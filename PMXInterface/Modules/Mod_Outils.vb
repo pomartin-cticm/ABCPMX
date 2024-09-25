@@ -1888,8 +1888,6 @@ Module Mod_Outils
                 MiseAJourBac(myBeam.Dalle.Bac, msgErreurs)
             Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
                 MiseAJourPlancherPrefa(myBeam.Dalle.Cofradal, msgErreurs)
-
-
         End Select
     End Sub
 

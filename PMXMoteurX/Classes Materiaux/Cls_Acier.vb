@@ -13,6 +13,7 @@ Public Class cls_Acier
         Dim Fy As Double
         Dim Fu As Double
     End Structure
+
 #End Region
 
 #Region " Attributs "
@@ -45,6 +46,33 @@ Public Class cls_Acier
 #End Region
 
 #Region " Propriétés "
+
+
+    Public ReadOnly Property BetaW() As Decimal
+        '-----------------------------------------------------------------------------------------------
+        '   25/09/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Renvoie le coefficient BetaW pour le calcul des soudures selon EN 1993-1-8
+        '-----------------------------------------------------------------------------------------------
+
+        Get
+            Dim pBetaW As Decimal
+
+            Select Case Me.Nuance
+                Case "S235"
+                    pBetaW = 0.8
+                Case "S275"
+                    pBetaW = 0.85
+                Case "S355"
+                    pBetaW = 0.9
+                Case Else
+                    pBetaW = 1
+            End Select
+
+            Return pBetaW
+        End Get
+    End Property
+
 
     Public Function get_epsilon(fy As Decimal)
         Return Math.Sqrt(235 / fy)

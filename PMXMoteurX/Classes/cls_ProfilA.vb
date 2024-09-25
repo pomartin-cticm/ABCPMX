@@ -66,6 +66,12 @@ Public Class cls_ProfilA
 
 #Region " Propriétés "
 
+    Public ReadOnly Property BfMax As Decimal
+        Get
+            Return Math.Max(Me.Bfs, Me.Bfi)
+        End Get
+    End Property
+
     Public Sub InitialiseSoudureMini(ByRef Gorges() As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   14/03/24 :  Création - POM

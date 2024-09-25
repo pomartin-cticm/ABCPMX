@@ -629,6 +629,7 @@ EDITDECKS				= Editer les bacs acier
 WELDEDSEC				= PRS
 FIRENOTAVAIL			= Le calcul au feu n'est pas disponible dans cette version de $.
 FIRELATER				= Il sera fourni dans une future version.
+CONFIRMBEAMREMOVE		= Confirmer la suppression de la poutre $ du projet
 ERRMISSINGDECK			= Le profil $ n'est pas disponible dans la base de données
 ERRMISSINGPSLAB			= Le plancher préfabriqué $ n'est pas reconnu par le logiciel 
 

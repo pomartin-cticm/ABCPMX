@@ -106,6 +106,7 @@ Public Module Mod_Dessins
         End Select
 
         '--> Preparation de la zone d'affichage - Calcul de ParAff
+
         dCar = Math.Sqrt(EntraxeTot ^ 2 + (Ha + MyDalle.zTop) ^ 2) / 10
         dCote = Math.Sqrt((Bfs + Bfi) ^ 2 / 4 + (Ha + MyDalle.zTop) ^ 2) / 4
 
@@ -197,7 +198,7 @@ Public Module Mod_Dessins
 
         End If
 
-        '--> Dessin de la poutre intermédaire 
+        '--> Dessin de la poutre calculée 
 
         DessinFrmMainCoupeProfile(myGr, MySection, lEnrob, 0, True, zREF, MyParAff, myBrushB, myBrushE, myBrushP, myBeam.lIntermediaire)
 
@@ -242,6 +243,36 @@ Public Module Mod_Dessins
             AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
             Chaine = GetStringNoUnit(EntraxeD2, Enu_TypeVariable.Dimension)
             AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            '-- Hauteur du profilé
+
+            Dim hPro As Decimal = myBeam.Section.ProfilA.ha
+            'Dim xVcote As Decimal = EntraxeD2 - 2 * myBeam.Section.ProfilA.BfMax
+            Dim xVcote As Decimal = 0 - 1 * dCar
+
+            AddFleche(myGr, MyPen, xVcote, 0, xVcote, -hPro, MyParAff, True, True)
+            Chaine = GetStringInUnitN(hPro, Enu_TypeVariable.Dimension, 4, 3, False, True)
+            AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, xVcote, -hPro / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            '-- Hauteur de la dalle
+
+            Dim hDalle As Decimal = myBeam.Dalle.zTop
+            Dim DeltaZ As Decimal = dCar / 5
+
+            AddLigne(myGr, xVcote, 0, xVcote, hDalle, MyParAff)
+            AddFleche(myGr, MyPen, xVcote, hDalle, xVcote, hDalle + DeltaZ, MyParAff, True, False)
+
+            Chaine = GetStringInUnitN(hDalle, Enu_TypeVariable.Dimension, 4, 3, False, True)
+            AddTexte(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, xVcote, hDalle + DeltaZ, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top, lContour, MyPen)
+
+            '-- Hauteur totale
+
+            xVcote = 0 - 1.5 * dCar
+
+            AddFleche(myGr, MyPen, xVcote, -hPro, xVcote, +hDalle, MyParAff, True, True)
+            Chaine = GetStringInUnitN(hPro + hDalle, Enu_TypeVariable.Dimension, 4, 3, False, True)
+            AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, xVcote, -hPro / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
 
         End If
 

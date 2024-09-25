@@ -812,7 +812,7 @@ Public Module Mod_Demarrage
         If nbStd > 0 Then
             ReDim myProfile.IndStandart(nbStd - 1)
             For i As Integer = 0 To nbStd - 1
-                myProfile.IndStandart(i) = i
+                myProfile.IndStandart(i) = 1
             Next
         Else
             GestionErrorsPMX("Mod_demmarage", "UpdateProfilPRS", "Erreur", True)
@@ -881,6 +881,7 @@ Public Module Mod_Demarrage
             AssocieAcierCompatible(myBeam, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve, True)
         Else
             UpdateProfilPRS(myBeam.Section.ProfilA, MyCatalogue.nbStandard)
+            AssocieAcierCompatible(myBeam, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve, True)
         End If
 
     End Sub

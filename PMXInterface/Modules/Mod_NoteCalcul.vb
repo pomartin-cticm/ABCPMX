@@ -5808,7 +5808,7 @@ Module Mod_NoteCalcul
         AddTitreNdC(2, BlocELU("CRITERIA_TRANSREBAR"))
 
         AddLigneNDC(TABW2 & BlocELU("NBTRANSVERSELAYER") & TABAFF & MyBeam.NbTransverseLayer)
-        AddLigneNDC(TABW2 & BlocELU("MINTRANSVERSEREINF") & TABAFF & "\Sr\s\-t,min\=" & TABEGAL & GetStringInUnit(MyBeam.rho_t_min * 100, Enu_TypeVariable.SansType, 3, -1, True) & " %")
+        AddLigneNDC(TABW2 & BlocELU("MINTRANSVERSEREINF") & TABAFF & "\Sr\s\-t,min\=" & TABEGAL & GetStringInUnitN(MyBeam.rho_t_min * 100, Enu_TypeVariable.SansType, 3, -1, True, True) & " %")
 
         Dim strFailureMode As String = ""
         Dim str_aa, str_bb, str_dd As String
@@ -5846,12 +5846,6 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    ''' <summary>
-    ''' Edition du tableau de vérification des armatures transversales
-    ''' </summary>
-    ''' <param name="MyBeam"> Poutre en cours </param>
-    ''' <param name="str_failureArea"> nom du mode de ruine à afficher </param>
-    ''' <param name="ind_failureArea"> indice du mode de ruine associé :0a-a = 0, b-b = 1, d-d = 2</param>
     Private Sub EditionVerificationELUArmaturesTransv(MyBeam As cls_Poutre, str_failureArea As String, ind_failureArea As Integer)
         '-------------------------------------------------------------------------------------------
         '   20/11/23 :  Création - GUD
@@ -5863,8 +5857,20 @@ Module Mod_NoteCalcul
         '   ind_failureArea     [E] :   indice du mode de ruine associé :0a-a = 0, b-b = 1, d-d = 2
         '-------------------------------------------------------------------------------------------
 
+        '--( Déclarations
+
         Dim NCOL As Integer
         Const iVerif As Integer = 0
+        Dim iTravDeb As Integer
+        Const StarNote As String = " (*)"
+        Dim lNote As Boolean = False
+        Dim strNote As String = ""
+
+        '--( Initialisation
+
+        iTravDeb = MyBeam.IndicePremiereTravee
+
+        '--( Traitement
 
         If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
 
@@ -5875,25 +5881,41 @@ Module Mod_NoteCalcul
         EnteteTableauELUArmaturesTransv(NCOL, str_failureArea)
         'SauteLigne()
 
-        For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
+        For i As Integer = iTravDeb To MyBeam.IndiceDerniereTravee
             For j As Integer = 0 To MyBeam.NombreZones(i) - 1
 
                 If nbLignes + HLIGNE > MAXLIGNEPPAG Then SautePage()
 
                 InitialiseLigneTableau(NCOL, HLIGNE)
-                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(i + 1))
+                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(i - iTravDeb + 1))
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(j + 1))
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
                 AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.VerifMixte(iVerif).TauEd(i, j, ind_failureArea), Enu_TypeVariable.Contrainte, 4, 2, False))
                 AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(GetAngleInDegree(MyBeam.VerifMixte(iVerif).Thetaf_min(i, j)), Enu_TypeVariable.SansType, 4, 2, False))
                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(GetAngleInDegree(MyBeam.VerifMixte(iVerif).Thetaf(i, j, ind_failureArea)), Enu_TypeVariable.SansType, 4, 2, False))
                 AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.VerifMixte(iVerif).Gamma_sf(i, j, ind_failureArea), Enu_TypeVariable.SansType, 4, 2, False))
-                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.VerifMixte(iVerif).As_s_transv(i, j, ind_failureArea), Enu_TypeVariable.AireCM2, 4, 2, False))
+
+                If IsEqual(MyBeam.VerifMixte(iVerif).As_s_transv(i, j, ind_failureArea), 0) _
+                   And MyBeam.Dalle.lMixte _
+                   And MyBeam.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus Then
+                    lNote = True
+                    strNote = StarNote
+                Else
+                    strNote = Space(1)
+                End If
+
+                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre,
+                           GetStringInUnit(MyBeam.VerifMixte(iVerif).As_s_transv(i, j, ind_failureArea), Enu_TypeVariable.AireCM2, 4, 2, False) & strNote)
 
             Next
         Next
 
         FinTableau()
+
+        If lNote Then
+            AddLigneNDC(TABW2 & "\I" & strNote.Trim & "\T19" & BlocELU("SHEARLBYDECK") & "\i")
+            AddLigneNDC(TABW2 & "\I" & "\T19" & BlocELU("MINIMALREINFREQ") & "\i")
+        End If
     End Sub
 
     Private Sub EnteteTableauELUArmaturesTransv(ByRef nbCol As Integer, str_failureArea As String)

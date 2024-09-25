@@ -35,8 +35,7 @@ Public Class Frm_PMX
 
     Dim strFeuNonDispo As String
 
-
-    Dim msgErreur As New Dictionary(Of String, String)
+    Dim strConfirmerSupp As String
 
     ''' <summary>
     ''' Booleens utilisés pour les controles du dessin
@@ -314,11 +313,12 @@ Public Class Frm_PMX
                 strPRS = Bloc("WELDEDSEC")
 
                 strFeuNonDispo = RemplaceDollar(Bloc("FIRENOTAVAIL"), LogicielInfo.Racine) & Chr(13) & Bloc("FIRELATER")
+                strConfirmerSupp = Bloc("CONFIRMBEAMREMOVE")
 
                 '=== MESSAGES d'ERREUR
 
-                msgErreur.Add("BACABSENT", Bloc("ERRMISSINGDECK"))
-                msgErreur.Add("COFRAABSENT", Bloc("ERRMISSINGPSLAB"))
+                msgErreurs.Add("BACABSENT", Bloc("ERRMISSINGDECK"))
+                msgErreurs.Add("COFRAABSENT", Bloc("ERRMISSINGPSLAB"))
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -442,17 +442,29 @@ Public Class Frm_PMX
 
     Private Sub SupprimerPoutre()
 
-        MyProjet.Poutres.Remove(MyProjet.Poutres(MyProjet.IndEnCours))
+        Dim lSupp As Boolean = False
+        Dim Chaine As String = RemplaceDollar(strConfirmerSupp, MyProjet.Poutres(MyProjet.IndEnCours).BeamID)
+        Dim Result As MsgBoxResult = MsgBox(Chaine, MsgBoxStyle.OkCancel)
 
-        MyProjet.IndEnCours = Math.Max(Math.Min(MyProjet.IndEnCours, MyProjet.Poutres.Count - 1), 0)
+        lSupp = (Result = MsgBoxResult.Ok)
 
-        If Not MyProjet.Poutres.Count = 0 Then MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
+        If lSupp Then
 
-        '--> Mise à jour du TreeView
-        AffichageTViewChk()
-        MAJToolBarPoutre()
-        MAJMainToolBar()
-        Me.img_Main.Invalidate()
+            MyProjet.Poutres.Remove(MyProjet.Poutres(MyProjet.IndEnCours))
+
+            MyProjet.IndEnCours = Math.Max(Math.Min(MyProjet.IndEnCours, MyProjet.Poutres.Count - 1), 0)
+
+            If Not MyProjet.Poutres.Count = 0 Then MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
+
+            '--> Mise à jour du TreeView
+            AffichageTViewChk()
+            MAJToolBarPoutre()
+            MAJMainToolBar()
+            Me.img_Main.Invalidate()
+
+        End If
+
+
 
     End Sub
 
@@ -780,7 +792,7 @@ Public Class Frm_PMX
                 '    Me.TLPan_ZoneDeSaisie.Controls.Add(Frm_Portees.pan_Main, 0, 1)
                 'End If
 
-                    Case EnuFenetres.Dalle
+            Case EnuFenetres.Dalle
 
                 Frm_Dalle.ShowDialog()
 
@@ -856,7 +868,7 @@ Public Class Frm_PMX
             Case EnuFenetres.Hivoss
 
                 iFrmAppel = EnuFenetres.Main
-                    Frm_Hivoss.ShowDialog()
+                Frm_Hivoss.ShowDialog()
 
 
             Case EnuFenetres.Incendie
@@ -1530,7 +1542,7 @@ Public Class Frm_PMX
             InitialiseParametresSectionBase(MyPoutre, lTrouve)
         Next
 
-        MiseAJourProjet(MyProjet, msgErreur)
+        MiseAJourProjet(MyProjet, msgErreurs)
 
         '--> Aucune modification par rapport au fichier ouvert
         MyProjet.lSaved = False

@@ -114,6 +114,8 @@ Public Class Frm_AjoutPoutreDeFichier
         Dim iStop As Integer
         Dim nbPoutres As Integer = Poutres.Count
 
+        Dim nbInitial As Integer = MyProjet.Poutres.Count
+
         For i As Integer = 0 To chklst_Beams.CheckedIndices.Count - 1
 
             iBeamChk = chklst_Beams.CheckedIndices(i)
@@ -124,6 +126,18 @@ Public Class Frm_AjoutPoutreDeFichier
 
         Next i
 
+        '-- Mise à jour des poutres chargées
+
+        Dim lTrouve As Boolean
+
+        '--( Mise à jour des données de la poutre rechargée
+
+        For iBeam As Integer = nbInitial To MyProjet.Poutres.Count - 1
+            InitialiseParametresSectionBase(MyProjet.Poutres(iBeam), lTrouve)
+            MiseAJourPoutre(MyProjet.Poutres(iBeam), msgErreurs)
+        Next
+
+        MyProjet.IndEnCours = MyProjet.Poutres.Count - 1
     End Sub
 
 #End Region

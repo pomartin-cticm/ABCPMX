@@ -903,6 +903,10 @@ Public Class cls_Projet
 
             SaveFileBlocBeton(pTre.Dalle.beton, Lines, True)
 
+            '==[ Bloc armatures dalle ]===============================================================
+
+            SaveFileBlocArmaDalle(pTre.Dalle.LitArma, pTre.Dalle.AcierArmatures, Lines)
+
             '==[ Bloc des Goujons ]===================================================================
 
             If lMixte Then _
@@ -929,42 +933,7 @@ Public Class cls_Projet
 
             SaveFileBlocCharges(pTre.ChargesU, pTre.IndicePremiereTravee, pTre.IndiceDerniereTravee, Lines)
 
-            'For Each elemnts As KeyValuePair(Of String, cls_ChargementUtilisateur) In pTre.ChargesU
-            '    For i As Integer = pTre.IndicePremiereTravee To pTre.IndiceDerniereTravee
-            '        Lines.Add("BLOCK CHGTU_QSURF")
-            '        Lines.Add("   CleDic      =  " & elemnts.Key)
-            '        Lines.Add("   indTravee      =  " & i)
-            '        Lines.Add("   QSurf      =  " & elemnts.Value.QSurf(i))
-            '        Lines.Add("")
-
-            '        For Each force As cls_Force In elemnts.Value.Forces(i)
-            '            Lines.Add("BLOCK CHGTU_FORCE")
-            '            Lines.Add("   CleDic      =  " & elemnts.Key)
-            '            Lines.Add("   indTravee      =  " & i)
-            '            Lines.Add("   Force      =  " & force.Force)
-            '            Lines.Add("   xPosT      =  " & force.xPosT)
-            '            Lines.Add("   xGaucheT   =  " & force.xGaucheT)
-            '            Lines.Add("")
-            '        Next
-
-            '        For Each frepart As cls_ForceRepartie In elemnts.Value.FReparties(i)
-            '            If Not (elemnts.Value.FReparties(i).IndexOf(frepart) = 0 And elemnts.Key = cls_Poutre.KEYPP) Then 'le premier cas de charge de FRepartie concerne le PP que l'on ne veut pas enregistrer car calculer automatiquement
-            '                Lines.Add("BLOCK CHGTU_FREPAR")
-            '                Lines.Add("   CleDic      =  " & elemnts.Key)
-            '                Lines.Add("   indTravee      =  " & i)
-            '                Lines.Add("   F0      =  " & frepart.Force(0))
-            '                Lines.Add("   F1      =  " & frepart.Force(1))
-            '                Lines.Add("   xPosT0      =  " & frepart.xPosT(0))
-            '                Lines.Add("   xPosT1      =  " & frepart.xPosT(1))
-            '                Lines.Add("   xGaucheT      =  " & frepart.xGaucheT)
-            '                Lines.Add("")
-            '            End If
-            '        Next
-            '    Next
-            'Next
-
         Next
-
 
     End Sub
 
@@ -1216,7 +1185,7 @@ Public Class cls_Projet
 
                 Case BkMAINTIENS
 
-                    ReadBlocMaintiensN(Me.Poutres.Last.Maintiens, Lines, indBlocs(iBloc) + 1, iFin)
+                    ReadBlocMaintiensN(Me.Poutres.Last, Lines, indBlocs(iBloc) + 1, iFin)
 
                 Case BkMAINTIENBAC
 
@@ -1238,10 +1207,6 @@ Public Class cls_Projet
 
                     ReadBlocArmaEnrob(Me.Poutres.Last.Section.Enrobage.LitArma, Me.Poutres.Last.Section.Enrobage.AcierArmatures,
                                       Lines, indBlocs(iBloc) + 1, iFin)
-
-                'Case BkACIERARMAE
-
-                '    ReadBlocAcierArmatureEnrobageProfilA(Me.Poutres.Last.Section.Enrobage.AcierArmatures, Lines, indBlocs(iBloc) + 1, iFin)
 
                 Case BkBETONENROB
 
@@ -1370,7 +1335,7 @@ Public Class cls_Projet
 
                 Case BkMAINTIENS
 
-                    ReadBlocMaintiensN(Me.Poutres.Last.Maintiens, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ReadBlocMaintiensN(Me.Poutres.Last, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
 
                 Case BkMAINTIENBAC
                     'Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -1486,54 +1451,6 @@ Public Class cls_Projet
 
                     Dim KeyCh As String = ListeBlocCle(i).Substring(BkCharges.Length)
                     ReadBlocCharges(Me.Poutres.Last, KeyCh, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-
-                    'Case "CHGTU_QSURF"
-                    '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    '    Dim QSurf_en_cours As Decimal
-                    '    Dim cle_dic As String = ""
-                    '    Dim ind_travee As Integer
-                    '    ReadBlocQSurf(QSurf_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    '    ptre_en_cours.ChargesU(cle_dic).QSurf(ind_travee) = QSurf_en_cours
-
-                    'Case "CHGTU_FORCE"
-                    '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    '    Dim force_en_cours As New cls_Force
-                    '    Dim cle_dic As String = ""
-                    '    Dim ind_travee As Integer
-                    '    ReadBlocForce(force_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    '    ptre_en_cours.ChargesU(cle_dic).Forces(ind_travee).Add(force_en_cours)
-
-                    'Case "CHGTU_FREPAR"
-                    '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    '    Dim frepart_en_cours As New cls_ForceRepartie
-                    '    Dim cle_dic As String = ""
-                    '    Dim ind_travee As Integer
-                    '    ReadBlocFRepartie(frepart_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    '    ptre_en_cours.ChargesU(cle_dic).FReparties(ind_travee).Add(frepart_en_cours)
-
-
-                    'Case "OPT_CALCULS_PROP_ELAST_ENROBAGE"
-                    '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    '    Dim prop_elast_enrob_opt_calculs As Cls_Prop_Elastique
-                    '    ReadBlocPropElastEnrobageOptionsCalculs(prop_elast_enrob_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    '    ptre_en_cours.Param.Prop_Elastique_Enrobage = prop_elast_enrob_opt_calculs
-
-                    'Case "OPT_CALCULS_PROP_ELAST_DALLE"
-                    '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    '    Dim prop_elast_dalle_opt_calculs As Cls_Prop_Elastique
-                    '    ReadBlocPropElastDalleOptionsCalculs(prop_elast_dalle_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    '    ptre_en_cours.Param.Prop_Elastique_Dalle = prop_elast_dalle_opt_calculs
-                    'Case "IDENTIFICATION"
-                    '    Me.ReadBloc_Indentification(Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-
-                    'Case "NUANCEACIER"
-                    '    Me.ReadBloc_SteelGrade(Lines.Lines, ListeBlocIndex(i) + 1, IndexFin, nuances, f_y)
-
-                    'Case "SECTION"
-
-                    '    Dim s As New cls_Section
-                    '    s.LectureFile(Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    '    'List_Section.Add(s)
 
             End Select
 
@@ -1741,7 +1658,7 @@ Public Class cls_Projet
 
     End Sub
 
-    Private Sub ReadBlocMaintiensN(ByRef myRest() As List(Of cls_Maintiens), ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocMaintiensN(myBeam As cls_Poutre, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '-------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
         '-------------------------------------------------------------------------------------
@@ -1761,6 +1678,16 @@ Public Class cls_Projet
         Dim xLoc As Decimal
         Dim iTravee, nbR As Integer
         Dim lSup, lInf As Boolean
+        Dim indTravFin As Integer = myBeam.IndiceDerniereTravee
+
+        '--> Initialisation
+
+        ReDim myBeam.Maintiens(indTravFin)
+        For i = 0 To indTravFin
+            myBeam.Maintiens(i) = New List(Of cls_Maintiens)
+        Next
+
+        '--> Traitement
 
         For i = Index0 To IndexFin
 
@@ -1778,13 +1705,13 @@ Public Class cls_Projet
                         lSup = Mots(4)
                         lInf = Mots(5)
 
-                        myRest(iTravee).Add(New cls_Maintiens)
+                        myBeam.Maintiens(iTravee).Add(New cls_Maintiens)
 
-                        nbR = myRest(iTravee).Count
+                        nbR = myBeam.Maintiens(iTravee).Count
 
-                        myRest(iTravee)(nbR - 1).x_Loc = xLoc
-                        myRest(iTravee)(nbR - 1).lMaintienSemelleSup = lSup
-                        myRest(iTravee)(nbR - 1).lMaintienSemelleInf = lInf
+                        myBeam.Maintiens(iTravee)(nbR - 1).x_Loc = xLoc
+                        myBeam.Maintiens(iTravee)(nbR - 1).lMaintienSemelleSup = lSup
+                        myBeam.Maintiens(iTravee)(nbR - 1).lMaintienSemelleInf = lInf
 
                 End Select
             End If
@@ -2340,7 +2267,15 @@ Public Class cls_Projet
         Dim xPos(1) As Decimal
         Dim xGauche As Decimal
         Dim iTravDeb As Integer = myPtre.IndicePremiereTravee
-        Dim lPoidsP As Boolean = (KeyCh = "G1")
+        Dim iTravFin As Integer = myPtre.IndiceDerniereTravee
+        Dim lPoidsP() As Boolean
+
+        '--( Initialisation
+
+        ReDim lPoidsP(iTravFin)
+        For i = iTravDeb To iTravFin
+            lPoidsP(i) = (KeyCh = "G1")
+        Next
 
         '--( Traitement
 
@@ -2359,12 +2294,13 @@ Public Class cls_Projet
                                 pQsurf = CDec(TraiteReal(Mots(iMot)))
                                 myPtre.ChargesU(KeyCh).QSurf(iTravDeb + iMot - 2) = pQsurf
                             Next
+
                         Case "QDIST"
                             If nbMots >= 6 Then
-                                If lPoidsP Then
-                                    lPoidsP = False
+                                iTravee = CInt(TraiteReal(Mots(2)))
+                                If lPoidsP(iTravee) Then
+                                    lPoidsP(iTravee) = False
                                 Else
-                                    iTravee = CInt(TraiteReal(Mots(2)))
                                     xPos(0) = CDec(TraiteReal(Mots(3)))
                                     qRep(0) = CDec(TraiteReal(Mots(4)))
                                     xPos(1) = CDec(TraiteReal(Mots(5)))
@@ -2372,7 +2308,6 @@ Public Class cls_Projet
                                     xGauche = myPtre.xPositionAppui(True, iTravee)
                                     myPtre.ChargesU(KeyCh).FReparties(iTravee).Add(New cls_ForceRepartie(xPos(0), qRep(0), xPos(1), qRep(1), xGauche))
                                 End If
-
                             End If
                         Case "FORCE"
                             If nbMots >= 4 Then
@@ -2473,32 +2408,35 @@ Public Class cls_Projet
                         If indexI >= myLits.Count Then
                             myLits.Add(New Cls_Armatures_Longi)
                         End If
-                        myLits(myLits.Count - 1).EspBar = TraiteReal(Mots(nbMots))
+                        myLits(indexI).EspBar = TraiteReal(Mots(nbMots))
                     Case "PHIS"
                         indexI = CInt(TraiteReal(Mots(2)))
                         If indexI >= myLits.Count Then
                             myLits.Add(New Cls_Armatures_Longi)
                         End If
-                        myLits(myLits.Count - 1).PhiS = CDec(TraiteReal(Mots(nbMots)))
+                        myLits(indexI).PhiS = CDec(TraiteReal(Mots(nbMots)))
                     Case "Z_S"
                         indexI = CInt(TraiteReal(Mots(2)))
                         If indexI >= myLits.Count Then
                             myLits.Add(New Cls_Armatures_Longi)
                         End If
-                        myLits(myLits.Count - 1).z_s = TraiteReal(Mots(nbMots))
+                        myLits(indexI).z_s = TraiteReal(Mots(nbMots))
                     'Case "N_S" : .n_s = TraiteReal(Mots(nbMots))
                         'Case "C_S" : .c_s = TraiteReal(Mots(nbMots))
                     Case "LACTIV" : indexI = CInt(TraiteReal(Mots(2)))
                         If indexI >= myLits.Count Then
                             myLits.Add(New Cls_Armatures_Longi)
                         End If
-                        myLits(myLits.Count - 1).lActive = Mots(nbMots)
+                        myLits(indexI).lActive = Mots(nbMots)
 
                     Case "RCLASS"
                         mySteelR.Classe = Mots(nbMots)
 
                     Case "RFSK"
                         mySteelR.FsK = CDec(TraiteReal(Mots(nbMots)))
+
+                    Case "RES"
+                        mySteelR.Es = CDec(TraiteReal(Mots(nbMots)))
 
                     Case Else : MsgBox("BLOC " & BkARMADALLE & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                 End Select

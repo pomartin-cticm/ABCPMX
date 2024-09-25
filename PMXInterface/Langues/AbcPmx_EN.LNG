@@ -629,6 +629,7 @@ EDITDECKS				= Edit Steel profiled sheetings
 WELDEDSEC				= Welded
 FIRENOTAVAIL			= Fire calculation is not available in this version of $.
 FIRELATER				= It will be released in a future version.
+CONFIRMBEAMREMOVE		= Confirm the removal of the beam $ from the project
 ERRMISSINGDECK			= Steel deck $ is missing in the database
 ERRMISSINGPSLAB			= Prefabricated slab $ is not recognized by the software 
 

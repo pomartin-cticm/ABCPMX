@@ -366,10 +366,14 @@ Public Class cls_VerificationsAcier
         Dim iDebNod, iFinNod, iNode As Integer
         Dim kDeb, kFin, k As Integer
         Dim GammaM2 As Decimal = myBeam.Param.Gamma.GammaM2
-        Dim BetaW As Decimal = 1      '== APROGRaMMER
+        Dim BetaW As Decimal = 1
         Dim Fu() As Decimal = {myBeam.Section.Acier.LimiteFu(Math.Max(myBeam.Section.ProfilA.Tfs, myBeam.Section.ProfilA.Tw)),
                                myBeam.Section.Acier.LimiteFu(Math.Max(myBeam.Section.ProfilA.Tfi, myBeam.Section.ProfilA.Tw))}
         Dim myEN1993 As New cls_Eurocodes
+
+        '--( Initialisation
+
+        BetaW = myBeam.Section.Acier.BetaW
 
         '--( Calcul
 
@@ -398,6 +402,7 @@ Public Class cls_VerificationsAcier
         Next
 
     End Sub
+
 
 #End Region
 
