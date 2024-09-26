@@ -855,6 +855,30 @@ Public Class cls_Poutre
         End With
     End Sub
 
+    Public Sub UpdateTableaux()
+        '-----------------------------------------------------------------------------------------------
+        '   26/09/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Mise à jour des tableaux après changements de nombre de travées
+        '-----------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------
+
+        Dim IndTravFin As Integer = Me.IndiceDerniereTravee
+        Dim IndOld As Integer = Me.Maintiens.GetUpperBound(0)
+
+        If Me.Maintiens.GetUpperBound(0) < IndTravFin Then
+            ReDim Preserve Me.Maintiens(IndTravFin)
+
+            For i As Integer = IndOld + 1 To IndTravFin
+                Me.Maintiens(i) = New List(Of cls_Maintiens)
+            Next
+        End If
+
+    End Sub
+
+
+
+
 #End Region
 
 #Region " Outils divers "

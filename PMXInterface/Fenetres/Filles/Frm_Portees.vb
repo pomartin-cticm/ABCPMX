@@ -267,6 +267,7 @@ Public Class Frm_Portees
             If .lTremieDroite Then _
                 GereTransfertValeur(MyPoutreLoc.DistanceDsl2, .DistanceDsl2, lModif)
 
+            .UpdateTableaux()
         End With
     End Sub
 
