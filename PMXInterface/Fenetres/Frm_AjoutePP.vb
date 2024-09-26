@@ -35,7 +35,7 @@ Public Class Frm_AjoutePP
     Dim strType As String
     Dim tabType As New Dictionary(Of cls_Section.Enum_TypeSection, String)
 
-    Public lOuverture As Boolean = False    ' Indique si appel depuis la fenêtre ouverture (démarrage du programme)
+    Public lOuverture As Boolean = False            ' Indique si appel depuis la fenêtre ouverture (démarrage du programme)
 
     Dim lSlimDispo As Boolean = lSLIM Or LogicielOptions.lExpert
 

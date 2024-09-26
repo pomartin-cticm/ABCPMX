@@ -6146,10 +6146,10 @@ Module Mod_NoteCalcul
 
         Select Case MyBeam.Section.TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
-                EditionVerificationsELUSummaryACIER(MyBeam, 0)
+                EditionVerificationsELUSummaryACIER(MyBeam, 0, False)
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 If lConstruction Then
-                    EditionVerificationsELUSummaryACIER(MyBeam, 0)
+                    EditionVerificationsELUSummaryACIER(MyBeam, 0, True)
                 Else
                     EditionVerificationsELUSummaryMIXTE(MyBeam, 0)
                 End If
@@ -6177,22 +6177,38 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub AfficheSyntheseCritere(Critere As cls_Critere, Symbol As String, Titre As String, Optional lFeu As Boolean = False)
+    Private Sub AfficheSyntheseCritere(myBeam As cls_Poutre, Critere As cls_Critere, Symbol As String, Titre As String,
+                                       lConstructionP As Boolean, Optional lFeu As Boolean = False)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Affichage de la synthèse d'un critère
         '-------------------------------------------------------------------------------------------
-        '   Critere     [E] :
-        '   Symbol      [E] :
-        '   Titre       [E] :
+        '   myBeam          [E] :
+        '   Critere         [E] :
+        '   Symbol          [E] :
+        '   Titre           [E] :   Label du critère (dans la langue utilisateur)
+        '   lConstructionP  [E] :   Indique si critère ELU en phase de construction
         '-------------------------------------------------------------------------------------------
 
-        AfficheSyntheseCritere(Critere.CritereMax, Symbol, Titre, Critere.iNodeM, Critere.iCombiM, lFeu)
+        Dim ChaineU As String = ""
+
+        If lFeu Then
+            ChaineU = myBeam.CombiA_ELF.Symbole(Critere.iCombiM)
+        Else
+            If lConstructionP Then
+                ChaineU = myBeam.CombiA_ELCU.Symbole(Critere.iCombiM)
+            Else
+                ChaineU = myBeam.CombiA_ELU.Symbole(Critere.iCombiM)
+            End If
+        End If
+
+
+        AfficheSyntheseCritere(Critere.CritereMax, Symbol, Titre, Critere.iNodeM, ChaineU, lFeu)
 
     End Sub
 
-    Private Sub AfficheSyntheseCritere(CritereMax As Decimal, Symbol As String, Titre As String, iNodeM As Integer, iCombiM As Integer, lFeu As Boolean)
+    Private Sub AfficheSyntheseCritere(CritereMax As Decimal, Symbol As String, Titre As String, iNodeM As Integer, ChCombi As String, lFeu As Boolean)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -6202,7 +6218,7 @@ Module Mod_NoteCalcul
         '   Symbol          [E] :   Symbole pour le critère
         '   Titre           [E] :   Titre du critère
         '   iNodeM          [E] :   Indice du noeud ou le critère maxi est obtenu
-        '   iCombiM         [E] :   Indice de la combi pour laquelle le critère maxi est obtenu
+        '   ChCombi         [E] :   Label de la combinaison donnant le critère maxi
         '   lFeu            [E] :   Indique si situation d'incendie ou non
         '-------------------------------------------------------------------------------------------
 
@@ -6224,15 +6240,14 @@ Module Mod_NoteCalcul
 
         '--> Affichage
 
-        'AddLigneNDC(TABW3 & Titre & TABAFF & strGras &
-        '            Symbol & TABEGAL & GetStringInUnit(CritereMax, Enu_TypeVariable.SansType, 3, 2, False) &
-        '            strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & strRacineELU & "_" & CStr(iCombiM + 1) & ")" & strGras & TABOK & strFinGras & "\BAL")
-
         If lFeu Then myTabul = TABW2 Else myTabul = TABW3
 
+        'AddLigneNDC(myTabul & Titre & TABAFF & strGras &
+        '            Symbol & TABEGAL & GetStringInUnit(CritereMax, Enu_TypeVariable.SansType, 4, 3, False) &
+        '            strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & cls_Poutre.SymboleCombi(RacineEL, iCombiM) & ")" & strGras & TABOK & strFinGras & "\BAL")
         AddLigneNDC(myTabul & Titre & TABAFF & strGras &
                     Symbol & TABEGAL & GetStringInUnit(CritereMax, Enu_TypeVariable.SansType, 4, 3, False) &
-                    strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & cls_Poutre.SymboleCombi(RacineEL, iCombiM) & ")" & strGras & TABOK & strFinGras & "\BAL")
+                    strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & ChCombi & ")" & strGras & TABOK & strFinGras & "\BAL")
 
         AfficheBalise(lOK)
 
@@ -7076,14 +7091,14 @@ Module Mod_NoteCalcul
             '--> Calcul Plastique
             '------------------------------------------------------------------------------------------------------------
 
-            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)")
-            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
-            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereMV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA"))
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)", False)
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"), False)
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereMV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA"), False)
 
             If MyBeam.VerifMixte(iVerif).ShearB.lCheckRequired Then
-                AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereVb, "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"))
+                AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereVb, "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"), False)
                 If Not IsEqual(MyBeam.VerifMixte(iVerif).CritereMVb.CritereMax, 0) Then
-                    AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereMVb, "\SG\s\-MVb\=", BlocELU("MVB_CRITERIA") & " (3)")
+                    AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereMVb, "\SG\s\-MVb\=", BlocELU("MVB_CRITERIA") & " (3)", False)
                     lAff3 = True
                 Else
                     AddLigneNDC(TABW3 & BlocELU("NO_MVBINTERACTION"))
@@ -7110,19 +7125,19 @@ Module Mod_NoteCalcul
             '------------------------------------------------------------------------------------------------------------
 
             '# Contraintes normales
-            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereSigmaA, "\SG\-s\s,a\=", BlocELU("M_CRITERIA") & " (1)(2)")
-            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereSigmaC, "\SG\-s\s,c\=", BlocELU("M_CRITERIA") & " (3)")
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereSigmaA, "\SG\-s\s,a\=", BlocELU("M_CRITERIA") & " (1)(2)", False)
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereSigmaC, "\SG\-s\s,c\=", BlocELU("M_CRITERIA") & " (3)", False)
             If lMultiSpan Then
-                AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereSigmaArmaC, "\SG\-s\s,s\=", BlocELU("M_CRITERIA") & " (5)")
+                AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereSigmaArmaC, "\SG\-s\s,s\=", BlocELU("M_CRITERIA") & " (5)", False)
             End If
             If lEnrob Then
-                AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereSigmaE, "\SG\-s\s,ce\=", BlocELU("M_CRITERIA") & " (6)")
-                AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereSigmaArmaE, "\SG\-s\s,se\=", BlocELU("M_CRITERIA") & " (7)")
+                AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereSigmaE, "\SG\-s\s,ce\=", BlocELU("M_CRITERIA") & " (6)", False)
+                AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereSigmaArmaE, "\SG\-s\s,se\=", BlocELU("M_CRITERIA") & " (7)", False)
             End If
             '# Contraintes de cisaillement
-            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereTauA, "\SG\-t\s\=", BlocELU("V_CRITERIA") & " (4)")
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereTauA, "\SG\-t\s\=", BlocELU("V_CRITERIA") & " (4)", False)
             '# Contraintes de Von Mises
-            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereSigmaVM, "\SG\s\-eq,VM\=", BlocELU("MV_CRITERIA") & " (1)")
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereSigmaVM, "\SG\s\-eq,VM\=", BlocELU("MV_CRITERIA") & " (1)", False)
 
             '# Notes
             SauteLigne()
@@ -7146,7 +7161,7 @@ Module Mod_NoteCalcul
 
             '# Connexion 
             AddTitreNdC(3, BlocELU("CONNECTION"))
-            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereConnex, "\SG\s\-connex\=", BlocELU("CON_CRITERIA"))
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereConnex, "\SG\s\-connex\=", BlocELU("CON_CRITERIA"), False)
 
         Else
 
@@ -7156,13 +7171,13 @@ Module Mod_NoteCalcul
 
             'AddLigneNDC(TABW2 & BlocELU("ELASTIC_DESIGN"))
 
-            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)")
-            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)", False)
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"), False)
 
             If MyBeam.VerifMixte(iVerif).ShearB.lCheckRequired Then
-                AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereVb, "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"))
+                AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereVb, "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"), False)
             End If
-            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereMV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA") & " (2)")
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereMV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA") & " (2)", False)
 
             SauteLigne()
 
@@ -7176,7 +7191,7 @@ Module Mod_NoteCalcul
 
             '# Connexion 
             AddTitreNdC(3, BlocELU("CONNECTION"))
-            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereConnex, "\SG\s\-connex\=", BlocELU("CON_CRITERIA"))
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifMixte(iVerif).CritereConnex, "\SG\s\-connex\=", BlocELU("CON_CRITERIA"), False)
 
         End If
 
@@ -7448,7 +7463,7 @@ Module Mod_NoteCalcul
 
 #Region "***Edition vérifications ELU pour les poutres ACIER***"
 
-    Private Sub EditionVerificationsELUSummaryACIER(MyBeam As cls_Poutre, iVerif As Integer)
+    Private Sub EditionVerificationsELUSummaryACIER(MyBeam As cls_Poutre, iVerif As Integer, lConstructionP As Boolean)
 
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
@@ -7469,21 +7484,21 @@ Module Mod_NoteCalcul
             '--> Calcul Plastique
 
             '# Critères M et V
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)")
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA") & " (2)")
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)", lConstructionP)
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA") & " (2)", lConstructionP)
 
             '# Interaction MV
             If IsEqual(MyBeam.VerifAcier(iVerif).CritereMV.CritereMax, 0) Then
                 AddLigneNDC(TABW3 & BlocELU("NO_MVINTERACTION"))
             Else
-                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereMV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA"))
+                AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereMV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA"), lConstructionP)
             End If
 
             '# Voilement par cisaillement et interaction MVb le cas échéant
             If MyBeam.VerifAcier(iVerif).ShearB.lCheckRequired Then
-                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereVb, "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"))
+                AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereVb, "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"), lConstructionP)
                 If Not IsEqual(MyBeam.VerifAcier(iVerif).CritereMVb.CritereMax, 0) Then
-                    AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereMVb, "\SG\s\-MVb\=", BlocELU("MVB_CRITERIA") & " (3)")
+                    AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereMVb, "\SG\s\-MVb\=", BlocELU("MVB_CRITERIA") & " (3)", lConstructionP)
                     lAff3 = True
                 Else
                     AddLigneNDC(TABW3 & BlocELU("NO_MVBINTERACTION"))
@@ -7497,17 +7512,17 @@ Module Mod_NoteCalcul
 
         ElseIf MyBeam.Param.lElasticDesignVM Then
             '--> Calcul élastique imposé
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaA, "\SG\-s\s\=", BlocELU("M_CRITERIA") & " (1)(2)")
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereSigmaA, "\SG\-s\s\=", BlocELU("M_CRITERIA") & " (1)(2)", lConstructionP)
             If lEnrob Then
-                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaE, "\SG\-s\s,ce\=", BlocELU("M_CRITERIA") & " (4)")
-                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaArmaE, "\SG\-s\s,se\=", BlocELU("M_CRITERIA") & " (5)")
+                AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereSigmaE, "\SG\-s\s,ce\=", BlocELU("M_CRITERIA") & " (4)", lConstructionP)
+                AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereSigmaArmaE, "\SG\-s\s,se\=", BlocELU("M_CRITERIA") & " (5)", lConstructionP)
             End If
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereTauA, "\SG\-t\s\=", BlocELU("V_CRITERIA") & " (1)(3)")
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereTauA, "\SG\-t\s\=", BlocELU("V_CRITERIA") & " (1)(3)", lConstructionP)
 
             If MyBeam.VerifAcier(iVerif).CritereSigmaVM.CritereMax = 0 Then
                 AddLigneNDC(TABW3 & BlocELU("NO_MVINTERACTION"))
             Else
-                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaVM, "\SG\s\-eq,VM\=", BlocELU("MV_CRITERIA") & " (1)")
+                AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereSigmaVM, "\SG\s\-eq,VM\=", BlocELU("MV_CRITERIA") & " (1)", lConstructionP)
             End If
 
             SauteLigne()
@@ -7523,21 +7538,21 @@ Module Mod_NoteCalcul
             '--> Calcul élastique en raison de la classe des sections
 
             '# Critères M et V
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)")
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA") & " (2)")
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)", lConstructionP)
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA") & " (2)", lConstructionP)
 
             '# Interaction MV
             If MyBeam.VerifAcier(iVerif).CritereMV.CritereMax = 0 Then
                 AddLigneNDC(TABW3 & BlocELU("NO_MVINTERACTION"))
             Else
-                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA"))
+                AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA"), lConstructionP)
             End If
 
             '# Voilement par cisaillement et interaction MVb le cas échéant
             If MyBeam.VerifAcier(iVerif).ShearB.lCheckRequired Then
-                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereVb, "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"))
+                AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereVb, "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"), lConstructionP)
                 If Not IsEqual(MyBeam.VerifAcier(iVerif).CritereMVb.CritereMax, 0) Then
-                    AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereMVb, "\SG\s\-MVb\=", BlocELU("MVB_CRITERIA") & " (3)")
+                    AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereMVb, "\SG\s\-MVb\=", BlocELU("MVB_CRITERIA") & " (3)", lConstructionP)
                     lAff3 = True
                 Else
                     AddLigneNDC(TABW3 & BlocELU("NO_MVBINTERACTION"))
@@ -10697,7 +10712,6 @@ Module Mod_NoteCalcul
 
     End Sub
 
-
     Private Sub EditionVerificationsFEUSyntheseEnrobe(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
         '   19/04/24 :  Création - POM
@@ -10726,8 +10740,8 @@ Module Mod_NoteCalcul
 
         '--( Synthèse des critères
 
-        AfficheSyntheseCritere(myBeam.VerifFeuEnrob.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
-        AfficheSyntheseCritere(myBeam.VerifFeuEnrob.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuEnrob.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), False, True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuEnrob.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), False, True)
 
     End Sub
 
@@ -10759,12 +10773,12 @@ Module Mod_NoteCalcul
 
         '--( Synthèse des critères
 
-        AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
-        AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuAcier.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), False, True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuAcier.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), False, True)
         If IsGreater(myBeam.VerifFeuAcier.ElancementW, myBeam.VerifFeuAcier.ElancementWMax) Then
-            AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereV(myStep), "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"), True)
+            AfficheSyntheseCritere(myBeam, myBeam.VerifFeuAcier.CritereV(myStep), "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"), False, True)
         End If
-        AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereLTB(myStep), "\SG\s\-LT\=", BlocELU("LTB_CRITERIA"), True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuAcier.CritereLTB(myStep), "\SG\s\-LT\=", BlocELU("LTB_CRITERIA"), False, True)
 
     End Sub
 
@@ -10798,8 +10812,8 @@ Module Mod_NoteCalcul
 
         '--( Synthèse des critères
 
-        AfficheSyntheseCritere(myBeam.VerifFeuMixte.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
-        AfficheSyntheseCritere(myBeam.VerifFeuMixte.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuMixte.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), False, True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuMixte.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), False, True)
 
     End Sub
 

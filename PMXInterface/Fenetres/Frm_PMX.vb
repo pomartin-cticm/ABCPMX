@@ -80,6 +80,8 @@ Public Class Frm_PMX
 
     Private Sub Frm_PMX_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        Dim FileName As String = ""
+
         '--> Initialisation générale du logiciel
 
         InitialiseLogiciel()
@@ -110,17 +112,17 @@ Public Class Frm_PMX
         '--> Affichage
 
         'Si le chemin d'un fichier est passé en argument
-        '--> c'est-à-dire que le logiciel est ouvert par le biais d'un fichier sdx+
+        '--> c'est-à-dire que le logiciel est ouvert par le biais d'un fichier pmx
         If Environment.GetCommandLineArgs().Length = 2 Then
             If (Environment.GetCommandLineArgs(1) <> "") Then
                 'Sauvegarde du chemin du fichier
                 lOpenAvecFichier = True
-                ' FileName = Environment.GetCommandLineArgs(1)
+                FileName = Environment.GetCommandLineArgs(1)
             End If
         End If
 
         If lOpenAvecFichier Then
-            'ReadInFile(FileName)    '--> Ouverture du fichier 
+            ReadInFile(FileName)    '--> Ouverture du fichier 
         Else
             lBuild = False
             Frm_Ouverture.ShowDialog()    '--> Fenetre Ouverture
@@ -416,7 +418,9 @@ Public Class Frm_PMX
 
     Private Sub ClickNouveauProjet(sender As Object, e As EventArgs) Handles TSBbtn_NewN.Click
 
-        Frm_AjoutePP.ShowDialog()
+        'Frm_AjoutePP.lOuverture = True
+        'Frm_AjoutePP.ShowDialog()
+        Frm_Ouverture.ShowDialog()
 
     End Sub
 

@@ -973,7 +973,7 @@ Partial Class Frm_Chargement
         Me.txt_F2_Lineique.Size = New System.Drawing.Size(66, 20)
         Me.txt_F2_Lineique.TabIndex = 78
         Me.txt_F2_Lineique.TabStop = False
-        Me.txt_F2_Lineique.Text = "F (kN/m)"
+        Me.txt_F2_Lineique.Text = "q (kN/m)"
         Me.txt_F2_Lineique.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'txt_x1_Lineique_2
@@ -1048,7 +1048,7 @@ Partial Class Frm_Chargement
         Me.txt_F1_Lineique.Size = New System.Drawing.Size(66, 20)
         Me.txt_F1_Lineique.TabIndex = 78
         Me.txt_F1_Lineique.TabStop = False
-        Me.txt_F1_Lineique.Text = "F (kN/m)"
+        Me.txt_F1_Lineique.Text = "q (kN/m)"
         Me.txt_F1_Lineique.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'txt_Indice_Lineique_1
