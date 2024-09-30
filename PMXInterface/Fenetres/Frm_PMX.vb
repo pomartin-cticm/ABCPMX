@@ -420,6 +420,7 @@ Public Class Frm_PMX
 
         'Frm_AjoutePP.lOuverture = True
         'Frm_AjoutePP.ShowDialog()
+        Frm_Ouverture.lNewP = True
         Frm_Ouverture.ShowDialog()
 
     End Sub

@@ -8,6 +8,8 @@ Public Class Frm_Ouverture
     Dim strFiltresExtension As String
     Dim strNonDispo As String
 
+    Public lNewP As Boolean = False
+
 #End Region
 
 #Region "=== Ouverture Fenetre ==="
@@ -82,7 +84,6 @@ Public Class Frm_Ouverture
         Frm_AjoutePP.lOuverture = True
         Frm_AjoutePP.InitialiseFromOutside()
         TabPage_NewProject.Controls.Add(Frm_AjoutePP.pan_Choix)
-
 
         '==> Ouvrir Projet
         RemplirListe_RecentFiles()
@@ -175,6 +176,12 @@ Public Class Frm_Ouverture
         If TabPage_NewProject.Visible Then          '==> NOUVEAU PROJET
 
             Dim lOK As Boolean
+
+            '--> Gestion d'un nouveau projet
+
+            If Me.lNewP Then
+                MyProjet.Poutres.Clear()
+            End If
 
             '--> Ajout de la nouvelle poutre
 

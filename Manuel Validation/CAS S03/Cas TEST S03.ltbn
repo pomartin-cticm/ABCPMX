@@ -3,7 +3,7 @@
 +------------------+
 
 #VERSION
-VERSION                = 2,00
+VERSION                = 2,01
 NORMALMODE             = 0
 
 #REFERENCES
@@ -13,7 +13,7 @@ PROJECTNAME            =
 PROJECTID              = 
 
 #BEAM
-LENGTH                 = 13
+LENGTH                 = 11,5
 ELEMENTSNUMBER         = 100
 NZ                     = 20
 NZMIN                  = 1
@@ -85,7 +85,7 @@ SECTION 1 KTETA TYPE   = 0
 SECTION 1 KVP TYPE     = 0
 SECTION 1 KTETAP TYPE  = 0
 SECTION 1 KWP TYPE     = 0
-SECTION 2 ABSCISSA     = 13
+SECTION 2 ABSCISSA     = 11,5
 SECTION 2 DEFINITION   = 1
 SECTION 2 TYPE         = 4
 SECTION 2 NAME         = PRS S03
@@ -104,10 +104,10 @@ SECTION 2 KTETAP TYPE  = 0
 SECTION 2 KWP TYPE     = 0
 
 #RESTRAINTS
-RESTRAINTS NB          = 2
+RESTRAINTS NB          = 4
 RESTRAINT 1 TYPE       = 0
 RESTRAINT 1 VREFERENCE = 0
-RESTRAINT 1 X          = 3
+RESTRAINT 1 X          = 2,5
 RESTRAINT 1 Z          = 0
 RESTRAINT 1 V TYPE     = 0
 RESTRAINT 1 TETA TYPE  = 0
@@ -115,20 +115,36 @@ RESTRAINT 1 VP TYPE    = 1
 RESTRAINT 1 TETAP TYPE = 1
 RESTRAINT 2 TYPE       = 0
 RESTRAINT 2 VREFERENCE = 0
-RESTRAINT 2 X          = 13
+RESTRAINT 2 X          = 5,5
 RESTRAINT 2 Z          = 0
 RESTRAINT 2 V TYPE     = 0
 RESTRAINT 2 TETA TYPE  = 0
 RESTRAINT 2 VP TYPE    = 1
 RESTRAINT 2 TETAP TYPE = 1
+RESTRAINT 3 TYPE       = 0
+RESTRAINT 3 VREFERENCE = 0
+RESTRAINT 3 X          = 8,5
+RESTRAINT 3 Z          = 0
+RESTRAINT 3 V TYPE     = 0
+RESTRAINT 3 TETA TYPE  = 0
+RESTRAINT 3 VP TYPE    = 1
+RESTRAINT 3 TETAP TYPE = 1
+RESTRAINT 4 TYPE       = 0
+RESTRAINT 4 VREFERENCE = 0
+RESTRAINT 4 X          = 11,5
+RESTRAINT 4 Z          = 0
+RESTRAINT 4 V TYPE     = 0
+RESTRAINT 4 TETA TYPE  = 0
+RESTRAINT 4 VP TYPE    = 1
+RESTRAINT 4 TETAP TYPE = 1
 
 #SUPPORTS
 SUPPORTS NB            = 2
-SUPPORT 1 X            = 3
+SUPPORT 1 X            = 2,5
 SUPPORT 1 U TYPE       = 0
 SUPPORT 1 W TYPE       = 0
 SUPPORT 1 WP TYPE      = 1
-SUPPORT 2 X            = 13
+SUPPORT 2 X            = 11,5
 SUPPORT 2 U TYPE       = 1
 SUPPORT 2 W TYPE       = 0
 SUPPORT 2 WP TYPE      = 1
@@ -140,7 +156,7 @@ LOADS WEIGHT                   = 0
 LOADS CON NB                   = 0
 LOADS DIS NB                   = 1
 LOAD DIS 1 X1                  = 0
-LOAD DIS 1 X2                  = 13
+LOAD DIS 1 X2                  = 2,5
 LOAD DIS 1 Z1                  = 0,174
 LOAD DIS 1 Z2                  = 0,174
 LOAD DIS 1 ZREFERENCE          = 0
@@ -155,13 +171,13 @@ LOADS INTMOMENT NB             = 2
 LOADS INTMOMENT ACTIVE         = 1
 LOAD INTMOMENT 1 X             = 0
 LOAD INTMOMENT 1 M             = 100
-LOAD INTMOMENT 2 X             = 13
+LOAD INTMOMENT 2 X             = 11,5
 LOAD INTMOMENT 2 M             = 100
 LOADS INTAXIALFORCE NB         = 2
 LOADS INTAXIALFORCE ACTIVE     = 1
 LOAD INTAXIALFORCE 1 X         = 0
 LOAD INTAXIALFORCE 1 N         = 0
-LOAD INTAXIALFORCE 2 X         = 13
+LOAD INTAXIALFORCE 2 X         = 11,5
 LOAD INTAXIALFORCE 2 N         = 0
 
 #2DELASTICANALYSIS

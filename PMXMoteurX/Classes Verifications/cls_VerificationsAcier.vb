@@ -370,6 +370,7 @@ Public Class cls_VerificationsAcier
         Dim Fu() As Decimal = {myBeam.Section.Acier.LimiteFu(Math.Max(myBeam.Section.ProfilA.Tfs, myBeam.Section.ProfilA.Tw)),
                                myBeam.Section.Acier.LimiteFu(Math.Max(myBeam.Section.ProfilA.Tfi, myBeam.Section.ProfilA.Tw))}
         Dim myEN1993 As New cls_Eurocodes
+        Dim awCal As Decimal
 
         '--( Initialisation
 
@@ -390,7 +391,8 @@ Public Class cls_VerificationsAcier
 
                     For iSoud = iDEB To iFIN
 
-                        Gorges(iSoud - 1) = Math.Max(Gorges(iSoud - 1), myEN1993.CalculSoudure(FluxELU(iSoud, iNode, k), GammaM2, BetaW, Fu(iSoud - 1)))
+                        awCal = myEN1993.CalculSoudure(FluxELU(iSoud, iNode, k), GammaM2, BetaW, Fu(iSoud - 1))
+                        Gorges(iSoud - 1) = Math.Max(Gorges(iSoud - 1), awCal)
 
                     Next
 

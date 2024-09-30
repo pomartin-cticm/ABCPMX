@@ -12,7 +12,7 @@ BLOCK IDENTIFICATION
    NomProjet             = VALIDATION
 
 BLOCK BEAM
-   BeaIden               = CAS TEST S03
+   BeaIden               = CAS TEST S04
    Comment               = 
    LCantilever           = True
    RCantilever           = False
@@ -49,8 +49,8 @@ BLOCK BEAM
    CSLSCoef              = {0/0/0/1/1}+{0/0/0/0/0}
 
 BLOCK MAINTIENS
-   Lrest                 = 1 3,1666666666666666666666666667 True True
-   Lrest                 = 1 6,3333333333333333333333333334 True True
+   Lrest                 = 1 3 True True
+   Lrest                 = 1 6 True True
 
 BLOCK SECTION
    Name                  = Name
@@ -72,11 +72,11 @@ BLOCK PROFIL
    tfi                   = 0,022
    rcs                   = 0
    rci                   = 0
-   tw                    = 0,006
+   tw                    = 0,005
    Welda                 = 0
    PlatB                 = 0
    PlatT                 = 0
-   Grade                 = S275
+   Grade                 = S460
    QualitY               = EC3
    Reduction             = Table 3.1
    Standart              = EN 1993-1-1
@@ -110,7 +110,7 @@ BLOCK SLAB_REINFORCEMENT
 BLOCK OPTIONS
    RH                    = 50
    Norme                 = 0
-   EtaW                  = 1,00
+   EtaW                  = 1,2
    lLarEffSimp           = False
    lCompArma             = False
    dMaxNodes             = 1,0
@@ -169,15 +169,15 @@ BLOCK HIVOSS
 
 BLOCK LOADS_G1
    QSurf                 = 0 0
-   qDist                 = 0 0 6477,425 2,5 6477,425
-   qDist                 = 1 0 6477,425 9 6477,425
+   qDist                 = 0 0 6455,863 2,5 6455,863
+   qDist                 = 1 0 6455,863 9 6455,863
  
 BLOCK LOADS_G2
    QSurf                 = 0 0
  
 BLOCK LOADS_Q1
    QSurf                 = 0 0
-   qDist                 = 0 0 75000,000 2,5 75000,000
+   qDist                 = 0 0 120000,000 2,5 120000,000
  
 BLOCK LOADS_Q2
    QSurf                 = 0 0
@@ -187,7 +187,7 @@ BLOCK LOADS_QC
  
 ==================================================================================
 BLOCK BEAM
-   BeaIden               = CAS TEST S03B
+   BeaIden               = CAS TEST S04B
    Comment               = 
    LCantilever           = False
    RCantilever           = True
@@ -224,8 +224,8 @@ BLOCK BEAM
    CSLSCoef              = {0/0/0/1/1}+{0/0/0/0/0}
 
 BLOCK MAINTIENS
-   Lrest                 = 1 3,1666666666666666666666666667 True True
-   Lrest                 = 1 6,3333333333333333333333333334 True True
+   Lrest                 = 1 3 True True
+   Lrest                 = 1 6 True True
 
 BLOCK SECTION
    Name                  = Name
@@ -247,11 +247,11 @@ BLOCK PROFIL
    tfi                   = 0,022
    rcs                   = 0
    rci                   = 0
-   tw                    = 0,006
+   tw                    = 0,005
    Welda                 = 0
    PlatB                 = 0
    PlatT                 = 0
-   Grade                 = S275
+   Grade                 = S460
    QualitY               = EC3
    Reduction             = Table 3.1
    Standart              = EN 1993-1-1
@@ -285,7 +285,7 @@ BLOCK SLAB_REINFORCEMENT
 BLOCK OPTIONS
    RH                    = 50
    Norme                 = 0
-   EtaW                  = 1,00
+   EtaW                  = 1,2
    lLarEffSimp           = False
    lCompArma             = False
    dMaxNodes             = 1,0
@@ -344,15 +344,15 @@ BLOCK HIVOSS
 
 BLOCK LOADS_G1
    QSurf                 = 0 0
-   qDist                 = 1 0 6477,425 9 6477,425
-   qDist                 = 2 0 6477,425 2,5 6477,425
+   qDist                 = 1 0 6455,863 9 6455,863
+   qDist                 = 2 0 6455,863 2,5 6455,863
  
 BLOCK LOADS_G2
    QSurf                 = 0 0
  
 BLOCK LOADS_Q1
    QSurf                 = 0 0
-   qDist                 = 2 0 75000,000 2,5 75000,000
+   qDist                 = 2 0 120000,000 2,5 120000,000
  
 BLOCK LOADS_Q2
    QSurf                 = 0 0

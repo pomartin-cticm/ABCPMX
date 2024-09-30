@@ -114,10 +114,13 @@ Public Class Frm_Maintiens
 #Region "===OUVERTURE==="
 
     Private Sub Frm_Portees_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         InitialiserFenetre()
+
     End Sub
 
     Public Sub InitialiserFenetre()
+        lBuild = True
         InitialiserVariables()
         GestionLangues()
         GestionStyle()
@@ -182,7 +185,7 @@ Public Class Frm_Maintiens
                 Me.rad_FullyRestrain.Text = Bloc("FULLYRESTRAINED")
                 Me.rad_PointRestrain.Text = Bloc("POINTRESTRAINTS")
 
-                Me.lbl_ControlDessin.Text = Bloc("DRAWCONTROL")
+                'Me.lbl_.Text = Bloc("DRAWCONTROL")
                 Me.btn_Add.Text = Bloc("ADD")
                 Me.btn_Delete.Text = Bloc("DELETE")
 
@@ -235,6 +238,7 @@ Public Class Frm_Maintiens
         Else
             Me.cmb_Travee.SelectedIndex = 0
         End If
+        traveeEnCours = (cls_Poutre.EnuTypeTravee.DeuxAppuis, 1)
     End Sub
 
     Private Sub PrepareFlechesNavigation()
@@ -265,8 +269,8 @@ Public Class Frm_Maintiens
 
         Me.Icon = Frm_PMX.Icon
 
-        Me.lbl_ControlDessin.BackColor = CouleurBackBandeaux
-        Me.lbl_ControlDessin.ForeColor = CouleurForeBandeaux
+        'Me.lbl_.BackColor = CouleurBackBandeaux
+        'Me.lbl_.ForeColor = CouleurForeBandeaux
 
         Me.lbl_Maintiens.BackColor = CouleurBackBandeaux
         Me.lbl_Maintiens.ForeColor = CouleurForeBandeaux
@@ -295,7 +299,8 @@ Public Class Frm_Maintiens
                 rad_PointRestrain.Checked = True
         End Select
 
-        MAJ_pan_ControlDessin(rad_PointRestrain.Checked)
+        'MAJ_pan_ControlDessin(rad_PointRestrain.Checked)
+        MAJI_PointRestraints(rad_PointRestrain.Checked)
 
     End Sub
 
@@ -331,7 +336,7 @@ Public Class Frm_Maintiens
 
         With MyProjet.Poutres(MyProjet.IndEnCours)
 
-            For i_travee As Integer = 0 To MyPoutreLoc.IndiceTraveeConsoleDroite
+            For i_travee As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee
 
                 If MyPoutreLoc.Maintiens(i_travee).Count <> .Maintiens(i_travee).Count Then
                     lModif = True
@@ -366,6 +371,7 @@ Public Class Frm_Maintiens
 #Region " Dessins "
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Maintiens.Paint
 
+        iSelect = traveeEnCours.Item2
         DessinFrmMaintiens(e.Graphics, MyPoutreLoc, FontFrm, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height,
                            1, iSelect, True, positionCotesInferieuresDessin, positionMaintiensDessin, EpaisseurSemelleDessin)
 
@@ -538,6 +544,14 @@ Public Class Frm_Maintiens
     Private Sub btn_Add_Click(sender As Object, e As EventArgs) Handles btn_Add.Click
         If lBuild Then Exit Sub
 
+        If MyPoutreLoc.TypeMaintien <> cls_Poutre.EnuTypeMaintiensPoutre.PointRestrained Then
+            MyPoutreLoc.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.PointRestrained
+            lBuild = True
+            Me.rad_PointRestrain.Checked = True
+            lBuild = False
+            MAJI_PointRestraints(True)
+        End If
+
         If MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count < NBRESTRAINMAX Then
             MyPoutreLoc.Maintiens(traveeEnCours.Item2).Add(New cls_Maintiens(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / 2, True, True, False))
             MAJ_PositionMaintiens()
@@ -556,7 +570,7 @@ Public Class Frm_Maintiens
         End If
 
     End Sub
-    Private Sub MouseClick_HorsPanImg(sender As Object, e As PaintEventArgs) Handles pan_Maintiens.Paint, pan_ControlDessin.Paint
+    Private Sub MouseClick_HorsPanImg(sender As Object, e As PaintEventArgs) Handles pan_Maintiens.Paint
         'Rend invisible les textbox lorsqu'on clique ailleurs
         txt_Cotations.Visible = False
 
@@ -626,7 +640,7 @@ Public Class Frm_Maintiens
                     traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleDroite, MyPoutreLoc.IndiceTraveeConsoleDroite)
                     iSelect = 99
                 Else
-                    traveeEnCours = (cls_Poutre.EnuTypeTravee.DeuxAppuis, NbTravees)
+                    traveeEnCours = (cls_Poutre.EnuTypeTravee.DeuxAppuis, NbTravees - 1)
                     iSelect = 1
                 End If
             Case Else
@@ -637,23 +651,6 @@ Public Class Frm_Maintiens
         End Select
 
 
-        'Select Case True
-        '    Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
-        '        rad_NonRestrain.Checked = True
-        '    Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
-        '        rad_FullyRestrain.Checked = True
-        '    Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
-        '        rad_PointRestrain.Checked = True
-        'End Select
-
-        'Select Case True
-        '    Case MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
-        '        rad_NonRestrain.Checked = True
-        '    Case MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
-        '        rad_FullyRestrain.Checked = True
-        '    Case MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
-        '        rad_PointRestrain.Checked = True
-        'End Select
         '===POM
         Select Case MyPoutreLoc.TypeMaintien
             Case cls_Poutre.EnuTypeMaintiensPoutre.NotRestrained
@@ -737,15 +734,6 @@ Public Class Frm_Maintiens
 
         MAJ_PositionMaintiens()
 
-        'Select Case True
-        '    Case rad_NonRestrain.Checked
-        '        MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
-        '    Case rad_FullyRestrain.Checked
-        '        MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
-        '    Case rad_PointRestrain.Checked
-        '        MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
-        'End Select
-
         Select Case True
             Case rad_NonRestrain.Checked
                 MyPoutreLoc.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.NotRestrained
@@ -755,15 +743,20 @@ Public Class Frm_Maintiens
                 MyPoutreLoc.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.PointRestrained
         End Select
 
-        MAJ_pan_ControlDessin(rad_PointRestrain.Checked)
+        'MAJ_pan_ControlDessin(rad_PointRestrain.Checked)
+        MAJI_PointRestraints(rad_PointRestrain.Checked)
 
         img_Maintiens.Invalidate()
     End Sub
 
-    Private Sub MAJ_pan_ControlDessin(lEnable As Boolean)
-        'Affiche le panel qui permet d'ajouter ou de supprimer des maintiens ponctuels uniquement si rad_PointRestrain est selectionné
-        Me.pan_ControlDessin.Enabled = lEnable
-        Me.lbl_ControlDessin.Enabled = lEnable
+    'Private Sub MAJ_pan_ControlDessin(lEnable As Boolean)
+    '    'Affiche le panel qui permet d'ajouter ou de supprimer des maintiens ponctuels uniquement si rad_PointRestrain est selectionné
+    '    Me.pan_ControlDessin.Enabled = lEnable
+    '    Me.lbl_.Enabled = lEnable
+    'End Sub
+
+    Private Sub MAJI_PointRestraints(lEnable As Boolean)
+        Me.btn_Delete.Enabled = lEnable
     End Sub
 
 #End Region

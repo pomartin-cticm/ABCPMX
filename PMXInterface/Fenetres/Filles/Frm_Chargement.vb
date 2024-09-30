@@ -283,9 +283,9 @@ Public Class Frm_Chargement
                 Me.btn_InfoPP.Text = Bloc("INFORMATION")
 
                 Me.txt_x1_Lineique.Text = "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
-                Me.txt_F1_Lineique.Text = "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+                Me.txt_F1_Lineique.Text = "q (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
                 Me.txt_x2_Lineique.Text = "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
-                Me.txt_F2_Lineique.Text = "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+                Me.txt_F2_Lineique.Text = "q (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
 
                 '=== FORCE PONCTUELLE ==============================================================='
                 Me.lbl_ChargesPonctuelles.Text = Bloc("CONCENTRATEDLOAD")
@@ -302,8 +302,6 @@ Public Class Frm_Chargement
 
                 Me.lbl_UnitLeftSupport.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
                 Me.lbl_UnitRightSupport.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
-
-
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")

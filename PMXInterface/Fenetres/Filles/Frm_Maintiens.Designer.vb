@@ -33,11 +33,9 @@ Partial Class Frm_Maintiens
         Me.TLPan_Maintiens = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
-        Me.pan_ControlDessin = New System.Windows.Forms.Panel()
         Me.btn_Delete = New System.Windows.Forms.Button()
         Me.btn_Add = New System.Windows.Forms.Button()
         Me.lbl_Maintiens = New System.Windows.Forms.Label()
-        Me.lbl_ControlDessin = New System.Windows.Forms.Label()
         Me.pan_Maintiens = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btn_Precedent = New System.Windows.Forms.Button()
@@ -58,7 +56,6 @@ Partial Class Frm_Maintiens
         Me.TLPan_Maintiens.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
-        Me.pan_ControlDessin.SuspendLayout()
         Me.pan_Maintiens.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.pan_Img_Maintiens.SuspendLayout()
@@ -174,49 +171,32 @@ Partial Class Frm_Maintiens
         '
         Me.TLPan_Gauche.ColumnCount = 1
         Me.TLPan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.Controls.Add(Me.pan_ControlDessin, 0, 3)
         Me.TLPan_Gauche.Controls.Add(Me.lbl_Maintiens, 0, 0)
-        Me.TLPan_Gauche.Controls.Add(Me.lbl_ControlDessin, 0, 2)
         Me.TLPan_Gauche.Controls.Add(Me.pan_Maintiens, 0, 1)
         Me.TLPan_Gauche.Dock = System.Windows.Forms.DockStyle.Top
         Me.TLPan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
-        Me.TLPan_Gauche.RowCount = 4
+        Me.TLPan_Gauche.RowCount = 2
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 180.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
         Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 303)
         Me.TLPan_Gauche.TabIndex = 0
         '
-        'pan_ControlDessin
-        '
-        Me.pan_ControlDessin.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_ControlDessin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_ControlDessin.Controls.Add(Me.btn_Delete)
-        Me.pan_ControlDessin.Controls.Add(Me.btn_Add)
-        Me.pan_ControlDessin.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_ControlDessin.Location = New System.Drawing.Point(0, 240)
-        Me.pan_ControlDessin.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_ControlDessin.Name = "pan_ControlDessin"
-        Me.pan_ControlDessin.Size = New System.Drawing.Size(250, 63)
-        Me.pan_ControlDessin.TabIndex = 2
-        '
         'btn_Delete
         '
-        Me.btn_Delete.Location = New System.Drawing.Point(128, 18)
+        Me.btn_Delete.Location = New System.Drawing.Point(33, 200)
         Me.btn_Delete.Name = "btn_Delete"
-        Me.btn_Delete.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Delete.Size = New System.Drawing.Size(191, 28)
         Me.btn_Delete.TabIndex = 3
         Me.btn_Delete.Text = "btn_Delete"
         Me.btn_Delete.UseVisualStyleBackColor = True
         '
         'btn_Add
         '
-        Me.btn_Add.Location = New System.Drawing.Point(7, 18)
+        Me.btn_Add.Location = New System.Drawing.Point(33, 166)
         Me.btn_Add.Name = "btn_Add"
-        Me.btn_Add.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Add.Size = New System.Drawing.Size(191, 28)
         Me.btn_Add.TabIndex = 2
         Me.btn_Add.Text = "btn_Add"
         Me.btn_Add.UseVisualStyleBackColor = True
@@ -235,25 +215,13 @@ Partial Class Frm_Maintiens
         Me.lbl_Maintiens.Text = "lbl_Maintiens"
         Me.lbl_Maintiens.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lbl_ControlDessin
-        '
-        Me.lbl_ControlDessin.AutoSize = True
-        Me.lbl_ControlDessin.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_ControlDessin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_ControlDessin.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_ControlDessin.Location = New System.Drawing.Point(0, 210)
-        Me.lbl_ControlDessin.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_ControlDessin.Name = "lbl_ControlDessin"
-        Me.lbl_ControlDessin.Size = New System.Drawing.Size(250, 30)
-        Me.lbl_ControlDessin.TabIndex = 3
-        Me.lbl_ControlDessin.Text = "lbl_ControlDessin"
-        Me.lbl_ControlDessin.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'pan_Maintiens
         '
         Me.pan_Maintiens.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Maintiens.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Maintiens.Controls.Add(Me.btn_Delete)
         Me.pan_Maintiens.Controls.Add(Me.Panel1)
+        Me.pan_Maintiens.Controls.Add(Me.btn_Add)
         Me.pan_Maintiens.Controls.Add(Me.rad_NonRestrain)
         Me.pan_Maintiens.Controls.Add(Me.lbl_Travee)
         Me.pan_Maintiens.Controls.Add(Me.rad_PointRestrain)
@@ -262,7 +230,7 @@ Partial Class Frm_Maintiens
         Me.pan_Maintiens.Location = New System.Drawing.Point(0, 30)
         Me.pan_Maintiens.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Maintiens.Name = "pan_Maintiens"
-        Me.pan_Maintiens.Size = New System.Drawing.Size(250, 179)
+        Me.pan_Maintiens.Size = New System.Drawing.Size(250, 272)
         Me.pan_Maintiens.TabIndex = 1
         '
         'Panel1
@@ -414,7 +382,6 @@ Partial Class Frm_Maintiens
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
-        Me.pan_ControlDessin.ResumeLayout(False)
         Me.pan_Maintiens.ResumeLayout(False)
         Me.pan_Maintiens.PerformLayout()
         Me.Panel1.ResumeLayout(False)
@@ -440,10 +407,8 @@ Partial Class Frm_Maintiens
     Friend WithEvents rad_FullyRestrain As RadioButton
     Friend WithEvents rad_PointRestrain As RadioButton
     Friend WithEvents cmb_Travee As ComboBox
-    Friend WithEvents pan_ControlDessin As Panel
     Friend WithEvents btn_Delete As Button
     Friend WithEvents btn_Add As Button
-    Friend WithEvents lbl_ControlDessin As Label
     Friend WithEvents lbl_Travee As Label
     Friend WithEvents rad_NonRestrain As RadioButton
     Friend WithEvents pan_Img_Maintiens As Panel

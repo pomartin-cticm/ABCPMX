@@ -1568,7 +1568,7 @@ Public Class cls_Section
         End If
 
         ' --> Calcul classe âme
-        classeAme = Me.ClasseAme(lFlexionPositive, zANP, lG1_EN, lCalculFeu)
+        classeAme = Me.ClassificationPlastiqueAme(lFlexionPositive, zANP, lG1_EN, lCalculFeu)
 
         ' --> Calcul classe section totale 
         classeSectionTotale = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, Math.Max(classePlatInfSFB, classeAme)))
@@ -1591,7 +1591,7 @@ Public Class cls_Section
 
             ' --> Calcul classe âme
 
-            classeAme = Me.ClasseAme(lFlexionPositive, zANE, lG1_EN, lCalculFeu)
+            classeAme = Me.ClassificationElastiqueAme(lFlexionPositive, zANE, lG1_EN, lCalculFeu)
 
             ' --> Calcul classe section totale
 
@@ -1832,15 +1832,7 @@ Public Class cls_Section
         Return classeSemelle
     End Function
 
-    ''' <summary>
-    ''' Calcul la classe d'une ame
-    ''' </summary>
-    ''' <param name="lFlexionPositive"></param>
-    ''' <param name="zAN"></param>
-    ''' <param name="lG1_EN"></param>
-    ''' <returns></returns>
-    Public Function ClasseAme(lFlexionPositive As Boolean, zAN As Decimal, lG1_EN As Boolean, Optional lCalculFeu As Boolean = False) As Integer
-
+    Public Function ClasseAme(lFlexionPositive As Boolean, zANP As Decimal, zANE As Decimal, lG1_EN As Boolean, Optional lCalculFeu As Boolean = False) As Integer
         '----------------------------------------------------------------------------------------------------------
         '   11/10/23 :  Création - GUD
         '----------------------------------------------------------------------------------------------------------
@@ -1848,34 +1840,34 @@ Public Class cls_Section
         '----------------------------------------------------------------------------------------------------------
         '   lFlexionPositive    [E] :   Indique si le calcul se fait en considérant une flexion positive (True) ou non (False)
         '   SectionLoc          [E] :   Section locale à classer
-        '   zAN                 [E] :   Position de l'Axe Neutre (compté algébriquement depuis la face supérieure du profilé)
+        '   zANP                [E] :   Position de l'Axe Neutre Plastique (compté algébriquement depuis la face supérieure du profilé)
+        '   zANE                [E] :   Position de l'Axe Neutre Elastique (compté algébriquement depuis la face supérieure du profilé)
         '   lG1_EN              [E] :   Indique si le calcul de la classe se fait selon les Eurocodes actuels (True) ou selon la deuxieme génération d'Eurocodes (False)
         '----------------------------------------------------------------------------------------------------------
 
+        '--( Déclarations
+
         Dim epsilon_w As Decimal = Me.Epsilon_W
-        Dim alpha, psi As Decimal
         Dim classeAmeLoc As Integer
+
+        '--( Initialisations
 
         If lCalculFeu Then
             epsilon_w *= 0.85
         End If
 
+        '--( Traitement
+
         With Me.ProfilA
 
             '# Hypothese d'une répartition plastique
 
-            If lAmeEntierementTendue(lFlexionPositive, zAN) Then
-                classeAmeLoc = 1
-            Else 'Ame au moins en partie comprimée 
-                alpha = CalculAlpha(lFlexionPositive, zAN)
-                classeAmeLoc = ClasseAmeFlechiePlastique(.HauteurAmeDw, .Tw, epsilon_w, alpha, lG1_EN)
-            End If
+            classeAmeLoc = Me.ClassificationPlastiqueAme(lFlexionPositive, zANP, lG1_EN, lCalculFeu)
 
             If classeAmeLoc >= 3 Then
                 '# Hypothese d'une répartition élastique
 
-                psi = CalculPsi(lFlexionPositive, zAN)
-                classeAmeLoc = ClasseAmeFlechieElastique(.HauteurAmeDw, .Tw, epsilon_w, psi, lG1_EN)
+                Me.ClassificationElastiqueAme(lFlexionPositive, zANE, lG1_EN, epsilon_w)
 
             End If
 
@@ -1885,13 +1877,106 @@ Public Class cls_Section
 
     End Function
 
-    ''' <summary>
-    ''' Permet de savoir si l'ame du profile est entierement tendue ou non (nécessaire avant de faire le calcul de alpha ou de psi)
-    ''' </summary>
-    ''' <param name="lFlexionPositive">indique si on considère une flexion positive (qui comprime la semelle supérieure) ou non</param>
-    ''' <param name="zAN">position de l'axe neutre</param>
-    ''' <returns></returns>
+    Private Function ClassificationElastiqueAme(lFlexionPositive As Boolean, zANE As Decimal, lG1_EN As Boolean, EpsilonW As Decimal) As Integer
+        '----------------------------------------------------------------------------------------------------------
+        '   30/09/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul de la classe d'une ame flechie avec une hypothèse de répartition élastique
+        '----------------------------------------------------------------------------------------------------------
+        '   lFlexionPositive    [E] :   Indique si le calcul se fait en considérant une flexion positive (True) ou non (False)
+        '   zANE                [E] :   Position de l'Axe Neutre élastique (compté algébriquement depuis la face supérieure du profilé)
+        '   lG1_EN              [E] :   Indique si le calcul de la classe se fait selon les Eurocodes actuels (True) ou selon la deuxieme génération d'Eurocodes (False)
+        '   EpsilonW            [E] :   Valeur du coef epsilon
+        '----------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Psi As Decimal
+        Dim classeAmeLoc As Integer = 3
+
+        '--( Traitement
+
+        With Me.ProfilA
+            Psi = CalculPsi(lFlexionPositive, zANE)
+            classeAmeLoc = ClasseAmeFlechieElastique(.HauteurAmeDw, .Tw, Epsilon_W, psi, lG1_EN)
+        End With
+        Return classeAmeLoc
+
+    End Function
+
+    Public Function ClassificationElastiqueAme(lFlexionPositive As Boolean, zANE As Decimal, lG1_EN As Boolean, Optional lCalculFeu As Boolean = False) As Integer
+        '----------------------------------------------------------------------------------------------------------
+        '   30/09/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul de la classe d'une ame flechie avec une hypothèse de répartition élastique
+        '----------------------------------------------------------------------------------------------------------
+        '   lFlexionPositive    [E] :   Indique si le calcul se fait en considérant une flexion positive (True) ou non (False)
+        '   zANE                [E] :   Position de l'Axe Neutre élastique (compté algébriquement depuis la face supérieure du profilé)
+        '   lG1_EN              [E] :   Indique si le calcul de la classe se fait selon les Eurocodes actuels (True) ou selon la deuxieme génération d'Eurocodes (False)
+        '----------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim epsilon_w As Decimal = Me.Epsilon_W
+
+        '--( Initialisations
+
+        If lCalculFeu Then epsilon_w *= 0.85
+
+        '--( Traitement
+
+        Return Me.ClassificationElastiqueAme(lFlexionPositive, zANE, lG1_EN, epsilon_w)
+
+    End Function
+
+    Public Function ClassificationPlastiqueAme(lFlexionPositive As Boolean, zANP As Decimal, lG1_EN As Boolean, Optional lCalculFeu As Boolean = False) As Integer
+        '----------------------------------------------------------------------------------------------------------
+        '   30/09/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul de la classe d'une ame flechie avec une hypothèse de répartition plastique
+        '----------------------------------------------------------------------------------------------------------
+        '   lFlexionPositive    [E] :   Indique si le calcul se fait en considérant une flexion positive (True) ou non (False)
+        '   SectionLoc          [E] :   Section locale à classer
+        '   zANP                [E] :   Position de l'Axe Neutre (compté algébriquement depuis la face supérieure du profilé)
+        '   lG1_EN              [E] :   Indique si le calcul de la classe se fait selon les Eurocodes actuels (True) ou selon la deuxieme génération d'Eurocodes (False)
+        '----------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim epsilon_w As Decimal = Me.Epsilon_W
+        Dim alpha As Decimal
+        Dim classeAmeLoc As Integer
+
+        '--( Initialisations
+
+        If lCalculFeu Then epsilon_w *= 0.85
+
+        '--( Traitement
+
+        With Me.ProfilA
+            If lAmeEntierementTendue(lFlexionPositive, zANP) Then
+                classeAmeLoc = 1
+            Else 'Ame au moins en partie comprimée 
+                alpha = CalculAlpha(lFlexionPositive, zANP)
+                classeAmeLoc = ClasseAmeFlechiePlastique(.HauteurAmeDw, .Tw, epsilon_w, alpha, lG1_EN)
+            End If
+        End With
+
+        Return classeAmeLoc
+
+    End Function
+
+
+
     Public Function lAmeEntierementTendue(lFlexionPositive As Boolean, zAN As Decimal) As Boolean
+        '----------------------------------------------------------------------------------------------------------
+        '   11/10/23 :  Création - GUD
+        '----------------------------------------------------------------------------------------------------------
+        '    Permet de savoir si l'ame du profile est entierement tendue ou non (nécessaire avant de faire le calcul de alpha ou de psi)
+        '----------------------------------------------------------------------------------------------------------
+        '   lFlexionPositive    [E] :   Indique si le calcul se fait en considérant une flexion positive (qui comprime la semelle supérieure) (True) ou non (False)
+        '   zAN                 [E] :   Position de l'Axe Neutre (compté algébriquement depuis la face supérieure du profilé)
+        '----------------------------------------------------------------------------------------------------------
 
         'Permet de savoir si l'ame flechie est entierement tendue ou non (nécessaire avant le calcul de alpha ou psi)
         With Me.ProfilA
