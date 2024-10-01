@@ -44,6 +44,8 @@
     Public GorgesSoudures(1) As Decimal             ' Gorge des soudures ame semelles pour les sections PRS
     Public GorgesSouduresMini(1) As Decimal         ' Gorge mini des soudures ame semelles pour les sections PRS
 
+
+    Private Const NBSURFP As Integer = 4
 #End Region
 
 #Region " Attributs pour le calcul des armatures transversales"
@@ -52,7 +54,7 @@
     ''' Contrainte tangentielle / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
+    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1), c-c(2) ou d-d (3)
     ''' </summary>
     Public TauEd(,,) As Decimal
 
@@ -60,7 +62,7 @@
     ''' Angle de la bielle de compression EN RADIAN / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
+    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1), c-c(2) ou d-d (3)
     ''' </summary>
     Public Thetaf(,,) As Decimal
 
@@ -76,7 +78,7 @@
     ''' (GUD: pour l'instant je mets ici l'attribut car le critère est constant le long d'une zone de connexion. A voir s'il faut le déplacer dans la classe vérification)
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
+    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1), c-c(2) ou d-d (3)
     ''' </summary>
     Public Gamma_sf(,,) As Decimal
 
@@ -84,7 +86,7 @@
     ''' Aire par unité de longueur des armatures transversales / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
+    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1), c-c(2) ou d-d (3)
     ''' </summary>
 
     Public As_s_transv(,,) As Decimal
@@ -107,11 +109,11 @@
         Me.CritereMV = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         Me.CritereMVb = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
 
-        ReDim TauEd(IndDerniereT, 2, 2)
-        ReDim Thetaf(IndDerniereT, 2, 2)
+        ReDim TauEd(IndDerniereT, 2, NBSURFP - 1)
+        ReDim Thetaf(IndDerniereT, 2, NBSURFP - 1)
         ReDim Thetaf_min(IndDerniereT, 2)
-        ReDim Gamma_sf(IndDerniereT, 2, 2)
-        ReDim As_s_transv(IndDerniereT, 2, 2)
+        ReDim Gamma_sf(IndDerniereT, 2, NBSURFP - 1)
+        ReDim As_s_transv(IndDerniereT, 2, NBSURFP - 1)
 
     End Sub
 
@@ -1272,11 +1274,11 @@
         Dim Ecm, Fck, Fcd, nu As Decimal
         Dim fypd, fsd As Decimal
         Dim gammaVs, gammaVc As Decimal
-        Dim v_x_Ed As Decimal
-        Dim k_sf_aa_sA, k_sf_bb_sA, k_sf_dd_sA As Decimal   'Definition des coefficients lorsque l'on se trouve au droit de l'appui A (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
-        Dim k_sf_aa_m, k_sf_bb_m, k_sf_dd_m As Decimal      'Definition des coefficients lorsque l'on se trouve à mi-travee (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
-        Dim k_sf_aa_sB, k_sf_bb_sB, k_sf_dd_sB As Decimal   'Definition des coefficients lorsque l'on se trouve au droit de l'appui B (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
-        Dim hf_aa, hf_bb, hf_dd As Decimal
+        Dim vxEd As Decimal
+        Dim ksf_aa_sA, ksf_bb_sA, ksf_cc_sA, ksf_dd_sA As Decimal       'Definition des coefficients lorsque l'on se trouve au droit de l'appui A (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
+        Dim ksf_aa_m, ksf_bb_m, ksf_cc_m, ksf_dd_m As Decimal           'Definition des coefficients lorsque l'on se trouve à mi-travee (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
+        Dim ksf_aa_sB, ksf_bb_sB, ksf_cc_sB, ksf_dd_sB As Decimal       'Definition des coefficients lorsque l'on se trouve au droit de l'appui B (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
+        Dim hf_aa, hf_bb, hf_dd, hf_cc As Decimal
         Dim b0, b0min As Decimal
         Dim LargeurParticipante(0, 0) As Decimal
         Dim be1, be2, beta1, beta2, bem, bes As Decimal
@@ -1285,7 +1287,15 @@
         Dim lSupportA, lSupportB, lMiTravee As Boolean      'sera utile pour + tard, permet de savoir si la zone de connection etudiee empiete sur la zone de support A, B ou mi-travee (selon la Figure 5.1 de l'EC4)
         Dim thetaf_min_pos, thetaf_min_neg, thetaf_max As Decimal 'angle min de la bielle de compression en fonction de si on se trouve en zone de flexion positive ou négative 
 
+        Dim bAppMin As Decimal
+
+        Const indAA As Integer = 0
+        Const indBB As Integer = 1
+        Const indCC As Integer = 2
+        Const indDD As Integer = 3
+
         '--> Initialisation
+
         lGeneration1 = myBeam.Param.lGeneration1
         lDallePleine = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
         lPerp = (myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
@@ -1317,72 +1327,90 @@
         xDebutZoneLoc = myBeam.xDebutZoneTravee
         xFinZoneLoc = myBeam.xFinZoneTravee
 
-        For i_travee As Integer = myBeam.IndicePremiereTravee To myBeam.IndiceDerniereTravee
-            For j_zone As Integer = 0 To myBeam.NombreZones(i_travee) - 1
+        For iTravee As Integer = myBeam.IndicePremiereTravee To myBeam.IndiceDerniereTravee
+            For jZone As Integer = 0 To myBeam.NombreZones(iTravee) - 1
 
-                '---
-                'CALCUL DE LA CONTRAINTE TANGENTIELLE
-                '---
+                '======================================
+                ' CALCUL DE LA CONTRAINTE TANGENTIELLE
+                '======================================
 
-                nr = myBeam.NombreGoujonsTransv(i_travee, j_zone)
+                '* nb de goujons par rangée
+                nr = myBeam.NombreGoujonsTransv(iTravee, jZone)
                 'PRd = myBeam.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, myBeam.Dalle.Bac, nr, Fck, Ecm, gammaVs, gammaVc)
-                'sx = myBeam.EspacemyPoutrentZone(i_travee, j_zone)
-                'v_x_Ed = nr * PRd / sx
-                v_x_Ed = myBeam.FluxRdZone(i_travee, j_zone)
+                'sx = myBeam.EspacemyPoutrentZone(iTravee, jZone)
+                'vxEd = nr * PRd / sx
+                '* flux de cisaillement enveloppe dans la zone (en capacité)
+                vxEd = myBeam.FluxRdZone(iTravee, jZone)
 
+                '* écartement de l'axe des connecteurs les plus éloignées l'un  de l'autre
                 b0 = (nr - 1) * b0min
 
-                myBeam.BeffDalle(myBeam.LongueurTravee(i_travee) / 2, i_travee, False, False, cls_Poutre.EnuTypeLargeurParticipante.Totale, LargeurParticipante)
+                '* largeurs participantes à mi-travée
+                myBeam.BeffDalle(myBeam.LongueurTravee(iTravee) / 2, iTravee, False, False, cls_Poutre.EnuTypeLargeurParticipante.Totale, LargeurParticipante)
 
-                'Calcul de hf qui correspond à la longueur developpe de la surface de ruine 
+                'Calcul de hf qui correspond à la longueur developpée de la surface de ruine 
                 hf_aa = myBeam.Dalle.EpaisseurActive
-                If nr = 1 Then
-                    hf_bb = 2 * myBeam.Dalle.Goujons.hsc + myBeam.Dalle.Goujons.d 'GUD: a confirmyPoutrer avec les corrections apportées dans le MT 
-                Else
-                    hf_bb = 2 * myBeam.Dalle.Goujons.hsc + b0
-                End If
+                hf_bb = 2 * myBeam.Dalle.Goujons.hsc + myBeam.Dalle.Goujons.d + b0
                 hf_dd = b0 + 2 * (myBeam.Section.ProfilA.Bfs - b0 + myBeam.Dalle.Goujons.hsc * Math.Tan(myBeam.Dalle.ThetaRd)) / Math.Sqrt(1 + Math.Tan(myBeam.Dalle.ThetaRd) ^ 2)
 
-                Select Case i_travee
-                    Case 0 'on est dans le cas de la console gauche
+                Dim dsc, d1, h1 As Decimal
+                h1 = myBeam.Dalle.Goujons.hsc - myBeam.Dalle.Bac.Hp
+                If myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
+                    d1 = myBeam.Dalle.Bac.Bt / 2 - (myBeam.Dalle.Goujons.d + b0) / 2
+                Else
+                    d1 = myBeam.Section.ProfilA.Bfs / 2 - (myBeam.Dalle.Goujons.d + b0) / 2 - bappmin
+                End If
+                dsc = Math.Sqrt(d1 ^ 2 + h1 ^ 2)
+                If myBeam.lIntermediaire Then
+                    hf_cc = b0 + +myBeam.Dalle.Goujons.d + 2 * dsc
+                Else
+                    hf_cc = b0 + +myBeam.Dalle.Goujons.d + myBeam.Dalle.Goujons.hsc + dsc
+                End If
 
-                        'Les consoles sont forcemyPoutrent en flexion négative, on calcul uniquemyPoutrent le coefficient au droit de l'appui A
+                Select Case iTravee
+                    Case 0                                  '%%% on est dans le cas de la console gauche
+
+                        'Les consoles sont forcement en flexion négative, on calcule uniquement le coefficient au droit de l'appui A
                         be1 = LargeurParticipante(0, 0)
                         be2 = LargeurParticipante(1, 0)
                         beta1 = LargeurParticipante(2, 0)
                         beta2 = LargeurParticipante(3, 0)
                         bes = LargeurParticipante(5, 0)
 
-                        k_sf_aa_sA = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
-                        k_sf_bb_sA = 1
-                        k_sf_dd_sA = 1
+                        ksf_aa_sA = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
+                        ksf_bb_sA = 1
+                        ksf_dd_sA = 1
+                        ksf_cc_sA = 1
 
-                        myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 0) = k_sf_aa_sA * v_x_Ed / hf_aa
-                        myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 1) = k_sf_bb_sA * v_x_Ed / hf_bb
-                        myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 2) = k_sf_dd_sA * v_x_Ed / hf_dd
+                        myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indAA) = ksf_aa_sA * vxEd / hf_aa
+                        myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indBB) = ksf_bb_sA * vxEd / hf_bb
+                        myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indCC) = ksf_cc_sA * vxEd / hf_cc
+                        myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indDD) = ksf_dd_sA * vxEd / hf_dd
 
-                        myBeam.VerifMixte(iVerif).Thetaf_min(i_travee, j_zone) = thetaf_min_neg
+                        myBeam.VerifMixte(iVerif).Thetaf_min(iTravee, jZone) = thetaf_min_neg
 
-                    Case myBeam.IndiceTraveeConsoleDroite 'on est dans le cas de la console droite 
+                    Case myBeam.IndiceTraveeConsoleDroite       '%%%on est dans le cas de la console droite 
 
-                        'Les consoles sont forcemyPoutrent en flexion négative, on calcul uniquemyPoutrent le coefficient au droit de l'appui B
+                        'Les consoles sont forcement en flexion négative, on calcul uniquement le coefficient au droit de l'appui B
                         be1 = LargeurParticipante(0, 2)
                         be2 = LargeurParticipante(1, 2)
                         beta1 = LargeurParticipante(2, 2)
                         beta2 = LargeurParticipante(3, 2)
                         bes = LargeurParticipante(5, 2)
 
-                        k_sf_aa_sB = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
-                        k_sf_bb_sB = 1
-                        k_sf_dd_sB = 1
+                        ksf_aa_sB = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
+                        ksf_bb_sB = 1
+                        ksf_dd_sB = 1
+                        ksf_cc_sB = 1
 
-                        myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 0) = k_sf_aa_sB * v_x_Ed / hf_aa
-                        myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 1) = k_sf_bb_sB * v_x_Ed / hf_bb
-                        myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 2) = k_sf_dd_sB * v_x_Ed / hf_dd
+                        myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indAA) = ksf_aa_sB * vxEd / hf_aa
+                        myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indBB) = ksf_bb_sB * vxEd / hf_bb
+                        myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indCC) = ksf_cc_sB * vxEd / hf_cc
+                        myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indDD) = ksf_dd_sB * vxEd / hf_dd
 
-                        myBeam.VerifMixte(iVerif).Thetaf_min(i_travee, j_zone) = thetaf_min_neg
+                        myBeam.VerifMixte(iVerif).Thetaf_min(iTravee, jZone) = thetaf_min_neg
 
-                    Case Else 'on est dans le cas d'une travée centrale
+                    Case Else                                       '%%% on est dans le cas d'une travée centrale
 
                         'Calcul des coefficients k_sf au droit de l'appui A
                         be1 = LargeurParticipante(0, 0)
@@ -1391,18 +1419,20 @@
                         beta2 = LargeurParticipante(3, 0)
                         bes = LargeurParticipante(5, 0)
 
-                        k_sf_aa_sA = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
-                        k_sf_bb_sA = 1
-                        k_sf_dd_sA = 1
+                        ksf_aa_sA = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
+                        ksf_bb_sA = 1
+                        ksf_dd_sA = 1
+                        ksf_cc_sA = 1
 
                         'Calcul des coefficients k_sf a mi travee
                         be1 = LargeurParticipante(0, 1)
                         be2 = LargeurParticipante(1, 1)
                         bem = LargeurParticipante(5, 1)
 
-                        k_sf_aa_m = Math.Max((be1 - b0 / 2) / bem, (be2 - b0 / 2) / bem)
-                        k_sf_bb_m = 1
-                        k_sf_dd_m = 1
+                        ksf_aa_m = Math.Max((be1 - b0 / 2) / bem, (be2 - b0 / 2) / bem)
+                        ksf_bb_m = 1
+                        ksf_dd_m = 1
+                        ksf_cc_m = 1
 
                         'Calcul des coefficients k_sf au droit de l'appui B
                         be1 = LargeurParticipante(0, 2)
@@ -1411,59 +1441,60 @@
                         beta2 = LargeurParticipante(3, 2)
                         bes = LargeurParticipante(5, 2)
 
-                        k_sf_aa_sB = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
-                        k_sf_bb_sB = 1
-                        k_sf_dd_sB = 1
+                        ksf_aa_sB = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
+                        ksf_bb_sB = 1
+                        ksf_dd_sB = 1
+                        ksf_cc_sB = 1
 
                         If myBeam.lTraveeConsoleGauche Then
                             If myBeam.lTraveeConsoleDroite Then 'Presence de console a gauche ET a droite
-                                Select Case myBeam.xDebutZoneTravee(i_travee, j_zone)
-                                    Case <= myBeam.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence avant L/4
-                                        Select Case myBeam.xFinZoneTravee(i_travee, j_zone)
-                                            Case <= myBeam.LongueurTravee(i_travee) / 4 'la zone etudiée commyPoutrence et finie avant L/4
+                                Select Case myBeam.xDebutZoneTravee(iTravee, jZone)
+                                    Case <= myBeam.LongueurTravee(iTravee) / 4                  'la zone étudiée commence avant L/4
+                                        Select Case myBeam.xFinZoneTravee(iTravee, jZone)
+                                            Case <= myBeam.LongueurTravee(iTravee) / 4          'la zone etudiée commence et finit avant L/4
                                                 lSupportA = True
                                                 lMiTravee = False
                                                 lSupportB = False
-                                            Case <= 3 * myBeam.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence avant L/4 et finie entre L/4 et 3L/4
+                                            Case <= 3 * myBeam.LongueurTravee(iTravee) / 4      'la zone étudiée commence avant L/4 et finit entre L/4 et 3L/4
                                                 lSupportA = True
                                                 lMiTravee = True
                                                 lSupportB = False
-                                            Case >= 3 * myBeam.LongueurTravee(i_travee) / 4 'la eone étudiée commyPoutrence avant L/4 et finie après 3L/4
+                                            Case >= 3 * myBeam.LongueurTravee(iTravee) / 4      'la zone étudiée commence avant L/4 et finit après 3L/4
                                                 lSupportA = True
                                                 lMiTravee = True
                                                 lSupportB = True
                                         End Select
-                                    Case <= 3 * myBeam.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence après L/4 et avant 3L/4
-                                        Select Case myBeam.xFinZoneTravee(i_travee, j_zone) 'le cas ou la zone finie avant L/4 n a pas de sens et n est pas étudiée 
-                                            Case <= 3 * myBeam.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence et finie entre L/4 et 3L/4 
+                                    Case <= 3 * myBeam.LongueurTravee(iTravee) / 4              'la zone étudiée commence après L/4 et avant 3L/4
+                                        Select Case myBeam.xFinZoneTravee(iTravee, jZone)       'le cas ou la zone finie avant L/4 n a pas de sens et n est pas étudiée 
+                                            Case <= 3 * myBeam.LongueurTravee(iTravee) / 4      'la zone étudiée commence et finie entre L/4 et 3L/4 
                                                 lSupportA = False
                                                 lMiTravee = True
                                                 lSupportB = False
-                                            Case >= 3 * myBeam.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence entre L/4 et 3L/4 et finie après 3L/4
+                                            Case >= 3 * myBeam.LongueurTravee(iTravee) / 4      'la zone étudiée commence entre L/4 et 3L/4 et finie après 3L/4
                                                 lSupportA = False
                                                 lMiTravee = True
                                                 lSupportB = True
                                         End Select
-                                    Case >= 3 * myBeam.LongueurTravee(i_travee) / 4 'la zone finie nécessairemyPoutrent après 3L/4 donc pas besoin de boucle 
+                                    Case >= 3 * myBeam.LongueurTravee(iTravee) / 4              'la zone finie nécessairement après 3L/4 donc pas besoin de boucle 
                                         lSupportA = False
                                         lMiTravee = False
                                         lSupportB = True
                                 End Select
 
-                            Else 'Presence de console a gauche uniquemyPoutrent
+                            Else 'Presence de console a gauche uniquement
                                 lSupportB = False 'il n'y a pas de console a droite, ce qui fait qu'il ne peut pas y avoir de zone de momyPoutrent négatif proche de l appui de droite 
 
-                                Select Case myBeam.xDebutZoneTravee(i_travee, j_zone)
-                                    Case <= myBeam.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence avant L/4
-                                        Select Case myBeam.xFinZoneTravee(i_travee, j_zone)
-                                            Case <= myBeam.LongueurTravee(i_travee) / 4 'la zone etudiée commyPoutrence et finie avant L/4
+                                Select Case myBeam.xDebutZoneTravee(iTravee, jZone)
+                                    Case <= myBeam.LongueurTravee(iTravee) / 4          'la zone étudiée commyPoutrence avant L/4
+                                        Select Case myBeam.xFinZoneTravee(iTravee, jZone)
+                                            Case <= myBeam.LongueurTravee(iTravee) / 4  'la zone etudiée commyPoutrence et finie avant L/4
                                                 lSupportA = True
                                                 lMiTravee = False
-                                            Case >= myBeam.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence avant L/4 et finie après L/4
+                                            Case >= myBeam.LongueurTravee(iTravee) / 4  'la zone étudiée commyPoutrence avant L/4 et finie après L/4
                                                 lSupportA = True
                                                 lMiTravee = True
                                         End Select
-                                    Case >= myBeam.LongueurTravee(i_travee) / 4 'la zone  commyPoutrence et finie nécessairemyPoutrent après L/4 donc pas besoin de boucle 
+                                    Case >= myBeam.LongueurTravee(iTravee) / 4          'la zone  commyPoutrence et finie nécessairemyPoutrent après L/4 donc pas besoin de boucle 
                                         lSupportA = False
                                         lMiTravee = True
                                 End Select
@@ -1472,21 +1503,21 @@
                             If myBeam.lTraveeConsoleDroite Then 'Presence de console a droite uniquemyPoutrent
                                 lSupportA = False 'il n'y a pas de console a gauche, ce qui fait qu'il ne peut pas y avoir de zone de momyPoutrent négatif proche de l appui de droite 
 
-                                Select Case myBeam.xDebutZoneTravee(i_travee, j_zone)
-                                    Case <= 3 * myBeam.LongueurTravee(i_travee) / 4
-                                        Select Case myBeam.xFinZoneTravee(i_travee, j_zone)
-                                            Case <= 3 * myBeam.LongueurTravee(i_travee) / 4 'la zone etudiée commyPoutrence et finie avant 3L/4
+                                Select Case myBeam.xDebutZoneTravee(iTravee, jZone)
+                                    Case <= 3 * myBeam.LongueurTravee(iTravee) / 4
+                                        Select Case myBeam.xFinZoneTravee(iTravee, jZone)
+                                            Case <= 3 * myBeam.LongueurTravee(iTravee) / 4 'la zone etudiée commence et finie avant 3L/4
                                                 lMiTravee = True
                                                 lSupportB = False
-                                            Case >= 3 * myBeam.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence avant 3L/4 et finie après 3L/4
+                                            Case >= 3 * myBeam.LongueurTravee(iTravee) / 4 'la zone étudiée commence avant 3L/4 et finie après 3L/4
                                                 lMiTravee = True
                                                 lSupportB = True
                                         End Select
-                                    Case >= 3 * myBeam.LongueurTravee(i_travee) / 4 'la zone  commyPoutrence et finie nécessairemyPoutrent après 3L/4 donc pas besoin de boucle 
+                                    Case >= 3 * myBeam.LongueurTravee(iTravee) / 4 'la zone  commyPoutrence et finie nécessairement après 3L/4 donc pas besoin de boucle 
                                         lMiTravee = False
                                         lSupportB = True
                                 End Select
-                            Else 'Aucune console, la zone étudiée se trouve nécessairemyPoutrent en zone de flexion positive 
+                            Else 'Aucune console, la zone étudiée se trouve nécessairement en zone de flexion positive 
                                 lSupportA = False
                                 lMiTravee = True
                                 lSupportB = False
@@ -1495,52 +1526,55 @@
 
 
                         If lSupportA Then
-                            myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 0) = k_sf_aa_sA * v_x_Ed / hf_aa
-                            myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 1) = k_sf_bb_sA * v_x_Ed / hf_bb
-                            myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 2) = k_sf_dd_sA * v_x_Ed / hf_dd
+                            myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indAA) = ksf_aa_sA * vxEd / hf_aa
+                            myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indBB) = ksf_bb_sA * vxEd / hf_bb
+                            myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indCC) = ksf_cc_sA * vxEd / hf_cc
+                            myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indDD) = ksf_dd_sA * vxEd / hf_dd
                         End If
 
                         If lMiTravee Then
-                            myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 0) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 0), k_sf_aa_m * v_x_Ed / hf_aa)
-                            myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 1) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 1), k_sf_bb_m * v_x_Ed / hf_bb)
-                            myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 2) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 2), k_sf_dd_m * v_x_Ed / hf_dd)
+                            myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indAA) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indAA), ksf_aa_m * vxEd / hf_aa)
+                            myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indBB) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indBB), ksf_bb_m * vxEd / hf_bb)
+                            myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indCC) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indCC), ksf_cc_m * vxEd / hf_cc)
+                            myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indDD) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indDD), ksf_dd_m * vxEd / hf_dd)
                         End If
 
                         If lSupportB Then
-                            myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 0) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 0), k_sf_aa_sB * v_x_Ed / hf_aa)
-                            myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 1) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 1), k_sf_bb_sB * v_x_Ed / hf_bb)
-                            myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 2) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 2), k_sf_dd_sB * v_x_Ed / hf_dd)
+                            myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indAA) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indAA), ksf_aa_sB * vxEd / hf_aa)
+                            myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indBB) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indBB), ksf_bb_sB * vxEd / hf_bb)
+                            myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indCC) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indCC), ksf_cc_sB * vxEd / hf_cc)
+                            myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indDD) = Math.Max(myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indDD), ksf_dd_sB * vxEd / hf_dd)
                         End If
 
-                        If lSupportA Or lSupportB Then 'la zone de connection étudiée traverse au moins une zone de flexion négative
-                            myBeam.VerifMixte(iVerif).Thetaf_min(i_travee, j_zone) = thetaf_min_neg
-                        Else 'la zone de connection étudiée est entièremyPoutrent en zone de flexion comprimée 
-                            myBeam.VerifMixte(iVerif).Thetaf_min(i_travee, j_zone) = thetaf_min_pos
+                        If lSupportA Or lSupportB Then  ' la zone de connection étudiée traverse au moins une zone de flexion négative
+                            myBeam.VerifMixte(iVerif).Thetaf_min(iTravee, jZone) = thetaf_min_neg
+                        Else                             'la zone de connection étudiée est entièrement en zone de flexion comprimée 
+                            myBeam.VerifMixte(iVerif).Thetaf_min(iTravee, jZone) = thetaf_min_pos
                         End If
 
                 End Select
 
-                '---
+                '===================================================================================================================
                 'CALCUL DE L'ANGLE DE LA BIELLE DE COMPRESSION ET DE LA QUANTITE D'ARMATURE PAR UNITE DE LONGUEUR NECESSAIRE
-                '---
+                '===================================================================================================================
 
                 Dim TauEd_max As Decimal = nu * Fcd / 2
 
-                For k_ruine As Integer = 0 To 2
+                For k_ruine As Integer = 0 To NBSURFP - 1
                     'Conversion de Pa a MPa des contraintes tangentielles
-                    myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, k_ruine) /= kConvMPaPa
+                    myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, k_ruine) /= kConvMPaPa
 
-                    If myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, k_ruine) <= TauEd_max Then
-                        myBeam.VerifMixte(iVerif).Thetaf(i_travee, j_zone, k_ruine) = 0.5 * Math.Asin(2 * myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, k_ruine) / (nu * Fcd))
+                    If myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, k_ruine) <= TauEd_max Then
+                        myBeam.VerifMixte(iVerif).Thetaf(iTravee, jZone, k_ruine) = 0.5 * Math.Asin(2 * myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, k_ruine) / (nu * Fcd))
                     Else 'la contrainte tangentielle est trop importante, la bielle de compression n'est pas vérifiée. On considère alors l'angle de la bielle max pour la suite du calcul 
-                        myBeam.VerifMixte(iVerif).Thetaf(i_travee, j_zone, k_ruine) = thetaf_max
+                        myBeam.VerifMixte(iVerif).Thetaf(iTravee, jZone, k_ruine) = thetaf_max
                     End If
 
-                    myBeam.VerifMixte(iVerif).Thetaf(i_travee, j_zone, k_ruine) = Math.Min(myBeam.VerifMixte(iVerif).Thetaf(i_travee, j_zone, k_ruine), thetaf_max)
-                    myBeam.VerifMixte(iVerif).Thetaf(i_travee, j_zone, k_ruine) = Math.Max(myBeam.VerifMixte(iVerif).Thetaf(i_travee, j_zone, k_ruine), myBeam.VerifMixte(iVerif).Thetaf_min(i_travee, j_zone))
+                    myBeam.VerifMixte(iVerif).Thetaf(iTravee, jZone, k_ruine) = Math.Min(myBeam.VerifMixte(iVerif).Thetaf(iTravee, jZone, k_ruine), thetaf_max)
+                    myBeam.VerifMixte(iVerif).Thetaf(iTravee, jZone, k_ruine) = Math.Max(myBeam.VerifMixte(iVerif).Thetaf(iTravee, jZone, k_ruine), myBeam.VerifMixte(iVerif).Thetaf_min(iTravee, jZone))
 
                     'Calcul du critère de vérification de la bielle de compression
-                    myBeam.VerifMixte(iVerif).Gamma_sf(i_travee, j_zone, k_ruine) = myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, k_ruine) / (nu * Fcd * Math.Sin(myBeam.VerifMixte(iVerif).Thetaf(i_travee, j_zone, k_ruine)) * Math.Cos(myBeam.VerifMixte(iVerif).Thetaf(i_travee, j_zone, k_ruine)))
+                    myBeam.VerifMixte(iVerif).Gamma_sf(iTravee, jZone, k_ruine) = myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, k_ruine) / (nu * Fcd * Math.Sin(myBeam.VerifMixte(iVerif).Thetaf(iTravee, jZone, k_ruine)) * Math.Cos(myBeam.VerifMixte(iVerif).Thetaf(iTravee, jZone, k_ruine)))
 
                 Next
 
@@ -1550,15 +1584,13 @@
                     k_bacPE1 = 0
                 End If
 
-                myBeam.VerifMixte(iVerif).As_s_transv(i_travee, j_zone, 0) = Math.Max((myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 0) * hf_aa * Math.Tan(myBeam.VerifMixte(iVerif).Thetaf(i_travee, j_zone, 0)) - k_bacPE1 * myBeam.Dalle.Bac.Ape * fypd) / fsd, 0)
-                myBeam.VerifMixte(iVerif).As_s_transv(i_travee, j_zone, 1) = Math.Max((myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 1) * hf_bb * Math.Tan(myBeam.VerifMixte(iVerif).Thetaf(i_travee, j_zone, 1)) - k_bacPE1 * myBeam.Dalle.Bac.Ape * fypd) / fsd, 0)
-                myBeam.VerifMixte(iVerif).As_s_transv(i_travee, j_zone, 2) = Math.Max((myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 2) * hf_dd * Math.Tan(myBeam.VerifMixte(iVerif).Thetaf(i_travee, j_zone, 2)) - k_bacPE1 * myBeam.Dalle.Bac.Ape * fypd) / fsd, 0)
-
+                myBeam.VerifMixte(iVerif).As_s_transv(iTravee, jZone, indAA) = Math.Max((myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indAA) * hf_aa * Math.Tan(myBeam.VerifMixte(iVerif).Thetaf(iTravee, jZone, indAA)) - k_bacPE1 * myBeam.Dalle.Bac.Ape * fypd) / fsd, 0)
+                myBeam.VerifMixte(iVerif).As_s_transv(iTravee, jZone, indBB) = Math.Max((myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indBB) * hf_bb * Math.Tan(myBeam.VerifMixte(iVerif).Thetaf(iTravee, jZone, indBB)) - k_bacPE1 * myBeam.Dalle.Bac.Ape * fypd) / fsd, 0)
+                myBeam.VerifMixte(iVerif).As_s_transv(iTravee, jZone, indCC) = Math.Max((myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indCC) * hf_cc * Math.Tan(myBeam.VerifMixte(iVerif).Thetaf(iTravee, jZone, indCC)) - k_bacPE1 * myBeam.Dalle.Bac.Ape * fypd) / fsd, 0)
+                myBeam.VerifMixte(iVerif).As_s_transv(iTravee, jZone, indDD) = Math.Max((myBeam.VerifMixte(iVerif).TauEd(iTravee, jZone, indDD) * hf_dd * Math.Tan(myBeam.VerifMixte(iVerif).Thetaf(iTravee, jZone, indDD)) - k_bacPE1 * myBeam.Dalle.Bac.Ape * fypd) / fsd, 0)
 
             Next
         Next
-
-
 
     End Sub
 

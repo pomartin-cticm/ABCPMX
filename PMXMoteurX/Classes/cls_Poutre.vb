@@ -311,7 +311,8 @@ Public Class cls_Poutre
     ''' Fonction renvoyant la densité d'armatures min à disposer (m2/m2)
     ''' </summary>
     ''' <returns></returns>
-    Public Function rho_t_min() As Decimal
+    Public Function RhoArmaTMin() As Decimal
+
         Dim rho_loc As Decimal
         rho_loc = 0.08 * Math.Sqrt(Me.Dalle.beton.Fck) / Me.Dalle.AcierArmatures.FsK
         Return rho_loc
@@ -322,9 +323,9 @@ Public Class cls_Poutre
     ''' Fonction renvoyant la quantité d'armatures min à disposer (m2/m) selon le §9.2.2 (5) de l'EC2
     ''' </summary>
     ''' <returns></returns>
-    Public Function As_min_EC2() As Decimal
+    Public Function AsArmaTMinEC2() As Decimal
         Dim Asmin As Decimal
-        Asmin = Me.rho_t_min * Me.Dalle.EpaisseurActive
+        Asmin = Me.RhoArmaTMin * Me.Dalle.EpaisseurActive
         Return Asmin
     End Function
 
@@ -5210,7 +5211,7 @@ Public Class cls_Poutre
                     pMmax = MEd(iNode, k)
                     iT1 = iNode
                     iT2 = iNode
-                ElseIf IsEqual(MEd(iNode, k), pMmax, EPSilon) Then
+                ElseIf IsEqual(MEd(iNode, k), pMmax, EPSILON) Then
                     iT2 = iNode
                 Else
 

@@ -5808,16 +5808,33 @@ Module Mod_NoteCalcul
         AddTitreNdC(2, BlocELU("CRITERIA_TRANSREBAR"))
 
         AddLigneNDC(TABW2 & BlocELU("NBTRANSVERSELAYER") & TABAFF & MyBeam.NbTransverseLayer)
-        AddLigneNDC(TABW2 & BlocELU("MINTRANSVERSEREINF") & TABAFF & "\Sr\s\-t,min\=" & TABEGAL & GetStringInUnitN(MyBeam.rho_t_min * 100, Enu_TypeVariable.SansType, 3, -1, True, True) & " %")
+        AddLigneNDC(TABW2 & BlocELU("MINTRANSVERSEREINF") & TABAFF _
+                  & "\Sr\s\-t,min\=" & TABEGAL & GetStringInUnitN(MyBeam.RhoArmaTMin * 100, Enu_TypeVariable.SansType, 3, -1, False, True) & " %   " _
+                  & "(A\-sf\=/s\-f\= = " & GetStringInUnitN(MyBeam.AsArmaTMinEC2, Enu_TypeVariable.AireCM2, 3, -1, False, True) _
+                  & "cm\+2\=/m)")
 
         Dim strFailureMode As String = ""
-        Dim str_aa, str_bb, str_dd As String
+        Dim str_aa, str_bb, str_cc, str_dd As String
         str_aa = "a-a"
         str_bb = "b-b"
+        str_cc = "c-c"
         str_dd = "d-d"
 
-        Dim l_aa, l_bb, l_dd As Boolean 'indique quels mode de ruine on vérifie
-        If Not MyBeam.Dalle.lMixte Then
+        Dim l_aa, l_bb, l_cc, l_dd As Boolean 'indique quels mode de ruine on vérifie
+
+        If MyBeam.Dalle.lMixte Then
+            strFailureMode = str_aa
+            l_aa = True
+            l_bb = False
+            l_dd = False
+
+            If MyBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
+                l_cc = True
+            Else
+                l_cc = (MyBeam.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu)
+            End If
+        Else
+            l_cc = False
             If MyBeam.NbTransverseLayer = 2 Then 'cas solid slab without prefabricated part (Table 51 du MT)
                 strFailureMode = str_aa & ", " & str_bb
                 l_aa = True
@@ -5829,20 +5846,223 @@ Module Mod_NoteCalcul
                 l_bb = False
                 l_dd = True
             End If
-        Else
-            strFailureMode = str_aa
-            l_aa = True
-            l_bb = False
-            l_dd = False
         End If
 
-        AddLigneNDC(TABW2 & BlocELU("POTENTIALSHEARFAILURE") & TABAFF & strFailureMode)
+
+
+        ' AddLigneNDC(TABW2 & BlocELU("POTENTIALSHEARFAILURE") & TABAFF & strFailureMode)
 
         SauteLigne()
 
-        If l_aa Then EditionVerificationELUArmaturesTransv(MyBeam, str_aa, 0)
-        If l_bb Then EditionVerificationELUArmaturesTransv(MyBeam, str_bb, 1)
-        If l_dd Then EditionVerificationELUArmaturesTransv(MyBeam, str_dd, 2)
+        Const indAA As Integer = 0
+        Const indBB As Integer = 1
+        Const indCC As Integer = 2
+        Const indDD As Integer = 3
+
+        'If l_aa Then EditionVerificationELUArmaturesTransv(MyBeam, str_aa, indAA)
+        'If l_bb Then EditionVerificationELUArmaturesTransv(MyBeam, str_bb, indBB)
+        'If l_cc Then EditionVerificationELUArmaturesTransv(MyBeam, str_cc, indCC)
+        'If l_dd Then EditionVerificationELUArmaturesTransv(MyBeam, str_dd, indDD)
+
+        '-----------------------------------------------------
+
+        Dim lShearA(3) As Boolean
+        Dim strA(3) As String
+
+        lShearA(indAA) = l_aa
+        lShearA(indBB) = l_bb
+        lShearA(indCC) = l_cc
+        lShearA(indDD) = l_dd
+
+        strA(indAA) = "a-a"
+        strA(indBB) = "b-b"
+        strA(indCC) = "c-c"
+        strA(indDD) = "d-d"
+
+        EditionVerificationELUArmaTransN(MyBeam, lShearA, strA)
+
+    End Sub
+
+    Private Sub EditionVerificationELUArmaTransN(myBeam As cls_Poutre, lShearA() As Boolean, strA() As String)
+        '-------------------------------------------------------------------------------------------
+        '   30/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Tableau des armatures transversales
+        '-------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   lShearA     [E] :   Indique les surfaces potentielles de ruine à traiter
+        '   strA        [E] :   Nom des surfaces potentielles de ruine
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim iTravDeb As Integer
+        Dim NCOL As Integer
+        Const iVerif As Integer = 0
+        Const StarNote As String = " (*)"
+        Dim lNote As Boolean = False
+        Dim strNote As String = ""
+        Const pLC9 As Integer = 12
+        'Dim ChaineR As String
+
+        '--( Initialisation
+
+        iTravDeb = myBeam.IndicePremiereTravee
+
+        '--( Traitement
+
+        If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
+
+        'AddTitreNdC(3, BlocELU("SHEARFAILUREAREA"))
+
+        'If nbLignes + 2 * HLIGNE > MAXLIGNEPPAG Then SautePage()
+
+        EnteteTableauELUArmaTransN(NCOL)
+
+        For i As Integer = iTravDeb To myBeam.IndiceDerniereTravee
+            For j As Integer = 0 To myBeam.NombreZones(i) - 1
+
+                If nbLignes + 3 * HLIGNE > MAXLIGNEPPAG Then
+                    FinTableau()
+                    SautePage()
+                    EnteteTableauELUArmaTransN(NCOL)
+                End If
+
+                For k = 0 To 3
+                    If lShearA(k) Then
+                        InitialiseLigneTableau(NCOL, HLIGNE)
+
+                        AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(i - iTravDeb + 1))
+                        AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(j + 1))
+                        AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myBeam.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
+                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, strA(k))
+                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myBeam.VerifMixte(iVerif).TauEd(i, j, k), Enu_TypeVariable.Contrainte, 4, 2, False))
+                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(GetAngleInDegree(myBeam.VerifMixte(iVerif).Thetaf(i, j, k)), Enu_TypeVariable.SansType, 4, 2, False, True))
+                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myBeam.VerifMixte(iVerif).Gamma_sf(i, j, k), Enu_TypeVariable.SansType, 4, 2, False))
+
+                        If IsEqual(myBeam.VerifMixte(iVerif).As_s_transv(i, j, k), 0) _
+                        And myBeam.Dalle.lMixte _
+                        And myBeam.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus Then
+                            lNote = True
+                            strNote = StarNote
+                        Else
+                            strNote = Space(1)
+                        End If
+
+                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre,
+                                   GetStringInUnit(myBeam.VerifMixte(iVerif).As_s_transv(i, j, k), Enu_TypeVariable.AireCM2, 4, 2, False) & strNote)
+
+                        AddCellule(pLC9, Bordures.Tous, PositionTexteInCell.Centre, ArmaTrans(myBeam.Dalle, k))
+
+                    End If
+
+                Next
+
+            Next
+        Next
+
+        FinTableau()
+
+        If lNote Then
+            AddLigneNDC(TABW2 & "\I" & strNote.Trim & "\T19" & BlocELU("SHEARLBYDECK") & "\i")
+            AddLigneNDC(TABW2 & "\I" & "\T19" & BlocELU("MINIMALREINFREQ") & "\i")
+        End If
+
+    End Sub
+
+    Private Function ArmaTrans(myDalle As cls_Dalle, iArea As Integer) As String
+        '-------------------------------------------------------------------------------------------
+        '   01/10/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Renvoie les armatures transversales reprenant le cisaillement en fct de la surface potentielle de ruine
+        '-------------------------------------------------------------------------------------------
+        '   myDalle     [E] :   Dalle
+        '   iArea       [E] :   Indice de la surface potentielle de ruine
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclaration 
+
+        Dim nbT As Integer
+        Dim strArma As String = ""
+
+        '--( Initialisation
+
+        '* Nombre de lits d'armatures transversales
+
+        nbT = myDalle.NbLitsArmaActifs
+
+        '--( Traitement
+
+        Select Case iArea
+            Case 0      ' surface a-a
+
+                If nbT = 1 Then
+                    strArma = "A\-t\="
+                Else
+                    strArma = "A\-t\= + A\-b\="
+                End If
+
+            Case 1, 2   ' surfaces b-b et c-c
+
+                If nbT = 1 Then
+                    strArma = "2 A\-t\="
+                Else
+                    strArma = "2 A\-b\="
+                End If
+
+            Case 3 ' surface d-d
+
+                strArma = "2 A\-bh\="
+
+        End Select
+
+        Return strArma
+
+    End Function
+
+    Private Sub EnteteTableauELUArmaTransN(ByRef nbCol As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - GUD
+        '-------------------------------------------------------------------------------------------
+        '   Entête du Tableau des armatures transversales
+        '-------------------------------------------------------------------------------------------
+        '   nbCol               [S] :   nombre de colonnes du tableau 
+        '   str_failureArea     [E] :   nom du mode de ruine à afficher
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Const BordsLigneH As Integer = Bordures.Tous - Bordures.Bas
+        Const BordsLigneB As Integer = Bordures.Tous - Bordures.Haut
+        Const pLC9 As Integer = 12
+
+        '--( Entête
+
+        AddLigneNDC("\TABLEAU 10")
+
+        nbCol = 9
+
+        InitialiseLigneTableau(nbCol, HLIGNE)
+        AddCelluleFond(LC4, BordsLigneH, PositionTexteInCell.Centre, BlocG("SPAN"))
+        AddCelluleFond(LC4, BordsLigneH, PositionTexteInCell.Centre, BlocG("ZONE"))
+        AddCelluleFond(LC4, BordsLigneH, PositionTexteInCell.Centre, "n\-r\=")
+        AddCelluleFond(LC3, BordsLigneH, PositionTexteInCell.Centre, "Area")
+        AddCelluleFond(LC3, BordsLigneH, PositionTexteInCell.Centre, "\St\s\-Ed\= ")
+        AddCelluleFond(LC3, BordsLigneH, PositionTexteInCell.Centre, "\Sq\s\-f\= ")
+        AddCelluleFond(LC3, BordsLigneH, PositionTexteInCell.Centre, "\SG\s\-sf\=")
+        AddCelluleFond(LC3, BordsLigneH, PositionTexteInCell.Centre, "(A\-sf\=/s\-f\=) ")
+        AddCelluleFond(pLC9, BordsLigneH, PositionTexteInCell.Centre, "Reinforcements")
+
+        InitialiseLigneTableau(nbCol, HLIGNE)
+        AddCelluleFond(LC4, BordsLigneB, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LC4, BordsLigneB, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LC4, BordsLigneB, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LC3, BordsLigneB, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LC3, BordsLigneB, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes) & ")")
+        AddCelluleFond(LC3, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "(°)")
+        AddCelluleFond(LC3, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LC3, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "(cm\+2\=/m)")
+        AddCelluleFond(pLC9, BordsLigneB, PositionTexteInCell.Centre, "")
 
     End Sub
 
@@ -5933,14 +6153,24 @@ Module Mod_NoteCalcul
         nbCol = 8
 
         InitialiseLigneTableau(nbCol, HLIGNE)
-        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
-        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("ZONE"))
-        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "n\-r\=")
-        AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\St\s\-Ed," & str_failureArea & "\= " & "(" & LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes) & ")")
-        AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-f,min," & str_failureArea & "\= (°)")
-        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-f," & str_failureArea & "\= (°)")
-        AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-sf," & str_failureArea & "\=")
-        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "(A\-sf\=/s\-f\=)\-" & str_failureArea & "\= (cm\+2\=/m)")
+        AddCelluleFond(LC4, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, BlocG("SPAN"))
+        AddCelluleFond(LC4, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, BlocG("ZONE"))
+        AddCelluleFond(LC4, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n\-r\=")
+        AddCelluleFond(LC2_3, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "\St\s\-Ed," & str_failureArea & "\= ")
+        AddCelluleFond(LC2_3, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "\Sq\s\-f,min," & str_failureArea & "\= ")
+        AddCelluleFond(LC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "\Sq\s\-f," & str_failureArea & "\= ")
+        AddCelluleFond(LC2_3, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "\SG\s\-sf," & str_failureArea & "\=")
+        AddCelluleFond(LC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "(A\-sf\=/s\-f\=)\-" & str_failureArea & "\= ")
+
+        InitialiseLigneTableau(nbCol, HLIGNE)
+        AddCelluleFond(LC4, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LC4, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LC4, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LC2_3, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes) & ")")
+        AddCelluleFond(LC2_3, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "(°)")
+        AddCelluleFond(LC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, " (°)")
+        AddCelluleFond(LC2_3, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "(cm\+2\=/m)")
 
     End Sub
 
