@@ -682,8 +682,8 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection,
-                   NomPoutre As String, OptionsLogiciels As Struc_OptionsLogiciel, OptionsCalcul As Struc_OptionsCalcul,
+    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String,
+                   OptionsLogiciels As Struc_OptionsLogiciel, OptionsCalcul As Struc_OptionsCalcul, OptionsFeu As struc_OptionsFeu,
                    NomCasChargesU() As String)
 
         Me.Section.TypeSection = MyTypeSection
@@ -718,7 +718,7 @@ Public Class cls_Poutre
         'Copie des options de calculs
         Me.Param.Gamma = OptionsLogiciels.Gamma.Clone()
         Me.TransfertOptionsCalculs(OptionsCalcul)
-
+        Me.TransfertOptionsFeu(OptionsFeu)
     End Sub
 
     Private Sub ParametresGenerauxDefaut()
@@ -817,13 +817,23 @@ Public Class cls_Poutre
 
     End Sub
 
-    'Private Sub EnrobageDefaut()
+    Private Sub TransfertOptionsFeu(OptionsFeu As struc_OptionsFeu)
 
-    'End Sub
+        With OptionsFeu
 
-    'Private Sub DalleDefaut()
+            Me.ParamFeu.EmissivityC = .EmissiviteC
+            Me.ParamFeu.EmissivityFire = .EmissiviteF
 
-    'End Sub
+            Me.ParamFeu.ConvectionCoef = .AlphaC
+            Me.ParamFeu.ConvectionCoefDalle = .AlphaCC
+
+            Me.ParamFeu.ksh = .ksh
+            Me.ParamFeu.PhiViewFactor = .Phi
+
+        End With
+
+
+    End Sub
 
     Private Sub TransfertOptionsCalculs(OptionsCalculs As Struc_OptionsCalcul)
         With OptionsCalculs

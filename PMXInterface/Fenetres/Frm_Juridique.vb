@@ -14,6 +14,7 @@ Public Class Frm_Juridique
         Me.Text = LogicielInfo.NomLogiciel
         Me.RadioButton_En.Text = LogicielInfo.ListeLangue(0)
         Me.RadioButton_Fr.Text = LogicielInfo.ListeLangue(1)
+        Me.Icon = Frm_PMX.Icon
 
         '--> Initialisation des controls
         If LogicielInfo.ListeLangue(LogicielOptions.IndLangue) = LogicielInfo.ListeLangue(0) Then

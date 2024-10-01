@@ -188,7 +188,7 @@ Partial Class Frm_ErreursMessages
         Me.rtxt_Message.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.rtxt_Message.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.rtxt_Message.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.rtxt_Message.Location = New System.Drawing.Point(3, 3)
         Me.rtxt_Message.Name = "rtxt_Message"
         Me.rtxt_Message.Size = New System.Drawing.Size(496, 52)

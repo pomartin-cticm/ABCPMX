@@ -75,6 +75,8 @@ Public Class Frm_Ouverture
         '   Initialisation de la fenêtre avec des paramètres par défaut
         '--------------------------------------------------------------------
 
+        Me.Icon = Frm_PMX.Icon
+
         GestionStyle()
 
         '==> Nouveau Projet

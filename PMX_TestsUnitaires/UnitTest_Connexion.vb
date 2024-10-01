@@ -56,7 +56,7 @@ Imports PMXInterface
         InitialiseOptionsScope()
         InitialiseOptionsCalcul()
 
-        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "TU", LogicielOptions, OptionsCalcul, NomCharges)
+        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "TU", LogicielOptions, OptionsCalcul, OptionsFeu, NomCharges)
 
         ReDim myPoutre.VerifMixte(0)
         myPoutre.VerifMixte(0) = New cls_VerificationsMixtes()

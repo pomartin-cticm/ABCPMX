@@ -1,4 +1,6 @@
-﻿Public Class Frm_OptionsCalculIncendie
+﻿Imports PMXMoteur2
+
+Public Class Frm_OptionsCalculIncendie
 
 #Region " Attributs "
 
@@ -26,6 +28,12 @@
 
             Me.lbl_Constantes.Text = MyBloc("CONSTANTS")
             Me.lbl_Boltzman.Text = MyBloc("BOLTZMAN")
+            Me.lbl_EmissiviteBeton.Text = MyBloc("EMISSIVITYC")
+            Me.lbl_EmissiviteFeu.Text = MyBloc("EMISSIVITYF")
+            Me.lbl_AlphaC.Text = MyBloc("CONVECTIONFACTOR")
+            Me.lbl_AlphaCC.Text = MyBloc("CONVECTIONFACTORSLAB")
+            Me.lbl_FormFactorPhi.Text = MyBloc("FORMFACTOR")
+            Me.lbl_ShadowKsh.Text = MyBloc("FORMFACTOR")
 
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -41,6 +49,12 @@
         Me.lbl_Incendie.BackColor = CouleurBackBandeaux
         Me.lbl_Incendie.ForeColor = CouleurForeBandeaux
 
+        PrepareTextBoxDipo(Me.txt_Sigma, False)
+        PrepareTextBoxDipo(Me.txt_EmissiviteBeton, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_EmissiviteFeu, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_AlphaC, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_AlphaCC, LogicielOptions.lExpert)
+
     End Sub
 
     Private Sub GestionUnites()
@@ -51,15 +65,21 @@
 
     Private Sub AfficherOptionsEnCours()
 
+        Me.txt_Sigma.Text = GetStringInUnitN(cls_OptionsFeu.BOLTZMANN * 10 ^ 8, Enu_TypeVariable.SansType, 5, 4, False, True)
+        Me.txt_EmissiviteFeu.Text = GetStringInUnitN(OptionsFeu.EmissiviteF, Enu_TypeVariable.SansType, 5, 4, False, True)
+        Me.txt_EmissiviteBeton.Text = GetStringInUnitN(OptionsFeu.EmissiviteC, Enu_TypeVariable.SansType, 5, 4, False, True)
+        Me.txt_AlphaC.Text = GetStringInUnitN(OptionsFeu.AlphaC, Enu_TypeVariable.SansType, 5, 4, False, True)
+        Me.txt_AlphaCC.Text = GetStringInUnitN(OptionsFeu.AlphaCC, Enu_TypeVariable.SansType, 5, 4, False, True)
+        Me.txt_ksh.Text = GetStringInUnitN(OptionsFeu.ksh, Enu_TypeVariable.SansType, 5, 4, False, True)
+        Me.txt_Phi.Text = GetStringInUnitN(OptionsFeu.Phi, Enu_TypeVariable.SansType, 5, 4, False, True)
+
     End Sub
 
 #End Region
 
-
-
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Sigma.Paint, img_dNodes.Paint, img_T0.Paint, img_EpsilonF.Paint, img_EpsilonA.Paint, img_Deltat.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Sigma.Paint, img_dNodes.Paint, img_T0.Paint, img_EpsilonF.Paint, img_EpsilonC.Paint, img_Deltat.Paint, img_AlphaC.Paint, img_AlphaCC.Paint, img_Phi.Paint, img_ksh.Paint
 
         '--> Déclarations
 
@@ -93,9 +113,9 @@
                 strSymbol = "q"
                 strIndice = "0"
                 lGrec = True
-            Case Me.img_EpsilonA.Name
+            Case Me.img_EpsilonC.Name
                 strSymbol = "e"
-                strIndice = "m"
+                strIndice = "c"
                 lGrec = True
             Case Me.img_EpsilonF.Name
                 strSymbol = "e"
@@ -105,6 +125,28 @@
                 strSymbol = "D"
                 strIndice = "t"
                 lGrec = True
+
+            Case Me.img_AlphaC.Name
+                strSymbol = "a"
+                strIndice = "c"
+                lGrec = True
+
+            Case Me.img_AlphaCC.Name
+                strSymbol = "a"
+                strIndice = "cc"
+                lGrec = True
+
+            Case Me.img_ksh.Name
+                strSymbol = "k"
+                strIndice = "sh"
+                lGrec = False
+
+            Case Me.img_Phi.Name
+                strSymbol = "f"
+                strIndice = ""
+                lGrec = True
+
+
         End Select
 
         '--> Dessin
@@ -115,7 +157,6 @@
     End Sub
 
 #End Region
-
 
 #Region "   Dessin des unités spéciales"
 
@@ -141,7 +182,7 @@
         sCar = MyGr.MeasureString(Chaine, FontNormal).Height
         xDec = MyGr.MeasureString(Chaine, FontNormal).Width
 
-        yPen = (sHI / 2 - sCar) / 2
+        yPen = (sHI - sCar) / 2
         xPen = 1
 
         MyGr.DrawString(Chaine, FontNormal, Brushes.Black, xPen, yPen)
@@ -186,16 +227,11 @@
         FontExp.Dispose()
     End Sub
 
-    'Private Sub img_TempReference_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles img_TempReference.Paint
-    '    DrawSymbol(e.Graphics, Brushes.Black, "q", "ref", 1, 1, 0, True, Enu_Alignement.Centre, MyFontNormal, MyFontNormal, MyFontNormal, 0.95)
-    'End Sub
-
-
-    Private Sub img_UnitThermConvection_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles img_UnitThermConvection.Paint
-        DrawUnitConvection(e.Graphics, Me.img_UnitThermConvection.ClientRectangle.Width, Me.img_UnitThermConvection.ClientRectangle.Height)
+    Private Sub img_UnitThermConvection_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles img_UnitAlphaC.Paint, img_UnitAlphaCC.Paint
+        DrawUnitAlphaConvection(e.Graphics, Me.img_UnitAlphaC.ClientRectangle.Width, Me.img_UnitAlphaC.ClientRectangle.Height)
     End Sub
 
-    Private Sub DrawUnitConvection(ByVal MyGr As Graphics, ByVal sWI As Single, ByVal sHI As Single)
+    Private Sub DrawUnitAlphaConvection(ByVal MyGr As Graphics, ByVal sWI As Single, ByVal sHI As Single)
         '----------------------------------------------------------------------------------------
         '   30/09/09 :  Création - Version 2.00
         '----------------------------------------------------------------------------------------
@@ -237,6 +273,119 @@
         FontNormal.Dispose()
         FontExp.Dispose()
     End Sub
+
+
+#End Region
+
+#Region " Gestion des évènements de saisie "
+
+    Private Sub txt_CteFeu_TextChanged(sender As Object, e As EventArgs) Handles txt_AlphaCC.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+            LocalOptionsFeu.AlphaCC = ValeurUI
+        End If
+
+    End Sub
+
+    Private Sub txt_AlphaC_TextChanged(sender As Object, e As EventArgs) Handles txt_AlphaC.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+            LocalOptionsFeu.AlphaC = ValeurUI
+        End If
+    End Sub
+
+    Private Sub txt_EmissiviteFeu_TextChanged(sender As Object, e As EventArgs) Handles txt_EmissiviteFeu.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+            LocalOptionsFeu.EmissiviteF = ValeurUI
+        End If
+    End Sub
+
+    Private Sub txt_EmissiviteBeton_TextChanged(sender As Object, e As EventArgs) Handles txt_EmissiviteBeton.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+            LocalOptionsFeu.EmissiviteC = ValeurUI
+        End If
+    End Sub
+
+    Private Sub txt_ksh_TextChanged(sender As Object, e As EventArgs) Handles txt_ksh.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+            LocalOptionsFeu.ksh = ValeurUI
+        End If
+    End Sub
+
+    Private Sub txt_Phi_TextChanged(sender As Object, e As EventArgs) Handles txt_Phi.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+            LocalOptionsFeu.Phi = ValeurUI
+        End If
+    End Sub
+
+    Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+
+        Dim lOk As Boolean = True
+        ErrorProvider.SetError(MyTxt, String.Empty)
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMin As Boolean = True
+        Dim lValMax As Boolean = True
+        Dim kUnit As Decimal
+
+        Select Case MyTxt.Name
+            Case Me.txt_AlphaC.Name
+
+                lValMax = False
+                kUnit = 1
+                ValMin = 0
+
+            Case Me.txt_AlphaCC.Name
+
+                lValMax = False
+                kUnit = 1
+                ValMin = 0
+
+            Case Me.txt_EmissiviteFeu.Name, Me.txt_EmissiviteBeton.Name
+
+                lValMax = True
+                kUnit = 1
+                ValMin = 0
+                ValMax = 1
+
+        End Select
+
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin / kUnit, lValMax, ValMax / kUnit)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, lValMin, ValMax, lValMax)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            ErrorProvider.Clear()
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+    End Function
+
 
 #End Region
 

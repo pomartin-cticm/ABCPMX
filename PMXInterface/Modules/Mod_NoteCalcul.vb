@@ -5113,7 +5113,6 @@ Module Mod_NoteCalcul
 
     End Sub
 
-
     'Private Function IndiceTravee(Node As Integer, iNodeAppui As Integer()) As Integer()
     '    '-------------------------------------------------------------------------------------------
     '    '   10/11/23 :  Création - GUD
@@ -5794,7 +5793,7 @@ Module Mod_NoteCalcul
 
 #End Region
 
-#Region "***Feraillage transversal***"
+#Region "***Ferraillage transversal***"
 
     Private Sub EditionFerraillageTransversal(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
@@ -5903,7 +5902,6 @@ Module Mod_NoteCalcul
         Dim lNote As Boolean = False
         Dim strNote As String = ""
         Const pLC9 As Integer = 12
-        'Dim ChaineR As String
 
         '--( Initialisation
 

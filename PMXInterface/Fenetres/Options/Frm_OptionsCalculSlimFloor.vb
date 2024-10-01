@@ -27,7 +27,8 @@ Public Class Frm_OptionsCalculSlimFloor
     Private Sub GestionLangue(ByVal MyBloc As Dictionary(Of String, String))
         Try
 
-            Me.lbl_Scope.Text = MyBloc("TITLE")
+            Me.lbl_Slimfloors.Text = MyBloc("TITLE")
+            Me.lbl_Dalles.Text = MyBloc("SLABS")
 
             '#-------------------- GEOMETRIE POUTRE
 
@@ -47,13 +48,14 @@ Public Class Frm_OptionsCalculSlimFloor
 
         Me.pan_Slimfloor.Dock = DockStyle.Fill
 
-        Me.lbl_Scope.BackColor = CouleurBackBandeaux
-        Me.lbl_Scope.ForeColor = CouleurForeBandeaux
+        Me.lbl_Slimfloors.BackColor = CouleurBackBandeaux
+        Me.lbl_Slimfloors.ForeColor = CouleurForeBandeaux
+        Me.lbl_Dalles.BackColor = CouleurBackBandeaux
+        Me.lbl_Dalles.ForeColor = CouleurForeBandeaux
 
         PrepareTextBoxDipo(Me.txt_hslimmax, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_bappmin, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_tpinfmin, LogicielOptions.lExpert)
-
 
     End Sub
 
@@ -79,7 +81,7 @@ Public Class Frm_OptionsCalculSlimFloor
 
 #Region " Evènements saisie "
 
-    Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_bappmin.TextChanged, txt_hslimmax.TextChanged, txt_tpinfmin.TextChanged
+    Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_hslimmax.TextChanged, txt_tpinfmin.TextChanged
 
         If lBuild Then Exit Sub
         Dim lPortees As Boolean = False
@@ -159,7 +161,7 @@ Public Class Frm_OptionsCalculSlimFloor
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_bappmin.Paint, img_hslimmax.Paint, img_tpinfmin.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_hslimmax.Paint, img_tpinfmin.Paint, img_bappmin.Paint
 
         '--> Déclarations
 

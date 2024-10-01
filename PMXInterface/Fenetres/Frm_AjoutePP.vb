@@ -629,7 +629,7 @@ Public Class Frm_AjoutePP
 
             If lOKPoutre And lAjout Then
 
-                MyProjet.Poutres.Add(New cls_Poutre(TypeSection, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(TypeSection, NomPoutre, LogicielOptions, OptionsCalcul, OptionsFeu, NomChargements))
 
                 InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)
                 InitialiseBacDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Bac, lTrouve)

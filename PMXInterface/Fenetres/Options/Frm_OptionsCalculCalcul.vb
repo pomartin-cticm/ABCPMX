@@ -299,8 +299,6 @@ Public Class Frm_OptionsCalculCalcul
 
     End Sub
 
-
-
     Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
 
         Dim lOk As Boolean = True

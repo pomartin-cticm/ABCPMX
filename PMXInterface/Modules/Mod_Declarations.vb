@@ -19,7 +19,9 @@ Public Module Mod_Declarations
     Public OptionsScope As Struc_OptionsScope
     Public LocalOptionsScope As Struc_OptionsScope          ' Pour la saisie des paramètres dans la fenêtre des options de calcul
     Public OptionsCalcul As Struc_OptionsCalcul
+    Public OptionsFeu As struc_OptionsFeu
     Public LocalOptionsCalcul As Struc_OptionsCalcul        ' Pour la saisie des paramètres dans la fenêtre des options de calcul
+    Public LocalOptionsFeu As struc_OptionsFeu              ' Pour la saisie des paramètres dans la fenêtre des options de calcul au feu
 
 #End Region
 
@@ -267,6 +269,17 @@ Public Module Mod_Declarations
         OptionsScope.RhoCBetonLegerMin = My.Settings.RhoCBetonLegerMin
 
         OptionsScope.RatioEpPredalleMax = My.Settings.RatioEpPredalleMax
+
+    End Sub
+
+    Public Sub InitialiseOptionsFeu()
+
+        OptionsFeu.EmissiviteC = 1
+        OptionsFeu.EmissiviteF = 1
+        OptionsFeu.AlphaC = 25
+        OptionsFeu.AlphaCC = 4
+        OptionsFeu.ksh = 1
+        OptionsFeu.Phi = 1
 
     End Sub
 

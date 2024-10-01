@@ -925,7 +925,7 @@ CANCEL					= Annuler
 GAMMA					= Coefficients nationaux par défaut
 SCOPE					= Domaine d'application
 CALCUL					= Options de calcul
-SLIMFLOOR				= Slimfloor 
+SLIMFLOOR				= Dalles et planchers minces
 FIRE					= Calcul à l'incendie
 MODIF					= Attention : la modification des paramètres sera prise en compte lors de l'ajout de nouvelles poutres uniquement. 
 MODIF2					= Les valeurs des paramètres des poutres déjà créées resteront inchangées.  
@@ -973,6 +973,13 @@ TITLE					= Calcul incendie
 CONSTANTS				= Constantes
 PARAMETERS				= Paramètres
 BOLTZMAN				= Constante de Boltzman
+EMISSIVITYC				= Emissivité du béton
+EMISSIVITYF				= Emissivité du feu
+CONVECTIONFACTORSLAB	= Coefficient de convection au-dessus de la dalle
+CONVECTIONFACTOR		= Coefficient de convection
+FORMFACTOR				= Coefficient de forme
+SHADOWFACTOR			= Coefficient de correction pour l'effet d'ombre
+
 
 #OPTCALSCOPE
 TITLE					= Domaine d'application
@@ -989,11 +996,12 @@ COMPOSITESLABTH			= Epaisseur de la dalle mixte (au-dessus du bac)
 RHOLWC					= Masse volumique du béton léger
 
 #OPTCALSLIMFLOOR
-TITLE					= Slimfloor
+TITLE					= Planchers minces
+SLABS					= Dalles
 SLIMFLOORDIM			= Dimensions des slimfloors
-DEPTHMAX				= Hauteur maximale d'un profil laminé à chaud pour slimfloors
-SLABSUPPORTMIN			= Largeur minimale du support de plancher
-THICKNESSMIN			= Epaisseur minimale du plat pour les slimfloors
+DEPTHMAX				= Hauteur maximale d'un profil laminé intégré
+SLABSUPPORTMIN			= Largeur minimale d'un support de dalle
+THICKNESSMIN			= Epaisseur minimale du plat
 
 #OPTSOFTMAIN
 TITLE					= Options logiciel
@@ -1032,8 +1040,8 @@ FILTRESOFT				= Software filter
 HIDEFILTER				= Hide unauthorized profiles
 
 #RESERVE
-EPROFILS		= Base de données des profilés d'ArcelorMittal
-EACIER			= Base de données des aciers
+EPROFILS				= Base de données des profilés d'ArcelorMittal
+EACIER					= Base de données des aciers
 
 STEELAVAIL		= Afficher uniquement les aciers disponibles
 CHOIXSTEEL		= Options pour la sélection des aciers

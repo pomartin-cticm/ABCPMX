@@ -129,6 +129,7 @@ Public Class Frm_OptionsCalcul
         ' Me.GammaLoc.TransfertFrom(LogicielOptions.Gamma)
         LocalOptionsScope = OptionsScope
         LocalOptionsCalcul = OptionsCalcul
+        LocalOptionsFeu = OptionsFeu
         LocalOptionsSlimFloor = OptionsSlimFloor
 
         Me.lSettingsReset = False
@@ -339,7 +340,7 @@ Public Class Frm_OptionsCalcul
         End If
         GereTransfertValeur(LocalOptionsScope.ThetaH, OptionsScope.ThetaH, lModif)
 
-        '# Fenêtre Slimfloor
+        '# Fenêtre Dalle et slimfloor
         If lExpert Then
             GereTransfertValeur(LocalOptionsSlimFloor.hslimmax, OptionsSlimFloor.hslimmax, lModif)
             GereTransfertValeur(LocalOptionsSlimFloor.bappmin, OptionsSlimFloor.bappmin, lModif)
@@ -371,6 +372,19 @@ Public Class Frm_OptionsCalcul
         GereTransfertValeur(LocalOptionsCalcul.EtaW, OptionsCalcul.EtaW, lModif)
 
         'AppliquerReglagesProjetEnCours() '--> GUD: Désactivation de cette ligne car elle modifie l'ensemble des poutres du projet, ce qui n'est pas souhaitable
+
+        '# Calcul incendie
+
+        If lExpert Then
+
+            GereTransfertValeur(LocalOptionsFeu.AlphaCC, OptionsFeu.AlphaCC, lModif)
+            GereTransfertValeur(LocalOptionsFeu.AlphaC, OptionsFeu.AlphaC, lModif)
+            GereTransfertValeur(LocalOptionsFeu.EmissiviteC, OptionsFeu.EmissiviteC, lModif)
+            GereTransfertValeur(LocalOptionsFeu.EmissiviteF, OptionsFeu.EmissiviteF, lModif)
+            GereTransfertValeur(LocalOptionsFeu.ksh, OptionsFeu.ksh, lModif)
+            GereTransfertValeur(LocalOptionsFeu.Phi, OptionsFeu.Phi, lModif)
+
+        End If
 
     End Sub
 

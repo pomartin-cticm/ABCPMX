@@ -77,9 +77,20 @@
     End Structure
 
     Public Structure Struc_OptionsSlimFloor
-        Public hslimmax As Decimal 'hauteur maximale des sections slimfloors
-        Public bappmin As Decimal 'Largeur d'appui min à respecter
-        Public tpinfmin As Decimal 'Epaisseur min des plats soudés
+        Public hslimmax As Decimal                      ' hauteur maximale des sections slimfloors
+        Public bappmin As Decimal                       ' Largeur d'appui min à respecter
+        Public tpinfmin As Decimal                      ' Epaisseur min des plats soudés
+    End Structure
+
+    Public Structure struc_OptionsFeu
+
+        Public EmissiviteC As Decimal                   ' Emissivité du béton
+        Public EmissiviteF As Decimal                   ' Emissivité du feu
+        Public AlphaC As Decimal                        ' Coefficient de transfert thermique par convection
+        Public AlphaCC As Decimal                       ' Coefficient de transfert thermique par convection au dessus de la dalle
+        Public ksh As Decimal                           ' Coefficient de correction pour l'effet d'ombre
+        Public Phi As Decimal                           ' Coefficient de forme
+
     End Structure
 
 #End Region

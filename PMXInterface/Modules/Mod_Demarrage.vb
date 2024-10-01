@@ -309,6 +309,7 @@ Public Module Mod_Demarrage
 
         InitialiseOptionsScope()
         InitialiseOptionsCalcul()
+        InitialiseOptionsFeu()
 
         '--> MAJ des noms de fichiers langue
 
