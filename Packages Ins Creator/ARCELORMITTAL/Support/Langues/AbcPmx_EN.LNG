@@ -23,6 +23,14 @@ VERSION					= Version
 SUPPORT					= Support :
 YEARVERSION				= Year :
 
+#FRM_ADDBEAMFILE
+TITLE					= Add a beam
+OK						= OK
+CANCEL					= Cancel
+CLOSE					= Close
+PROJECT					= Project $
+ADDBEAM					= Add the following beams in the project
+
 #FRMADDSTUD
 TITLEADD				= Add a new stud
 TITLEMODIFY				= Modify the stud
@@ -621,6 +629,9 @@ EDITDECKS				= Edit Steel profiled sheetings
 WELDEDSEC				= Welded
 FIRENOTAVAIL			= Fire calculation is not available in this version of $.
 FIRELATER				= It will be released in a future version.
+CONFIRMBEAMREMOVE		= Confirm the removal of the beam $ from the project
+ERRMISSINGDECK			= Steel deck $ is missing in the database
+ERRMISSINGPSLAB			= Prefabricated slab $ is not recognized by the software 
 
 #FRM_MODULARRATIOTOOL
 TITLE					= Modular ratio tool
@@ -931,7 +942,7 @@ CANCEL					= Cancel
 GAMMA					= Default national factors
 SCOPE					= Scope of application
 CALCUL					= Calculation options
-SLIMFLOOR				= Slimfloor
+SLIMFLOOR				= Slabs and slimfloors
 FIRE					= Fire design
 MODIF					= Warning : parameter modifications will be taken into account when adding new beams only. 
 MODIF2					= The parameter values of existing beams will remain unchanged.
@@ -979,6 +990,15 @@ TITLE					= Fire design
 CONSTANTS				= Constants
 PARAMETERS				= Parameters
 BOLTZMAN				= Boltzman constant
+EMISSIVITYC				= Emissivity of concrete
+EMISSIVITYF				= Emissivity of fire
+CONVECTIONFACTORSLAB	= Convection factor above the slab
+CONVECTIONFACTOR		= Convection factor
+FORMFACTOR				= Form factor
+SHADOWFACTOR			= Correction factor for the shadow effect
+TEMPREFERENCE			= Reference temperature
+TEMPMAX					= Maximal temperature
+
 
 #OPTCALSCOPE
 TITLE					= Scope of application
@@ -995,11 +1015,12 @@ COMPOSITESLABTH			= Thickness of composite slab (above ribs)
 RHOLWC					= Density of light weight concrete
 
 #OPTCALSLIMFLOOR
-TITLE					= Slimfloor
+TITLE					= Slimfloors
+SLABS					= Slabs
 SLIMFLOORDIM			= Slimfloor dimensions
 DEPTHMAX				= Maximal depth of a slim floor hot rolled profile
-SLABSUPPORTMIN			= Minimum width of the slab support
-THICKNESSMIN			= Minimum thickness of the plate for slim floors
+SLABSUPPORTMIN			= Minimum width of a slab support
+THICKNESSMIN			= Minimum thickness of the plate
 
 #OPTSOFTMAIN
 TITLE					= Software options

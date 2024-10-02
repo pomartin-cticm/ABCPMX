@@ -579,15 +579,45 @@ Public Class Frm_Maintiens
     Private Sub MAJ_PositionMaintiens()
         'Dim index_maintien As Integer
 
+        '--( Déclarations
+
         Dim val As Decimal = 0
+
+        Dim lConsoleG As Boolean
+        Dim lConsoleD As Boolean
+        Dim x0, DeltaX As Decimal
+
+        '--( Initialisations
+
+        lConsoleG = (traveeEnCours.Item2 = 0)
+        lConsoleD = (traveeEnCours.Item2 = MyPoutreLoc.IndiceTraveeConsoleDroite)
+
+        If lConsoleG Or lConsoleD Then
+            DeltaX = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count)
+        Else
+            DeltaX = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count + 1)
+        End If
+        If lConsoleG Then
+            x0 = 0
+        Else
+            x0 = DeltaX
+        End If
+
+        '--( Traitement
 
         'Lissage des positions des maintiens lorsqu'on ajoute ou supprime un maintien
 
-        For Each maintiens As cls_Maintiens In MyPoutreLoc.Maintiens(traveeEnCours.Item2)
-            'index_maintien = MyPoutreLoc.Maintiens(traveeEnCours.Item2).IndexOf(maintiens)
-            val += MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count + 1)
-            maintiens.x_Loc = val
+        For i As Integer = 0 To MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count - 1
+
+            MyPoutreLoc.Maintiens(traveeEnCours.Item2)(i).x_Loc = x0 + DeltaX * i
+
         Next
+
+        'For Each maintiens As cls_Maintiens In MyPoutreLoc.Maintiens(traveeEnCours.Item2)
+        '    'index_maintien = MyPoutreLoc.Maintiens(traveeEnCours.Item2).IndexOf(maintiens)
+        '    val += MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count + 1)
+        '    maintiens.x_Loc = val
+        'Next
     End Sub
 
 #End Region

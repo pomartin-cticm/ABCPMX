@@ -90,6 +90,7 @@
         Public AlphaCC As Decimal                       ' Coefficient de transfert thermique par convection au dessus de la dalle
         Public ksh As Decimal                           ' Coefficient de correction pour l'effet d'ombre
         Public Phi As Decimal                           ' Coefficient de forme
+        Public TempRef As Decimal                       ' Température de référence
 
     End Structure
 

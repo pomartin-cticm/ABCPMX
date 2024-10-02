@@ -1,0 +1,26 @@
+COMPOSITE BEAMS SOFTWARE 
+ABC-PMX Software
+
+  ==============================================================
+   |   |   |   |   |   |  |   |   |   |   |   |   |   |   |   |
+  ==============================================================
+  |                                                            |
+  |                                                            |
+  ==============================================================
+  /\							      /\	
+
+Copyright CTICM-ArcelorMittal - 2024
+ABC-PMX has been developed by CTICM - PARIS - FRANCE
+02-10-2024
+================================================================
+
+Version 1.00 (Beta2): 02/10/24
+---------------------
+
+First edition of the piece of software. Without fire design and slimfloors
+
+Delivered with ArcelorMittal DataBase - 2022-1
+
+----------------------------------------------------------------------------------------------
+
+

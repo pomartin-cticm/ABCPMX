@@ -383,6 +383,7 @@ Public Class Frm_OptionsCalcul
             GereTransfertValeur(LocalOptionsFeu.EmissiviteF, OptionsFeu.EmissiviteF, lModif)
             GereTransfertValeur(LocalOptionsFeu.ksh, OptionsFeu.ksh, lModif)
             GereTransfertValeur(LocalOptionsFeu.Phi, OptionsFeu.Phi, lModif)
+            GereTransfertValeur(LocalOptionsFeu.TempRef, OptionsFeu.TempRef, lModif)
 
         End If
 

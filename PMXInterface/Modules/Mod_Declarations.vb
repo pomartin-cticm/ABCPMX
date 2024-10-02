@@ -280,6 +280,7 @@ Public Module Mod_Declarations
         OptionsFeu.AlphaCC = 4
         OptionsFeu.ksh = 1
         OptionsFeu.Phi = 1
+        OptionsFeu.TempRef = 20
 
     End Sub
 

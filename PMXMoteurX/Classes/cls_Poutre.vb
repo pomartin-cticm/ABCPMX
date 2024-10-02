@@ -830,6 +830,8 @@ Public Class cls_Poutre
             Me.ParamFeu.ksh = .ksh
             Me.ParamFeu.PhiViewFactor = .Phi
 
+            Me.ParamFeu.TempRef = .TempRef
+
         End With
 
 

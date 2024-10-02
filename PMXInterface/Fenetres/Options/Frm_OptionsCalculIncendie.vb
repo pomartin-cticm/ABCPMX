@@ -35,6 +35,10 @@ Public Class Frm_OptionsCalculIncendie
             Me.lbl_FormFactorPhi.Text = MyBloc("FORMFACTOR")
             Me.lbl_ShadowKsh.Text = MyBloc("FORMFACTOR")
 
+            Me.lbl_Parametres.Text = MyBloc("PARAMETERS")
+            Me.lbl_TempReference.Text = MyBloc("TEMPREFERENCE")
+            Me.lbl_TempMax.Text = MyBloc("TEMPMAX")
+
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues")
             'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -54,12 +58,15 @@ Public Class Frm_OptionsCalculIncendie
         PrepareTextBoxDipo(Me.txt_EmissiviteFeu, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_AlphaC, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_AlphaCC, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_TempReference, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_TempMax, False)
 
     End Sub
 
     Private Sub GestionUnites()
-        Me.etq_UnitBoltzman.Text = LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
-        Me.etq_UnitL1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+        Me.etq_UnitTemp1.Text = "°C"
+        Me.etq_UnitTemp2.Text = "°C"
 
     End Sub
 
@@ -73,13 +80,16 @@ Public Class Frm_OptionsCalculIncendie
         Me.txt_ksh.Text = GetStringInUnitN(OptionsFeu.ksh, Enu_TypeVariable.SansType, 5, 4, False, True)
         Me.txt_Phi.Text = GetStringInUnitN(OptionsFeu.Phi, Enu_TypeVariable.SansType, 5, 4, False, True)
 
+        Me.txt_TempReference.Text = GetStringInUnitN(OptionsFeu.TempRef, Enu_TypeVariable.SansType, 4, 1, False, True)
+        Me.txt_TempMax.Text = GetStringInUnitN(cls_OptionsFeu.TempMax, Enu_TypeVariable.SansType, 4, 1, False, True)
+
     End Sub
 
 #End Region
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Sigma.Paint, img_dNodes.Paint, img_T0.Paint, img_EpsilonF.Paint, img_EpsilonC.Paint, img_Deltat.Paint, img_AlphaC.Paint, img_AlphaCC.Paint, img_Phi.Paint, img_ksh.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Sigma.Paint, img_T0.Paint, img_EpsilonF.Paint, img_EpsilonC.Paint, img_Deltat.Paint, img_AlphaC.Paint, img_AlphaCC.Paint, img_Phi.Paint, img_ksh.Paint
 
         '--> Déclarations
 
@@ -104,15 +114,12 @@ Public Class Frm_OptionsCalculIncendie
                 strIndice = ""
                 lEgal = True
                 lGrec = True
-                'AlignH = Enu_AlignementH.Droite
-            Case Me.img_dNodes.Name
-                strSymbol = "d"
-                strIndice = ""
-                lEgal = False
+
             Case Me.img_T0.Name
                 strSymbol = "q"
                 strIndice = "0"
                 lGrec = True
+
             Case Me.img_EpsilonC.Name
                 strSymbol = "e"
                 strIndice = "c"
@@ -340,6 +347,16 @@ Public Class Frm_OptionsCalculIncendie
         End If
     End Sub
 
+    Private Sub txt_TempMax_TextChanged(sender As Object, e As EventArgs) Handles txt_TempMax.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+            LocalOptionsFeu.TempRef = ValeurUI
+        End If
+    End Sub
+
     Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
 
         Dim lOk As Boolean = True
@@ -371,6 +388,20 @@ Public Class Frm_OptionsCalculIncendie
                 ValMin = 0
                 ValMax = 1
 
+            Case Me.txt_Phi.Name, Me.txt_ksh.Name
+
+                lValMax = True
+                kUnit = 1
+                ValMin = 0
+                ValMax = 1
+
+            Case Me.txt_TempReference.Name
+
+                lValMax = True
+                kUnit = 1
+                ValMin = 0
+                ValMax = 100
+
         End Select
 
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin / kUnit, lValMax, ValMax / kUnit)
@@ -385,6 +416,7 @@ Public Class Frm_OptionsCalculIncendie
         lOk = (iErreur = 0)
         Return lOk
     End Function
+
 
 
 #End Region
