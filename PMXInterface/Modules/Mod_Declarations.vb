@@ -93,6 +93,16 @@ Public Module Mod_Declarations
         ''' </summary>
         Public Base_Goujons_Perso As String
 
+        ''' <summary>
+        ''' Fichier pdf du Manuel Technique
+        ''' </summary>
+        Public RapportMT As String
+
+        ''' <summary>
+        ''' Fichier  pdf du Manuel de Validation
+        ''' </summary>
+        Public RapportMV As String
+
         '''' <summary>
         '''' Fichier de base de données des icones
         '''' </summary>

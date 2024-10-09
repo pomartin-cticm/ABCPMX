@@ -319,6 +319,7 @@ Public Class Frm_PMX
 
                 '=== MESSAGES d'ERREUR
 
+                msgErreurs.Clear()
                 msgErreurs.Add("BACABSENT", Bloc("ERRMISSINGDECK"))
                 msgErreurs.Add("COFRAABSENT", Bloc("ERRMISSINGPSLAB"))
 
@@ -627,6 +628,41 @@ Public Class Frm_PMX
 #End Region
 
 #Region " Gestion Barre d'outils poutre "
+
+
+    Private Sub TechnicalToolStripMenuItemN_Click(sender As Object, e As EventArgs) Handles TechnicalToolStripMenuItemN.Click
+        OuvertureRapport(True)
+    End Sub
+
+    Private Sub ValidationToolStripMenuItemN_Click(sender As Object, e As EventArgs) Handles ValidationToolStripMenuItemN.Click
+        OuvertureRapport(False)
+    End Sub
+
+
+    Public Sub OuvertureRapport(lMT As Boolean)
+        '------------------------------------------------------------------------
+        '   09/10/24 :  Création - POM - 
+        '------------------------------------------------------------------------
+        '   Gestion de l'ouverture des rapport MT et MV
+        '------------------------------------------------------------------------
+        '   lMT     [E] :   Indique si ouverture MT ou MV
+        '------------------------------------------------------------------------
+
+        Dim FileHelp As String = LogicielFichiers.RapportMT
+        If Not lMT Then FileHelp = LogicielFichiers.RapportMV
+        Try
+            Process.Start(FileHelp)
+        Catch ex As Exception
+            Dim Message As String
+
+            Message = "Impossible to open file " & FileHelp
+
+            GestionErrorsPMX("FrmPMX", "OuvertureMT", Message, True)
+        End Try
+
+
+    End Sub
+
 
     Private Sub GestionBoutonsBarreOutilGenerale(sender As Object, e As EventArgs) Handles TSbtn_EditStuds.Click, TSbtn_EditProfiles.Click, TSbtn_EditBacs.Click, AboutToolStripMenuItemN.Click, SupportToolStripMenuItemN.Click
 

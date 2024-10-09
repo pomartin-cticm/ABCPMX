@@ -187,6 +187,12 @@
 
         Dim lClasse3, lClasse4 As Boolean               ' Indique si présence d'au moins une section de classe 3 ou de classe 4
         Dim DeltaRd(,) As List(Of Decimal) = Nothing
+        '   DeltaRd : Somme des résistances des connecteurs entre le noeud et le point de moment nul
+        '------------------------------------------------------------------------------------------------------------------
+        '   Indice(i,j)(k) :    i : indice travée
+        '                       j : indice appui gauche ou droite
+        '                       k : indice du noeud
+        '------------------------------------------------------------------------------------------------------------------
 
         Dim zANP(,) As Decimal = Nothing                ' Position ANP, tenant compte de MEd et du degré de connexion
         Dim zANPMV(,) As Decimal = Nothing              ' Position ANP, tenant compte de MEd, du degré de connexion et de l'interaction avec l'effort tranchant 
@@ -389,7 +395,7 @@
                 If Me.ShearB.lCheckRequired Or Not (lCalculPlastic) Then
 
                     '# Calcul des moments plastiques  MfRd
-                    '====  Me.MaillageProprietesMfRd(myBeam, MEd, DeltaRd, Beff, MfRd)
+                    Me.MaillageProprietesMfRd(myBeam, MEd, DeltaRd, Beff, MfRd)
 
                     '# Interaction MV pour le voilement par cisaillement
                     Me.RunCritereInteractionMVoilementCisaillement(myBeam, iCombi, MEd, VEd, VbRd, MplRd, MfRd)
@@ -903,7 +909,7 @@
 
     End Sub
 
-    Private Sub MaillageProprietesMfRd(MyPoutre As cls_Poutre, MEd(,) As Decimal, DeltaRd() As List(Of Decimal), bEff() As Decimal, ByRef pMfRd(,) As Decimal)
+    Private Sub MaillageProprietesMfRd(MyPoutre As cls_Poutre, MEd(,) As Decimal, DeltaRd(,) As List(Of Decimal), bEff() As Decimal, ByRef pMfRd(,) As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   02/11/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -914,6 +920,7 @@
         '   myBeam          [E] :   Poutre traitée
         '   MEd             [E] :   Diagramme de moment aux ELU
         '   DeltaRd         [E] :   Cumul des résistance des PRd entre les sections et les points de moment nul
+
         '   bEff            [E] :   Largeur efficace de dalle
         '   pMfRd           [S] :   moments plastiques des semelles seules (en fonction du signe de MEd)
         '----------------------------------------------------------------------------------------------------------
@@ -930,6 +937,8 @@
         Dim Signe As Decimal
 
         Dim zANP As Decimal
+
+        Dim RConnexG, RConnexD, RConnex As Decimal
 
         '--> Initialisation
 
@@ -955,8 +964,13 @@
                 rhoVLoc = 1
                 '==
 
+                '== Degré de connexion
+                RConnexG = DeltaRd(iTravee, 0)(iNode - iNodeDeb)
+                RConnexD = DeltaRd(iTravee, 1)(iNode - iNodeDeb)
+                RConnex = Math.Min(RConnexG, RConnexD)
+
                 MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, rhoVLoc,
-                                                                 bEff(iNode), DeltaRd(iTravee)(iNode - iNodeDeb), MyPoutre.Dalle, zANP, pMfRd(iNode, kDeb))
+                                                                 bEff(iNode), RConnex, MyPoutre.Dalle, zANP, pMfRd(iNode, kDeb))
 
                 If kfin > kDeb Then
                     pMfRd(iNode, kfin) = pMfRd(iNode, kDeb)

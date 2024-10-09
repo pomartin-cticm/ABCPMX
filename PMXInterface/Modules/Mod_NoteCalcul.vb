@@ -1093,7 +1093,7 @@ Module Mod_NoteCalcul
         Else
             AddLigneNDC(TABW2 & BlocG("NOETADEFLECTIONS"))
         End If
-        AddLigneNDC(TABW2 & BlocG("STUDSE") & " : ")
+        AddLigneNDC(TABW2 & RemplaceDollar(BlocG("STUDSE"), "0,7 . \IP\i\-Rk\=") & " : ")
         AddLigneNDC(TABW2 & TABVAR5 & "s\-e\= = " & GetStringInUnit(MyBeam.Param.DeltaD, Enu_TypeVariable.Millimetre, 4, 2, True))
         If MyBeam.Param.lMaitriseFissuration Then
             AddLigneNDC(TABW2 & BlocG("CONTROLCRACKW") & TABAFF & BlocG("YES"))
@@ -1142,7 +1142,7 @@ Module Mod_NoteCalcul
         AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0SH(1) & " " & BlocG("SYMBOLFORDAY"))
         FinTableau()
 
-        AddLigneNDC(TABW2 & BlocG("AGET") & TABAFF & "t = " & GetStringInUnit(MyBeam.Param.AgeT, Enu_TypeVariable.SansType, 4, 2, False) & BlocG("SYMBOLFORDAY"))
+        AddLigneNDC(TABW2 & BlocG("AGET") & TABAFF & "t = " & GetStringInUnit(MyBeam.Param.AgeT, Enu_TypeVariable.SansType, 4, 2, False) & " " & BlocG("SYMBOLFORDAY"))
 
         '--> Paramètres
         AddTitreNdC(3, BlocG("TPARAMETERS"))

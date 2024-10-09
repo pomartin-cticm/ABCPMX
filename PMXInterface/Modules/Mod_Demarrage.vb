@@ -102,8 +102,8 @@ Public Module Mod_Demarrage
 
         '--> Réglages CTICM/AM
 
-        'LogicielInfo.Maitre = EnuMaitre.CTICM
-        LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
+        LogicielInfo.Maitre = EnuMaitre.CTICM
+        'LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
 
         InitialiseReglagesLogiciel()
         InitialiseVersion()
@@ -148,6 +148,10 @@ Public Module Mod_Demarrage
         '--> Langues
 
         InitialiseLangues()
+
+        '--> Rapports MT et MV
+
+        InitialiseRapports()
 
         '--> Options de la NdC
 
@@ -329,6 +333,26 @@ Public Module Mod_Demarrage
     <Conditional("DEBUG")> Private Sub InitialiseDebug()
         lDebug = True
         LogicielOptions.lDebug = True
+    End Sub
+
+    Private Sub InitialiseRapports()
+        '--------------------------------------------------------------------------------------------------------
+        '   09/10/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------
+        '   Initialisation des fichiers pdf des MV et MT
+        '--------------------------------------------------------------------------------------------------------
+
+        Dim MyRep As String = LogicielRep.Install
+
+        If lDebug Then
+            MyRep = MyRep & "\..\..\Rapports"
+        Else
+            MyRep = MyRep & "\Rapports"
+        End If
+
+        LogicielFichiers.RapportMT = MyRep & "\ABCPMX - MT.pdf"
+        LogicielFichiers.RapportMV = MyRep & "\ABCPMX - MV.pdf"
+
     End Sub
 
     Private Sub InitialiseLangues()

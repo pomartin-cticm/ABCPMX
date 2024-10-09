@@ -96,6 +96,7 @@ Partial Class Frm_PMX
         Me.TSbtn_SaveN = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator23 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_AddBeamN = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_AddPoutreFromFile = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_SupprBeam = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_DupBeam = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator24 = New System.Windows.Forms.ToolStripSeparator()
@@ -153,7 +154,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog_Project = New System.Windows.Forms.SaveFileDialog()
-        Me.TSbtn_AddPoutreFromFile = New System.Windows.Forms.ToolStripButton()
         Me.TLPan_Main.SuspendLayout()
         CType(Me.Split_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Split_Main.Panel1.SuspendLayout()
@@ -872,6 +872,15 @@ Partial Class Frm_PMX
         Me.TSbtn_AddBeamN.Size = New System.Drawing.Size(28, 32)
         Me.TSbtn_AddBeamN.Text = "TSbtn_AddBeamN"
         '
+        'TSbtn_AddPoutreFromFile
+        '
+        Me.TSbtn_AddPoutreFromFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_AddPoutreFromFile.Image = CType(resources.GetObject("TSbtn_AddPoutreFromFile.Image"), System.Drawing.Image)
+        Me.TSbtn_AddPoutreFromFile.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_AddPoutreFromFile.Name = "TSbtn_AddPoutreFromFile"
+        Me.TSbtn_AddPoutreFromFile.Size = New System.Drawing.Size(28, 32)
+        Me.TSbtn_AddPoutreFromFile.Text = "ToolStripButton1"
+        '
         'TSbtn_SupprBeam
         '
         Me.TSbtn_SupprBeam.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -1204,13 +1213,13 @@ Partial Class Frm_PMX
         Me.AboutToolStripMenuItemN.Name = "AboutToolStripMenuItemN"
         Me.AboutToolStripMenuItemN.ShortcutKeys = CType(((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.Shift) _
             Or System.Windows.Forms.Keys.A), System.Windows.Forms.Keys)
-        Me.AboutToolStripMenuItemN.Size = New System.Drawing.Size(301, 22)
+        Me.AboutToolStripMenuItemN.Size = New System.Drawing.Size(305, 26)
         Me.AboutToolStripMenuItemN.Text = "AboutToolStripMenuItemN"
         '
         'ToolStripSeparator21
         '
         Me.ToolStripSeparator21.Name = "ToolStripSeparator21"
-        Me.ToolStripSeparator21.Size = New System.Drawing.Size(298, 6)
+        Me.ToolStripSeparator21.Size = New System.Drawing.Size(302, 6)
         '
         'SupportToolStripMenuItemN
         '
@@ -1218,13 +1227,13 @@ Partial Class Frm_PMX
         Me.SupportToolStripMenuItemN.Name = "SupportToolStripMenuItemN"
         Me.SupportToolStripMenuItemN.ShortcutKeys = CType(((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.Shift) _
             Or System.Windows.Forms.Keys.R), System.Windows.Forms.Keys)
-        Me.SupportToolStripMenuItemN.Size = New System.Drawing.Size(301, 22)
+        Me.SupportToolStripMenuItemN.Size = New System.Drawing.Size(305, 26)
         Me.SupportToolStripMenuItemN.Text = "SupportToolStripMenuItemN"
         '
         'ToolStripSeparator22
         '
         Me.ToolStripSeparator22.Name = "ToolStripSeparator22"
-        Me.ToolStripSeparator22.Size = New System.Drawing.Size(298, 6)
+        Me.ToolStripSeparator22.Size = New System.Drawing.Size(302, 6)
         '
         'TechnicalToolStripMenuItemN
         '
@@ -1232,7 +1241,7 @@ Partial Class Frm_PMX
         Me.TechnicalToolStripMenuItemN.Name = "TechnicalToolStripMenuItemN"
         Me.TechnicalToolStripMenuItemN.ShortcutKeys = CType(((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.Shift) _
             Or System.Windows.Forms.Keys.T), System.Windows.Forms.Keys)
-        Me.TechnicalToolStripMenuItemN.Size = New System.Drawing.Size(301, 22)
+        Me.TechnicalToolStripMenuItemN.Size = New System.Drawing.Size(305, 26)
         Me.TechnicalToolStripMenuItemN.Text = "TechnicalToolStripMenuItemN"
         '
         'ValidationToolStripMenuItemN
@@ -1241,7 +1250,7 @@ Partial Class Frm_PMX
         Me.ValidationToolStripMenuItemN.Name = "ValidationToolStripMenuItemN"
         Me.ValidationToolStripMenuItemN.ShortcutKeys = CType(((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.Shift) _
             Or System.Windows.Forms.Keys.V), System.Windows.Forms.Keys)
-        Me.ValidationToolStripMenuItemN.Size = New System.Drawing.Size(301, 22)
+        Me.ValidationToolStripMenuItemN.Size = New System.Drawing.Size(305, 26)
         Me.ValidationToolStripMenuItemN.Text = "ValidationToolStripMenuItemN"
         '
         'Panel2
@@ -1328,15 +1337,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(0, "Enregistrer_NotOK")
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
-        '
-        'TSbtn_AddPoutreFromFile
-        '
-        Me.TSbtn_AddPoutreFromFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_AddPoutreFromFile.Image = CType(resources.GetObject("TSbtn_AddPoutreFromFile.Image"), System.Drawing.Image)
-        Me.TSbtn_AddPoutreFromFile.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_AddPoutreFromFile.Name = "TSbtn_AddPoutreFromFile"
-        Me.TSbtn_AddPoutreFromFile.Size = New System.Drawing.Size(28, 32)
-        Me.TSbtn_AddPoutreFromFile.Text = "ToolStripButton1"
         '
         'Frm_PMX
         '
