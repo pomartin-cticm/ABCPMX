@@ -778,7 +778,7 @@ Public Class Frm_PMX
                 'FilleEnCours = EnuFenetres.Incendie
                 If lFIRE Then
 
-                    FilleEnCours = EnuFenetres.OptionsIncendie
+                    FilleEnCours = EnuFenetres.Incendie
 
                 Else
 

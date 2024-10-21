@@ -1033,6 +1033,86 @@ Public Class cls_Poutre
 
     End Sub
 
+    Public Sub MAJModifPortees(LongueursIni() As Decimal)
+        '--------------------------------------------------------------------------
+        '   21/10/24 :  Création - POM
+        '--------------------------------------------------------------------------
+        '   Mise à jour de la poutre suite à modification d'une longueur
+        '--------------------------------------------------------------------------
+        '   LongueurIni [E] :   Table des longueurs de travées avant modification
+        '--------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim indTravD, indTravF As Integer
+        Dim iLastI As Integer
+
+        '--( Initialisation
+
+        indTravD = Me.IndicePremiereTravee
+        indTravF = Me.IndiceDerniereTravee
+        iLastI = LongueursIni.GetUpperBound(0)
+
+        '--( Boucle sur les travées
+
+        For iTravee As Integer = indTravD To indTravF
+            If iTravee <= iLastI Then
+
+                If Not IsEqual(Me.LongueurTravee(iTravee), LongueursIni(iTravee)) Then
+
+                    Me.MAJChargesModifL(iTravee, LongueursIni(iTravee))
+                    Me.MAJMaintiensModifL(iTravee, LongueursIni(iTravee))
+
+                End If
+
+            End If
+        Next
+
+    End Sub
+
+    Private Sub MAJMaintiensModifL(iTravee As Integer, LongueurI As Decimal)
+        '--------------------------------------------------------------------------
+        '   21/10/24 :  Création - POM
+        '--------------------------------------------------------------------------
+        '   Mise à jour des maintiens de la poutre suite à modification d'une longueur de travée
+        '--------------------------------------------------------------------------
+        '   iTravee     [E] :   Inidice de travée
+        '   LongueurI   [E] :   Longueur initiale de la travée traitée
+        '--------------------------------------------------------------------------
+
+        If IsEqual(LongueurI, 0) Then Exit Sub
+
+        For iM As Integer = 0 To Me.Maintiens(iTravee).Count - 1
+            Me.Maintiens(iTravee)(iM).x_Loc *= Me.LongueurTravee(iTravee) / LongueurI
+        Next
+
+    End Sub
+
+    Private Sub MAJChargesModifL(iTravee As Integer, LongueurI As Decimal)
+        '--------------------------------------------------------------------------
+        '   21/10/24 :  Création - POM
+        '--------------------------------------------------------------------------
+        '   Mise à jour des charges de la poutre suite à modification d'une longueur de travée
+        '--------------------------------------------------------------------------
+        '   iTravee     [E] :   Inidice de travée
+        '   LongueurI   [E] :   Longueur initiale de la travée traitée
+        '--------------------------------------------------------------------------
+
+        If IsEqual(LongueurI, 0) Then Exit Sub
+
+        For Each element As KeyValuePair(Of String, cls_ChargementUtilisateur) In Me.ChargesU
+
+            For Each FRep As cls_ForceRepartie In element.Value.FReparties(iTravee)
+
+                FRep.xPosT(0) *= Me.LongueurTravee(iTravee) / LongueurI
+                FRep.xPosT(1) *= Me.LongueurTravee(iTravee) / LongueurI
+
+            Next
+        Next
+
+    End Sub
+
+
     ''' <summary>
     ''' Identifie les différentes parties modifiées ou validées par l'utilisateur
     ''' </summary>

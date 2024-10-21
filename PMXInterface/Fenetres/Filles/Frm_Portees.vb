@@ -22,6 +22,8 @@ Public Class Frm_Portees
 
     Dim FontFrm As Font
 
+    Dim LongueurTraveesIni() As Decimal     ' Longueurs initiales des travées
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -40,7 +42,14 @@ Public Class Frm_Portees
     End Sub
 
     Private Sub InitialiserVariables()
+
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
+
+        ReDim LongueurTraveesIni(MyPoutreLoc.LongueurTravee.GetUpperBound(0))
+        For iTravee As Integer = 0 To MyPoutreLoc.LongueurTravee.GetUpperBound(0)
+            LongueurTraveesIni(iTravee) = MyPoutreLoc.LongueurTravee(iTravee)
+        Next
+
     End Sub
 
     Private Sub GestionLangues()
@@ -196,9 +205,13 @@ Public Class Frm_Portees
         If ValideSaisieFenetre() Then
 
             Dim lModif As Boolean = False
+            Dim lModifL As Boolean = False
 
-            TransfertSaisie(lModif)
+            TransfertSaisie(lModif, lModifL)
 
+            If lModifL Then
+                MyProjet.Poutres(MyProjet.IndEnCours).MAJModifPortees(LongueurTraveesIni)
+            End If
             If lModif Then
                 MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
@@ -234,15 +247,17 @@ Public Class Frm_Portees
         Return lFrm_Valide
     End Function
 
-    Private Sub TransfertSaisie(ByRef lModif As Boolean)
+    Private Sub TransfertSaisie(ByRef lModif As Boolean, ByRef lModifL As Boolean)
 
         lModif = False
+        lModifL = False
 
         With MyProjet.Poutres(MyProjet.IndEnCours)
 
             For i_travee As Integer = 0 To MyPoutreLoc.IndiceTraveeConsoleDroite
                 If .LongueurTravee(i_travee) <> MyPoutreLoc.LongueurTravee(i_travee) Then
                     lModif = True
+                    lModifL = True
                     .LongueurTravee(i_travee) = MyPoutreLoc.LongueurTravee(i_travee)
                     Reinitialiser_Connection(i_travee)
                 End If
