@@ -787,6 +787,11 @@ Module Mod_Outils
                 kUnitU = 1
                 Unite = "kg"
 
+            Case Enu_TypeVariable.Massivete
+
+                kUnitU = 1
+                Unite = "m\+-1\="
+
             Case Enu_TypeVariable.ModuleY
                 kUnitU = LogicielInfo.Transfert_ModulesY(LogicielOptions.IndUnitModulesY)
                 Unite = SEP & LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)

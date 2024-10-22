@@ -1272,15 +1272,21 @@ Public Class Cls_Rapport
 
                 Case "RDM_COMBI"
 
-                    Dim indiceCombo As Integer
+                    Dim indiceCombi As Integer
                     Dim typeCombo As String
                     Dim lRetraitELU As Boolean
 
-                    indiceCombo = CInt(TraiteReal(Mots(6)))
+                    indiceCombi = CInt(TraiteReal(Mots(6)))
                     typeCombo = Mots(7)
                     lRetraitELU = Mots(8)
 
-                    DessineRDMCombi(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), indiceCombo, typeCombo, lRetraitELU, xLeftImg, YPen)
+                    DessineRDMCombi(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), indiceCombi, typeCombo, lRetraitELU, xLeftImg, YPen)
+
+                Case "FIRE_HEATING"
+
+                    ' Représentation des courbes d'échauffement
+
+
 
             End Select
 

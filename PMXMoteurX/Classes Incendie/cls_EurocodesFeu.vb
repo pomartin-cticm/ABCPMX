@@ -1034,6 +1034,48 @@
     End Function
 #End Region
 
+#Region " Exposition de la semelle supérieure "
+
+    Public Function SemelleSupExposee(myBeam As cls_Poutre) As Boolean
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   22/10/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Indique si la semelle supérieure est exposée au feu
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   myBeam  [E] :   Poutre traitée
+        '------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lExpo As Boolean
+        Dim Cr As Decimal
+
+        '--( Traitement
+
+        If myBeam.Dalle.lMixte Then
+            lExpo = False
+        Else
+            Select Case myBeam.Dalle.Bac.Orientation
+                Case cls_Bac.Enum_Orientation.Parallele
+                    Cr = myBeam.Dalle.Bac.Bb / myBeam.Section.ProfilA.Bfs
+
+                Case cls_Bac.Enum_Orientation.Perpendiculaire
+                    Select Case myBeam.Dalle.Bac.AppuiT
+                        Case cls_Bac.EnuConfigTAppui.Discontinu
+                            Cr = 1
+                        Case Else
+                            Cr = myBeam.Dalle.Bac.Bb / myBeam.Section.ProfilA.Bfs
+                    End Select
+
+            End Select
+            lExpo = IsGreaterOrEqual(Cr, 0.85)
+        End If
+
+        Return lExpo
+    End Function
+
+#End Region
+
 #Region " Massiveté des sections "
 
     Public Function MassiveteSemelleInf(myProfil As cls_ProfilA) As Decimal

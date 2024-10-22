@@ -9,10 +9,10 @@
 BLOCK IDENTIFICATION
    Utilisateur           = 
    Entreprise            = 
-   NomProjet             = Projet Pr#1
+   NomProjet             = VALIDATION
 
 BLOCK BEAM
-   BeaIden               = Poutre B#1
+   BeaIden               = TEST F01
    Comment               = 
    LCantilever           = False
    RCantilever           = False

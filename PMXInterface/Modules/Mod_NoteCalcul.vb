@@ -1106,7 +1106,6 @@ Module Mod_NoteCalcul
 
                     AddLigneNDC(TABW2 & BlocFEU("PRO_THICK") & TABAFF & "d\-p\= = " & GetStringInUnitN(myBeam.ParamFeu.EpProtection, Enu_TypeVariable.Dimension, 4, 2, True, True) & " °C")
 
-
             End Select
 
             AddLigneNDC(TABW2 & BlocFEU("CONVECTIONALPHAC") & TABAFF & "\Sa\s\-c\= = " & GetStringInUnitN(myBeam.ParamFeu.ConvectionCoef, Enu_TypeVariable.SansType, 4, 2, False, True) & " W/m\+2\=K")
@@ -10741,6 +10740,10 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(1, BlocFEU("FIRE_CHECKS"))
 
+        '--( Paramètres
+
+        EditionELFeuParametres(myBeam)
+
         '--( Synthèse
 
         EditionVerificationsFEUSynthese(myBeam)
@@ -10748,6 +10751,88 @@ Module Mod_NoteCalcul
         '--( Détail pour chaque durée au feu
 
         EditionVerificationsFEUDetail(myBeam)
+
+        '--( Courbes
+
+        EditionELFeuCourbes(myBeam)
+
+
+    End Sub
+
+    Private Sub EditionELFeuParametres(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   22/10/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition des paramètres utilisés dans les calculs au feu
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre Calculée au feu
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lMixte As Boolean = myBeam.lMixte
+        Dim lProtege As Boolean = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
+        Dim Massivete, MassiveteBox As Decimal
+        Dim EN_Feu As New cls_EurocodesFeu
+        Dim kSh As Decimal
+        Dim lSsExposee As Boolean
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_PARAM"))
+
+        '--( Massiveté
+
+        lSsExposee = EN_Feu.SemelleSupExposee(myBeam)
+        If lSsExposee Then
+            AddLigneNDC(TABW2 & BlocFEU("UPPERFEXPOSED"))
+        Else
+            AddLigneNDC(TABW2 & BlocFEU("UPPERFNOTEXPOSED"))
+        End If
+
+        If lMixte Then
+        Else
+
+            Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
+            MassiveteBox = EN_Feu.MassiveteSectionAcierBox(myBeam.Section.ProfilA, lSsExposee)
+
+            If Not lProtege Then
+
+                kSh = 0.9 * MassiveteBox / Massivete
+
+            End If
+
+            AddLigneNDC(TABW2 & BlocFEU("SECTIONFACTOR") & TABAFF & "A\-m\=/V = " & GetStringInUnitN(Massivete, Enu_TypeVariable.Massivete, 4, 2, True, True))
+            AddLigneNDC(TABW2 & BlocFEU("SECTIONFACTORBOX") & TABAFF & "(A\-m\=/V)\-b\= = " & GetStringInUnitN(MassiveteBox, Enu_TypeVariable.Massivete, 4, 2, True, True))
+
+        End If
+
+        '--( Facteur d'ombre
+
+        AddLigneNDC(TABW2 & BlocFEU("SHADOWFACTOR") & TABAFF & "k\-sh\= = " & GetStringInUnitN(kSh, Enu_TypeVariable.SansType, 4, 2, False, True))
+
+    End Sub
+
+    Private Sub EditionELFeuCourbes(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   22/10/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Affichage de courbe de résultats pour les calculs au feu
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre Calculée au feu
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_CURVES"))
+
+        '--( Echauffements
+
+        Const NbLigDiag As Integer = 20
+        If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
+        ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
+        AddLigneNDC("\IMG FIRE_HEATING " & " 10 80 30 NoCadre ")
+        nbLignes += NbLigDiag
 
     End Sub
 

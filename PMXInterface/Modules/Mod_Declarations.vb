@@ -363,6 +363,7 @@ Public Module Mod_Declarations
         Longueur
         LongueurCM
         Masse
+        Massivete
         Millimetre
         ModuleCM3
         ModuleY

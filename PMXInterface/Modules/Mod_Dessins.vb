@@ -7114,7 +7114,7 @@ Public Module Mod_Dessins
 
 #End Region
 
-#Region " Dessins pour la définition de l'étaiement (FRM_ETAIEMENT)"
+#Region " Dessins pour la définition de l'étaiement (FRM_ETAIEMENT) "
 
     Public Sub DessinFrmEtaiement(MyGr As Graphics, myBeam As cls_Poutre, myFont As Font,
                                   ByVal pWi As Decimal, ByVal pHi As Decimal,
@@ -7394,7 +7394,7 @@ Public Module Mod_Dessins
 
 #End Region
 
-#Region "Dessins pour le chargement (FRM_CHARGEMENT)"
+#Region " Dessins pour le chargement (FRM_CHARGEMENT) "
 
     Public Sub DessinFrmChargement(MyGr As Graphics, MyPoutre As cls_Poutre,
                                    ByVal pWi As Decimal, ByVal pHi As Decimal,
@@ -8669,7 +8669,7 @@ Public Module Mod_Dessins
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
-        '   myBeam    [E] :   Poutre à dessiner
+        '   myBeam      [E] :   Poutre à dessiner
         '   iCas        [E] :   Cas de charge à afficher
         '   lDef        [E] :   Indique si affichage des déformées
         '   lMom        [E] :   Indique si affichage du diagramme de moment
@@ -11983,7 +11983,6 @@ Public Module Mod_Dessins
 
 #End Region
 
-
 #Region " Dessins des courbes HIVOSS "
 
     '--> Paramètres du dessin
@@ -12254,5 +12253,54 @@ Public Module Mod_Dessins
 
 #End Region
 
+#Region " Dessins des calculs au feu "
+
+    Public Sub DessineCourbeEchauffement(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
+                                         myBeam As cls_Poutre,
+                                         ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   22/10/24 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation des courbes de températures gaz et acier
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   myBeam      [E] :   Poutre à dessiner
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Declarations
+
+        Dim MyParAff As Struc_Affichage
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim Largeur As Decimal = 240
+        Dim HauteurT As Decimal = myBeam.VerifFeuAcier.TempAInter.Max
+
+        Dim dCar As Decimal = Largeur / 10
+        Const Alpha As Decimal = 4 / 3            'Rapport Hauteur/largeur
+        Dim Hauteur As Decimal = Alpha * Largeur
+        Const kADJUST As Decimal = 0.95
+
+        Dim kConvY As Decimal = Hauteur / HauteurT
+        Dim kConvX As Decimal = myBeam.VerifFeuAcier.TempAInter.Count
+
+        '--( Initialisation
+
+        xMin = 0 - dCar
+        xMax = Largeur + dCar
+
+        yMin = 0
+        yMax = Hauteur
+
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+
+        '--( Tracé de la courbe des gaz
+
+
+
+    End Sub
+
+
+#End Region
 
 End Module

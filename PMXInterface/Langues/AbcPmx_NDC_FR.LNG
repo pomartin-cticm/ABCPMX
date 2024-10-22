@@ -592,6 +592,8 @@ FREQG					= Fréquence propre pour la combinaison
 FIRE_CHECKS				= Etats limites ultime en situation d'incendie
 FIRE_CHECKS_SYMMARY		= Synthèse des résultats
 FIRE_CHECKS_DETAIL		= Résultats détaillés
+FIRE_CHECKS_PARAM		= Paramètres du calcul
+FIRE_CHECKS_CURVES		= Courbes de résultats
 TIMERESISTANCE			= Résistance au feu
 TIMESTEP				= Durée d'exposition
 TEMPSTEEL				= Températures dans le profilé métallique
@@ -620,6 +622,11 @@ PRO_BOARDSPLASTER		= Caissons en platre
 PRO_BOARDSFCEMENT		= Caissons en fibro-ciment
 PRO_BOARDSSILICATE		= Caissons en fibres de silicate
 PRO_BOARDSVERMICULITE	= Caissons en vermiculite ou en perlite avec du ciment
+UPPERFNOTEXPOSED		= La semelle supérieure n'est pas exposée au feu
+UPPERFEXPOSED			= La semelle supérieure est exposée au feu
+SECTIONFACTOR			= Massiveté du profilé métallique
+SECTIONFACTORBOX		= Facteur de massiveté enveloppe
+SHADOWFACTOR			= Facteur d'ombre
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Evaluation des vibrations du plancher

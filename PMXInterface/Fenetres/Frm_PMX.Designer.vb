@@ -351,7 +351,7 @@ Partial Class Frm_PMX
         Me.ToolStrip_Poutre.GripMargin = New System.Windows.Forms.Padding(0)
         Me.ToolStrip_Poutre.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Poutre.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Identification, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_DalleN, Me.TSbtn_DalleSlimFloor, Me.TSbtn_SectionA, Me.TSbtn_SectionSFB, Me.TSbtn_SectionIFB, Me.TSbtn_SectionSAB, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.TSbtn_ConnexionSlimfloor, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.TSbtn_MaintienBac, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Combinaisons, Me.ToolStripSeparator5, Me.TSbtn_OptionsCalculPoutre, Me.TSbtn_Hivoss, Me.TSbtn_NdcPoutre, Me.TSbtn_OptionsIncendie, Me.ToolStripSeparator1, Me.TSbtn_PostT, Me.TSbtn_PPLargeurEfficace, Me.TSbtn_PPLoadCases, Me.TSbtn_PPCombi, Me.TSbtn_PPVerifications})
+        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Identification, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_DalleN, Me.TSbtn_DalleSlimFloor, Me.TSbtn_SectionA, Me.TSbtn_SectionSFB, Me.TSbtn_SectionIFB, Me.TSbtn_SectionSAB, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.TSbtn_ConnexionSlimfloor, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.TSbtn_MaintienBac, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Combinaisons, Me.ToolStripSeparator5, Me.TSbtn_OptionsCalculPoutre, Me.TSbtn_Hivoss, Me.TSbtn_OptionsIncendie, Me.TSbtn_NdcPoutre, Me.ToolStripSeparator1, Me.TSbtn_PostT, Me.TSbtn_PPLargeurEfficace, Me.TSbtn_PPLoadCases, Me.TSbtn_PPCombi, Me.TSbtn_PPVerifications})
         Me.ToolStrip_Poutre.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip_Poutre.Name = "ToolStrip_Poutre"
         Me.ToolStrip_Poutre.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
@@ -1213,13 +1213,13 @@ Partial Class Frm_PMX
         Me.AboutToolStripMenuItemN.Name = "AboutToolStripMenuItemN"
         Me.AboutToolStripMenuItemN.ShortcutKeys = CType(((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.Shift) _
             Or System.Windows.Forms.Keys.A), System.Windows.Forms.Keys)
-        Me.AboutToolStripMenuItemN.Size = New System.Drawing.Size(305, 26)
+        Me.AboutToolStripMenuItemN.Size = New System.Drawing.Size(301, 22)
         Me.AboutToolStripMenuItemN.Text = "AboutToolStripMenuItemN"
         '
         'ToolStripSeparator21
         '
         Me.ToolStripSeparator21.Name = "ToolStripSeparator21"
-        Me.ToolStripSeparator21.Size = New System.Drawing.Size(302, 6)
+        Me.ToolStripSeparator21.Size = New System.Drawing.Size(298, 6)
         '
         'SupportToolStripMenuItemN
         '
@@ -1227,13 +1227,13 @@ Partial Class Frm_PMX
         Me.SupportToolStripMenuItemN.Name = "SupportToolStripMenuItemN"
         Me.SupportToolStripMenuItemN.ShortcutKeys = CType(((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.Shift) _
             Or System.Windows.Forms.Keys.R), System.Windows.Forms.Keys)
-        Me.SupportToolStripMenuItemN.Size = New System.Drawing.Size(305, 26)
+        Me.SupportToolStripMenuItemN.Size = New System.Drawing.Size(301, 22)
         Me.SupportToolStripMenuItemN.Text = "SupportToolStripMenuItemN"
         '
         'ToolStripSeparator22
         '
         Me.ToolStripSeparator22.Name = "ToolStripSeparator22"
-        Me.ToolStripSeparator22.Size = New System.Drawing.Size(302, 6)
+        Me.ToolStripSeparator22.Size = New System.Drawing.Size(298, 6)
         '
         'TechnicalToolStripMenuItemN
         '
@@ -1241,7 +1241,7 @@ Partial Class Frm_PMX
         Me.TechnicalToolStripMenuItemN.Name = "TechnicalToolStripMenuItemN"
         Me.TechnicalToolStripMenuItemN.ShortcutKeys = CType(((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.Shift) _
             Or System.Windows.Forms.Keys.T), System.Windows.Forms.Keys)
-        Me.TechnicalToolStripMenuItemN.Size = New System.Drawing.Size(305, 26)
+        Me.TechnicalToolStripMenuItemN.Size = New System.Drawing.Size(301, 22)
         Me.TechnicalToolStripMenuItemN.Text = "TechnicalToolStripMenuItemN"
         '
         'ValidationToolStripMenuItemN
@@ -1250,7 +1250,7 @@ Partial Class Frm_PMX
         Me.ValidationToolStripMenuItemN.Name = "ValidationToolStripMenuItemN"
         Me.ValidationToolStripMenuItemN.ShortcutKeys = CType(((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.Shift) _
             Or System.Windows.Forms.Keys.V), System.Windows.Forms.Keys)
-        Me.ValidationToolStripMenuItemN.Size = New System.Drawing.Size(305, 26)
+        Me.ValidationToolStripMenuItemN.Size = New System.Drawing.Size(301, 22)
         Me.ValidationToolStripMenuItemN.Text = "ValidationToolStripMenuItemN"
         '
         'Panel2

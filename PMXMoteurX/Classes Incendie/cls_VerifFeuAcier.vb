@@ -27,6 +27,9 @@ Public Class cls_VerifFeuAcier
     Public ElancementW As Decimal                       ' Elancement de l'âme 
     Public ElancementWMax As Decimal                    ' Limite d'elancement de l'âme pour le voilement par cisaillement
 
+    Public TempAInter As List(Of Decimal)               ' Températures de l'acier pour les intervalles de temps
+    Public TimeInter As Decimal = 120                   ' Intervalle de temps (en secondes) pour l'enregistrement de TempA
+
 #End Region
 
 #Region " Constructeurs et Initialisation "
@@ -63,6 +66,8 @@ Public Class cls_VerifFeuAcier
         Next
 
         ReDim TempAStep(Me.NbStep - 1)
+
+        Me.TempAInter = New List(Of Decimal)
 
     End Sub
 
@@ -130,6 +135,7 @@ Public Class cls_VerifFeuAcier
 
         DeltaT = myBeam.ParamFeu.DeltaTCalcul
         nbCombiELU = myBeam.CombiA_ELF.nbCombi
+        lSsExposee = EN_Feu.SemelleSupExposee(myBeam)
         lProtege = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
         Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
 
@@ -158,6 +164,8 @@ Public Class cls_VerifFeuAcier
 
         ClasseP = myBeam.Section.ClasseSection(zANP0, zANE0, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, 0, True)
         ClasseM = myBeam.Section.ClasseSection(zANP0, zANE0, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, 0, True)
+
+        Me.TimeInter = CInt((Me.TimeInter / DeltaT)) * DeltaT
 
         '--( Boucle sur TimeSteps
 
@@ -188,6 +196,9 @@ Public Class cls_VerifFeuAcier
 
                 lCont = IsSmaller(TimeT, TimeTarget)
 
+                If IsEqual(TimeT Mod Me.TimeInter, 0) Then
+                    Me.TempAInter.Add(TempA)
+                End If
             Loop
 
             TempAStep(iSTep) = TempA

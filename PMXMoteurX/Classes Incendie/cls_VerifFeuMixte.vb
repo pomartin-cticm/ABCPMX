@@ -187,6 +187,7 @@
         TempW = myBeam.ParamFeu.TempRef
         TempRef = myBeam.ParamFeu.TempRef
 
+        lSsExposee = EN_Feu.SemelleSupExposee(myBeam)
         DeltaT = myBeam.ParamFeu.DeltaTCalcul
         nbCombiELU = myBeam.CombiA_ELF.nbCombi
         lProtege = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
