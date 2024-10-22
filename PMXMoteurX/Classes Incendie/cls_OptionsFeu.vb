@@ -13,7 +13,7 @@
     Public EmissivityC As Decimal                           ' Emissivité du béton
     'Public EmissivitySteel As Decimal                        ' Emissivité de l'acier
 
-    Public ConvectionCoef As Decimal                        ' Coefficient de convection sur les faces exposées au feu
+    Public ConvectionCoef As Decimal                        ' Coefficient de convection sur les faces exposées au feu (AlphaC)
     Public ConvectionCoefDalle As Decimal                   ' Coefficient de convection sur la face supérieure de la dalle, non exposée au feu (uniquement si calcul EF Dalle)
 
     Public TeneurU As Decimal                               ' Teneur en eau

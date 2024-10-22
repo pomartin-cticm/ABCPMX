@@ -1055,6 +1055,83 @@ Module Mod_NoteCalcul
 
     End Sub
 
+
+    Private Sub EditionParametresCalculFeu(ByVal myBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   22/10/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des options de calcul à l'incendie
+        '----------------------------------------------------------------------------------------------
+
+        If myBeam.ParamFeu.lCalcuFeu Then
+            If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
+
+            AddTitreNdC(3, BlocFEU("TFIREOPTIONS"))
+
+            Select Case myBeam.ParamFeu.TypeSurface
+                Case cls_OptionsFeu.enu_TypeSurface.AcierNu
+                Case cls_OptionsFeu.enu_TypeSurface.Galvanise
+                    AddLigneNDC(TABW2 & BlocFEU("HDGLAVA"))
+                Case cls_OptionsFeu.enu_TypeSurface.Protege
+                    AddLigneNDC(TABW2 & BlocFEU("PROTECTEDSTEEL"))
+                    Select Case myBeam.ParamFeu.Protection
+                        Case cls_OptionsFeu.enu_TypeProtection.BoardsFibroCement
+                            AddLigneNDC(TABW2 & BlocFEU("PRO_BOARDSFCEMENT"))
+
+                        Case cls_OptionsFeu.enu_TypeProtection.BoardsPlaster
+                            AddLigneNDC(TABW2 & BlocFEU("PRO_BOARDSPLASTER"))
+
+                        Case cls_OptionsFeu.enu_TypeProtection.BoardsSilicate
+                            AddLigneNDC(TABW2 & BlocFEU("PRO_BOARDSSILICATE"))
+
+                        Case cls_OptionsFeu.enu_TypeProtection.BoardsVermiculite
+                            AddLigneNDC(TABW2 & BlocFEU("PRO_BOARDSVERMICULITE"))
+
+                        Case cls_OptionsFeu.enu_TypeProtection.HighDensitySpray_PerliteCement
+                            AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAYPERCEM"))
+
+                        Case cls_OptionsFeu.enu_TypeProtection.HighDensitySpray_PerlitePlaster
+                            AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAYPERPLAST"))
+
+                        Case cls_OptionsFeu.enu_TypeProtection.LowDensitySpray_Mineral
+                            AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAY"))
+
+                        Case cls_OptionsFeu.enu_TypeProtection.LowDensitySpray_Vermiculite
+                            AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAY"))
+
+                        Case cls_OptionsFeu.enu_TypeProtection.IntumescentPaint
+                            AddLigneNDC(TABW2 & BlocFEU("PROTECTION_PAINT"))
+
+                    End Select
+
+                    AddLigneNDC(TABW2 & BlocFEU("PRO_THICK") & TABAFF & "d\-p\= = " & GetStringInUnitN(myBeam.ParamFeu.EpProtection, Enu_TypeVariable.Dimension, 4, 2, True, True) & " °C")
+
+
+            End Select
+
+            AddLigneNDC(TABW2 & BlocFEU("CONVECTIONALPHAC") & TABAFF & "\Sa\s\-c\= = " & GetStringInUnitN(myBeam.ParamFeu.ConvectionCoef, Enu_TypeVariable.SansType, 4, 2, False, True) & " W/m\+2\=K")
+            AddLigneNDC(TABW2 & BlocFEU("BOLTZMANNC") & TABAFF & "\Ss\s = " & GetStringInUnitN(cls_OptionsFeu.BOLTZMANN * 10 ^ 8, Enu_TypeVariable.SansType, 4, 2, False, True) & " x 10\+8\= W/m\+2\=K\+4\=")
+            AddLigneNDC(TABW2 & BlocFEU("FIREEMISSIVITY") & TABAFF & "\Se\s\-f\= = " & GetStringInUnitN(myBeam.ParamFeu.EmissivityFire, Enu_TypeVariable.SansType, 4, 2, False, True))
+            AddLigneNDC(TABW2 & BlocFEU("FORMFACTOR") & TABAFF & "\Sf\s = " & GetStringInUnitN(myBeam.ParamFeu.PhiViewFactor, Enu_TypeVariable.SansType, 4, 2, False, True))
+            AddLigneNDC(TABW2 & BlocFEU("REFTEMP") & TABAFF & "\Sq\s\-0\= = " & GetStringInUnitN(myBeam.ParamFeu.TempRef, Enu_TypeVariable.Temperature, 4, 2, True, True))
+
+            If myBeam.lMixte Then
+                If myBeam.ParamFeu.lDalleFEM Then
+                    AddLigneNDC(TABW2 & BlocFEU("SLABTEMPBYFEM"))
+                Else
+                    If myBeam.Param.lGeneration1 Then
+                        AddLigneNDC(TABW2 & BlocFEU("SLABTEMPBYTAB"))
+                    Else
+                        AddLigneNDC(TABW2 & BlocFEU("SLABTEMPBYTABG2"))
+                    End If
+
+                End If
+            End If
+        End If
+
+
+    End Sub
+
     Private Sub EditionParametresCalcul(ByVal MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
         '   21/03/24 :  Création - Version 1.00 - POM
@@ -1101,6 +1178,9 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & BlocG("CONTROLCRACKW") & TABAFF & BlocG("NO"))
         End If
         AddLigneNDC(TABW2 & BlocG("CRACKWIDTH") & TABAFF & "w\-max\= = " & GetStringInUnit(MyBeam.Param.FissureWk, Enu_TypeVariable.SansType, 4, 2, True) & " mm")
+
+        '--> Options Feu
+        EditionParametresCalculFeu(MyBeam)
 
         '--> Propriétés du béton
         AddTitreNdC(3, BlocG("TCONCRETE"))
