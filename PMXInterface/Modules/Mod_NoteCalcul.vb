@@ -1112,6 +1112,18 @@ Module Mod_NoteCalcul
                     AddLigneNDC(TABW2 & BlocFEU("PROTECTIONTYPE") & TABAFF & Chaine)
                     AddLigneNDC(TABW2 & BlocFEU("PRO_THICK") & TABAFF & "d\-p\= = " & GetStringInUnitN(myBeam.ParamFeu.EpProtection, Enu_TypeVariable.Dimension, 4, 2, True, True) & " °C")
 
+                    AddLigneNDC(TABW2 & BlocFEU("PRO_PROP") & ":")
+
+                    Dim cP, LambdaP, RhoP As Decimal
+
+                    cP = myBeam.ParamFeu.Protection_ChaleurMassique
+                    LambdaP = myBeam.ParamFeu.Protection_Conductivite
+                    RhoP = myBeam.ParamFeu.Protection_MasseVol
+
+                    AddLigneNDC(TABW2 & " - " & BlocFEU("PRO_DENS") & ":" & TABAFF & "\Sr\s\-p\= = " & GetStringInUnitN(RhoP, Enu_TypeVariable.SansType, 4, 2, True, True) & " kg/m\+3\=")
+                    AddLigneNDC(TABW2 & " - " & BlocFEU("PRO_THCOND") & ":" & TABAFF & "\Sl\s\-p\= = " & GetStringInUnitN(LambdaP, Enu_TypeVariable.SansType, 4, 2, True, True) & " W/mK")
+                    AddLigneNDC(TABW2 & " - " & BlocFEU("PRO_SHEAT") & ":" & TABAFF & "c\-p\= = " & GetStringInUnitN(cP, Enu_TypeVariable.SansType, 4, 2, True, True) & " J/kgK")
+
             End Select
 
             AddLigneNDC(TABW2 & BlocFEU("CONVECTIONALPHAC") & TABAFF & "\Sa\s\-c\= = " & GetStringInUnitN(myBeam.ParamFeu.ConvectionCoef, Enu_TypeVariable.SansType, 4, 2, False, True) & " W/m\+2\=K")
@@ -10837,11 +10849,17 @@ Module Mod_NoteCalcul
 
         '--( Echauffements
 
-        Const NbLigDiag As Integer = 20
-        If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
-        ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
-        AddLigneNDC("\IMG FIRE_HEATING " & " 10 80 50 NoCadre ")
-        nbLignes += NbLigDiag
+        Select Case myBeam.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.Mixte
+                Const NbLigDiag As Integer = 20
+                If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
+                ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
+                AddLigneNDC("\IMG FIRE_HEATING " & " 10 80 50 NoCadre ")
+                nbLignes += NbLigDiag
+                ' Case cls_Section.Enum_TypeSection.Mixte
+
+        End Select
+
 
     End Sub
 

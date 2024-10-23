@@ -3,6 +3,7 @@
 Imports System.Collections.Specialized.BitVector32
 Imports System.Drawing.Drawing2D
 Imports System.Windows
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Tab
 Imports PMXInterface.Cls_Rapport
 'Imports PMXInterface.Mod_MethodeHivoss
 Imports PMXMoteur2
@@ -12261,6 +12262,322 @@ Public Module Mod_Dessins
         '-----------------------------------------------------------------------------------------------
         '   22/10/24 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
+        '   Représentation des courbes de températures gaz et structure
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   myBeam      [E] :   Poutre à dessiner
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+
+        Select Case myBeam.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul
+                DessineCourbeEchauffementAcier(myGr, pWi, pHi, myBeam, xLeft, yTop)
+            Case cls_Section.Enum_TypeSection.Mixte
+
+        End Select
+
+    End Sub
+
+    Private Sub InitialiseCourbesEchauffement(ByVal pWi As Single, ByVal pHi As Single,
+                                              ByRef myParAff As Struc_Affichage, ByRef LargD As Decimal, ByRef HautD As Decimal,
+                                              ByRef dCar As Decimal,
+                                              ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   22/10/24 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Initialisation du dessin des courbes de températures gaz et acier
+        '-----------------------------------------------------------------------------------------------
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   myParAff    [S] :   Paramètres d'affichage
+        '   LargD       [S] :   Dimension de référence - largeur du diagramme
+        '   HautD       [S] :   Dimension de référence - hauteur du diagramme
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim xMin, yMin, xMax, yMax As Double
+        Const kADJUST As Decimal = 0.95
+
+        Const Alpha As Decimal = 3 / 4            'Rapport Hauteur/largeur
+
+        '--( Initialisation
+
+        LargD = 1000
+        HautD = Alpha * LargD
+        dCar = Math.Sqrt(LargD ^ 2 + HautD ^ 2) / 15
+
+        xMin = 0 - dCar
+        xMax = LargD + dCar
+
+        yMin = -dCar
+        yMax = HautD + dCar
+
+        ParametresAffichage(myParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+
+    End Sub
+
+    Private Sub DessineAxesQCourbesTemperatures(ByRef myGr As Graphics, ByRef myParAff As Struc_Affichage,
+                                                LargD As Decimal, HautD As Decimal, dCar As Decimal, FontAxe As Font,
+                                                TimeSteps() As Decimal, ColorQ As Color, kConvX As Decimal,
+                                                tabTemp() As Decimal, tabTempLabel() As Decimal, kConvY As Decimal)
+        '-----------------------------------------------------------------------------------------------
+        '   22/10/24 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation des axes et quadrillages pour les courbes de températures
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myParAff    [E] :   Paramètres du dessin
+        '   LargD, HautD[E] :   Dimensions de la zone du dessin
+        '   dCar        [E] :   Dimension de référence
+        '   FontAxe     [E] :   Police pour l'affichage des axes
+        '   TimeSteps   [E] :   Table des valeurs de temps en minutes ou l'on place un quadrillage vertical
+        '   ColorQ      [E] :   Couleur utilisée pour le quadrillage
+        '   kConvX      [E] :   Facteur de conversion des unités / x
+        '   tabTemp     [E] :   Table des températures pour lesquelles on trave le quadrillage en température
+        '   tabTempLabel[E] :   Table des températures pour lesquelles on affiche une valeur sur l'axe pour le quadrillage en température
+        '   kConvY      [E] :   Facteur de conversion des unités / y
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim myPen As New Pen(Color.Black)
+        Dim Chaine As String = ""
+        Dim xo, yo As Double
+        Dim xe, ye As Double
+        Dim myPenQ As New Pen(ColorQ)
+
+        '--( Axes
+
+        AddFleche(myGr, myPen, 0, 0, LargD + dCar, 0, myParAff, False, True)
+        AddFleche(myGr, myPen, 0, 0, 0, HautD + dCar, myParAff, False, True)
+
+        Chaine = "t (min)"
+        AddTexte(myGr, New SolidBrush(Color.Black), Chaine, FontAxe, LargD + dCar, 0, myParAff, HorizontalAlignment.Left, VerticalAlignement.Bottom)
+        Chaine = "temp (°C)"
+        AddTexte(myGr, New SolidBrush(Color.Black), Chaine, FontAxe, 0, HautD + dCar, myParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
+
+        '--( Quadrillage temps
+
+        For i As Integer = 0 To TimeSteps.Count - 1
+
+            xo = TimeSteps(i) * 60 * kConvX
+            yo = 0
+            ye = HautD
+
+            AddLigne(myGr, myPenQ, xo, yo, xo, ye, myParAff)
+
+            Chaine = CStr(cls_VerifFeuAcier.TimeSteps(i))
+
+            AddTexte(myGr, New SolidBrush(Color.Gray), Chaine, FontAxe, xo, yo, myParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+        Next
+
+        '--( Quadrillage températures
+
+        For i As Integer = 0 To tabTemp.GetUpperBound(0)
+
+            xo = 0
+            xe = LargD
+
+            yo = tabTemp(i) * kConvY
+            ye = yo
+
+            AddLigne(myGr, myPenQ, xo, yo, xe, ye, myParAff)
+
+            If tabTempLabel.Contains(tabTemp(i)) Then
+                Chaine = CStr(tabTemp(i))
+
+                AddTexte(myGr, New SolidBrush(Color.Gray), Chaine, FontAxe, xo, yo, myParAff, HorizontalAlignment.Right, VerticalAlignement.Middle)
+
+            End If
+
+        Next
+
+        '--( Fin
+
+        myPen.Dispose()
+    End Sub
+
+    Private Sub DessineCourbeTempGaz(ByRef myGr As Graphics, ByRef myParAff As Struc_Affichage, myFont As Font,
+                                     kConvX As Decimal, kConvY As Decimal, ColorG As Color, indG As Integer)
+        '-----------------------------------------------------------------------------------------------
+        '   22/10/24 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation de la courbe de température des gaz
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myParAff    [E] :   Paramètres du dessin
+        '   kConvX      [E] :   Facteur de conversion / x
+        '   kConvY      [E] :   Facteur de conversion / y
+        '   ColorG      [E] :   Couleur de la courbe des gaz
+        '   indG        [E] :   Indice de la courbe pour la légende
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim ENFeu As New cls_EurocodesFeu
+        Dim ThetaG(1) As Decimal
+        Dim ThetaA(1) As Decimal
+
+        Dim myPenG As New Pen(ColorG)
+
+        Dim xo, yo As Double
+        Dim xe, ye As Double
+        Dim t(1) As Decimal
+
+        '--( Courbe des gaz
+
+        t(0) = 0
+        ThetaG(0) = ENFeu.TemperatureGazISO(0)
+        For i As Integer = 0 To 239
+
+            t(1) = (i + 1) * 60
+            ThetaG(1) = ENFeu.TemperatureGazISO(CDec(t(1)))
+
+            xo = t(0) * kConvX
+            xe = t(1) * kConvX
+            yo = ThetaG(0) * kConvY
+            ye = ThetaG(1) * kConvY
+
+            AddLigne(myGr, myPenG, xo, yo, xe, ye, myParAff)
+
+            t(0) = t(1)
+            ThetaG(0) = ThetaG(1)
+
+        Next
+
+        AddTexte(myGr, New SolidBrush(ColorG), CStr(indG), myFont, xe, ye, myParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
+
+    End Sub
+
+    Private Sub DessineCourbeTempElt(ByRef myGr As Graphics, ByRef myParAff As Struc_Affichage, myFont As Font,
+                                     kConvX As Decimal, kConvY As Decimal, ColorC As Color, indC As Integer,
+                                     TempRef As Decimal, TempInter As List(Of Decimal), TimeInter As Decimal)
+        '-----------------------------------------------------------------------------------------------
+        '   22/10/24 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation de la courbe de température d'un élément
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myParAff    [E] :   Paramètres du dessin
+        '   kConvX      [E] :   Facteur de conversion / x
+        '   kConvY      [E] :   Facteur de conversion / y
+        '   ColorC      [E] :   Couleur de la courbe
+        '   indC        [E] :   Indice de la courbe pour la légende
+        '   TempRef     [E] :   Température à t = 0
+        '   TempInter   [E] :   Liste des températures à tracer
+        '   TimeInter   [E] :   Intervalle de temps entre les température de la liste
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim t(1) As Decimal
+        Dim Theta(1) As Decimal
+        Dim myPenC As New Pen(ColorC)
+
+        Dim xo, yo As Double
+        Dim xe, ye As Double
+
+        '-( Traitement
+
+        t(0) = 0
+        Theta(0) = TempRef
+
+        For i As Integer = 0 To TempInter.Count - 1
+
+            t(1) = (i + 1) * TimeInter
+            Theta(1) = TempInter(i)
+
+            xo = t(0) * kConvX
+            xe = t(1) * kConvX
+            yo = Theta(0) * kConvY
+            ye = Theta(1) * kConvY
+
+            AddLigne(myGr, myPenC, xo, yo, xe, ye, myParAff)
+
+            t(0) = t(1)
+            Theta(0) = Theta(1)
+
+        Next
+
+        AddTexte(myGr, New SolidBrush(ColorC), CStr(indC), myFont, xe, ye, myParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
+
+    End Sub
+
+    Public Sub DessineCourbeEchauffementAcier(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
+                                              myBeam As cls_Poutre,
+                                              ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   22/10/24 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation des courbes de températures gaz et acier
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   myBeam      [E] :   Poutre à dessiner
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Declarations
+
+        Dim MyParAff As Struc_Affichage
+        Dim HautD, LargD As Decimal
+        Dim dCar As Decimal
+        Dim kConvX, kConvY As Decimal
+        Dim ColorQ As Color = Color.LightGray
+        Dim ColorG As Color = Color.DarkRed
+        Dim ColorA As Color = Color.DarkBlue
+        Dim myPenG As New Pen(ColorG)
+        Dim myPenA As New Pen(ColorA)
+        Dim myPenQ As New Pen(ColorQ)
+
+        Dim TimeMax As Decimal
+        Dim TempMax As Decimal
+        Dim FontAxe As New Font(FontBase.Name, 7)
+
+        Dim tabTemp() As Decimal = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200}
+        Dim tabTempLabel() As Decimal = {100, 300, 500, 700, 900, 1100, 1200}
+
+        '--( Initialisations
+
+        InitialiseCourbesEchauffement(pWi, pHi, MyParAff, LargD, HautD, dCar, xLeft, yTop)
+
+        TimeMax = Math.Max((myBeam.VerifFeuAcier.TempAInter.Count * myBeam.VerifFeuAcier.TimeInter), cls_VerifFeuAcier.TimeSteps.Last * 60)
+
+        TempMax = tabTemp.Max
+
+        kConvX = LargD / TimeMax
+        kConvY = HautD / TempMax
+
+        '--( Axes et quadrillage
+
+        DessineAxesQCourbesTemperatures(myGr, MyParAff, LargD, HautD, dCar, FontAxe,
+                                        cls_VerifFeuAcier.TimeSteps, ColorQ, kConvX, tabTemp, tabTempLabel, kConvY)
+
+        '--( Tracé de la courbe de température des gaz
+
+        DessineCourbeTempGaz(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorG, 1)
+
+        '--( Tracé de la courbe de température de l'acier
+
+        DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, 2,
+                             myBeam.ParamFeu.TempRef, myBeam.VerifFeuAcier.TempAInter, myBeam.VerifFeuAcier.TimeInter)
+
+        '--( Fin
+
+        myPenG.Dispose()
+        myPenQ.Dispose()
+        myPenA.Dispose()
+        FontAxe.Dispose()
+
+    End Sub
+
+    Public Sub DessineCourbeEchauffementAcierOld(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
+                                              myBeam As cls_Poutre,
+                                              ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   22/10/24 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
         '   Représentation des courbes de températures gaz et acier
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
@@ -12279,7 +12596,6 @@ Public Module Mod_Dessins
         Dim dCar As Decimal = Largeur / 10
         Const Alpha As Decimal = 3 / 4            'Rapport Hauteur/largeur
         Dim Hauteur As Decimal = Alpha * Largeur
-        Const kADJUST As Decimal = 0.95
 
         Dim kConvY As Decimal
         Dim kConvX As Decimal = Largeur / (myBeam.VerifFeuAcier.TempAInter.Count * myBeam.VerifFeuAcier.TimeInter)
@@ -12318,7 +12634,7 @@ Public Module Mod_Dessins
         yMin = -dCar
         yMax = Hauteur + dCar
 
-        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+        ' ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
 
         '--( Axes
 

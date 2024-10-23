@@ -282,7 +282,7 @@
 
                 '# 
 
-                lCont = IsSmaller(TimeT, TimeTarget)
+                lCont = IsSmaller(TimeT, TimeTarget, 10 ^ (-4))
 
             Loop
 
