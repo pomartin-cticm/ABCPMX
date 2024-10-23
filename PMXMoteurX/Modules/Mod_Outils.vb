@@ -37,7 +37,7 @@
             Return Math.Abs(a) <= EPS
         Else
             'ATTENTION : Lorsqu'on compare la fraction (PAS DE DIMENSION), il faut utiliser 0.001
-            Return Math.Abs(a / b - 1) <= 0.001
+            Return Math.Abs(a / b - 1) <= EPS
         End If
     End Function
 

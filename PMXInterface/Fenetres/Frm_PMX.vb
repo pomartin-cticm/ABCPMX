@@ -174,6 +174,10 @@ Public Class Frm_PMX
 
                 strCopy = Bloc("COPY")
 
+                labelDessin = New Dictionary(Of String, String)
+                labelDessin.Add("GAZ", Bloc("GAZ"))
+                labelDessin.Add("STEELPROFILE", Bloc("STEELPROFILE"))
+
             Catch ex As Exception
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangueMessagesGeneraux")
                 GestionErreurAffichageLangue(Me.Name, "GestionLangueMessagesGeneraux")

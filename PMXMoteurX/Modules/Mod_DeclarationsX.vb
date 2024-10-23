@@ -312,6 +312,8 @@
     Public NomChargements() As String           ' Nom des cas de charge utilisateur
     Public NomChargesA() As String              ' Nom des cas de charge analyse
 
+    Public labelDessin As Dictionary(Of String, String)
+
 #End Region
 
 

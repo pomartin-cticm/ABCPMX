@@ -917,6 +917,9 @@ FLS						= ELF
 ULSC					= ELU_C
 SLSC					= ELS_C
 COPY					= Copie
+GAZ						= Gaz chauds
+STEELPROFILE			= Profilé acier
+
 
 #OPTCALCULMAIN
 TITLE					= Options de calcul

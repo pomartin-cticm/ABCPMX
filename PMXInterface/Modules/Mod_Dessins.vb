@@ -12288,17 +12288,28 @@ Public Module Mod_Dessins
         Dim ENFeu As New cls_EurocodesFeu
         Dim ThetaG(1) As Decimal
         Dim ThetaA(1) As Decimal
-        Dim myPenG As New Pen(Color.DarkRed)
-        Dim myPenA As New Pen(Color.DarkBlue)
-        Dim myPenQ As New Pen(Color.LightGray)
+        Dim ColorQ As Color = Color.LightGray
+        Dim ColorG As Color = Color.DarkRed
+        Dim ColorA As Color = Color.DarkBlue
+        Dim myPenG As New Pen(ColorG)
+        Dim myPenA As New Pen(ColorA)
+        Dim myPenQ As New Pen(ColorQ)
 
         Dim xo, yo As Double
         Dim xe, ye As Double
         Dim t(1) As Decimal
 
+        Dim Chaine As String = ""
+        Dim FontAxe As New Font(FontBase.Name, 7)
+
+        Dim tabTemp() As Decimal = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200}
+        Dim tabTempLabel() As Decimal = {100, 300, 500, 700, 900, 1100, 1200}
+
         '--( Initialisation
 
         HauteurT = Math.Max((myBeam.VerifFeuAcier.TempAInter.Max), ENFeu.TemperatureGazISO(240 * 60))
+        HauteurT = Math.Max(HauteurT, tabTemp.Max)
+
         kConvY = Hauteur / HauteurT
 
         xMin = 0 - dCar
@@ -12309,11 +12320,57 @@ Public Module Mod_Dessins
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
 
+        '--( Axes
+
+        AddFleche(myGr, myPen, 0, 0, Largeur + dCar, 0, MyParAff, False, True)
+        AddFleche(myGr, myPen, 0, 0, 0, Hauteur + dCar, MyParAff, False, True)
+
+        Chaine = "t (min)"
+        AddTexte(myGr, New SolidBrush(Color.Black), Chaine, FontAxe, Largeur + dCar, 0, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Bottom)
+        Chaine = "temp (°C)"
+        AddTexte(myGr, New SolidBrush(Color.Black), Chaine, FontAxe, 0, Hauteur + dCar, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
+
+        '--( Quadrillage
+
+        For i As Integer = 0 To cls_VerifFeuAcier.TimeSteps.Count - 1
+
+            xo = cls_VerifFeuAcier.TimeSteps(i) * 60 * kConvX
+            yo = 0
+            ye = Hauteur
+
+            AddLigne(myGr, myPenQ, xo, yo, xo, ye, MyParAff)
+
+            Chaine = CStr(cls_VerifFeuAcier.TimeSteps(i))
+
+            AddTexte(myGr, New SolidBrush(Color.Gray), Chaine, FontAxe, xo, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+
+        Next
+
+        For i As Integer = 0 To tabTemp.GetUpperBound(0)
+
+            xo = 0
+            xe = Largeur
+
+            yo = tabTemp(i) * kConvY
+            ye = yo
+
+            AddLigne(myGr, myPenQ, xo, yo, xe, ye, MyParAff)
+
+            If tabTempLabel.Contains(tabTemp(i)) Then
+                Chaine = CStr(tabTemp(i))
+
+                AddTexte(myGr, New SolidBrush(Color.Gray), Chaine, FontAxe, xo, yo, MyParAff, HorizontalAlignment.Right, VerticalAlignement.Middle)
+
+            End If
+
+        Next
+
         '--( Tracé de la courbe des gaz
 
         t(0) = 0
         ThetaG(0) = ENFeu.TemperatureGazISO(0)
-        For i As Integer = 0 To Largeur - 1
+        For i As Integer = 0 To 239
+
             t(1) = (i + 1) * 60
             ThetaG(1) = ENFeu.TemperatureGazISO(CDec(t(1)))
 
@@ -12326,21 +12383,28 @@ Public Module Mod_Dessins
 
             t(0) = t(1)
             ThetaG(0) = ThetaG(1)
+
         Next
+
+        AddTexte(myGr, New SolidBrush(ColorG), "1", FontAxe, xe, ye, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
 
         '--( Tracé de la température de l'acier
 
         t(0) = 0
-        ThetaA(0) = myBeam.VerifFeuAcier.TempAInter(0)
-        For i As Integer = 1 To myBeam.VerifFeuAcier.TempAInter.Count - 1
+        ThetaA(0) = myBeam.ParamFeu.TempRef
+        For i As Integer = 0 To myBeam.VerifFeuAcier.TempAInter.Count - 1
 
-            t(1) = i * myBeam.VerifFeuAcier.TimeInter
+            t(1) = (i + 1) * myBeam.VerifFeuAcier.TimeInter
             ThetaA(1) = myBeam.VerifFeuAcier.TempAInter(i)
 
             xo = t(0) * kConvX
             xe = t(1) * kConvX
             yo = ThetaA(0) * kConvY
             ye = ThetaA(1) * kConvY
+
+            'If i = 119 Then
+            '    t(0) = t(1)
+            'End If
 
             AddLigne(myGr, myPenA, xo, yo, xe, ye, MyParAff)
 
@@ -12349,22 +12413,10 @@ Public Module Mod_Dessins
 
         Next
 
-        '--( Axes
+        AddTexte(myGr, New SolidBrush(ColorA), "2", FontAxe, xe, ye, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Bottom)
 
-        AddFleche(myGr, myPen, 0, 0, Largeur + dCar, 0, MyParAff, False, True)
-        AddFleche(myGr, myPen, 0, 0, 0, Hauteur + dCar, MyParAff, False, True)
-
-        '--( Quadrillage
-
-        For i As Integer = 0 To cls_VerifFeuAcier.TimeSteps.Count - 1
-
-            xo = cls_VerifFeuAcier.TimeSteps(i) * 60 * kConvX
-            yo = 0
-            ye = Hauteur
-
-            AddLigne(myGr, myPenQ, xo, yo, xo, ye, MyParAff)
-
-        Next
+        AddTexte(myGr, New SolidBrush(ColorG), "1: " & labelDessin("GAZ"), FontAxe, 0, -dCar / 2, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
+        AddTexte(myGr, New SolidBrush(ColorA), "2: " & labelDessin("STEELPROFILE"), FontAxe, 0, -dCar, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
 
     End Sub
 

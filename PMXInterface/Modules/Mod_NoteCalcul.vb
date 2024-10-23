@@ -1055,13 +1055,18 @@ Module Mod_NoteCalcul
 
     End Sub
 
-
     Private Sub EditionParametresCalculFeu(ByVal myBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
         '   22/10/24 :  Création - Version 1.00 - POM
         '----------------------------------------------------------------------------------------------
         '   Edition des options de calcul à l'incendie
         '----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Chaine As String = ""
+
+        '--( Traitement
 
         If myBeam.ParamFeu.lCalcuFeu Then
             If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
@@ -1076,34 +1081,35 @@ Module Mod_NoteCalcul
                     AddLigneNDC(TABW2 & BlocFEU("PROTECTEDSTEEL"))
                     Select Case myBeam.ParamFeu.Protection
                         Case cls_OptionsFeu.enu_TypeProtection.BoardsFibroCement
-                            AddLigneNDC(TABW2 & BlocFEU("PRO_BOARDSFCEMENT"))
+                            Chaine = BlocFEU("PRO_BOARDSFCEMENT")
 
                         Case cls_OptionsFeu.enu_TypeProtection.BoardsPlaster
-                            AddLigneNDC(TABW2 & BlocFEU("PRO_BOARDSPLASTER"))
+                            Chaine = BlocFEU("PRO_BOARDSPLASTER")
 
                         Case cls_OptionsFeu.enu_TypeProtection.BoardsSilicate
-                            AddLigneNDC(TABW2 & BlocFEU("PRO_BOARDSSILICATE"))
+                            Chaine = BlocFEU("PRO_BOARDSSILICATE")
 
                         Case cls_OptionsFeu.enu_TypeProtection.BoardsVermiculite
-                            AddLigneNDC(TABW2 & BlocFEU("PRO_BOARDSVERMICULITE"))
+                            Chaine = BlocFEU("PRO_BOARDSVERMICULITE")
 
                         Case cls_OptionsFeu.enu_TypeProtection.HighDensitySpray_PerliteCement
-                            AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAYPERCEM"))
+                            Chaine = BlocFEU("PRO_SPRAYPERCEM")
 
                         Case cls_OptionsFeu.enu_TypeProtection.HighDensitySpray_PerlitePlaster
-                            AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAYPERPLAST"))
+                            Chaine = BlocFEU("PRO_SPRAYPERPLAST")
 
                         Case cls_OptionsFeu.enu_TypeProtection.LowDensitySpray_Mineral
-                            AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAYMINERAL"))
+                            Chaine = BlocFEU("PRO_SPRAYMINERAL")
 
                         Case cls_OptionsFeu.enu_TypeProtection.LowDensitySpray_Vermiculite
-                            AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAYVERMICULITE"))
+                            Chaine = BlocFEU("PRO_SPRAYVERMICULITE")
 
                         Case cls_OptionsFeu.enu_TypeProtection.IntumescentPaint
-                            AddLigneNDC(TABW2 & BlocFEU("PROTECTION_PAINT"))
+                            Chaine = BlocFEU("PROTECTION_PAINT")
 
                     End Select
 
+                    AddLigneNDC(TABW2 & BlocFEU("PROTECTIONTYPE") & TABAFF & Chaine)
                     AddLigneNDC(TABW2 & BlocFEU("PRO_THICK") & TABAFF & "d\-p\= = " & GetStringInUnitN(myBeam.ParamFeu.EpProtection, Enu_TypeVariable.Dimension, 4, 2, True, True) & " °C")
 
             End Select
@@ -10809,7 +10815,9 @@ Module Mod_NoteCalcul
 
         '--( Facteur d'ombre
 
-        AddLigneNDC(TABW2 & BlocFEU("SHADOWFACTOR") & TABAFF & "k\-sh\= = " & GetStringInUnitN(kSh, Enu_TypeVariable.SansType, 4, 2, False, True))
+        If Not lProtege Then
+            AddLigneNDC(TABW2 & BlocFEU("SHADOWFACTOR") & TABAFF & "k\-sh\= = " & GetStringInUnitN(kSh, Enu_TypeVariable.SansType, 4, 2, False, True))
+        End If
 
     End Sub
 
@@ -10824,6 +10832,7 @@ Module Mod_NoteCalcul
 
         '--( Titre
 
+        SautePage()
         AddTitreNdC(2, BlocFEU("FIRE_CHECKS_CURVES"))
 
         '--( Echauffements

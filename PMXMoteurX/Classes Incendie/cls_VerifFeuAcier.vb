@@ -128,6 +128,8 @@ Public Class cls_VerifFeuAcier
 
         Dim lMontantR As Boolean = myBeam.lTraveeConsoleGauche And myBeam.lTraveeConsoleDroite
 
+        Dim pTimeR As Decimal
+
         '--( Initialisation
 
         TempG = myBeam.ParamFeu.TempRef
@@ -194,10 +196,15 @@ Public Class cls_VerifFeuAcier
 
                 '# 
 
-                lCont = IsSmaller(TimeT, TimeTarget)
+                'If IsEqual(TimeT, 14400, 1 / 100000) Then
+                '    TempA = TempA
+                'End If
+
+                lCont = IsSmaller(TimeT, TimeTarget, 10 ^ (-5))
 
                 If IsEqual(TimeT Mod Me.TimeInter, 0) Then
                     Me.TempAInter.Add(TempA)
+                    pTimeR = TimeT
                 End If
             Loop
 
