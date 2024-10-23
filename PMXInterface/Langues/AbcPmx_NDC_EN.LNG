@@ -623,6 +623,7 @@ PRO_BOARDSPLASTER		= Plaster boards
 PRO_BOARDSFCEMENT		= Fibro-cement boards
 PRO_BOARDSSILICATE		= Silicate boards
 PRO_BOARDSVERMICULITE	= Vermiculite boards
+PRO_THICK				= Protection thickness
 UPPERFNOTEXPOSED		= The upper flange is not exposed to fire
 UPPERFEXPOSED			= The upper flange is exposed to fire
 SECTIONFACTOR			= Section factor of the steel profile

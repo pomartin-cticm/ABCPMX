@@ -1094,10 +1094,10 @@ Module Mod_NoteCalcul
                             AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAYPERPLAST"))
 
                         Case cls_OptionsFeu.enu_TypeProtection.LowDensitySpray_Mineral
-                            AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAY"))
+                            AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAYMINERAL"))
 
                         Case cls_OptionsFeu.enu_TypeProtection.LowDensitySpray_Vermiculite
-                            AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAY"))
+                            AddLigneNDC(TABW2 & BlocFEU("PRO_SPRAYVERMICULITE"))
 
                         Case cls_OptionsFeu.enu_TypeProtection.IntumescentPaint
                             AddLigneNDC(TABW2 & BlocFEU("PROTECTION_PAINT"))
@@ -10831,7 +10831,7 @@ Module Mod_NoteCalcul
         Const NbLigDiag As Integer = 20
         If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
         ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
-        AddLigneNDC("\IMG FIRE_HEATING " & " 10 80 30 NoCadre ")
+        AddLigneNDC("\IMG FIRE_HEATING " & " 10 80 50 NoCadre ")
         nbLignes += NbLigDiag
 
     End Sub

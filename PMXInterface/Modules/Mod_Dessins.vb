@@ -12274,32 +12274,99 @@ Public Module Mod_Dessins
         Dim MyParAff As Struc_Affichage
         Dim xMin, yMin, xMax, yMax As Double
         Dim Largeur As Decimal = 240
-        Dim HauteurT As Decimal = myBeam.VerifFeuAcier.TempAInter.Max
+        Dim HauteurT As Decimal
 
         Dim dCar As Decimal = Largeur / 10
-        Const Alpha As Decimal = 4 / 3            'Rapport Hauteur/largeur
+        Const Alpha As Decimal = 3 / 4            'Rapport Hauteur/largeur
         Dim Hauteur As Decimal = Alpha * Largeur
         Const kADJUST As Decimal = 0.95
 
-        Dim kConvY As Decimal = Hauteur / HauteurT
-        Dim kConvX As Decimal = myBeam.VerifFeuAcier.TempAInter.Count
+        Dim kConvY As Decimal
+        Dim kConvX As Decimal = Largeur / (myBeam.VerifFeuAcier.TempAInter.Count * myBeam.VerifFeuAcier.TimeInter)
+
+        Dim myPen As New Pen(Color.Black)
+        Dim ENFeu As New cls_EurocodesFeu
+        Dim ThetaG(1) As Decimal
+        Dim ThetaA(1) As Decimal
+        Dim myPenG As New Pen(Color.DarkRed)
+        Dim myPenA As New Pen(Color.DarkBlue)
+        Dim myPenQ As New Pen(Color.LightGray)
+
+        Dim xo, yo As Double
+        Dim xe, ye As Double
+        Dim t(1) As Decimal
 
         '--( Initialisation
+
+        HauteurT = Math.Max((myBeam.VerifFeuAcier.TempAInter.Max), ENFeu.TemperatureGazISO(240 * 60))
+        kConvY = Hauteur / HauteurT
 
         xMin = 0 - dCar
         xMax = Largeur + dCar
 
-        yMin = 0
-        yMax = Hauteur
+        yMin = -dCar
+        yMax = Hauteur + dCar
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
 
         '--( Tracé de la courbe des gaz
 
+        t(0) = 0
+        ThetaG(0) = ENFeu.TemperatureGazISO(0)
+        For i As Integer = 0 To Largeur - 1
+            t(1) = (i + 1) * 60
+            ThetaG(1) = ENFeu.TemperatureGazISO(CDec(t(1)))
 
+            xo = t(0) * kConvX
+            xe = t(1) * kConvX
+            yo = ThetaG(0) * kConvY
+            ye = ThetaG(1) * kConvY
+
+            AddLigne(myGr, myPenG, xo, yo, xe, ye, MyParAff)
+
+            t(0) = t(1)
+            ThetaG(0) = ThetaG(1)
+        Next
+
+        '--( Tracé de la température de l'acier
+
+        t(0) = 0
+        ThetaA(0) = myBeam.VerifFeuAcier.TempAInter(0)
+        For i As Integer = 1 To myBeam.VerifFeuAcier.TempAInter.Count - 1
+
+            t(1) = i * myBeam.VerifFeuAcier.TimeInter
+            ThetaA(1) = myBeam.VerifFeuAcier.TempAInter(i)
+
+            xo = t(0) * kConvX
+            xe = t(1) * kConvX
+            yo = ThetaA(0) * kConvY
+            ye = ThetaA(1) * kConvY
+
+            AddLigne(myGr, myPenA, xo, yo, xe, ye, MyParAff)
+
+            t(0) = t(1)
+            ThetaA(0) = ThetaA(1)
+
+        Next
+
+        '--( Axes
+
+        AddFleche(myGr, myPen, 0, 0, Largeur + dCar, 0, MyParAff, False, True)
+        AddFleche(myGr, myPen, 0, 0, 0, Hauteur + dCar, MyParAff, False, True)
+
+        '--( Quadrillage
+
+        For i As Integer = 0 To cls_VerifFeuAcier.TimeSteps.Count - 1
+
+            xo = cls_VerifFeuAcier.TimeSteps(i) * 60 * kConvX
+            yo = 0
+            ye = Hauteur
+
+            AddLigne(myGr, myPenQ, xo, yo, xo, ye, MyParAff)
+
+        Next
 
     End Sub
-
 
 #End Region
 

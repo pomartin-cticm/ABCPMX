@@ -1286,7 +1286,7 @@ Public Class Cls_Rapport
 
                     ' Représentation des courbes d'échauffement
 
-
+                    DessineCourbeEchauffement(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), xLeftImg, YPen)
 
             End Select
 
