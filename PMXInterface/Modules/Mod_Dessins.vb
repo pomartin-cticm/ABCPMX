@@ -12274,7 +12274,7 @@ Public Module Mod_Dessins
             Case cls_Section.Enum_TypeSection.AcierSeul
                 DessineCourbeEchauffementAcier(myGr, pWi, pHi, myBeam, xLeft, yTop)
             Case cls_Section.Enum_TypeSection.Mixte
-
+                DessineCourbeEchauffementMixte(myGr, pWi, pHi, myBeam, xLeft, yTop)
         End Select
 
     End Sub
@@ -12504,6 +12504,162 @@ Public Module Mod_Dessins
 
     End Sub
 
+    Private Sub DessineCourbeTempDalleTab(ByRef myGr As Graphics, ByRef myParAff As Struc_Affichage, myFont As Font,
+                                          kConvX As Decimal, kConvY As Decimal, ColorC As Color, indC As Integer,
+                                          TempRef As Decimal, TimeSteps() As Decimal, TempDStep(,) As Decimal)
+        '-----------------------------------------------------------------------------------------------
+        '   24/10/24 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation de la courbe de température de la dalle
+        '   Obtenues avec la méthode tabulée
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myParAff    [E] :   Paramètres du dessin
+        '   kConvX      [E] :   Facteur de conversion / x
+        '   kConvY      [E] :   Facteur de conversion / y
+        '   ColorC      [E] :   Couleur de la courbe
+        '   indC        [E] :   Indice de la courbe pour la légende
+        '   TempRef     [E] :   Température à t = 0
+        '   TimeSteps   [E] :   Tableau des temps auxquels la température a été calculée (en minutes)
+        '   TempDStep   [E] :   Tabeau des températures sur les deux faces de la dalle
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim t(1) As Decimal
+        Dim Theta(1) As Decimal
+        Dim myPenC As New Pen(ColorC)
+
+        Dim xo, yo As Double
+        Dim xe, ye As Double
+
+        '-( Traitement
+
+        For k As Integer = 0 To 1
+
+            t(0) = 0
+            Theta(0) = TempRef
+
+            For i As Integer = 0 To TimeSteps.GetUpperBound(0)
+
+                t(1) = TimeSteps(i) * 60
+                Theta(1) = TempDStep(i, k)
+
+                xo = t(0) * kConvX
+                xe = t(1) * kConvX
+                yo = Theta(0) * kConvY
+                ye = Theta(1) * kConvY
+
+                AddLigne(myGr, myPenC, xo, yo, xe, ye, myParAff)
+
+                t(0) = t(1)
+                Theta(0) = Theta(1)
+
+            Next
+
+            AddTexte(myGr, New SolidBrush(ColorC), CStr(indC + k), myFont, xe, ye, myParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
+        Next
+
+    End Sub
+
+    Public Sub DessineCourbeEchauffementMixte(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
+                                              myBeam As cls_Poutre,
+                                              ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   22/10/24 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation des courbes de températures gaz et acier
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   myBeam      [E] :   Poutre à dessiner
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Declarations
+
+        Dim MyParAff As Struc_Affichage
+        Dim HautD, LargD As Decimal
+        Dim dCar As Decimal
+        Dim kConvX, kConvY As Decimal
+        Dim ColorQ As Color = Color.LightGray
+        Dim ColorG As Color = Color.DarkRed
+        Dim ColorA As Color = Color.DarkBlue
+        Dim ColorB As Color = Color.DarkOrange
+        Dim myPenG As New Pen(ColorG)
+        Dim myPenA As New Pen(ColorA)
+        Dim myPenQ As New Pen(ColorQ)
+
+        Dim TimeMax As Decimal
+        Dim TempMax As Decimal
+        Dim FontAxe As New Font(FontBase.Name, 7)
+
+        Dim tabTemp() As Decimal = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200}
+        Dim tabTempLabel() As Decimal = {100, 300, 500, 700, 900, 1100, 1200}
+
+        Dim lBoard As Boolean = myBeam.ParamFeu.lProtectionBoard
+        Dim lProtege As Boolean = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
+
+        Dim indB As Integer
+
+        '--( Initialisations
+
+        InitialiseCourbesEchauffement(pWi, pHi, MyParAff, LargD, HautD, dCar, xLeft, yTop)
+
+        TimeMax = Math.Max((myBeam.VerifFeuMixte.TempFSInter.Count * myBeam.VerifFeuMixte.TimeInter), cls_VerifFeuMixte.TimeSteps.Last * 60)
+
+        TempMax = tabTemp.Max
+
+        kConvX = LargD / TimeMax
+        kConvY = HautD / TempMax
+
+        '--( Axes et quadrillage
+
+        DessineAxesQCourbesTemperatures(myGr, MyParAff, LargD, HautD, dCar, FontAxe,
+                                        cls_VerifFeuAcier.TimeSteps, ColorQ, kConvX, tabTemp, tabTempLabel, kConvY)
+
+        '--( Tracé de la courbe de température des gaz
+
+        DessineCourbeTempGaz(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorG, 1)
+
+        '--( Tracé des courbes de températures de l'acier
+
+        If (lProtege And lBoard) Then
+            '## Teméprature de la section
+            DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, 2,
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempFSInter, myBeam.VerifFeuMixte.TimeInter)
+            indB = 3
+        Else
+            '## Température de la semelle sup
+            DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, 2,
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempFSInter, myBeam.VerifFeuMixte.TimeInter)
+            '## Température de la semelle inf
+            DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, 3,
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempFIInter, myBeam.VerifFeuMixte.TimeInter)
+            '## Température de l'âme
+            DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, 4,
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempWInter, myBeam.VerifFeuMixte.TimeInter)
+            indB = 5
+        End If
+
+        '--( Tracé des courbes température dans la dalle
+
+        If myBeam.ParamFeu.lDalleFEM Then
+
+        Else
+            DessineCourbeTempDalleTab(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorB, indB,
+                                      myBeam.ParamFeu.TempRef, cls_VerifFeuMixte.TimeSteps, myBeam.VerifFeuMixte.TempDalleStep)
+        End If
+
+        '--( Fin
+
+        myPenG.Dispose()
+        myPenQ.Dispose()
+        myPenA.Dispose()
+        FontAxe.Dispose()
+
+    End Sub
+
     Public Sub DessineCourbeEchauffementAcier(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
                                               myBeam As cls_Poutre,
                                               ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
@@ -12572,169 +12728,169 @@ Public Module Mod_Dessins
 
     End Sub
 
-    Public Sub DessineCourbeEchauffementAcierOld(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
-                                              myBeam As cls_Poutre,
-                                              ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
-        '-----------------------------------------------------------------------------------------------
-        '   22/10/24 :  Version 1.00
-        '-----------------------------------------------------------------------------------------------
-        '   Représentation des courbes de températures gaz et acier
-        '-----------------------------------------------------------------------------------------------
-        '   myGr        [E] :   Graphics dans lequel on dessine
-        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
-        '   myBeam      [E] :   Poutre à dessiner
-        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
-        '-----------------------------------------------------------------------------------------------
+    'Public Sub DessineCourbeEchauffementAcierOld(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
+    '                                          myBeam As cls_Poutre,
+    '                                          ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+    '    '-----------------------------------------------------------------------------------------------
+    '    '   22/10/24 :  Version 1.00
+    '    '-----------------------------------------------------------------------------------------------
+    '    '   Représentation des courbes de températures gaz et acier
+    '    '-----------------------------------------------------------------------------------------------
+    '    '   myGr        [E] :   Graphics dans lequel on dessine
+    '    '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+    '    '   myBeam      [E] :   Poutre à dessiner
+    '    '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+    '    '-----------------------------------------------------------------------------------------------
 
-        '--( Declarations
+    '    '--( Declarations
 
-        Dim MyParAff As Struc_Affichage
-        Dim xMin, yMin, xMax, yMax As Double
-        Dim Largeur As Decimal = 240
-        Dim HauteurT As Decimal
+    '    Dim MyParAff As Struc_Affichage
+    '    Dim xMin, yMin, xMax, yMax As Double
+    '    Dim Largeur As Decimal = 240
+    '    Dim HauteurT As Decimal
 
-        Dim dCar As Decimal = Largeur / 10
-        Const Alpha As Decimal = 3 / 4            'Rapport Hauteur/largeur
-        Dim Hauteur As Decimal = Alpha * Largeur
+    '    Dim dCar As Decimal = Largeur / 10
+    '    Const Alpha As Decimal = 3 / 4            'Rapport Hauteur/largeur
+    '    Dim Hauteur As Decimal = Alpha * Largeur
 
-        Dim kConvY As Decimal
-        Dim kConvX As Decimal = Largeur / (myBeam.VerifFeuAcier.TempAInter.Count * myBeam.VerifFeuAcier.TimeInter)
+    '    Dim kConvY As Decimal
+    '    Dim kConvX As Decimal = Largeur / (myBeam.VerifFeuAcier.TempAInter.Count * myBeam.VerifFeuAcier.TimeInter)
 
-        Dim myPen As New Pen(Color.Black)
-        Dim ENFeu As New cls_EurocodesFeu
-        Dim ThetaG(1) As Decimal
-        Dim ThetaA(1) As Decimal
-        Dim ColorQ As Color = Color.LightGray
-        Dim ColorG As Color = Color.DarkRed
-        Dim ColorA As Color = Color.DarkBlue
-        Dim myPenG As New Pen(ColorG)
-        Dim myPenA As New Pen(ColorA)
-        Dim myPenQ As New Pen(ColorQ)
+    '    Dim myPen As New Pen(Color.Black)
+    '    Dim ENFeu As New cls_EurocodesFeu
+    '    Dim ThetaG(1) As Decimal
+    '    Dim ThetaA(1) As Decimal
+    '    Dim ColorQ As Color = Color.LightGray
+    '    Dim ColorG As Color = Color.DarkRed
+    '    Dim ColorA As Color = Color.DarkBlue
+    '    Dim myPenG As New Pen(ColorG)
+    '    Dim myPenA As New Pen(ColorA)
+    '    Dim myPenQ As New Pen(ColorQ)
 
-        Dim xo, yo As Double
-        Dim xe, ye As Double
-        Dim t(1) As Decimal
+    '    Dim xo, yo As Double
+    '    Dim xe, ye As Double
+    '    Dim t(1) As Decimal
 
-        Dim Chaine As String = ""
-        Dim FontAxe As New Font(FontBase.Name, 7)
+    '    Dim Chaine As String = ""
+    '    Dim FontAxe As New Font(FontBase.Name, 7)
 
-        Dim tabTemp() As Decimal = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200}
-        Dim tabTempLabel() As Decimal = {100, 300, 500, 700, 900, 1100, 1200}
+    '    Dim tabTemp() As Decimal = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200}
+    '    Dim tabTempLabel() As Decimal = {100, 300, 500, 700, 900, 1100, 1200}
 
-        '--( Initialisation
+    '    '--( Initialisation
 
-        HauteurT = Math.Max((myBeam.VerifFeuAcier.TempAInter.Max), ENFeu.TemperatureGazISO(240 * 60))
-        HauteurT = Math.Max(HauteurT, tabTemp.Max)
+    '    HauteurT = Math.Max((myBeam.VerifFeuAcier.TempAInter.Max), ENFeu.TemperatureGazISO(240 * 60))
+    '    HauteurT = Math.Max(HauteurT, tabTemp.Max)
 
-        kConvY = Hauteur / HauteurT
+    '    kConvY = Hauteur / HauteurT
 
-        xMin = 0 - dCar
-        xMax = Largeur + dCar
+    '    xMin = 0 - dCar
+    '    xMax = Largeur + dCar
 
-        yMin = -dCar
-        yMax = Hauteur + dCar
+    '    yMin = -dCar
+    '    yMax = Hauteur + dCar
 
-        ' ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+    '    ' ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
 
-        '--( Axes
+    '    '--( Axes
 
-        AddFleche(myGr, myPen, 0, 0, Largeur + dCar, 0, MyParAff, False, True)
-        AddFleche(myGr, myPen, 0, 0, 0, Hauteur + dCar, MyParAff, False, True)
+    '    AddFleche(myGr, myPen, 0, 0, Largeur + dCar, 0, MyParAff, False, True)
+    '    AddFleche(myGr, myPen, 0, 0, 0, Hauteur + dCar, MyParAff, False, True)
 
-        Chaine = "t (min)"
-        AddTexte(myGr, New SolidBrush(Color.Black), Chaine, FontAxe, Largeur + dCar, 0, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Bottom)
-        Chaine = "temp (°C)"
-        AddTexte(myGr, New SolidBrush(Color.Black), Chaine, FontAxe, 0, Hauteur + dCar, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
+    '    Chaine = "t (min)"
+    '    AddTexte(myGr, New SolidBrush(Color.Black), Chaine, FontAxe, Largeur + dCar, 0, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Bottom)
+    '    Chaine = "temp (°C)"
+    '    AddTexte(myGr, New SolidBrush(Color.Black), Chaine, FontAxe, 0, Hauteur + dCar, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
 
-        '--( Quadrillage
+    '    '--( Quadrillage
 
-        For i As Integer = 0 To cls_VerifFeuAcier.TimeSteps.Count - 1
+    '    For i As Integer = 0 To cls_VerifFeuAcier.TimeSteps.Count - 1
 
-            xo = cls_VerifFeuAcier.TimeSteps(i) * 60 * kConvX
-            yo = 0
-            ye = Hauteur
+    '        xo = cls_VerifFeuAcier.TimeSteps(i) * 60 * kConvX
+    '        yo = 0
+    '        ye = Hauteur
 
-            AddLigne(myGr, myPenQ, xo, yo, xo, ye, MyParAff)
+    '        AddLigne(myGr, myPenQ, xo, yo, xo, ye, MyParAff)
 
-            Chaine = CStr(cls_VerifFeuAcier.TimeSteps(i))
+    '        Chaine = CStr(cls_VerifFeuAcier.TimeSteps(i))
 
-            AddTexte(myGr, New SolidBrush(Color.Gray), Chaine, FontAxe, xo, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+    '        AddTexte(myGr, New SolidBrush(Color.Gray), Chaine, FontAxe, xo, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
 
-        Next
+    '    Next
 
-        For i As Integer = 0 To tabTemp.GetUpperBound(0)
+    '    For i As Integer = 0 To tabTemp.GetUpperBound(0)
 
-            xo = 0
-            xe = Largeur
+    '        xo = 0
+    '        xe = Largeur
 
-            yo = tabTemp(i) * kConvY
-            ye = yo
+    '        yo = tabTemp(i) * kConvY
+    '        ye = yo
 
-            AddLigne(myGr, myPenQ, xo, yo, xe, ye, MyParAff)
+    '        AddLigne(myGr, myPenQ, xo, yo, xe, ye, MyParAff)
 
-            If tabTempLabel.Contains(tabTemp(i)) Then
-                Chaine = CStr(tabTemp(i))
+    '        If tabTempLabel.Contains(tabTemp(i)) Then
+    '            Chaine = CStr(tabTemp(i))
 
-                AddTexte(myGr, New SolidBrush(Color.Gray), Chaine, FontAxe, xo, yo, MyParAff, HorizontalAlignment.Right, VerticalAlignement.Middle)
+    '            AddTexte(myGr, New SolidBrush(Color.Gray), Chaine, FontAxe, xo, yo, MyParAff, HorizontalAlignment.Right, VerticalAlignement.Middle)
 
-            End If
+    '        End If
 
-        Next
+    '    Next
 
-        '--( Tracé de la courbe des gaz
+    '    '--( Tracé de la courbe des gaz
 
-        t(0) = 0
-        ThetaG(0) = ENFeu.TemperatureGazISO(0)
-        For i As Integer = 0 To 239
+    '    t(0) = 0
+    '    ThetaG(0) = ENFeu.TemperatureGazISO(0)
+    '    For i As Integer = 0 To 239
 
-            t(1) = (i + 1) * 60
-            ThetaG(1) = ENFeu.TemperatureGazISO(CDec(t(1)))
+    '        t(1) = (i + 1) * 60
+    '        ThetaG(1) = ENFeu.TemperatureGazISO(CDec(t(1)))
 
-            xo = t(0) * kConvX
-            xe = t(1) * kConvX
-            yo = ThetaG(0) * kConvY
-            ye = ThetaG(1) * kConvY
+    '        xo = t(0) * kConvX
+    '        xe = t(1) * kConvX
+    '        yo = ThetaG(0) * kConvY
+    '        ye = ThetaG(1) * kConvY
 
-            AddLigne(myGr, myPenG, xo, yo, xe, ye, MyParAff)
+    '        AddLigne(myGr, myPenG, xo, yo, xe, ye, MyParAff)
 
-            t(0) = t(1)
-            ThetaG(0) = ThetaG(1)
+    '        t(0) = t(1)
+    '        ThetaG(0) = ThetaG(1)
 
-        Next
+    '    Next
 
-        AddTexte(myGr, New SolidBrush(ColorG), "1", FontAxe, xe, ye, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
+    '    AddTexte(myGr, New SolidBrush(ColorG), "1", FontAxe, xe, ye, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
 
-        '--( Tracé de la température de l'acier
+    '    '--( Tracé de la température de l'acier
 
-        t(0) = 0
-        ThetaA(0) = myBeam.ParamFeu.TempRef
-        For i As Integer = 0 To myBeam.VerifFeuAcier.TempAInter.Count - 1
+    '    t(0) = 0
+    '    ThetaA(0) = myBeam.ParamFeu.TempRef
+    '    For i As Integer = 0 To myBeam.VerifFeuAcier.TempAInter.Count - 1
 
-            t(1) = (i + 1) * myBeam.VerifFeuAcier.TimeInter
-            ThetaA(1) = myBeam.VerifFeuAcier.TempAInter(i)
+    '        t(1) = (i + 1) * myBeam.VerifFeuAcier.TimeInter
+    '        ThetaA(1) = myBeam.VerifFeuAcier.TempAInter(i)
 
-            xo = t(0) * kConvX
-            xe = t(1) * kConvX
-            yo = ThetaA(0) * kConvY
-            ye = ThetaA(1) * kConvY
+    '        xo = t(0) * kConvX
+    '        xe = t(1) * kConvX
+    '        yo = ThetaA(0) * kConvY
+    '        ye = ThetaA(1) * kConvY
 
-            'If i = 119 Then
-            '    t(0) = t(1)
-            'End If
+    '        'If i = 119 Then
+    '        '    t(0) = t(1)
+    '        'End If
 
-            AddLigne(myGr, myPenA, xo, yo, xe, ye, MyParAff)
+    '        AddLigne(myGr, myPenA, xo, yo, xe, ye, MyParAff)
 
-            t(0) = t(1)
-            ThetaA(0) = ThetaA(1)
+    '        t(0) = t(1)
+    '        ThetaA(0) = ThetaA(1)
 
-        Next
+    '    Next
 
-        AddTexte(myGr, New SolidBrush(ColorA), "2", FontAxe, xe, ye, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Bottom)
+    '    AddTexte(myGr, New SolidBrush(ColorA), "2", FontAxe, xe, ye, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Bottom)
 
-        AddTexte(myGr, New SolidBrush(ColorG), "1: " & labelDessin("GAZ"), FontAxe, 0, -dCar / 2, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
-        AddTexte(myGr, New SolidBrush(ColorA), "2: " & labelDessin("STEELPROFILE"), FontAxe, 0, -dCar, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
+    '    AddTexte(myGr, New SolidBrush(ColorG), "1: " & labelDessin("GAZ"), FontAxe, 0, -dCar / 2, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
+    '    AddTexte(myGr, New SolidBrush(ColorA), "2: " & labelDessin("STEELPROFILE"), FontAxe, 0, -dCar, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
 
-    End Sub
+    'End Sub
 
 #End Region
 

@@ -204,7 +204,7 @@ Public Class cls_VerifFeuAcier
 
                 If IsEqual(TimeT Mod Me.TimeInter, 0) Then
                     Me.TempAInter.Add(TempA)
-                    pTimeR = TimeT
+                    'pTimeR = TimeT
                 End If
             Loop
 

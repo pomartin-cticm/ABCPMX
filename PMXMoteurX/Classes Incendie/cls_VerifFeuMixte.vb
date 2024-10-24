@@ -34,6 +34,11 @@
 
     Dim MethodTempArma As cls_OptionsFeu.enuTypeInterpoleTempArma
 
+    Public TempFSInter As List(Of Decimal)              ' Températures de la semelle sup (ou de la section complète) pour les intervalles de temps
+    Public TempFIInter As List(Of Decimal)              ' Températures de la semelle inf pour les intervalles de temps
+    Public TempWInter As List(Of Decimal)               ' Températures de l'âme pour les intervalles de temps
+    Public TimeInter As Decimal = 120                   ' Intervalle de temps (en secondes) pour l'enregistrement de TempA
+
 #End Region
 
 #Region " Constructeurs "
@@ -81,6 +86,10 @@
         For i As Integer = 0 To Me.NbStep - 1
             ReDim TempArmaStep(i)(nbArma - 1)
         Next
+
+        Me.TempFSInter = New List(Of Decimal)
+        Me.TempFIInter = New List(Of Decimal)
+        Me.TempWInter = New List(Of Decimal)
 
     End Sub
 
@@ -196,6 +205,8 @@
         MassivW = EN_Feu.MassiveteAme(myBeam.Section.ProfilA)
         MassivS = EN_Feu.MassiveteSectionAcierBoardP(myBeam.Section.ProfilA)
 
+        Me.TimeInter = CInt((Me.TimeInter / DeltaT)) * DeltaT
+
         If Not lProtege Then
             kSh = EN_Feu.kShMixte(myBeam.Section.ProfilA)
         End If
@@ -262,8 +273,8 @@
                         TempW = TempFs
                     Else
                         TempFs += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivFs, kSh, TimeT, DeltaT, myBeam.ParamFeu)
-                        TempFi += EN_Feu.DeltaTempAcierProtege(TempFi, TempG, MassivFs, kSh, TimeT, DeltaT, myBeam.ParamFeu)
-                        TempW += EN_Feu.DeltaTempAcierProtege(TempW, TempG, MassivFs, kSh, TimeT, DeltaT, myBeam.ParamFeu)
+                        TempFi += EN_Feu.DeltaTempAcierProtege(TempFi, TempG, MassivFi, kSh, TimeT, DeltaT, myBeam.ParamFeu)
+                        TempW += EN_Feu.DeltaTempAcierProtege(TempW, TempG, MassivW, kSh, TimeT, DeltaT, myBeam.ParamFeu)
                     End If
                 Else
                     TempFs += EN_Feu.DeltaTempAcierNonProtege(TempFs, TempG, MassivFs, kSh, DeltaT, myBeam.ParamFeu)
@@ -283,6 +294,17 @@
                 '# 
 
                 lCont = IsSmaller(TimeT, TimeTarget, 10 ^ (-4))
+
+                If IsEqual(TimeT Mod Me.TimeInter, 0) Then
+                    Me.TempFSInter.Add(TempFs)
+                    If Not (lProtege And lBoard) Then
+                        Me.TempFIInter.Add(TempFi)
+                        Me.TempWInter.Add(TempW)
+                    End If
+                    If myBeam.ParamFeu.lDalleFEM Then
+
+                    End If
+                End If
 
             Loop
 
