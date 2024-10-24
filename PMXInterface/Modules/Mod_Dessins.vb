@@ -12645,6 +12645,16 @@ Public Module Mod_Dessins
         '--( Tracé des courbes température dans la dalle
 
         If myBeam.ParamFeu.lDalleFEM Then
+            '## Température de la dalle
+            '### Fibre inférieure
+
+            DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorB, indB,
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempDInter(0), myBeam.VerifFeuMixte.TimeInter)
+
+            '### Fibre supérieure
+
+            DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorB, indB + 1,
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempDInter(1), myBeam.VerifFeuMixte.TimeInter)
 
         Else
             DessineCourbeTempDalleTab(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorB, indB,

@@ -37,6 +37,7 @@
     Public TempFSInter As List(Of Decimal)              ' Températures de la semelle sup (ou de la section complète) pour les intervalles de temps
     Public TempFIInter As List(Of Decimal)              ' Températures de la semelle inf pour les intervalles de temps
     Public TempWInter As List(Of Decimal)               ' Températures de l'âme pour les intervalles de temps
+    Public TempDInter(1) As List(Of Decimal)            ' Températures aux fibres extrêmes de la dalle pour les intervalles de temps
     Public TimeInter As Decimal = 120                   ' Intervalle de temps (en secondes) pour l'enregistrement de TempA
 
 #End Region
@@ -50,7 +51,7 @@
     End Sub
 
     Private Sub InitialiseClassePourCalcul(lMulti As Boolean, NbNodes As Integer, NbCombi As Integer,
-                                           IndDerniereT As Integer, nbArma As Integer)
+                                           IndDerniereT As Integer, nbArma As Integer, lDalleFEM As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   30/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -61,6 +62,7 @@
         '   NbCombi     [E] :   Nombre de combinaisons
         '   IndDerniereT[E] :   Indice de la dernière travée
         '   NbArma      [E] :   Nombre de lits d'armatures
+        '   lDalleFEM   [E] :   Indique si calcul échauffement par FEM
         '----------------------------------------------------------------------------------------------------------
 
         ReDim CritereM(Me.NbStep - 1)
@@ -90,6 +92,11 @@
         Me.TempFSInter = New List(Of Decimal)
         Me.TempFIInter = New List(Of Decimal)
         Me.TempWInter = New List(Of Decimal)
+
+        If lDalleFEM Then
+            Me.TempDInter(0) = New List(Of Decimal)
+            Me.TempDInter(1) = New List(Of Decimal)
+        End If
 
     End Sub
 
@@ -215,7 +222,8 @@
         ' ReDim MelRdFeu(Me.NbStep - 1)
         ReDim VplRdFeu(Me.NbStep - 1)
 
-        Me.InitialiseClassePourCalcul(lMulti, myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee, nbArma)
+        Me.InitialiseClassePourCalcul(lMulti, myBeam.Nodes.nbNodes, nbCombiELU,
+                                      myBeam.IndiceDerniereTravee, nbArma, myBeam.ParamFeu.lDalleFEM)
 
         If myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             EpDalle = EN_Feu.EpaisseurEfficaceDalleMixte(myBeam.Dalle.Ep_td, myBeam.Dalle.Bac)
@@ -302,7 +310,8 @@
                         Me.TempWInter.Add(TempW)
                     End If
                     If myBeam.ParamFeu.lDalleFEM Then
-
+                        Me.TempDInter(0).Add(TempCTranche(0))
+                        Me.TempDInter(1).Add(TempCTranche(NbTranches - 1))
                     End If
                 End If
 

@@ -12,7 +12,191 @@
 
 #Region " Procédure numérique par différence finie "
 
-    Public Sub Calcul_thermique_Dalle_beton(tDalle As Decimal, NbLayers As Integer, tLayers() As Decimal,
+    Sub Calcul_thermique_Dalle_beton(tDalle As Decimal, nbLayers As Integer, tLayers() As Decimal, DeltaT As Decimal,
+                                     ByRef ThetaC() As Decimal,
+                                     ThetaG As Decimal, ThetaR As Decimal, AlphaCInf As Decimal, AlphaCSup As Decimal,
+                                     val_U As Decimal, EpsilonF As Decimal, SigmaSB As Decimal, EpsilonC As Decimal,
+                                     lNormal As Boolean, RhoC As Decimal, lRhoCVariable As Boolean,
+                                     lANFrance As Boolean, lGeneration1 As Boolean)
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   15/05/24 :  Création - GiB
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de l'échauffement d'une dalle en béton exposée à l'incendie normalisé en sous-face
+        '   Par la méthode des différences finies
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   tDalle              [E] :   épaisseur de la dalle                                       (m)
+        '   NbLayers            [E] :   nombre de couche discrétisant la dalle
+        '   tLayers(i)          [E] :   épaisseur individuelle des couches                          (m)
+        '                                   de i = 0 à NbLayers-1, i = 0 pour la couche inférieure
+        '   DeltaT              [E] :   incrément de temps                                          (s)
+        '   ThetaC(i)               :   température dans chaque couche i du béton,        (°C)
+        '                       [E] :       au temps t en entrée
+        '                       [S] :       au temps t + DeltaT  en sortie 
+        '   ThetaG              [E] :   température des gaz chauds sous la dalle au temps val_t + DeltaT  (°C)
+        '   ThetaR              [E] :   température de référence au-dessus de la dalle              (°C)
+        '   AlphaCInf           [E] :   coefficient de convection pour la face exposée              (W/m2 K)
+        '   AlphaCSup           [E] :   coefficient de convection pour la face non exposée          (W/m2 K)
+        '   val_U               [E] :   teneur en eau du béton (entre 0 et 10)                      (%)
+        '   EpsilonF            [E] :   émissivité du feu
+        '   SigmaSB             [E] :   constante de Stefan-Boltzmann
+        '   EpsilonC            [E] :   émissivité de surface du béton
+        '   lNormal             [E] :   indique si béton NC (true) ou LC (false)
+        '   RhoC                [E] :   masse volumique du béton (à froid)                              (kg/m3)
+        '   lRhoCVariable       [E] :   indique si on utilise la formule de rhoc de l’EN 1994-1-2 variant en fonction de la température, pour un béton normal.
+        '                               Si non, on utilise la valeur constante du paramètre RhoC.
+        '                               Pour le béton léger, on utilise toujours RhoC.
+        '   lANFrance           [E] :   indique si on utilise l’Annexe Nationale française de l’EN 1994-1-2
+        '   lGeneration1        [E] :   indique si génération 1 ou génération 2 des Eurocodes
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        'Temperature des mailles
+        Dim Temp_0(0 To nbLayers - 1) As Single, Temp_1(0 To nbLayers - 1) As Single
+
+        'Parametres variables de la boucle de calcul
+        Dim rho_ As Single     'masse volumique du materiau d'une maille a un instant donne
+        Dim cp_ As Single      'chaleur specifique du materiau d'une maille a un instant donne
+        Dim rho_cp As Single    'produit rho * cp du materiau d'une maille a un instant donne
+        Dim lambda_ As Single   'conductivite thermique du materiau d'une maille a un instant donne
+        Dim val_dth As Single   'increment de temperature d'une maille pendant DeltaT
+        Dim h_net_ce As Single   'densite de flux convectif sur les faces exposees a un instant donne
+        Dim h_net_re As Single   'densite de flux radiatif sur les faces exposees a un instant donne
+        Dim h_net_de As Single   'densite totale de flux sur les faces exposees a un instant donne
+        Dim h_net_cn As Single   'densite de flux convectif sur les faces non exposees a un instant donne
+        Dim h_net_rn As Single   'densite de flux radiatif sur les faces non exposees a un instant donne
+        Dim h_net_dn As Single   'densite totale de flux sur les faces non exposees a un instant donne
+
+        Dim dth_1 As Single, dth_2 As Single
+        Dim h_11 As Single, h_21 As Single, lambda_11 As Single
+        Dim h_12 As Single, h_22 As Single, lambda_21 As Single
+        Dim k_1 As Single
+        Dim q_1 As Single, q_2 As Single, q_z As Single
+        Dim cst_1 As Single, cst_2 As Single
+
+        Dim i_ As Integer
+        Dim EN1994_12 As New cls_EurocodesFeu
+
+        'Temperature des couches de beton à l'instant val_t
+        For i_ = 0 To nbLayers - 1
+            Temp_0(i_) = ThetaC(i_)
+            Temp_1(i_) = Temp_0(i_)
+        Next
+
+        'Boucle sur les couches pour calculer la temperature de chacune à l'instant val_t + DeltaT
+        For i_ = 0 To nbLayers - 1
+
+            'Initialisation de valeurs
+            val_dth = 0
+            dth_1 = 0 : dth_2 = 0
+            h_11 = 0 : h_21 = 0
+            h_12 = 0 : h_22 = 0
+
+            'Caracteristiques thermiques du beton
+            rho_ = EN1994_12.Masse_volumique_beton(lNormal, lRhoCVariable, lGeneration1, RhoC, Temp_0(i_))
+            cp_ = EN1994_12.Chaleur_specifique_beton(lNormal, val_U, lGeneration1, Temp_0(i_))
+            rho_cp = rho_ * cp_
+            lambda_ = EN1994_12.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_))
+
+            'Convection et rayonnement sur les faces inf et sup de la dalle
+            If i_ = 0 Then
+                'Face exposee
+                h_net_ce = AlphaCInf * (ThetaG - Temp_0(i_))    'densite de flux convectif
+                h_net_re = EpsilonF * EpsilonC * SigmaSB * ((ThetaG + 273.0) ^ 4 - (Temp_0(i_) + 273.0) ^ 4)    'densite de flux radiatif
+                h_net_de = h_net_ce + h_net_re  'densite de flux net
+
+            ElseIf i_ = nbLayers - 1 Then
+                'Face non exposee
+                h_net_cn = AlphaCSup * (ThetaR - Temp_0(i_))    'densite de flux convectif
+                h_net_rn = EpsilonF * EpsilonC * SigmaSB * ((ThetaR + 273.0) ^ 4 - (Temp_0(i_) + 273.0) ^ 4)    'densite de flux radiatif
+                h_net_dn = h_net_cn + h_net_rn  'densite de flux net
+
+            End If
+
+
+            'Face inferieure de la couche i_
+            If i_ = 0 Then  'Exposee au feu
+
+                dth_1 = ThetaG - Temp_0(i_) 'ecart de temperature entre les gaz chauds et la maille i_
+                h_11 = dth_1 / h_net_de
+
+            Else  'Interieure
+
+                dth_1 = Temp_0(i_ - 1) - Temp_0(i_) 'ecart de temperature entre les mailles i_-1 et i_
+                h_11 = 0.5 * tLayers(i_ - 1)     'demi-epaisseur de la couche i_-1, sur laquelle se produit de la conduction entre les deux mailles
+                lambda_11 = EN1994_12.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_ - 1))
+                h_11 = h_11 / lambda_11
+
+            End If
+
+            'Face superieure de la couche i_
+            If i_ < nbLayers - 1 Then  'Interieure
+
+                dth_2 = Temp_0(i_ + 1) - Temp_0(i_) 'ecart de temperature entre les mailles i_+1 et i_
+                h_21 = 0.5 * tLayers(i_ + 1)     'demi-epaisseur de la couche i_+1, sur laquelle se produit de la conduction entre les deux mailles
+                lambda_21 = EN1994_12.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_ + 1))
+                h_21 = h_21 / lambda_21
+
+            Else  'Non exposee au feu
+
+                dth_2 = ThetaR - Temp_0(i_) 'ecart de temperature entre l'air ambiant et la maille i_
+                If Math.Abs(dth_2) > 0.0001 Then
+                    h_21 = dth_2 / h_net_dn
+                End If
+
+            End If
+
+            h_12 = 0.5 * tLayers(i_) / lambda_   'resistance thermique sur la demi-epaisseur inferieure de la maille i_
+            h_22 = 0.5 * tLayers(i_) / lambda_   'resistance thermique sur la demi-epaisseur superieure de la maille i_
+
+            cst_1 = tLayers(i_) / (h_11 + h_12)
+            cst_2 = tLayers(i_) / (h_21 + h_22)
+
+            q_1 = dth_1 * DeltaT * cst_1        'energie fournie par la maille superieure ou l'air a temperature ambiante
+            q_2 = dth_2 * DeltaT * cst_2        'energie fournie par la maille inferieure ou les gaz chauds
+
+            q_z = q_1 + q_2                     'energie fournie a la maille
+
+            k_1 = rho_cp * tLayers(i_)          'energie interne de la maille i_ par increment de temperature
+            val_dth = q_z / k_1
+            Temp_1(i_) = Temp_0(i_) + val_dth
+
+            ThetaC(i_) = Temp_1(i_)
+
+        Next
+
+
+        'Calcul de l'échauffement d'une dalle en béton exposée à l'incendie normalisé en sous-face
+        'Paramètres d'entrée:
+        '   tDalle          epaisseur de la dalle                                       (m)
+        '   NbLayers         nombre de couche discrétisant la dalle
+        '   tLayers(i)       Épaisseur individuelle des couches                          (m)
+        '                   de i = 0 à NbLayer-1, i = 0 pour la couche inférieure
+        '   val_t               instant de la boucle de calcul                              (s)
+        '   DeltaT          incrément de temps                                          (s)
+        '   ThetaC(i)       température dans chaque couche i du béton, au temps t       (°C)
+        '   ThetaG          température des gaz chauds sous la dalle au temps val_t + DeltaT  (°C)
+        '   ThetaR          température de référence au-dessus de la dalle              (°C)
+        '   AlphaCInf       coefficient de convection pour la face exposée              (W/m2 K)
+        '   AlphaCSup       coefficient de convection pour la face non exposée          (W/m2 K)
+        '   val_U_              teneur en eau du béton (entre 0 et 10)                      (%)
+        '   EpsilonF        émissivité du feu
+        '   SigmaSB         constante de Stefan-Boltzmann
+        '   EpsilonC        émissivité de surface du béton
+        '   lNormal         indique si béton NC (true) ou LC (false)
+        '   RhoC            masse volumique du béton (à froid)                              (kg/m3)
+        '   lRhoCVariable   indique si on utilise la formule de rhoc de l’EN 1994-1-2 variant en fonction de la température, pour un béton normal.
+        '                   Si non, on utilise la valeur constante du paramètre RhoC.
+        '                   Pour le béton léger, on utilise toujours RhoC.
+        '   lANFrance       indique si on utilise l’Annexe Nationale française de l’EN 1994-1-2
+        '   val_LGeneration1    indique si génération 1 ou génération 2 des Eurocodes
+        '
+        'Paramètre en sortie:
+        '   ThetaC(i)       Température dans chaque couche i du béton, au temps t + DeltaT  (°C)
+
+    End Sub
+
+    Public Sub Calcul_thermique_Dalle_betonOLD(tDalle As Decimal, NbLayers As Integer, tLayers() As Decimal,
                                             DeltaT As Decimal, ByRef ThetaC() As Decimal,
                                             ThetaG As Decimal, ThetaR As Decimal, AlphaCInf As Decimal, AlphaCSup As Decimal,
                                             val_U As Decimal, EpsilonF As Decimal, SigmaSB As Decimal, EpsilonC As Decimal,

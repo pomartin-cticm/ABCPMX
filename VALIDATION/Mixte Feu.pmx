@@ -67,7 +67,7 @@ BLOCK DECKRESTRAINT
    lDeckRestraint        = False
    lTheta                = False
 BLOCK SECTION
-   Name                  = 
+   Name                  = Name
    SlabDefined           = False
    Database              = False
    Type                  = 2
