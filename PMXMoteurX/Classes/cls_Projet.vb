@@ -30,6 +30,7 @@ Public Class cls_Projet
     Const BkARMACONNEX As String = "R_CONNEXION"
 
     Const BkOPTIONS As String = "OPTIONS"
+    Const BkFIREOPTIONS As String = "FIRE_OPTIONS"
     Const BkGAMMA As String = "GAMMA"
     Const BkHIVOSS As String = "HIVOSS"
 
@@ -687,6 +688,49 @@ Public Class cls_Projet
 
     End Sub
 
+    Private Sub SaveFileBlocOptionsFeu(myParamF As cls_OptionsFeu, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   28/10/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif aux options de calcul au feu
+        '-------------------------------------------------------------------------------------
+
+        Lines.Add("BLOCK " & BkFIREOPTIONS)
+
+        With myParamF
+
+            AjouteLigneFrmt(Lines, "FireDesign", .lCalcuFeu)
+            AjouteLigneFrmt(Lines, "DeltaT", .DeltaTCalcul)
+            AjouteLigneFrmt(Lines, "Temp0", .TempRef)
+            AjouteLigneFrmt(Lines, "EpsilonF", .EmissivityFire)
+            AjouteLigneFrmt(Lines, "AlphaC", .ConvectionCoef)
+            AjouteLigneFrmt(Lines, "SlabAlphaC", .ConvectionCoefDalle)
+            AjouteLigneFrmt(Lines, "Slab085", .AlphaSlab)
+            AjouteLigneFrmt(Lines, "Phi", .PhiViewFactor)
+            AjouteLigneFrmt(Lines, "Moisture", .TeneurU)
+            AjouteLigneFrmt(Lines, "FrenchAN", .lANFrance)
+            AjouteLigneFrmt(Lines, "VariableCDens", .lRhoCvar)
+            AjouteLigneFrmt(Lines, "CompressionReinf", .lArmaCompression)
+            AjouteLigneFrmt(Lines, "ColdFormReinf", .lArmaFormeeAFroid)
+            AjouteLigneFrmt(Lines, "SlabFEM", .lDalleFEM)
+            AjouteLigneFrmt(Lines, "SlabTmax", .tDalleEFmax)
+            AjouteLigneFrmt(Lines, "ConcreteRedux", .lReductionConcreteStrength)
+            AjouteLigneFrmt(Lines, "ReinfTemp", .MethodTempArma)
+            Select Case .TypeSurface
+                Case cls_OptionsFeu.enu_TypeSurface.AcierNu
+                    AjouteLigneFrmt(Lines, "Surface", "Steel")
+
+                Case cls_OptionsFeu.enu_TypeSurface.Galvanise
+                    AjouteLigneFrmt(Lines, "Surface", "HDGalva")
+                Case cls_OptionsFeu.enu_TypeSurface.Protege
+                    AjouteLigneFrmt(Lines, "Surface", "Protection" & " " & .Protection & " " & .EpProtection)
+                    AjouteLigneFrmt(Lines, "LambdP", .CustomLambdaP)
+
+            End Select
+
+        End With
+    End Sub
+
     Private Sub SaveFileBlocOptions(myParam As cls_OptionsCalcul, ByRef Lines As List(Of String))
         '-------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
@@ -817,7 +861,7 @@ Public Class cls_Projet
 
         '==[ Entete ]=========================================================================
         Lines.Add("'-----------------------------------------------'")
-        Lines.Add("'PropMix software - CTICM - Version " & version)
+                    Lines.Add("'PropMix software - CTICM - Version " & version)
         Lines.Add("'PROJECT USER FILE")
         Lines.Add("'-----------------------------------------------'")
         Lines.Add("'       /!\   Don't modify this file   /!\")
@@ -920,6 +964,10 @@ Public Class cls_Projet
             '==[ Classe Options Calculs ]=================================================================
 
             SaveFileBlocOptions(pTre.Param, Lines)
+
+            '==[ Classe Options Feu ]=================================================================
+
+            SaveFileBlocOptionsFeu(pTre.ParamFeu, Lines)
 
             '==[ Classe Gamma ]=================================================================
 
@@ -1244,6 +1292,10 @@ Public Class cls_Projet
 
                     ReadBlocOptionsCalculs(Me.Poutres.Last.Param, Lines, indBlocs(iBloc) + 1, iFin)
 
+                Case BkFIREOPTIONS
+
+                    ReadBlocOptionsFeu(Me.Poutres.Last.ParamFeu, Lines, indBlocs(iBloc) + 1, iFin)
+
                 Case BkGAMMA
 
                     ReadBlocGamma(Me.Poutres.Last.Param.Gamma, Lines, indBlocs(iBloc) + 1, iFin)
@@ -1434,6 +1486,10 @@ Public Class cls_Projet
                     Dim opt_calculs_en_cours As New cls_OptionsCalcul
                     ReadBlocOptionsCalculs(opt_calculs_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Param = opt_calculs_en_cours
+
+                Case BkFIREOPTIONS
+
+                    ReadBlocOptionsFeu(Me.Poutres.Last.ParamFeu, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
 
                 Case BkGAMMA
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -2587,6 +2643,79 @@ Public Class cls_Projet
                         Case "AGETCA" : .AgeT = CDec(TraiteReal(Mots(nbMots)))
                         Case "LELAST" : .lElasticDesignVM = Mots(nbMots)
                         Case "LCONTR" : .lMaitriseFissuration = Mots(nbMots)
+                        Case Else : MsgBox("BLOC " & BkOPTIONS & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+    Private Sub ReadBlocOptionsFeu(myParamF As cls_OptionsFeu, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '-------------------------------------------------------------------------------------
+        '   28/10/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Lecture du bloc OPTIONS FEU
+        '-------------------------------------------------------------------------------------
+        '   myParamF    [S] :   Options à definir
+        '   Lignes      [E] :   lignes extraites du fichier de données
+        '   Index0      [E] :   Indice de la première ligne du bloc
+        '   IndexFin    [E] :   Indice la dernière ligne du bloc
+        '-------------------------------------------------------------------------------------
+
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+        Const NBCAR As Integer = 6
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(NBCAR, Mots(1).Length)).ToUpper
+
+                With myParamF
+                    Select Case MotCle
+
+                        Case "FIREDE" : .lCalcuFeu = CBool((Mots(nbMots)))
+                        Case "DELTAT" : .DeltaTCalcul = CDec(TraiteReal(Mots(nbMots)))
+                        Case "TEMP0" : .TempRef = CDec(TraiteReal(Mots(nbMots)))
+                        Case "EPSILO" : .EmissivityFire = CDec(TraiteReal(Mots(nbMots)))
+                        Case "ALPHAC" : .ConvectionCoef = CDec(TraiteReal(Mots(nbMots)))
+                        Case "SLABAL" : .ConvectionCoefDalle = CDec(TraiteReal(Mots(nbMots)))
+                        Case "SLAB08" : .AlphaSlab = CDec(TraiteReal(Mots(nbMots)))
+                        Case "PHI" : .PhiViewFactor = CDec(TraiteReal(Mots(nbMots)))
+                        Case "MOISTU" : .TeneurU = CDec(TraiteReal(Mots(nbMots)))
+
+                        Case "FRENCH" : .lANFrance = CBool((Mots(nbMots)))
+                        Case "VARIAB" : .lRhoCvar = CBool((Mots(nbMots)))
+                        Case "COMPRE" : .lArmaCompression = CBool((Mots(nbMots)))
+                        Case "COLDFO" : .lArmaFormeeAFroid = CBool((Mots(nbMots)))
+                        Case "SLABFE" : .lDalleFEM = CBool((Mots(nbMots)))
+                        Case "CONCRE" : .lReductionConcreteStrength = CBool((Mots(nbMots)))
+
+                        Case "SLABTM" : .tDalleEFmax = CDec(TraiteReal(Mots(nbMots)))
+
+                        Case "REINFT" : .MethodTempArma = (Mots(nbMots))
+
+                        Case "SURFAC"
+
+                            Select Case Mots(2).ToUpper
+                                Case "STEEL" : .TypeSurface = cls_OptionsFeu.enu_TypeSurface.AcierNu
+                                Case "HDGALVA" : .TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise
+                                Case "PROTECTION"
+                                    .TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege
+                                    .Protection = Mots(3)
+                                    .EpProtection = CDec(TraiteReal(Mots(nbMots)))
+                            End Select
+
+                        Case "LAMBDP" : .CustomLambdaP = CDec(TraiteReal(Mots(nbMots)))
+
                         Case Else : MsgBox("BLOC " & BkOPTIONS & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End With

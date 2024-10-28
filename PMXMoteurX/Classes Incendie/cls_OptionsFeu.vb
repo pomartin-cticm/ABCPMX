@@ -112,7 +112,7 @@
 
         Me.TeneurU = 0
         Me.lANFrance = True
-        Me.lRhoCvar = True
+        Me.lRhoCvar = False
 
         Me.MethodTempArma = enuTypeInterpoleTempArma.Moyenne
     End Sub

@@ -55,17 +55,17 @@
         Dim Temp_0(0 To nbLayers - 1) As Single, Temp_1(0 To nbLayers - 1) As Single
 
         'Parametres variables de la boucle de calcul
-        Dim rho_ As Single     'masse volumique du materiau d'une maille a un instant donne
-        Dim cp_ As Single      'chaleur specifique du materiau d'une maille a un instant donne
-        Dim rho_cp As Single    'produit rho * cp du materiau d'une maille a un instant donne
-        Dim lambda_ As Single   'conductivite thermique du materiau d'une maille a un instant donne
-        Dim val_dth As Single   'increment de temperature d'une maille pendant DeltaT
-        Dim h_net_ce As Single   'densite de flux convectif sur les faces exposees a un instant donne
-        Dim h_net_re As Single   'densite de flux radiatif sur les faces exposees a un instant donne
-        Dim h_net_de As Single   'densite totale de flux sur les faces exposees a un instant donne
-        Dim h_net_cn As Single   'densite de flux convectif sur les faces non exposees a un instant donne
-        Dim h_net_rn As Single   'densite de flux radiatif sur les faces non exposees a un instant donne
-        Dim h_net_dn As Single   'densite totale de flux sur les faces non exposees a un instant donne
+        Dim rho_ As Single          ' masse volumique du materiau d'une maille a un instant donne
+        Dim cp_ As Single           ' chaleur specifique du materiau d'une maille a un instant donne
+        Dim rho_cp As Single        ' produit rho * cp du materiau d'une maille a un instant donne
+        Dim lambda_ As Single       ' conductivite thermique du materiau d'une maille a un instant donne
+        Dim val_dth As Single       ' increment de temperature d'une maille pendant DeltaT
+        Dim h_net_ce As Single      ' densite de flux convectif sur les faces exposees a un instant donne
+        Dim h_net_re As Single      ' densite de flux radiatif sur les faces exposees a un instant donne
+        Dim h_net_de As Single      ' densite totale de flux sur les faces exposees a un instant donne
+        Dim h_net_cn As Single      ' densite de flux convectif sur les faces non exposees a un instant donne
+        Dim h_net_rn As Single      ' densite de flux radiatif sur les faces non exposees a un instant donne
+        Dim h_net_dn As Single      ' densite totale de flux sur les faces non exposees a un instant donne
 
         Dim dth_1 As Single, dth_2 As Single
         Dim h_11 As Single, h_21 As Single, lambda_11 As Single
@@ -108,22 +108,23 @@
             ElseIf i_ = nbLayers - 1 Then
                 'Face non exposee
                 h_net_cn = AlphaCSup * (ThetaR - Temp_0(i_))    'densite de flux convectif
-                h_net_rn = EpsilonF * EpsilonC * SigmaSB * ((ThetaR + 273.0) ^ 4 - (Temp_0(i_) + 273.0) ^ 4)    'densite de flux radiatif
+                'h_net_rn = EpsilonF * EpsilonC * SigmaSB * ((ThetaR + 273.0) ^ 4 - (Temp_0(i_) + 273.0) ^ 4)       'densite de flux radiatif
+                h_net_rn = EpsilonC * SigmaSB * ((ThetaR + 273.0) ^ 4 - (Temp_0(i_) + 273.0) ^ 4)                   'densite de flux radiatif
                 h_net_dn = h_net_cn + h_net_rn  'densite de flux net
 
             End If
 
 
             'Face inferieure de la couche i_
-            If i_ = 0 Then  'Exposee au feu
+            If i_ = 0 Then                              'Exposee au feu
 
-                dth_1 = ThetaG - Temp_0(i_) 'ecart de temperature entre les gaz chauds et la maille i_
+                dth_1 = ThetaG - Temp_0(i_)             'ecart de temperature entre les gaz chauds et la maille i_
                 h_11 = dth_1 / h_net_de
 
             Else  'Interieure
 
-                dth_1 = Temp_0(i_ - 1) - Temp_0(i_) 'ecart de temperature entre les mailles i_-1 et i_
-                h_11 = 0.5 * tLayers(i_ - 1)     'demi-epaisseur de la couche i_-1, sur laquelle se produit de la conduction entre les deux mailles
+                dth_1 = Temp_0(i_ - 1) - Temp_0(i_)     'ecart de temperature entre les mailles i_-1 et i_
+                h_11 = 0.5 * tLayers(i_ - 1)            'demi-epaisseur de la couche i_-1, sur laquelle se produit de la conduction entre les deux mailles
                 lambda_11 = EN1994_12.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_ - 1))
                 h_11 = h_11 / lambda_11
 
@@ -132,32 +133,47 @@
             'Face superieure de la couche i_
             If i_ < nbLayers - 1 Then  'Interieure
 
-                dth_2 = Temp_0(i_ + 1) - Temp_0(i_) 'ecart de temperature entre les mailles i_+1 et i_
-                h_21 = 0.5 * tLayers(i_ + 1)     'demi-epaisseur de la couche i_+1, sur laquelle se produit de la conduction entre les deux mailles
+                dth_2 = Temp_0(i_ + 1) - Temp_0(i_)     'ecart de temperature entre les mailles i_+1 et i_
+                h_21 = 0.5 * tLayers(i_ + 1)            'demi-epaisseur de la couche i_+1, sur laquelle se produit de la conduction entre les deux mailles
                 lambda_21 = EN1994_12.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_ + 1))
                 h_21 = h_21 / lambda_21
 
             Else  'Non exposee au feu
 
-                dth_2 = ThetaR - Temp_0(i_) 'ecart de temperature entre l'air ambiant et la maille i_
+                dth_2 = ThetaR - Temp_0(i_)             'ecart de temperature entre l'air ambiant et la maille i_
                 If Math.Abs(dth_2) > 0.0001 Then
                     h_21 = dth_2 / h_net_dn
                 End If
 
             End If
 
-            h_12 = 0.5 * tLayers(i_) / lambda_   'resistance thermique sur la demi-epaisseur inferieure de la maille i_
-            h_22 = 0.5 * tLayers(i_) / lambda_   'resistance thermique sur la demi-epaisseur superieure de la maille i_
+            h_12 = 0.5 * tLayers(i_) / lambda_          'resistance thermique sur la demi-epaisseur inferieure de la maille i_
+            h_22 = 0.5 * tLayers(i_) / lambda_          'resistance thermique sur la demi-epaisseur superieure de la maille i_
 
-            cst_1 = tLayers(i_) / (h_11 + h_12)
-            cst_2 = tLayers(i_) / (h_21 + h_22)
+            '=== Unité de h : (m2K)/W
+
+            'cst_1 = tLayers(i_) / (h_11 + h_12)        '==A Unité de cst: m*W/(m2K)=W/(mK)
+            'cst_2 = tLayers(i_) / (h_21 + h_22)
+            cst_1 = 1 / (h_11 + h_12)                   '==B Unité de cst: W/(m2K)
+            cst_2 = 1 / (h_21 + h_22)
+
+            '=== unité de q : A: K s W / (m2K) = Ws/(m2)
+            '                 B: K s W / (mK)  = Ws/m
 
             q_1 = dth_1 * DeltaT * cst_1        'energie fournie par la maille superieure ou l'air a temperature ambiante
             q_2 = dth_2 * DeltaT * cst_2        'energie fournie par la maille inferieure ou les gaz chauds
 
             q_z = q_1 + q_2                     'energie fournie a la maille
 
+            '=== Unité rho : kg/m3
+            '=== Unité cp  : J / (kgK) = Ws/(kgK)
+            '=== Unité k_1 : kg/m3 * Ws * m / (kgK) = Ws/(m2K)
+
             k_1 = rho_cp * tLayers(i_)          'energie interne de la maille i_ par increment de temperature
+
+            '=== Unité de dth :          A: Ws/(m) / (Ws/(m2K)) = Km
+            '                            B: Ws/(m2) / (Ws/(m2K))= K
+
             val_dth = q_z / k_1
             Temp_1(i_) = Temp_0(i_) + val_dth
 
@@ -165,7 +181,7 @@
 
         Next
 
-
+        Exit Sub
         'Calcul de l'échauffement d'une dalle en béton exposée à l'incendie normalisé en sous-face
         'Paramètres d'entrée:
         '   tDalle          epaisseur de la dalle                                       (m)

@@ -9,10 +9,10 @@
 BLOCK IDENTIFICATION
    Utilisateur           = 
    Entreprise            = 
-   NomProjet             = Projet Pr#1
+   NomProjet             = FEM
 
 BLOCK BEAM
-   BeaIden               = Poutre B#1
+   BeaIden               = Mixte Feu
    Comment               = 
    LCantilever           = False
    RCantilever           = False
@@ -98,35 +98,16 @@ BLOCK PROFIL
    Standart              = 
 
 BLOCK SLAB
-   Type                  = 1
-   td                    = 0,12
-   th                    = 0,04
+   Type                  = 0
+   td                    = 0,18
+   th                    = 0
    preDalle_ep           = 0,06
    preDalle_tjoi         = 0,05
-
-BLOCK STEELDECK
-   Label                 = Cofraplus_60 1.00
-   Company               = ArcelorMittal
-   lDatabase             = True
-   h_rs                  = 0
-   h_p                   = 0,058
-   b_b                   = 0,062
-   b_t                   = 0,101
-   e_p                   = 0,207
-   tp                    = 0,001
-   Orientation           = 1
-   msurf                 = 11,37
-   fyp                   = 350
-   ModuleWidth           = 1,035
-   Ieff                  = 0,0000006008
-   lPunched              = True
-   AppuiT                = 2
-   AppuiL                = 0
 
 BLOCK SLABCONCRETE
    LightC                = False
    Classe                = C20/25
-   RhoC                  = 2500
+   RhoC                  = 2300
    lCrackLimit           = True
    wk_max                = 0,0004
 
@@ -174,6 +155,26 @@ BLOCK OPTIONS
    lElasticDesign        = False
    lControlCrack         = False
 
+BLOCK FIRE_OPTIONS
+   FireDesign            = True
+   DeltaT                = 1
+   Temp0                 = 20
+   EpsilonF              = 1
+   AlphaC                = 25
+   SlabAlphaC            = 4
+   Slab085               = 1
+   Phi                   = 1
+   Moisture              = 0
+   FrenchAN              = True
+   VariableCDens         = False
+   CompressionReinf      = True
+   ColdFormReinf         = True
+   SlabFEM               = True
+   SlabTmax              = 0,01
+   ConcreteRedux         = False
+   ReinfTemp             = 0
+   Surface               = Protection 0 0,02
+   LambdP                = 0
 BLOCK GAMMA
    GammaM0               = 1,00
    GammaM1               = 1,0
@@ -211,7 +212,7 @@ BLOCK HIVOSS
 
 BLOCK LOADS_G1
    QSurf                 = 0
-   qDist                 = 1 0 4798,671 10 4798,671
+   qDist                 = 1 0 8537,078 10 8537,078
  
 BLOCK LOADS_G2
    QSurf                 = 0
