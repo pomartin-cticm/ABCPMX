@@ -159,7 +159,8 @@ BLOCK FIRE_OPTIONS
    FireDesign            = True
    DeltaT                = 1
    Temp0                 = 20
-   EpsilonF              = 1
+   FEpsilon              = 1
+   CEpsilon              = 0,7
    AlphaC                = 25
    SlabAlphaC            = 4
    Slab085               = 1
