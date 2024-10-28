@@ -1562,9 +1562,9 @@ Module Mod_Outils
                 tabAbbrege.Add(Symb)
                 Select Case Symb
                     Case "EN"
-                        tabLangue.Add("English")
+                        tabLangue.Add(ENGLISH)
                     Case "FR"
-                        tabLangue.Add("Français")
+                        tabLangue.Add(FRANCAIS)
                     Case "ES"
                         tabLangue.Add("Espanol")
                     Case "IT"

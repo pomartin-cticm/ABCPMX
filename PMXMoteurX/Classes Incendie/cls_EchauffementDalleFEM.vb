@@ -115,17 +115,17 @@
         Dim q_1 As Single, q_2 As Single, q_z As Single
         Dim cst_1 As Single, cst_2 As Single
 
-        Dim i_ As Integer
+        Dim i As Integer
         Dim EN1994_12 As New cls_EurocodesFeu
 
         'Temperature des couches de beton à l'instant val_t
-        For i_ = 0 To nbLayers - 1
-            Temp_0(i_) = ThetaC(i_)
-            Temp_1(i_) = Temp_0(i_)
+        For i = 0 To nbLayers - 1
+            Temp_0(i) = ThetaC(i)
+            Temp_1(i) = Temp_0(i)
         Next
 
         'Boucle sur les couches pour calculer la temperature de chacune à l'instant val_t + DeltaT
-        For i_ = 0 To nbLayers - 1
+        For i = 0 To nbLayers - 1
 
             'Initialisation de valeurs
             val_dth = 0
@@ -134,72 +134,69 @@
             h_12 = 0 : h_22 = 0
 
             'Caracteristiques thermiques du beton
-            rho_ = EN1994_12.Masse_volumique_beton(lNormal, lRhoCVariable, lGeneration1, RhoC, Temp_0(i_))
-            cp_ = EN1994_12.Chaleur_specifique_beton(lNormal, val_U, lGeneration1, Temp_0(i_))
+            rho_ = EN1994_12.Masse_volumique_beton(lNormal, lRhoCVariable, lGeneration1, RhoC, Temp_0(i))
+            cp_ = EN1994_12.Chaleur_specifique_beton(lNormal, val_U, lGeneration1, Temp_0(i))
             rho_cp = rho_ * cp_
-            lambda_ = EN1994_12.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_))
+            lambda_ = EN1994_12.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i))
 
             'Convection et rayonnement sur les faces inf et sup de la dalle
-            If i_ = 0 Then
+            If i = 0 Then
                 'Face exposee
-                h_net_ce = AlphaCInf * (ThetaG - Temp_0(i_))    'densite de flux convectif
-                h_net_re = EpsilonF * EpsilonC * SigmaSB * ((ThetaG + 273.0) ^ 4 - (Temp_0(i_) + 273.0) ^ 4)    'densite de flux radiatif
+                h_net_ce = AlphaCInf * (ThetaG - Temp_0(i))    'densite de flux convectif
+                h_net_re = EpsilonF * EpsilonC * SigmaSB * ((ThetaG + 273.0) ^ 4 - (Temp_0(i) + 273.0) ^ 4)    'densite de flux radiatif
                 h_net_de = h_net_ce + h_net_re  'densite de flux net
 
-            ElseIf i_ = nbLayers - 1 Then
+            ElseIf i = nbLayers - 1 Then
                 'Face non exposee
-                h_net_cn = AlphaCSup * (ThetaR - Temp_0(i_))    'densite de flux convectif
-                'h_net_rn = EpsilonF * EpsilonC * SigmaSB * ((ThetaR + 273.0) ^ 4 - (Temp_0(i_) + 273.0) ^ 4)       'densite de flux radiatif
-                h_net_rn = EpsilonC * SigmaSB * ((ThetaR + 273.0) ^ 4 - (Temp_0(i_) + 273.0) ^ 4)                   'densite de flux radiatif
+                h_net_cn = AlphaCSup * (ThetaR - Temp_0(i))    'densite de flux convectif
+                'h_net_rn = EpsilonF * EpsilonC * SigmaSB * ((ThetaR + 273.0) ^ 4 - (Temp_0(i) + 273.0) ^ 4)       'densite de flux radiatif
+                h_net_rn = EpsilonC * SigmaSB * ((ThetaR + 273.0) ^ 4 - (Temp_0(i) + 273.0) ^ 4)                   'densite de flux radiatif
                 h_net_dn = h_net_cn + h_net_rn  'densite de flux net
 
             End If
 
 
-            'Face inferieure de la couche i_
-            If i_ = 0 Then                              'Exposee au feu
+            'Face inferieure de la couche i
+            If i = 0 Then                              'Exposee au feu
 
-                dth_1 = ThetaG - Temp_0(i_)             'ecart de temperature entre les gaz chauds et la maille i_
+                dth_1 = ThetaG - Temp_0(i)             'ecart de temperature entre les gaz chauds et la maille i
                 h_11 = dth_1 / h_net_de
 
             Else  'Interieure
 
-                dth_1 = Temp_0(i_ - 1) - Temp_0(i_)     'ecart de temperature entre les mailles i_-1 et i_
-                h_11 = 0.5 * tLayers(i_ - 1)            'demi-epaisseur de la couche i_-1, sur laquelle se produit de la conduction entre les deux mailles
-                lambda_11 = EN1994_12.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_ - 1))
+                dth_1 = Temp_0(i - 1) - Temp_0(i)     'ecart de temperature entre les mailles i-1 et i
+                h_11 = 0.5 * tLayers(i - 1)            'demi-epaisseur de la couche i-1, sur laquelle se produit de la conduction entre les deux mailles
+                lambda_11 = EN1994_12.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i - 1))
                 h_11 = h_11 / lambda_11
 
             End If
 
-            'Face superieure de la couche i_
-            If i_ < nbLayers - 1 Then  'Interieure
+            'Face superieure de la couche i
+            If i < nbLayers - 1 Then  'Interieure
 
-                dth_2 = Temp_0(i_ + 1) - Temp_0(i_)     'ecart de temperature entre les mailles i_+1 et i_
-                h_21 = 0.5 * tLayers(i_ + 1)            'demi-epaisseur de la couche i_+1, sur laquelle se produit de la conduction entre les deux mailles
-                lambda_21 = EN1994_12.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_ + 1))
+                dth_2 = Temp_0(i + 1) - Temp_0(i)     'ecart de temperature entre les mailles i+1 et i
+                h_21 = 0.5 * tLayers(i + 1)            'demi-epaisseur de la couche i+1, sur laquelle se produit de la conduction entre les deux mailles
+                lambda_21 = EN1994_12.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i + 1))
                 h_21 = h_21 / lambda_21
 
             Else  'Non exposee au feu
 
-                dth_2 = ThetaR - Temp_0(i_)             'ecart de temperature entre l'air ambiant et la maille i_
+                dth_2 = ThetaR - Temp_0(i)             'ecart de temperature entre l'air ambiant et la maille i
                 If Math.Abs(dth_2) > 0.0001 Then
                     h_21 = dth_2 / h_net_dn
                 End If
 
             End If
 
-            h_12 = 0.5 * tLayers(i_) / lambda_          'resistance thermique sur la demi-epaisseur inferieure de la maille i_
-            h_22 = 0.5 * tLayers(i_) / lambda_          'resistance thermique sur la demi-epaisseur superieure de la maille i_
+            h_12 = 0.5 * tLayers(i) / lambda_          'resistance thermique sur la demi-epaisseur inferieure de la maille i
+            h_22 = 0.5 * tLayers(i) / lambda_          'resistance thermique sur la demi-epaisseur superieure de la maille i
 
             '=== Unité de h : (m2K)/W
 
-            'cst_1 = tLayers(i_) / (h_11 + h_12)        '==A Unité de cst: m*W/(m2K)=W/(mK)
-            'cst_2 = tLayers(i_) / (h_21 + h_22)
-            cst_1 = 1 / (h_11 + h_12)                   '==B Unité de cst: W/(m2K)
+            cst_1 = 1 / (h_11 + h_12)                   '== Unité de cst: W/(m2K)
             cst_2 = 1 / (h_21 + h_22)
 
-            '=== unité de q : A: K s W / (m2K) = Ws/(m2)
-            '                 B: K s W / (mK)  = Ws/m
+            'unité                   K s W / (mK)  = Ws/m
 
             q_1 = dth_1 * DeltaT * cst_1        'energie fournie par la maille superieure ou l'air a temperature ambiante
             q_2 = dth_2 * DeltaT * cst_2        'energie fournie par la maille inferieure ou les gaz chauds
@@ -210,46 +207,16 @@
             '=== Unité cp  : J / (kgK) = Ws/(kgK)
             '=== Unité k_1 : kg/m3 * Ws * m / (kgK) = Ws/(m2K)
 
-            k_1 = rho_cp * tLayers(i_)          'energie interne de la maille i_ par increment de temperature
+            k_1 = rho_cp * tLayers(i)          'energie interne de la maille i par increment de temperature
 
-            '=== Unité de dth :          A: Ws/(m) / (Ws/(m2K)) = Km
-            '                            B: Ws/(m2) / (Ws/(m2K))= K
+            '=== Unité de dth :       Ws/(m2) / (Ws/(m2K))= K
 
             val_dth = q_z / k_1
-            Temp_1(i_) = Temp_0(i_) + val_dth
+            Temp_1(i) = Temp_0(i) + val_dth
 
-            ThetaC(i_) = Temp_1(i_)
+            ThetaC(i) = Temp_1(i)
 
         Next
-
-        Exit Sub
-        'Calcul de l'échauffement d'une dalle en béton exposée à l'incendie normalisé en sous-face
-        'Paramètres d'entrée:
-        '   tDalle          epaisseur de la dalle                                       (m)
-        '   NbLayers         nombre de couche discrétisant la dalle
-        '   tLayers(i)       Épaisseur individuelle des couches                          (m)
-        '                   de i = 0 à NbLayer-1, i = 0 pour la couche inférieure
-        '   val_t               instant de la boucle de calcul                              (s)
-        '   DeltaT          incrément de temps                                          (s)
-        '   ThetaC(i)       température dans chaque couche i du béton, au temps t       (°C)
-        '   ThetaG          température des gaz chauds sous la dalle au temps val_t + DeltaT  (°C)
-        '   ThetaR          température de référence au-dessus de la dalle              (°C)
-        '   AlphaCInf       coefficient de convection pour la face exposée              (W/m2 K)
-        '   AlphaCSup       coefficient de convection pour la face non exposée          (W/m2 K)
-        '   val_U_              teneur en eau du béton (entre 0 et 10)                      (%)
-        '   EpsilonF        émissivité du feu
-        '   SigmaSB         constante de Stefan-Boltzmann
-        '   EpsilonC        émissivité de surface du béton
-        '   lNormal         indique si béton NC (true) ou LC (false)
-        '   RhoC            masse volumique du béton (à froid)                              (kg/m3)
-        '   lRhoCVariable   indique si on utilise la formule de rhoc de l’EN 1994-1-2 variant en fonction de la température, pour un béton normal.
-        '                   Si non, on utilise la valeur constante du paramètre RhoC.
-        '                   Pour le béton léger, on utilise toujours RhoC.
-        '   lANFrance       indique si on utilise l’Annexe Nationale française de l’EN 1994-1-2
-        '   val_LGeneration1    indique si génération 1 ou génération 2 des Eurocodes
-        '
-        'Paramètre en sortie:
-        '   ThetaC(i)       Température dans chaque couche i du béton, au temps t + DeltaT  (°C)
 
     End Sub
 

@@ -80,7 +80,8 @@
 
     Private Sub AfficherOptionsEnCours()
 
-        InitialiseLangues(Me.lst_LangueGUI, LogicielInfo.ListeLangue, Frm_OptionsLogiciel.pLocalLogicielOptions.IndLangue)
+        Dim lFrenchOnly As Boolean = LogicielOptions.lFrenchOnly And (Not LogicielOptions.lExpert)
+        InitialiseLangues(Me.lst_LangueGUI, LogicielInfo.ListeLangue, Frm_OptionsLogiciel.pLocalLogicielOptions.IndLangue, lFrenchOnly)
         InitialiseLangues(Me.lst_LangueNdC, LogicielInfo.ListeLangueNDC, Frm_OptionsLogiciel.pLocalLogicielOptions.IndLangueNDC)
 
         Me.txt_Firm.Text = Frm_OptionsLogiciel.pLocalLogicielOptions.CompanyName
@@ -89,17 +90,21 @@
     End Sub
 
 
-    Private Sub InitialiseLangues(ByRef MyLst As ListBox, ByVal tabLangues As String(), IndexL As Integer)
+    Private Sub InitialiseLangues(ByRef MyLst As ListBox, ByVal tabLangues As String(), IndexL As Integer,
+                                  Optional lFrenchOnly As Boolean = False)
 
         '--> Déclarations
 
         Dim i As Integer
+        Dim lDisplay As Boolean
 
         '--> Remplissage liste langue
 
         MyLst.Items.Clear()
         For i = 0 To tabLangues.Count - 1
-            MyLst.Items.Add(tabLangues(i))
+            lDisplay = (Not lFrenchOnly) Or (lFrenchOnly And tabLangues(i) = FRANCAIS)
+            If lDisplay Then _
+                MyLst.Items.Add(tabLangues(i))
         Next i
 
         MyLst.SelectedIndex = IndexL

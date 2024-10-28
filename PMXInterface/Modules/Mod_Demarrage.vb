@@ -15,6 +15,9 @@ Public Module Mod_Demarrage
         Dim lAvailable As Boolean
     End Structure
 
+    Public Const ENGLISH As String = "English"
+    Public Const FRANCAIS As String = "Français"
+
 #End Region
 
 #Region "===DEMARRAGE==="
@@ -104,6 +107,8 @@ Public Module Mod_Demarrage
 
         LogicielInfo.Maitre = EnuMaitre.CTICM
         'LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
+        'LogicielOptions.lFrenchOnly = (LogicielInfo.Maitre = EnuMaitre.CTICM)
+        LogicielOptions.lFrenchOnly = False
 
         InitialiseReglagesLogiciel()
         InitialiseVersion()
@@ -370,8 +375,8 @@ Public Module Mod_Demarrage
 
         '--> Initialisation
 
-        LogicielInfo.ListeLangue = {"English", "Français"}
-        LogicielInfo.ListeLangueNDC = {"English", "Français"}
+        LogicielInfo.ListeLangue = {ENGLISH, FRANCAIS}
+        LogicielInfo.ListeLangueNDC = {ENGLISH, FRANCAIS}
 
         If lDebug Then
             MyRep = MyRep & "\..\..\Langues"
@@ -394,7 +399,6 @@ Public Module Mod_Demarrage
             MsgBox("Erreur fichiers langues NdC non disponibles | Error NdC language files missing", MsgBoxStyle.Critical, "Mod_Demarrage/InitialiseLangues")
             Stop
         End If
-
 
     End Sub
 
@@ -1166,17 +1170,27 @@ Public Module Mod_Demarrage
         '   FichierLangue   [S] :   Fichier langue pour l'interface
         '-----------------------------------------------------------------------------------------------------------------
 
+        '--( Déclarations
+
+        Dim idxLangue As Integer = IndLangue
+
         If (LogicielInfo.ListeLangue.Count > 0) AndAlso (IndLangue >= 0) AndAlso (IndLangue < LogicielInfo.ListeLangue.Count) Then
+
+            '== En mode normal et en version CTICM : français
+
+            If LogicielOptions.lFrenchOnly And (Not LogicielOptions.lExpert) Then
+                idxLangue = Math.Max(idxLangue, IndiceFrancais)
+            End If
 
             If LogicielOptions.lDebug Then
                 FichierLangue = LogicielRep.Install & "\..\..\Langues\" & LogicielInfo.Racine & "_" &
-                                LogicielInfo.ListeLangue(IndLangue).Substring(0, 2).ToUpper & EXTENSIONLANGUE
+                                LogicielInfo.ListeLangue(idxLangue).Substring(0, 2).ToUpper & EXTENSIONLANGUE
 
             Else
                 'FichierLangue = LogicielRep.Install & "\Langues\" & LogicielInfo.Racine & "_" &
                 '                LogicielInfo.ListeLangue(IndLangue).Substring(0, 2).ToUpper & EXTENSIONLANGUE
                 FichierLangue = LogicielRep.Install & "\Langues\" & LogicielInfo.Racine & "_" &
-                               LogicielInfo.ListeLangue(IndLangue).Substring(0, 2).ToUpper & EXTENSIONLANGUE
+                                LogicielInfo.ListeLangue(idxLangue).Substring(0, 2).ToUpper & EXTENSIONLANGUE
             End If
 
         Else
@@ -1184,6 +1198,25 @@ Public Module Mod_Demarrage
         End If
 
     End Sub
+
+    Private Function IndiceFrancais() As Integer
+        '-----------------------------------------------------------------------------------------------------------------
+        '   28/10/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Renvoit l'indice de la langue française
+        '-----------------------------------------------------------------------------------------------------------------
+        '   
+        '-----------------------------------------------------------------------------------------------------------------
+
+        Dim Indice As Integer = -1
+        'Dim lCont As Boolean = True
+
+        If LogicielInfo.ListeLangue.Contains(FRANCAIS) Then
+            Indice = Array.IndexOf(LogicielInfo.ListeLangue, FRANCAIS)
+        End If
+
+        Return Indice
+    End Function
 
     ''' <summary>
     ''' Mise à jour du nom du fichier langue Note de calcul
