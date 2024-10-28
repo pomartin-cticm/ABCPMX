@@ -3,7 +3,7 @@ Imports System.Text
 Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports PMXMoteur2
 
-<TestClass()> Public Class UnitTest_ClsPoutre_EltsFinis
+<TestClass()> Public Class UnitTest_FEMPoutre
 
     '========================================================================================================================================
     '   CLASSE POUR LES ANALYSES ELTS FINIS DANS L'OBJET POUTRE
@@ -54,7 +54,7 @@ Imports PMXMoteur2
 
             .LongueurTravee(1) = Longueur
 
-            pPoutre.Section.typeSection = cls_Section.Enum_TypeSection.AcierSeul
+            pPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
 
         End With
 
@@ -91,7 +91,7 @@ Imports PMXMoteur2
 
         '# Chargements
 
-        pPoutre.Analyse.TransfertChargementU(pPoutre.ChargesU("G1"), 1, 1, pPoutre.LongueurTravee, pPoutre.largeurinfluence)
+        pPoutre.Analyse.TransfertChargementU(pPoutre.ChargesU("G1"), 1, 1, pPoutre.LongueurTravee, pPoutre.LargeurInfluence)
 
         '--> Calcul EF
 
@@ -163,7 +163,7 @@ Imports PMXMoteur2
 
             .LongueurTravee(1) = Longueur
 
-            pPoutre.Section.typeSection = cls_Section.Enum_TypeSection.AcierSeul
+            pPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
 
         End With
 
@@ -272,7 +272,7 @@ Imports PMXMoteur2
 
             .LongueurTravee(1) = Longueur
 
-            pPoutre.Section.typeSection = cls_Section.Enum_TypeSection.AcierSeul
+            pPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
 
         End With
 

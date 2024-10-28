@@ -263,7 +263,7 @@
 
         For iSTep = 0 To Me.NbStep - 1
 
-            TimeTarget = cls_VerifFeuAcier.TimeSteps(iSTep) * kConvMinSec
+            TimeTarget = cls_VerifFeuMixte.TimeSteps(iSTep) * kConvMinSec
             lCont = IsSmaller(TimeT, TimeTarget)
 
             Do While lCont
