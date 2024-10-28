@@ -237,7 +237,11 @@
 
         '--( Préparation du maillage de la dalle
 
-        EN_Feu.PrepareMaillageDalleTabulee(EpDalle, myBeam.Param.lGeneration1, NbTranches, EpTranche, zTranche)
+        If myBeam.ParamFeu.lDalleFEM Then
+            FEMDalle.PrepareMaillageDalleFEM(EpDalle, myBeam.ParamFeu.tDalleEFmax, NbTranches, EpTranche)
+        Else
+            EN_Feu.PrepareMaillageDalleTabulee(EpDalle, myBeam.Param.lGeneration1, NbTranches, EpTranche, zTranche)
+        End If
         If lMulti Then InitialiseCalculTempArma(myBeam.Dalle, NbTranches, EpTranche)
 
         If myBeam.ParamFeu.lDalleFEM Then

@@ -10,6 +10,47 @@
 
 #End Region
 
+#Region " Maillage "
+
+    Public Sub PrepareMaillageDalleFEM(tDalle As Decimal, EpEltMax As Decimal, ByRef nbLayers As Integer, ByRef tLayers() As Decimal)
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   28/10/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Préparation du maillage pour un calcul EF
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   tDalle      [E] :   Epaisseur totale de la dalle
+        '   EpElMax     [E] :   Epaisseur maximale d'une maille
+        '   nbLayers    [S] :   Nombre de mailles
+        '   tLayers     [S] :   Tableau des épaisseurs de maille
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim EpMaille As Decimal
+
+        '--( Nombre de mailles
+
+        nbLayers = Math.Floor(tDalle / EpEltMax)
+
+        If Not IsEqual(tDalle, EpEltMax * nbLayers) Then nbLayers += 1
+
+        '--( Epaisseur des mailles courantes (arrondi au mm près)
+
+        EpMaille = Math.Floor(tDalle / nbLayers * 1000) / 1000
+
+        '--( Tableau des épaisseurs
+
+        ReDim tLayers(nbLayers - 1)
+
+        For i = 0 To nbLayers - 2
+            tLayers(i) = EpMaille
+        Next
+
+        tLayers(nbLayers - 1) = tDalle - (nbLayers - 1) * EpMaille
+    End Sub
+
+#End Region
+
 #Region " Procédure numérique par différence finie "
 
     Sub Calcul_thermique_Dalle_beton(tDalle As Decimal, nbLayers As Integer, tLayers() As Decimal, DeltaT As Decimal,
