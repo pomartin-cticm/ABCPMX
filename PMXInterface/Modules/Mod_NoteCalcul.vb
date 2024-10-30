@@ -576,12 +576,13 @@ Module Mod_NoteCalcul
             Dim lDalleP As Boolean = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine)
             Dim lPerp As Boolean = (myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
             Dim FcK As Decimal = myBeam.Dalle.beton.Fck
+            Dim Fctk_005 As Decimal = myBeam.Dalle.beton.Fctk_005
             Dim GammaVs As Decimal = myBeam.Param.Gamma.GammaVs
             Dim GammaVc As Decimal = myBeam.Param.Gamma.GammaVc
             Dim Ecm As Decimal = myBeam.Dalle.beton.Ecm
             Dim Nr As Integer = myBeam.NombreGoujonsTransv(1, 0)
 
-            PRd = myBeam.Dalle.Goujons.ResistancePRd(lGeneration1, lDalleP, lPerp, myBeam.Dalle.Bac, Nr, FcK, Ecm, GammaVs, GammaVc)
+            PRd = myBeam.Dalle.Goujons.ResistancePRd(lGeneration1, lDalleP, lPerp, myBeam.Dalle.Bac, Nr, FcK, Ecm, Fctk_005, GammaVs, GammaVc)
             ChainePRd = "P\-Rd\= " & GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 4, 3, True, True)
             If Not lDalleP Then
                 ChainePRd = ChainePRd & " - n\-r\= = " & CStr(Nr)
@@ -2145,6 +2146,7 @@ Module Mod_NoteCalcul
                 Dim nr_min, nr_max As Integer
                 Dim Ecm, Fck As Decimal
                 Dim gammaVs, gammaVc As Decimal
+                Dim Fctk_005 As Decimal = MyBeam.Dalle.beton.Fctk_005
 
                 lGeneration1 = MyBeam.Param.lGeneration1
                 lDallePleine = (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
@@ -2160,18 +2162,23 @@ Module Mod_NoteCalcul
                 gammaVc = MyBeam.Param.Gamma.GammaVc
 
                 If lDallePleine Then
-                    AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
+                    AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL &
+                                GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, Fctk_005, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
                 Else 'dalle mixte
                     If lPerp Then
                         For nr_boucle As Integer = nr_min To nr_max
-                            AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True) & " (n\-r\= = " & nr_boucle & ")")
+                            AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL &
+                                        GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, Fctk_005, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True) & " (n\-r\= = " & nr_boucle & ")")
                             ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
-                            AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\=" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True) & " (n\-r\= = " & nr_boucle & ")")
+                            AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\=" & TABEGAL &
+                                        GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True) & " (n\-r\= = " & nr_boucle & ")")
                         Next
                     Else 'dalle parallèlle
-                        AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
+                        AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL &
+                                    GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, Fctk_005, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
                         ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-l\= =" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
-                        AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-l\=" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True))
+                        AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-l\=" & TABEGAL &
+                                    GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True))
                     End If
                 End If
 
@@ -10809,6 +10816,9 @@ Module Mod_NoteCalcul
         End If
 
         If lMixte Then
+            If Not lProtege Then
+                kSh = EN_Feu.kShMixte(myBeam.Section.ProfilA)
+            End If
         Else
 
             Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
@@ -11023,16 +11033,16 @@ Module Mod_NoteCalcul
 
         AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
         AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempAStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-        AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(kY, Enu_TypeVariable.SansType, 3, 2, False))
-        AddCellule(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(kE, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(kY, Enu_TypeVariable.SansType, 4, 3, False))
+        AddCellule(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(kE, Enu_TypeVariable.SansType, 4, 3, False))
 
-        AddCellule(LargCol(4), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
-        AddCellule(LargCol(5), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(4), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, False))
+        AddCellule(LargCol(5), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, False))
         If lBuckling Then
-            AddCellule(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, False))
             iCol = 7
         End If
-        AddCellule(LargCol(iCol), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereLTB(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(iCol), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereLTB(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, False))
 
     End Sub
 
@@ -11237,7 +11247,6 @@ Module Mod_NoteCalcul
 
     End Sub
 
-
     Private Sub EditionVerificationsFEUDetailMixte(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
         '   04/05/24 :  Création - POM
@@ -11262,9 +11271,158 @@ Module Mod_NoteCalcul
 
         EditionTemperatureFeuMixte(myBeam)
 
+        '## Tableau des résistances des connecteurs
+
+        EditionFeuResistancePRd(myBeam)
+
         '## Tableau des critères de résistance
 
         EditionCritereFeuMixteTemp(myBeam)
+
+    End Sub
+
+    Private Sub EditionFeuResistancePRd(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   18/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition du tableau des résistances PRd en fonction de la température
+        '   Pour les poutres mixtes
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+        Dim iStep As Integer
+
+        Dim NbReq As Integer = (cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1) * 1 + 2
+
+        '--( Entete du tableau
+
+        If NbReq + nbLignes > MAXLIGNEPPAG Then SautePage()
+
+        AddLigneNDC("\T10\U" & BlocFEU("PRD_STUDS") & "\u")
+        SauteLigne()
+
+        EnteteTableauFeuConnecteurs(NCOL, largcol)
+
+        '--( Remplissage tableau
+
+        For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
+            LigneTableauFeuConnecteurs(iStep, myBeam, NCOL, LargCol)
+        Next
+
+        '--( Fin
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub LigneTableauFeuConnecteurs(iStep As Integer, myBeam As cls_Poutre, NCOL As Integer, LargCol() As Single)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   30/10/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Ligne du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   iStep       [E] :   Indice du pas de temps
+        '   myVerifFeu  [E] :   Critères
+        '   NCOL        [E] :   Nombre de colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tab
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim EN_Feu As New cls_EurocodesFeu
+        Dim BTous As Integer = Bordures.Tous
+        Dim PRd As Decimal
+        Dim ThetaV As Decimal
+        Dim ThetaC As Decimal
+        Dim lLeger As Boolean
+        Dim lPleine As Boolean
+        Dim lPerp As Boolean
+        Dim Fck, Ecm, Fctk_005 As Decimal
+        Dim Nr As Decimal = 1
+        Dim GammaVfi As Decimal
+
+        '--( Initialisation 
+
+        ThetaV = myBeam.VerifFeuMixte.TempVStep(iStep)
+        ThetaC = myBeam.VerifFeuMixte.TempVcStep(iStep)
+        lLeger = myBeam.Dalle.beton.lLeger
+        lPleine = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee) Or (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine)
+        lPerp = (myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+        GammaVfi = myBeam.Param.Gamma.GammaV_fi
+        Fck = myBeam.Dalle.beton.Fck
+        Ecm = myBeam.Dalle.beton.Ecm
+        Fctk_005 = myBeam.Dalle.beton.Fctk_005
+
+        '--( Ligne
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        AddCellule(LargCol(0), BTous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
+
+        AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
+                   GetStringInUnitN(ThetaV, Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
+                   GetStringInUnitN(EN_Feu.ReducFuAcier(ThetaV), Enu_TypeVariable.SansType, 4, 3, False))
+
+        AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
+                   GetStringInUnitN(ThetaC, Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
+                   GetStringInUnitN(EN_Feu.ReducFckBeton(ThetaC, lLeger), Enu_TypeVariable.SansType, 4, 3, False))
+
+        PRd = myBeam.Dalle.Goujons.PRdStudFeu(ThetaV, ThetaC, myBeam.Param.lGeneration1, lLeger, lPleine, lPerp,
+                                              myBeam.Dalle.Bac, Nr, Fck, Ecm, Fctk_005, GammaVfi, GammaVfi)
+
+        AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
+                   GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 3, 2, True))
+
+    End Sub
+
+    Private Sub EnteteTableauFeuConnecteurs(ByRef NCOL As Integer, ByRef LargCol() As Single)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   30/10/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Entête du tableau des PRd des connecteurs
+        '-----------------------------------------------------------------------------------------------------------------
+        '   NCOL        [S] :   Nombre de colonnes dans le tableau
+        '   LargCol     [S] :   Largeur des colonnes du tab
+        '   lbuckling   [E] :   Indique si voilement par cisaillement
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Initialisation
+
+        NCOL = 6
+
+        ReDim LargCol(2)
+
+        LargCol(0) = 15
+        LargCol(1) = 10
+
+        Const POS As Integer = 10
+
+        '--( Affichage de l'entête
+
+        AddLigneNDC("\TABLEAU " & CStr(POS), False)
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
+
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-v\=")
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "k\-u,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-c\=")
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "k\-c,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "P\-Rd,\Sq\s\=")
 
     End Sub
 
@@ -11735,6 +11893,7 @@ Module Mod_NoteCalcul
         Dim LargCol() As Single = Nothing
         Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
         Dim NbReq As Integer = (cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1) * 2
+        Dim indice As Integer
 
         '--( Gestion titre et saut de page
 
@@ -11744,7 +11903,7 @@ Module Mod_NoteCalcul
             AddLigneNDC("\T10\U" & BlocFEU("TEMPPARTS") & "\u")
         End If
         SauteLigne()
-        NbReq += 2
+        NbReq += 3
 
         If NbReq + nbLignes > MAXLIGNEPPAG Then SautePage()
 
@@ -11756,9 +11915,28 @@ Module Mod_NoteCalcul
         Next
         FinTableau()
 
+        '--( Notes pour le tableau
+
+        indice = 1
+        If lBoard Then
+            AddLigneNDC("\T10(" & CStr(indice) & ") : " & BlocFEU("TABSTEELPRO"))
+        Else
+            AddLigneNDC("\T10(" & CStr(indice) & ") : " & BlocFEU("TABSTEELUPFLANGE") _
+                      & "\T35(" & CStr(indice + 1) & ") : " & BlocFEU("TABSTEELLOFLANGE") _
+                      & "\T60(" & CStr(indice + 2) & ") : " & BlocFEU("TABSTEELWEB"))
+            indice += 2
+        End If
+        If Not lAcierSeul Then
+
+            AddLigneNDC("\T10(" & CStr(indice) & ") : " & BlocFEU("TABCONCRETESLAB") _
+                      & "\T60(" & CStr(indice + 1) & ") : " & BlocFEU("TABCONNECTOR"))
+        End If
+        SauteLigne()
+
     End Sub
 
-    Private Sub EnteteTableauTempVerifFeuMixte(ByRef NCOL As Integer, ByRef LargCol() As Single, lUni As Boolean, Optional lAcierSeul As Boolean = False)
+    Private Sub EnteteTableauTempVerifFeuMixte(ByRef NCOL As Integer, ByRef LargCol() As Single,
+                                               lUni As Boolean, Optional lAcierSeul As Boolean = False)
         '-----------------------------------------------------------------------------------------------------------------
         '   04/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -11782,6 +11960,11 @@ Module Mod_NoteCalcul
         Dim BordinfG As Integer = Bordures.Tous - Bordures.Haut - Bordures.Droite
         Dim BordinfD As Integer = Bordures.Tous - Bordures.Haut - Bordures.Gauche
 
+        Dim BBGauche As Integer = Bordures.Tous - Bordures.Droite
+        Dim BBDroite As Integer = Bordures.Tous - Bordures.Gauche
+
+        Dim indice As Integer
+
         '--( Initialisation
 
         If lAcierSeul Then NCOL = 7 Else NCOL = 11
@@ -11800,6 +11983,31 @@ Module Mod_NoteCalcul
         '--( Affichage de l'entête
 
         AddLigneNDC("\TABLEAU " & CStr(POS), False)
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCellule(LargCol(0), Bordures.Aucun, PositionTexteInCell.Centre, "")
+        If lUni Then
+            AddCelluleFond(LargCol(1), BBGauche, PositionTexteInCell.Gauche, "(1)")
+            AddCelluleFond(LargCol(1), BBDroite, PositionTexteInCell.Droite, "")
+            indice = 1
+        Else
+            AddCelluleFond(LargCol(1), BBGauche, PositionTexteInCell.Gauche, "(1)")
+            AddCelluleFond(LargCol(1), BBDroite, PositionTexteInCell.Droite, "")
+            AddCelluleFond(LargCol(1), BBGauche, PositionTexteInCell.Gauche, "(2)")
+            AddCelluleFond(LargCol(1), BBDroite, PositionTexteInCell.Droite, "")
+            AddCelluleFond(LargCol(1), BBGauche, PositionTexteInCell.Gauche, "(3)")
+            AddCelluleFond(LargCol(1), BBDroite, PositionTexteInCell.Droite, "")
+            indice = 3
+        End If
+        If Not lAcierSeul Then
+            indice += 1
+            AddCelluleFond(LargCol(1), BBGauche, PositionTexteInCell.Gauche, "(" & CStr(indice) & ")")
+            AddCelluleFond(LargCol(1), BBDroite, PositionTexteInCell.Droite, "")
+            indice += 1
+            AddCelluleFond(LargCol(1), BBGauche, PositionTexteInCell.Gauche, "(" & CStr(indice) & ")")
+            AddCelluleFond(LargCol(1), BBDroite, PositionTexteInCell.Droite, "")
+        End If
 
         InitialiseLigneTableau(NCOL, HLIGNEENTETE)
 
@@ -12006,10 +12214,13 @@ Module Mod_NoteCalcul
 
         AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
 
-        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
-        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre,
+                   GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, False))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre,
+                   GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, False))
         If lBuckling Then
-            AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre,
+                       GetStringInUnitN(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, False))
         End If
 
     End Sub

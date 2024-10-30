@@ -112,7 +112,7 @@ Public Class cls_VerifFeuAcier
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
 
-        Dim VRd0, MplRd0, MelRd0 As Decimal     ' Résistance de la section à température ambiante
+        Dim VRd0, MplRd0, MelRd0, MRk0 As Decimal     ' Résistance de la section à température ambiante
         Dim zANP0, zANE0 As Decimal
         Dim MplRdFeu() As Decimal               ' Moments résistants plastiques aux Time Steps
         Dim MelRdFeu() As Decimal               ' Moments résistants élastiques aux Time Steps
@@ -127,8 +127,9 @@ Public Class cls_VerifFeuAcier
         Dim lOK As Boolean
 
         Dim lMontantR As Boolean = myBeam.lTraveeConsoleGauche And myBeam.lTraveeConsoleDroite
+        Dim RatioGammaM As Decimal
 
-        Dim pTimeR As Decimal
+        'Dim pTimeR As Decimal
 
         '--( Initialisation
 
@@ -158,6 +159,8 @@ Public Class cls_VerifFeuAcier
 
         myBeam.ProprietesVerifAcier(True, MplRd0, zANP0, MelRd0, zANE0)
         VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW)
+        MRk0 = MplRd0 * myBeam.Param.Gamma.GammaM0
+        RatioGammaM = myBeam.Param.Gamma.GammaM0 / myBeam.Param.Gamma.GammaM_fi
 
         '# Classes de la section
 
@@ -217,9 +220,9 @@ Public Class cls_VerifFeuAcier
 
             '# Résistance de la section 
 
-            VplRdFeu(iSTep) = kReducY * VRd0
-            MplRdFeu(iSTep) = kReducY * MplRd0
-            MelRdFeu(iSTep) = kReducY * MelRd0
+            VplRdFeu(iSTep) = RatioGammaM * kReducY * VRd0
+            MplRdFeu(iSTep) = RatioGammaM * kReducY * MplRd0
+            MelRdFeu(iSTep) = RatioGammaM * kReducY * MelRd0
             VbRdFeu(iSTep) = myBeam.Section.VbRdFeu(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW, lMontantR, kReducY, kReducE)
 
         Next
@@ -260,7 +263,7 @@ Public Class cls_VerifFeuAcier
                 kReducY = EN_Feu.ReducFyAcier(TempAStep(iSTep))
                 kReducE = EN_Feu.ReducEyAcier(TempAStep(iSTep))
 
-                RunCritereDeversement(myBeam, iCombi, iSTep, MEd, AlphaCr, kReducY, kReducE, MplRdFeu(iSTep))
+                RunCritereDeversement(myBeam, iCombi, iSTep, MEd, AlphaCr, kReducY, kReducE, MRk0)
 
             Next
 
@@ -498,7 +501,7 @@ Public Class cls_VerifFeuAcier
 #Region " Vérifications de la résistance au déversement "
 
     Private Sub RunCritereDeversement(myBeam As cls_Poutre, iCombi As Integer, iStep As Integer, MEd(,) As Decimal,
-                                      AlphaCr As Decimal, kReducY As Decimal, kReducE As Decimal, MRd As Decimal)
+                                      AlphaCr As Decimal, kReducY As Decimal, kReducE As Decimal, MRk As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   07/12/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -512,6 +515,7 @@ Public Class cls_VerifFeuAcier
         '   kReducY         [E] :   Coefficient de réduction de fy / température    
         '   kReducE         [E] :   Coefficient de réduction de E / température    
         '   MRd             [E] :   Moment résistant de la section à froid
+        '   MRk             [E] :   Moment résistant de la section à froid, valeur caractéristique
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -521,7 +525,7 @@ Public Class cls_VerifFeuAcier
         Dim iFinTrav As Integer = myBeam.IndiceDerniereTravee
         Dim iTrav, iNode As Integer
         Dim iDebNod, iFinNod As Integer
-        Dim MEdmax, Mcr, MRk As Decimal
+        Dim MEdmax, Mcr As Decimal
         Dim MbRd, KhiLT, LambdaBLT, AlphaLT As Decimal
         Dim EN1993 As New cls_Eurocodes
         'Dim zANE, InertieY As Decimal
@@ -531,7 +535,6 @@ Public Class cls_VerifFeuAcier
         '--> Initialisation
 
         GammaMFi = myBeam.Param.Gamma.GammaM_fi
-        MRk = MRd * GammaMFi
 
         '--> Calcul Alpha Critique
 
@@ -557,7 +560,6 @@ Public Class cls_VerifFeuAcier
             '# Moment critique
 
             Mcr = AlphaCr * MEdmax
-            'McrLTB(iCombi, iTrav) = Mcr
 
             If IsGreater(kReducE, 0) Then
                 '# Elancement réduit

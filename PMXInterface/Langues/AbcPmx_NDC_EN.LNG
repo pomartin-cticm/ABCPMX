@@ -633,6 +633,13 @@ UPPERFEXPOSED			= The upper flange is exposed to fire
 SECTIONFACTOR			= Section factor of the steel profile
 SECTIONFACTORBOX		= Section factor of the box profile
 SHADOWFACTOR			= Shadow factor
+TABSTEELPRO				= Steel profile
+TABSTEELUPFLANGE		= Upper flange
+TABSTEELLOFLANGE		= Lower flange
+TABSTEELWEB				= Web
+TABCONCRETESLAB			= Upper and lower fibres of the concrete slab
+TABCONNECTOR			= Welded stud
+PRD_STUDS				= Shear resistance of the welded studs
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations

@@ -237,15 +237,18 @@ Public Class cls_Poutre
         Dim GammaVs, GammaVc As Decimal
         Dim sX As Decimal
         Dim myFluxRd As Decimal
+        Dim Fctk_005 As Decimal
+
         GammaVs = Me.Param.Gamma.GammaVs
         GammaVc = Me.Param.Gamma.GammaVc
         FcK = Me.Dalle.beton.Fck
         Ecm = Me.Dalle.beton.Ecm
+        Fctk_005 = Me.Dalle.beton.Fctk_005
 
         '--( Calcul
 
         Nr = Me.NombreGoujonsTransv(iTravee, iZone)
-        PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, Nr, FcK, Ecm, GammaVs, GammaVc)
+        PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, Nr, FcK, Ecm, Fctk_005, GammaVs, GammaVc)
         sX = Me.EntraxeLongiGoujons(iTravee, iZone)
         myFluxRd = Nr * PRd / sX
 
@@ -2922,6 +2925,7 @@ Public Class cls_Poutre
         Dim lDallePleine, lPerp As Boolean
         Dim Ecm, Fck As Decimal
         Dim gammaVs, gammaVc As Decimal
+        Dim Fctk_005 As Decimal
 
         '--( Initialisation
 
@@ -2947,6 +2951,7 @@ Public Class cls_Poutre
         lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
         Ecm = Me.Dalle.beton.Ecm
         Fck = Me.Dalle.beton.Fck
+        Fctk_005 = Me.Dalle.beton.Fctk_005
         gammaVs = 1
         gammaVc = 1
 
@@ -2980,7 +2985,7 @@ Public Class cls_Poutre
 
                         nR = Me.NombreGoujonsTransv(iTravee, IndZoneConnex(iElt))
                         sX = Me.EntraxeLongiGoujons(iTravee, IndZoneConnex(iElt))
-                        PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
+                        PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
                         kSc = 0.7 * PRd / DeltaD
 
                         cStiff = nR * kSc / sX
@@ -5901,6 +5906,7 @@ Public Class cls_Poutre
         Dim lDallePleine As Boolean
         Dim lPerp As Boolean
         Dim Ecm, Fck As Decimal
+        Dim Fctk_005 As Decimal
         Dim gammaVs, gammaVc As Decimal
         Dim nR As Integer
         Dim pEspace As Decimal
@@ -5916,6 +5922,7 @@ Public Class cls_Poutre
         lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
         Ecm = Me.Dalle.beton.Ecm
         Fck = Me.Dalle.beton.Fck
+        Fctk_005 = Me.Dalle.beton.Fctk_005
         gammaVs = Me.Param.Gamma.GammaVs
         gammaVc = Me.Param.Gamma.GammaVc
         lBacNervuresPerpContinues = (Me.Dalle.lMixte And Me.Dalle.Bac.lPerpendiculaire And Me.Dalle.Bac.lNervuresContinues)
@@ -5934,7 +5941,7 @@ Public Class cls_Poutre
                 pEspace = Me.EntraxeLongiGoujons(iTravee, iZone)
 
                 nR = Me.NombreGoujonsTransv(iTravee, iZone)
-                PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
+                PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
 
                 NbCZone = Me.NombreGoujonTotParZone(iTravee, iZone)
                 LongZone = Me.LongueurZone(iTravee, iZone)

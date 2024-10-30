@@ -453,6 +453,35 @@ Public Class cls_GoujonSoude
 
     End Function
 
+    Public Function PRdBacPerpendiculaireG2_AnnexeG(myBac As cls_Bac, Fctk_005 As Decimal, nr As Integer, GammaVC As Decimal, GammaVS As Decimal)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   02/08/23 :  Création - GUD
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Calcul de la résistance PRd avec un bac perpendiculaire lorsque les conditions ne sont pas réunis -> Annexe G
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBac       [E] :   Bac acier
+        '   Fctk_005    [E] :   Résistance caractéristique à la raction du béton, avec fractile 005
+        '   nr          [E] :   Nombre de goujons disposés transversalement au droit du goujon
+        '   GammaVC     [E] :   Coefficient partiel pour la seconde équation (béton)
+        '   GammaVS     [E] :   Coefficient partiel pour la première équation (acier)
+        '-----------------------------------------------------------------------------------------------------------------
+
+
+        '--> Déclaration
+
+        Dim PRdC, PRdS As Decimal
+
+        '--> Calcul
+
+        PRdS = PRdBacPerpendiculaireG2_AnnexeG_Acier(GammaVS)
+        PRdC = PRdBacPerpendiculaireG2_AnnexeG_Beton(myBac, Fctk_005, nr, GammaVC)
+
+        '--> Fin
+
+        Return Math.Min(PRdC, PRdS)
+
+    End Function
+
     Public Function PRdBacPerpendiculaireG2_AnnexeG(MyPoutre As cls_Poutre, nr As Integer, GammaVC As Decimal, GammaVS As Decimal)
         '-----------------------------------------------------------------------------------------------------------------
         '   02/08/23 :  Création - GUD
@@ -552,6 +581,60 @@ Public Class cls_GoujonSoude
         Return PRd
     End Function
 
+    Public Function PRdBacPerpendiculaireG2_AnnexeG_Beton(myBac As cls_Bac, Fctk_005 As Decimal, nr As Integer, GammaVC As Decimal,
+                                                          Optional kuTheta As Decimal = 1, Optional kcTheta As Decimal = 1) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------
+        '   18/07/23 :  Création - GUD
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Calcul de la résistance PRd,c avec un bac perpendiculaire lorsque les conditions ne sont pas réunis -> Annexe G
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBac       [E] :   Bac acier
+        '   nr          [E] :   Nombre de goujons disposés transversalement au droit du goujon
+        '   Fctk_005    [E] :   Résistance caractéristique à la raction du béton, avec fractile 005
+        '   GammaVC     [E] :   Coefficient partiel pour la seconde équation (béton)
+        '   kuTheta     [E] :   Coefficient de réduction en situation d'incendie (y compris le facteur 0.8) pour la partie acier
+        '   kcTheta     [E] :   Coefficient de réduction en situation béton pour la partie béton
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim PRd As Decimal
+        Dim hA, dp, C2, C2_min, C2_max, Wsc, Mpl_sc, sy, ku As Decimal
+        Dim ny As Decimal
+
+        '--> Calcul
+
+        hA = hsc - myBac.Hp
+        dp = 0.82 * myBac.Hp - d / 2
+
+        C2_min = 1
+        C2_max = 1.35
+        C2 = 1.85 * myBac.Hp / myBac.LargeurB0
+        C2 = Math.Max(C2, C2_min)
+        C2 = Math.Min(C2, C2_max)
+
+        If nr = 1 Then
+            ny = 2
+            sy = 0
+        Else
+            ny = Math.Min(1 + (hA - 2 * Me.d) / (0.52 * Me.d), 2)
+            sy = 4 * d
+        End If
+
+        If myBac.lPreperce = False And myBac.Tp >= 0.001 Then
+            ku = 1.25
+        Else
+            ku = 1
+        End If
+
+        Wsc = myBac.Bt ^ 2 / 6 * (2.4 * Me.hsc + (nr - 1) * sy) 'm3
+        Mpl_sc = (1 / 6) * Me.Fu * Me.d ^ 3 * kConvMPaPa        'Valeur en N.m
+
+        PRd = Me.kcc * C2 * ku / GammaVC * (kcTheta * Fctk_005 * kConvMPaPa * Wsc / (myBac.Hp * nr) + kuTheta * ny * Mpl_sc / dp) 'N
+
+        Return PRd
+    End Function
+
 #End Region
 
 #Region " Résistance dalle mixte avec Bac parrallèle "
@@ -640,7 +723,7 @@ Public Class cls_GoujonSoude
 
     Public Function ResistancePRd(lGeneration1 As Boolean, lDallePleine As Boolean, lPerpendiculaire As Boolean,
                                   MyBac As cls_Bac, nR As Integer,
-                                  Fck As Decimal, Ecm As Decimal, gammaVS As Decimal, gammaVC As Decimal) As Decimal
+                                  Fck As Decimal, Ecm As Decimal, Fctk_005 As Decimal, gammaVS As Decimal, gammaVC As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   31/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -652,6 +735,7 @@ Public Class cls_GoujonSoude
         '   MyBac           [E] :   Bac pour les dalles mixtes
         '   nR              [E] :   Nombre de connecteur par rangée
         '   FcK, Ecm        [E] :   Résistance à la compression et module élastique du béton
+        '   Fctk_005        [E] :   Résistance caractéristique à la raction du béton, avec fractile 005
         '   gammaVS         [E] :   Coefficient partiel pour le terme lié à l'acier du connecteur
         '   gammaVC         [E] :   Coefficient partiel pour le terme lié au béton
         '-----------------------------------------------------------------------------------------------------------------
@@ -685,6 +769,7 @@ Public Class cls_GoujonSoude
 
                     If Me.lAnnexeG(MyBac) Then
                         'pPRd = Me.PRdBacPerpendiculaireG2_AnnexeG(, nR, gammaVC, gammaVS)
+                        pPRd = Me.PRdBacPerpendiculaireG2_AnnexeG(MyBac, Fctk_005, nR, gammaVC, gammaVS)
                     Else
                         pPRd = Me.PRdBacPerpendiculaireG2(Fck, Ecm, gammaVS, gammaVC, nR, MyBac)
                     End If
@@ -730,5 +815,111 @@ Public Class cls_GoujonSoude
     End Function
 
 #End Region
+
+#Region " Résistance des connecteurs à chaud "
+
+    Public Function PRdStudFeu(ThetaV As Decimal, ThetaC As Decimal, lGeneration1 As Boolean, lBetonLeger As Boolean,
+                               lDallePleine As Boolean, lPerpendiculaire As Boolean, MyBac As cls_Bac, nR As Integer,
+                               Fck As Decimal, Ecm As Decimal, Fctk_005 As Decimal, gammaVS As Decimal, gammaVC As Decimal) As Decimal
+        '------------------------------------------------------------------------------------------------------------------------
+        '   30/10/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la résistance du connecteur en situation d'incendie
+        '------------------------------------------------------------------------------------------------------------------------
+        '   ThetaV          [E] :   Température du connecteur
+        '   ThetaC          [E] :   Température du béton autour du connecteur
+        '   lGeneration1    [E] :   Indique si génération 1 ou 2 de l'EN 1994
+        '   lBetonLeger     [E] :   Indique si béton léger
+        '   lDallePleine    [E] :   Indique si dalle pleine ou dalle mixte
+        '   lPerpendiculaire[E] :   Indique si bac perpendiculaire, pour les dalles mixtes
+        '   MyBac           [E] :   Bac pour les dalles mixtes
+        '   nR              [E] :   Nombre de connecteur par rangée
+        '   FcK, Ecm        [E] :   Résistance à la compression et module élastique du béton    (à froid)
+        '   Fctk_005        [E] :   Résistance caractéristique à la raction du béton, avec fractile 005
+        '   gammaVS         [E] :   Coefficient partiel pour le terme lié à l'acier du connecteur
+        '   gammaVC         [E] :   Coefficient partiel pour le terme lié au béton 
+        '------------------------------------------------------------------------------------------------------------------------
+        '   Pour la génération 1 : application de l'EN 1994-1-2: 2005 § 4.3.4.2.5
+        '   Pour la génération 2 : application du prEN 1994-1-2: 2024 § 7.4.2.2.3
+        '------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim PRd, PRdS, PRdC, PRdDP As Decimal
+        Dim kuTheta, kcTheta As Decimal
+        Dim kT, kL As Decimal
+
+        Dim ENFeu As New cls_EurocodesFeu
+
+        '--( Calcul des coefficients de réduction en fonction de la température
+
+        kuTheta = ENFeu.ReducFuAcier(ThetaV)
+        kcTheta = ENFeu.ReducFckBeton(ThetaC, lBetonLeger)
+
+        '--( Résistances en dalle pleine
+
+        PRdS = PRdDallePleineG1G2Acier(gammaVS)
+        If lGeneration1 Then
+            PRdC = PRdDallePleineG1Beton(Fck, Ecm, gammaVC)
+        Else
+            PRdC = PRdDallePleineG2Beton(Fck, Ecm, gammaVC)
+        End If
+
+        '--( Calcul de la résistance
+
+        If lGeneration1 Then
+            '# Génération 1 de l'EN 
+
+            '## PRd en dalle pleine
+            PRdDP = Math.Min(0.8 * kuTheta * PRdS, kcTheta * PRdC)
+
+            If lDallePleine Then
+                PRd = PRdDP
+            Else
+                If lPerpendiculaire Then
+                    kT = CoefkT(nR, MyBac)
+                    PRd = kT * PRdDP
+                Else
+                    kL = CoefkL(MyBac)
+                    PRd = kL * PRdDP
+                End If
+            End If
+
+        Else
+            '# Génération 2 de l'EN 
+
+            '## PRd en dalle pleine
+            PRdDP = Math.Min(0.8 * kuTheta * PRdS, kcTheta * PRdC)
+
+            If lDallePleine Then
+                PRd = PRdDP
+            Else
+                If lPerpendiculaire Then
+
+                    If Me.lAnnexeG(MyBac) Then
+
+                        PRdS = PRdBacPerpendiculaireG2_AnnexeG_Acier(gammaVS)
+                        PRdC = PRdBacPerpendiculaireG2_AnnexeG_Beton(MyBac, Fctk_005, nR, gammaVC, 0.8 * kuTheta, kcTheta)
+
+                        PRd = Math.Min(0.8 * kuTheta * PRdS, PRdC)
+
+                    Else
+                        kT = CoefkT(nR, MyBac)
+                        PRd = kT * PRdDP
+                    End If
+                Else
+                    kL = CoefkL(MyBac)
+                    PRd = kL * PRdDP
+                End If
+            End If
+
+        End If
+
+        Return PRd
+
+    End Function
+
+#End Region
+
 
 End Class

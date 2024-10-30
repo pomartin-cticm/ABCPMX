@@ -632,6 +632,13 @@ UPPERFEXPOSED			= La semelle supérieure est exposée au feu
 SECTIONFACTOR			= Massiveté du profilé métallique
 SECTIONFACTORBOX		= Facteur de massiveté enveloppe
 SHADOWFACTOR			= Facteur d'ombre
+ABSTEELPRO				= Profilé en acier
+TABSTEELUPFLANGE		= Semelle supérieure
+TABSTEELLOFLANGE		= Semelle inférieure
+TABSTEELWEB				= Âme
+TABCONCRETESLAB			= Fibres inférieure et supérieure de la dalle
+TABCONNECTOR			= Goujons soudés
+PRD_STUDS				= Résistance des goujons soudés
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Evaluation des vibrations du plancher

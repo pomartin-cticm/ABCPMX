@@ -218,6 +218,8 @@ Imports PMXMoteur2
 
 #Region " VALIDATION : résistance des connecteurs (ELU)"
 
+        Dim Fctk_005 As Decimal = myPoutre.Dalle.beton.Fctk_005
+
         Valeur = myPoutre.Dalle.Goujons.PRdDallePleineG1G2Acier(myPoutre.Param.Gamma.GammaVs)
         ValRef = 81.7 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
@@ -228,24 +230,24 @@ Imports PMXMoteur2
 
         '--> Calcul avec 1 connecteur par onde 
         Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine, 'VALEUR CORRIGEE avec Ecm = 31 GPA
-                                                         myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
-                                                         myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
-                                                         31000, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
+                                                      myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
+                                                      myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
+                                                      31000, Fctk_005, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 52.5 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine, 'VALEUR CORRIGEE avec Ecm = 31 GPA
-                                                         myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
-                                                         myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
-                                                         myPoutre.Dalle.beton.Ecm, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
+                                                      myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
+                                                      myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
+                                                      myPoutre.Dalle.beton.Ecm, Fctk_005, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 52.897 * 1000 'VALEUR CALCULEE à la main avec le vrai Ecm = 31.476 GPa
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Calcul avec 2 connecteurs par ondes
         Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
-                                                         myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
-                                                         2, myPoutre.Dalle.beton.Fck,
-                                                         31000, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
+                                                      myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
+                                                      2, myPoutre.Dalle.beton.Fck,
+                                                      31000, Fctk_005, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 37.1 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
@@ -1680,6 +1682,8 @@ Imports PMXMoteur2
 
 #Region " VALIDATION : Résistance des connecteurs (ELU) "
 
+        Dim Fctk_005 As Decimal = myPoutre.Dalle.beton.Fctk_005
+
         Valeur = myPoutre.Dalle.Goujons.PRdDallePleineG1G2Acier(myPoutre.Param.Gamma.GammaVs)
         ValRef = 81.7 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
@@ -1692,14 +1696,14 @@ Imports PMXMoteur2
         Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
                                                          myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
                                                          2, myPoutre.Dalle.beton.Fck,
-                                                         31000, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
+                                                         31000, Fctk_005, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 37.1 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
                                                          myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
-                                                         2, myPoutre.Dalle.beton.Fck,
-                                                         myPoutre.Dalle.beton.Ecm, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
+                                                         2, myPoutre.Dalle.beton.Fck, myPoutre.Dalle.beton.Ecm, Fctk_005,
+                                                         myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 37.44 * 1000 'valeur recalculée à la main
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
@@ -2448,8 +2452,8 @@ Imports PMXMoteur2
 
         Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
                                                       myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
-                                                      2, myPoutre.Dalle.beton.Fck,
-                                                      myPoutre.Dalle.beton.Ecm, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
+                                                      2, myPoutre.Dalle.beton.Fck, myPoutre.Dalle.beton.Ecm, myPoutre.Dalle.beton.Fctk_005,
+                                                      myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 41.13 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
@@ -2879,8 +2883,8 @@ Imports PMXMoteur2
 
         Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
                                                       myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
-                                                      2, myPoutre.Dalle.beton.Fck,
-                                                      myPoutre.Dalle.beton.Ecm, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
+                                                      2, myPoutre.Dalle.beton.Fck, myPoutre.Dalle.beton.Ecm, myPoutre.Dalle.beton.Fctk_005,
+                                                      myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 41.13 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
