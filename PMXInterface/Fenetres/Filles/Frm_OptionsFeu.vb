@@ -250,7 +250,7 @@ Public Class Frm_OptionsFeu
 
             '--> Partie qui concerne les paramètres de la poutre
 
-            chk_CalculFeu.Checked = .lCalcuFeu
+            chk_CalculFeu.Checked = .lCalculFeu
             Affiche_SurfaceType()
 
             Me.chk_ProtectionThermique.Checked = (MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
@@ -471,7 +471,7 @@ Public Class Frm_OptionsFeu
 
         'Gestion de l'affichage en fonction de si le calcul au feu est demandé ou non
 
-        Dim lCalculFeu As Boolean = MyPoutreLoc.ParamFeu.lCalcuFeu
+        Dim lCalculFeu As Boolean = MyPoutreLoc.ParamFeu.lCalculFeu
 
         cmb_SurfaceType.Enabled = lCalculFeu
         chk_AcierGalva.Enabled = lCalculFeu
@@ -624,7 +624,7 @@ Public Class Frm_OptionsFeu
 
         lBuild = True
 
-        MyPoutreLoc.ParamFeu.lCalcuFeu = chk_CalculFeu.Checked
+        MyPoutreLoc.ParamFeu.lCalculFeu = chk_CalculFeu.Checked
         AfficherPoutreEnCours()
 
         lBuild = False
@@ -844,7 +844,7 @@ Public Class Frm_OptionsFeu
 
             '--> Partie paramètres de la poutre
 
-            GereTransfertValeur(MyPoutreLoc.ParamFeu.lCalcuFeu, .lCalcuFeu, lModif)
+            GereTransfertValeur(MyPoutreLoc.ParamFeu.lCalculFeu, .lCalculFeu, lModif)
 
             If MyPoutreLoc.ParamFeu.TypeSurface <> .TypeSurface Then
                 lModif = True

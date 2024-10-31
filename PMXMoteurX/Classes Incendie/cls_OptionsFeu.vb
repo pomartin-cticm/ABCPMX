@@ -30,7 +30,7 @@
     Public lArmaCompression As Boolean                      ' Indique si on prend en compte les armatures comprimées (dans l'enrobage partiel)
     Public lArmaFormeeAFroid As Boolean                     ' Indique si les armatures pour le béton sont formées à froid (True) ou non (False)
 
-    Public lCalcuFeu As Boolean                             ' Indique si on effectue le calcul au feu
+    Public lCalculFeu As Boolean                            ' Indique si on effectue le calcul au feu
 
     Public lDalleFEM As Boolean                             ' Indique pour les poutres mixtes si on calcule l'échauffement par une analyse EF
     Public tDalleEFmax As Decimal                           ' Epaisseur maximale d'un elt dalle pour le calcul numérique de l'échauffement de la dalle
@@ -95,7 +95,7 @@
 
         Me.AlphaSlab = 1
 
-        Me.lCalcuFeu = True
+        Me.lCalculFeu = True
         Me.lArmaCompression = True
         Me.lArmaFormeeAFroid = True
 

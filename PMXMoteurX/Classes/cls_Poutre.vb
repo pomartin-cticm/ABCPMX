@@ -5532,7 +5532,7 @@ Public Class cls_Poutre
         'MyPoutre.InitialiseCombiA_ELU()
         Me.InitialiseCombiA(cls_Poutre.nbCombELU, Me.lCombELU, Me.CoefCombELU, strRacineELU, Me.CombiA_ELU)
         Me.InitialiseCombiA(cls_Poutre.nbCombELS, Me.lCombELS, Me.CoefCombELS, strRacineELS, Me.CombiA_ELS)
-        If Me.ParamFeu.lCalcuFeu Then _
+        If Me.ParamFeu.lCalculFeu Then _
         Me.InitialiseCombiA(cls_Poutre.nbCombFeu, Me.lCombFeu, Me.CoefCombFeu, strRacineELF, Me.CombiA_ELF)
         Me.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, Me.lCombELCURules, Me.CoefCombELCU, strRacineELUC, Me.CombiA_ELCU)
         Me.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, Me.lCombELCSRules, Me.CoefCombELCS, strRacineELSC, Me.CombiA_ELCS)
@@ -5563,7 +5563,7 @@ Public Class cls_Poutre
 
         '--> Vérification aux ELU en situation d'incendie
 
-        If Me.ParamFeu.lCalcuFeu And (Me.CombiA_ELF.nbCombi > 0) Then
+        If Me.ParamFeu.lCalculFeu And (Me.CombiA_ELF.nbCombi > 0) Then
             Select Case Me.Section.TypeSection
                 Case cls_Section.Enum_TypeSection.AcierSeul
                     Me.VerifFeuAcier.Z_VerifFeu(Me)

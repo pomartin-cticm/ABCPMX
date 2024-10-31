@@ -161,11 +161,13 @@ Public Class cls_VerifFeuAcier
 
         '# Propriétés à froid
 
+        RatioGammaM = myBeam.Param.Gamma.GammaM0 / myBeam.Param.Gamma.GammaM_fi
         myBeam.ProprietesVerifAcier(True, MplRd0, zANP0, MelRd0, zANE0)
         VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW)
         MplRk0 = MplRd0 * myBeam.Param.Gamma.GammaM0
         MelRk0 = MelRd0 * myBeam.Param.Gamma.GammaM0
-        RatioGammaM = myBeam.Param.Gamma.GammaM0 / myBeam.Param.Gamma.GammaM_fi
+        MplRd0 *= RatioGammaM
+        MelRd0 *= RatioGammaM
 
         '# Classes de la section
 
@@ -225,9 +227,9 @@ Public Class cls_VerifFeuAcier
 
             '# Résistance de la section 
 
-            VplRdFeu(iSTep) = RatioGammaM * kReducY * VRd0
-            MplRdFeu(iSTep) = RatioGammaM * kReducY * MplRd0
-            MelRdFeu(iSTep) = RatioGammaM * kReducY * MelRd0
+            VplRdFeu(iSTep) = kReducY * VRd0
+            MplRdFeu(iSTep) = kReducY * MplRd0
+            MelRdFeu(iSTep) = kReducY * MelRd0
             VbRdFeu(iSTep) = myBeam.Section.VbRdFeu(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW, lMontantR, kReducY, kReducE)
 
         Next

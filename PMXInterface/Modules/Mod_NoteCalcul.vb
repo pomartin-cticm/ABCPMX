@@ -1069,7 +1069,7 @@ Module Mod_NoteCalcul
 
         '--( Traitement
 
-        If myBeam.ParamFeu.lCalcuFeu Then
+        If myBeam.ParamFeu.lCalculFeu Then
             If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
 
             AddTitreNdC(3, BlocFEU("TFIREOPTIONS"))
@@ -10757,7 +10757,7 @@ Module Mod_NoteCalcul
         '   myBeam      [E] :   Calcul au feu
         '-----------------------------------------------------------------------------------------------------------------
 
-        If (myBeam.CombiA_ELF.nbCombi = 0) Or (Not myBeam.ParamFeu.lCalcuFeu) Then Exit Sub
+        If (myBeam.CombiA_ELF.nbCombi = 0) Or (Not myBeam.ParamFeu.lCalculFeu) Then Exit Sub
 
         '--( Initialisation
 

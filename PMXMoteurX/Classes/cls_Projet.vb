@@ -699,7 +699,7 @@ Public Class cls_Projet
 
         With myParamF
 
-            AjouteLigneFrmt(Lines, "FireDesign", .lCalcuFeu)
+            AjouteLigneFrmt(Lines, "FireDesign", .lCalculFeu)
             AjouteLigneFrmt(Lines, "DeltaT", .DeltaTCalcul)
             AjouteLigneFrmt(Lines, "Temp0", .TempRef)
             AjouteLigneFrmt(Lines, "FEpsilon", .EmissivityFire)
@@ -2683,7 +2683,7 @@ Public Class cls_Projet
                 With myParamF
                     Select Case MotCle
 
-                        Case "FIREDE" : .lCalcuFeu = CBool((Mots(nbMots)))
+                        Case "FIREDE" : .lCalculFeu = CBool((Mots(nbMots)))
                         Case "DELTAT" : .DeltaTCalcul = CDec(TraiteReal(Mots(nbMots)))
                         Case "TEMP0" : .TempRef = CDec(TraiteReal(Mots(nbMots)))
                         Case "FEPSIL" : .EmissivityFire = CDec(TraiteReal(Mots(nbMots)))

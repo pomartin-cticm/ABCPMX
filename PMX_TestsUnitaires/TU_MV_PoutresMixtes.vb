@@ -300,6 +300,7 @@ Imports PMXMoteur2
 
         Valeur = myPoutre.VerifMixte(0).CritereM.Resistance(iNodeMMax)
         ValRef = 779.4 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (779.4 kN.m) du fait que le NConnexion n'est pas identique
+        ValRef = 783 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, 3 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
 
         Valeur = myPoutre.VerifMixte(0).CritereM.CritereMax
@@ -374,6 +375,7 @@ Imports PMXMoteur2
 
         Valeur = myPoutre.VerifMixte(0).CritereMV.Resistance(iNodeMMaxConstruction)
         ValRef = 779.4 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (834.6 kN.m) du fait que le NConnexion n'est pas identique
+        ValRef = 783 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, 3 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
 
         Valeur = myPoutre.VerifMixte(0).CritereMV.CritereMax

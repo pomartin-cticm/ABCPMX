@@ -1467,7 +1467,7 @@
 
     End Function
 
-    Public Function KhiLTFire(LambdaBfi As Decimal, AlphaLTfi As Decimal) As Decimal
+    Public Function KhiLTFire(AlphaLTfi As Decimal, LambdaBfi As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------------------
         '   31/10/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------------------
@@ -1485,7 +1485,7 @@
         '--( Calcul
 
         PhiLT = 0.5 * (1 + AlphaLTfi * LambdaBfi + LambdaBfi ^ 2)
-        KhiLT = Math.Min(1, 1 / (PhiLT + Math.Sqrt(PhiLT ^ 2 + LambdaBfi ^ 2)))
+        KhiLT = Math.Min(1, 1 / (PhiLT + Math.Sqrt(PhiLT ^ 2 - LambdaBfi ^ 2)))
 
 
         Return KhiLT

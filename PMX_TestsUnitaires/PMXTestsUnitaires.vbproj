@@ -81,6 +81,7 @@
     <Compile Include="Mod_Outils.vb" />
     <Compile Include="TU_MV_PoutresAcier.vb" />
     <Compile Include="TU_MV_PoutresMixtes.vb" />
+    <Compile Include="TU_MV_Incendie.vb" />
     <Compile Include="UnitTest_FEMTempDalle.vb" />
     <Compile Include="UnitTest_Cls_ConnecteurArmatures.vb" />
     <Compile Include="UnitTest_Cls_EurocodesFeu.vb" />
