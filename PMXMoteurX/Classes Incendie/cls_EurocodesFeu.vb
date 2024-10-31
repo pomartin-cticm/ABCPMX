@@ -1451,5 +1451,46 @@
 
 #End Region
 
+#Region " Déversement incendie "
 
+    Public Function AlphaLT(FyAcier As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   31/10/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient d'imperfection pour le déversement à l'incendie
+        '   Selon EN 1993-1-2, 4.2.3.3 (5)
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   FyAcier     [E] :   Limite d'élasticité
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        Return 0.65 * Math.Sqrt(235 / FyAcier)
+
+    End Function
+
+    Public Function KhiLTFire(LambdaBfi As Decimal, AlphaLTfi As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   31/10/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient de réduction pour le déversement à l'incendie
+        '   Selon EN 1993-1-2, 4.2.3.3 (5)
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   LambdaBfi       [E] :   Elancement réduit
+        '   AlphaLTfi       [E] :   Coefficient d'imperfection
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim PhiLT, KhiLT As Decimal
+
+        '--( Calcul
+
+        PhiLT = 0.5 * (1 + AlphaLTfi * LambdaBfi + LambdaBfi ^ 2)
+        KhiLT = Math.Min(1, 1 / (PhiLT + Math.Sqrt(PhiLT ^ 2 + LambdaBfi ^ 2)))
+
+
+        Return KhiLT
+    End Function
+
+
+#End Region
 End Class

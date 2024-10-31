@@ -112,7 +112,8 @@ Public Class cls_VerifFeuAcier
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
 
-        Dim VRd0, MplRd0, MelRd0, MRk0 As Decimal     ' Résistance de la section à température ambiante
+        Dim VRd0, MplRd0, MelRd0 As Decimal     ' Résistance de la section à température ambiante
+        Dim MplRk0, MelRk0 As Decimal           ' Résistances caractéristiques de la section à température ambiante
         Dim zANP0, zANE0 As Decimal
         Dim MplRdFeu() As Decimal               ' Moments résistants plastiques aux Time Steps
         Dim MelRdFeu() As Decimal               ' Moments résistants élastiques aux Time Steps
@@ -128,6 +129,7 @@ Public Class cls_VerifFeuAcier
 
         Dim lMontantR As Boolean = myBeam.lTraveeConsoleGauche And myBeam.lTraveeConsoleDroite
         Dim RatioGammaM As Decimal
+        Dim FyAcier As Decimal
 
         'Dim pTimeR As Decimal
 
@@ -141,6 +143,8 @@ Public Class cls_VerifFeuAcier
         lSsExposee = EN_Feu.SemelleSupExposee(myBeam)
         lProtege = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
         Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
+
+        FyAcier = myBeam.Section.FyMin
 
         If Not lProtege Then
             'kSh = 0.9 * Massivete / EN_Feu.MassiveteSectionAcierBox(myBeam.Section.ProfilA, lSsExposee)
@@ -159,7 +163,8 @@ Public Class cls_VerifFeuAcier
 
         myBeam.ProprietesVerifAcier(True, MplRd0, zANP0, MelRd0, zANE0)
         VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW)
-        MRk0 = MplRd0 * myBeam.Param.Gamma.GammaM0
+        MplRk0 = MplRd0 * myBeam.Param.Gamma.GammaM0
+        MelRk0 = MelRd0 * myBeam.Param.Gamma.GammaM0
         RatioGammaM = myBeam.Param.Gamma.GammaM0 / myBeam.Param.Gamma.GammaM_fi
 
         '# Classes de la section
@@ -263,7 +268,7 @@ Public Class cls_VerifFeuAcier
                 kReducY = EN_Feu.ReducFyAcier(TempAStep(iSTep))
                 kReducE = EN_Feu.ReducEyAcier(TempAStep(iSTep))
 
-                RunCritereDeversement(myBeam, iCombi, iSTep, MEd, AlphaCr, kReducY, kReducE, MRk0)
+                RunCritereDeversement(myBeam, iCombi, iSTep, MEd, AlphaCr, kReducY, kReducE, MplRk0, MelRk0, ClasseP, FyAcier)
 
             Next
 
@@ -501,7 +506,8 @@ Public Class cls_VerifFeuAcier
 #Region " Vérifications de la résistance au déversement "
 
     Private Sub RunCritereDeversement(myBeam As cls_Poutre, iCombi As Integer, iStep As Integer, MEd(,) As Decimal,
-                                      AlphaCr As Decimal, kReducY As Decimal, kReducE As Decimal, MRk As Decimal)
+                                      AlphaCr As Decimal, kReducY As Decimal, kReducE As Decimal,
+                                      MplRk As Decimal, MelRk As Decimal, ClasseP As Decimal, FyAcier As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   07/12/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -514,27 +520,35 @@ Public Class cls_VerifFeuAcier
         '   AlphaCr         [E] :   Coefficient d'amplification critique (ne dépend pas du time step)
         '   kReducY         [E] :   Coefficient de réduction de fy / température    
         '   kReducE         [E] :   Coefficient de réduction de E / température    
-        '   MRd             [E] :   Moment résistant de la section à froid
-        '   MRk             [E] :   Moment résistant de la section à froid, valeur caractéristique
+        '   MplRk           [E] :   Moment plastique caratéristique de la section à froid
+        '   MelRk           [E] :   Moment élastique caratéristique de la section à froid
+        '   ClasseP         [E] :   Classe de la section sous moment > 0
+        '   FyAcier         [E] :   Limite d'élasticité de la section
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
-        '        Dim lOK As Boolean
         Dim iDebTrav As Integer = myBeam.IndicePremiereTravee
         Dim iFinTrav As Integer = myBeam.IndiceDerniereTravee
         Dim iTrav, iNode As Integer
         Dim iDebNod, iFinNod As Integer
         Dim MEdmax, Mcr As Decimal
         Dim MbRd, KhiLT, LambdaBLT, AlphaLT As Decimal
-        Dim EN1993 As New cls_Eurocodes
+        'Dim EN1993 As New cls_Eurocodes
+        Dim ENfeu As New cls_EurocodesFeu
         'Dim zANE, InertieY As Decimal
         'Dim nEqEc As Decimal
         Dim GammaMFi As Decimal
+        Dim MRk As Decimal
 
         '--> Initialisation
 
         GammaMFi = myBeam.Param.Gamma.GammaM_fi
+        Select Case ClasseP
+            Case 1, 2 : MRk = MplRk
+            Case 3 : MRk = MelRk
+            Case 4
+        End Select
 
         '--> Calcul Alpha Critique
 
@@ -564,12 +578,12 @@ Public Class cls_VerifFeuAcier
             If IsGreater(kReducE, 0) Then
                 '# Elancement réduit
 
-                LambdaBLT = Math.Sqrt(kReducY * MRk / (kReducE * Mcr))
+                LambdaBLT = Math.Sqrt((kReducY * MRk) / (kReducE * Mcr))
 
                 '# Coefficient de réduction
 
-                AlphaLT = EN1993.GetAlphaLTFromProfil(myBeam.Section.ProfilA)
-                KhiLT = EN1993.ReductionDeversement(AlphaLT, LambdaBLT)
+                AlphaLT = ENfeu.AlphaLT(FyAcier)
+                KhiLT = ENfeu.KhiLTFire(AlphaLT, LambdaBLT)
 
             Else
                 KhiLT = 0

@@ -27,7 +27,7 @@ BLOCK BEAM
    LPropping             = False
    RPropping             = False
    NbPropping            = 0
-   TypeRestraint         = 0
+   TypeRestraint         = 2
    LSpacing              = 2
    RSpacing              = 2
    LDSlOp                = 1
@@ -37,8 +37,8 @@ BLOCK BEAM
    lDefEncas             = True
    lDefProp              = True
    lDefSlab              = False
-   ULSlComb              = {True/False/False/False/False/False}
-   ULSCoef               = {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1,0/1,5/1,05/0/0}+{1,0/1,05/1,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
+   ULSlComb              = {False/False/False/False/True/False}
+   ULSCoef               = {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1,0/1,5/1,05/0/0}+{1,0/1,05/1,5/0/0}+{0/1/0/0/0}+{0/0/0/0/0}
    SLSlComb              = {True/False/False/False/False/False}
    SLSCoef               = {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    FLSlComb              = {False/False/False/True/False}
@@ -49,9 +49,11 @@ BLOCK BEAM
    CSLSCoef              = {0/0/0/1/1}+{0/0/0/0/0}
 
 BLOCK MAINTIENS
+   Lrest                 = 1 4 True True
+   Lrest                 = 1 8 True True
 
 BLOCK SECTION
-   Name                  = 
+   Name                  = Name
    SlabDefined           = False
    Database              = False
    Type                  = 0

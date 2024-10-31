@@ -1172,6 +1172,22 @@ Public Class cls_Section
     End Property
 
     ''' <summary>
+    ''' Limite d'élasticité minimale de la section
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property FyMin As Decimal
+        Get
+            Dim Fy As Decimal
+            Fy = Math.Min(FySup, FyW)
+            If Not (Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine) Then
+                Fy = Math.Min(Fy, Me.FyInf)
+            End If
+
+            Return Fy
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Limite d'élasticité de la semelle supérieure
     ''' </summary>
     ''' <returns></returns>
