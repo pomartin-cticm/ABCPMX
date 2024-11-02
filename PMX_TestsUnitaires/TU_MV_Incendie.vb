@@ -332,7 +332,6 @@ Imports PMXMoteur2
 
     End Sub
 
-
     <TestMethod()> Public Sub TestMV_F01B_PoutreAcierLamineeGalvanisee()
 
 #Region " Preparation de la poutre "
@@ -939,7 +938,6 @@ Imports PMXMoteur2
 
     End Sub
 
-
     <TestMethod()> Public Sub TestMV_F02B_PoutreAcierPRSProtegee_Peinture()
 
 #Region " Preparation de la poutre "
@@ -1275,6 +1273,11 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 
 #End Region
+
+    End Sub
+
+    <TestMethod()> Public Sub TestMV_F02C_PoutreAcierPRSProtegee_Panneaux()
+
 
     End Sub
 

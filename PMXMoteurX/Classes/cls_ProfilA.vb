@@ -62,6 +62,8 @@ Public Class cls_ProfilA
     Public IndDeliv() As Short                      ' Indices conditions de livraison
     Public IndStandart() As Short                   ' Indices normes acier compatibles
 
+    Public lPlat As Boolean                     ' Indique pour un profilé laminé si présence d'un plat de renfort
+
 #End Region
 
 #Region " Propriétés "
@@ -1368,6 +1370,8 @@ Public Class cls_ProfilA
         Me.Plat_t = 0.012
 
         Me.ha = Me.hb + Me.Plat_t
+
+        Me.lPlat = False
     End Sub
 
     Public Sub GenererProfileHEB300()

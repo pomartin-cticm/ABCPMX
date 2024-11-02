@@ -75,10 +75,6 @@ Partial Class Frm_SectionAcierStandard
         Me.lbl_SemelleSup = New System.Windows.Forms.Label()
         Me.lbl_Height = New System.Windows.Forms.Label()
         Me.pan_Lamine = New System.Windows.Forms.Panel()
-        Me.lbl_Delivery = New System.Windows.Forms.Label()
-        Me.GridDelivery = New System.Windows.Forms.DataGridView()
-        Me.Col_Index = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Col_Message = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lbl_Profiles = New System.Windows.Forms.Label()
         Me.Grid_ProfilesSup = New System.Windows.Forms.DataGridView()
         Me.Col_ListeSup = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -97,6 +93,18 @@ Partial Class Frm_SectionAcierStandard
         Me.img_ReductionCurve = New System.Windows.Forms.PictureBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.imgList_UY = New System.Windows.Forms.ImageList(Me.components)
+        Me.chk_Plat = New System.Windows.Forms.CheckBox()
+        Me.pan_Plat = New System.Windows.Forms.Panel()
+        Me.txt_EpPlat = New System.Windows.Forms.TextBox()
+        Me.img_Tplat = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitDim9 = New System.Windows.Forms.Label()
+        Me.txt_Wplat = New System.Windows.Forms.TextBox()
+        Me.img_Wplat = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitDim8 = New System.Windows.Forms.Label()
+        Me.cmb_NuancePlat = New System.Windows.Forms.ComboBox()
+        Me.lbl_Wplat = New System.Windows.Forms.Label()
+        Me.lbl_Tplat = New System.Windows.Forms.Label()
+        Me.lbl_NuancePlat = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -117,7 +125,6 @@ Partial Class Frm_SectionAcierStandard
         CType(Me.img_Bfs, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Ht, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Lamine.SuspendLayout()
-        CType(Me.GridDelivery, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_TypeSection.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -125,6 +132,9 @@ Partial Class Frm_SectionAcierStandard
         Me.pan_Acier.SuspendLayout()
         CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Plat.SuspendLayout()
+        CType(Me.img_Tplat, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Wplat, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -681,8 +691,8 @@ Partial Class Frm_SectionAcierStandard
         '
         Me.pan_Lamine.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Lamine.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Lamine.Controls.Add(Me.lbl_Delivery)
-        Me.pan_Lamine.Controls.Add(Me.GridDelivery)
+        Me.pan_Lamine.Controls.Add(Me.chk_Plat)
+        Me.pan_Lamine.Controls.Add(Me.pan_Plat)
         Me.pan_Lamine.Controls.Add(Me.lbl_Profiles)
         Me.pan_Lamine.Controls.Add(Me.Grid_ProfilesSup)
         Me.pan_Lamine.Controls.Add(Me.lbl_Gamme)
@@ -693,46 +703,6 @@ Partial Class Frm_SectionAcierStandard
         Me.pan_Lamine.Name = "pan_Lamine"
         Me.pan_Lamine.Size = New System.Drawing.Size(336, 290)
         Me.pan_Lamine.TabIndex = 3
-        '
-        'lbl_Delivery
-        '
-        Me.lbl_Delivery.Location = New System.Drawing.Point(7, 187)
-        Me.lbl_Delivery.Name = "lbl_Delivery"
-        Me.lbl_Delivery.Size = New System.Drawing.Size(322, 15)
-        Me.lbl_Delivery.TabIndex = 37
-        Me.lbl_Delivery.Text = "lbl_Delivery"
-        Me.lbl_Delivery.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'GridDelivery
-        '
-        Me.GridDelivery.AllowUserToAddRows = False
-        Me.GridDelivery.AllowUserToDeleteRows = False
-        Me.GridDelivery.AllowUserToResizeColumns = False
-        Me.GridDelivery.AllowUserToResizeRows = False
-        Me.GridDelivery.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.GridDelivery.ColumnHeadersVisible = False
-        Me.GridDelivery.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Col_Index, Me.Col_Message})
-        Me.GridDelivery.Location = New System.Drawing.Point(6, 205)
-        Me.GridDelivery.MultiSelect = False
-        Me.GridDelivery.Name = "GridDelivery"
-        Me.GridDelivery.RowHeadersVisible = False
-        Me.GridDelivery.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.GridDelivery.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.GridDelivery.ShowCellToolTips = False
-        Me.GridDelivery.Size = New System.Drawing.Size(338, 76)
-        Me.GridDelivery.TabIndex = 36
-        '
-        'Col_Index
-        '
-        Me.Col_Index.HeaderText = "Col_Index"
-        Me.Col_Index.Name = "Col_Index"
-        Me.Col_Index.ReadOnly = True
-        '
-        'Col_Message
-        '
-        Me.Col_Message.HeaderText = "Col_Message"
-        Me.Col_Message.Name = "Col_Message"
-        Me.Col_Message.ReadOnly = True
         '
         'lbl_Profiles
         '
@@ -924,6 +894,120 @@ Partial Class Frm_SectionAcierStandard
         Me.imgList_UY.Images.SetKeyName(0, "Fu")
         Me.imgList_UY.Images.SetKeyName(1, "Fy")
         '
+        'chk_Plat
+        '
+        Me.chk_Plat.AutoSize = True
+        Me.chk_Plat.Location = New System.Drawing.Point(10, 195)
+        Me.chk_Plat.Name = "chk_Plat"
+        Me.chk_Plat.Size = New System.Drawing.Size(68, 17)
+        Me.chk_Plat.TabIndex = 32
+        Me.chk_Plat.Text = "chk_Plat"
+        Me.chk_Plat.UseVisualStyleBackColor = True
+        '
+        'pan_Plat
+        '
+        Me.pan_Plat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Plat.Controls.Add(Me.lbl_NuancePlat)
+        Me.pan_Plat.Controls.Add(Me.lbl_Tplat)
+        Me.pan_Plat.Controls.Add(Me.lbl_Wplat)
+        Me.pan_Plat.Controls.Add(Me.cmb_NuancePlat)
+        Me.pan_Plat.Controls.Add(Me.txt_EpPlat)
+        Me.pan_Plat.Controls.Add(Me.img_Tplat)
+        Me.pan_Plat.Controls.Add(Me.etq_UnitDim9)
+        Me.pan_Plat.Controls.Add(Me.txt_Wplat)
+        Me.pan_Plat.Controls.Add(Me.img_Wplat)
+        Me.pan_Plat.Controls.Add(Me.etq_UnitDim8)
+        Me.pan_Plat.Location = New System.Drawing.Point(6, 203)
+        Me.pan_Plat.Name = "pan_Plat"
+        Me.pan_Plat.Size = New System.Drawing.Size(324, 82)
+        Me.pan_Plat.TabIndex = 33
+        '
+        'txt_EpPlat
+        '
+        Me.txt_EpPlat.Location = New System.Drawing.Point(219, 32)
+        Me.txt_EpPlat.Name = "txt_EpPlat"
+        Me.txt_EpPlat.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EpPlat.TabIndex = 23
+        '
+        'img_Tplat
+        '
+        Me.img_Tplat.Location = New System.Drawing.Point(183, 32)
+        Me.img_Tplat.Name = "img_Tplat"
+        Me.img_Tplat.Size = New System.Drawing.Size(37, 20)
+        Me.img_Tplat.TabIndex = 24
+        Me.img_Tplat.TabStop = False
+        '
+        'etq_UnitDim9
+        '
+        Me.etq_UnitDim9.AutoSize = True
+        Me.etq_UnitDim9.Location = New System.Drawing.Point(283, 35)
+        Me.etq_UnitDim9.Name = "etq_UnitDim9"
+        Me.etq_UnitDim9.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim9.TabIndex = 22
+        Me.etq_UnitDim9.Text = "mm"
+        '
+        'txt_Wplat
+        '
+        Me.txt_Wplat.Location = New System.Drawing.Point(219, 13)
+        Me.txt_Wplat.Name = "txt_Wplat"
+        Me.txt_Wplat.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Wplat.TabIndex = 20
+        '
+        'img_Wplat
+        '
+        Me.img_Wplat.Location = New System.Drawing.Point(183, 13)
+        Me.img_Wplat.Name = "img_Wplat"
+        Me.img_Wplat.Size = New System.Drawing.Size(37, 20)
+        Me.img_Wplat.TabIndex = 21
+        Me.img_Wplat.TabStop = False
+        '
+        'etq_UnitDim8
+        '
+        Me.etq_UnitDim8.AutoSize = True
+        Me.etq_UnitDim8.Location = New System.Drawing.Point(283, 16)
+        Me.etq_UnitDim8.Name = "etq_UnitDim8"
+        Me.etq_UnitDim8.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim8.TabIndex = 19
+        Me.etq_UnitDim8.Text = "mm"
+        '
+        'cmb_NuancePlat
+        '
+        Me.cmb_NuancePlat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmb_NuancePlat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_NuancePlat.FormattingEnabled = True
+        Me.cmb_NuancePlat.Location = New System.Drawing.Point(183, 56)
+        Me.cmb_NuancePlat.Name = "cmb_NuancePlat"
+        Me.cmb_NuancePlat.Size = New System.Drawing.Size(113, 21)
+        Me.cmb_NuancePlat.TabIndex = 57
+        '
+        'lbl_Wplat
+        '
+        Me.lbl_Wplat.Location = New System.Drawing.Point(23, 14)
+        Me.lbl_Wplat.Name = "lbl_Wplat"
+        Me.lbl_Wplat.Size = New System.Drawing.Size(145, 17)
+        Me.lbl_Wplat.TabIndex = 79
+        Me.lbl_Wplat.Text = "lbl_Wplat"
+        Me.lbl_Wplat.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'lbl_Tplat
+        '
+        Me.lbl_Tplat.Location = New System.Drawing.Point(23, 33)
+        Me.lbl_Tplat.Name = "lbl_Tplat"
+        Me.lbl_Tplat.Size = New System.Drawing.Size(145, 17)
+        Me.lbl_Tplat.TabIndex = 80
+        Me.lbl_Tplat.Text = "lbl_Tplat"
+        Me.lbl_Tplat.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'lbl_NuancePlat
+        '
+        Me.lbl_NuancePlat.Location = New System.Drawing.Point(23, 57)
+        Me.lbl_NuancePlat.Name = "lbl_NuancePlat"
+        Me.lbl_NuancePlat.Size = New System.Drawing.Size(145, 17)
+        Me.lbl_NuancePlat.TabIndex = 81
+        Me.lbl_NuancePlat.Text = "lbl_NuancePlat"
+        Me.lbl_NuancePlat.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'Frm_SectionAcierStandard
         '
         Me.AcceptButton = Me.btn_OK
@@ -962,7 +1046,6 @@ Partial Class Frm_SectionAcierStandard
         CType(Me.img_Ht, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Lamine.ResumeLayout(False)
         Me.pan_Lamine.PerformLayout()
-        CType(Me.GridDelivery, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_TypeSection.ResumeLayout(False)
         Me.pan_TypeSection.PerformLayout()
@@ -971,6 +1054,10 @@ Partial Class Frm_SectionAcierStandard
         Me.pan_Acier.ResumeLayout(False)
         CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Plat.ResumeLayout(False)
+        Me.pan_Plat.PerformLayout()
+        CType(Me.img_Tplat, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Wplat, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1005,9 +1092,6 @@ Partial Class Frm_SectionAcierStandard
     Friend WithEvents lst_GammeS As ListBox
     Friend WithEvents pan_Provi As Panel
     Friend WithEvents pan_Lamine As Panel
-    Friend WithEvents GridDelivery As DataGridView
-    Friend WithEvents Col_Index As DataGridViewTextBoxColumn
-    Friend WithEvents Col_Message As DataGridViewTextBoxColumn
     Friend WithEvents rdb_PRS As RadioButton
     Friend WithEvents rdb_PRS_symetrique As RadioButton
     Friend WithEvents rdb_Lamine As RadioButton
@@ -1042,10 +1126,21 @@ Partial Class Frm_SectionAcierStandard
     Friend WithEvents lbl_Ame As Label
     Friend WithEvents lbl_SemelleSup As Label
     Friend WithEvents lbl_Height As Label
-    Friend WithEvents lbl_Delivery As Label
     Friend WithEvents img_ReductionCurve As PictureBox
     Friend WithEvents ErrorProvider As ErrorProvider
     Friend WithEvents pan_Acier As Panel
     Friend WithEvents btn_FyFu As Button
     Friend WithEvents imgList_UY As ImageList
+    Friend WithEvents chk_Plat As CheckBox
+    Friend WithEvents pan_Plat As Panel
+    Friend WithEvents txt_EpPlat As TextBox
+    Friend WithEvents img_Tplat As PictureBox
+    Friend WithEvents etq_UnitDim9 As Label
+    Friend WithEvents txt_Wplat As TextBox
+    Friend WithEvents img_Wplat As PictureBox
+    Friend WithEvents etq_UnitDim8 As Label
+    Friend WithEvents cmb_NuancePlat As ComboBox
+    Friend WithEvents lbl_Tplat As Label
+    Friend WithEvents lbl_Wplat As Label
+    Friend WithEvents lbl_NuancePlat As Label
 End Class

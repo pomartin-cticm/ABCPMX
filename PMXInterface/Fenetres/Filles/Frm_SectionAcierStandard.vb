@@ -94,7 +94,7 @@ Public Class Frm_SectionAcierStandard
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_STANDARDSTEELSECTIONS")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_STEELSECTIONSUSUAL")
             BlocLine.CreationBloc(Bloc)
 
             Try
@@ -122,6 +122,12 @@ Public Class Frm_SectionAcierStandard
                 Me.lbl_SemelleSup.Text = Bloc("UPPERF")
                 Me.lbl_Ame.Text = Bloc("WEB")
 
+                '=== RENFORT =============================================================
+
+                Me.chk_Plat.Text = Bloc("PLATE")
+                Me.lbl_Wplat.Text = Bloc("PLATEW")
+                Me.lbl_Tplat.Text = Bloc("PLATET")
+                Me.lbl_NuancePlat.Text = Bloc("PLATEGRADE")
 
                 '=== STEEL ===============================================================
 
@@ -192,8 +198,8 @@ Public Class Frm_SectionAcierStandard
         lPRS = LogicielReglages.lPRS Or LogicielOptions.lExpert
         Me.rdb_PRS.Visible = lPRS
         Me.rdb_PRS_symetrique.Visible = lPRS
-        Me.GridDelivery.Visible = LogicielReglages.lDelivery
-        Me.lbl_Delivery.Visible = LogicielReglages.lDelivery
+        'Me.GridDelivery.Visible = LogicielReglages.lDelivery
+        '  Me.lbl_Delivery.Visible = LogicielReglages.lDelivery
 
         '== Transfert vers variable locale
 
@@ -212,8 +218,8 @@ Public Class Frm_SectionAcierStandard
 
         PrepareLookGrille(Me.Grid_ProfilesSup, Me.Col_HISTARSup, Me.Col_ListeSup, Me.lst_GammeS.BackColor, RATIOHIGAMME)
         PrepareLookGrille(Me.GridAciers, Me.Col_Grade, Me.Col_Qualite, Me.Col_ReductionCurve, Me.lst_GammeS.BackColor, Ratio1, Ratio2)
-        PrepareLookGrille(Me.GridDelivery, Me.Col_Index, Me.Col_Message, Me.lst_GammeS.BackColor, 0.1)
-        PrepareGridDelivery()
+        'PrepareLookGrille(Me.GridDelivery, Me.Col_Index, Me.Col_Message, Me.lst_GammeS.BackColor, 0.1)
+        'PrepareGridDelivery()
 
         '== Parametrage PRS
 
@@ -222,6 +228,10 @@ Public Class Frm_SectionAcierStandard
             Case Enu_DefinitionH.HauteurTotale : Me.chk_Ht.Checked = True
         End Select
         MAJ_DefinitionHauteur()
+
+        '== Plats
+
+        Me.pan_Plat.Width = Me.Grid_ProfilesSup.Width + Me.Grid_ProfilesSup.Left - Me.lst_GammeS.Left
 
     End Sub
 
@@ -234,6 +244,8 @@ Public Class Frm_SectionAcierStandard
         Me.Etq_UnitDim5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.Etq_UnitDim6.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.Etq_UnitDim7.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim8.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim9.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
     End Sub
 
@@ -286,6 +298,14 @@ Public Class Frm_SectionAcierStandard
         Me.txt_Tfs.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, False, True)
         Me.txt_Tw.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tw, Enu_TypeVariable.Dimension, 4, 1, False, True)
 
+        '== Plats
+
+        Me.chk_Plat.Checked = MySectionLoc.ProfilA.lPlat
+
+        Me.txt_EpPlat.Text = GetStringInUnitN(MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False, True)
+        Me.txt_Wplat.Text = GetStringInUnitN(MySectionLoc.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 1, False, True)
+        MAJI_Plats()
+
     End Sub
 
     Private Sub AfficherProfileLamineEnCours()
@@ -304,7 +324,7 @@ Public Class Frm_SectionAcierStandard
             Me.lst_GammeS.Text = MyGam
             RemplissageGrilleProfile(Me.Grid_ProfilesSup, MyGam, NbProG)
 
-            RemplirDelivery(MyGam, MyProf)
+            'RemplirDelivery(MyGam, MyProf)
 
             Dim iPro As Integer = 0
             Dim lTrouve As Boolean = False
@@ -511,6 +531,12 @@ Public Class Frm_SectionAcierStandard
         If MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.typeProfileAcier <> MySectionLoc.ProfilA.typeProfileAcier Then
             MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.typeProfileAcier = MySectionLoc.ProfilA.typeProfileAcier
             lModif = True
+        End If
+
+        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+            GereTransfertValeur(MySectionLoc.ProfilA.lPlat, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.lPlat, lModif)
+            GereTransfertValeur(MySectionLoc.ProfilA.Plat_b, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Plat_b, lModif)
+            GereTransfertValeur(MySectionLoc.ProfilA.Plat_t, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Plat_t, lModif)
         End If
 
         GereTransfertValeur(MySectionLoc.ProfilA.ha, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.ha, lModif)
@@ -1096,7 +1122,7 @@ Public Class Frm_SectionAcierStandard
 
 #Region " Dessin symboles "
 
-    Private Sub img_Symbol_Paint(sender As Object, e As PaintEventArgs) Handles img_Tw.Paint, img_Tfs.Paint, img_Tfi.Paint, img_Hw.Paint, img_Ht.Paint, img_Bfs.Paint, img_Bfi.Paint
+    Private Sub img_Symbol_Paint(sender As Object, e As PaintEventArgs) Handles img_Tw.Paint, img_Tfs.Paint, img_Tfi.Paint, img_Hw.Paint, img_Ht.Paint, img_Bfs.Paint, img_Bfi.Paint, img_Wplat.Paint, img_Tplat.Paint
 
         '--> Déclarations
 
@@ -1140,6 +1166,12 @@ Public Class Frm_SectionAcierStandard
             Case Me.img_Tw.Name
                 strSymbol = "t"
                 strIndice = "w"
+            Case Me.img_Tplat.Name
+                strSymbol = "t"
+                strIndice = "p"
+            Case Me.img_Wplat.Name
+                strSymbol = "w"
+                strIndice = "p"
         End Select
 
         '--> Dessin
@@ -1153,7 +1185,26 @@ Public Class Frm_SectionAcierStandard
 
 #Region " Evènements "
 
-    Private Sub SaisieDimensions(sender As Object, e As EventArgs) Handles txt_Tw.TextChanged, txt_Tfs.TextChanged, txt_Tfi.TextChanged, txt_Hw.TextChanged, txt_Ha.TextChanged, txt_Bfs.TextChanged, txt_Bfi.TextChanged
+    Private Sub SaisieDimensionsPlat(sender As Object, e As EventArgs) Handles txt_Wplat.TextChanged, txt_EpPlat.TextChanged
+
+        If lBuild Then Exit Sub
+        Dim Valeur As Decimal
+
+        If VerificationSaisiePlat(sender, Valeur) Then
+            Select Case sender.name
+                Case Me.txt_EpPlat.Name
+                    MySectionLoc.ProfilA.Plat_t = Valeur
+                Case Me.txt_Wplat.Name
+                    MySectionLoc.ProfilA.Plat_b = Valeur
+            End Select
+            Me.img_Section.Invalidate()
+        End If
+
+    End Sub
+
+    Private Sub SaisieDimensions(sender As Object, e As EventArgs) _
+        Handles txt_Tw.TextChanged, txt_Tfs.TextChanged, txt_Tfi.TextChanged, txt_Hw.TextChanged,
+                txt_Ha.TextChanged, txt_Bfs.TextChanged, txt_Bfi.TextChanged
         If lBuild Then Exit Sub
         lBuild = True
 
@@ -1216,6 +1267,53 @@ Public Class Frm_SectionAcierStandard
 
         lBuild = False
     End Sub
+
+    Private Function VerificationSaisiePlat(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+        '-------------------------------------------------------------------------------------
+        '   02/11/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Vérifie la validité de la saisie pour les dimensions d'un plat
+        '-------------------------------------------------------------------------------------
+        '   myTxt       [E] :   
+        '   ValeurUI    [S] :   Valeur saisie dans les unités internes
+        '-------------------------------------------------------------------------------------
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMin As Boolean = True
+        Dim lValMax As Boolean = True
+        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+        Dim lOK As Boolean = True
+
+        Const TMINI As Decimal = 0.005
+        Const TMAXI As Decimal = 0.05
+        Const BFMINI As Decimal = 0.1
+        Const BFMAXI As Decimal = 0.5
+
+
+        Select Case MyTxt.Name
+            Case Me.txt_EpPlat.Name
+                ValMin = TMINI
+                ValMax = TMAXI
+            Case Me.txt_Wplat.Name
+                ValMin = BFMINI
+                ValMax = BFMAXI
+        End Select
+
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin / kUnit, lValMax, ValMax / kUnit)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin / kUnit, lValMin, ValMax / kUnit, lValMax)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            ErrorProvider.Clear()
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+
+
+    End Function
 
     ''' <summary>
     ''' Vérifie la saisie des données en cours, pour les dimensions des PRS
@@ -1413,6 +1511,19 @@ Public Class Frm_SectionAcierStandard
 
     End Sub
 
+    Private Sub chk_Plat_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Plat.CheckedChanged
+
+        If lBuild Then Exit Sub
+
+        MySectionLoc.ProfilA.lPlat = Me.chk_Plat.Checked
+
+        Me.img_Section.Invalidate()
+
+        MAJI_Plats()
+
+    End Sub
+
+
 #End Region
 
 #Region "   Gestion selection profile "
@@ -1444,7 +1555,7 @@ Public Class Frm_SectionAcierStandard
         'SelectDefaultSteel(False)
         'GetAcierFromGrid()
 
-        RemplirDelivery(Gamme, Etiquette)
+        'RemplirDelivery(Gamme, Etiquette)
 
         'MAJ_DonneesFinales()
         Me.img_Section.Invalidate()
@@ -1494,40 +1605,60 @@ Public Class Frm_SectionAcierStandard
 
     End Sub
 
+    Private Sub MAJI_Plats()
+
+        Dim lPlat As Boolean = Me.chk_Plat.Checked
+
+        Me.lbl_NuancePlat.Visible = lPlat
+        Me.lbl_Wplat.Visible = lPlat
+        Me.lbl_Tplat.Visible = lPlat
+
+        Me.cmb_NuancePlat.Visible = lPlat
+        Me.txt_Wplat.Visible = lPlat
+        Me.txt_EpPlat.Visible = lPlat
+
+        Me.etq_UnitDim8.Visible = lPlat
+        Me.etq_UnitDim9.Visible = lPlat
+
+        Me.img_Tplat.Visible = lPlat
+        Me.img_Wplat.Visible = lPlat
+
+    End Sub
+
 #End Region
 
 #Region "   Conditions de livraison "
 
-    Private Sub RemplirDelivery(ByVal Serie As String, ByVal Profile As String)
+    'Private Sub RemplirDelivery(ByVal Serie As String, ByVal Profile As String)
 
-        Dim iRow As Integer = 0
+    '    Dim iRow As Integer = 0
 
-        Me.lbl_Delivery.Text = RemplaceDollar(strDeliveryConditions, Profile)
-        Me.GridDelivery.Rows.Clear()
+    '    Me.lbl_Delivery.Text = RemplaceDollar(strDeliveryConditions, Profile)
+    '    Me.GridDelivery.Rows.Clear()
 
-        'GridDelivery.AutoResizeRow(iRow - 1)
+    '    'GridDelivery.AutoResizeRow(iRow - 1)
 
-        For i As Integer = 1 To MyCatalogue.nbDelivery
+    '    For i As Integer = 1 To MyCatalogue.nbDelivery
 
-            If MyCatalogue.Series(Serie).Profiles(Profile).IndDeliv(i - 1) = 1 Then
+    '        If MyCatalogue.Series(Serie).Profiles(Profile).IndDeliv(i - 1) = 1 Then
 
-                GridDelivery.Rows.Add()
-                iRow += 1
-                GridDelivery(0, iRow - 1).Value = CStr(iRow)
-                GridDelivery(1, iRow - 1).Value = MyCatalogue.Delivery(i - 1)(ILangueDelivery)
-                GridDelivery(1, iRow - 1).Selected = False
-            End If
+    '            GridDelivery.Rows.Add()
+    '            iRow += 1
+    '            GridDelivery(0, iRow - 1).Value = CStr(iRow)
+    '            GridDelivery(1, iRow - 1).Value = MyCatalogue.Delivery(i - 1)(ILangueDelivery)
+    '            GridDelivery(1, iRow - 1).Selected = False
+    '        End If
 
-        Next
+    '    Next
 
-    End Sub
+    'End Sub
 
-    Private Sub PrepareGridDelivery()
+    'Private Sub PrepareGridDelivery()
 
-        GridDelivery.Columns(1).CellTemplate.Style.WrapMode = DataGridViewTriState.True
-        GridDelivery.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
+    '    GridDelivery.Columns(1).CellTemplate.Style.WrapMode = DataGridViewTriState.True
+    '    GridDelivery.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
 
-    End Sub
+    'End Sub
 
 #End Region
 
@@ -2044,7 +2175,6 @@ Public Class Frm_SectionAcierStandard
         Next
 
     End Sub
-
 
 #End Region
 

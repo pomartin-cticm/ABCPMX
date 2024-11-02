@@ -342,9 +342,9 @@ Public Class Frm_SectionIFB
         Me.txt_bp.Text = GetStringInUnit(MySectionLoc.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 1, False)
         Me.txt_tp.Text = GetStringInUnit(MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False)
 
-        Me.cmb_GradeWP.SelectedItem = MySectionLoc.AcierSPD.Nuance
+        Me.cmb_GradeWP.SelectedItem = MySectionLoc.AcierPlat.Nuance
 
-        If MySectionLoc.AcierSPD.Qualite = "EC3" Then
+        If MySectionLoc.AcierPlat.Qualite = "EC3" Then
             Me.cmb_ReductionCurveWP.SelectedItem = "EC3"
         Else
             Me.cmb_ReductionCurveWP.SelectedItem = "EN 10025"
@@ -523,27 +523,27 @@ Public Class Frm_SectionIFB
 
         Dim lAcierModifieSPD As Boolean = False
 
-        GereTransfertValeur(MySectionLoc.AcierSPD.Nuance, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Nuance, lAcierModifieSPD)
-        GereTransfertValeur(MySectionLoc.AcierSPD.Qualite, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Qualite, lAcierModifieSPD)
-        GereTransfertValeur(MySectionLoc.AcierSPD.NormeProduit, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.NormeProduit, lAcierModifieSPD)
-        GereTransfertValeur(MySectionLoc.AcierSPD.Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Reduction, lAcierModifieSPD)
+        GereTransfertValeur(MySectionLoc.AcierPlat.Nuance, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierPlat.Nuance, lAcierModifieSPD)
+        GereTransfertValeur(MySectionLoc.AcierPlat.Qualite, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierPlat.Qualite, lAcierModifieSPD)
+        GereTransfertValeur(MySectionLoc.AcierPlat.NormeProduit, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierPlat.NormeProduit, lAcierModifieSPD)
+        GereTransfertValeur(MySectionLoc.AcierPlat.Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierPlat.Reduction, lAcierModifieSPD)
 
         If lAcierModifieSPD Then
             lModif = True
 
-            MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Plages.Clear()
+            MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierPlat.Plages.Clear()
             Dim MyPlageSPD As cls_Acier.strucPlage
             Dim NuanceSPD, QualiteSPD, ReductionSPD As String
 
-            NuanceSPD = MySectionLoc.AcierSPD.Nuance
-            QualiteSPD = MySectionLoc.AcierSPD.Qualite
-            ReductionSPD = MySectionLoc.AcierSPD.Reduction
+            NuanceSPD = MySectionLoc.AcierPlat.Nuance
+            QualiteSPD = MySectionLoc.AcierPlat.Qualite
+            ReductionSPD = MySectionLoc.AcierPlat.Reduction
 
             For i As Integer = 0 To SteelBase.Grades(NuanceSPD).Qualites(QualiteSPD).ReductionCurv(ReductionSPD).Plages.Count - 1
                 MyPlageSPD.Ep = SteelBase.Grades(NuanceSPD).Qualites(QualiteSPD).ReductionCurv(ReductionSPD).Plages(i).Ep
                 MyPlageSPD.Fy = SteelBase.Grades(NuanceSPD).Qualites(QualiteSPD).ReductionCurv(ReductionSPD).Plages(i).Fy
                 MyPlageSPD.Fu = SteelBase.Grades(NuanceSPD).Qualites(QualiteSPD).ReductionCurv(ReductionSPD).Plages(i).Fu
-                MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Plages.Add(MyPlageSPD)
+                MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierPlat.Plages.Add(MyPlageSPD)
             Next
         End If
 
@@ -1877,8 +1877,8 @@ Public Class Frm_SectionIFB
 
         End If
 
-        TransfertGridAcier(Nuance, Qualite, Norme, MySectionLoc.AcierSPD)
-        MAJNuancesPossibles(MySectionLoc.AcierSPD)
+        TransfertGridAcier(Nuance, Qualite, Norme, MySectionLoc.AcierPlat)
+        MAJNuancesPossibles(MySectionLoc.AcierPlat)
         MAJ_InfoWP()
     End Sub
 
@@ -1886,10 +1886,10 @@ Public Class Frm_SectionIFB
         Dim msg As String
         msg = "fy = " & MySectionLoc.FySpd & " MPa ("
 
-        If MySectionLoc.AcierSPD.Qualite = "EC3" Then
-            msg += MySectionLoc.AcierSPD.Nuance & " - " & MySectionLoc.AcierSPD.Reduction & ")" 'EC3 - Table 3.1
+        If MySectionLoc.AcierPlat.Qualite = "EC3" Then
+            msg += MySectionLoc.AcierPlat.Nuance & " - " & MySectionLoc.AcierPlat.Reduction & ")" 'EC3 - Table 3.1
         Else
-            msg += MySectionLoc.AcierSPD.Reduction & ")" '10025-2 ou 10025-4
+            msg += MySectionLoc.AcierPlat.Reduction & ")" '10025-2 ou 10025-4
         End If
 
         Me.lbl_InfoFyWP.Text = msg

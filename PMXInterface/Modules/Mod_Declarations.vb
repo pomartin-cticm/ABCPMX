@@ -248,6 +248,7 @@ Public Module Mod_Declarations
         Public lPRS As Boolean                      'Indique si version accessible aux PRS
         Public lDelivery As Boolean                 'Indique si on affiche les conditions de livraison des laminés
         Public lG2 As Boolean                       'Indique si Génération 2 des Eurocodes accessible en mode normal
+        Public lFrenchOnly As Boolean               'Indique si interface en français uniquement (mode normal)
     End Structure
 
     Public Enum Enu_Normes

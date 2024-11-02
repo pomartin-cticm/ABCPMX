@@ -814,7 +814,7 @@ SPANS					= Span lengths
 LEFTSLABCONTINUITY		= The slab is continuous at the left support
 RIGHTSLABCONTINUITY		= The slab is continuous at the right support
 
-#FRM_STANDARDSTEELSECTIONS
+#FRM_STEELSECTIONSUSUAL
 AUTOMATICHA				= Total height automatically assessed
 AUTOMATICHW				= Height of the web automatically assessed
 CANCEL					= Cancel
@@ -835,6 +835,10 @@ UPPERF					= Upper flange
 WEB						= Web 
 WELDEDSYM				= Bi-symmetrical welded section
 WELDEDP					= Mono-symmetrical welded section
+PLATE					= Reinforcing plate under the lower flange
+PLATEW					= Width
+PLATET					= Thickness
+PLATEGRADE				= Steel grade
 
 #FRM_START
 BROWSEFILES				= Browse

@@ -3654,6 +3654,7 @@ Public Module Mod_Dessins
         Dim yMin, yMax As Decimal
         Dim dCar As Decimal
         Dim lLam As Boolean = (mySec.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
+        Dim lPlat As Boolean = lLam And mySec.ProfilA.lPlat
 
         Dim zRef As Decimal = 0
 
@@ -3672,7 +3673,9 @@ Public Module Mod_Dessins
         End If
 
         '--> Initialisation des paramètres d'affichage
+
         yMin = -mySec.ProfilA.ha
+        If lPlat Then yMin -= mySec.ProfilA.Plat_t
 
         xMin = -Math.Max(mySec.ProfilA.Bfs, mySec.ProfilA.Bfi) / 2
 
@@ -3737,7 +3740,11 @@ Public Module Mod_Dessins
             MyColor = StyleCouleur(iSelect, iRef)
             MyPen.Color = MyColor
 
-            yo = -mySec.ProfilA.ha - dCar
+            If lLam And lPlat Then
+                yo = dCar
+            Else
+                yo = -mySec.ProfilA.ha - dCar
+            End If
             xo = mySec.ProfilA.Bfi / 2
 
             ye = yo
@@ -10847,7 +10854,7 @@ Public Module Mod_Dessins
     End Sub
 
     Private Sub DessinProfileMetal(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
-                                   zRef As Decimal, Optional xPos As Decimal = 0, Optional lRepresentationPoutreExtremite As Boolean = False)
+                                   zRef As Decimal, Optional xPos As Decimal = 0, Optional lExtremite As Boolean = False)
         '---------------------------------------------------------------------------------------------------------------------------
         '   01/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -10863,12 +10870,12 @@ Public Module Mod_Dessins
 
         '--> Déclaration
 
-        Dim xPts() As Single = Nothing
-        Dim yPts() As Single = Nothing
-        Dim nbPts As Integer
+        'Dim xPts() As Single = Nothing
+        'Dim yPts() As Single = Nothing
+        'Dim nbPts As Integer
 
-        Dim xe, ye As Double
-        Dim xo, yo As Double
+        'Dim xe, ye As Double
+        'Dim xo, yo As Double
 
         Dim MyPenContour As New Pen(Color.Black, 1)
 
@@ -10876,121 +10883,313 @@ Public Module Mod_Dessins
 
         Select Case MyProfil.typeProfileAcier
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine
-                PrepareContourLamine(MyProfil, xPts, yPts, nbPts, False)
-                DecalePts(yPts, nbPts, zRef)
-                If Math.Abs(xPos) > 0 Then
-                    DecalePts(xPts, nbPts, xPos)
-                End If
-                RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
+                DessinProfileLamine(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos)
 
             Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
-
-                '-< Semelle supérieure >-
-
-                xe = xPos + MyProfil.Bfs / 2
-                xo = xPos - MyProfil.Bfs / 2
-                ye = -zRef
-                yo = -MyProfil.Tfs - zRef
-
-                AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
-
-                '-< Semelle inférieure >-
-
-                xe = xPos + MyProfil.Bfi / 2
-                xo = xPos - MyProfil.Bfi / 2
-                ye = -MyProfil.ha - zRef                  '   - Section.ha / 2
-                yo = -MyProfil.ha + MyProfil.Tfi - zRef
-
-                AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
-
-                '-< Âme >-
-
-                xe = xPos + MyProfil.Tw / 2
-                xo = xPos - MyProfil.Tw / 2
-                ye = -MyProfil.Tfs - zRef
-                yo = -MyProfil.ha - zRef + MyProfil.Tfi
-
-                AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
+                DessinProfilePRS(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos)
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                PrepareContourSFB(MyProfil, xPts, yPts, nbPts)
-                DecalePts(yPts, nbPts, zRef)
-                If Math.Abs(xPos) > 0 Then
-                    DecalePts(xPts, nbPts, xPos)
-                End If
-                RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
-
-                'Dessin du plat soudé inf
-
-                If MyProjet.Poutres.Count = 0 Then
-                    xo = xPos - MyProfil.Plat_b / 2
-                Else
-                    If Not lRepresentationPoutreExtremite Then
-                        xo = xPos - MyProfil.Plat_b / 2
-                    Else
-                        xo = xPos - MyProfil.Bfi / 2
-                    End If
-                End If
-
-                xe = xo + MyProfil.Plat_b
-                ye = -MyProfil.hb + zRef
-                yo = -MyProfil.hb + zRef - MyProfil.Plat_t
-
-                AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
+                DessinSlimSFB(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos, lExtremite)
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                PrepareContourIFB_A(MyProfil, xPts, yPts, nbPts)
-                DecalePts(yPts, nbPts, zRef)
-                If Math.Abs(xPos) > 0 Then
-                    DecalePts(xPts, nbPts, xPos)
-                End If
-                RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
-
-                'Dessin du plat soudé inf
-
-                If MyProjet.Poutres.Count = 0 Then
-                    xo = xPos - MyProfil.Plat_b / 2
-                Else
-                    If Not lRepresentationPoutreExtremite Then
-                        xo = xPos - MyProfil.Plat_b / 2
-                    Else
-                        xo = xPos - MyProfil.Bfs / 2
-                    End If
-                End If
-
-                xe = xo + MyProfil.Plat_b
-                ye = -MyProfil.ha + zRef
-                yo = -MyProfil.ha + zRef + MyProfil.Plat_t
-
-                AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
+                DessinSlimIFBA(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos, lExtremite)
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                PrepareContourIFB_B(MyProfil, xPts, yPts, nbPts)
-                DecalePts(yPts, nbPts, zRef)
-                If Math.Abs(xPos) > 0 Then
-                    DecalePts(xPts, nbPts, xPos)
-                End If
-                RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
-
-                'Dessin du plat soudé sup
-
-                xo = xPos - MyProfil.Plat_b / 2
-
-                xe = xo + MyProfil.Plat_b
-                ye = zRef
-                yo = zRef - MyProfil.Plat_t
-
-                AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
+                DessinSlimIFBB(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos, lExtremite)
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                PrepareContourLamine(MyProfil, xPts, yPts, nbPts, lRepresentationPoutreExtremite)
-                DecalePts(yPts, nbPts, zRef)
-                If Math.Abs(xPos) > 0 Then
-                    DecalePts(xPts, nbPts, xPos)
-                End If
-                RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
+                DessinSlimSAB(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos, lExtremite)
 
         End Select
+    End Sub
+
+
+    Private Sub DessinSlimSAB(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
+                              zRef As Decimal, xPos As Decimal, lExtremite As Boolean)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   02/11/24    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Dessin d'un profilé Slim floor SAB
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics d'affichage
+        '   MyProfil    [E] :   Profilé métallique affiché
+        '   MyBrush     [E] :   Pinceau utilisé pour le remplissage
+        '   MyParrffloc [E] :   Paramètres d'affichage
+        '   zRef        [E] :   z de reférence (0 pour la fibre supérieure de la section acier)
+        '   xPos        [E] :   Position x de la section représentée
+        '   lExtremite  [E] :   Poutre en extremité de dalle ?
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
+        Dim nbPts As Integer
+
+        Dim xe, ye As Double
+        Dim xo, yo As Double
+
+        '--( Dessin
+        PrepareContourLamine(MyProfil, xPts, yPts, nbPts, lExtremite)
+        DecalePts(yPts, nbPts, zRef)
+        If Math.Abs(xPos) > 0 Then
+            DecalePts(xPts, nbPts, xPos)
+        End If
+        RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
+
+    End Sub
+
+    Private Sub DessinSlimIFBB(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
+                               zRef As Decimal, xPos As Decimal, lExtremite As Boolean)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   02/11/24    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Dessin d'un profilé Slim floor IFB-B
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics d'affichage
+        '   MyProfil    [E] :   Profilé métallique affiché
+        '   MyBrush     [E] :   Pinceau utilisé pour le remplissage
+        '   MyParrffloc [E] :   Paramètres d'affichage
+        '   zRef        [E] :   z de reférence (0 pour la fibre supérieure de la section acier)
+        '   xPos        [E] :   Position x de la section représentée
+        '   lExtremite  [E] :   Poutre en extremité de dalle ?
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
+        Dim nbPts As Integer
+
+        Dim xe, ye As Double
+        Dim xo, yo As Double
+
+        '--( Dessin
+
+        PrepareContourIFB_B(MyProfil, xPts, yPts, nbPts)
+        DecalePts(yPts, nbPts, zRef)
+        If Math.Abs(xPos) > 0 Then
+            DecalePts(xPts, nbPts, xPos)
+        End If
+        RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
+
+        'Dessin du plat soudé sup
+
+        xo = xPos - MyProfil.Plat_b / 2
+
+        xe = xo + MyProfil.Plat_b
+        ye = zRef
+        yo = zRef - MyProfil.Plat_t
+
+        AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
+
+    End Sub
+
+    Private Sub DessinSlimIFBA(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
+                               zRef As Decimal, xPos As Decimal, lExtremite As Boolean)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   02/11/24    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Dessin d'un profilé Slim floor IFB-A
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics d'affichage
+        '   MyProfil    [E] :   Profilé métallique affiché
+        '   MyBrush     [E] :   Pinceau utilisé pour le remplissage
+        '   MyParrffloc [E] :   Paramètres d'affichage
+        '   zRef        [E] :   z de reférence (0 pour la fibre supérieure de la section acier)
+        '   xPos        [E] :   Position x de la section représentée
+        '   lExtremite  [E] :   Poutre en extremité de dalle ?
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
+        Dim nbPts As Integer
+
+        Dim xe, ye As Double
+        Dim xo, yo As Double
+
+        '--( Dessin
+
+        PrepareContourIFB_A(MyProfil, xPts, yPts, nbPts)
+        DecalePts(yPts, nbPts, zRef)
+        If Math.Abs(xPos) > 0 Then
+            DecalePts(xPts, nbPts, xPos)
+        End If
+        RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
+
+        'Dessin du plat soudé inf
+
+        If MyProjet.Poutres.Count = 0 Then
+            xo = xPos - MyProfil.Plat_b / 2
+        Else
+            If Not lExtremite Then
+                xo = xPos - MyProfil.Plat_b / 2
+            Else
+                xo = xPos - MyProfil.Bfs / 2
+            End If
+        End If
+
+        xe = xo + MyProfil.Plat_b
+        ye = -MyProfil.ha + zRef
+        yo = -MyProfil.ha + zRef + MyProfil.Plat_t
+
+        AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
+
+    End Sub
+
+    Private Sub DessinSlimSFB(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
+                              zRef As Decimal, xPos As Decimal, lExtremite As Boolean)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   02/11/24    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Dessin d'un profilé Slim floor SFB
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics d'affichage
+        '   MyProfil    [E] :   Profilé métallique affiché
+        '   MyBrush     [E] :   Pinceau utilisé pour le remplissage
+        '   MyParrffloc [E] :   Paramètres d'affichage
+        '   zRef        [E] :   z de reférence (0 pour la fibre supérieure de la section acier)
+        '   xPos        [E] :   Position x de la section représentée
+        '   lExtremite  [E] :   Poutre en extremité de dalle ?
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
+        Dim nbPts As Integer
+
+        Dim xe, ye As Double
+        Dim xo, yo As Double
+
+        '--( Dessin
+
+        PrepareContourSFB(MyProfil, xPts, yPts, nbPts)
+        DecalePts(yPts, nbPts, zRef)
+        If Math.Abs(xPos) > 0 Then
+            DecalePts(xPts, nbPts, xPos)
+        End If
+        RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
+
+        'Dessin du plat soudé inf
+
+        If MyProjet.Poutres.Count = 0 Then
+            xo = xPos - MyProfil.Plat_b / 2
+        Else
+            If Not lExtremite Then
+                xo = xPos - MyProfil.Plat_b / 2
+            Else
+                xo = xPos - MyProfil.Bfi / 2
+            End If
+        End If
+
+        xe = xo + MyProfil.Plat_b
+        ye = -MyProfil.hb + zRef
+        yo = -MyProfil.hb + zRef - MyProfil.Plat_t
+
+        AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
+
+    End Sub
+
+    Private Sub DessinProfilePRS(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
+                                 zRef As Decimal, Optional xPos As Decimal = 0)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   02/11/24    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Dessin d'un profilé PRS
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics d'affichage
+        '   MyProfil    [E] :   Profilé métallique affiché
+        '   MyBrush     [E] :   Pinceau utilisé pour le remplissage
+        '   MyParrffloc [E] :   Paramètres d'affichage
+        '   zRef        [E] :   z de reférence (0 pour la fibre supérieure de la section acier)
+        '   xPos        [E] :   Position x de la section représentée
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xe, ye As Double
+        Dim xo, yo As Double
+
+        '-< Semelle supérieure >-
+
+        xe = xPos + MyProfil.Bfs / 2
+        xo = xPos - MyProfil.Bfs / 2
+        ye = -zRef
+        yo = -MyProfil.Tfs - zRef
+
+        AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
+
+        '-< Semelle inférieure >-
+
+        xe = xPos + MyProfil.Bfi / 2
+        xo = xPos - MyProfil.Bfi / 2
+        ye = -MyProfil.ha - zRef                  '   - Section.ha / 2
+        yo = -MyProfil.ha + MyProfil.Tfi - zRef
+
+        AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
+
+        '-< Âme >-
+
+        xe = xPos + MyProfil.Tw / 2
+        xo = xPos - MyProfil.Tw / 2
+        ye = -MyProfil.Tfs - zRef
+        yo = -MyProfil.ha - zRef + MyProfil.Tfi
+
+        AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
+
+    End Sub
+
+
+    Private Sub DessinProfileLamine(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
+                                    zRef As Decimal, Optional xPos As Decimal = 0)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   02/11/24    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Dessin du profilé laminé
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics d'affichage
+        '   MyProfil    [E] :   Profilé métallique affiché
+        '   MyBrush     [E] :   Pinceau utilisé pour le remplissage
+        '   MyParrffloc [E] :   Paramètres d'affichage
+        '   zRef        [E] :   z de reférence (0 pour la fibre supérieure de la section acier)
+        '   xPos        [E] :   Position x de la section représentée
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
+        Dim nbPts As Integer
+
+        Dim xe, ye As Double
+        Dim xo, yo As Double
+
+        '--> Tracé du profilé laminé
+
+        PrepareContourLamine(MyProfil, xPts, yPts, nbPts, False)
+        DecalePts(yPts, nbPts, zRef)
+        If Math.Abs(xPos) > 0 Then
+            DecalePts(xPts, nbPts, xPos)
+        End If
+        RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
+
+        '--> Tracé du plat, le cas échéant
+
+        If MyProfil.lPlat Then
+
+            xo = xPos - MyProfil.Plat_b / 2
+
+            xe = xo + MyProfil.Plat_b
+            ye = zRef - MyProfil.hb
+            yo = zRef - MyProfil.hb - MyProfil.Plat_t
+
+            AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
+
+        End If
+
     End Sub
 
     Private Sub PrepareContourLamine(myProfil As cls_ProfilA, ByRef xPts() As Single, ByRef yPts() As Single,

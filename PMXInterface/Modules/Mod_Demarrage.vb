@@ -42,6 +42,9 @@ Public Module Mod_Demarrage
 
         LogicielReglages.lG2 = False
 
+        'LogicielOptions.lFrenchOnly = (LogicielInfo.Maitre = EnuMaitre.CTICM)
+        LogicielReglages.lFrenchOnly = False
+
     End Sub
 
     Private Sub InitialiseVersion()
@@ -106,9 +109,7 @@ Public Module Mod_Demarrage
         '--> Réglages CTICM/AM
 
         LogicielInfo.Maitre = EnuMaitre.CTICM
-        'LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
-        'LogicielOptions.lFrenchOnly = (LogicielInfo.Maitre = EnuMaitre.CTICM)
-        LogicielOptions.lFrenchOnly = False
+        LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
 
         InitialiseReglagesLogiciel()
         InitialiseVersion()
@@ -742,7 +743,7 @@ Public Module Mod_Demarrage
 
         AssocieAcierCompatible(MyPoutre, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve)
         If MyPoutre.lSlimFloor Then _
-        InitialiseAcierPlats(MyPoutre.Section.AcierSPD)
+        InitialiseAcierPlats(MyPoutre.Section.AcierPlat)
 
         MyPoutre.Dalle.ThetaRd = OptionsScope.ThetaH
 
@@ -1178,7 +1179,7 @@ Public Module Mod_Demarrage
 
             '== En mode normal et en version CTICM : français
 
-            If LogicielOptions.lFrenchOnly And (Not LogicielOptions.lExpert) Then
+            If LogicielReglages.lFrenchOnly And (Not LogicielOptions.lExpert) Then
                 idxLangue = Math.Max(idxLangue, IndiceFrancais)
             End If
 

@@ -80,7 +80,7 @@
 
     Private Sub AfficherOptionsEnCours()
 
-        Dim lFrenchOnly As Boolean = LogicielOptions.lFrenchOnly And (Not LogicielOptions.lExpert)
+        Dim lFrenchOnly As Boolean = LogicielReglages.lFrenchOnly And (Not LogicielOptions.lExpert)
         InitialiseLangues(Me.lst_LangueGUI, LogicielInfo.ListeLangue, Frm_OptionsLogiciel.pLocalLogicielOptions.IndLangue, lFrenchOnly)
         InitialiseLangues(Me.lst_LangueNdC, LogicielInfo.ListeLangueNDC, Frm_OptionsLogiciel.pLocalLogicielOptions.IndLangueNDC)
 

@@ -813,7 +813,7 @@ SPANS					= Portées
 LEFTSLABCONTINUITY		= La dalle est continue sur l'appui gauche
 RIGHTSLABCONTINUITY		= La dalle est continue sur l'appui droit
 
-#FRM_STANDARDSTEELSECTIONS
+#FRM_STEELSECTIONSUSUAL
 AUTOMATICHA				= Hauteur totale automatiquement calculée
 AUTOMATICHW				= Hauteur de l'âme automatiquement calculée
 CANCEL					= Annuler
@@ -834,6 +834,10 @@ UPPERF					= Semelle supérieure
 WEB						= Âme 
 WELDEDSYM				= PRS bisymétrique
 WELDEDP					= PRS mono-symétrique
+PLATE					= Plat de renfort sous la semelle inférieure
+PLATEW					= Largeur
+PLATET					= Épaisseur
+PLATEGRADE				= Nuance
 
 #FRM_START
 BROWSEFILES				= Parcourir

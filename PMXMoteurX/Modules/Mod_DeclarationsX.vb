@@ -34,7 +34,6 @@
         Public lDebug As Boolean                    'Fonctionnement en mode debug
         Public IndLangue As Integer                 'Indice de la langue de l'interface
         Public IndLangueNDC As Integer              'Indice de la langue de la note de calcul
-        Public lFrenchOnly As Boolean               'Indique si interface en français uniquement (mode normal)
 
         Public IndUnitLongueur As Integer           'Indice de l'unité de longueur utilisée
         Public IndUnitDimension As Integer          'Indice de l'unité de longueur utilisée

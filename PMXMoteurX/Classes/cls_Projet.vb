@@ -804,6 +804,7 @@ Public Class cls_Projet
             AjouteLigneFrmt(Lines, "Welda", .aW)
             AjouteLigneFrmt(Lines, "PlatB", .Plat_b)
             AjouteLigneFrmt(Lines, "PlatT", .Plat_t)
+            AjouteLigneFrmt(Lines, "PlatR", .lPlat)
             'AjouteLigneFrmt(Lines, "IndStand", ConvertListShortToString(.IndStandart))
             'If .IndDeliv IsNot Nothing Then
             '    AjouteLigneFrmt(Lines, "IndDeliv", ConvertListShortToString(.IndDeliv))
@@ -1922,6 +1923,7 @@ Public Class cls_Projet
                     Case "TW" : myProfil.Tw = CDec(TraiteReal(Mots(nbMots)))
                     Case "WELDA" : myProfil.aW = CDec(TraiteReal(Mots(nbMots)))
                     Case "TYPE" : myProfil.typeProfileAcier = Mots(nbMots)
+                    Case "PLATR" : myProfil.lPlat = CBool(TraiteReal(Mots(nbMots)))
                     Case "PLATB" : myProfil.Plat_b = CDec(TraiteReal(Mots(nbMots)))
                     Case "PLATT" : myProfil.Plat_t = CDec(TraiteReal(Mots(nbMots)))
                             'Case "INDDELIV" : .IndDeliv = ConvertStringToListShort(Mots(nbMots))

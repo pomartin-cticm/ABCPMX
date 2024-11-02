@@ -38,7 +38,6 @@ Public Class cls_Section
 
 #Region " Attributs généraux "
 
-
     Public Nom As String                        ' Nom de la section
 
     Public lDalleBeton As Boolean               ' Indique si l'utilisateur a défini une dalle de béton
@@ -66,7 +65,7 @@ Public Class cls_Section
     Public ProfilA As New cls_ProfilA           ' Profilé métallique
 
     Public Acier As New cls_Acier               ' Acier du profilé
-    Public AcierSPD As New cls_Acier            ' Acier de la plaque soudée
+    Public AcierPlat As New cls_Acier           ' Acier de la plaque soudée
 
     ''' <summary>
     ''' Indique si les valeurs de fy sont renseignées directement par l'utilisateur (True) ou via les plages (False)
@@ -1266,7 +1265,7 @@ Public Class cls_Section
                 MyFy = Me.f_y.spd
 
             Else '--[ Acier de la base de donnée : Recherche dans les plages
-                MyFy = Me.AcierSPD.LimiteFy(Me.ProfilA.Plat_t)
+                MyFy = Me.AcierPlat.LimiteFy(Me.ProfilA.Plat_t)
             End If
 
             Return MyFy
@@ -1473,7 +1472,7 @@ Public Class cls_Section
         SectionSource.ProfilA.DeepClone(SectionSource.ProfilA, SectionCible.ProfilA)
         SectionSource.Enrobage.DeepClone(SectionSource.Enrobage, SectionCible.Enrobage)
         SectionSource.Acier.Deepclone(SectionSource.Acier, SectionCible.Acier)
-        SectionSource.AcierSPD.Deepclone(SectionSource.AcierSPD, SectionCible.AcierSPD)
+        SectionSource.AcierPlat.Deepclone(SectionSource.AcierPlat, SectionCible.AcierPlat)
 
     End Sub
 
@@ -1631,7 +1630,7 @@ Public Class cls_Section
     ''' <param name="tplat">valeur de t pour le plat soudé, le cas échéant (sinon la valeur 0 lui sera affectée)</param>
     Public Sub calcul_cf_tf(ByRef cfsup As Decimal, ByRef tfsup As Decimal, ByRef cfinf As Decimal, ByRef tfinf As Decimal, ByRef cplat As Decimal, ByRef tplat As Decimal)
         With Me.ProfilA
-            Select Case Me.typeSection
+            Select Case Me.TypeSection
                 Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
                     cfsup = (.Bfs - .Tw) / 2 - .Rcs
                     tfsup = .Tfs
@@ -1681,7 +1680,7 @@ Public Class cls_Section
     Public Function lSemelleSupComprimee(lFlexionPositive As Boolean, zAN As Decimal) As Boolean
         If lFlexionPositive Then
             If lSlimFloor Then
-                Select Case Me.typeSection
+                Select Case Me.TypeSection
                     Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
                         lSemelleSupComprimee = zAN <= Me.hec - Me.ProfilA.Plat_t
                     Case Else
@@ -1914,7 +1913,7 @@ Public Class cls_Section
 
         With Me.ProfilA
             Psi = CalculPsi(lFlexionPositive, zANE)
-            classeAmeLoc = ClasseAmeFlechieElastique(.HauteurAmeDw, .Tw, Epsilon_W, psi, lG1_EN)
+            classeAmeLoc = ClasseAmeFlechieElastique(.HauteurAmeDw, .Tw, Epsilon_W, Psi, lG1_EN)
         End With
         Return classeAmeLoc
 
@@ -1999,7 +1998,7 @@ Public Class cls_Section
 
             If lFlexionPositive Then
                 If lSlimFloor Then
-                    Select Case Me.typeSection
+                    Select Case Me.TypeSection
                         Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
                             Return zAN >= Me.hec - .Plat_t
                         Case Else
@@ -2010,7 +2009,7 @@ Public Class cls_Section
                 End If
             Else 'flexion négative
                 If lSlimFloor Then
-                    Select Case Me.typeSection
+                    Select Case Me.TypeSection
                         Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
                             Return zAN <= .Tfi + .Rci
                         Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
@@ -2045,7 +2044,7 @@ Public Class cls_Section
                 If lFlexionPositive Then
 
                     If lSlimFloor Then
-                        Select Case Me.typeSection
+                        Select Case Me.TypeSection
                             Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
                                 alpha = (Me.hec - .Plat_t - zAN) / .HauteurAmeDw
                             Case Else
@@ -2056,7 +2055,7 @@ Public Class cls_Section
                     End If
                 Else
                     If lSlimFloor Then
-                        Select Case Me.typeSection
+                        Select Case Me.TypeSection
                             Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
                                 alpha = (zAN - .Tfi - .Rci) / .HauteurAmeDw
                             Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
@@ -2086,7 +2085,7 @@ Public Class cls_Section
             If lFlexionPositive Then
 
                 If lSlimFloor Then
-                    Select Case Me.typeSection
+                    Select Case Me.TypeSection
                         Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
                             psi = (-zAN + .Tfi + .Rci) / (-zAN + Me.hec - .Tfs - .Rcs)
                         Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
@@ -2101,7 +2100,7 @@ Public Class cls_Section
                 End If
             Else
                 If lSlimFloor Then
-                    Select Case Me.typeSection
+                    Select Case Me.TypeSection
                         Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
 
                             psi = (-zAN + Me.hec - .Tfs - .Rcs) / (-zAN + .Tfi + .Rci)
@@ -2274,7 +2273,7 @@ Public Class cls_Section
         Me.f_y.spd = 235
 
         Me.Nom = nom
-        Me.typeSection = typeSection
+        Me.TypeSection = typeSection
 
         '--> Par défaut définition utilisateur de la section
         Me.lDatabase = True
@@ -2367,7 +2366,7 @@ Public Class cls_Section
                         'Case "DB_G" : Me.Gamme = Mots(nbMots)
                         'Case "DB_P" : Me.NomProfile = Mots(nbMots)
                             '--> Géométrie
-                        Case "TYPE" : Me.typeSection = Mots(nbMots)
+                        Case "TYPE" : Me.TypeSection = Mots(nbMots)
                         'Case "H" : Me.ha = Mots(nbMots)
                         ''Case "H_W" : Me.h_w = Mots(nbMots)
                         'Case "T_W" : Me.t_w = Mots(nbMots)
