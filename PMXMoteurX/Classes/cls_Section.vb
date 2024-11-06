@@ -273,7 +273,7 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        MyModele.MaillageProfileUsuels_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW)
+        MyModele.MaillageProfileUsuels_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd)
 
         '# Béton d'enrobage
 

@@ -1166,7 +1166,6 @@ Public Class cls_ProfilA
         WelYY = Inertie / Math.Max(Math.Abs(zSup - zANE), Math.Abs(zANE - zInf))
         WplYY = MplRd / (Fy * kConvMPaPa)
 
-
     End Sub
 
     Public Sub ProprietesElastiques(Signe As Decimal, ByRef zANE As Decimal, ByRef InertieY As Decimal)

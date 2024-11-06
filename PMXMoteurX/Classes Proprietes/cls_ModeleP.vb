@@ -451,9 +451,9 @@ Public Class cls_ModeleP
 #Region " Outils de modélisation - Profilés "
 
     Public Sub MaillageProfileA_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                    FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
-                                     Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
-                                        Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
+                                   FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
+                                   Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
+                                   Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
         '-------------------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -461,15 +461,13 @@ Public Class cls_ModeleP
         '-------------------------------------------------------------------------------------------------------------------
         '   Gammas      [E] :   Coefficients partiels
         '   RhoV        [E] :   Coefficient pour l'interaction MV
-        '   MyModele    [E/S]:  Modèle
-        '   coefReduc1  [E] :   Coefficient de réduction qui s'applique au plat le plus bas
-        '   coefReduc2  [E] :   Coefficient de réduction qui s'applique au 2eme plat le plus bas, le cas échéant (sert pour SFB -> correspond à la semelle inférieure du profilé)
+        '   MyProfil    [E] :   Profilé à mailler
         '-------------------------------------------------------------------------------------------------------------------
 
         Select Case MyProfil.typeProfileAcier
 
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
-                MaillageProfileUsuels_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW)
+                MaillageProfileUsuels_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
                 MaillageProfileASlimfloorsSFB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
@@ -484,7 +482,7 @@ Public Class cls_ModeleP
     End Sub
 
     Public Sub MaillageProfileUsuels_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal)
+                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FyP As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   25/04/24 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -492,16 +490,18 @@ Public Class cls_ModeleP
         '-------------------------------------------------------------------------------------------------------------------
         '   GammaM      [E] :   Coefficient partiel
         '   RhoV        [E] :   Coefficient pour l'interaction MV
-        '   MyProfil    [E]:    Profilé à modéliser
+        '   MyProfil    [E] :   Profilé à modéliser
         '   FySup       [E] :   Limite d'élasticité semelle sup
         '   FyInf       [E] :   Limite d'élasticité semelle inf
         '   FyW         [E] :   Limite d'élasticité âme
+        '   FyP         [E] :   Limite d'élasticité plat renfort
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
         Dim Hw As Decimal
         Dim zRef As Decimal = MyProfil.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
+        Dim lLamine As Boolean = (MyProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
 
         '--> Initialisation
 
@@ -521,19 +521,27 @@ Public Class cls_ModeleP
 
         Me.AddMaille(MyProfil.AireFi, MyProfil.Tfi, zRef - MyProfil.ha + MyProfil.Tfi / 2, 1, 1, 1, FyInf, 1, GammaM)
 
-        If IsGreater(MyProfil.Rcs, 0) Then
+        '# Congés supérieurs
 
-            '# Congés supérieurs
+        If IsGreater(MyProfil.Rcs, 0) Then
 
             Me.AddMailleConges(MyProfil.Rcs, zRef - MyProfil.Tfs, 1, 1, 1, FyW, (1 - RhoV), GammaM, cls_Maille.EnuTypeMaille.CongeSup)
 
         End If
 
+        '# Congés inférieurs
+
         If IsGreater(MyProfil.Rci, 0) Then
 
-            '# Congés inférieurs
-
             Me.AddMailleConges(MyProfil.Rci, zRef - MyProfil.ha + MyProfil.Tfi, 1, 1, 1, FyW, (1 - RhoV), GammaM, cls_Maille.EnuTypeMaille.CongeInf)
+
+        End If
+
+        '# Plat renfort de semelle inférieure pour les profilés laminés
+
+        If MyProfil.lPlatRenfort And lLamine Then
+
+            Me.AddMaille(MyProfil.AirePlat, MyProfil.Plat_t, zRef - MyProfil.ha - MyProfil.Plat_t / 2, 1, 1, 1, FyP, 1, GammaM)
 
         End If
 
@@ -805,7 +813,7 @@ Public Class cls_ModeleP
     End Sub
 
     Private Sub MaillageProfileUsuels_ZZ(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal)
+                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FyP As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   25/04/24 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -817,12 +825,14 @@ Public Class cls_ModeleP
         '   FySup       [E] :   Limite d'élasticité semelle sup
         '   FyInf       [E] :   Limite d'élasticité semelle inf
         '   FyW         [E] :   Limite d'élasticité âme
+        '   FyP         [E] :   Limite d'élasticité plat renfort de semelle
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
         Dim Hw As Decimal
         Dim zRef As Decimal = MyProfil.zRefAraseSup             'Cote de l'arase supérieure de la semelle supérieure du profilé 
+        Dim lLamine As Boolean = (MyProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
 
         '--> Initialisation
 
@@ -857,6 +867,14 @@ Public Class cls_ModeleP
 
             Me.AddMailleConges(MyProfil.Rci, -MyProfil.Tw / 2, 1, 1, 1, FyW, (1 - RhoV), GammaM, cls_Maille.EnuTypeMaille.CongeSup, 0.5)
             Me.AddMailleConges(MyProfil.Rci, MyProfil.Tw / 2, 1, 1, 1, FyW, (1 - RhoV), GammaM, cls_Maille.EnuTypeMaille.CongeInf, 0.5)
+
+        End If
+
+        '# Plat renfort de semelle inférieure pour les profilés laminés
+
+        If MyProfil.lPlatRenfort And lLamine Then
+
+            Me.AddMaille(MyProfil.AirePlat, MyProfil.Plat_b, 0, 1, 1, 1, FyP, 1, GammaM)
 
         End If
 
