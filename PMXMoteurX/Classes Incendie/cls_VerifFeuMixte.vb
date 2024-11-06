@@ -280,13 +280,13 @@
 
                 If lProtege Then
                     If lBoard Then
-                        TempFs += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivS, kSh, TimeT, DeltaT, myBeam.ParamFeu)
+                        TempFs += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivS, TimeT, DeltaT, myBeam.ParamFeu)
                         TempFi = TempFs
                         TempW = TempFs
                     Else
-                        TempFs += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivFs, kSh, TimeT, DeltaT, myBeam.ParamFeu)
-                        TempFi += EN_Feu.DeltaTempAcierProtege(TempFi, TempG, MassivFi, kSh, TimeT, DeltaT, myBeam.ParamFeu)
-                        TempW += EN_Feu.DeltaTempAcierProtege(TempW, TempG, MassivW, kSh, TimeT, DeltaT, myBeam.ParamFeu)
+                        TempFs += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivFs, TimeT, DeltaT, myBeam.ParamFeu)
+                        TempFi += EN_Feu.DeltaTempAcierProtege(TempFi, TempG, MassivFi, TimeT, DeltaT, myBeam.ParamFeu)
+                        TempW += EN_Feu.DeltaTempAcierProtege(TempW, TempG, MassivW, TimeT, DeltaT, myBeam.ParamFeu)
                     End If
                 Else
                     TempFs += EN_Feu.DeltaTempAcierNonProtege(TempFs, TempG, MassivFs, kSh, DeltaT, myBeam.ParamFeu)

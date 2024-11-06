@@ -799,7 +799,7 @@ Public Class cls_ModeleP
         Select Case MyProfil.typeProfileAcier
 
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
-                MaillageProfileUsuels_ZZ(GammaM, RhoV, MyProfil, FySup, FyInf, FyW)
+                MaillageProfileUsuels_ZZ(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
                 MaillageProfileASlimfloorsSFB_ZZ(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA

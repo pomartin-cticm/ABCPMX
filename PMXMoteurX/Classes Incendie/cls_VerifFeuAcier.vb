@@ -106,7 +106,8 @@ Public Class cls_VerifFeuAcier
         Dim iCombi As Integer
 
         Dim EN_Feu As New cls_EurocodesFeu
-        Dim lProtege As Boolean
+        Dim lProtege As Boolean                 ' Indique si section protégée
+        Dim lPanneau As Boolean                 ' Indique si protection thermique par panneaux
         Dim lSsExposee As Boolean               ' Indique si la semelle supérieure est exposée au feu
 
         Dim MEd(,) As Decimal = Nothing
@@ -142,7 +143,12 @@ Public Class cls_VerifFeuAcier
         nbCombiELU = myBeam.CombiA_ELF.nbCombi
         lSsExposee = EN_Feu.SemelleSupExposee(myBeam)
         lProtege = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
-        Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
+        lPanneau = myBeam.ParamFeu.lProtectionBoard
+        If lProtege And lPanneau Then
+            Massivete = EN_Feu.MassiveteSectionAcierBox(myBeam.Section.ProfilA, False)
+        Else
+            Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
+        End If
 
         FyAcier = myBeam.Section.FyMin
 
@@ -199,7 +205,7 @@ Public Class cls_VerifFeuAcier
                 '# Calcul de l'échauffement de la section sur le pas de temps
 
                 If lProtege Then
-                    TempA += EN_Feu.DeltaTempAcierProtege(TempA, TempG, Massivete, kSh, TimeT, DeltaT, myBeam.ParamFeu)
+                    TempA += EN_Feu.DeltaTempAcierProtege(TempA, TempG, Massivete, TimeT, DeltaT, myBeam.ParamFeu)
                 Else
                     TempA += EN_Feu.DeltaTempAcierNonProtege(TempA, TempG, Massivete, kSh, DeltaT, myBeam.ParamFeu)
                 End If

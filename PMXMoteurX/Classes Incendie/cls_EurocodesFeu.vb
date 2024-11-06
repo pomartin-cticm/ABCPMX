@@ -466,7 +466,7 @@
 
 #Region " Echauffement des parties en acier "
 
-    Public Function DeltaTempAcierProtege(TempA As Decimal, TempG As Decimal, Massivete As Decimal, ksh As Decimal,
+    Public Function DeltaTempAcierProtege(TempA As Decimal, TempG As Decimal, Massivete As Decimal,
                                           TimeT As Decimal, DeltaT As Decimal, myParamFeu As cls_OptionsFeu) As Decimal
         '--------------------------------------------------------------------------------------------------------------------------------
         '   23/04/24 :  Création - POM
@@ -476,7 +476,6 @@
         '   TempA       [E] :   Température de l'acier au début du pas de temps
         '   TempG       [E] :   Température des gaz au début du pas de temps
         '   Massivete   [E] :   Massiveté de la partie en acier protégée
-        '   ksh         [E] :   Shadow factor
         '   TimeT       [E] :   Temps en secondes
         '   DeltaT      [E] :   Pas de temps en secondes
         '   myParamFeu  [E] :   Options de calcul au feu
