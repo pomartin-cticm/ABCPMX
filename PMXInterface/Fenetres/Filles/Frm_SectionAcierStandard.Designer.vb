@@ -75,6 +75,18 @@ Partial Class Frm_SectionAcierStandard
         Me.lbl_SemelleSup = New System.Windows.Forms.Label()
         Me.lbl_Height = New System.Windows.Forms.Label()
         Me.pan_Lamine = New System.Windows.Forms.Panel()
+        Me.chk_Plat = New System.Windows.Forms.CheckBox()
+        Me.pan_Plat = New System.Windows.Forms.Panel()
+        Me.lbl_NuancePlat = New System.Windows.Forms.Label()
+        Me.lbl_Tplat = New System.Windows.Forms.Label()
+        Me.lbl_Wplat = New System.Windows.Forms.Label()
+        Me.cmb_NuancePlat = New System.Windows.Forms.ComboBox()
+        Me.txt_EpPlat = New System.Windows.Forms.TextBox()
+        Me.img_Tplat = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitDim9 = New System.Windows.Forms.Label()
+        Me.txt_Wplat = New System.Windows.Forms.TextBox()
+        Me.img_Wplat = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitDim8 = New System.Windows.Forms.Label()
         Me.lbl_Profiles = New System.Windows.Forms.Label()
         Me.Grid_ProfilesSup = New System.Windows.Forms.DataGridView()
         Me.Col_ListeSup = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -93,18 +105,6 @@ Partial Class Frm_SectionAcierStandard
         Me.img_ReductionCurve = New System.Windows.Forms.PictureBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.imgList_UY = New System.Windows.Forms.ImageList(Me.components)
-        Me.chk_Plat = New System.Windows.Forms.CheckBox()
-        Me.pan_Plat = New System.Windows.Forms.Panel()
-        Me.txt_EpPlat = New System.Windows.Forms.TextBox()
-        Me.img_Tplat = New System.Windows.Forms.PictureBox()
-        Me.etq_UnitDim9 = New System.Windows.Forms.Label()
-        Me.txt_Wplat = New System.Windows.Forms.TextBox()
-        Me.img_Wplat = New System.Windows.Forms.PictureBox()
-        Me.etq_UnitDim8 = New System.Windows.Forms.Label()
-        Me.cmb_NuancePlat = New System.Windows.Forms.ComboBox()
-        Me.lbl_Wplat = New System.Windows.Forms.Label()
-        Me.lbl_Tplat = New System.Windows.Forms.Label()
-        Me.lbl_NuancePlat = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -125,6 +125,9 @@ Partial Class Frm_SectionAcierStandard
         CType(Me.img_Bfs, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Ht, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Lamine.SuspendLayout()
+        Me.pan_Plat.SuspendLayout()
+        CType(Me.img_Tplat, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Wplat, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_TypeSection.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -132,9 +135,6 @@ Partial Class Frm_SectionAcierStandard
         Me.pan_Acier.SuspendLayout()
         CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_Plat.SuspendLayout()
-        CType(Me.img_Tplat, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Wplat, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -704,6 +704,120 @@ Partial Class Frm_SectionAcierStandard
         Me.pan_Lamine.Size = New System.Drawing.Size(336, 290)
         Me.pan_Lamine.TabIndex = 3
         '
+        'chk_Plat
+        '
+        Me.chk_Plat.AutoSize = True
+        Me.chk_Plat.Location = New System.Drawing.Point(10, 195)
+        Me.chk_Plat.Name = "chk_Plat"
+        Me.chk_Plat.Size = New System.Drawing.Size(68, 17)
+        Me.chk_Plat.TabIndex = 32
+        Me.chk_Plat.Text = "chk_Plat"
+        Me.chk_Plat.UseVisualStyleBackColor = True
+        '
+        'pan_Plat
+        '
+        Me.pan_Plat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Plat.Controls.Add(Me.lbl_NuancePlat)
+        Me.pan_Plat.Controls.Add(Me.lbl_Tplat)
+        Me.pan_Plat.Controls.Add(Me.lbl_Wplat)
+        Me.pan_Plat.Controls.Add(Me.cmb_NuancePlat)
+        Me.pan_Plat.Controls.Add(Me.txt_EpPlat)
+        Me.pan_Plat.Controls.Add(Me.img_Tplat)
+        Me.pan_Plat.Controls.Add(Me.etq_UnitDim9)
+        Me.pan_Plat.Controls.Add(Me.txt_Wplat)
+        Me.pan_Plat.Controls.Add(Me.img_Wplat)
+        Me.pan_Plat.Controls.Add(Me.etq_UnitDim8)
+        Me.pan_Plat.Location = New System.Drawing.Point(6, 203)
+        Me.pan_Plat.Name = "pan_Plat"
+        Me.pan_Plat.Size = New System.Drawing.Size(324, 82)
+        Me.pan_Plat.TabIndex = 33
+        '
+        'lbl_NuancePlat
+        '
+        Me.lbl_NuancePlat.Location = New System.Drawing.Point(23, 57)
+        Me.lbl_NuancePlat.Name = "lbl_NuancePlat"
+        Me.lbl_NuancePlat.Size = New System.Drawing.Size(145, 17)
+        Me.lbl_NuancePlat.TabIndex = 81
+        Me.lbl_NuancePlat.Text = "lbl_NuancePlat"
+        Me.lbl_NuancePlat.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'lbl_Tplat
+        '
+        Me.lbl_Tplat.Location = New System.Drawing.Point(23, 33)
+        Me.lbl_Tplat.Name = "lbl_Tplat"
+        Me.lbl_Tplat.Size = New System.Drawing.Size(145, 17)
+        Me.lbl_Tplat.TabIndex = 80
+        Me.lbl_Tplat.Text = "lbl_Tplat"
+        Me.lbl_Tplat.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'lbl_Wplat
+        '
+        Me.lbl_Wplat.Location = New System.Drawing.Point(23, 14)
+        Me.lbl_Wplat.Name = "lbl_Wplat"
+        Me.lbl_Wplat.Size = New System.Drawing.Size(145, 17)
+        Me.lbl_Wplat.TabIndex = 79
+        Me.lbl_Wplat.Text = "lbl_Wplat"
+        Me.lbl_Wplat.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'cmb_NuancePlat
+        '
+        Me.cmb_NuancePlat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmb_NuancePlat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_NuancePlat.FormattingEnabled = True
+        Me.cmb_NuancePlat.Location = New System.Drawing.Point(183, 56)
+        Me.cmb_NuancePlat.Name = "cmb_NuancePlat"
+        Me.cmb_NuancePlat.Size = New System.Drawing.Size(113, 21)
+        Me.cmb_NuancePlat.TabIndex = 57
+        '
+        'txt_EpPlat
+        '
+        Me.txt_EpPlat.Location = New System.Drawing.Point(219, 32)
+        Me.txt_EpPlat.Name = "txt_EpPlat"
+        Me.txt_EpPlat.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EpPlat.TabIndex = 23
+        '
+        'img_Tplat
+        '
+        Me.img_Tplat.Location = New System.Drawing.Point(183, 32)
+        Me.img_Tplat.Name = "img_Tplat"
+        Me.img_Tplat.Size = New System.Drawing.Size(37, 20)
+        Me.img_Tplat.TabIndex = 24
+        Me.img_Tplat.TabStop = False
+        '
+        'etq_UnitDim9
+        '
+        Me.etq_UnitDim9.AutoSize = True
+        Me.etq_UnitDim9.Location = New System.Drawing.Point(283, 35)
+        Me.etq_UnitDim9.Name = "etq_UnitDim9"
+        Me.etq_UnitDim9.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim9.TabIndex = 22
+        Me.etq_UnitDim9.Text = "mm"
+        '
+        'txt_Wplat
+        '
+        Me.txt_Wplat.Location = New System.Drawing.Point(219, 13)
+        Me.txt_Wplat.Name = "txt_Wplat"
+        Me.txt_Wplat.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Wplat.TabIndex = 20
+        '
+        'img_Wplat
+        '
+        Me.img_Wplat.Location = New System.Drawing.Point(183, 13)
+        Me.img_Wplat.Name = "img_Wplat"
+        Me.img_Wplat.Size = New System.Drawing.Size(37, 20)
+        Me.img_Wplat.TabIndex = 21
+        Me.img_Wplat.TabStop = False
+        '
+        'etq_UnitDim8
+        '
+        Me.etq_UnitDim8.AutoSize = True
+        Me.etq_UnitDim8.Location = New System.Drawing.Point(283, 16)
+        Me.etq_UnitDim8.Name = "etq_UnitDim8"
+        Me.etq_UnitDim8.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim8.TabIndex = 19
+        Me.etq_UnitDim8.Text = "mm"
+        '
         'lbl_Profiles
         '
         Me.lbl_Profiles.AutoSize = True
@@ -894,120 +1008,6 @@ Partial Class Frm_SectionAcierStandard
         Me.imgList_UY.Images.SetKeyName(0, "Fu")
         Me.imgList_UY.Images.SetKeyName(1, "Fy")
         '
-        'chk_Plat
-        '
-        Me.chk_Plat.AutoSize = True
-        Me.chk_Plat.Location = New System.Drawing.Point(10, 195)
-        Me.chk_Plat.Name = "chk_Plat"
-        Me.chk_Plat.Size = New System.Drawing.Size(68, 17)
-        Me.chk_Plat.TabIndex = 32
-        Me.chk_Plat.Text = "chk_Plat"
-        Me.chk_Plat.UseVisualStyleBackColor = True
-        '
-        'pan_Plat
-        '
-        Me.pan_Plat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Plat.Controls.Add(Me.lbl_NuancePlat)
-        Me.pan_Plat.Controls.Add(Me.lbl_Tplat)
-        Me.pan_Plat.Controls.Add(Me.lbl_Wplat)
-        Me.pan_Plat.Controls.Add(Me.cmb_NuancePlat)
-        Me.pan_Plat.Controls.Add(Me.txt_EpPlat)
-        Me.pan_Plat.Controls.Add(Me.img_Tplat)
-        Me.pan_Plat.Controls.Add(Me.etq_UnitDim9)
-        Me.pan_Plat.Controls.Add(Me.txt_Wplat)
-        Me.pan_Plat.Controls.Add(Me.img_Wplat)
-        Me.pan_Plat.Controls.Add(Me.etq_UnitDim8)
-        Me.pan_Plat.Location = New System.Drawing.Point(6, 203)
-        Me.pan_Plat.Name = "pan_Plat"
-        Me.pan_Plat.Size = New System.Drawing.Size(324, 82)
-        Me.pan_Plat.TabIndex = 33
-        '
-        'txt_EpPlat
-        '
-        Me.txt_EpPlat.Location = New System.Drawing.Point(219, 32)
-        Me.txt_EpPlat.Name = "txt_EpPlat"
-        Me.txt_EpPlat.Size = New System.Drawing.Size(58, 20)
-        Me.txt_EpPlat.TabIndex = 23
-        '
-        'img_Tplat
-        '
-        Me.img_Tplat.Location = New System.Drawing.Point(183, 32)
-        Me.img_Tplat.Name = "img_Tplat"
-        Me.img_Tplat.Size = New System.Drawing.Size(37, 20)
-        Me.img_Tplat.TabIndex = 24
-        Me.img_Tplat.TabStop = False
-        '
-        'etq_UnitDim9
-        '
-        Me.etq_UnitDim9.AutoSize = True
-        Me.etq_UnitDim9.Location = New System.Drawing.Point(283, 35)
-        Me.etq_UnitDim9.Name = "etq_UnitDim9"
-        Me.etq_UnitDim9.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitDim9.TabIndex = 22
-        Me.etq_UnitDim9.Text = "mm"
-        '
-        'txt_Wplat
-        '
-        Me.txt_Wplat.Location = New System.Drawing.Point(219, 13)
-        Me.txt_Wplat.Name = "txt_Wplat"
-        Me.txt_Wplat.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Wplat.TabIndex = 20
-        '
-        'img_Wplat
-        '
-        Me.img_Wplat.Location = New System.Drawing.Point(183, 13)
-        Me.img_Wplat.Name = "img_Wplat"
-        Me.img_Wplat.Size = New System.Drawing.Size(37, 20)
-        Me.img_Wplat.TabIndex = 21
-        Me.img_Wplat.TabStop = False
-        '
-        'etq_UnitDim8
-        '
-        Me.etq_UnitDim8.AutoSize = True
-        Me.etq_UnitDim8.Location = New System.Drawing.Point(283, 16)
-        Me.etq_UnitDim8.Name = "etq_UnitDim8"
-        Me.etq_UnitDim8.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitDim8.TabIndex = 19
-        Me.etq_UnitDim8.Text = "mm"
-        '
-        'cmb_NuancePlat
-        '
-        Me.cmb_NuancePlat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmb_NuancePlat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_NuancePlat.FormattingEnabled = True
-        Me.cmb_NuancePlat.Location = New System.Drawing.Point(183, 56)
-        Me.cmb_NuancePlat.Name = "cmb_NuancePlat"
-        Me.cmb_NuancePlat.Size = New System.Drawing.Size(113, 21)
-        Me.cmb_NuancePlat.TabIndex = 57
-        '
-        'lbl_Wplat
-        '
-        Me.lbl_Wplat.Location = New System.Drawing.Point(23, 14)
-        Me.lbl_Wplat.Name = "lbl_Wplat"
-        Me.lbl_Wplat.Size = New System.Drawing.Size(145, 17)
-        Me.lbl_Wplat.TabIndex = 79
-        Me.lbl_Wplat.Text = "lbl_Wplat"
-        Me.lbl_Wplat.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'lbl_Tplat
-        '
-        Me.lbl_Tplat.Location = New System.Drawing.Point(23, 33)
-        Me.lbl_Tplat.Name = "lbl_Tplat"
-        Me.lbl_Tplat.Size = New System.Drawing.Size(145, 17)
-        Me.lbl_Tplat.TabIndex = 80
-        Me.lbl_Tplat.Text = "lbl_Tplat"
-        Me.lbl_Tplat.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'lbl_NuancePlat
-        '
-        Me.lbl_NuancePlat.Location = New System.Drawing.Point(23, 57)
-        Me.lbl_NuancePlat.Name = "lbl_NuancePlat"
-        Me.lbl_NuancePlat.Size = New System.Drawing.Size(145, 17)
-        Me.lbl_NuancePlat.TabIndex = 81
-        Me.lbl_NuancePlat.Text = "lbl_NuancePlat"
-        Me.lbl_NuancePlat.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
         'Frm_SectionAcierStandard
         '
         Me.AcceptButton = Me.btn_OK
@@ -1046,6 +1046,10 @@ Partial Class Frm_SectionAcierStandard
         CType(Me.img_Ht, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Lamine.ResumeLayout(False)
         Me.pan_Lamine.PerformLayout()
+        Me.pan_Plat.ResumeLayout(False)
+        Me.pan_Plat.PerformLayout()
+        CType(Me.img_Tplat, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Wplat, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_TypeSection.ResumeLayout(False)
         Me.pan_TypeSection.PerformLayout()
@@ -1054,10 +1058,6 @@ Partial Class Frm_SectionAcierStandard
         Me.pan_Acier.ResumeLayout(False)
         CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_Plat.ResumeLayout(False)
-        Me.pan_Plat.PerformLayout()
-        CType(Me.img_Tplat, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Wplat, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

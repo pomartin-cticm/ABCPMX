@@ -62,11 +62,18 @@ Public Class cls_ProfilA
     Public IndDeliv() As Short                      ' Indices conditions de livraison
     Public IndStandart() As Short                   ' Indices normes acier compatibles
 
-    Public lPlat As Boolean                     ' Indique pour un profilé laminé si présence d'un plat de renfort
+    Public lPlat As Boolean                         ' Indique pour un profilé laminé si présence d'un plat de renfort
 
 #End Region
 
 #Region " Propriétés "
+
+    Public ReadOnly Property lPlatRenfort As Boolean
+        Get
+            Return Me.lPlat And IsGreater(Me.Plat_b, 0) And IsGreater(Me.Plat_t, 0)
+        End Get
+    End Property
+
 
     Public ReadOnly Property BfMax As Decimal
         Get

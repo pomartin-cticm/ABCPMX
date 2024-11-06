@@ -582,8 +582,8 @@ Public Class Frm_SectionAcierStandard
                 Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
                     .hb = .ha
                     .aW = 0
-                    .Plat_b = 0
-                    .Plat_t = 0
+                    '      .Plat_b = 0
+              '      .Plat_t = 0
                 Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
                     .hb = 0
                     .Rcs = 0
@@ -1523,6 +1523,49 @@ Public Class Frm_SectionAcierStandard
 
     End Sub
 
+
+    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_Bfi.Leave, txt_Wplat.Leave, txt_Tw.Leave, txt_Tfs.Leave, txt_Tfi.Leave, txt_Hw.Leave, txt_Ha.Leave, txt_EpPlat.Leave, txt_Bfs.Leave
+        If lBuild Then Exit Sub
+        iSelect = -1
+        Me.img_Section.Invalidate()
+    End Sub
+
+    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_Bfi.Enter, txt_Wplat.Enter, txt_Tw.Enter, txt_Tfs.Enter, txt_Tfi.Enter, txt_Hw.Enter, txt_Ha.Enter, txt_EpPlat.Enter, txt_Bfs.Enter
+        If lBuild Then Exit Sub
+        Select Case sender.name
+            Case Me.txt_Ha.Name
+                iSelect = 0
+            Case Me.txt_Bfs.Name
+                iSelect = 1
+            Case Me.txt_Tfs.Name
+                iSelect = 2
+            Case Me.txt_Bfi.Name
+                iSelect = 3
+            Case Me.txt_Tfi.Name
+                iSelect = 4
+            Case Me.txt_Tw.Name
+                iSelect = 5
+            Case Me.txt_Hw.Name
+                iSelect = 7
+            Case Me.txt_Wplat.Name
+                iSelect = 20
+            Case Me.txt_EpPlat.Name
+                iSelect = 21
+
+        End Select
+        Me.img_Section.Invalidate()
+
+        '       0   pour ha
+        '       1   pour bfs ou b
+        '       2   pour tfs ou tf
+        '       3   pour bfi (PRS non sym)
+        '       4   pour tfi (PRS non sym)
+        '       5   pour tw
+        '       6   pour r
+        '       7   pour hw
+        '       20  pour wp
+        '       21  pour tp
+    End Sub
 
 #End Region
 

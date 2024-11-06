@@ -3638,14 +3638,16 @@ Public Module Mod_Dessins
         '   xLeft, yTop [E] :   Paramètres de positionnement pour affichage dans NdC
         '---------------------------------------------------------------------------------------------------------------------------
         '   Valeurs de iSelect: 
-        '       0 pour ha
-        '       1 pour bfs ou b
-        '       2 pour tfs ou tf
-        '       3 pour bfi (PRS non sym)
-        '       4 pour tfi (PRS non sym)
-        '       5 pour tw
-        '       6 pour r
-        '       7 pour hw
+        '       0   pour ha
+        '       1   pour bfs ou b
+        '       2   pour tfs ou tf
+        '       3   pour bfi (PRS non sym)
+        '       4   pour tfi (PRS non sym)
+        '       5   pour tw
+        '       6   pour r
+        '       7   pour hw
+        '       20  pour wp
+        '       21  pour tp
         '---------------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -3654,7 +3656,7 @@ Public Module Mod_Dessins
         Dim yMin, yMax As Decimal
         Dim dCar As Decimal
         Dim lLam As Boolean = (mySec.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
-        Dim lPlat As Boolean = lLam And mySec.ProfilA.lPlat
+        Dim lPlat As Boolean = lLam And mySec.ProfilA.lPlatRenfort
 
         Dim zRef As Decimal = 0
 
@@ -3688,6 +3690,8 @@ Public Module Mod_Dessins
         yMax += dCar
         xMax += dCar
         xMin -= dCar
+
+        If lPlat Then yMin -= dCar
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
@@ -3770,6 +3774,64 @@ Public Module Mod_Dessins
             'Else
             '    AddTexte(MyGr, myBrushF, Chaine, myFont, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle)
             'End If
+
+            '-- wp et tp --================================================================================
+
+            If lLam And lPlat Then
+
+                '# wp
+                iRef = 20
+                MyColor = StyleCouleur(iSelect, iRef)
+                MyPen.Color = MyColor
+
+                yo = -mySec.ProfilA.ha - mySec.ProfilA.Plat_t - dCar
+                ye = yo
+
+                xo = mySec.ProfilA.Plat_b / 2
+                xe = -xo
+
+                If lAffSymbol Then
+
+                    Chaine = "wp"
+
+                Else
+                    Chaine = GetStringNoUnit(mySec.ProfilA.Plat_b, Enu_TypeVariable.Dimension)
+                End If
+                AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
+
+                myBrushF = New SolidBrush(MyColor)
+
+                AddTexteFond(MyGr, myBrushF, Chaine, myFont, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+
+                '# tp
+                iRef = 21
+                MyColor = StyleCouleur(iSelect, iRef)
+                MyPen.Color = MyColor
+
+                xo = 1 / 2 * mySec.ProfilA.Plat_b / 4 * 3
+                xe = xo
+
+                If lAffSymbol Then
+
+                    Chaine = "tp"
+
+                Else
+                    Chaine = GetStringNoUnit(mySec.ProfilA.Plat_t, Enu_TypeVariable.Dimension)
+                End If
+
+                yo = -mySec.ProfilA.ha - mySec.ProfilA.Plat_t
+                ye = -mySec.ProfilA.ha
+                AddLigne(MyGr, xo, yo, xe, ye, MyParAff)
+
+                ye = yo - 2 * dCar
+                AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
+
+                myBrushF = New SolidBrush(MyColor)
+
+                AddTexteFond(MyGr, myBrushF, Chaine, myFont, (xo + xe) / 2, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            End If
 
             '-- Bfs --=====================================================================================
 
@@ -11178,7 +11240,7 @@ Public Module Mod_Dessins
 
         '--> Tracé du plat, le cas échéant
 
-        If MyProfil.lPlat Then
+        If MyProfil.lPlatRenfort Then
 
             xo = xPos - MyProfil.Plat_b / 2
 
