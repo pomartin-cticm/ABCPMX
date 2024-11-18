@@ -248,6 +248,7 @@ Public Class Frm_PMX
                 Me.TSbtn_AddBeamN.ToolTipText = Bloc("ADDBEAM")
                 Me.TSbtn_SupprBeam.ToolTipText = Bloc("DELBEAM")
                 Me.TSbtn_DupBeam.ToolTipText = Bloc("DUPBEAM")
+                Me.TSbtn_AddPoutreFromFile.ToolTipText = Bloc("ADDBEAMFILE")
                 Me.TSbtn_Calcul.ToolTipText = Bloc("CALCULATION")
                 Me.TSbtn_NoteSynthese.ToolTipText = Bloc("CALCULATIONREPORT")
 

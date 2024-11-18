@@ -12094,6 +12094,10 @@ Module Mod_NoteCalcul
 
         Dim EN_Feu As New cls_EurocodesFeu
 
+        Const nbSignK As Integer = 4
+        Const nbDigitK As Integer = 3
+
+
         '--( Ligne
 
         InitialiseLigneTableau(NCOL, HLIGNE)
@@ -12102,16 +12106,16 @@ Module Mod_NoteCalcul
 
         If lUni Then
             AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, False))
         Else
             AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, False))
 
             AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFiStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFiStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFiStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, False))
 
             AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempWStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, False))
         End If
 
         If Not lAcierSeul Then
@@ -12119,7 +12123,7 @@ Module Mod_NoteCalcul
             AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 1), Enu_TypeVariable.Temperature, 3, 2, True))
 
             AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, False))
         End If
 
         InitialiseLigneTableau(NCOL, HLIGNE)
@@ -12128,7 +12132,7 @@ Module Mod_NoteCalcul
 
         If lUni Then
             AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
-            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, False))
         Else
             AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
             AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, "")
@@ -12137,15 +12141,15 @@ Module Mod_NoteCalcul
             AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, "")
 
             AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
-            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, False))
         End If
 
         If Not lAcierSeul Then
-            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
-            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, nbSignK, nbDigitK, False))
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, nbSignK, nbDigitK, False))
 
             AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, nbSignK, nbDigitK, False))
         End If
     End Sub
 

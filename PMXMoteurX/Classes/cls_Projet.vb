@@ -776,7 +776,7 @@ Public Class cls_Projet
 
     End Sub
 
-    Private Sub SaveFileBlocProfile(myProfil As cls_ProfilA, mySteel As cls_Acier, ByRef Lines As List(Of String))
+    Private Sub SaveFileBlocProfile(myProfil As cls_ProfilA, mySteel As cls_Acier, mySteelPlat As cls_Acier, ByRef Lines As List(Of String))
         '-------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
         '-------------------------------------------------------------------------------------
@@ -817,6 +817,15 @@ Public Class cls_Projet
             AjouteLigneFrmt(Lines, "Reduction", .Reduction)
             AjouteLigneFrmt(Lines, "Standart", .NormeProduit)
         End With
+
+        If myProfil.lPlat Then
+            With mySteelPlat
+                AjouteLigneFrmt(Lines, "PlGrade", .Nuance)
+                AjouteLigneFrmt(Lines, "PlQualitY", .Qualite)
+                AjouteLigneFrmt(Lines, "PlReduction", .Reduction)
+                AjouteLigneFrmt(Lines, "PlStandart", .NormeProduit)
+            End With
+        End If
 
         Lines.Add("")
 
@@ -922,7 +931,7 @@ Public Class cls_Projet
 
             '==[ Bloc ProfilA ]=================================================================
 
-            SaveFileBlocProfile(pTre.Section.ProfilA, pTre.Section.Acier, Lines)
+            SaveFileBlocProfile(pTre.Section.ProfilA, pTre.Section.Acier, pTre.Section.AcierPlat, Lines)
 
             '==[ Blocs relatifs à l'enrobage ]==================================================
 
@@ -1247,7 +1256,8 @@ Public Class cls_Projet
 
                 Case BkPROFILA
 
-                    ReadBlocProfilA(Me.Poutres.Last.Section.ProfilA, Me.Poutres.Last.Section.Acier, Lines, indBlocs(iBloc) + 1, iFin)
+                    ReadBlocProfilA(Me.Poutres.Last.Section.ProfilA, Me.Poutres.Last.Section.Acier,
+                                    Me.Poutres.Last.Section.AcierPlat, Lines, indBlocs(iBloc) + 1, iFin)
 
                 Case BkENROBAGE
 
@@ -1408,10 +1418,14 @@ Public Class cls_Projet
                 Case BkPROFILA
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim profilA_en_cours As New cls_ProfilA
+
                     Dim acier_profilA As New cls_Acier
-                    ReadBlocProfilA(profilA_en_cours, acier_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    Dim acier_profilPl As New cls_Acier
+
+                    ReadBlocProfilA(profilA_en_cours, acier_profilA, acier_profilPl, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.ProfilA = profilA_en_cours
                     ptre_en_cours.Section.Acier = acier_profilA
+                    ptre_en_cours.Section.AcierPlat = acier_profilPl
 
                 'Case BkACIERP
                 '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -1875,7 +1889,7 @@ Public Class cls_Projet
 
     End Sub
 
-    Private Sub ReadBlocProfilA(ByRef myProfil As cls_ProfilA, ByRef mySteel As cls_Acier,
+    Private Sub ReadBlocProfilA(ByRef myProfil As cls_ProfilA, ByRef mySteel As cls_Acier, ByRef mySteelPlat As cls_Acier,
                                 ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '-------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
@@ -1884,6 +1898,7 @@ Public Class cls_Projet
         '-------------------------------------------------------------------------------------
         '   myProfil    [S] :   Profilé à definir
         '   mySteel     [S] :   Acier à definir
+        '   mySteelPlat [S] :   Acier du plat de renforcement
         '   Lignes      [E] :   lignes extraites du fichier de données
         '   Index0      [E] :   Indice de la première ligne du bloc
         '   IndexFin    [E] :   Indice la dernière ligne du bloc
@@ -1950,6 +1965,30 @@ Public Class cls_Projet
                             mySteel.NormeProduit = Lignes(i).Substring(iFirst - 1).Trim
                         Else
                             mySteel.NormeProduit = ""
+                        End If
+
+
+                    Case "PLGRAD"
+                        If nbMots > 1 Then
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            mySteelPlat.Nuance = Lignes(i).Substring(iFirst - 1).Trim
+                        End If
+                    Case "PLQUAL"
+                        If nbMots > 1 Then
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            mySteelPlat.Qualite = Lignes(i).Substring(iFirst - 1).Trim
+                        End If
+                    Case "PLREDU"
+                        If nbMots > 1 Then
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            mySteelPlat.Reduction = Lignes(i).Substring(iFirst - 1).Trim
+                        End If
+                    Case "PLSTAN"
+                        If nbMots > 1 Then
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            mySteelPlat.NormeProduit = Lignes(i).Substring(iFirst - 1).Trim
+                        Else
+                            mySteelPlat.NormeProduit = ""
                         End If
 
                     Case Else : MsgBox("BLOC " & BkPROFILA & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")

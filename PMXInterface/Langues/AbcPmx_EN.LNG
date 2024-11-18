@@ -560,6 +560,7 @@ SOFTOPT					= Software options
 COPYPICTURE				= Copy picture
 DELBEAM					= Delete beam
 DUPBEAM					= Duplicate beam
+ADDBEAMFILE				= Add beam from file
 ERRORCAPACITY			= The maximum capacity of the list has been reached, no new additions are possible
 ERROREMPTYCELL			= Empty cell
 ERRORNONNUMERIC			= Non-numeric value

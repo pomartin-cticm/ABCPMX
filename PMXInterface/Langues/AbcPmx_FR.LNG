@@ -560,6 +560,7 @@ SOFTOPT					= Options du logiciel
 COPYPICTURE				= Copier l'image
 DELBEAM					= Supprimer la poutre
 DUPBEAM					= Dupliquer la poutre
+ADDBEAMFILE				= Ajouter une poutre issue d'un fichier
 ERRORCAPACITY			= La capacité maximale de la liste a été atteinte, aucun nouvel ajout n'est possible 
 ERROREMPTYCELL			= Cellule vide
 ERRORNONNUMERIC			= Valeur non numérique

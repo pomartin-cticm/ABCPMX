@@ -68,6 +68,11 @@ Public Class Frm_SectionAcierStandard
 
     'Dim lDessinFy As Boolean = True
 
+    '---- Gestion des aciers pour les plats
+
+    Dim AcierPlats As New List(Of strucAcierLocal)
+    Private NuancesPlats() As String = {"S235", "S275", "S355"}
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -232,6 +237,7 @@ Public Class Frm_SectionAcierStandard
         '== Plats
 
         Me.pan_Plat.Width = Me.Grid_ProfilesSup.Width + Me.Grid_ProfilesSup.Left - Me.lst_GammeS.Left
+        RemplirCmbNuancesPlats()
 
     End Sub
 
@@ -272,6 +278,7 @@ Public Class Frm_SectionAcierStandard
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine
                 Me.rdb_Lamine.Checked = True
                 AfficherProfileLamineEnCours()
+                AfficherPlatEnCours()
             Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
                 Me.rdb_PRS_symetrique.Checked = True
                 AfficherPRSEnCours()
@@ -300,13 +307,62 @@ Public Class Frm_SectionAcierStandard
 
         '== Plats
 
+
+
+    End Sub
+
+    Private Sub AfficherPlatEnCours()
+        '---------------------------------------------------------------------------------------------------------
+        '   18/11/24 : Création - POM
+        '---------------------------------------------------------------------------------------------------------
+        '   Affichage du plat de renfort en cours
+        '---------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
         Me.chk_Plat.Checked = MySectionLoc.ProfilA.lPlat
 
         Me.txt_EpPlat.Text = GetStringInUnitN(MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False, True)
         Me.txt_Wplat.Text = GetStringInUnitN(MySectionLoc.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 1, False, True)
         MAJI_Plats()
 
+        '==> Affichage de la nuance
+
+        Me.cmb_NuancePlat.SelectedIndex = GetIndiceNuancePlat()
+
     End Sub
+
+    Private Function GetIndiceNuancePlat() As Integer
+        '---------------------------------------------------------------------------------------------------------
+        '   18/11/24 : Création - POM
+        '---------------------------------------------------------------------------------------------------------
+        '   Fonction qui retourne l'indice de la nuance de plat à afficher dans le combobox
+        '---------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Indice As Integer = 0
+
+        Dim iAcier As Integer = 0
+        Dim lTrouve As Boolean = False
+        Dim nbAciers As Integer = AcierPlats.Count
+
+        '--( Traitements
+
+        Do While (Not lTrouve) And iAcier < nbAciers
+            iAcier += 1
+
+            lTrouve = (MySectionLoc.AcierPlat.Nuance = AcierPlats(iAcier - 1).Nuance) _
+                  And (MySectionLoc.AcierPlat.Qualite = AcierPlats(iAcier - 1).Qualite) _
+                  And (MySectionLoc.AcierPlat.Reduction = AcierPlats(iAcier - 1).Reduc)
+
+        Loop
+
+        If lTrouve Then Indice = iAcier - 1
+
+        Return Indice
+
+    End Function
 
     Private Sub AfficherProfileLamineEnCours()
         '---------------------------------------------------------------------------------------------------------
@@ -527,6 +583,7 @@ Public Class Frm_SectionAcierStandard
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
         lModif = False
+        Dim lAcierPlatModifie As Boolean = False
 
         If MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.typeProfileAcier <> MySectionLoc.ProfilA.typeProfileAcier Then
             MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.typeProfileAcier = MySectionLoc.ProfilA.typeProfileAcier
@@ -534,9 +591,27 @@ Public Class Frm_SectionAcierStandard
         End If
 
         If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+
             GereTransfertValeur(MySectionLoc.ProfilA.lPlat, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.lPlat, lModif)
             GereTransfertValeur(MySectionLoc.ProfilA.Plat_b, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Plat_b, lModif)
             GereTransfertValeur(MySectionLoc.ProfilA.Plat_t, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Plat_t, lModif)
+
+            GereTransfertValeur(MySectionLoc.AcierPlat.Nuance, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierPlat.Nuance, lAcierPlatModifie)
+            GereTransfertValeur(MySectionLoc.AcierPlat.Qualite, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierPlat.Qualite, lAcierPlatModifie)
+            GereTransfertValeur(MySectionLoc.AcierPlat.Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierPlat.Reduction, lAcierPlatModifie)
+
+            If lAcierPlatModifie Then
+                lModif = True
+
+                Dim Nuance, Qualite, Reduction As String
+
+                Nuance = MySectionLoc.AcierPlat.Nuance
+                Qualite = MySectionLoc.AcierPlat.Qualite
+                Reduction = MySectionLoc.AcierPlat.Reduction
+
+                TransfertPlagesAcier(Nuance, Qualite, Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierPlat)
+            End If
+
         End If
 
         GereTransfertValeur(MySectionLoc.ProfilA.ha, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.ha, lModif)
@@ -561,20 +636,22 @@ Public Class Frm_SectionAcierStandard
         If lAcierModifie Then
             lModif = True
 
-            MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Plages.Clear()
-            Dim MyPlage As cls_Acier.strucPlage
+            'MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Plages.Clear()
+            'Dim MyPlage As cls_Acier.strucPlage
             Dim Nuance, Qualite, Reduction As String
 
             Nuance = MySectionLoc.Acier.Nuance
             Qualite = MySectionLoc.Acier.Qualite
             Reduction = MySectionLoc.Acier.Reduction
 
-            For i As Integer = 0 To SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages.Count - 1
-                MyPlage.Ep = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Ep
-                MyPlage.Fy = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fy
-                MyPlage.Fu = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fu
-                MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Plages.Add(MyPlage)
-            Next
+            'For i As Integer = 0 To SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages.Count - 1
+            '    MyPlage.Ep = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Ep
+            '    MyPlage.Fy = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fy
+            '    MyPlage.Fu = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fu
+            '    MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Plages.Add(MyPlage)
+            'Next
+
+            TransfertPlagesAcier(Nuance, Qualite, Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier)
         End If
 
         With MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA ' --> Sécurité supplémentaire pour s'assurer que les valeurs qui n'ont pas de sens restent égales à 0
@@ -607,7 +684,30 @@ Public Class Frm_SectionAcierStandard
 
     End Sub
 
+    Private Sub TransfertPlagesAcier(Nuance As String, Qualite As String, Reduction As String, ByRef mySteel As cls_Acier)
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   18/11/24 :  Création - POM 
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Transfert des plages epaisseurs/fu/fu pour un acier selectionné
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Nuance      [E] :   Nuance de l'acier sélectionné
+        '   Qualite     [E] :   Qualité de l'acier sélectionné
+        '   Reduction   [E] :   Courbe de réduction de l'acier sélectionné
+        '   mySteel     [S] :   Acier à définir (classe)
+        '------------------------------------------------------------------------------------------------------------------------------
 
+        Dim MyPlage As cls_Acier.strucPlage
+
+        mySteel.Plages.Clear()
+
+        For i As Integer = 0 To SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages.Count - 1
+            MyPlage.Ep = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Ep
+            MyPlage.Fy = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fy
+            MyPlage.Fu = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fu
+            mySteel.Plages.Add(MyPlage)
+        Next
+
+    End Sub
 
 #End Region
 
@@ -1309,8 +1409,8 @@ Public Class Frm_SectionAcierStandard
             ErrorProvider.Clear()
         End If
 
-        lOk = (iErreur = 0)
-        Return lOk
+        lOK = (iErreur = 0)
+        Return lOK
 
 
     End Function
@@ -1567,6 +1667,17 @@ Public Class Frm_SectionAcierStandard
         '       21  pour tp
     End Sub
 
+    Private Sub cmb_NuancePlat_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NuancePlat.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        Dim inDice As Integer = Me.cmb_NuancePlat.SelectedIndex
+
+        MySectionLoc.AcierPlat.Nuance = AcierPlats(inDice).Nuance
+        MySectionLoc.AcierPlat.Qualite = AcierPlats(inDice).Qualite
+        MySectionLoc.AcierPlat.Reduction = AcierPlats(inDice).Reduc
+
+    End Sub
+
 #End Region
 
 #Region "   Gestion selection profile "
@@ -1644,7 +1755,7 @@ Public Class Frm_SectionAcierStandard
         '------------------------------------------------------------------------------------------------
         Dim lPRS As Boolean = (MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym Or MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym)
 
-        MAJ_GridAcier(Serie, Profile, OptionsDatabase.ChoiceSteel, lPRS)
+        Remplir_GridAcier(Serie, Profile, OptionsDatabase.ChoiceSteel, lPRS)
 
     End Sub
 
@@ -1967,7 +2078,7 @@ Public Class Frm_SectionAcierStandard
         Return (Not lTrouve)
     End Function
 
-    Private Sub MAJ_GridAcier(ByVal Serie As String, ByVal Profile As String, ByVal ChoiceSteel As EnuChoiceAcier, Optional lPRS As Boolean = False)
+    Private Sub Remplir_GridAcier(ByVal Serie As String, ByVal Profile As String, ByVal ChoiceSteel As EnuChoiceAcier, Optional lPRS As Boolean = False)
 
         Dim lBuildBack As Boolean = lBuild
         lBuild = True
@@ -2218,6 +2329,71 @@ Public Class Frm_SectionAcierStandard
         Next
 
     End Sub
+
+    Private Sub RemplirCmbNuancesPlats()
+
+        Dim MySteel As strucAcierLocal
+
+        AcierPlats.Clear()
+
+        For Each kvpGrade As KeyValuePair(Of String, strucGrade) In SteelBase.Grades
+
+            For Each kvpQualite As KeyValuePair(Of String, strucQualite) In kvpGrade.Value.Qualites
+
+                For Each kvpSteel As KeyValuePair(Of String, strucReduction) In kvpQualite.Value.ReductionCurv
+
+                    If isAcierPlat(kvpGrade.Key, kvpQualite.Key) Then
+
+                        MySteel.Nuance = kvpGrade.Key
+                        MySteel.Qualite = kvpQualite.Key
+                        MySteel.Reduc = kvpSteel.Key
+
+                        AcierPlats.Add(MySteel)
+
+                    End If
+
+                Next
+
+            Next
+
+        Next
+
+        Me.cmb_NuancePlat.Items.Clear()
+
+        For iAcier As Integer = 0 To AcierPlats.Count - 1
+
+            Me.cmb_NuancePlat.Items.Add(AcierPlats(iAcier).Nuance & "/" & AcierPlats(iAcier).Qualite)
+
+        Next
+
+    End Sub
+
+    Private Function isAcierPlat(Nuance As String, Qualite As String) As Boolean
+        '-----------------------------------------------------------------------------------------------------------------------
+        '   18/11/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------
+        '   Indique si on prend en compte l'acier pour les plats de renfort
+        '-----------------------------------------------------------------------------------------------------------------------
+        '   Nuance      [E] :   Nuance
+        '   Qualite     [E] :   Qualité
+        '-----------------------------------------------------------------------------------------------------------------------
+
+        Dim lOK As Boolean
+
+        lOK = (Array.IndexOf(NuancesPlats, Nuance) >= 0)
+
+        If lOK Then
+
+            If Not ((Qualite.IndexOf("EC3") >= 0) Or (Qualite.IndexOf("JR") >= 0)) Then
+                lOK = False
+            End If
+
+        End If
+
+            Return lOK
+
+    End Function
+
 
 #End Region
 
