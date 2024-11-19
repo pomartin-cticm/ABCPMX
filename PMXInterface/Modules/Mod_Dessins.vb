@@ -6104,7 +6104,7 @@ Public Module Mod_Dessins
         LargeurSemelle = LongueurTravee / 8.5
         If Not MyPoutre.lAutomaticDesign Then
             For i As Integer = 0 To 2
-                NombreGoujonsTrans(i) = MyPoutre.NombreGoujonsTransv(indTravee, i)
+                NombreGoujonsTrans(i) = MyPoutre.NrTransZone(indTravee, i)
                 LongueurZones(i) = MyPoutre.LongueurZone(indTravee, i) / MyPoutre.LongueurTravee(indTravee) * LongueurTravee
                 NombreGoujonsLongiZone(i) = 0.75 * MyPoutre.LongueurZone(indTravee, i) / MyPoutre.EspacementZone(indTravee, i)
                 NombreZones = MyPoutre.NombreZones(indTravee)
@@ -6355,7 +6355,7 @@ Public Module Mod_Dessins
 
         'Initialisation
         Dim Espacement_Trans_MIN As Decimal
-        Dim NbGoujonsTrans As Integer = MyPoutre.NombreGoujonsTransv(1, 0)
+        Dim NbGoujonsTrans As Integer = MyPoutre.NrTransZone(1, 0)
 
         If MyPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             Espacement_Trans_MIN = 4 * MyPoutre.Dalle.Goujons.d

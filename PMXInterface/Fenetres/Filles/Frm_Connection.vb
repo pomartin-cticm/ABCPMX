@@ -182,8 +182,8 @@ Public Class Frm_Connection
             End If
 
             For j As Integer = 0 To 2
-                If Not (MyPoutreLoc.NombreGoujonsTransv(i, j) >= Nb_TransV_Row_MIN And MyPoutreLoc.NombreGoujonsTransv(i, j) <= Nb_TransV_Row_MAX) Then
-                    MyPoutreLoc.NombreGoujonsTransv(i, j) = Nb_TransV_Row_MIN
+                If Not (MyPoutreLoc.NrTransZone(i, j) >= Nb_TransV_Row_MIN And MyPoutreLoc.NrTransZone(i, j) <= Nb_TransV_Row_MAX) Then
+                    MyPoutreLoc.NrTransZone(i, j) = Nb_TransV_Row_MIN
                 End If
 
                 If lBacTransv Then
@@ -457,7 +457,7 @@ Public Class Frm_Connection
 
             If .NombreZones(traveeEnCours) >= 1 Then
                 Me.txt_Largeur_I1.Text = GetStringInUnit(.LongueurZone(traveeEnCours, 0), Enu_TypeVariable.Longueur, 4, 2, False)
-                Me.cmb_NbRow_I1.SelectedIndex = .NombreGoujonsTransv(traveeEnCours, 0) - 1
+                Me.cmb_NbRow_I1.SelectedIndex = .NrTransZone(traveeEnCours, 0) - 1
 
                 If Not lBacTransv Then
                     Me.txt_EspLongi_I1.Text = GetStringInUnit(.EspacementZone(traveeEnCours, 0), Enu_TypeVariable.Dimension, 4, 0, False)
@@ -468,7 +468,7 @@ Public Class Frm_Connection
 
             If .NombreZones(traveeEnCours) >= 2 Then
                 Me.txt_Largeur_I2.Text = GetStringInUnit(.LongueurZone(traveeEnCours, 1), Enu_TypeVariable.Longueur, 4, 2, False)
-                Me.cmb_NbRow_I2.SelectedIndex = .NombreGoujonsTransv(traveeEnCours, 1) - 1
+                Me.cmb_NbRow_I2.SelectedIndex = .NrTransZone(traveeEnCours, 1) - 1
 
                 If Not lBacTransv Then
                     Me.txt_EspLongi_I2.Text = GetStringInUnit(.EspacementZone(traveeEnCours, 1), Enu_TypeVariable.Dimension, 4, 0, False)
@@ -479,7 +479,7 @@ Public Class Frm_Connection
 
             If .NombreZones(traveeEnCours) >= 3 Then
                 Me.txt_Largeur_I3.Text = GetStringInUnit(.LongueurZone(traveeEnCours, 2), Enu_TypeVariable.Longueur, 4, 2, False)
-                Me.cmb_NbRow_I3.SelectedIndex = .NombreGoujonsTransv(traveeEnCours, 2) - 1
+                Me.cmb_NbRow_I3.SelectedIndex = .NrTransZone(traveeEnCours, 2) - 1
 
                 If Not lBacTransv Then
                     Me.txt_EspLongi_I3.Text = GetStringInUnit(.EspacementZone(traveeEnCours, 2), Enu_TypeVariable.Dimension, 4, 0, False)
@@ -489,9 +489,9 @@ Public Class Frm_Connection
             End If
 
 
-            'Me.cmb_NbRow_I1.SelectedItem = .NombreGoujonsTransv(traveeEnCours, 0)
-            'Me.cmb_NbRow_I2.SelectedItem = .NombreGoujonsTransv(traveeEnCours, 1)
-            'Me.cmb_NbRow_I3.SelectedItem = .NombreGoujonsTransv(traveeEnCours, 2)
+            'Me.cmb_NbRow_I1.SelectedItem = .NrTransZone(traveeEnCours, 0)
+            'Me.cmb_NbRow_I2.SelectedItem = .NrTransZone(traveeEnCours, 1)
+            'Me.cmb_NbRow_I3.SelectedItem = .NrTransZone(traveeEnCours, 2)
 
             'If lBacTransv Then
             '    Me.cmb_EspLongi_I1.SelectedItem = .Espacement_Bac_Trans(traveeEnCours, 0)
@@ -597,7 +597,7 @@ Public Class Frm_Connection
                     For j As Integer = 0 To .NombreZones(i) - 1
 
                         GereTransfertValeur(MyPoutreLoc.LongueurZone(i, j), .LongueurZone(i, j), lModif)
-                        GereTransfertValeur(MyPoutreLoc.NombreGoujonsTransv(i, j), .NombreGoujonsTransv(i, j), lModif)
+                        GereTransfertValeur(MyPoutreLoc.NrTransZone(i, j), .NrTransZone(i, j), lModif)
 
                         If lBacTransv Then
                             GereTransfertValeur(MyPoutreLoc.Espacement_Bac_TransZone(i, j), .Espacement_Bac_TransZone(i, j), lModif)
@@ -650,9 +650,9 @@ Public Class Frm_Connection
     '                        .Longueur_Zone(i, j) = MyPoutreLoc.Longueur_Zone(i, j)
     '                    End If
 
-    '                    If .NombreGoujonsTransv(i, j) <> MyPoutreLoc.NombreGoujonsTransv(i, j) Then
+    '                    If .NrTransZone(i, j) <> MyPoutreLoc.NrTransZone(i, j) Then
     '                        lModif = True
-    '                        .NombreGoujonsTransv(i, j) = MyPoutreLoc.NombreGoujonsTransv(i, j)
+    '                        .NrTransZone(i, j) = MyPoutreLoc.NrTransZone(i, j)
     '                    End If
 
     '                    If lBacTransv Then
@@ -901,9 +901,9 @@ Public Class Frm_Connection
         If Not ltxt_Largeur_I2Enter Or lBtnAjouterSupprimer Then Me.txt_Largeur_I2.Text = GetStringInUnit(MyPoutreLoc.LongueurZone(traveeEnCours, 1), Enu_TypeVariable.Longueur, 4, 2, False)
         If Not ltxt_Largeur_I3Enter Or lBtnAjouterSupprimer Then Me.txt_Largeur_I3.Text = GetStringInUnit(MyPoutreLoc.LongueurZone(traveeEnCours, 2), Enu_TypeVariable.Longueur, 4, 2, False)
 
-        Me.cmb_NbRow_I1.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 0) - 1
-        Me.cmb_NbRow_I2.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 1) - 1
-        Me.cmb_NbRow_I3.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 2) - 1
+        Me.cmb_NbRow_I1.SelectedIndex = MyPoutreLoc.NrTransZone(traveeEnCours, 0) - 1
+        Me.cmb_NbRow_I2.SelectedIndex = MyPoutreLoc.NrTransZone(traveeEnCours, 1) - 1
+        Me.cmb_NbRow_I3.SelectedIndex = MyPoutreLoc.NrTransZone(traveeEnCours, 2) - 1
 
         If lBacTransv Then
             Me.cmb_EspLongi_I1.SelectedIndex = MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 0) - 1
@@ -1080,11 +1080,11 @@ Public Class Frm_Connection
 
         Select Case sender.name
             Case cmb_NbRow_I1.Name
-                MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 0) = cmb_NbRow_I1.SelectedIndex + 1
+                MyPoutreLoc.NrTransZone(traveeEnCours, 0) = cmb_NbRow_I1.SelectedIndex + 1
             Case cmb_NbRow_I2.Name
-                MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 1) = cmb_NbRow_I2.SelectedIndex + 1
+                MyPoutreLoc.NrTransZone(traveeEnCours, 1) = cmb_NbRow_I2.SelectedIndex + 1
             Case cmb_NbRow_I3.Name
-                MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 2) = cmb_NbRow_I3.SelectedIndex + 1
+                MyPoutreLoc.NrTransZone(traveeEnCours, 2) = cmb_NbRow_I3.SelectedIndex + 1
         End Select
 
         MAJ_SommeGoujons()
@@ -1159,8 +1159,8 @@ Public Class Frm_Connection
 
         For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee
             For j As Integer = 0 To 2
-                If Not (MyPoutreLoc.NombreGoujonsTransv(i, j) >= Nb_TransV_Row_MIN And MyPoutreLoc.NombreGoujonsTransv(i, j) <= Nb_TransV_Row_MAX) Then
-                    MyPoutreLoc.NombreGoujonsTransv(i, j) = Nb_TransV_Row_MIN
+                If Not (MyPoutreLoc.NrTransZone(i, j) >= Nb_TransV_Row_MIN And MyPoutreLoc.NrTransZone(i, j) <= Nb_TransV_Row_MAX) Then
+                    MyPoutreLoc.NrTransZone(i, j) = Nb_TransV_Row_MIN
                     lMAJ_cmb_NbRow = True
                 End If
 
@@ -1195,9 +1195,9 @@ Public Class Frm_Connection
                 Me.cmb_NbRow_I3.Items.Add(i)
             Next
 
-            Me.cmb_NbRow_I1.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 0) - 1
-            Me.cmb_NbRow_I2.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 1) - 1
-            Me.cmb_NbRow_I3.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 2) - 1
+            Me.cmb_NbRow_I1.SelectedIndex = MyPoutreLoc.NrTransZone(traveeEnCours, 0) - 1
+            Me.cmb_NbRow_I2.SelectedIndex = MyPoutreLoc.NrTransZone(traveeEnCours, 1) - 1
+            Me.cmb_NbRow_I3.SelectedIndex = MyPoutreLoc.NrTransZone(traveeEnCours, 2) - 1
         End If
 
         If lMAJ_cmb_EspLongi Then

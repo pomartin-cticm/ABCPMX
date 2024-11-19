@@ -180,7 +180,7 @@ Imports PMXMoteur2
     '        'End With
 
     '        'myPoutre.NombreZones(myPoutre.IndicePremiereTravee) = 1
-    '        'myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0) = 1
+    '        'myPoutre.NrTransZone(myPoutre.IndicePremiereTravee, 0) = 1
     '        'myPoutre.Espacement_Bac_TransZone(myPoutre.IndicePremiereTravee, 0) = 1
     '        'myPoutre.EspacementZone(myPoutre.IndicePremiereTravee, 0) = 0.207
     '        'myPoutre.lAutomaticDesign = False

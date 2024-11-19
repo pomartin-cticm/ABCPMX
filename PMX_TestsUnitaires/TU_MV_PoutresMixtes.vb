@@ -74,7 +74,7 @@ Imports PMXMoteur2
         End With
 
         myPoutre.NombreZones(myPoutre.IndicePremiereTravee) = 1
-        myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0) = 1
+        myPoutre.NrTransZone(myPoutre.IndicePremiereTravee, 0) = 1
         myPoutre.Espacement_Bac_TransZone(myPoutre.IndicePremiereTravee, 0) = 1
         myPoutre.EspacementZone(myPoutre.IndicePremiereTravee, 0) = 0.207
         myPoutre.LongueurZone(myPoutre.IndicePremiereTravee, 0) = myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee)
@@ -231,14 +231,14 @@ Imports PMXMoteur2
         '--> Calcul avec 1 connecteur par onde 
         Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine, 'VALEUR CORRIGEE avec Ecm = 31 GPA
                                                       myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
-                                                      myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
+                                                      myPoutre.NrTransZone(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
                                                       31000, Fctk_005, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 52.5 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine, 'VALEUR CORRIGEE avec Ecm = 31 GPA
                                                       myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
-                                                      myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
+                                                      myPoutre.NrTransZone(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
                                                       myPoutre.Dalle.beton.Ecm, Fctk_005, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 52.897 * 1000 'VALEUR CALCULEE à la main avec le vrai Ecm = 31.476 GPa
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
@@ -652,7 +652,7 @@ Imports PMXMoteur2
         End With
 
         myPoutre.NombreZones(myPoutre.IndicePremiereTravee) = 1
-        myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0) = 1
+        myPoutre.NrTransZone(myPoutre.IndicePremiereTravee, 0) = 1
         myPoutre.Espacement_Bac_TransZone(myPoutre.IndicePremiereTravee, 0) = 1
         myPoutre.EspacementZone(myPoutre.IndicePremiereTravee, 0) = 0.207
         myPoutre.lAutomaticDesign = False
@@ -914,7 +914,7 @@ Imports PMXMoteur2
         myPoutre.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus 'permet de prendre en compte le bac pour le calcul des armatures transversales
 
         myPoutre.NombreZones(myPoutre.IndicePremiereTravee) = 1
-        myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0) = 1
+        myPoutre.NrTransZone(myPoutre.IndicePremiereTravee, 0) = 1
         myPoutre.Espacement_Bac_TransZone(myPoutre.IndicePremiereTravee, 0) = 1
         myPoutre.EspacementZone(myPoutre.IndicePremiereTravee, 0) = 0.207
         myPoutre.lAutomaticDesign = False
@@ -1516,7 +1516,7 @@ Imports PMXMoteur2
         End With
 
         myPoutre.NombreZones(myPoutre.IndicePremiereTravee) = 1
-        myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0) = 2
+        myPoutre.NrTransZone(myPoutre.IndicePremiereTravee, 0) = 2
         myPoutre.Espacement_Bac_TransZone(myPoutre.IndicePremiereTravee, 0) = 1
         myPoutre.EspacementZone(myPoutre.IndicePremiereTravee, 0) = 0.207
         myPoutre.LongueurZone(myPoutre.IndicePremiereTravee, 0) = myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee)
@@ -2172,7 +2172,7 @@ Imports PMXMoteur2
 
         For itravee As Integer = myPoutre.IndicePremiereTravee To myPoutre.IndiceDerniereTravee
             myPoutre.NombreZones(itravee) = 1
-            myPoutre.NombreGoujonsTransv(itravee, 0) = 2
+            myPoutre.NrTransZone(itravee, 0) = 2
             myPoutre.Espacement_Bac_TransZone(itravee, 0) = 1
             myPoutre.EspacementZone(itravee, 0) = 0.207
             myPoutre.LongueurZone(itravee, 0) = myPoutre.LongueurTravee(itravee)
@@ -2603,7 +2603,7 @@ Imports PMXMoteur2
 
         For itravee As Integer = myPoutre.IndicePremiereTravee To myPoutre.IndiceDerniereTravee
             myPoutre.NombreZones(itravee) = 1
-            myPoutre.NombreGoujonsTransv(itravee, 0) = 2
+            myPoutre.NrTransZone(itravee, 0) = 2
             myPoutre.Espacement_Bac_TransZone(itravee, 0) = 1
             myPoutre.EspacementZone(itravee, 0) = 0.207
             myPoutre.LongueurZone(itravee, 0) = myPoutre.LongueurTravee(itravee)

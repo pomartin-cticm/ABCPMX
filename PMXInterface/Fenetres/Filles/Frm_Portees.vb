@@ -302,9 +302,9 @@ Public Class Frm_Portees
             .Espacement_Bac_TransZone(indTravee, 0) = 1
             .Espacement_Bac_TransZone(indTravee, 1) = 1
             .Espacement_Bac_TransZone(indTravee, 2) = 1
-            .NombreGoujonsTransv(indTravee, 0) = 1
-            .NombreGoujonsTransv(indTravee, 1) = 1
-            .NombreGoujonsTransv(indTravee, 2) = 1
+            .NrTransZone(indTravee, 0) = 1
+            .NrTransZone(indTravee, 1) = 1
+            .NrTransZone(indTravee, 2) = 1
             'For j As Integer = 0 To 2
             '    .NombreGoujonsTot(indTravee) += .ZoneLongueur(indTravee, j) / .ZoneEspacement(indTravee, j)
             'Next

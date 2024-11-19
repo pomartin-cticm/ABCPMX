@@ -197,7 +197,7 @@ Public Class cls_Poutre
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0, 1 ou 2)
     ''' </summary>
-    Public NombreGoujonsTransv(,) As Integer
+    Public NrTransZone(,) As Integer
 
     '''' <summary>
     '''' Nombre total de goujons disposés sur la travée considérée   
@@ -247,7 +247,7 @@ Public Class cls_Poutre
 
         '--( Calcul
 
-        Nr = Me.NombreGoujonsTransv(iTravee, iZone)
+        Nr = Me.NrTransZone(iTravee, iZone)
         PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, Nr, FcK, Ecm, Fctk_005, GammaVs, GammaVc)
         sX = Me.EntraxeLongiGoujons(iTravee, iZone)
         myFluxRd = Nr * PRd / sX
@@ -255,7 +255,8 @@ Public Class cls_Poutre
         Return myFluxRd
 
     End Function
-    Private Function EntraxeLongiGoujons(iTravee As Integer, iZone As Integer) As Decimal
+
+    Public Function EntraxeLongiGoujons(iTravee As Integer, iZone As Integer) As Decimal
         '--------------------------------------------------------------------------------------------------------
         '   03/02/24 :  Création - POM - V1.00
         '--------------------------------------------------------------------------------------------------------
@@ -411,11 +412,11 @@ Public Class cls_Poutre
     ''' <returns></returns>
     Public ReadOnly Property nr_min As Integer
         Get
-            Dim nr_retour As Integer = Me.NombreGoujonsTransv(Me.IndicePremiereTravee, 0)
+            Dim nr_retour As Integer = Me.NrTransZone(Me.IndicePremiereTravee, 0)
 
             For i_travee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
                 For j_zone As Integer = 0 To Me.NombreZones(i_travee) - 1
-                    nr_retour = Math.Min(nr_retour, Me.NombreGoujonsTransv(i_travee, j_zone))
+                    nr_retour = Math.Min(nr_retour, Me.NrTransZone(i_travee, j_zone))
                 Next
             Next
 
@@ -429,11 +430,11 @@ Public Class cls_Poutre
     ''' <returns></returns>
     Public ReadOnly Property nr_max As Integer
         Get
-            Dim nr_retour As Integer = Me.NombreGoujonsTransv(Me.IndicePremiereTravee, 0)
+            Dim nr_retour As Integer = Me.NrTransZone(Me.IndicePremiereTravee, 0)
 
             For i_travee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
                 For j_zone As Integer = 0 To Me.NombreZones(i_travee) - 1
-                    nr_retour = Math.Max(nr_retour, Me.NombreGoujonsTransv(i_travee, j_zone))
+                    nr_retour = Math.Max(nr_retour, Me.NrTransZone(i_travee, j_zone))
                 Next
             Next
 
@@ -794,7 +795,7 @@ Public Class cls_Poutre
         ReDim NombreZones(IndiceTraveeConsoleDroite)
         ReDim EspacementZone(IndiceTraveeConsoleDroite, 2)
         ReDim Espacement_Bac_TransZone(IndiceTraveeConsoleDroite, 2)
-        ReDim NombreGoujonsTransv(IndiceTraveeConsoleDroite, 2)
+        ReDim NrTransZone(IndiceTraveeConsoleDroite, 2)
         'ReDim NombreGoujonsTot(IndiceTraveeConsoleDroite + 2)
 
         For i As Integer = 0 To IndiceTraveeConsoleDroite
@@ -808,9 +809,9 @@ Public Class cls_Poutre
             Espacement_Bac_TransZone(i, 0) = 1
             Espacement_Bac_TransZone(i, 1) = 1
             Espacement_Bac_TransZone(i, 2) = 1
-            NombreGoujonsTransv(i, 0) = 1
-            NombreGoujonsTransv(i, 1) = 1
-            NombreGoujonsTransv(i, 2) = 1
+            NrTransZone(i, 0) = 1
+            NrTransZone(i, 1) = 1
+            NrTransZone(i, 2) = 1
             'For j As Integer = 0 To 2
             'NombreGoujonsTot(i) += ZoneLongueur(i, j) / ZoneEspacement(i, j)
             'Next
@@ -1327,7 +1328,7 @@ Public Class cls_Poutre
         ReDim Preserve NombreZones(IndiceTraveeConsoleDroite)
         ReDim Preserve EspacementZone(IndiceTraveeConsoleDroite, 2)
         ReDim Preserve Espacement_Bac_TransZone(IndiceTraveeConsoleDroite, 2)
-        ReDim Preserve NombreGoujonsTransv(IndiceTraveeConsoleDroite, 2)
+        ReDim Preserve NrTransZone(IndiceTraveeConsoleDroite, 2)
 
         For i As Integer = 0 To IndiceTraveeConsoleDroite
             If LongueurZone(i, 0) = 0 Then 'Permet de savoir si la dimension i est remplie d'éléments nuls, auquel cas on initialise avec les paramètres par défaut
@@ -1341,9 +1342,9 @@ Public Class cls_Poutre
                 Espacement_Bac_TransZone(i, 0) = 1
                 Espacement_Bac_TransZone(i, 1) = 1
                 Espacement_Bac_TransZone(i, 2) = 1
-                NombreGoujonsTransv(i, 0) = 1
-                NombreGoujonsTransv(i, 1) = 1
-                NombreGoujonsTransv(i, 2) = 1
+                NrTransZone(i, 0) = 1
+                NrTransZone(i, 1) = 1
+                NrTransZone(i, 2) = 1
             End If
         Next
 
@@ -1453,8 +1454,8 @@ Public Class cls_Poutre
         ReDim PoutreCible.Espacement_Bac_TransZone(PoutreSource.Espacement_Bac_TransZone.GetUpperBound(0), PoutreSource.Espacement_Bac_TransZone.GetUpperBound(1))
         PoutreCible.Espacement_Bac_TransZone = PoutreSource.Espacement_Bac_TransZone.Clone
 
-        ReDim PoutreCible.NombreGoujonsTransv(PoutreSource.NombreGoujonsTransv.GetUpperBound(0), PoutreSource.NombreGoujonsTransv.GetUpperBound(1))
-        PoutreCible.NombreGoujonsTransv = PoutreSource.NombreGoujonsTransv.Clone
+        ReDim PoutreCible.NrTransZone(PoutreSource.NrTransZone.GetUpperBound(0), PoutreSource.NrTransZone.GetUpperBound(1))
+        PoutreCible.NrTransZone = PoutreSource.NrTransZone.Clone
 
         'Clone ChargeUtilisateur
         PoutreCible.ChargesU = New Dictionary(Of String, cls_ChargementUtilisateur)
@@ -2417,7 +2418,7 @@ Public Class cls_Poutre
     '            'CALCUL DE LA CONTRAINTE TANGENTIELLE
     '            '---
 
-    '            'nr = Me.NombreGoujonsTransv(i_travee, j_zone)
+    '            'nr = Me.NrTransZone(i_travee, j_zone)
     '            'PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nr, Fck, Ecm, gammaVs, gammaVc)
     '            'sx = Me.EspacementZone(i_travee, j_zone)
     '            'v_x_Ed = nr * PRd / sx
@@ -2983,7 +2984,7 @@ Public Class cls_Poutre
                         '# Raideur de la connexion
                         DeltaD = Me.Param.DeltaD
 
-                        nR = Me.NombreGoujonsTransv(iTravee, IndZoneConnex(iElt))
+                        nR = Me.NrTransZone(iTravee, IndZoneConnex(iElt))
                         sX = Me.EntraxeLongiGoujons(iTravee, IndZoneConnex(iElt))
                         PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
                         kSc = 0.7 * PRd / DeltaD
@@ -5455,7 +5456,7 @@ Public Class cls_Poutre
     Public Function NombreGoujonTotParZone(indTravee As Integer, indZone As Integer)
         Dim resultat As Integer = 0
 
-        resultat += Math.Floor(NombreGoujonsTransv(indTravee, indZone) * LongueurZone(indTravee, indZone) / EspacementZone(indTravee, indZone))
+        resultat += Math.Floor(NrTransZone(indTravee, indZone) * LongueurZone(indTravee, indZone) / EspacementZone(indTravee, indZone))
 
         Return resultat
 
@@ -5757,12 +5758,17 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Sub MaillageRConnexion(xMZero(,) As Decimal, ByRef DeltaRd() As List(Of Decimal))
+    Public Sub MaillageRConnexionN(lIncendie As Boolean, ThetaV As Decimal, ThetaC As Decimal,
+                                    xMZero(,) As Decimal, ByRef DeltaRd() As List(Of Decimal))
         '------------------------------------------------------------------------------------------------------------------
-        '    31/10/23 : Création - POM
+        '    19/11/24 : Création - POM
         '------------------------------------------------------------------------------------------------------------------
         '   Calcul de la resistance de connexion le long de la barre (au droit des noeuds du maillage), par rapport au points de moments nuls
+        '   en situation, tenant compte de la résistance des connecteurs
         '------------------------------------------------------------------------------------------------------------------
+        '   lIncendie   [E] :   Indique si calcul en situation d'incendie
+        '   ThetaV      [E] :   Température de l'acier des connecteurs, équation acier
+        '   ThetaC      [E] :   Température du béton autour des connecteurs
         '   xMZero      [E] :   Position des points de moments nuls dans les travées intermédiaires
         '   DeltaRd     [S] :   Somme des résistances des connecteurs entre le noeud et le point de moment nul
         '------------------------------------------------------------------------------------------------------------------
@@ -5772,6 +5778,8 @@ Public Class cls_Poutre
         Dim iTravee, iNode As Integer
         Dim pDeltaRd(1) As Decimal
 
+        Dim DensitePRdZone(,) As Decimal = Nothing
+
         '--> Initialisation
 
         ReDim DeltaRd(Me.IndiceDerniereTravee)
@@ -5779,20 +5787,25 @@ Public Class cls_Poutre
         For iTravee = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
             DeltaRd(iTravee) = New List(Of Decimal)
         Next
-        Me.InitialiseDensiteConnexion()
+
+        InitialiseDensiteConnexionN(lIncendie, ThetaV, ThetaC, DensitePRdZone)
+        If Not lIncendie Then
+            Me.DensiteConnexionZone = DensitePRdZone
+        End If
 
         '--> Traitement des travées en console
 
         If Me.lTraveeConsoleGauche Then
             iTravee = 0
             For iNode = Me.Nodes.iNodeExtTrav(iTravee, 0) To Me.Nodes.iNodeExtTrav(iTravee, 1)
-                DeltaRd(iTravee).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
+                DeltaRd(iTravee).Add(DeltaRdXN(iTravee, Me.Nodes.xTravee(iNode), 0, DensitePRdZone))
             Next
         End If
+
         If Me.lTraveeConsoleDroite Then
             iTravee = Me.IndiceDerniereTravee
             For iNode = Me.Nodes.iNodeExtTrav(iTravee, 0) To Me.Nodes.iNodeExtTrav(iTravee, 1)
-                DeltaRd(iTravee).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTotale))
+                DeltaRd(iTravee).Add(DeltaRdXN(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTotale, DensitePRdZone))
             Next
         End If
 
@@ -5801,13 +5814,126 @@ Public Class cls_Poutre
         For iTravee = 1 To Me.NombreTraveesDeuxAppuis
             For iNode = Me.Nodes.iNodeExtTrav(iTravee, 0) To Me.Nodes.iNodeExtTrav(iTravee, 1)
                 For i As Integer = 0 To 1
-                    pDeltaRd(i) = Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), xMZero(iTravee, i))
+                    pDeltaRd(i) = DeltaRdXN(iTravee, Me.Nodes.xTravee(iNode), xMZero(iTravee, i), DensitePRdZone)
                 Next
                 DeltaRd(iTravee).Add(pDeltaRd.Min)
             Next
         Next
 
     End Sub
+
+    Public Sub MaillageRConnexion(xMZero(,) As Decimal, ByRef DeltaRd() As List(Of Decimal))
+        '------------------------------------------------------------------------------------------------------------------
+        '   19/11/24 : Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la resistance de connexion le long de la barre (au droit des noeuds du maillage), par rapport au points de moments nuls
+        '------------------------------------------------------------------------------------------------------------------
+        '   xMZero      [E] :   Position des points de moments nuls dans les travées intermédiaires
+        '   DeltaRd     [S] :   Somme des résistances des connecteurs entre le noeud et le point de moment nul
+        '------------------------------------------------------------------------------------------------------------------
+
+        Me.MaillageRConnexionN(False, 0, 0, xMZero, DeltaRd)
+
+    End Sub
+
+    'Public Sub MaillageRConnexionOLD(xMZero(,) As Decimal, ByRef DeltaRd() As List(Of Decimal))
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '    31/10/23 : Création - POM
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   Calcul de la resistance de connexion le long de la barre (au droit des noeuds du maillage), par rapport au points de moments nuls
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   xMZero      [E] :   Position des points de moments nuls dans les travées intermédiaires
+    '    '   DeltaRd     [S] :   Somme des résistances des connecteurs entre le noeud et le point de moment nul
+    '    '------------------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclaration
+
+    '    Dim iTravee, iNode As Integer
+    '    Dim pDeltaRd(1) As Decimal
+
+    '    '--> Initialisation
+
+    '    ReDim DeltaRd(Me.IndiceDerniereTravee)
+
+    '    For iTravee = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+    '        DeltaRd(iTravee) = New List(Of Decimal)
+    '    Next
+    '    Me.InitialiseDensiteConnexion()
+
+    '    '--> Traitement des travées en console
+
+    '    If Me.lTraveeConsoleGauche Then
+    '        iTravee = 0
+    '        For iNode = Me.Nodes.iNodeExtTrav(iTravee, 0) To Me.Nodes.iNodeExtTrav(iTravee, 1)
+    '            DeltaRd(iTravee).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
+    '        Next
+    '    End If
+    '    If Me.lTraveeConsoleDroite Then
+    '        iTravee = Me.IndiceDerniereTravee
+    '        For iNode = Me.Nodes.iNodeExtTrav(iTravee, 0) To Me.Nodes.iNodeExtTrav(iTravee, 1)
+    '            DeltaRd(iTravee).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTotale))
+    '        Next
+    '    End If
+
+    '    '--> Traitement des travées intermédiaires
+
+    '    For iTravee = 1 To Me.NombreTraveesDeuxAppuis
+    '        For iNode = Me.Nodes.iNodeExtTrav(iTravee, 0) To Me.Nodes.iNodeExtTrav(iTravee, 1)
+    '            For i As Integer = 0 To 1
+    '                pDeltaRd(i) = Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), xMZero(iTravee, i))
+    '            Next
+    '            DeltaRd(iTravee).Add(pDeltaRd.Min)
+    '        Next
+    '    Next
+
+    'End Sub
+
+    Private Function DeltaRdXN(iTravee As Decimal, xPosT As Decimal, xRefT As Decimal,
+                               DensitePRdZone(,) As Decimal) As Decimal
+        '------------------------------------------------------------------------------------------------------------------
+        '   19/11/24 : Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Renvoie le cumul des résistances des connecteurs entre deux positions
+        '------------------------------------------------------------------------------------------------------------------
+        '   iTravee         [E] :   Indice de la travée
+        '   xPosT           [E] :   Position de la section étudiée  (par rapport à l'extrémité gauche de la travée)
+        '   xRefT           [E] :   Position de référence (idem)
+        '   DensitePRdZone  [E] :   Densité de PRd par zone
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim pDeltaRd As Decimal = 0
+        Dim pxPos(1) As Decimal
+        Dim iZone(1) As Integer
+
+        '--> Traitement
+
+        If Not IsEqual(xPosT, xRefT) Then
+
+            pxPos(0) = Math.Min(xPosT, xRefT)
+            pxPos(1) = Math.Max(xPosT, xRefT)
+
+            iZone(0) = Me.IndiceZoneFromPosition(iTravee, pxPos(0))
+            iZone(1) = Me.IndiceZoneFromPosition(iTravee, pxPos(1))
+
+            If (iZone(0) = iZone(1)) Then
+                '# Cas où les deux positions sont dans la même zone de connexion
+                pDeltaRd = (pxPos(1) - pxPos(0)) * DensitePRdZone(iTravee, iZone(0))
+            Else
+                pDeltaRd = (Me.xZoneT(iTravee, iZone(0)) - pxPos(0)) * DensitePRdZone(iTravee, iZone(0))
+                pDeltaRd += (pxPos(1) - Me.xZoneT(iTravee, iZone(1) - 1)) * DensitePRdZone(iTravee, iZone(1))
+                For iZe As Integer = iZone(0) + 1 To iZone(1) - 1
+                    pDeltaRd += Me.LongueurZone(iTravee, iZe) * DensitePRdZone(iTravee, iZe)
+                Next
+            End If
+        End If
+
+        '--> Fin
+
+        Return pDeltaRd
+
+    End Function
 
     Private Function DeltaRdX(iTravee As Decimal, xPosT As Decimal, xRefT As Decimal) As Decimal
         '------------------------------------------------------------------------------------------------------------------
@@ -5854,7 +5980,20 @@ Public Class cls_Poutre
 
     End Function
 
-    Private Function IndiceZoneFromPosition(iTravee As Integer, xPosT As Decimal) As Integer
+    Public Function IndiceZoneMiPortee(iTravee As Integer) As Integer
+        '------------------------------------------------------------------------------------------------------------------
+        '    19/11/24 : Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Renvoie l'indice de la zone de connexion à mi-portée d'une travée
+        '------------------------------------------------------------------------------------------------------------------
+        '   iTravee     [E] :   Indice de la travée
+        '------------------------------------------------------------------------------------------------------------------
+
+        Return Me.IndiceZoneFromPosition(iTravee, Me.LongueurTravee(iTravee) / 2)
+
+    End Function
+
+    Public Function IndiceZoneFromPosition(iTravee As Integer, xPosT As Decimal) As Integer
         '------------------------------------------------------------------------------------------------------------------
         '    31/10/23 : Création - POM
         '------------------------------------------------------------------------------------------------------------------
@@ -5890,12 +6029,16 @@ Public Class cls_Poutre
         Return pIndice
     End Function
 
-    Public Sub InitialiseDensiteConnexion()
+    Public Sub InitialiseDensiteConnexionN(lIncendie As Boolean, ThetaV As Decimal, ThetaC As Decimal, ByRef DensitePRdZone(,) As Decimal)
         '------------------------------------------------------------------------------------------------------------------
-        '    31/10/23 : Création - POM
+        '    19/11/24 : Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   Initialise la table DensiteConnexion
+        '   Initialise la table DensiteConnexion pour un calcul en situation d'incendie
         '------------------------------------------------------------------------------------------------------------------
+        '   lIncendie       [E] :   Indique si calcule en situation d'incendie
+        '   ThetaV          [E] :   Température de l'acier des connecteurs, équation acier
+        '   ThetaC          [E] :   Température du béton autour des connecteurs
+        '   DensitePRdZone  [S] :   Densité de PRd dans chaque zone
         '------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -5913,46 +6056,128 @@ Public Class cls_Poutre
         Dim lBacNervuresPerpContinues As Boolean
         Dim LongZone As Decimal
         Dim NbCZone As Integer
+        Dim lLeger As Boolean
 
         '--> Initialisation
 
-        ReDim Me.DensiteConnexionZone(Me.IndiceDerniereTravee, 2)
+        ReDim DensitePRdZone(Me.IndiceDerniereTravee, 2)
         lGeneration1 = Me.Param.lGeneration1
         lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
         lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
         Ecm = Me.Dalle.beton.Ecm
         Fck = Me.Dalle.beton.Fck
         Fctk_005 = Me.Dalle.beton.Fctk_005
-        gammaVs = Me.Param.Gamma.GammaVs
-        gammaVc = Me.Param.Gamma.GammaVc
+        If lIncendie Then
+            gammaVs = Me.Param.Gamma.GammaV_fi
+            gammaVc = Me.Param.Gamma.GammaV_fi
+        Else
+            gammaVs = Me.Param.Gamma.GammaVs
+            gammaVc = Me.Param.Gamma.GammaVc
+        End If
+
         lBacNervuresPerpContinues = (Me.Dalle.lMixte And Me.Dalle.Bac.lPerpendiculaire And Me.Dalle.Bac.lNervuresContinues)
+        lLeger = Me.Dalle.beton.lLeger
 
         '--> Traitement
 
         For iTravee = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
             For iZone = 0 To Me.NombreZones(iTravee) - 1
 
-                'If lBacNervuresPerpContinues Then
-                '    pEspace = Me.Espacement_Bac_TransZone(iTravee, iZone) * Me.Dalle.Bac.Ep
-                'Else
-                '    pEspace = Me.EspacementZone(iTravee, iZone)
-                'End If
-
                 pEspace = Me.EntraxeLongiGoujons(iTravee, iZone)
 
-                nR = Me.NombreGoujonsTransv(iTravee, iZone)
-                PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
+                nR = Me.NrTransZone(iTravee, iZone)
+
+                If lIncendie Then
+                    PRd = Me.Dalle.Goujons.PRdStudFeu(ThetaV, ThetaC, lGeneration1, lLeger, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
+                Else
+                    PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
+                End If
 
                 NbCZone = Me.NombreGoujonTotParZone(iTravee, iZone)
                 LongZone = Me.LongueurZone(iTravee, iZone)
 
-                'Me.DensiteConnexionZone(iTravee, iZone) = PRd * nR / pEspace
-                Me.DensiteConnexionZone(iTravee, iZone) = PRd * NbCZone / LongZone
+                DensitePRdZone(iTravee, iZone) = PRd * NbCZone / LongZone
 
             Next
         Next
 
     End Sub
+
+    Private Sub InitialiseDensiteConnexion()
+        '------------------------------------------------------------------------------------------------------------------
+        '    31/10/23 : Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Initialise la table DensiteConnexion
+        '------------------------------------------------------------------------------------------------------------------
+        '------------------------------------------------------------------------------------------------------------------
+
+        Me.InitialiseDensiteConnexionN(False, 0, 0, Me.DensiteConnexionZone)
+
+    End Sub
+
+    'Public Sub InitialiseDensiteConnexionOLD()
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '    31/10/23 : Création - POM
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   Initialise la table DensiteConnexion
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '------------------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclaration
+
+    '    Dim iTravee, iZone As Integer
+    '    Dim PRd As Decimal
+    '    Dim lGeneration1 As Boolean
+    '    Dim lDallePleine As Boolean
+    '    Dim lPerp As Boolean
+    '    Dim Ecm, Fck As Decimal
+    '    Dim Fctk_005 As Decimal
+    '    Dim gammaVs, gammaVc As Decimal
+    '    Dim nR As Integer
+    '    Dim pEspace As Decimal
+    '    Dim lBacNervuresPerpContinues As Boolean
+    '    Dim LongZone As Decimal
+    '    Dim NbCZone As Integer
+
+    '    '--> Initialisation
+
+    '    ReDim Me.DensiteConnexionZone(Me.IndiceDerniereTravee, 2)
+    '    lGeneration1 = Me.Param.lGeneration1
+    '    lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
+    '    lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
+    '    Ecm = Me.Dalle.beton.Ecm
+    '    Fck = Me.Dalle.beton.Fck
+    '    Fctk_005 = Me.Dalle.beton.Fctk_005
+    '    gammaVs = Me.Param.Gamma.GammaVs
+    '    gammaVc = Me.Param.Gamma.GammaVc
+    '    lBacNervuresPerpContinues = (Me.Dalle.lMixte And Me.Dalle.Bac.lPerpendiculaire And Me.Dalle.Bac.lNervuresContinues)
+
+    '    '--> Traitement
+
+    '    For iTravee = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+    '        For iZone = 0 To Me.NombreZones(iTravee) - 1
+
+    '            'If lBacNervuresPerpContinues Then
+    '            '    pEspace = Me.Espacement_Bac_TransZone(iTravee, iZone) * Me.Dalle.Bac.Ep
+    '            'Else
+    '            '    pEspace = Me.EspacementZone(iTravee, iZone)
+    '            'End If
+
+    '            pEspace = Me.EntraxeLongiGoujons(iTravee, iZone)
+
+    '            nR = Me.NrTransZone(iTravee, iZone)
+    '            PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
+
+    '            NbCZone = Me.NombreGoujonTotParZone(iTravee, iZone)
+    '            LongZone = Me.LongueurZone(iTravee, iZone)
+
+    '            'Me.DensiteConnexionZone(iTravee, iZone) = PRd * nR / pEspace
+    '            Me.DensiteConnexionZone(iTravee, iZone) = PRd * NbCZone / LongZone
+
+    '        Next
+    '    Next
+
+    'End Sub
 
 #End Region
 

@@ -1349,7 +1349,7 @@
                 '======================================
 
                 '* nb de goujons par rangée
-                nr = myBeam.NombreGoujonsTransv(iTravee, jZone)
+                nr = myBeam.NrTransZone(iTravee, jZone)
                 'PRd = myBeam.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, myBeam.Dalle.Bac, nr, Fck, Ecm, gammaVs, gammaVc)
                 'sx = myBeam.EspacemyPoutrentZone(iTravee, jZone)
                 'vxEd = nr * PRd / sx

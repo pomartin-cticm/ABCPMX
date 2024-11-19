@@ -109,7 +109,7 @@ Public Module Mod_Demarrage
         '--> Réglages CTICM/AM
 
         LogicielInfo.Maitre = EnuMaitre.CTICM
-        LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
+        'LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
 
         InitialiseReglagesLogiciel()
         InitialiseVersion()

@@ -152,8 +152,8 @@ Public Class Frm_ConnectionSlimFloor
         'Corrige les valeurs de certaines variables si nécessaire (utile en cas d'un changement de certaines valeurs dans les fenêtres précédentes)
         For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee
             For j As Integer = 0 To 2
-                If Not (MyPoutreLoc.NombreGoujonsTransv(i, j) >= Nb_TransV_Row_MIN And MyPoutreLoc.NombreGoujonsTransv(i, j) <= Nb_TransV_Row_MAX) Then
-                    MyPoutreLoc.NombreGoujonsTransv(i, j) = Nb_TransV_Row_MIN
+                If Not (MyPoutreLoc.NrTransZone(i, j) >= Nb_TransV_Row_MIN And MyPoutreLoc.NrTransZone(i, j) <= Nb_TransV_Row_MAX) Then
+                    MyPoutreLoc.NrTransZone(i, j) = Nb_TransV_Row_MIN
                 End If
             Next
         Next
@@ -325,7 +325,7 @@ Public Class Frm_ConnectionSlimFloor
 
         'Gestion des valeurs de la poutre en cours
         With MyPoutreLoc
-            Me.cmb_NbRow_I1.SelectedIndex = .NombreGoujonsTransv(traveeEnCours, 0) - 1
+            Me.cmb_NbRow_I1.SelectedIndex = .NrTransZone(traveeEnCours, 0) - 1
             Me.txt_EspLongi_I1.Text = GetStringInUnit(.EspacementZone(traveeEnCours, 0), Enu_TypeVariable.Dimension, 4, 0, False)
 
         End With
@@ -411,7 +411,7 @@ Public Class Frm_ConnectionSlimFloor
                 GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurArmature.Acier.FsK, .Dalle.ConnecteurArmature.Acier.FsK, lModif)
             End If
 
-            GereTransfertValeur(MyPoutreLoc.NombreGoujonsTransv(1, 0), .NombreGoujonsTransv(1, 0), lModif)
+            GereTransfertValeur(MyPoutreLoc.NrTransZone(1, 0), .NrTransZone(1, 0), lModif)
             GereTransfertValeur(MyPoutreLoc.EspacementZone(1, 0), .EspacementZone(1, 0), lModif)
 
         End With
@@ -629,7 +629,7 @@ Public Class Frm_ConnectionSlimFloor
     Private Sub cmb_NbRow_I1_I2_I3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbRow_I1.SelectedIndexChanged
         If lBuild Or lMAJAffichage Then Exit Sub
 
-        MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 0) = cmb_NbRow_I1.SelectedIndex + 1
+        MyPoutreLoc.NrTransZone(traveeEnCours, 0) = cmb_NbRow_I1.SelectedIndex + 1
 
         MAJ_SommeGoujons()
         MAJ_affichage_txt_cmb_connection()
@@ -677,8 +677,8 @@ Public Class Frm_ConnectionSlimFloor
 
         For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee
             For j As Integer = 0 To 2
-                If Not (MyPoutreLoc.NombreGoujonsTransv(i, j) >= Nb_TransV_Row_MIN And MyPoutreLoc.NombreGoujonsTransv(i, j) <= Nb_TransV_Row_MAX) Then
-                    MyPoutreLoc.NombreGoujonsTransv(i, j) = Nb_TransV_Row_MIN
+                If Not (MyPoutreLoc.NrTransZone(i, j) >= Nb_TransV_Row_MIN And MyPoutreLoc.NrTransZone(i, j) <= Nb_TransV_Row_MAX) Then
+                    MyPoutreLoc.NrTransZone(i, j) = Nb_TransV_Row_MIN
                     lMAJ_cmb_NbRow = True
                 End If
 
@@ -694,7 +694,7 @@ Public Class Frm_ConnectionSlimFloor
                 Me.cmb_NbRow_I1.Items.Add(i)
             Next
 
-            Me.cmb_NbRow_I1.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 0) - 1
+            Me.cmb_NbRow_I1.SelectedIndex = MyPoutreLoc.NrTransZone(traveeEnCours, 0) - 1
         End If
 
     End Sub

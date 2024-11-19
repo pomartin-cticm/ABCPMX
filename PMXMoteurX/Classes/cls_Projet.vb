@@ -216,7 +216,7 @@ Public Class cls_Projet
             AjouteLigneFrmt(Lines, "ZoneLengths", ConvertListDecimalToString(myBeam.LongueurZone))
             AjouteLigneFrmt(Lines, "ZoneSpacings", ConvertListDecimalToString(myBeam.EspacementZone))
             AjouteLigneFrmt(Lines, "ZoneTroughSp", ConvertListIntegerToString(myBeam.Espacement_Bac_TransZone))
-            AjouteLigneFrmt(Lines, "ZoneNy", ConvertListIntegerToString(myBeam.NombreGoujonsTransv))
+            AjouteLigneFrmt(Lines, "ZoneNy", ConvertListIntegerToString(myBeam.NrTransZone))
         End If
 
         AjouteLigneFrmt(Lines, "ULSlComb", ConvertListBooleanToString(myBeam.lCombELU))
@@ -486,7 +486,7 @@ Public Class cls_Projet
             Chaine = ""
             For itravee As Integer = iTDeb To iTFin
 
-                If itravee > iTDeb Then Chaine = Chaine & sp
+                If itravee > iTDeb Then Chaine = Chaine & SP
                 Chaine = Chaine & CStr(Ch.Value.QSurf(itravee))
 
             Next
@@ -872,7 +872,7 @@ Public Class cls_Projet
 
         '==[ Entete ]=========================================================================
         Lines.Add("'-----------------------------------------------'")
-                    Lines.Add("'PropMix software - CTICM - Version " & version)
+        Lines.Add("'PropMix software - CTICM - Version " & version)
         Lines.Add("'PROJECT USER FILE")
         Lines.Add("'-----------------------------------------------'")
         Lines.Add("'       /!\   Don't modify this file   /!\")
@@ -1662,7 +1662,7 @@ Public Class cls_Projet
                         Case "ZONELE" : .LongueurZone = ConvertStringToListDecimalDim2(Mots(nbMots))
                         Case "ZONESP" : .EspacementZone = ConvertStringToListDecimalDim2(Mots(nbMots))
                         Case "ZONETR" : .Espacement_Bac_TransZone = ConvertStringToListIntegerDim2(Mots(nbMots))
-                        Case "ZONENY" : .NombreGoujonsTransv = ConvertStringToListIntegerDim2(Mots(nbMots))
+                        Case "ZONENY" : .NrTransZone = ConvertStringToListIntegerDim2(Mots(nbMots))
 
                         Case "ULSLCO" : .lCombELU = ConvertStringToListBoolean(Mots(nbMots))
                         Case "ULSCOE" : .CoefCombELU = ConvertStringToListDecimalDim2Bis(Mots(nbMots))

@@ -326,6 +326,9 @@
             TempFsStep(iSTep) = TempFs
             TempFiStep(iSTep) = TempFi
             TempWStep(iSTep) = TempW
+
+            '# Températures dans les goujons
+
             TempVStep(iSTep) = Math.Max(0.8 * TempFs, myBeam.ParamFeu.TempRef)
             TempVcStep(iSTep) = Math.Max(0.4 * TempFs, myBeam.ParamFeu.TempRef)
 
@@ -377,15 +380,14 @@
 
             myBeam.AnalyseDiagrammeMoments(MEd, iNodeMmax, Mmax, xMZero, lTraveeMomNeg)
 
-            '# Calcul des propriétés plastiques le long de la barre,
-            ' avec prise en compte de la connection,
-            ' sans prise en compte de la réduction induit par l'effort tranchant 
-
-            myBeam.MaillageRConnexion(xMZero, DeltaRd)
-
             '## Classification
 
             For iSTep = 0 To Me.NbStep - 1
+
+                '# Calcul des densités de connexion
+
+                myBeam.MaillageRConnexionN(True, TempVStep(iSTep), TempVcStep(iSTep), xMZero, DeltaRd)
+
                 '## Calculs des moments plastiques en fct de la température
 
                 MaillagePropPlastiquesMixtes(myBeam, bEff, DeltaRd, 1, lGeneration1, False,
@@ -1353,5 +1355,183 @@
     'End Sub
 
 #End Region
+
+#Region " Calcul DeltaPRd "
+
+    'Private Sub MaillageRConnexion(myBeam As cls_Poutre, ThetaV As Decimal, ThetaC As Decimal,
+    '                               xMZero(,) As Decimal, ByRef DeltaRd() As List(Of Decimal))
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '    19/11/24 : Création - POM
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   Calcul de la resistance de connexion le long de la barre (au droit des noeuds du maillage), par rapport au points de moments nuls
+    '    '   en situation, tenant compte de la résistance des connecteurs
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   myBeam      [E] :   Poutre traitée
+    '    '   ThetaV      [E] :   Température de l'acier des connecteurs, équation acier
+    '    '   ThetaC      [E] :   Température du béton autour des connecteurs
+    '    '   xMZero      [E] :   Position des points de moments nuls dans les travées intermédiaires
+    '    '   DeltaRd     [S] :   Somme des résistances des connecteurs entre le noeud et le point de moment nul
+    '    '------------------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclaration
+
+    '    Dim iTravee, iNode As Integer
+    '    Dim pDeltaRd(1) As Decimal
+
+    '    Dim DensitePRdZone(,) As Decimal = Nothing
+
+    '    '--> Initialisation
+
+    '    ReDim DeltaRd(myBeam.IndiceDerniereTravee)
+
+    '    For iTravee = myBeam.IndicePremiereTravee To myBeam.IndiceDerniereTravee
+    '        DeltaRd(iTravee) = New List(Of Decimal)
+    '    Next
+    '    InitialiseDensiteConnexion(myBeam, ThetaV, ThetaC, DensitePRdZone)
+
+    '    '--> Traitement des travées en console
+
+    '    If myBeam.lTraveeConsoleGauche Then
+    '        iTravee = 0
+    '        For iNode = myBeam.Nodes.iNodeExtTrav(iTravee, 0) To myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+    '            DeltaRd(iTravee).Add(DeltaRdX(myBeam, iTravee, myBeam.Nodes.xTravee(iNode), 0, DensitePRdZone))
+    '        Next
+    '    End If
+
+    '    If myBeam.lTraveeConsoleDroite Then
+    '        iTravee = myBeam.IndiceDerniereTravee
+    '        For iNode = myBeam.Nodes.iNodeExtTrav(iTravee, 0) To myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+    '            DeltaRd(iTravee).Add(DeltaRdX(myBeam, iTravee, myBeam.Nodes.xTravee(iNode), myBeam.LongueurTotale, DensitePRdZone))
+    '        Next
+    '    End If
+
+    '    '--> Traitement des travées intermédiaires
+
+    '    For iTravee = 1 To myBeam.NombreTraveesDeuxAppuis
+    '        For iNode = myBeam.Nodes.iNodeExtTrav(iTravee, 0) To myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+    '            For i As Integer = 0 To 1
+    '                pDeltaRd(i) = DeltaRdX(myBeam, iTravee, myBeam.Nodes.xTravee(iNode), xMZero(iTravee, i), DensitePRdZone)
+    '            Next
+    '            DeltaRd(iTravee).Add(pDeltaRd.Min)
+    '        Next
+    '    Next
+
+    'End Sub
+
+    'Private Function DeltaRdX(myBeam As cls_Poutre, iTravee As Decimal, xPosT As Decimal, xRefT As Decimal,
+    '                          DensitePRdZone(,) As Decimal) As Decimal
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   19/11/24 : Création - POM
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   Renvoie le cumul des résistances des connecteurs entre deux positions
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   myBeam          [E] :   Poutre
+    '    '   iTravee         [E] :   Indice de la travée
+    '    '   xPosT           [E] :   Position de la section étudiée  (par rapport à l'extrémité gauche de la travée)
+    '    '   xRefT           [E] :   Position de référence (idem)
+    '    '   DensitePRdZone  [E] :   Densité de PRd par zone
+    '    '------------------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclaration
+
+    '    Dim pDeltaRd As Decimal = 0
+    '    Dim pxPos(1) As Decimal
+    '    Dim iZone(1) As Integer
+
+    '    '--> Traitement
+
+    '    If Not IsEqual(xPosT, xRefT) Then
+
+    '        pxPos(0) = Math.Min(xPosT, xRefT)
+    '        pxPos(1) = Math.Max(xPosT, xRefT)
+
+    '        iZone(0) = myBeam.IndiceZoneFromPosition(iTravee, pxPos(0))
+    '        iZone(1) = myBeam.IndiceZoneFromPosition(iTravee, pxPos(1))
+
+    '        If (iZone(0) = iZone(1)) Then
+    '            '# Cas où les deux positions sont dans la même zone de connexion
+    '            pDeltaRd = (pxPos(1) - pxPos(0)) * DensitePRdZone(iTravee, iZone(0))
+    '        Else
+    '            pDeltaRd = (myBeam.xZoneT(iTravee, iZone(0)) - pxPos(0)) * DensitePRdZone(iTravee, iZone(0))
+    '            pDeltaRd += (pxPos(1) - myBeam.xZoneT(iTravee, iZone(1) - 1)) * DensitePRdZone(iTravee, iZone(1))
+    '            For iZe As Integer = iZone(0) + 1 To iZone(1) - 1
+    '                pDeltaRd += myBeam.LongueurZone(iTravee, iZe) * DensitePRdZone(iTravee, iZe)
+    '            Next
+    '        End If
+    '    End If
+
+    '    '--> Fin
+
+    '    Return pDeltaRd
+
+    'End Function
+
+
+    'Public Sub InitialiseDensiteConnexion(mybeam As cls_Poutre, ThetaV As Decimal, ThetaC As Decimal, ByRef DensitePRdZone(,) As Decimal)
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '    19/11/24 : Création - POM
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   Initialise la table DensiteConnexion pour un calcul en situation d'incendie
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   myBeam          [E] :   Poutre traitée
+    '    '   ThetaV          [E] :   Température de l'acier des connecteurs, équation acier
+    '    '   ThetaC          [E] :   Température du béton autour des connecteurs
+    '    '   DensitePRdZone  [S] :   Densité de PRd dans chaque zone
+    '    '------------------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclaration
+
+    '    Dim iTravee, iZone As Integer
+    '    Dim PRd As Decimal
+    '    Dim lGeneration1 As Boolean
+    '    Dim lDallePleine As Boolean
+    '    Dim lPerp As Boolean
+    '    Dim Ecm, Fck As Decimal
+    '    Dim Fctk_005 As Decimal
+    '    Dim gammaVs, gammaVc As Decimal
+    '    Dim nR As Integer
+    '    Dim pEspace As Decimal
+    '    Dim lBacNervuresPerpContinues As Boolean
+    '    Dim LongZone As Decimal
+    '    Dim NbCZone As Integer
+    '    Dim lLeger As Boolean
+
+    '    '--> Initialisation
+
+    '    ReDim DensitePRdZone(mybeam.IndiceDerniereTravee, 2)
+    '    lGeneration1 = mybeam.Param.lGeneration1
+    '    lDallePleine = (mybeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (mybeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
+    '    lPerp = (mybeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And (mybeam.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
+    '    Ecm = mybeam.Dalle.beton.Ecm
+    '    Fck = mybeam.Dalle.beton.Fck
+    '    Fctk_005 = mybeam.Dalle.beton.Fctk_005
+    '    gammaVs = mybeam.Param.Gamma.GammaV_fi
+    '    gammaVc = mybeam.Param.Gamma.GammaV_fi
+
+    '    lBacNervuresPerpContinues = (mybeam.Dalle.lMixte And mybeam.Dalle.Bac.lPerpendiculaire And mybeam.Dalle.Bac.lNervuresContinues)
+    '    lLeger = mybeam.Dalle.beton.lLeger
+
+    '    '--> Traitement
+
+    '    For iTravee = mybeam.IndicePremiereTravee To mybeam.IndiceDerniereTravee
+    '        For iZone = 0 To mybeam.NombreZones(iTravee) - 1
+
+    '            pEspace = mybeam.EntraxeLongiGoujons(iTravee, iZone)
+
+    '            nR = mybeam.NrTransZone(iTravee, iZone)
+    '            PRd = mybeam.Dalle.Goujons.PRdStudFeu(ThetaV, ThetaC, lGeneration1, lLeger, lDallePleine, lPerp, mybeam.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
+
+    '            NbCZone = mybeam.NombreGoujonTotParZone(iTravee, iZone)
+    '            LongZone = mybeam.LongueurZone(iTravee, iZone)
+
+    '            DensitePRdZone(iTravee, iZone) = PRd * NbCZone / LongZone
+
+    '        Next
+    '    Next
+
+    'End Sub
+
+#End Region
+
 
 End Class

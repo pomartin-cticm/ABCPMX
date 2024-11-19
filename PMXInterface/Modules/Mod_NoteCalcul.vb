@@ -580,7 +580,7 @@ Module Mod_NoteCalcul
             Dim GammaVs As Decimal = myBeam.Param.Gamma.GammaVs
             Dim GammaVc As Decimal = myBeam.Param.Gamma.GammaVc
             Dim Ecm As Decimal = myBeam.Dalle.beton.Ecm
-            Dim Nr As Integer = myBeam.NombreGoujonsTransv(1, 0)
+            Dim Nr As Integer = myBeam.NrTransZone(1, 0)
 
             PRd = myBeam.Dalle.Goujons.ResistancePRd(lGeneration1, lDalleP, lPerp, myBeam.Dalle.Bac, Nr, FcK, Ecm, Fctk_005, GammaVs, GammaVc)
             ChainePRd = "P\-Rd\= " & GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 4, 3, True, True)
@@ -668,7 +668,7 @@ Module Mod_NoteCalcul
 
             End If
 
-            indDeb=myBeam.IndicePremiereTravee
+            indDeb = myBeam.IndicePremiereTravee
             indFin = myBeam.IndiceDerniereTravee
 
             For iTravee = indDeb To indFin
@@ -948,7 +948,7 @@ Module Mod_NoteCalcul
 
         For iCombi = 0 To mybeam.CombiA_ELS.nbCombi - 1
             For iTravee = iTravD To iTravF
-                If lETA And lmixte Then
+                If lETA And lMixte Then
                     myFleches(iTravee) = Math.Max(myFleches(iTravee), Math.Abs(mybeam.VerifELS.FlechesMaxCombiETA(iCombi, iTravee)))
                 Else
                     myFleches(iTravee) = Math.Max(myFleches(iTravee), Math.Abs(mybeam.VerifELS.FlechesMaxCombi(iCombi, iTravee)))
@@ -968,7 +968,7 @@ Module Mod_NoteCalcul
             Chaine = "\T" & myTab(0) & GetStringInUnitN(myFleches(1), Enu_TypeVariable.Dimension, 4, 3, True, True)
         End If
 
-        AddLigneNDC("\T11" & BlocG("SLSDEFLECTIONS") & chaine)
+        AddLigneNDC("\T11" & BlocG("SLSDEFLECTIONS") & Chaine)
 
         '# Critère Hivoss
 
@@ -2289,7 +2289,7 @@ Module Mod_NoteCalcul
                         InitialiseLigne(nbColonne, HLIGNE, True)
                         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, iTraveeAffichee)
                         AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.LongueurZone(i, j), Enu_TypeVariable.Longueur, 4, 0, False))
-                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NrTransZone(i, j), Enu_TypeVariable.SansType, 4, 0, False))
                         If lDalleMixteEtPerp Then
                             If .Espacement_Bac_TransZone(i, j) = 1 Then
                                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Espacement_Bac_TransZone(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & BlocG("RIB"))
@@ -6036,7 +6036,7 @@ Module Mod_NoteCalcul
 
                         AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(i - iTravDeb + 1))
                         AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(j + 1))
-                        AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myBeam.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
+                        AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myBeam.NrTransZone(i, j), Enu_TypeVariable.SansType, 4, 0, False))
                         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, strA(k))
                         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myBeam.VerifMixte(iVerif).TauEd(i, j, k), Enu_TypeVariable.Contrainte, 4, 2, False))
                         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(GetAngleInDegree(myBeam.VerifMixte(iVerif).Thetaf(i, j, k)), Enu_TypeVariable.SansType, 4, 2, False, True))
@@ -6211,7 +6211,7 @@ Module Mod_NoteCalcul
                 InitialiseLigneTableau(NCOL, HLIGNE)
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(i - iTravDeb + 1))
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(j + 1))
-                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
+                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.NrTransZone(i, j), Enu_TypeVariable.SansType, 4, 0, False))
                 AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.VerifMixte(iVerif).TauEd(i, j, ind_failureArea), Enu_TypeVariable.Contrainte, 4, 2, False))
                 AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(GetAngleInDegree(MyBeam.VerifMixte(iVerif).Thetaf_min(i, j)), Enu_TypeVariable.SansType, 4, 2, False))
                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(GetAngleInDegree(MyBeam.VerifMixte(iVerif).Thetaf(i, j, ind_failureArea)), Enu_TypeVariable.SansType, 4, 2, False))
@@ -11347,6 +11347,7 @@ Module Mod_NoteCalcul
         Dim Fck, Ecm, Fctk_005 As Decimal
         Dim Nr As Decimal = 1
         Dim GammaVfi As Decimal
+        Dim iZone As Integer
 
         '--( Initialisation 
 
@@ -11359,6 +11360,11 @@ Module Mod_NoteCalcul
         Fck = myBeam.Dalle.beton.Fck
         Ecm = myBeam.Dalle.beton.Ecm
         Fctk_005 = myBeam.Dalle.beton.Fctk_005
+
+        '# Calcul du PRd à mi-portée
+        Const iTravee As Integer = 1
+        iZone = myBeam.IndiceZoneMiPortee(iTravee)
+        Nr = myBeam.NrTransZone(iTravee, iZone)
 
         '--( Ligne
 
