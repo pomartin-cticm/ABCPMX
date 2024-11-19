@@ -40,7 +40,7 @@ Public Class Frm_PMX
     ''' <summary>
     ''' Booleens utilisés pour les controles du dessin
     ''' </summary>
-    Dim lZoomPlus, lCotation As Boolean
+    Dim lZoomPlus, lCotation, lIdent As Boolean
 
     Dim FontFrm As Font
 
@@ -104,8 +104,10 @@ Public Class Frm_PMX
 
         lZoomPlus = False
         lCotation = True
+        lIdent = True
         MAJ_btnZoomPlus()
         MAJ_btnCotation()
+        MAJ_btnIdent()
 
         AffichageRecentFiles()
 
@@ -1993,7 +1995,8 @@ Public Class Frm_PMX
     Private Sub img_Main_Paint(sender As Object, e As PaintEventArgs) Handles img_Main.Paint
         If Not MyProjet.Poutres.Count = 0 Then DessinFrmMain_Coupe(e.Graphics,
                                                                    Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height,
-                                                                   MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation, strPRS, FontFrm)
+                                                                   MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation, lIdent,
+                                                                   MyProjet.Entreprise, MyProjet.Nom, strPRS, FontFrm)
     End Sub
 
     Private Sub Frm_PMX_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
@@ -2024,6 +2027,10 @@ Public Class Frm_PMX
         Me.TSbtn_Cotations.Checked = lCotation
     End Sub
 
+    Private Sub MAJ_btnIdent()
+        Me.TSbtn_MontreIdent.Checked = lIdent
+    End Sub
+
     Private Sub TSbtn_ExpertMode_Click(sender As Object, e As EventArgs) Handles TSbtn_ExpertMode.Click
         LogicielOptions.lExpert = Not LogicielOptions.lExpert
         Me.TSbtn_ExpertMode.Checked = LogicielOptions.lExpert
@@ -2044,7 +2051,8 @@ Public Class Frm_PMX
         MyGr.Clear(System.Drawing.Color.White)
 
         If Not MyProjet.Poutres.Count = 0 Then DessinFrmMain_Coupe(MyGr, ImageSize.Width, ImageSize.Height,
-                                                                   MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation, strPRS, FontFrm)
+                                                                   MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation, lIdent,
+                                                                   MyProjet.Entreprise, MyProjet.Nom, strPRS, FontFrm)
 
         My.Computer.Clipboard.SetImage(Image)
         MyGr.Dispose()
@@ -2054,6 +2062,12 @@ Public Class Frm_PMX
     Private Sub TSbtn_Cotations_Click(sender As Object, e As EventArgs) Handles TSbtn_Cotations.Click
         lCotation = Not lCotation
         MAJ_btnCotation()
+        img_Main.Invalidate()
+    End Sub
+
+    Private Sub TSbtn_MontreIdent_Click(sender As Object, e As EventArgs) Handles TSbtn_MontreIdent.Click
+        lIdent = Not lIdent
+        MAJ_btnIdent()
         img_Main.Invalidate()
     End Sub
 

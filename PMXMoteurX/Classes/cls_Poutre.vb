@@ -791,6 +791,17 @@ Public Class cls_Poutre
 
         lIntermediaire = True
 
+        InitialiseConnexionDefaut()
+
+        lAutomaticDesign = False
+
+    End Sub
+
+    Public Sub InitialiseConnexionDefaut()
+        '-------------------------------------------------------------------------------------------
+        '   19/11/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+
         ReDim LongueurZone(IndiceTraveeConsoleDroite, 2)
         ReDim NombreZones(IndiceTraveeConsoleDroite)
         ReDim EspacementZone(IndiceTraveeConsoleDroite, 2)
@@ -816,9 +827,6 @@ Public Class cls_Poutre
             'NombreGoujonsTot(i) += ZoneLongueur(i, j) / ZoneEspacement(i, j)
             'Next
         Next
-
-        lAutomaticDesign = False
-
     End Sub
 
     Private Sub TransfertOptionsFeu(OptionsFeu As struc_OptionsFeu)

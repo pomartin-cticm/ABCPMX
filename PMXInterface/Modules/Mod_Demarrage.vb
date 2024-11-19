@@ -578,10 +578,6 @@ Public Module Mod_Demarrage
 
         End Select
 
-
-
-
-
     End Sub
 
     Public Sub InitialiseOptionsCalculPoutre(myPoutre As cls_Poutre)

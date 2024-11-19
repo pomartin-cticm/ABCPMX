@@ -391,10 +391,10 @@
                 '## Calculs des moments plastiques en fct de la température
 
                 MaillagePropPlastiquesMixtes(myBeam, bEff, DeltaRd, 1, lGeneration1, False,
-                                             TempFsStep(iSTep), TempFiStep(iSTep), TempWStep(iSTep),
+                                             TempFsStep(iSTep), TempWStep(iSTep), TempFiStep(iSTep),
                                              NbTranches, zTranche, EpTranche, TempCStep(iSTep), TempArmaStep(iSTep), MplRdP, zANPP)
                 MaillagePropPlastiquesMixtes(myBeam, bEff, DeltaRd, -1, lGeneration1, False,
-                                             TempFsStep(iSTep), TempFiStep(iSTep), TempWStep(iSTep),
+                                             TempFsStep(iSTep), TempWStep(iSTep), TempFiStep(iSTep),
                                              NbTranches, zTranche, EpTranche, TempCStep(iSTep), TempArmaStep(iSTep), MplRdM, zANPM)
 
                 '## Vérification en flexion
@@ -404,7 +404,6 @@
                 '## Vérification à l'effort tranchant
 
                 RunCritereEffortTranchant(myBeam, iCombi, iSTep, VEd, VplRdFeu(iSTep))
-
 
             Next
 
@@ -568,12 +567,12 @@
 
                     If Signe > 0 Then
                         Me.MomentPlastiquePlus(myBeam.Section, myBeam.Dalle, myBeam.ParamFeu, myBeam.Param.Gamma,
-                                               Beff(iNode, k), myDeltaPRd, kReducYFs, kReducYFi, kReducYW,
+                                               Beff(iNode, k), myDeltaPRd, kReducYFs, kReducYW, kReducYFi,
                                                NbTranches, zTran, eTran, kReducC, MplRd(iNode, k), zANP(iNode, k))
                     Else
 
                         Me.MomentPlastiqueMoins(myBeam.Section, myBeam.Dalle, myBeam.ParamFeu, myBeam.Param.Gamma,
-                                                Beff(iNode, k), kReducYFs, kReducYFi, kReducYW, kReducS, MplRd(iNode, k), zANP(iNode, k))
+                                                Beff(iNode, k), kReducYFs, kReducYW, kReducYFi, kReducS, MplRd(iNode, k), zANP(iNode, k))
 
                     End If
 
@@ -585,7 +584,7 @@
     End Sub
 
     Private Sub MomentPlastiqueMoins(mySection As cls_Section, myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma,
-                                     Beff As Decimal, reducKyFs As Decimal, reducKyFi As Decimal, reducKyW As Decimal,
+                                     Beff As Decimal, reducKyFs As Decimal, reducKyW As Decimal, reducKyFi As Decimal,
                                      kReducS() As Decimal, ByRef MplRd As Decimal, ByRef zANP As Decimal)
         '--------------------------------------------------------------------------------------------------------------------------
         '   08/05/24 :  Création - POM
@@ -661,7 +660,7 @@
     End Sub
 
     Private Sub MomentPlastiquePlus(mySection As cls_Section, myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma,
-                                    Beff As Decimal, DeltaPRd As Decimal, reducKyFs As Decimal, reducKyFi As Decimal, reducKyW As Decimal,
+                                    Beff As Decimal, DeltaPRd As Decimal, reducKyFs As Decimal, reducKyW As Decimal, reducKyFi As Decimal,
                                     NbTranches As Integer, zTran() As Decimal, eTran() As Decimal, kRedCTr() As Decimal,
                                     ByRef MplRd As Decimal, ByRef zANP As Decimal)
         '--------------------------------------------------------------------------------------------------------------------------

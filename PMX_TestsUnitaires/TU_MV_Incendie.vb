@@ -2198,8 +2198,384 @@ Imports PMXMoteur2
 
 #End Region
 
+    End Sub
 
+    <TestMethod()> Public Sub TestMV_F04_PoutreAcierPRSProtegee_Flocage()
+
+#Region " Preparation de la poutre "
+
+        Dim myBeam As New cls_Poutre(NomCas)
+        Dim ValRef, Valeur As Decimal
+        Const Portee As Decimal = 14
+
+        Dim qQ1 As Decimal = 5000
+
+        myBeam.Initialise_CoefficientsCombinaisons()
+
+        myBeam.Section.TypeSection = cls_Section.Enum_TypeSection.Mixte
+
+        '# GEOMETRIE
+
+        myBeam.lTraveeConsoleGauche = False
+        myBeam.lTraveeConsoleDroite = False
+
+        myBeam.LongueurTravee(1) = Portee     ' travée centrale
+
+        myBeam.lIntermediaire = True
+
+        myBeam.Section.ProfilA.GenerePRS(0.2, 0.02, 0.56, 0.01)
+
+        '# DALLE
+        With myBeam.Dalle
+            .type = cls_Dalle.Enum_TypeDalle.Mixte
+            .Ep_td = 140 / 1000
+            .Ep_th = 0
+            .Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
+            .beton.Classe = "C30/37"
+        End With
+
+        '# CONNEXION
+        With myBeam.Dalle.Goujons
+            .d = 0.022
+            .hsc = 0.125
+        End With
+        myBeam.InitialiseConnexionDefaut()
+        myBeam.NrTransZone(1, 0) = 2
+
+        '# MAINTIENS LATERAUX
+
+        myBeam.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.PointRestrained
+        myBeam.Maintiens(1).Add(New cls_Maintiens(1 * Portee / 3, True, True, False))
+        myBeam.Maintiens(1).Add(New cls_Maintiens(2 * Portee / 3, True, True, False))
+
+        '# MATERIAUX
+        myBeam.Section.Acier.InitialiseAcierS355EC3()
+
+        '# CHARGES
+        myBeam.InitialisePoidsPropres()
+
+        myBeam.ChargesU("Q1").FReparties(1).Add(New cls_ForceRepartie(0, qQ1, Portee, qQ1, 0))
+
+        '# COEFFICIENTS PARTIELS
+        myBeam.Initialise_CoefficientsCombinaisons()          ' Initialise les coefficients par défaut 
+        myBeam.lCombELU(0) = True                             ' activation de la première combinaison ELU par défaut (1.35G + 1.5Q1+Psi0Q2)
+        myBeam.lCombELU(1) = False                             ' activation de la seconde combinaison ELU par défaut (1.35G + 1.5Q2+psi0Q1)
+        myBeam.lCombELS(0) = True                             ' activation de la première combinaison ELS par défaut (G + Q)
+        myBeam.lCombELCURules(0) = False                      ' activation de la première combinaison ELU pendant la phase de construction activée 
+        myBeam.lCombELCSRules(0) = False                      ' activation de la première combinaison ELS pendant la phase de construction activée 
+        myBeam.lCombFeu(4) = True
+
+        myBeam.CoefCombFeu(4)(0) = 0
+        myBeam.CoefCombFeu(4)(1) = 1
+        myBeam.CoefCombFeu(4)(2) = 0
+        myBeam.CoefCombFeu(4)(3) = 0
+        myBeam.CoefCombFeu(4)(4) = 0
+
+        With myBeam.Param.Gamma
+            .GammaG_sup = 1.4
+            .GammaQ = 1.6
+            .GammaM0 = 1.05
+            .GammaM1 = 1.1
+            .GammaC = 1.5
+            .lGammaV_unique = True
+            .GammaVc = 1.25
+            .GammaVs = 1.25
+            .Psi0_Q1 = 0.7
+            .Psi0_Q2 = 0.7
+            .GammaM_fi = 1
+        End With
+
+        myBeam.Param.EtaW = 1.0
+
+        myBeam.Initialise_CoefficientsCombinaisons()
+
+        myBeam.ParamFeu.lCalculFeu = True
+        myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege
+        myBeam.ParamFeu.Protection = cls_OptionsFeu.enu_TypeProtection.HighDensitySpray_PerliteCement
+        myBeam.ParamFeu.EpProtection = 0.025
+
+#End Region
+
+#Region " Lancement des calculs "
+
+        'Dim strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC As String
+        Dim NomChargesA() As String = gNomChargesA
+
+
+        'INITIALISATION DES TABLEAUX DES VERIFICATION
+        Select Case myBeam.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
+                ReDim myBeam.VerifAcier(0)
+                myBeam.VerifAcier(0) = New cls_VerificationsAcier
+                myBeam.VerifFeuAcier = New cls_VerifFeuAcier
+            Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                ReDim myBeam.VerifMixte(0)
+                myBeam.VerifMixte(0) = New cls_VerificationsMixtes
+                myBeam.VerifFeuMixte = New cls_VerifFeuMixte(myBeam.ParamFeu.MethodTempArma)
+                If myBeam.TypeEtaiement <> cls_Poutre.EnuTypeEtaiement.FullyPropped Then
+                    ' Quand on est pas totalement étayé, on ajoute la vérification en phase de construction
+                    ReDim myBeam.VerifAcier(0)
+                    myBeam.VerifAcier(0) = New cls_VerificationsAcier
+                End If
+        End Select
+
+        'INITIALISATION DES CALCULS
+        myBeam.InitialiseCalculs(NomChargesA)
+        myBeam.AAA_CalculMNVInternesN()
+        myBeam.InitialiseCombiA(cls_Poutre.nbCombELU, myBeam.lCombELU, myBeam.CoefCombELU, strRacineELU, myBeam.CombiA_ELU)
+        myBeam.InitialiseCombiA(cls_Poutre.nbCombELS, myBeam.lCombELS, myBeam.CoefCombELS, strRacineELS, myBeam.CombiA_ELS)
+        myBeam.InitialiseCombiA(cls_Poutre.nbCombFeu, myBeam.lCombFeu, myBeam.CoefCombFeu, strRacineELF, myBeam.CombiA_ELF)
+        myBeam.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myBeam.lCombELCURules, myBeam.CoefCombELCU, strRacineELUC, myBeam.CombiA_ELCU)
+        myBeam.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myBeam.lCombELCSRules, myBeam.CoefCombELCS, strRacineELSC, myBeam.CombiA_ELCS)
+
+        'COMBINAISON DES EFFORTS A L'ELU Indencie
+        Dim MEd1(,) As Decimal = Nothing
+        Dim MEdMax1, MEdMin1, iNodeMMin1, iNodeMMax1 As Decimal
+        Dim MEdMiTravee As Decimal
+
+        Dim VEd1(,) As Decimal = Nothing
+        Dim VEdMax1, VEdMin1, iNodeVMin1, iNodeVMax1 As Decimal
+        Dim VEdAppui As Decimal
+
+        myBeam.CombiA_ELF.CombineMoments(0, myBeam.Nodes.nbNodes, myBeam.ChargesA, MEd1, False)   ' Combinaison des moments pour la combinaison 0
+        myBeam.CombiA_ELF.CombineEffortsT(0, myBeam.Nodes.nbNodes, myBeam.ChargesA, VEd1, False)  ' Combinaison des tranchants pour la combinaison 0
+
+        EnveloppeTableauEfforts(MEd1, myBeam.Nodes.nbNodes, MEdMax1, MEdMin1, iNodeMMax1, iNodeMMin1)
+        EnveloppeTableauEfforts(VEd1, myBeam.Nodes.nbNodes, VEdMax1, VEdMin1, iNodeVMax1, iNodeVMin1)
+
+        MEdMiTravee = MEdMax1
+        VEdAppui = VEdMax1
+
+        'VERIFICATION DE LA POUTRE 
+
+        '# ELU
+        myBeam.VerifMixte(0).Z_VerificationELU(myBeam)
+
+        '# Incendie
+        myBeam.VerifFeuMixte.Z_VerifFeu(myBeam)
+
+#End Region
+
+#Region " VALIDATION : Températures "
+
+        Dim iStep As Integer = 0
+        '# R30
+        '-- Semelle supérieure
+        Valeur = myBeam.VerifFeuMixte.TempFsStep(iStep)
+        ValRef = 92.1
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Semelle inférieure
+        Valeur = myBeam.VerifFeuMixte.TempFiStep(iStep)
+        ValRef = 136.2
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Âme
+        Valeur = myBeam.VerifFeuMixte.TempWStep(iStep)
+        ValRef = 194.3
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Dalle
+        Valeur = myBeam.VerifFeuMixte.TempDalleStep(iStep, 0)
+        ValRef = 535
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+        Valeur = myBeam.VerifFeuMixte.TempDalleStep(iStep, 1)
+        ValRef = 60
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Connecteur
+        Valeur = myBeam.VerifFeuMixte.TempVStep(iStep)
+        ValRef = 74
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        Valeur = myBeam.VerifFeuMixte.TempVcStep(iStep)
+        ValRef = 37
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+
+        '# R180
+        iStep = 4
+        '-- Semelle supérieure
+        Valeur = myBeam.VerifFeuMixte.TempFsStep(iStep)
+        ValRef = 479
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Semelle inférieure
+        Valeur = myBeam.VerifFeuMixte.TempFiStep(iStep)
+        ValRef = 643.5
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Âme
+        Valeur = myBeam.VerifFeuMixte.TempWStep(iStep)
+        ValRef = 750.6
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Dalle
+        Valeur = myBeam.VerifFeuMixte.TempDalleStep(iStep, 0)
+        ValRef = 1200
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+        Valeur = myBeam.VerifFeuMixte.TempDalleStep(iStep, 1)
+        ValRef = 260
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Connecteur
+        Valeur = myBeam.VerifFeuMixte.TempVStep(iStep)
+        ValRef = 383
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        Valeur = myBeam.VerifFeuMixte.TempVcStep(iStep)
+        ValRef = 192
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+#End Region
+
+#Region " VALIDATION : Coefficients de réduction "
+
+        Dim Theta As Decimal
+        Dim ENFeu As New cls_EurocodesFeu
+
+        iStep = 0
+        '# R30
+        '-- Semelle supérieure
+        Theta = myBeam.VerifFeuMixte.TempFsStep(iStep)
+
+        Valeur = ENFeu.ReducFyAcier(Theta)
+        ValRef = 1
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        Valeur = ENFeu.ReducEyAcier(Theta)
+        ValRef = 1
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Semelle inférieure
+        Theta = myBeam.VerifFeuMixte.TempFiStep(iStep)
+
+        Valeur = ENFeu.ReducFyAcier(Theta)
+        ValRef = 1
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Âme
+        Theta = myBeam.VerifFeuMixte.TempWStep(iStep)
+
+        Valeur = ENFeu.ReducFyAcier(Theta)
+        ValRef = 1
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Dalle
+        Theta = myBeam.VerifFeuMixte.TempDalleStep(iStep, 0)
+
+        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        ValRef = 0.548
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        Theta = myBeam.VerifFeuMixte.TempDalleStep(iStep, 1)
+
+        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        ValRef = 1
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Connecteur
+
+        Theta = myBeam.VerifFeuMixte.TempVStep(iStep)
+
+        Valeur = ENFeu.ReducFuAcier(Theta)
+        ValRef = 1.25
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        Theta = myBeam.VerifFeuMixte.TempVcStep(iStep)
+
+        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        ValRef = 1
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+
+        iStep = 4
+        '# R180 ############################################################
+
+        '-- Semelle supérieure
+        Theta = myBeam.VerifFeuMixte.TempFsStep(iStep)
+
+        Valeur = ENFeu.ReducFyAcier(Theta)
+        ValRef = 0.826
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        Valeur = ENFeu.ReducEyAcier(Theta)
+        ValRef = 0.621
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Semelle inférieure
+        Theta = myBeam.VerifFeuMixte.TempFiStep(iStep)
+
+        Valeur = ENFeu.ReducFyAcier(Theta)
+        ValRef = 0.366
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Âme
+        Theta = myBeam.VerifFeuMixte.TempWStep(iStep)
+
+        Valeur = ENFeu.ReducFyAcier(Theta)
+        ValRef = 0.169
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Dalle
+        Theta = myBeam.VerifFeuMixte.TempDalleStep(iStep, 0)
+
+        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        ValRef = 0
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        Theta = myBeam.VerifFeuMixte.TempDalleStep(iStep, 1)
+
+        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        ValRef = 0.89
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '-- Connecteur
+
+        Theta = myBeam.VerifFeuMixte.TempVStep(iStep)
+
+        Valeur = ENFeu.ReducFuAcier(Theta)
+        ValRef = 1.042
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        Theta = myBeam.VerifFeuMixte.TempVcStep(iStep)
+
+        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        ValRef = 0.954
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+#End Region
+
+#Region " VALIDATION : Critères de résistance "
+
+        '# R30
+        iStep = 0
+
+        Valeur = myBeam.VerifFeuMixte.CritereM(iStep).CritereMax
+        ValRef = 0.0634
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        Valeur = myBeam.VerifFeuMixte.CritereV(iStep).CritereMax
+        ValRef = 0.03049
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        '# R180
+        iStep = 4
+
+        Valeur = myBeam.VerifFeuMixte.CritereM(iStep).CritereMax
+        ValRef = 0.184
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+        Valeur = myBeam.VerifFeuMixte.CritereV(iStep).CritereMax
+        ValRef = 0.18
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
+
+#End Region
 
     End Sub
+
+
+
+
 
 End Class

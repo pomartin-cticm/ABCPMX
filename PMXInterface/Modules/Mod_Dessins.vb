@@ -20,7 +20,8 @@ Public Module Mod_Dessins
 
 #Region " Dessins pour la fenetre principale (FRM_MAIN) "
     Public Sub DessinFrmMain_Coupe(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, myBeam As cls_Poutre,
-                                   lZoomPlus As Boolean, lCotation As Boolean, strPRS As String, myFont As Font,
+                                   lZoomPlus As Boolean, lCotation As Boolean, lIdentification As Boolean,
+                                   Company As String, Projet As String, strPRS As String, myFont As Font,
                                    ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   26/06/23 :  Version 1.00
@@ -32,6 +33,7 @@ Public Module Mod_Dessins
         '   myBeam      [E] :   Poutre à dessiner
         '   lZoomPlus   [E] :   Indique si zoom
         '   lCotation   [E] :   Indique si affichage cotation
+        '   lIdentificat[E] :   Indique si affichage de l'identification
         '   strPRS      [E] :   Message pour section soudée
         '   myFont      [E] :   Police à utiliser pour l'affichage
         '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
@@ -458,6 +460,41 @@ Public Module Mod_Dessins
             Chaine = myBeam.Dalle.Goujons.nom
             AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
         End If
+
+        ' Identification (19/11/24)
+
+        If lIdentification Then DessinIdentification(myGr, myBeam, Company, Projet, MyFontNormal)
+
+    End Sub
+
+    Private Sub DessinIdentification(myGr As Graphics, myBeam As cls_Poutre, Company As String, Projet As String, myFont As Font)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   19/11/24    :   Création - POM 
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Affiche l'identifcation de la poutre en haut à gauche du dessin
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics
+        '   myBeam      [E] :   Poutre
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Chaine As String
+        Dim myBrush As New SolidBrush(Color.Black)
+
+        Dim dCar As Single = myGr.MeasureString("X", myFont).Height
+
+        '--( Compagnie
+
+        Chaine = Company
+        myGr.DrawString(Chaine, myFont, myBrush, dCar, dCar)
+
+        '--( Projet / poutre
+
+        Chaine = Projet & " / " & myBeam.BeamID
+        myGr.DrawString(Chaine, myFont, myBrush, dCar, 2.5 * dCar)
+
+        myBrush.Dispose()
 
     End Sub
 
