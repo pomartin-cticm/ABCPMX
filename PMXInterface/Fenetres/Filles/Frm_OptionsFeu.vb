@@ -35,6 +35,7 @@ Public Class Frm_OptionsFeu
         GestionUnites()
         PrepareFenetre()
         AfficherPoutreEnCours()
+        MAJI_OptionsFEM()
         lBuild = False
     End Sub
 
@@ -70,6 +71,8 @@ Public Class Frm_OptionsFeu
         etq_UnitTime.Text = "s"
         etq_UnitTemp1.Text = "°C"
         etq_UnitTemp2.Text = "°C"
+
+        etq_UnitU.Text = "%"
 
         'lbl_UnitBoltzmann.Text = "x 10E-8 W.m-2.K-4"
         'lbl_UnitConvectionFactor.Text = "W.m-2.K-1"
@@ -193,6 +196,12 @@ Public Class Frm_OptionsFeu
                 strTempRebars(1) = Bloc("MAXTEMP2")
                 strTempRebars(2) = Bloc("AXISTEMP")
 
+                '=== OPTIONS POUR LE CALCUL NUMERIQUE DE L'ECHAUFFEMENT dE LA DALLE
+
+                Me.chk_ANFrance.Text = Bloc("FRENCHNA")
+                Me.chk_RhoCconstante.Text = Bloc("CONSTANTRHOC")
+                Me.lbl_TeneurEau.Text = Bloc("MOISTURECONTENT")
+
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -281,6 +290,13 @@ Public Class Frm_OptionsFeu
             '--> Partie qui concerne les paramètres de calcul
 
             Affichage_ParamCalcul()
+
+            '--> Options FEM
+
+            Me.chk_RhoCconstante.Checked = Not .lRhoCvar
+            Me.chk_ANFrance.Checked = .lANFrance
+
+            Me.txt_U.Text = GetStringInUnitN(.TeneurU, Enu_TypeVariable.SansType, 3, 2, False, True)
 
         End With
 
@@ -675,8 +691,29 @@ Public Class Frm_OptionsFeu
         MyPoutreLoc.ParamFeu.lDalleFEM = chk_DalleFEM.Checked
 
         AfficherPoutreEnCours()
+        MAJI_OptionsFEM()
 
         lBuild = False
+    End Sub
+
+
+    Private Sub chk_RhoCconstante_CheckedChanged(sender As Object, e As EventArgs) Handles chk_RhoCconstante.CheckedChanged
+        If lBuild Then Exit Sub
+
+        MyPoutreLoc.ParamFeu.lRhoCvar = Not chk_RhoCconstante.Checked
+
+    End Sub
+
+    Private Sub chk_ANFrance_CheckedChanged(sender As Object, e As EventArgs) Handles chk_ANFrance.CheckedChanged
+        If lBuild Then Exit Sub
+
+        MyPoutreLoc.ParamFeu.lANFrance = chk_ANFrance.Checked
+    End Sub
+
+    Private Sub MAJI_OptionsFEM()
+
+        Me.pan_OptionsFEM.Visible = MyPoutreLoc.ParamFeu.lDalleFEM
+
     End Sub
 
     Private Sub cmb_TempRebars_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_TempRebars.SelectedIndexChanged
@@ -696,7 +733,7 @@ Public Class Frm_OptionsFeu
 
     Private Sub TextBox_TextChanged(sender As Object, e As EventArgs) Handles txt_ThermalConductivity.TextChanged, txt_tDalleFEMmax.TextChanged, txt_TimeIncrement.TextChanged, txt_ReferenceTemp.TextChanged,
         txt_FormFactor.TextChanged, txt_EmissivityFire.TextChanged, txt_ConvectionFactor.TextChanged,
-        txt_ShadowEffect.TextChanged, txt_EpProtec.TextChanged, txt_EmissiviteBeton.TextChanged
+        txt_ShadowEffect.TextChanged, txt_EpProtec.TextChanged, txt_EmissiviteBeton.TextChanged, txt_U.TextChanged
 
         If lBuild Then Exit Sub
 
@@ -706,6 +743,8 @@ Public Class Frm_OptionsFeu
 
             With MyPoutreLoc.ParamFeu
                 Select Case sender.name
+                    Case txt_U.Name
+                        .TeneurU = ValeurUI
                     Case txt_ThermalConductivity.Name
                         .CustomLambdaP = ValeurUI
                     Case txt_tDalleFEMmax.Name
@@ -750,6 +789,11 @@ Public Class Frm_OptionsFeu
         lValMax = True
 
         Select Case MyTxt.Name
+            Case Me.txt_U.Name
+                ValMin = 0
+                ValMax = 10
+                kUnit = 1
+
             Case Me.txt_EpProtec.Name
                 ValMin = 0
                 ValMax = 2
@@ -886,6 +930,12 @@ Public Class Frm_OptionsFeu
             GereTransfertValeur(MyPoutreLoc.ParamFeu.ConvectionCoef, .ConvectionCoef, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.ksh, .ksh, lModif)
 
+            '--> Options calcul FEM
+
+            GereTransfertValeur(MyPoutreLoc.ParamFeu.lANFrance, .lANFrance, lModif)
+            GereTransfertValeur(MyPoutreLoc.ParamFeu.lRhoCvar, .lRhoCvar, lModif)
+            GereTransfertValeur(MyPoutreLoc.ParamFeu.TeneurU, .TeneurU, lModif)
+
         End With
 
     End Sub
@@ -900,7 +950,7 @@ Public Class Frm_OptionsFeu
 
     Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_Density.Paint, img_ThermalConductivity.Paint, img_SpecificHeat.Paint, img_tDalleFEMmax.Paint,
      img_Boltzmann.Paint, img_TimeIncrement.Paint, img_ReferenceTemp.Paint, img_MaxTemp.Paint, img_FormFactor.Paint,
-     img_EmissivityFire.Paint, img_ConvectionFactor.Paint, img_ShadowEffect.Paint, img_ConvectionSlab.Paint, img_ConcreteResistance.Paint, img_EpProtec.Paint, img_EmissiviteBeton.Paint
+     img_EmissivityFire.Paint, img_ConvectionFactor.Paint, img_ShadowEffect.Paint, img_ConvectionSlab.Paint, img_ConcreteResistance.Paint, img_EpProtec.Paint, img_EmissiviteBeton.Paint, img_U.Paint
 
         '--> Déclarations
 
@@ -1016,6 +1066,12 @@ Public Class Frm_OptionsFeu
 
                 strSymbol = "a"
                 strIndice = "slab"
+
+            Case Me.img_U.Name
+
+                strSymbol = "u"
+                strIndice = ""
+                lGrec = False
 
         End Select
 

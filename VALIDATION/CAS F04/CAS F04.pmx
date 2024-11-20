@@ -8,7 +8,7 @@
 
 BLOCK IDENTIFICATION
    Utilisateur           = 
-   Entreprise            = 
+   Entreprise            = CTICM
    NomProjet             = VALIDATION
 
 BLOCK BEAM
@@ -184,7 +184,7 @@ BLOCK FIRE_OPTIONS
    Slab085               = 1
    Phi                   = 1
    Moisture              = 0
-   FrenchAN              = True
+   FrenchAN              = False
    VariableCDens         = False
    CompressionReinf      = True
    ColdFormReinf         = True
@@ -467,7 +467,7 @@ BLOCK HIVOSS
 
 BLOCK LOADS_G1
    QSurf                 = 0
-   qDist                 = 1 0 8060,469 14 8060,469
+   qDist                 = 1 0 6911,003 10 6911,003
  
 BLOCK LOADS_G2
    QSurf                 = 0

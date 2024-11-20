@@ -37,13 +37,20 @@ Partial Class Frm_OptionsFeu
         Me.TLPan_Droite = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_ParamCalcul = New System.Windows.Forms.Label()
         Me.pan_ParamCalcul = New System.Windows.Forms.Panel()
+        Me.pan_OptionsFEM = New System.Windows.Forms.Panel()
+        Me.chk_RhoCconstante = New System.Windows.Forms.CheckBox()
+        Me.txt_U = New System.Windows.Forms.TextBox()
+        Me.chk_ANFrance = New System.Windows.Forms.CheckBox()
+        Me.img_U = New System.Windows.Forms.PictureBox()
+        Me.lbl_TeneurEau = New System.Windows.Forms.Label()
+        Me.lbl_EmissiviteBeton = New System.Windows.Forms.Label()
+        Me.txt_EmissiviteBeton = New System.Windows.Forms.TextBox()
+        Me.img_EmissiviteBeton = New System.Windows.Forms.PictureBox()
         Me.img_UnitThermConvection2 = New System.Windows.Forms.PictureBox()
         Me.img_UnitThermConvection = New System.Windows.Forms.PictureBox()
         Me.lbl_SurDalle = New System.Windows.Forms.Label()
         Me.lbl_SousDalle = New System.Windows.Forms.Label()
         Me.img_UnitBoltzmann = New System.Windows.Forms.PictureBox()
-        Me.cmb_SurfaceType = New System.Windows.Forms.ComboBox()
-        Me.lbl_SurfaceType = New System.Windows.Forms.Label()
         Me.lbl_ConcreteResistance = New System.Windows.Forms.Label()
         Me.lbl_ShadowEffect = New System.Windows.Forms.Label()
         Me.lbl_ConvectionFactor = New System.Windows.Forms.Label()
@@ -90,7 +97,9 @@ Partial Class Frm_OptionsFeu
         Me.lbl_CalculOptions = New System.Windows.Forms.Label()
         Me.lbl_ParamPoutre = New System.Windows.Forms.Label()
         Me.pan_ParamPoutre = New System.Windows.Forms.Panel()
+        Me.cmb_SurfaceType = New System.Windows.Forms.ComboBox()
         Me.chk_ProtectionThermique = New System.Windows.Forms.CheckBox()
+        Me.lbl_SurfaceType = New System.Windows.Forms.Label()
         Me.pan_Protection = New System.Windows.Forms.Panel()
         Me.etq_UnitD2 = New System.Windows.Forms.Label()
         Me.lbl_EpProtec = New System.Windows.Forms.Label()
@@ -117,9 +126,7 @@ Partial Class Frm_OptionsFeu
         Me.chk_ArmaFroid = New System.Windows.Forms.CheckBox()
         Me.chk_AcierGalva = New System.Windows.Forms.CheckBox()
         Me.ErrorProvider_Frm_OptionsFeu = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.lbl_EmissiviteBeton = New System.Windows.Forms.Label()
-        Me.txt_EmissiviteBeton = New System.Windows.Forms.TextBox()
-        Me.img_EmissiviteBeton = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitU = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -130,6 +137,9 @@ Partial Class Frm_OptionsFeu
         Me.pan_Droite.SuspendLayout()
         Me.TLPan_Droite.SuspendLayout()
         Me.pan_ParamCalcul.SuspendLayout()
+        Me.pan_OptionsFEM.SuspendLayout()
+        CType(Me.img_U, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_EmissiviteBeton, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_UnitThermConvection2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_UnitThermConvection, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_UnitBoltzmann, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -154,7 +164,6 @@ Partial Class Frm_OptionsFeu
         CType(Me.img_Density, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_ThermalConductivity, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider_Frm_OptionsFeu, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_EmissiviteBeton, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -317,6 +326,7 @@ Partial Class Frm_OptionsFeu
         '
         Me.pan_ParamCalcul.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_ParamCalcul.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ParamCalcul.Controls.Add(Me.pan_OptionsFEM)
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_EmissiviteBeton)
         Me.pan_ParamCalcul.Controls.Add(Me.txt_EmissiviteBeton)
         Me.pan_ParamCalcul.Controls.Add(Me.img_EmissiviteBeton)
@@ -325,8 +335,6 @@ Partial Class Frm_OptionsFeu
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_SurDalle)
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_SousDalle)
         Me.pan_ParamCalcul.Controls.Add(Me.img_UnitBoltzmann)
-        Me.pan_ParamCalcul.Controls.Add(Me.cmb_SurfaceType)
-        Me.pan_ParamCalcul.Controls.Add(Me.lbl_SurfaceType)
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_ConcreteResistance)
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_ShadowEffect)
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_ConvectionFactor)
@@ -365,6 +373,89 @@ Partial Class Frm_OptionsFeu
         Me.pan_ParamCalcul.Name = "pan_ParamCalcul"
         Me.pan_ParamCalcul.Size = New System.Drawing.Size(370, 475)
         Me.pan_ParamCalcul.TabIndex = 1
+        '
+        'pan_OptionsFEM
+        '
+        Me.pan_OptionsFEM.Controls.Add(Me.etq_UnitU)
+        Me.pan_OptionsFEM.Controls.Add(Me.chk_RhoCconstante)
+        Me.pan_OptionsFEM.Controls.Add(Me.txt_U)
+        Me.pan_OptionsFEM.Controls.Add(Me.chk_ANFrance)
+        Me.pan_OptionsFEM.Controls.Add(Me.img_U)
+        Me.pan_OptionsFEM.Controls.Add(Me.lbl_TeneurEau)
+        Me.pan_OptionsFEM.Location = New System.Drawing.Point(9, 379)
+        Me.pan_OptionsFEM.Name = "pan_OptionsFEM"
+        Me.pan_OptionsFEM.Size = New System.Drawing.Size(353, 77)
+        Me.pan_OptionsFEM.TabIndex = 121
+        '
+        'chk_RhoCconstante
+        '
+        Me.chk_RhoCconstante.AutoSize = True
+        Me.chk_RhoCconstante.Location = New System.Drawing.Point(3, 3)
+        Me.chk_RhoCconstante.Name = "chk_RhoCconstante"
+        Me.chk_RhoCconstante.Size = New System.Drawing.Size(124, 17)
+        Me.chk_RhoCconstante.TabIndex = 116
+        Me.chk_RhoCconstante.Text = "chk_RhoCconstante"
+        Me.chk_RhoCconstante.UseVisualStyleBackColor = True
+        '
+        'txt_U
+        '
+        Me.txt_U.Location = New System.Drawing.Point(195, 47)
+        Me.txt_U.Name = "txt_U"
+        Me.txt_U.Size = New System.Drawing.Size(58, 20)
+        Me.txt_U.TabIndex = 119
+        '
+        'chk_ANFrance
+        '
+        Me.chk_ANFrance.AutoSize = True
+        Me.chk_ANFrance.Location = New System.Drawing.Point(3, 26)
+        Me.chk_ANFrance.Name = "chk_ANFrance"
+        Me.chk_ANFrance.Size = New System.Drawing.Size(98, 17)
+        Me.chk_ANFrance.TabIndex = 117
+        Me.chk_ANFrance.Text = "chk_ANFrance"
+        Me.chk_ANFrance.UseVisualStyleBackColor = True
+        '
+        'img_U
+        '
+        Me.img_U.Location = New System.Drawing.Point(150, 47)
+        Me.img_U.Name = "img_U"
+        Me.img_U.Size = New System.Drawing.Size(46, 20)
+        Me.img_U.TabIndex = 120
+        Me.img_U.TabStop = False
+        '
+        'lbl_TeneurEau
+        '
+        Me.lbl_TeneurEau.AutoSize = True
+        Me.lbl_TeneurEau.Location = New System.Drawing.Point(1, 52)
+        Me.lbl_TeneurEau.Name = "lbl_TeneurEau"
+        Me.lbl_TeneurEau.Size = New System.Drawing.Size(76, 13)
+        Me.lbl_TeneurEau.TabIndex = 118
+        Me.lbl_TeneurEau.Text = "lbl_TeneurEau"
+        '
+        'lbl_EmissiviteBeton
+        '
+        Me.lbl_EmissiviteBeton.AutoSize = True
+        Me.lbl_EmissiviteBeton.Location = New System.Drawing.Point(10, 176)
+        Me.lbl_EmissiviteBeton.Name = "lbl_EmissiviteBeton"
+        Me.lbl_EmissiviteBeton.Size = New System.Drawing.Size(97, 13)
+        Me.lbl_EmissiviteBeton.TabIndex = 113
+        Me.lbl_EmissiviteBeton.Text = "lbl_EmissiviteBeton"
+        '
+        'txt_EmissiviteBeton
+        '
+        Me.txt_EmissiviteBeton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_EmissiviteBeton.Location = New System.Drawing.Point(204, 173)
+        Me.txt_EmissiviteBeton.Name = "txt_EmissiviteBeton"
+        Me.txt_EmissiviteBeton.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EmissiviteBeton.TabIndex = 114
+        '
+        'img_EmissiviteBeton
+        '
+        Me.img_EmissiviteBeton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_EmissiviteBeton.Location = New System.Drawing.Point(159, 173)
+        Me.img_EmissiviteBeton.Name = "img_EmissiviteBeton"
+        Me.img_EmissiviteBeton.Size = New System.Drawing.Size(46, 20)
+        Me.img_EmissiviteBeton.TabIndex = 115
+        Me.img_EmissiviteBeton.TabStop = False
         '
         'img_UnitThermConvection2
         '
@@ -411,29 +502,10 @@ Partial Class Frm_OptionsFeu
         Me.img_UnitBoltzmann.TabIndex = 96
         Me.img_UnitBoltzmann.TabStop = False
         '
-        'cmb_SurfaceType
-        '
-        Me.cmb_SurfaceType.FormattingEnabled = True
-        Me.cmb_SurfaceType.Location = New System.Drawing.Point(159, 450)
-        Me.cmb_SurfaceType.Name = "cmb_SurfaceType"
-        Me.cmb_SurfaceType.Size = New System.Drawing.Size(186, 21)
-        Me.cmb_SurfaceType.TabIndex = 3
-        Me.cmb_SurfaceType.Visible = False
-        '
-        'lbl_SurfaceType
-        '
-        Me.lbl_SurfaceType.AutoSize = True
-        Me.lbl_SurfaceType.Location = New System.Drawing.Point(53, 453)
-        Me.lbl_SurfaceType.Name = "lbl_SurfaceType"
-        Me.lbl_SurfaceType.Size = New System.Drawing.Size(84, 13)
-        Me.lbl_SurfaceType.TabIndex = 2
-        Me.lbl_SurfaceType.Text = "lbl_SurfaceType"
-        Me.lbl_SurfaceType.Visible = False
-        '
         'lbl_ConcreteResistance
         '
         Me.lbl_ConcreteResistance.AutoSize = True
-        Me.lbl_ConcreteResistance.Location = New System.Drawing.Point(10, 359)
+        Me.lbl_ConcreteResistance.Location = New System.Drawing.Point(10, 332)
         Me.lbl_ConcreteResistance.Name = "lbl_ConcreteResistance"
         Me.lbl_ConcreteResistance.Size = New System.Drawing.Size(119, 13)
         Me.lbl_ConcreteResistance.TabIndex = 52
@@ -535,7 +607,7 @@ Partial Class Frm_OptionsFeu
         'txt_ConcreteResistance
         '
         Me.txt_ConcreteResistance.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_ConcreteResistance.Location = New System.Drawing.Point(204, 380)
+        Me.txt_ConcreteResistance.Location = New System.Drawing.Point(204, 353)
         Me.txt_ConcreteResistance.Name = "txt_ConcreteResistance"
         Me.txt_ConcreteResistance.Size = New System.Drawing.Size(58, 20)
         Me.txt_ConcreteResistance.TabIndex = 53
@@ -551,7 +623,7 @@ Partial Class Frm_OptionsFeu
         'img_ConcreteResistance
         '
         Me.img_ConcreteResistance.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_ConcreteResistance.Location = New System.Drawing.Point(159, 380)
+        Me.img_ConcreteResistance.Location = New System.Drawing.Point(159, 353)
         Me.img_ConcreteResistance.Name = "img_ConcreteResistance"
         Me.img_ConcreteResistance.Size = New System.Drawing.Size(46, 20)
         Me.img_ConcreteResistance.TabIndex = 78
@@ -864,7 +936,9 @@ Partial Class Frm_OptionsFeu
         '
         Me.pan_ParamPoutre.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_ParamPoutre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ParamPoutre.Controls.Add(Me.cmb_SurfaceType)
         Me.pan_ParamPoutre.Controls.Add(Me.chk_ProtectionThermique)
+        Me.pan_ParamPoutre.Controls.Add(Me.lbl_SurfaceType)
         Me.pan_ParamPoutre.Controls.Add(Me.pan_Protection)
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_tDalleFEMmax)
         Me.pan_ParamPoutre.Controls.Add(Me.chk_CalculFeu)
@@ -877,6 +951,15 @@ Partial Class Frm_OptionsFeu
         Me.pan_ParamPoutre.Size = New System.Drawing.Size(369, 249)
         Me.pan_ParamPoutre.TabIndex = 1
         '
+        'cmb_SurfaceType
+        '
+        Me.cmb_SurfaceType.FormattingEnabled = True
+        Me.cmb_SurfaceType.Location = New System.Drawing.Point(223, 29)
+        Me.cmb_SurfaceType.Name = "cmb_SurfaceType"
+        Me.cmb_SurfaceType.Size = New System.Drawing.Size(137, 21)
+        Me.cmb_SurfaceType.TabIndex = 122
+        Me.cmb_SurfaceType.Visible = False
+        '
         'chk_ProtectionThermique
         '
         Me.chk_ProtectionThermique.AutoSize = True
@@ -886,6 +969,16 @@ Partial Class Frm_OptionsFeu
         Me.chk_ProtectionThermique.TabIndex = 80
         Me.chk_ProtectionThermique.Text = "chk_ProtectionThermique"
         Me.chk_ProtectionThermique.UseVisualStyleBackColor = True
+        '
+        'lbl_SurfaceType
+        '
+        Me.lbl_SurfaceType.AutoSize = True
+        Me.lbl_SurfaceType.Location = New System.Drawing.Point(261, 12)
+        Me.lbl_SurfaceType.Name = "lbl_SurfaceType"
+        Me.lbl_SurfaceType.Size = New System.Drawing.Size(84, 13)
+        Me.lbl_SurfaceType.TabIndex = 121
+        Me.lbl_SurfaceType.Text = "lbl_SurfaceType"
+        Me.lbl_SurfaceType.Visible = False
         '
         'pan_Protection
         '
@@ -1123,31 +1216,15 @@ Partial Class Frm_OptionsFeu
         '
         Me.ErrorProvider_Frm_OptionsFeu.ContainerControl = Me
         '
-        'lbl_EmissiviteBeton
+        'etq_UnitU
         '
-        Me.lbl_EmissiviteBeton.AutoSize = True
-        Me.lbl_EmissiviteBeton.Location = New System.Drawing.Point(10, 176)
-        Me.lbl_EmissiviteBeton.Name = "lbl_EmissiviteBeton"
-        Me.lbl_EmissiviteBeton.Size = New System.Drawing.Size(97, 13)
-        Me.lbl_EmissiviteBeton.TabIndex = 113
-        Me.lbl_EmissiviteBeton.Text = "lbl_EmissiviteBeton"
-        '
-        'txt_EmissiviteBeton
-        '
-        Me.txt_EmissiviteBeton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_EmissiviteBeton.Location = New System.Drawing.Point(204, 173)
-        Me.txt_EmissiviteBeton.Name = "txt_EmissiviteBeton"
-        Me.txt_EmissiviteBeton.Size = New System.Drawing.Size(58, 20)
-        Me.txt_EmissiviteBeton.TabIndex = 114
-        '
-        'img_EmissiviteBeton
-        '
-        Me.img_EmissiviteBeton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_EmissiviteBeton.Location = New System.Drawing.Point(159, 173)
-        Me.img_EmissiviteBeton.Name = "img_EmissiviteBeton"
-        Me.img_EmissiviteBeton.Size = New System.Drawing.Size(46, 20)
-        Me.img_EmissiviteBeton.TabIndex = 115
-        Me.img_EmissiviteBeton.TabStop = False
+        Me.etq_UnitU.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitU.AutoSize = True
+        Me.etq_UnitU.Location = New System.Drawing.Point(255, 50)
+        Me.etq_UnitU.Name = "etq_UnitU"
+        Me.etq_UnitU.Size = New System.Drawing.Size(55, 13)
+        Me.etq_UnitU.TabIndex = 122
+        Me.etq_UnitU.Text = "etq_UnitU"
         '
         'Frm_OptionsFeu
         '
@@ -1173,6 +1250,10 @@ Partial Class Frm_OptionsFeu
         Me.TLPan_Droite.PerformLayout()
         Me.pan_ParamCalcul.ResumeLayout(False)
         Me.pan_ParamCalcul.PerformLayout()
+        Me.pan_OptionsFEM.ResumeLayout(False)
+        Me.pan_OptionsFEM.PerformLayout()
+        CType(Me.img_U, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_EmissiviteBeton, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_UnitThermConvection2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_UnitThermConvection, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_UnitBoltzmann, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1201,7 +1282,6 @@ Partial Class Frm_OptionsFeu
         CType(Me.img_Density, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_ThermalConductivity, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider_Frm_OptionsFeu, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_EmissiviteBeton, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1225,8 +1305,6 @@ Partial Class Frm_OptionsFeu
     Friend WithEvents lbl_InsulationType As Label
     Friend WithEvents cmb_ProtectionType As ComboBox
     Friend WithEvents lbl_ProtectionType As Label
-    Friend WithEvents cmb_SurfaceType As ComboBox
-    Friend WithEvents lbl_SurfaceType As Label
     Friend WithEvents txt_Density As TextBox
     Friend WithEvents img_Density As PictureBox
     Friend WithEvents chk_ReductionConcreteStrenght As CheckBox
@@ -1302,4 +1380,13 @@ Partial Class Frm_OptionsFeu
     Friend WithEvents lbl_EmissiviteBeton As Label
     Friend WithEvents txt_EmissiviteBeton As TextBox
     Friend WithEvents img_EmissiviteBeton As PictureBox
+    Friend WithEvents chk_RhoCconstante As CheckBox
+    Friend WithEvents txt_U As TextBox
+    Friend WithEvents img_U As PictureBox
+    Friend WithEvents lbl_TeneurEau As Label
+    Friend WithEvents chk_ANFrance As CheckBox
+    Friend WithEvents lbl_SurfaceType As Label
+    Friend WithEvents cmb_SurfaceType As ComboBox
+    Friend WithEvents pan_OptionsFEM As Panel
+    Friend WithEvents etq_UnitU As Label
 End Class

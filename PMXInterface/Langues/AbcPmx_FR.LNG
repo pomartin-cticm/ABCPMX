@@ -456,6 +456,9 @@ TEMPREBARS				= Température des armatures égale à la
 AVERAGETEMP				= température moyenne
 MAXTEMP2				= température maximale
 AXISTEMP				= température à l'axe
+FRENCHNA				= Conductivité thermique du béton selon AN française
+CONSTANTRHOC			= Masse volumique du béton constante
+MOISTURECONTENT			= Teneur en eau
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Coefficients d'accompagnement

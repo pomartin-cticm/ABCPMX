@@ -456,6 +456,9 @@ TEMPREBARS				= Temperature of rebars equal to the
 AVERAGETEMP				= average temperature
 MAXTEMP2				= maximal temperature
 AXISTEMP				= temperature at axis
+FRENCHNA				= Thermal conductivity of concrete according to French NA
+CONSTANTRHOC			= Constant density of concrete
+MOISTURECONTENT			= Moisture content
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Combination factors
