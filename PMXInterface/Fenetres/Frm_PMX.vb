@@ -900,7 +900,13 @@ Public Class Frm_PMX
 
             Case EnuFenetres.Chargements
 
-                Frm_Chargement.ShowDialog()
+                Dim lNew As Boolean = Me.chk_NewF.Checked
+
+                If lNew Then
+                    Frm_ChargementN.ShowDialog()
+                Else
+                    Frm_Chargement.ShowDialog()
+                End If
 
 
             Case EnuFenetres.Gamma

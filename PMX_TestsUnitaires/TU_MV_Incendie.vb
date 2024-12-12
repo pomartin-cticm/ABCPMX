@@ -1903,8 +1903,6 @@ Imports PMXMoteur2
 
 #End Region
 
-
-
     End Sub
 
     <TestMethod()> Public Sub TestMV_F03B_PoutreMixteLamineeNonProtegeeGalva()

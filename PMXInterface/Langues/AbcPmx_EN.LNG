@@ -79,8 +79,8 @@ SLIMFLOORIFB_A			= Non composite slim floor IFB-A
 SLIMFLOORIFB_ACOMPO		= Composite slim floor IFB-A
 SLIMFLOORIFB_B			= Non composite slim floor IFB-B
 SLIMFLOORIFB_BCOMPO		= Composite slim floor IFB-B
-SLIMFLOORSAB			= Non composite slim floor SAB
-SLIMFLOORSABCOMPO		= Composite slim floor SAB
+SLIMFLOORSAB			= Non composite slim floor AFB
+SLIMFLOORSABCOMPO		= Composite slim floor AFB
 NOTAVAILABLE			= Not available in this version
 
 #FRM_BEAMOPTIONS
@@ -597,7 +597,7 @@ TSBSECTIONA				= Steel section
 TSBSECTIONSFB			= SFB slimfloor section
 TSBSECTIONIFBA			= IFB type A slimfloor section
 TSBSECTIONIFBB			= IFB type B slimfloor section
-TSBSECTIONSAB			= SAB slimfloor section
+TSBSECTIONSAB			= AFB slimfloor section
 TSBSLAB					= Slab
 TSBSPACINGS				= Transverse configuration
 TSBSPANS				= Spans
@@ -906,7 +906,7 @@ SERIAL					= Serial
 STEEL					= Steel
 STEELGRADE				= Steel grade
 TITLE					= Definition of the steel profile
-SABSECTION				= SAB section
+SABSECTION				= AFB section
 WIDTH					= Width
 
 #FRM_SFBSECTIONS
@@ -922,7 +922,7 @@ SERIAL					= Serial
 STEEL					= Steel
 STEELGRADE				= Steel grade
 TITLE					= Definition of the steel profile
-SABSECTION				= SAB Section
+SABSECTION				= AFB Section
 WIDTH					= Width
 
 #GENERAL

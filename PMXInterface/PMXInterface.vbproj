@@ -11,7 +11,7 @@
     <AssemblyName>PMXInterface</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <PublishUrl>publish\</PublishUrl>
@@ -29,6 +29,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -135,6 +136,12 @@
       <DependentUpon>Frm_Catalogue.vb</DependentUpon>
     </Compile>
     <Compile Include="Fenetres\EditionBases\Frm_Catalogue.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_ChargementN.Designer.vb">
+      <DependentUpon>Frm_ChargementN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_ChargementN.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_ConnectionSlimFloor.Designer.vb">
@@ -510,6 +517,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\EditionBases\Frm_Catalogue.resx">
       <DependentUpon>Frm_Catalogue.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_ChargementN.resx">
+      <DependentUpon>Frm_ChargementN.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_ConnectionSlimFloor.resx">
       <DependentUpon>Frm_ConnectionSlimFloor.vb</DependentUpon>

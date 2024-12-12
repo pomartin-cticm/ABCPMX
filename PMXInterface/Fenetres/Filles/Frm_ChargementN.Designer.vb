@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class Frm_Chargement
+Partial Class Frm_ChargementN
     Inherits System.Windows.Forms.Form
 
     'Form remplace la méthode Dispose pour nettoyer la liste des composants.
@@ -23,14 +23,15 @@ Partial Class Frm_Chargement
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_Chargement))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_ChargementN))
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
-        Me.TLPan_PartieMilieu = New System.Windows.Forms.TableLayoutPanel()
-        Me.TLPan_Dessin = New System.Windows.Forms.TableLayoutPanel()
-        Me.pan_Dessin = New System.Windows.Forms.Panel()
-        Me.TLPan_ReactionsAppuis = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_ReactionsAppuis = New System.Windows.Forms.Label()
+        Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
+        Me.btn_OK = New System.Windows.Forms.Button()
+        Me.btn_Annuler = New System.Windows.Forms.Button()
+        Me.pan_Chargement = New System.Windows.Forms.Panel()
+        Me.TLpan_Chargement = New System.Windows.Forms.TableLayoutPanel()
+        Me.TLpan_PanneauGauche = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_ReactionsAppuis = New System.Windows.Forms.Panel()
         Me.lbl_RightSupport = New System.Windows.Forms.Label()
         Me.lbl_LeftSupport = New System.Windows.Forms.Label()
@@ -38,9 +39,27 @@ Partial Class Frm_Chargement
         Me.txt_RightSupport = New System.Windows.Forms.TextBox()
         Me.lbl_UnitLeftSupport = New System.Windows.Forms.Label()
         Me.txt_LeftSupport = New System.Windows.Forms.TextBox()
-        Me.TLPan_PartieHaute = New System.Windows.Forms.TableLayoutPanel()
-        Me.TLPan_ChargesPonctuelles = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_ChargesPonctuelles = New System.Windows.Forms.Label()
+        Me.lbl_Span = New System.Windows.Forms.Label()
+        Me.lbl_ReactionsAppuis = New System.Windows.Forms.Label()
+        Me.pan_ChoixCharges = New System.Windows.Forms.Panel()
+        Me.pan_ChoixCas = New System.Windows.Forms.Panel()
+        Me.rad_G1 = New System.Windows.Forms.RadioButton()
+        Me.rad_Q1 = New System.Windows.Forms.RadioButton()
+        Me.rad_G2 = New System.Windows.Forms.RadioButton()
+        Me.rad_Q2 = New System.Windows.Forms.RadioButton()
+        Me.rad_Qc = New System.Windows.Forms.RadioButton()
+        Me.lbl_ChoixCharge = New System.Windows.Forms.Label()
+        Me.lbl_NameLoad = New System.Windows.Forms.Label()
+        Me.lbl_ChoixCharges = New System.Windows.Forms.Label()
+        Me.pan_Span = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btn_Precedent = New System.Windows.Forms.Button()
+        Me.btn_Suivant = New System.Windows.Forms.Button()
+        Me.cmb_Travee = New System.Windows.Forms.ComboBox()
+        Me.TLpan_OrganisationDessin = New System.Windows.Forms.TableLayoutPanel()
+        Me.pan_Dessin = New System.Windows.Forms.Panel()
+        Me.img_Chargement = New System.Windows.Forms.PictureBox()
+        Me.TLpan_DefCharges = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_ChargesPonctuelles = New System.Windows.Forms.Panel()
         Me.btn_SupprimerPonctuelle = New System.Windows.Forms.Button()
         Me.btn_AjouterPonctuelle = New System.Windows.Forms.Button()
@@ -71,7 +90,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_1 = New System.Windows.Forms.TextBox()
         Me.txt_x_Ponctuelle = New System.Windows.Forms.TextBox()
         Me.txt_Indice_Ponctuelle = New System.Windows.Forms.TextBox()
-        Me.TLPan_ChargesLineiqueSurfaciques = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_ChargesLineiques = New System.Windows.Forms.Panel()
         Me.btn_InfoPP = New System.Windows.Forms.Button()
         Me.btn_SupprimerLineique = New System.Windows.Forms.Button()
@@ -102,7 +120,6 @@ Partial Class Frm_Chargement
         Me.txt_x1_Lineique = New System.Windows.Forms.TextBox()
         Me.txt_Indice_Lineique = New System.Windows.Forms.TextBox()
         Me.lbl_ChargesLineiques = New System.Windows.Forms.Label()
-        Me.lbl_ChargesSurfaciques = New System.Windows.Forms.Label()
         Me.pan_ChargesSurfaciques = New System.Windows.Forms.Panel()
         Me.lbl_ResultingForce = New System.Windows.Forms.Label()
         Me.lbl_UniformLoad = New System.Windows.Forms.Label()
@@ -113,50 +130,29 @@ Partial Class Frm_Chargement
         Me.txt_ResultingForce = New System.Windows.Forms.TextBox()
         Me.txt_UniformLoad = New System.Windows.Forms.TextBox()
         Me.txt_WidthApplication = New System.Windows.Forms.TextBox()
-        Me.TLPan_ChoixCharges = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_ChoixCharges = New System.Windows.Forms.Label()
-        Me.pan_ChoixCharges = New System.Windows.Forms.Panel()
-        Me.pan_ChoixTravee = New System.Windows.Forms.Panel()
-        Me.lbl_ChoixTravee = New System.Windows.Forms.Label()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.btn_Suivant = New System.Windows.Forms.Button()
-        Me.cmb_Travee = New System.Windows.Forms.ComboBox()
-        Me.pan_ChoixCas = New System.Windows.Forms.Panel()
-        Me.rad_G1 = New System.Windows.Forms.RadioButton()
-        Me.rad_Q1 = New System.Windows.Forms.RadioButton()
-        Me.rad_G2 = New System.Windows.Forms.RadioButton()
-        Me.rad_Q2 = New System.Windows.Forms.RadioButton()
-        Me.rad_Qc = New System.Windows.Forms.RadioButton()
-        Me.lbl_ChoixCharge = New System.Windows.Forms.Label()
-        Me.lbl_NameLoad = New System.Windows.Forms.Label()
-        Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
-        Me.btn_OK = New System.Windows.Forms.Button()
-        Me.btn_Annuler = New System.Windows.Forms.Button()
-        Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
+        Me.lbl_ChargesPonctuelles = New System.Windows.Forms.Label()
+        Me.lbl_ChargesSurfaciques = New System.Windows.Forms.Label()
         Me.ErrorProvider_Frm_Chargement = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.img_Chargement = New System.Windows.Forms.PictureBox()
-        Me.btn_Precedent = New System.Windows.Forms.Button()
+        Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
-        Me.TLPan_PartieMilieu.SuspendLayout()
-        Me.TLPan_Dessin.SuspendLayout()
-        Me.pan_Dessin.SuspendLayout()
-        Me.TLPan_ReactionsAppuis.SuspendLayout()
+        Me.TLPan_PartieBasse.SuspendLayout()
+        Me.pan_Chargement.SuspendLayout()
+        Me.TLpan_Chargement.SuspendLayout()
+        Me.TLpan_PanneauGauche.SuspendLayout()
         Me.pan_ReactionsAppuis.SuspendLayout()
-        Me.TLPan_PartieHaute.SuspendLayout()
-        Me.TLPan_ChargesPonctuelles.SuspendLayout()
+        Me.pan_ChoixCharges.SuspendLayout()
+        Me.pan_ChoixCas.SuspendLayout()
+        Me.pan_Span.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.TLpan_OrganisationDessin.SuspendLayout()
+        Me.pan_Dessin.SuspendLayout()
+        CType(Me.img_Chargement, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TLpan_DefCharges.SuspendLayout()
         Me.pan_ChargesPonctuelles.SuspendLayout()
-        Me.TLPan_ChargesLineiqueSurfaciques.SuspendLayout()
         Me.pan_ChargesLineiques.SuspendLayout()
         Me.pan_ChargesSurfaciques.SuspendLayout()
-        Me.TLPan_ChoixCharges.SuspendLayout()
-        Me.pan_ChoixCharges.SuspendLayout()
-        Me.pan_ChoixTravee.SuspendLayout()
-        Me.Panel1.SuspendLayout()
-        Me.pan_ChoixCas.SuspendLayout()
-        Me.TLPan_PartieBasse.SuspendLayout()
         CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Chargement, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -166,99 +162,115 @@ Partial Class Frm_Chargement
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(961, 524)
+        Me.pan_General.Size = New System.Drawing.Size(964, 541)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
         '
         Me.TLpan_Main.ColumnCount = 1
         Me.TLpan_Main.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.Controls.Add(Me.TLPan_PartieMilieu, 0, 1)
-        Me.TLpan_Main.Controls.Add(Me.TLPan_PartieHaute, 0, 0)
-        Me.TLpan_Main.Controls.Add(Me.TLPan_PartieBasse, 0, 2)
+        Me.TLpan_Main.Controls.Add(Me.TLPan_PartieBasse, 0, 1)
+        Me.TLpan_Main.Controls.Add(Me.pan_Chargement, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
         Me.TLpan_Main.Name = "TLpan_Main"
-        Me.TLpan_Main.RowCount = 3
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 280.0!))
+        Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(961, 524)
+        Me.TLpan_Main.Size = New System.Drawing.Size(964, 541)
         Me.TLpan_Main.TabIndex = 0
         '
-        'TLPan_PartieMilieu
+        'TLPan_PartieBasse
         '
-        Me.TLPan_PartieMilieu.ColumnCount = 2
-        Me.TLPan_PartieMilieu.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
-        Me.TLPan_PartieMilieu.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieMilieu.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieMilieu.Controls.Add(Me.TLPan_Dessin, 0, 0)
-        Me.TLPan_PartieMilieu.Controls.Add(Me.TLPan_ReactionsAppuis, 0, 0)
-        Me.TLPan_PartieMilieu.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieMilieu.Location = New System.Drawing.Point(1, 280)
-        Me.TLPan_PartieMilieu.Margin = New System.Windows.Forms.Padding(1, 0, 1, 1)
-        Me.TLPan_PartieMilieu.Name = "TLPan_PartieMilieu"
-        Me.TLPan_PartieMilieu.RowCount = 1
-        Me.TLPan_PartieMilieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieMilieu.Size = New System.Drawing.Size(959, 203)
-        Me.TLPan_PartieMilieu.TabIndex = 1
+        Me.TLPan_PartieBasse.ColumnCount = 5
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
+        Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
+        Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 504)
+        Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
+        Me.TLPan_PartieBasse.RowCount = 1
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(958, 34)
+        Me.TLPan_PartieBasse.TabIndex = 0
         '
-        'TLPan_Dessin
+        'btn_OK
         '
-        Me.TLPan_Dessin.ColumnCount = 1
-        Me.TLPan_Dessin.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Dessin.Controls.Add(Me.pan_Dessin, 0, 0)
-        Me.TLPan_Dessin.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_Dessin.Location = New System.Drawing.Point(251, 0)
-        Me.TLPan_Dessin.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
-        Me.TLPan_Dessin.Name = "TLPan_Dessin"
-        Me.TLPan_Dessin.RowCount = 1
-        Me.TLPan_Dessin.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 204.0!))
-        Me.TLPan_Dessin.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 204.0!))
-        Me.TLPan_Dessin.Size = New System.Drawing.Size(708, 203)
-        Me.TLPan_Dessin.TabIndex = 4
+        Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_OK.Location = New System.Drawing.Point(492, 3)
+        Me.btn_OK.Name = "btn_OK"
+        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
+        Me.btn_OK.TabIndex = 1
+        Me.btn_OK.Text = "btn_OK"
+        Me.btn_OK.UseVisualStyleBackColor = True
         '
-        'pan_Dessin
+        'btn_Annuler
         '
-        Me.pan_Dessin.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_Dessin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Dessin.Controls.Add(Me.img_Chargement)
-        Me.pan_Dessin.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Dessin.Location = New System.Drawing.Point(0, 0)
-        Me.pan_Dessin.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
-        Me.pan_Dessin.Name = "pan_Dessin"
-        Me.pan_Dessin.Size = New System.Drawing.Size(708, 203)
-        Me.pan_Dessin.TabIndex = 1
+        Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_Annuler.Location = New System.Drawing.Point(352, 3)
+        Me.btn_Annuler.Name = "btn_Annuler"
+        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Annuler.TabIndex = 0
+        Me.btn_Annuler.Text = "btn_Annuler"
+        Me.btn_Annuler.UseVisualStyleBackColor = True
         '
-        'TLPan_ReactionsAppuis
+        'pan_Chargement
         '
-        Me.TLPan_ReactionsAppuis.ColumnCount = 1
-        Me.TLPan_ReactionsAppuis.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_ReactionsAppuis.Controls.Add(Me.lbl_ReactionsAppuis, 0, 0)
-        Me.TLPan_ReactionsAppuis.Controls.Add(Me.pan_ReactionsAppuis, 0, 1)
-        Me.TLPan_ReactionsAppuis.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_ReactionsAppuis.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_ReactionsAppuis.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_ReactionsAppuis.Name = "TLPan_ReactionsAppuis"
-        Me.TLPan_ReactionsAppuis.RowCount = 2
-        Me.TLPan_ReactionsAppuis.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_ReactionsAppuis.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_ReactionsAppuis.Size = New System.Drawing.Size(250, 203)
-        Me.TLPan_ReactionsAppuis.TabIndex = 1
+        Me.pan_Chargement.Controls.Add(Me.TLpan_Chargement)
+        Me.pan_Chargement.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Chargement.Location = New System.Drawing.Point(0, 0)
+        Me.pan_Chargement.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Chargement.Name = "pan_Chargement"
+        Me.pan_Chargement.Size = New System.Drawing.Size(964, 501)
+        Me.pan_Chargement.TabIndex = 1
         '
-        'lbl_ReactionsAppuis
+        'TLpan_Chargement
         '
-        Me.lbl_ReactionsAppuis.AutoSize = True
-        Me.lbl_ReactionsAppuis.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_ReactionsAppuis.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_ReactionsAppuis.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_ReactionsAppuis.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_ReactionsAppuis.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_ReactionsAppuis.Name = "lbl_ReactionsAppuis"
-        Me.lbl_ReactionsAppuis.Size = New System.Drawing.Size(250, 30)
-        Me.lbl_ReactionsAppuis.TabIndex = 0
-        Me.lbl_ReactionsAppuis.Text = "lbl_ReactionsAppuis"
-        Me.lbl_ReactionsAppuis.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.TLpan_Chargement.ColumnCount = 2
+        Me.TLpan_Chargement.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
+        Me.TLpan_Chargement.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_Chargement.Controls.Add(Me.TLpan_PanneauGauche, 0, 0)
+        Me.TLpan_Chargement.Controls.Add(Me.TLpan_OrganisationDessin, 1, 0)
+        Me.TLpan_Chargement.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLpan_Chargement.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Chargement.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLpan_Chargement.Name = "TLpan_Chargement"
+        Me.TLpan_Chargement.RowCount = 1
+        Me.TLpan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_Chargement.Size = New System.Drawing.Size(964, 501)
+        Me.TLpan_Chargement.TabIndex = 0
+        '
+        'TLpan_PanneauGauche
+        '
+        Me.TLpan_PanneauGauche.ColumnCount = 1
+        Me.TLpan_PanneauGauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_PanneauGauche.Controls.Add(Me.pan_ReactionsAppuis, 0, 5)
+        Me.TLpan_PanneauGauche.Controls.Add(Me.lbl_Span, 0, 2)
+        Me.TLpan_PanneauGauche.Controls.Add(Me.lbl_ReactionsAppuis, 0, 4)
+        Me.TLpan_PanneauGauche.Controls.Add(Me.pan_ChoixCharges, 0, 1)
+        Me.TLpan_PanneauGauche.Controls.Add(Me.lbl_ChoixCharges, 0, 0)
+        Me.TLpan_PanneauGauche.Controls.Add(Me.pan_Span, 0, 3)
+        Me.TLpan_PanneauGauche.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLpan_PanneauGauche.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_PanneauGauche.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLpan_PanneauGauche.Name = "TLpan_PanneauGauche"
+        Me.TLpan_PanneauGauche.RowCount = 6
+        Me.TLpan_PanneauGauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_PanneauGauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_PanneauGauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_PanneauGauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55.0!))
+        Me.TLpan_PanneauGauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_PanneauGauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 105.0!))
+        Me.TLpan_PanneauGauche.Size = New System.Drawing.Size(250, 501)
+        Me.TLpan_PanneauGauche.TabIndex = 0
         '
         'pan_ReactionsAppuis
         '
@@ -270,11 +282,12 @@ Partial Class Frm_Chargement
         Me.pan_ReactionsAppuis.Controls.Add(Me.txt_RightSupport)
         Me.pan_ReactionsAppuis.Controls.Add(Me.lbl_UnitLeftSupport)
         Me.pan_ReactionsAppuis.Controls.Add(Me.txt_LeftSupport)
-        Me.pan_ReactionsAppuis.Location = New System.Drawing.Point(0, 30)
+        Me.pan_ReactionsAppuis.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_ReactionsAppuis.Location = New System.Drawing.Point(0, 396)
         Me.pan_ReactionsAppuis.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ReactionsAppuis.Name = "pan_ReactionsAppuis"
-        Me.pan_ReactionsAppuis.Size = New System.Drawing.Size(212, 136)
-        Me.pan_ReactionsAppuis.TabIndex = 1
+        Me.pan_ReactionsAppuis.Size = New System.Drawing.Size(250, 105)
+        Me.pan_ReactionsAppuis.TabIndex = 6
         '
         'lbl_RightSupport
         '
@@ -330,54 +343,265 @@ Partial Class Frm_Chargement
         Me.txt_LeftSupport.Size = New System.Drawing.Size(58, 20)
         Me.txt_LeftSupport.TabIndex = 81
         '
-        'TLPan_PartieHaute
+        'lbl_Span
         '
-        Me.TLPan_PartieHaute.ColumnCount = 3
-        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
-        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 450.0!))
-        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieHaute.Controls.Add(Me.TLPan_ChargesPonctuelles, 2, 0)
-        Me.TLPan_PartieHaute.Controls.Add(Me.TLPan_ChargesLineiqueSurfaciques, 1, 0)
-        Me.TLPan_PartieHaute.Controls.Add(Me.TLPan_ChoixCharges, 0, 0)
-        Me.TLPan_PartieHaute.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieHaute.Location = New System.Drawing.Point(1, 1)
-        Me.TLPan_PartieHaute.Margin = New System.Windows.Forms.Padding(1)
-        Me.TLPan_PartieHaute.Name = "TLPan_PartieHaute"
-        Me.TLPan_PartieHaute.RowCount = 1
-        Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(959, 278)
-        Me.TLPan_PartieHaute.TabIndex = 0
+        Me.lbl_Span.AutoSize = True
+        Me.lbl_Span.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Span.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Span.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Span.Location = New System.Drawing.Point(0, 281)
+        Me.lbl_Span.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_Span.Name = "lbl_Span"
+        Me.lbl_Span.Size = New System.Drawing.Size(250, 30)
+        Me.lbl_Span.TabIndex = 4
+        Me.lbl_Span.Text = "lbl_Span"
+        Me.lbl_Span.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'TLPan_ChargesPonctuelles
+        'lbl_ReactionsAppuis
         '
-        Me.TLPan_ChargesPonctuelles.ColumnCount = 1
-        Me.TLPan_ChargesPonctuelles.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_ChargesPonctuelles.Controls.Add(Me.lbl_ChargesPonctuelles, 0, 0)
-        Me.TLPan_ChargesPonctuelles.Controls.Add(Me.pan_ChargesPonctuelles, 0, 1)
-        Me.TLPan_ChargesPonctuelles.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_ChargesPonctuelles.Location = New System.Drawing.Point(700, 0)
-        Me.TLPan_ChargesPonctuelles.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_ChargesPonctuelles.Name = "TLPan_ChargesPonctuelles"
-        Me.TLPan_ChargesPonctuelles.RowCount = 2
-        Me.TLPan_ChargesPonctuelles.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_ChargesPonctuelles.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_ChargesPonctuelles.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_ChargesPonctuelles.Size = New System.Drawing.Size(259, 278)
-        Me.TLPan_ChargesPonctuelles.TabIndex = 3
+        Me.lbl_ReactionsAppuis.AutoSize = True
+        Me.lbl_ReactionsAppuis.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_ReactionsAppuis.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_ReactionsAppuis.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_ReactionsAppuis.Location = New System.Drawing.Point(0, 366)
+        Me.lbl_ReactionsAppuis.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_ReactionsAppuis.Name = "lbl_ReactionsAppuis"
+        Me.lbl_ReactionsAppuis.Size = New System.Drawing.Size(250, 30)
+        Me.lbl_ReactionsAppuis.TabIndex = 3
+        Me.lbl_ReactionsAppuis.Text = "lbl_ReactionsAppuis"
+        Me.lbl_ReactionsAppuis.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lbl_ChargesPonctuelles
+        'pan_ChoixCharges
         '
-        Me.lbl_ChargesPonctuelles.AutoSize = True
-        Me.lbl_ChargesPonctuelles.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_ChargesPonctuelles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_ChargesPonctuelles.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_ChargesPonctuelles.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_ChargesPonctuelles.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_ChargesPonctuelles.Name = "lbl_ChargesPonctuelles"
-        Me.lbl_ChargesPonctuelles.Size = New System.Drawing.Size(259, 30)
-        Me.lbl_ChargesPonctuelles.TabIndex = 0
-        Me.lbl_ChargesPonctuelles.Text = "lbl_ChargesPonctuelles"
-        Me.lbl_ChargesPonctuelles.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.pan_ChoixCharges.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_ChoixCharges.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ChoixCharges.Controls.Add(Me.pan_ChoixCas)
+        Me.pan_ChoixCharges.Controls.Add(Me.lbl_ChoixCharge)
+        Me.pan_ChoixCharges.Controls.Add(Me.lbl_NameLoad)
+        Me.pan_ChoixCharges.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_ChoixCharges.Location = New System.Drawing.Point(0, 30)
+        Me.pan_ChoixCharges.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
+        Me.pan_ChoixCharges.Name = "pan_ChoixCharges"
+        Me.pan_ChoixCharges.Size = New System.Drawing.Size(250, 250)
+        Me.pan_ChoixCharges.TabIndex = 2
+        '
+        'pan_ChoixCas
+        '
+        Me.pan_ChoixCas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ChoixCas.Controls.Add(Me.rad_G1)
+        Me.pan_ChoixCas.Controls.Add(Me.rad_Q1)
+        Me.pan_ChoixCas.Controls.Add(Me.rad_G2)
+        Me.pan_ChoixCas.Controls.Add(Me.rad_Q2)
+        Me.pan_ChoixCas.Controls.Add(Me.rad_Qc)
+        Me.pan_ChoixCas.Location = New System.Drawing.Point(12, 35)
+        Me.pan_ChoixCas.Name = "pan_ChoixCas"
+        Me.pan_ChoixCas.Size = New System.Drawing.Size(217, 80)
+        Me.pan_ChoixCas.TabIndex = 78
+        '
+        'rad_G1
+        '
+        Me.rad_G1.AutoSize = True
+        Me.rad_G1.Location = New System.Drawing.Point(15, 7)
+        Me.rad_G1.Name = "rad_G1"
+        Me.rad_G1.Size = New System.Drawing.Size(60, 17)
+        Me.rad_G1.TabIndex = 0
+        Me.rad_G1.TabStop = True
+        Me.rad_G1.Text = "rad_G1"
+        Me.rad_G1.UseVisualStyleBackColor = True
+        '
+        'rad_Q1
+        '
+        Me.rad_Q1.AutoSize = True
+        Me.rad_Q1.Location = New System.Drawing.Point(114, 7)
+        Me.rad_Q1.Name = "rad_Q1"
+        Me.rad_Q1.Size = New System.Drawing.Size(60, 17)
+        Me.rad_Q1.TabIndex = 0
+        Me.rad_Q1.TabStop = True
+        Me.rad_Q1.Text = "rad_Q1"
+        Me.rad_Q1.UseVisualStyleBackColor = True
+        '
+        'rad_G2
+        '
+        Me.rad_G2.AutoSize = True
+        Me.rad_G2.Location = New System.Drawing.Point(15, 30)
+        Me.rad_G2.Name = "rad_G2"
+        Me.rad_G2.Size = New System.Drawing.Size(60, 17)
+        Me.rad_G2.TabIndex = 0
+        Me.rad_G2.TabStop = True
+        Me.rad_G2.Text = "rad_G2"
+        Me.rad_G2.UseVisualStyleBackColor = True
+        '
+        'rad_Q2
+        '
+        Me.rad_Q2.AutoSize = True
+        Me.rad_Q2.Location = New System.Drawing.Point(114, 30)
+        Me.rad_Q2.Name = "rad_Q2"
+        Me.rad_Q2.Size = New System.Drawing.Size(60, 17)
+        Me.rad_Q2.TabIndex = 0
+        Me.rad_Q2.TabStop = True
+        Me.rad_Q2.Text = "rad_Q2"
+        Me.rad_Q2.UseVisualStyleBackColor = True
+        '
+        'rad_Qc
+        '
+        Me.rad_Qc.AutoSize = True
+        Me.rad_Qc.Location = New System.Drawing.Point(114, 53)
+        Me.rad_Qc.Name = "rad_Qc"
+        Me.rad_Qc.Size = New System.Drawing.Size(60, 17)
+        Me.rad_Qc.TabIndex = 0
+        Me.rad_Qc.TabStop = True
+        Me.rad_Qc.Text = "rad_Qc"
+        Me.rad_Qc.UseVisualStyleBackColor = True
+        '
+        'lbl_ChoixCharge
+        '
+        Me.lbl_ChoixCharge.AutoSize = True
+        Me.lbl_ChoixCharge.Location = New System.Drawing.Point(11, 16)
+        Me.lbl_ChoixCharge.Name = "lbl_ChoixCharge"
+        Me.lbl_ChoixCharge.Size = New System.Drawing.Size(83, 13)
+        Me.lbl_ChoixCharge.TabIndex = 79
+        Me.lbl_ChoixCharge.Text = "lbl_ChoixCharge"
+        '
+        'lbl_NameLoad
+        '
+        Me.lbl_NameLoad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_NameLoad.Location = New System.Drawing.Point(12, 121)
+        Me.lbl_NameLoad.Name = "lbl_NameLoad"
+        Me.lbl_NameLoad.Size = New System.Drawing.Size(217, 29)
+        Me.lbl_NameLoad.TabIndex = 78
+        Me.lbl_NameLoad.Text = "lbl_NameLoad"
+        Me.lbl_NameLoad.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'lbl_ChoixCharges
+        '
+        Me.lbl_ChoixCharges.AutoSize = True
+        Me.lbl_ChoixCharges.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_ChoixCharges.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_ChoixCharges.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_ChoixCharges.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_ChoixCharges.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_ChoixCharges.Name = "lbl_ChoixCharges"
+        Me.lbl_ChoixCharges.Size = New System.Drawing.Size(250, 30)
+        Me.lbl_ChoixCharges.TabIndex = 1
+        Me.lbl_ChoixCharges.Text = "lbl_ChoixCharges"
+        Me.lbl_ChoixCharges.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'pan_Span
+        '
+        Me.pan_Span.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Span.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Span.Controls.Add(Me.Panel1)
+        Me.pan_Span.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Span.Location = New System.Drawing.Point(0, 311)
+        Me.pan_Span.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
+        Me.pan_Span.Name = "pan_Span"
+        Me.pan_Span.Size = New System.Drawing.Size(250, 54)
+        Me.pan_Span.TabIndex = 5
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.btn_Precedent)
+        Me.Panel1.Controls.Add(Me.btn_Suivant)
+        Me.Panel1.Controls.Add(Me.cmb_Travee)
+        Me.Panel1.Location = New System.Drawing.Point(28, 10)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(185, 28)
+        Me.Panel1.TabIndex = 77
+        '
+        'btn_Precedent
+        '
+        Me.btn_Precedent.Image = CType(resources.GetObject("btn_Precedent.Image"), System.Drawing.Image)
+        Me.btn_Precedent.Location = New System.Drawing.Point(1, 2)
+        Me.btn_Precedent.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Precedent.Name = "btn_Precedent"
+        Me.btn_Precedent.Size = New System.Drawing.Size(23, 23)
+        Me.btn_Precedent.TabIndex = 12
+        Me.btn_Precedent.TabStop = False
+        Me.btn_Precedent.UseVisualStyleBackColor = True
+        '
+        'btn_Suivant
+        '
+        Me.btn_Suivant.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.btn_Suivant.Location = New System.Drawing.Point(159, 2)
+        Me.btn_Suivant.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Suivant.Name = "btn_Suivant"
+        Me.btn_Suivant.Size = New System.Drawing.Size(23, 23)
+        Me.btn_Suivant.TabIndex = 11
+        Me.btn_Suivant.TabStop = False
+        Me.btn_Suivant.UseVisualStyleBackColor = True
+        '
+        'cmb_Travee
+        '
+        Me.cmb_Travee.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Travee.FormattingEnabled = True
+        Me.cmb_Travee.Location = New System.Drawing.Point(25, 3)
+        Me.cmb_Travee.Name = "cmb_Travee"
+        Me.cmb_Travee.Size = New System.Drawing.Size(133, 21)
+        Me.cmb_Travee.TabIndex = 75
+        '
+        'TLpan_OrganisationDessin
+        '
+        Me.TLpan_OrganisationDessin.ColumnCount = 1
+        Me.TLpan_OrganisationDessin.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_OrganisationDessin.Controls.Add(Me.pan_Dessin, 0, 1)
+        Me.TLpan_OrganisationDessin.Controls.Add(Me.TLpan_DefCharges, 0, 0)
+        Me.TLpan_OrganisationDessin.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLpan_OrganisationDessin.Location = New System.Drawing.Point(250, 0)
+        Me.TLpan_OrganisationDessin.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLpan_OrganisationDessin.Name = "TLpan_OrganisationDessin"
+        Me.TLpan_OrganisationDessin.RowCount = 2
+        Me.TLpan_OrganisationDessin.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 280.0!))
+        Me.TLpan_OrganisationDessin.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_OrganisationDessin.Size = New System.Drawing.Size(714, 501)
+        Me.TLpan_OrganisationDessin.TabIndex = 1
+        '
+        'pan_Dessin
+        '
+        Me.pan_Dessin.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Dessin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Dessin.Controls.Add(Me.img_Chargement)
+        Me.pan_Dessin.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Dessin.Location = New System.Drawing.Point(1, 280)
+        Me.pan_Dessin.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.pan_Dessin.Name = "pan_Dessin"
+        Me.pan_Dessin.Size = New System.Drawing.Size(713, 221)
+        Me.pan_Dessin.TabIndex = 2
+        '
+        'img_Chargement
+        '
+        Me.img_Chargement.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Chargement.BackColor = System.Drawing.SystemColors.Window
+        Me.img_Chargement.Location = New System.Drawing.Point(5, 10)
+        Me.img_Chargement.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
+        Me.img_Chargement.Name = "img_Chargement"
+        Me.img_Chargement.Size = New System.Drawing.Size(56, 60)
+        Me.img_Chargement.TabIndex = 77
+        Me.img_Chargement.TabStop = False
+        '
+        'TLpan_DefCharges
+        '
+        Me.TLpan_DefCharges.ColumnCount = 2
+        Me.TLpan_DefCharges.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_DefCharges.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 259.0!))
+        Me.TLpan_DefCharges.Controls.Add(Me.pan_ChargesPonctuelles, 1, 1)
+        Me.TLpan_DefCharges.Controls.Add(Me.pan_ChargesLineiques, 0, 3)
+        Me.TLpan_DefCharges.Controls.Add(Me.lbl_ChargesLineiques, 0, 2)
+        Me.TLpan_DefCharges.Controls.Add(Me.pan_ChargesSurfaciques, 0, 1)
+        Me.TLpan_DefCharges.Controls.Add(Me.lbl_ChargesPonctuelles, 1, 0)
+        Me.TLpan_DefCharges.Controls.Add(Me.lbl_ChargesSurfaciques, 0, 0)
+        Me.TLpan_DefCharges.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLpan_DefCharges.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_DefCharges.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLpan_DefCharges.Name = "TLpan_DefCharges"
+        Me.TLpan_DefCharges.RowCount = 4
+        Me.TLpan_DefCharges.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_DefCharges.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70.0!))
+        Me.TLpan_DefCharges.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_DefCharges.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_DefCharges.Size = New System.Drawing.Size(714, 280)
+        Me.TLpan_DefCharges.TabIndex = 3
         '
         'pan_ChargesPonctuelles
         '
@@ -413,11 +637,12 @@ Partial Class Frm_Chargement
         Me.pan_ChargesPonctuelles.Controls.Add(Me.txt_x_Ponctuelle)
         Me.pan_ChargesPonctuelles.Controls.Add(Me.txt_Indice_Ponctuelle)
         Me.pan_ChargesPonctuelles.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_ChargesPonctuelles.Location = New System.Drawing.Point(0, 30)
-        Me.pan_ChargesPonctuelles.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_ChargesPonctuelles.Location = New System.Drawing.Point(455, 30)
+        Me.pan_ChargesPonctuelles.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_ChargesPonctuelles.Name = "pan_ChargesPonctuelles"
-        Me.pan_ChargesPonctuelles.Size = New System.Drawing.Size(259, 248)
-        Me.pan_ChargesPonctuelles.TabIndex = 1
+        Me.TLpan_DefCharges.SetRowSpan(Me.pan_ChargesPonctuelles, 3)
+        Me.pan_ChargesPonctuelles.Size = New System.Drawing.Size(259, 249)
+        Me.pan_ChargesPonctuelles.TabIndex = 6
         '
         'btn_SupprimerPonctuelle
         '
@@ -721,26 +946,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle.Text = "i"
         Me.txt_Indice_Ponctuelle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'TLPan_ChargesLineiqueSurfaciques
-        '
-        Me.TLPan_ChargesLineiqueSurfaciques.ColumnCount = 1
-        Me.TLPan_ChargesLineiqueSurfaciques.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_ChargesLineiqueSurfaciques.Controls.Add(Me.pan_ChargesLineiques, 0, 3)
-        Me.TLPan_ChargesLineiqueSurfaciques.Controls.Add(Me.lbl_ChargesLineiques, 0, 2)
-        Me.TLPan_ChargesLineiqueSurfaciques.Controls.Add(Me.lbl_ChargesSurfaciques, 0, 0)
-        Me.TLPan_ChargesLineiqueSurfaciques.Controls.Add(Me.pan_ChargesSurfaciques, 0, 1)
-        Me.TLPan_ChargesLineiqueSurfaciques.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_ChargesLineiqueSurfaciques.Location = New System.Drawing.Point(251, 0)
-        Me.TLPan_ChargesLineiqueSurfaciques.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
-        Me.TLPan_ChargesLineiqueSurfaciques.Name = "TLPan_ChargesLineiqueSurfaciques"
-        Me.TLPan_ChargesLineiqueSurfaciques.RowCount = 4
-        Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70.0!))
-        Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_ChargesLineiqueSurfaciques.Size = New System.Drawing.Size(448, 278)
-        Me.TLPan_ChargesLineiqueSurfaciques.TabIndex = 2
-        '
         'pan_ChargesLineiques
         '
         Me.pan_ChargesLineiques.BackColor = System.Drawing.SystemColors.ControlLightLight
@@ -774,11 +979,11 @@ Partial Class Frm_Chargement
         Me.pan_ChargesLineiques.Controls.Add(Me.txt_x1_Lineique)
         Me.pan_ChargesLineiques.Controls.Add(Me.txt_Indice_Lineique)
         Me.pan_ChargesLineiques.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_ChargesLineiques.Location = New System.Drawing.Point(0, 130)
-        Me.pan_ChargesLineiques.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_ChargesLineiques.Location = New System.Drawing.Point(1, 130)
+        Me.pan_ChargesLineiques.Margin = New System.Windows.Forms.Padding(1, 0, 1, 1)
         Me.pan_ChargesLineiques.Name = "pan_ChargesLineiques"
-        Me.pan_ChargesLineiques.Size = New System.Drawing.Size(448, 148)
-        Me.pan_ChargesLineiques.TabIndex = 3
+        Me.pan_ChargesLineiques.Size = New System.Drawing.Size(453, 149)
+        Me.pan_ChargesLineiques.TabIndex = 5
         '
         'btn_InfoPP
         '
@@ -1077,27 +1282,13 @@ Partial Class Frm_Chargement
         Me.lbl_ChargesLineiques.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_ChargesLineiques.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_ChargesLineiques.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_ChargesLineiques.Location = New System.Drawing.Point(0, 100)
-        Me.lbl_ChargesLineiques.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_ChargesLineiques.Location = New System.Drawing.Point(1, 100)
+        Me.lbl_ChargesLineiques.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
         Me.lbl_ChargesLineiques.Name = "lbl_ChargesLineiques"
-        Me.lbl_ChargesLineiques.Size = New System.Drawing.Size(448, 30)
-        Me.lbl_ChargesLineiques.TabIndex = 2
+        Me.lbl_ChargesLineiques.Size = New System.Drawing.Size(453, 30)
+        Me.lbl_ChargesLineiques.TabIndex = 4
         Me.lbl_ChargesLineiques.Text = "lbl_ChargesLineiques"
         Me.lbl_ChargesLineiques.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'lbl_ChargesSurfaciques
-        '
-        Me.lbl_ChargesSurfaciques.AutoSize = True
-        Me.lbl_ChargesSurfaciques.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_ChargesSurfaciques.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_ChargesSurfaciques.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_ChargesSurfaciques.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_ChargesSurfaciques.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_ChargesSurfaciques.Name = "lbl_ChargesSurfaciques"
-        Me.lbl_ChargesSurfaciques.Size = New System.Drawing.Size(448, 30)
-        Me.lbl_ChargesSurfaciques.TabIndex = 0
-        Me.lbl_ChargesSurfaciques.Text = "lbl_ChargesSurfaciques"
-        Me.lbl_ChargesSurfaciques.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_ChargesSurfaciques
         '
@@ -1113,11 +1304,11 @@ Partial Class Frm_Chargement
         Me.pan_ChargesSurfaciques.Controls.Add(Me.txt_UniformLoad)
         Me.pan_ChargesSurfaciques.Controls.Add(Me.txt_WidthApplication)
         Me.pan_ChargesSurfaciques.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_ChargesSurfaciques.Location = New System.Drawing.Point(0, 30)
-        Me.pan_ChargesSurfaciques.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_ChargesSurfaciques.Location = New System.Drawing.Point(1, 30)
+        Me.pan_ChargesSurfaciques.Margin = New System.Windows.Forms.Padding(1, 0, 1, 1)
         Me.pan_ChargesSurfaciques.Name = "pan_ChargesSurfaciques"
-        Me.pan_ChargesSurfaciques.Size = New System.Drawing.Size(448, 70)
-        Me.pan_ChargesSurfaciques.TabIndex = 1
+        Me.pan_ChargesSurfaciques.Size = New System.Drawing.Size(453, 69)
+        Me.pan_ChargesSurfaciques.TabIndex = 3
         '
         'lbl_ResultingForce
         '
@@ -1177,7 +1368,7 @@ Partial Class Frm_Chargement
         '
         Me.txt_ResultingForce.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_ResultingForce.BackColor = System.Drawing.Color.LightGray
-        Me.txt_ResultingForce.Location = New System.Drawing.Point(355, 35)
+        Me.txt_ResultingForce.Location = New System.Drawing.Point(360, 35)
         Me.txt_ResultingForce.Name = "txt_ResultingForce"
         Me.txt_ResultingForce.ReadOnly = True
         Me.txt_ResultingForce.Size = New System.Drawing.Size(58, 20)
@@ -1186,7 +1377,7 @@ Partial Class Frm_Chargement
         'txt_UniformLoad
         '
         Me.txt_UniformLoad.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_UniformLoad.Location = New System.Drawing.Point(127, 35)
+        Me.txt_UniformLoad.Location = New System.Drawing.Point(132, 35)
         Me.txt_UniformLoad.Name = "txt_UniformLoad"
         Me.txt_UniformLoad.Size = New System.Drawing.Size(58, 20)
         Me.txt_UniformLoad.TabIndex = 76
@@ -1195,234 +1386,43 @@ Partial Class Frm_Chargement
         '
         Me.txt_WidthApplication.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_WidthApplication.BackColor = System.Drawing.Color.LightGray
-        Me.txt_WidthApplication.Location = New System.Drawing.Point(127, 13)
+        Me.txt_WidthApplication.Location = New System.Drawing.Point(132, 13)
         Me.txt_WidthApplication.Name = "txt_WidthApplication"
         Me.txt_WidthApplication.ReadOnly = True
         Me.txt_WidthApplication.Size = New System.Drawing.Size(58, 20)
         Me.txt_WidthApplication.TabIndex = 76
         '
-        'TLPan_ChoixCharges
+        'lbl_ChargesPonctuelles
         '
-        Me.TLPan_ChoixCharges.ColumnCount = 1
-        Me.TLPan_ChoixCharges.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_ChoixCharges.Controls.Add(Me.lbl_ChoixCharges, 0, 0)
-        Me.TLPan_ChoixCharges.Controls.Add(Me.pan_ChoixCharges, 0, 1)
-        Me.TLPan_ChoixCharges.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_ChoixCharges.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_ChoixCharges.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_ChoixCharges.Name = "TLPan_ChoixCharges"
-        Me.TLPan_ChoixCharges.RowCount = 2
-        Me.TLPan_ChoixCharges.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_ChoixCharges.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_ChoixCharges.Size = New System.Drawing.Size(250, 278)
-        Me.TLPan_ChoixCharges.TabIndex = 1
+        Me.lbl_ChargesPonctuelles.AutoSize = True
+        Me.lbl_ChargesPonctuelles.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_ChargesPonctuelles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_ChargesPonctuelles.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_ChargesPonctuelles.Location = New System.Drawing.Point(455, 0)
+        Me.lbl_ChargesPonctuelles.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_ChargesPonctuelles.Name = "lbl_ChargesPonctuelles"
+        Me.lbl_ChargesPonctuelles.Size = New System.Drawing.Size(259, 30)
+        Me.lbl_ChargesPonctuelles.TabIndex = 2
+        Me.lbl_ChargesPonctuelles.Text = "lbl_ChargesPonctuelles"
+        Me.lbl_ChargesPonctuelles.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lbl_ChoixCharges
+        'lbl_ChargesSurfaciques
         '
-        Me.lbl_ChoixCharges.AutoSize = True
-        Me.lbl_ChoixCharges.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_ChoixCharges.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_ChoixCharges.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_ChoixCharges.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_ChoixCharges.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_ChoixCharges.Name = "lbl_ChoixCharges"
-        Me.lbl_ChoixCharges.Size = New System.Drawing.Size(250, 30)
-        Me.lbl_ChoixCharges.TabIndex = 0
-        Me.lbl_ChoixCharges.Text = "lbl_ChoixCharges"
-        Me.lbl_ChoixCharges.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lbl_ChargesSurfaciques.AutoSize = True
+        Me.lbl_ChargesSurfaciques.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_ChargesSurfaciques.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_ChargesSurfaciques.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_ChargesSurfaciques.Location = New System.Drawing.Point(1, 0)
+        Me.lbl_ChargesSurfaciques.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
+        Me.lbl_ChargesSurfaciques.Name = "lbl_ChargesSurfaciques"
+        Me.lbl_ChargesSurfaciques.Size = New System.Drawing.Size(453, 30)
+        Me.lbl_ChargesSurfaciques.TabIndex = 1
+        Me.lbl_ChargesSurfaciques.Text = "lbl_ChargesSurfaciques"
+        Me.lbl_ChargesSurfaciques.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'pan_ChoixCharges
+        'ErrorProvider_Frm_Chargement
         '
-        Me.pan_ChoixCharges.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_ChoixCharges.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_ChoixCharges.Controls.Add(Me.pan_ChoixTravee)
-        Me.pan_ChoixCharges.Controls.Add(Me.pan_ChoixCas)
-        Me.pan_ChoixCharges.Controls.Add(Me.lbl_ChoixCharge)
-        Me.pan_ChoixCharges.Controls.Add(Me.lbl_NameLoad)
-        Me.pan_ChoixCharges.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_ChoixCharges.Location = New System.Drawing.Point(0, 30)
-        Me.pan_ChoixCharges.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_ChoixCharges.Name = "pan_ChoixCharges"
-        Me.pan_ChoixCharges.Size = New System.Drawing.Size(250, 248)
-        Me.pan_ChoixCharges.TabIndex = 1
-        '
-        'pan_ChoixTravee
-        '
-        Me.pan_ChoixTravee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_ChoixTravee.Controls.Add(Me.lbl_ChoixTravee)
-        Me.pan_ChoixTravee.Controls.Add(Me.Panel1)
-        Me.pan_ChoixTravee.Location = New System.Drawing.Point(12, 157)
-        Me.pan_ChoixTravee.Name = "pan_ChoixTravee"
-        Me.pan_ChoixTravee.Size = New System.Drawing.Size(217, 77)
-        Me.pan_ChoixTravee.TabIndex = 78
-        '
-        'lbl_ChoixTravee
-        '
-        Me.lbl_ChoixTravee.AutoSize = True
-        Me.lbl_ChoixTravee.Location = New System.Drawing.Point(3, 1)
-        Me.lbl_ChoixTravee.Name = "lbl_ChoixTravee"
-        Me.lbl_ChoixTravee.Size = New System.Drawing.Size(83, 13)
-        Me.lbl_ChoixTravee.TabIndex = 78
-        Me.lbl_ChoixTravee.Text = "lbl_ChoixTravee"
-        '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.btn_Precedent)
-        Me.Panel1.Controls.Add(Me.btn_Suivant)
-        Me.Panel1.Controls.Add(Me.cmb_Travee)
-        Me.Panel1.Location = New System.Drawing.Point(16, 28)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(185, 28)
-        Me.Panel1.TabIndex = 77
-        '
-        'btn_Suivant
-        '
-        Me.btn_Suivant.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.btn_Suivant.Location = New System.Drawing.Point(159, 2)
-        Me.btn_Suivant.Margin = New System.Windows.Forms.Padding(0)
-        Me.btn_Suivant.Name = "btn_Suivant"
-        Me.btn_Suivant.Size = New System.Drawing.Size(23, 23)
-        Me.btn_Suivant.TabIndex = 11
-        Me.btn_Suivant.TabStop = False
-        Me.btn_Suivant.UseVisualStyleBackColor = True
-        '
-        'cmb_Travee
-        '
-        Me.cmb_Travee.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_Travee.FormattingEnabled = True
-        Me.cmb_Travee.Location = New System.Drawing.Point(25, 3)
-        Me.cmb_Travee.Name = "cmb_Travee"
-        Me.cmb_Travee.Size = New System.Drawing.Size(133, 21)
-        Me.cmb_Travee.TabIndex = 75
-        '
-        'pan_ChoixCas
-        '
-        Me.pan_ChoixCas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_ChoixCas.Controls.Add(Me.rad_G1)
-        Me.pan_ChoixCas.Controls.Add(Me.rad_Q1)
-        Me.pan_ChoixCas.Controls.Add(Me.rad_G2)
-        Me.pan_ChoixCas.Controls.Add(Me.rad_Q2)
-        Me.pan_ChoixCas.Controls.Add(Me.rad_Qc)
-        Me.pan_ChoixCas.Location = New System.Drawing.Point(12, 35)
-        Me.pan_ChoixCas.Name = "pan_ChoixCas"
-        Me.pan_ChoixCas.Size = New System.Drawing.Size(217, 80)
-        Me.pan_ChoixCas.TabIndex = 78
-        '
-        'rad_G1
-        '
-        Me.rad_G1.AutoSize = True
-        Me.rad_G1.Location = New System.Drawing.Point(15, 7)
-        Me.rad_G1.Name = "rad_G1"
-        Me.rad_G1.Size = New System.Drawing.Size(60, 17)
-        Me.rad_G1.TabIndex = 0
-        Me.rad_G1.TabStop = True
-        Me.rad_G1.Text = "rad_G1"
-        Me.rad_G1.UseVisualStyleBackColor = True
-        '
-        'rad_Q1
-        '
-        Me.rad_Q1.AutoSize = True
-        Me.rad_Q1.Location = New System.Drawing.Point(114, 7)
-        Me.rad_Q1.Name = "rad_Q1"
-        Me.rad_Q1.Size = New System.Drawing.Size(60, 17)
-        Me.rad_Q1.TabIndex = 0
-        Me.rad_Q1.TabStop = True
-        Me.rad_Q1.Text = "rad_Q1"
-        Me.rad_Q1.UseVisualStyleBackColor = True
-        '
-        'rad_G2
-        '
-        Me.rad_G2.AutoSize = True
-        Me.rad_G2.Location = New System.Drawing.Point(15, 30)
-        Me.rad_G2.Name = "rad_G2"
-        Me.rad_G2.Size = New System.Drawing.Size(60, 17)
-        Me.rad_G2.TabIndex = 0
-        Me.rad_G2.TabStop = True
-        Me.rad_G2.Text = "rad_G2"
-        Me.rad_G2.UseVisualStyleBackColor = True
-        '
-        'rad_Q2
-        '
-        Me.rad_Q2.AutoSize = True
-        Me.rad_Q2.Location = New System.Drawing.Point(114, 30)
-        Me.rad_Q2.Name = "rad_Q2"
-        Me.rad_Q2.Size = New System.Drawing.Size(60, 17)
-        Me.rad_Q2.TabIndex = 0
-        Me.rad_Q2.TabStop = True
-        Me.rad_Q2.Text = "rad_Q2"
-        Me.rad_Q2.UseVisualStyleBackColor = True
-        '
-        'rad_Qc
-        '
-        Me.rad_Qc.AutoSize = True
-        Me.rad_Qc.Location = New System.Drawing.Point(114, 53)
-        Me.rad_Qc.Name = "rad_Qc"
-        Me.rad_Qc.Size = New System.Drawing.Size(60, 17)
-        Me.rad_Qc.TabIndex = 0
-        Me.rad_Qc.TabStop = True
-        Me.rad_Qc.Text = "rad_Qc"
-        Me.rad_Qc.UseVisualStyleBackColor = True
-        '
-        'lbl_ChoixCharge
-        '
-        Me.lbl_ChoixCharge.AutoSize = True
-        Me.lbl_ChoixCharge.Location = New System.Drawing.Point(11, 16)
-        Me.lbl_ChoixCharge.Name = "lbl_ChoixCharge"
-        Me.lbl_ChoixCharge.Size = New System.Drawing.Size(83, 13)
-        Me.lbl_ChoixCharge.TabIndex = 79
-        Me.lbl_ChoixCharge.Text = "lbl_ChoixCharge"
-        '
-        'lbl_NameLoad
-        '
-        Me.lbl_NameLoad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_NameLoad.Location = New System.Drawing.Point(12, 121)
-        Me.lbl_NameLoad.Name = "lbl_NameLoad"
-        Me.lbl_NameLoad.Size = New System.Drawing.Size(217, 29)
-        Me.lbl_NameLoad.TabIndex = 78
-        Me.lbl_NameLoad.Text = "lbl_NameLoad"
-        Me.lbl_NameLoad.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'TLPan_PartieBasse
-        '
-        Me.TLPan_PartieBasse.ColumnCount = 5
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
-        Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
-        Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 487)
-        Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
-        Me.TLPan_PartieBasse.RowCount = 1
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(955, 34)
-        Me.TLPan_PartieBasse.TabIndex = 0
-        '
-        'btn_OK
-        '
-        Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(490, 3)
-        Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
-        Me.btn_OK.TabIndex = 1
-        Me.btn_OK.Text = "btn_OK"
-        Me.btn_OK.UseVisualStyleBackColor = True
-        '
-        'btn_Annuler
-        '
-        Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(350, 3)
-        Me.btn_Annuler.Name = "btn_Annuler"
-        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
-        Me.btn_Annuler.TabIndex = 0
-        Me.btn_Annuler.Text = "btn_Annuler"
-        Me.btn_Annuler.UseVisualStyleBackColor = True
+        Me.ErrorProvider_Frm_Chargement.ContainerControl = Me
         '
         'imgList_Navigation
         '
@@ -1433,80 +1433,45 @@ Partial Class Frm_Chargement
         Me.imgList_Navigation.Images.SetKeyName(2, "Suivant")
         Me.imgList_Navigation.Images.SetKeyName(3, "SuivantNonDispo")
         '
-        'ErrorProvider_Frm_Chargement
+        'Frm_ChargementN
         '
-        Me.ErrorProvider_Frm_Chargement.ContainerControl = Me
-        '
-        'img_Chargement
-        '
-        Me.img_Chargement.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Chargement.BackColor = System.Drawing.SystemColors.Window
-        Me.img_Chargement.Location = New System.Drawing.Point(5, 10)
-        Me.img_Chargement.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
-        Me.img_Chargement.Name = "img_Chargement"
-        Me.img_Chargement.Size = New System.Drawing.Size(51, 42)
-        Me.img_Chargement.TabIndex = 77
-        Me.img_Chargement.TabStop = False
-        '
-        'btn_Precedent
-        '
-        Me.btn_Precedent.Image = CType(resources.GetObject("btn_Precedent.Image"), System.Drawing.Image)
-        Me.btn_Precedent.Location = New System.Drawing.Point(1, 2)
-        Me.btn_Precedent.Margin = New System.Windows.Forms.Padding(0)
-        Me.btn_Precedent.Name = "btn_Precedent"
-        Me.btn_Precedent.Size = New System.Drawing.Size(23, 23)
-        Me.btn_Precedent.TabIndex = 12
-        Me.btn_Precedent.TabStop = False
-        Me.btn_Precedent.UseVisualStyleBackColor = True
-        '
-        'Frm_Chargement
-        '
-        Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CancelButton = Me.btn_Annuler
-        Me.ClientSize = New System.Drawing.Size(961, 524)
+        Me.ClientSize = New System.Drawing.Size(964, 541)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "Frm_Chargement"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Frm_Chargement"
+        Me.Name = "Frm_ChargementN"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.Text = "Frm_ChargementN"
         Me.pan_General.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)
-        Me.TLPan_PartieMilieu.ResumeLayout(False)
-        Me.TLPan_Dessin.ResumeLayout(False)
-        Me.pan_Dessin.ResumeLayout(False)
-        Me.TLPan_ReactionsAppuis.ResumeLayout(False)
-        Me.TLPan_ReactionsAppuis.PerformLayout()
+        Me.TLPan_PartieBasse.ResumeLayout(False)
+        Me.pan_Chargement.ResumeLayout(False)
+        Me.TLpan_Chargement.ResumeLayout(False)
+        Me.TLpan_PanneauGauche.ResumeLayout(False)
+        Me.TLpan_PanneauGauche.PerformLayout()
         Me.pan_ReactionsAppuis.ResumeLayout(False)
         Me.pan_ReactionsAppuis.PerformLayout()
-        Me.TLPan_PartieHaute.ResumeLayout(False)
-        Me.TLPan_ChargesPonctuelles.ResumeLayout(False)
-        Me.TLPan_ChargesPonctuelles.PerformLayout()
+        Me.pan_ChoixCharges.ResumeLayout(False)
+        Me.pan_ChoixCharges.PerformLayout()
+        Me.pan_ChoixCas.ResumeLayout(False)
+        Me.pan_ChoixCas.PerformLayout()
+        Me.pan_Span.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.TLpan_OrganisationDessin.ResumeLayout(False)
+        Me.pan_Dessin.ResumeLayout(False)
+        CType(Me.img_Chargement, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TLpan_DefCharges.ResumeLayout(False)
+        Me.TLpan_DefCharges.PerformLayout()
         Me.pan_ChargesPonctuelles.ResumeLayout(False)
         Me.pan_ChargesPonctuelles.PerformLayout()
-        Me.TLPan_ChargesLineiqueSurfaciques.ResumeLayout(False)
-        Me.TLPan_ChargesLineiqueSurfaciques.PerformLayout()
         Me.pan_ChargesLineiques.ResumeLayout(False)
         Me.pan_ChargesLineiques.PerformLayout()
         Me.pan_ChargesSurfaciques.ResumeLayout(False)
         Me.pan_ChargesSurfaciques.PerformLayout()
-        Me.TLPan_ChoixCharges.ResumeLayout(False)
-        Me.TLPan_ChoixCharges.PerformLayout()
-        Me.pan_ChoixCharges.ResumeLayout(False)
-        Me.pan_ChoixCharges.PerformLayout()
-        Me.pan_ChoixTravee.ResumeLayout(False)
-        Me.pan_ChoixTravee.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
-        Me.pan_ChoixCas.ResumeLayout(False)
-        Me.pan_ChoixCas.PerformLayout()
-        Me.TLPan_PartieBasse.ResumeLayout(False)
         CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Chargement, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1516,32 +1481,40 @@ Partial Class Frm_Chargement
     Friend WithEvents TLPan_PartieBasse As TableLayoutPanel
     Friend WithEvents btn_OK As Button
     Friend WithEvents btn_Annuler As Button
-    Friend WithEvents TLPan_PartieHaute As TableLayoutPanel
-    Friend WithEvents TLPan_ChoixCharges As TableLayoutPanel
+    Friend WithEvents pan_Chargement As Panel
+    Friend WithEvents TLpan_Chargement As TableLayoutPanel
+    Friend WithEvents TLpan_PanneauGauche As TableLayoutPanel
     Friend WithEvents lbl_ChoixCharges As Label
     Friend WithEvents pan_ChoixCharges As Panel
-    Friend WithEvents TLPan_ChargesLineiqueSurfaciques As TableLayoutPanel
-    Friend WithEvents lbl_ChargesSurfaciques As Label
-    Friend WithEvents pan_ChargesSurfaciques As Panel
-    Friend WithEvents TLPan_ChargesPonctuelles As TableLayoutPanel
-    Friend WithEvents lbl_ChargesPonctuelles As Label
-    Friend WithEvents pan_ChargesPonctuelles As Panel
-    Friend WithEvents TLPan_PartieMilieu As TableLayoutPanel
-    Friend WithEvents TLPan_Dessin As TableLayoutPanel
-    Friend WithEvents TLPan_ReactionsAppuis As TableLayoutPanel
-    Friend WithEvents lbl_ReactionsAppuis As Label
-    Friend WithEvents pan_ReactionsAppuis As Panel
-    Friend WithEvents rad_G1 As RadioButton
-    Friend WithEvents rad_Qc As RadioButton
-    Friend WithEvents rad_Q2 As RadioButton
-    Friend WithEvents rad_G2 As RadioButton
-    Friend WithEvents rad_Q1 As RadioButton
     Friend WithEvents Panel1 As Panel
     Friend WithEvents btn_Precedent As Button
     Friend WithEvents btn_Suivant As Button
     Friend WithEvents cmb_Travee As ComboBox
-    Friend WithEvents lbl_ChoixTravee As Label
+    Friend WithEvents pan_ChoixCas As Panel
+    Friend WithEvents rad_G1 As RadioButton
+    Friend WithEvents rad_Q1 As RadioButton
+    Friend WithEvents rad_G2 As RadioButton
+    Friend WithEvents rad_Q2 As RadioButton
+    Friend WithEvents rad_Qc As RadioButton
     Friend WithEvents lbl_ChoixCharge As Label
+    Friend WithEvents lbl_NameLoad As Label
+    Friend WithEvents lbl_Span As Label
+    Friend WithEvents lbl_ReactionsAppuis As Label
+    Friend WithEvents pan_Span As Panel
+    Friend WithEvents pan_ReactionsAppuis As Panel
+    Friend WithEvents lbl_RightSupport As Label
+    Friend WithEvents lbl_LeftSupport As Label
+    Friend WithEvents lbl_UnitRightSupport As Label
+    Friend WithEvents txt_RightSupport As TextBox
+    Friend WithEvents lbl_UnitLeftSupport As Label
+    Friend WithEvents txt_LeftSupport As TextBox
+    Friend WithEvents TLpan_OrganisationDessin As TableLayoutPanel
+    Friend WithEvents pan_Dessin As Panel
+    Friend WithEvents img_Chargement As PictureBox
+    Friend WithEvents TLpan_DefCharges As TableLayoutPanel
+    Friend WithEvents lbl_ChargesSurfaciques As Label
+    Friend WithEvents lbl_ChargesPonctuelles As Label
+    Friend WithEvents pan_ChargesSurfaciques As Panel
     Friend WithEvents lbl_ResultingForce As Label
     Friend WithEvents lbl_UniformLoad As Label
     Friend WithEvents lbl_WidthApplication As Label
@@ -1551,7 +1524,11 @@ Partial Class Frm_Chargement
     Friend WithEvents txt_ResultingForce As TextBox
     Friend WithEvents txt_UniformLoad As TextBox
     Friend WithEvents txt_WidthApplication As TextBox
+    Friend WithEvents lbl_ChargesLineiques As Label
     Friend WithEvents pan_ChargesLineiques As Panel
+    Friend WithEvents btn_InfoPP As Button
+    Friend WithEvents btn_SupprimerLineique As Button
+    Friend WithEvents btn_AjouterLineique As Button
     Friend WithEvents txt_x2_Lineique_4 As TextBox
     Friend WithEvents txt_x2_Lineique_3 As TextBox
     Friend WithEvents txt_x2_Lineique_2 As TextBox
@@ -1574,21 +1551,10 @@ Partial Class Frm_Chargement
     Friend WithEvents txt_x1_Lineique_1 As TextBox
     Friend WithEvents txt_Indice_Lineique_2 As TextBox
     Friend WithEvents txt_F1_Lineique As TextBox
+    Friend WithEvents txt_Indice_Lineique_1 As TextBox
     Friend WithEvents txt_x1_Lineique As TextBox
     Friend WithEvents txt_Indice_Lineique As TextBox
-    Friend WithEvents lbl_ChargesLineiques As Label
-    Friend WithEvents btn_InfoPP As Button
-    Friend WithEvents btn_SupprimerLineique As Button
-    Friend WithEvents btn_AjouterLineique As Button
-    Friend WithEvents txt_F_Ponctuelle_2 As TextBox
-    Friend WithEvents txt_x_Ponctuelle_2 As TextBox
-    Friend WithEvents txt_F_Ponctuelle_1 As TextBox
-    Friend WithEvents txt_x_Ponctuelle_1 As TextBox
-    Friend WithEvents txt_Indice_Ponctuelle_2 As TextBox
-    Friend WithEvents txt_F_Ponctuelle As TextBox
-    Friend WithEvents txt_Indice_Ponctuelle_1 As TextBox
-    Friend WithEvents txt_x_Ponctuelle As TextBox
-    Friend WithEvents txt_Indice_Ponctuelle As TextBox
+    Friend WithEvents pan_ChargesPonctuelles As Panel
     Friend WithEvents btn_SupprimerPonctuelle As Button
     Friend WithEvents btn_AjouterPonctuelle As Button
     Friend WithEvents txt_F_Ponctuelle_8 As TextBox
@@ -1596,31 +1562,28 @@ Partial Class Frm_Chargement
     Friend WithEvents txt_F_Ponctuelle_7 As TextBox
     Friend WithEvents txt_F_Ponctuelle_3 As TextBox
     Friend WithEvents txt_F_Ponctuelle_6 As TextBox
+    Friend WithEvents txt_F_Ponctuelle_2 As TextBox
     Friend WithEvents txt_x_Ponctuelle_8 As TextBox
     Friend WithEvents txt_x_Ponctuelle_4 As TextBox
     Friend WithEvents txt_x_Ponctuelle_7 As TextBox
     Friend WithEvents txt_x_Ponctuelle_3 As TextBox
     Friend WithEvents txt_x_Ponctuelle_6 As TextBox
+    Friend WithEvents txt_x_Ponctuelle_2 As TextBox
     Friend WithEvents txt_Indice_Ponctuelle_8 As TextBox
     Friend WithEvents txt_Indice_Ponctuelle_4 As TextBox
     Friend WithEvents txt_F_Ponctuelle_5 As TextBox
+    Friend WithEvents txt_F_Ponctuelle_1 As TextBox
     Friend WithEvents txt_Indice_Ponctuelle_7 As TextBox
     Friend WithEvents txt_Indice_Ponctuelle_3 As TextBox
     Friend WithEvents txt_x_Ponctuelle_5 As TextBox
     Friend WithEvents txt_Indice_Ponctuelle_6 As TextBox
+    Friend WithEvents txt_x_Ponctuelle_1 As TextBox
+    Friend WithEvents txt_Indice_Ponctuelle_2 As TextBox
     Friend WithEvents txt_Indice_Ponctuelle_5 As TextBox
-    Friend WithEvents lbl_RightSupport As Label
-    Friend WithEvents lbl_LeftSupport As Label
-    Friend WithEvents lbl_UnitRightSupport As Label
-    Friend WithEvents txt_RightSupport As TextBox
-    Friend WithEvents lbl_UnitLeftSupport As Label
-    Friend WithEvents txt_LeftSupport As TextBox
-    Friend WithEvents imgList_Navigation As ImageList
-    Friend WithEvents pan_Dessin As Panel
-    Friend WithEvents img_Chargement As PictureBox
+    Friend WithEvents txt_F_Ponctuelle As TextBox
+    Friend WithEvents txt_Indice_Ponctuelle_1 As TextBox
+    Friend WithEvents txt_x_Ponctuelle As TextBox
+    Friend WithEvents txt_Indice_Ponctuelle As TextBox
     Friend WithEvents ErrorProvider_Frm_Chargement As ErrorProvider
-    Friend WithEvents txt_Indice_Lineique_1 As TextBox
-    Friend WithEvents lbl_NameLoad As Label
-    Friend WithEvents pan_ChoixTravee As Panel
-    Friend WithEvents pan_ChoixCas As Panel
+    Friend WithEvents imgList_Navigation As ImageList
 End Class

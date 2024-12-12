@@ -1219,28 +1219,36 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & BlocG("REBARSINCOMPRESSION") & TABAFF & BlocG("NO"))
         End If
 
-        SauteLigne()
+        If nbLignes + 4 * HLIGNEENTETE > MAXLIGNEPPAG Then
+            SautePage()
+        Else
+            SauteLigne()
+        End If
+
+        'SauteLigne()
+
+        Dim SymbolD As String = BlocG("SYMBOLFORDAY")
 
         AddLigneNDC("\TABLEAU 18")
         InitialiseLigne(3, HLIGNEENTETE, True)
         AddCelluleFond(LC1, Bordures.Tous, PositionTexteInCell.Centre, BlocG("AGET0"))
         AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SLAB"))
         AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("ENCASEMENT"))
-        InitialiseLigne(3, HLIGNEENTETE, True)
+        InitialiseLigne(3, HLIGNE, True)
         AddCellule(LC1, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SELFWEIGHT"))
-        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0G1(0) & " " & BlocG("SYMBOLFORDAY"))
-        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0G1(1) & " " & BlocG("SYMBOLFORDAY"))
-        InitialiseLigne(3, HLIGNEENTETE, True)
+        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0G1(0) & " " & SymbolD)
+        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0G1(1) & " " & SymbolD)
+        InitialiseLigne(3, HLIGNE, True)
         AddCellule(LC1, Bordures.Tous, PositionTexteInCell.Centre, BlocG("OTHERPERM"))
-        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0G2(0) & " " & BlocG("SYMBOLFORDAY"))
-        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0G2(1) & " " & BlocG("SYMBOLFORDAY"))
-        InitialiseLigne(3, HLIGNEENTETE, True)
+        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0G2(0) & " " & SymbolD)
+        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0G2(1) & " " & SymbolD)
+        InitialiseLigne(3, HLIGNE, True)
         AddCellule(LC1, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SHRINKAGE"))
-        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0SH(0) & " " & BlocG("SYMBOLFORDAY"))
-        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0SH(1) & " " & BlocG("SYMBOLFORDAY"))
+        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0SH(0) & " " & SymbolD)
+        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0SH(1) & " " & SymbolD)
         FinTableau()
 
-        AddLigneNDC(TABW2 & BlocG("AGET") & TABAFF & "t = " & GetStringInUnit(MyBeam.Param.AgeT, Enu_TypeVariable.SansType, 4, 2, False) & " " & BlocG("SYMBOLFORDAY"))
+        AddLigneNDC(TABW2 & BlocG("AGET") & TABAFF & "t = " & GetStringInUnit(MyBeam.Param.AgeT, Enu_TypeVariable.SansType, 4, 2, False) & " " & SymbolD)
 
         '--> Paramètres
         AddTitreNdC(3, BlocG("TPARAMETERS"))
@@ -4283,6 +4291,13 @@ Module Mod_NoteCalcul
 
         FinTableau()
 
+        If lMixte Then
+            AddLigneNDC(TABW2 & "n / " & BlocAnalyse("SLAB") & ": \T30" & BlocAnalyse("NSLAB"))
+        End If
+        If lEnrob Then
+            AddLigneNDC(TABW2 & "n / " & BlocAnalyse("ENCASEMENT") & ": \T30" & BlocAnalyse("NENCASEMENT"))
+        End If
+
         '--> Note sur les configurations
 
         Dim strFormatNoteFin As String = "\i"
@@ -6148,12 +6163,12 @@ Module Mod_NoteCalcul
         AddCelluleFond(LC4, BordsLigneH, PositionTexteInCell.Centre, BlocG("SPAN"))
         AddCelluleFond(LC4, BordsLigneH, PositionTexteInCell.Centre, BlocG("ZONE"))
         AddCelluleFond(LC4, BordsLigneH, PositionTexteInCell.Centre, "n\-r\=")
-        AddCelluleFond(LC3, BordsLigneH, PositionTexteInCell.Centre, "Area")
+        AddCelluleFond(LC3, BordsLigneH, PositionTexteInCell.Centre, BlocG("AREA"))                         ' "Area")
         AddCelluleFond(LC3, BordsLigneH, PositionTexteInCell.Centre, "\St\s\-Ed\= ")
         AddCelluleFond(LC3, BordsLigneH, PositionTexteInCell.Centre, "\Sq\s\-f\= ")
         AddCelluleFond(LC3, BordsLigneH, PositionTexteInCell.Centre, "\SG\s\-sf\=")
         AddCelluleFond(LC3, BordsLigneH, PositionTexteInCell.Centre, "(A\-sf\=/s\-f\=) ")
-        AddCelluleFond(pLC9, BordsLigneH, PositionTexteInCell.Centre, "Reinforcements")
+        AddCelluleFond(pLC9, BordsLigneH, PositionTexteInCell.Centre, BlocG("REINFORCEMENTS"))              ' "Reinforcements")
 
         InitialiseLigneTableau(nbCol, HLIGNE)
         AddCelluleFond(LC4, BordsLigneB, PositionTexteInCell.Centre, "")

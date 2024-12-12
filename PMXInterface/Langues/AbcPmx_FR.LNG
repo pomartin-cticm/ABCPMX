@@ -79,8 +79,8 @@ SLIMFLOORIFB_A			= Section dalle mince IFB-A non mixte
 SLIMFLOORIFB_ACOMPO		= Section dalle mince IFB-A mixte
 SLIMFLOORIFB_B			= Section dalle mince IFB-B non mixte
 SLIMFLOORIFB_BCOMPO		= Section dalle mince IFB-B mixte
-SLIMFLOORSAB			= Section dalle mince SAB non mixte
-SLIMFLOORSABCOMPO		= Section dalle mince SAB mixte
+SLIMFLOORSAB			= Section dalle mince AFB non mixte
+SLIMFLOORSABCOMPO		= Section dalle mince AFB mixte
 NOTAVAILABLE			= non disponible dans cette version
 
 #FRM_BEAMOPTIONS
@@ -597,7 +597,7 @@ TSBSECTIONA				= Profilé acier
 TSBSECTIONSFB			= Section slimfloor SFB
 TSBSECTIONIFBA			= Section slimfloor IFB type A
 TSBSECTIONIFBB			= Section slimfloor IFB type B
-TSBSECTIONSAB			= Section slimfloor SAB
+TSBSECTIONSAB			= Section slimfloor AFB
 TSBSLAB					= Dalle
 TSBSPACINGS				= Configuration transversale
 TSBSPANS				= Portées
@@ -905,7 +905,7 @@ SERIAL					= Série
 STEEL					= Acier
 STEELGRADE				= Nuance d'acier
 TITLE					= Définition de la poutre acier
-SABSECTION				= Section SAB
+SABSECTION				= Section AFB
 WIDTH					= Largeur
 
 #GENERAL

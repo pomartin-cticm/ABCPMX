@@ -321,6 +321,7 @@
         '
         '=============================================
 
+
         'Initialiser
         ReDim OUTPUT.VZ(Donnees.NbNodes - 1, 1)
         ReDim OUTPUT.MYY(Donnees.NbNodes - 1, 1)

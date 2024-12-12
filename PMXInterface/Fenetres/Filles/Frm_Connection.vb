@@ -811,7 +811,7 @@ Public Class Frm_Connection
             Nb_TransV_Row_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.Goujons.d) / Espacement_Trans_MIN + 1)
         End If
 
-
+        Nb_TransV_Row_MAX = Math.Max(1, Nb_TransV_Row_MAX)
     End Sub
 
     ''' <summary>

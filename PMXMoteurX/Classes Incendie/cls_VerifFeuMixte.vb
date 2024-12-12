@@ -211,6 +211,7 @@
         MassivFi = EN_Feu.MassiveteSemelleInf(myBeam.Section.ProfilA)
         MassivW = EN_Feu.MassiveteAme(myBeam.Section.ProfilA)
         MassivS = EN_Feu.MassiveteSectionAcierBoardP(myBeam.Section.ProfilA)
+        TeneurU = myBeam.ParamFeu.TeneurU
 
         Me.TimeInter = CInt((Me.TimeInter / DeltaT)) * DeltaT
 
@@ -1010,7 +1011,6 @@
     End Sub
 
 #End Region
-
 
 #Region " Vérification de la résistance en section "
 
