@@ -44,8 +44,9 @@ End Structure
 Friend Structure MOD_RESULTATS
     Dim VALP(,) As Double       'valeurs propres                                          VALP(NCAS,NBVALP)
     Dim VECTP(,,) As Double      'vecteurs propres                                          VECTP(NCAS,NBVALP,3*NNT)        
-    Dim MAS_TOT() As Double     'Masse totale                                             MAS_TOT(NCAS)    
-    Dim MAS_MOD(,) As Double     'Masse modale                                          MAS_MOD(NCAS,NBVALP)            
+    Dim MAS_TOT() As Double      'Masse totale                                             MAS_TOT(NCAS)        
+    Dim MAS_MOD(,) As Double     'Masse modale                                            MAS_MOD(NCAS,NBVALP)            
+    Dim MAS_GEN(,) As Double     'Masse généralisée                                       MAS_GEN(NCAS,NBVALP)            
 End Structure
 
 #End Region

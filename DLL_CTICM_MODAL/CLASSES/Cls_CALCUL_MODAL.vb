@@ -292,6 +292,7 @@
         '=============================================
         '
         ' 26/09/2023 : TMN, v 1.00
+        ' 17/12/2024 : TMN, ajouter la masse généralisée
         '
         '=============================================
         '
@@ -311,6 +312,7 @@
         ReDim OUTPUT.FreqProp(RESOLUTION.NBVALP - 1)
         ReDim OUTPUT.VectProp(RESOLUTION.NBVALP - 1, NOEUDS.NNT - 1)
         ReDim OUTPUT.MasseMod(RESOLUTION.NBVALP - 1)
+        ReDim OUTPUT.MasseGen(RESOLUTION.NBVALP - 1)
 
         For iMode = 1 To RESOLUTION.NBVALP
             OUTPUT.FreqProp(iMode - 1) = RESULTATS.VALP(1, iMode) ^ 0.5 / 2 / Math.PI
@@ -318,6 +320,7 @@
                 OUTPUT.VectProp(iMode - 1, iNode - 1) = RESULTATS.VECTP(1, iMode, 3 * (iNode - 1) + 2)
             Next
             OUTPUT.MasseMod(iMode - 1) = RESULTATS.MAS_MOD(1, iMode)
+            OUTPUT.MasseGen(iMode - 1) = RESULTATS.MAS_GEN(1, iMode)
         Next
         OUTPUT.MasseTot = RESULTATS.MAS_TOT(1)
     End Sub

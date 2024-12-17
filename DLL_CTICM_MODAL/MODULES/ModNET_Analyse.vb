@@ -205,6 +205,7 @@ Module ModNET_Analyse
         ReDim RESULTATS.MAS_TOT(NCAS)
         ReDim RESULTATS.VECTP(NCAS, NBVP, IDIM)
         ReDim RESULTATS.MAS_MOD(NCAS, NBVP)
+        ReDim RESULTATS.MAS_GEN(NCAS, NBVP)
 
         'TRAITEMENT DES SUPPORTS
         '-----------------------
@@ -347,6 +348,9 @@ Module ModNET_Analyse
 
                     DMDELTA += DM * DELTA(I)
                 Next
+
+                ' Masse généralisée
+                RESULTATS.MAS_GEN(ICAS, IV) = DMD
 
                 ' Masse modale                
                 RESULTATS.MAS_MOD(ICAS, IV) = DMDELTA ^ 2 / DMD
