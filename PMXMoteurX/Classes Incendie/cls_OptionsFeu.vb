@@ -4,6 +4,8 @@
 
 #Region " Attributs "
 
+    Public lCalculFeu As Boolean                            ' Indique si on effectue le calcul au feu
+
     Private DeltaTsimple As Decimal                         ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier non protégées
     'Private DeltaTprotege As Decimal                        ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier protégées
     Public TempRef As Decimal                               ' Température de référence (à t = 0)
@@ -30,7 +32,7 @@
     Public lArmaCompression As Boolean                      ' Indique si on prend en compte les armatures comprimées (dans l'enrobage partiel)
     Public lArmaFormeeAFroid As Boolean                     ' Indique si les armatures pour le béton sont formées à froid (True) ou non (False)
 
-    Public lCalculFeu As Boolean                            ' Indique si on effectue le calcul au feu
+    Public lCongesEnrobe As Boolean                         ' Indique si on prend en compte les congés de raccordement dans le calcul au feu d'une poutre acier ou mixte partiellement enrobée
 
     Public lDalleFEM As Boolean                             ' Indique pour les poutres mixtes si on calcule l'échauffement par une analyse EF
     Public tDalleEFmax As Decimal                           ' Epaisseur maximale d'un elt dalle pour le calcul numérique de l'échauffement de la dalle
@@ -62,7 +64,6 @@
         BoardsFibroCement
         BoardsPlaster
     End Enum
-
     Public Enum enuTypeInterpoleTempArma
         Maximale
         Moyenne
@@ -70,6 +71,7 @@
     End Enum
 
     Public MethodTempArma As enuTypeInterpoleTempArma       ' Type de méthode pour le calcul de la température des armatures
+
 #End Region
 
 #Region " Constructeur "
@@ -115,6 +117,9 @@
         Me.lRhoCvar = False
 
         Me.MethodTempArma = enuTypeInterpoleTempArma.Moyenne
+
+        Me.lCongesEnrobe = True
+
     End Sub
 
 #End Region

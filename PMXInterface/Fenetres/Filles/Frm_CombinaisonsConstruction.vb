@@ -362,7 +362,7 @@ Public Class Frm_CombinaisonsConstruction
         '----------------------------------------------------------------------------------------
         '   21/08/23 :  Création - Version 1.00
         '----------------------------------------------------------------------------------------
-        '   Affichage d'une combinaison EN1990 dans une Picture Box
+        '   AffichageOptFeu d'une combinaison EN1990 dans une Picture Box
         '----------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   lSelect     [E] :   Indique si combinaison sélectionnée
@@ -496,7 +496,7 @@ Public Class Frm_CombinaisonsConstruction
         '
         '----------------------------------------------------------------------------------------
         '
-        '   Affichage d'une combinaison réglementaire ELS dans une Picture Box
+        '   AffichageOptFeu d'une combinaison réglementaire ELS dans une Picture Box
         '
         '----------------------------------------------------------------------------------------
 

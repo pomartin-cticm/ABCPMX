@@ -749,7 +749,7 @@
             Coef_a2 = Me.TableauF3_A2_Cas1(iStep)
 
             Hwl = Coef_a1 / Bc + Coef_a2 * Tw / (Bc * Ha)
-            HwlMin = HwlMinCas1(iStep)
+            HwlMin = HwlMinCas1(iStep) / 1000
 
         ElseIf IsGreaterOrEqual(RatioHsurB, 2) Then
 
@@ -757,12 +757,12 @@
             Coef_a2 = Me.TableauF3_A2_Cas2(iStep)
 
             Hwl = Coef_a1 / Bc + Coef_a2 * Tw / (Bc * Ha)
-            HwlMin = HwlMinCas2(iStep)
+            HwlMin = HwlMinCas2(iStep) / 1000
 
         Else
 
             Hwl = Me.TableauF3_Cas3(Time, Tw, Ha, Bc)
-            HwlMin = HwlMinCas3(iStep)
+            HwlMin = HwlMinCas3(iStep) / 1000
 
         End If
 

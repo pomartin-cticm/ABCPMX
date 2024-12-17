@@ -255,7 +255,7 @@ Public Class POMbutton
             lContour = pContourFond
         End If
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         If lArrondi Then
             Rayon = (Math.Min(Me.pRatioArrondi, 0.5!) * Math.Min(sWI, sHI))
@@ -277,7 +277,7 @@ Public Class POMbutton
             If lContour Then MyGr.DrawRectangle(New Pen(CouleurContourSub), 0, 0, sWI, sHI)
         End If
 
-        '--> Affichage du texte
+        '--> AffichageOptFeu du texte
 
         Dim xCap, yCap As Single
 

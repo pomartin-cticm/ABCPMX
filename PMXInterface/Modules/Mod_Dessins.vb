@@ -279,7 +279,7 @@ Public Module Mod_Dessins
 
         End If
 
-        '--( Affichage du nom du profilé
+        '--( AffichageOptFeu du nom du profilé
 
         'If (Not MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym Or Not MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym) And lCotation Then
         If lCotation Then
@@ -434,7 +434,7 @@ Public Module Mod_Dessins
         End If
 
 
-        'Affichage nom du goujon disposé, le cas écheant
+        'AffichageOptFeu nom du goujon disposé, le cas écheant
 
         If myBeam.lMixte And lCotation Then
             'Cotation
@@ -582,7 +582,7 @@ Public Module Mod_Dessins
 
         PrepareContourDallePleine_Frm_Main(MyPoutre.Dalle, BeffDes, Bfs, xPts, yPts, nbPts, EntraxeD2, lIntermediaire, profilA, EntraxeD1, dCar)
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         RemplirZone(MyGr, MyBrushDP, xPts, yPts, nbPts, MyParAffA, True, True)
 
@@ -769,7 +769,7 @@ Public Module Mod_Dessins
                 xo = -profilA.Bfi / 2
         End Select
 
-        '--> Affichage de la dalle pleine (nécessairement sans renformis)
+        '--> AffichageOptFeu de la dalle pleine (nécessairement sans renformis)
 
         If lIntermediaire Then xo = -EntraxeD1 - dCar
 
@@ -777,7 +777,7 @@ Public Module Mod_Dessins
 
         AddRectanglePlein(MyGr, MyBrushDP, MyPen, xo, 0, xe, Td, MyParAffA, True, False)
 
-        '--> Affichage des prédalles
+        '--> AffichageOptFeu des prédalles
 
         If lIntermediaire Then
 
@@ -921,7 +921,7 @@ Public Module Mod_Dessins
                 xo = -profilA.Bfi / 2
         End Select
 
-        '--> Affichage de la dalle pleine (nécessairement sans renformis)
+        '--> AffichageOptFeu de la dalle pleine (nécessairement sans renformis)
 
         If lIntermediaire Then xo = -EntraxeD1 - dCar
 
@@ -929,7 +929,7 @@ Public Module Mod_Dessins
 
         AddRectanglePlein(MyGr, MyBrushDP, MyPen, xo, 0, xe, Td, MyParAffA, True, False)
 
-        '--> Affichage des prédalles
+        '--> AffichageOptFeu des prédalles
 
         If lIntermediaire Then
 
@@ -1538,7 +1538,7 @@ Public Module Mod_Dessins
         '   lCotation   [E] :   Indique si on met les cotations sur le dessin
         '   lCotEpTot   [E] :   Indique si cotation epaisseur bac+dalle
         '   lTitre      [E] :   Indique si affichage du titre du bac
-        '   ParAff      [S] :   Paramètres d'Affichage
+        '   ParAff      [S] :   Paramètres d'AffichageOptFeu
         '   lMemb       [E] :   Indique si on représente la semelle sup de la memb sup
         '   tfSup       [E] :   Epasseur semelle de la membrure superieure
         '   hMax        [E] :   Epaisseur maximale à considérer pour le dessin de la dalle
@@ -2822,7 +2822,7 @@ Public Module Mod_Dessins
         Rc = section.ProfilA.Rcs
         Tf = section.ProfilA.Tfs
 
-        '--> Affichage des cotes
+        '--> AffichageOptFeu des cotes
 
         '# Bc
 
@@ -2981,7 +2981,7 @@ Public Module Mod_Dessins
         '---------------------------------------------------------------------------------------------------------------------------
         '   20/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
-        '   Affichage des étriers dans le béton de l'enrobage partiel
+        '   AffichageOptFeu des étriers dans le béton de l'enrobage partiel
         '---------------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   
         '   profile     [E] :   profilé
@@ -3008,7 +3008,7 @@ Public Module Mod_Dessins
         '---------------------------------------------------------------------------------------------------------------------------
         '   20/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
-        '   Affichage des étriers dans le béton de l'enrobage partiel
+        '   AffichageOptFeu des étriers dans le béton de l'enrobage partiel
         '---------------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   
         '   profile     [E] :   profilé
@@ -3055,7 +3055,7 @@ Public Module Mod_Dessins
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
-        '   Affichage des étriers dans le béton de l'enrobage partiel
+        '   AffichageOptFeu des étriers dans le béton de l'enrobage partiel
         '---------------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   
         '   profile     [E] :   profilé
@@ -5271,7 +5271,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   05/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage du plancher en coupe
+        '   AffichageOptFeu du plancher en coupe
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Poutre à dessiner
@@ -5342,7 +5342,7 @@ Public Module Mod_Dessins
         ' Armatures
         Dim myBrushA As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurArma, CouleurArma)
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         DessinFrmCoupeStandard(MyGr, myBeam, myFont, iSelect, dCar, hMaxProfile, MyParAff, myBrushP, myBrushPSel, myBrushB, myBrushT, myBrushA)
 
@@ -5363,7 +5363,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   05/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage du plancher en coupe
+        '   AffichageOptFeu du plancher en coupe
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Section à dessiner
@@ -5403,7 +5403,7 @@ Public Module Mod_Dessins
                 ZREF = 0
         End Select
 
-        '--> Affichage de la dalle béton
+        '--> AffichageOptFeu de la dalle béton
 
         If myBeam.lIntermediaire Then
             xo = -1.5 * myBeam.EntraxeD1
@@ -5439,7 +5439,7 @@ Public Module Mod_Dessins
             AddLigne(MyGr, MyPenContour, xo, yo, xo, ye, MyParaff1)
         End If
 
-        '--> Affichage de la section principale
+        '--> AffichageOptFeu de la section principale
 
         '# Dessin de béton d'enrobage
 
@@ -5457,7 +5457,7 @@ Public Module Mod_Dessins
 
         DessinProfileMetal(MyGr, myBeam.Section.ProfilA, myBrushPSel, MyParaff1, ZREF, 0, lRepresentationPoutreExtremite)
 
-        '--> Affichage de la voisine à gauche
+        '--> AffichageOptFeu de la voisine à gauche
 
         '# Dessin de béton d'enrobage
 
@@ -5472,7 +5472,7 @@ Public Module Mod_Dessins
 
         End If
 
-        '--> Affichage de la voisine à droite
+        '--> AffichageOptFeu de la voisine à droite
 
         '# Dessin de béton d'enrobage
 
@@ -5516,7 +5516,7 @@ Public Module Mod_Dessins
 
         End If
 
-        '--> Affichage des cotes
+        '--> AffichageOptFeu des cotes
 
         DessinFrmCoupeCotes(MyGr, myBeam, myFont, MyParaff1, iSelect, dCar, hMaxProfile)
 
@@ -5527,7 +5527,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   05/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage des cotes du plancher en coupe
+        '   AffichageOptFeu des cotes du plancher en coupe
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Poutre à dessiner
@@ -5643,7 +5643,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   02/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage des travées dans la fenêtre portées
+        '   AffichageOptFeu des travées dans la fenêtre portées
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Poutre à dessiner
@@ -6094,7 +6094,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   21/07/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage des travées dans la fenêtre portées
+        '   AffichageOptFeu des travées dans la fenêtre portées
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Poutre à dessiner
@@ -6473,7 +6473,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   21/06/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage des travées dans la fenêtre maintiens latéraux
+        '   AffichageOptFeu des travées dans la fenêtre maintiens latéraux
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Poutre à dessiner
@@ -7108,7 +7108,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   26/06/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage des travées dans la fenêtre maintiens latéraux
+        '   AffichageOptFeu des travées dans la fenêtre maintiens latéraux
         '------------------------------------------------------------------------------------------------------------------
         '   myBeam    [E] :   Poutre à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
@@ -7230,7 +7230,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   08/06/23 :  Création - GuD
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage du plancher en longitudinal
+        '   AffichageOptFeu du plancher en longitudinal
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Poutre à dessiner
@@ -7511,7 +7511,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   21/06/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage des travées dans la fenêtre maintiens latéraux
+        '   AffichageOptFeu des travées dans la fenêtre maintiens latéraux
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam    [E] :   Poutre à dessiner
@@ -7808,7 +7808,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   21/06/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage des travées dans la fenêtre maintiens latéraux
+        '   AffichageOptFeu des travées dans la fenêtre maintiens latéraux
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam    [E] :   Poutre à dessiner
@@ -8195,7 +8195,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage du type de section dans la fenêtre choix de type de section
+        '   AffichageOptFeu du type de section dans la fenêtre choix de type de section
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   section     [E] :   Section à dessiner
@@ -8314,7 +8314,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   09/06/23 :  Création - FuD
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage du type de section dans la fenêtre choix de type de section
+        '   AffichageOptFeu du type de section dans la fenêtre choix de type de section
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   MySection   [E] :   Section à dessiner
@@ -8348,7 +8348,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage du type de section dans la fenêtre choix de type de section
+        '   AffichageOptFeu du type de section dans la fenêtre choix de type de section
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   MySection   [E] :   Section à dessiner
@@ -8385,7 +8385,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage du type de section dans la fenêtre choix de type de section
+        '   AffichageOptFeu du type de section dans la fenêtre choix de type de section
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   MySection   [E] :   Section à dessiner
@@ -8422,7 +8422,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage du type de section dans la fenêtre choix de type de section
+        '   AffichageOptFeu du type de section dans la fenêtre choix de type de section
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   MySection   [E] :   Section à dessiner
@@ -8460,7 +8460,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   Affichage du type de section dans la fenêtre choix de type de section
+        '   AffichageOptFeu du type de section dans la fenêtre choix de type de section
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   MySection   [E] :   Section à dessiner
@@ -8611,11 +8611,11 @@ Public Module Mod_Dessins
         With MyPoutre.ChargesA(iCas)
 
 
-            '--> Affichage de la poutre
+            '--> AffichageOptFeu de la poutre
 
             AddLigne(myGr, MyPenPoutre, 0, 0, Longueur, 0, MyParAff)
 
-            '--> Affichage des noeuds
+            '--> AffichageOptFeu des noeuds
 
             For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
                 MyPen = MyPenPoutre
@@ -8626,7 +8626,7 @@ Public Module Mod_Dessins
                 End If
             Next
 
-            '--> Affichage des appuis
+            '--> AffichageOptFeu des appuis
 
             Dim indAppuis() As Integer = Nothing
             Dim NbApp As Integer
@@ -8637,7 +8637,7 @@ Public Module Mod_Dessins
                 DessineAppui(myGr, MyPoutre.Nodes.xGlobal(indAppuis(iApp)), dApp, MyParAff)
             Next
 
-            '--> Affichage légende couleurs V et M
+            '--> AffichageOptFeu légende couleurs V et M
 
             If OptionsDiagrammesCDC.lDessMoment Or OptionsDiagrammesCDC.lDessEffortT Then
                 Dim longueurRectangle, hauteurRectangle As Decimal
@@ -8871,11 +8871,11 @@ Public Module Mod_Dessins
 
 
 
-        '--> Affichage de la poutre
+        '--> AffichageOptFeu de la poutre
 
         AddLigne(myGr, MyPenPoutre, 0, 0, Longueur, 0, MyParAff)
 
-        '--> Affichage des noeuds
+        '--> AffichageOptFeu des noeuds
 
         For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
             If iNode = iNodeMax Then
@@ -8890,7 +8890,7 @@ Public Module Mod_Dessins
             End If
         Next
 
-        '--> Affichage des appuis
+        '--> AffichageOptFeu des appuis
 
         Dim indAppuis() As Integer = Nothing
         Dim NbApp As Integer
@@ -8900,7 +8900,7 @@ Public Module Mod_Dessins
             DessineAppui(myGr, MyPoutre.Nodes.xGlobal(indAppuis(iApp)), dApp, MyParAff)
         Next
 
-        '--> Affichage légende couleurs V et M
+        '--> AffichageOptFeu légende couleurs V et M
 
         If OptionsDiagrammes.lDessMoment Or OptionsDiagrammes.lDessEffortT Then
             Dim longueurRectangle, hauteurRectangle As Decimal
@@ -9089,7 +9089,7 @@ Public Module Mod_Dessins
     '    Dim xo, xe, yo, ye As Decimal
     '    Dim myPenC As New Pen(CouleurC, 1.5)
 
-    '    '--> Affichage
+    '    '--> AffichageOptFeu
 
     '    xo = 0
     '    xe = 0
@@ -9231,7 +9231,7 @@ Public Module Mod_Dessins
         Const EPSX As Decimal = 0.5
         Dim qR As Decimal
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         xo = xPos(0)
         xe = xo
@@ -10455,7 +10455,7 @@ Public Module Mod_Dessins
         End If
         If lDalleRed Then BeffDes = BeffRed
 
-        '--> Affichage de la dalle pleine (nécessairement sans renformis)
+        '--> AffichageOptFeu de la dalle pleine (nécessairement sans renformis)
 
         If lIntermediaire Or Not MyPoutre.Section.lSlimFloor Then
             xo = -BeffDes / 2
@@ -10466,7 +10466,7 @@ Public Module Mod_Dessins
         End If
         AddRectanglePlein(MyGr, MyBrushDP, MyPen, xo, 0, xe, Td, MyParAffA, True, False)
 
-        '--> Affichage des deux prédalles
+        '--> AffichageOptFeu des deux prédalles
 
         If lIntermediaire Or Not MyPoutre.Section.lSlimFloor Then
             xe = -LargeurProfilA / 2 + wApp
@@ -10602,7 +10602,7 @@ Public Module Mod_Dessins
         End If
         If lDalleRed Then BeffDes = BeffRed
 
-        '--> Affichage de la dalle pleine (nécessairement sans renformis)
+        '--> AffichageOptFeu de la dalle pleine (nécessairement sans renformis)
 
         If lIntermediaire Or Not MyPoutre.Section.lSlimFloor Then
             xo = -BeffDes / 2
@@ -10614,7 +10614,7 @@ Public Module Mod_Dessins
         AddRectanglePlein(MyGr, MyBrushDP, MyPen, xo, 0, xe, Td, MyParAffA, True, False)
 
 
-        '--> Affichage des deux prédalles
+        '--> AffichageOptFeu des deux prédalles
 
         If lIntermediaire Or Not MyPoutre.Section.lSlimFloor Then
             xe = -LargeurProfilA / 2 + wApp
@@ -10709,7 +10709,7 @@ Public Module Mod_Dessins
 
         PrepareContourDallePleine(MyPoutre, lIntermediaire, BeffDes, Bfs, xPts, yPts, nbPts)
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         RemplirZone(MyGr, MyBrushDP, xPts, yPts, nbPts, MyParAffA, Not lDalleRed, True)
 
@@ -11869,7 +11869,7 @@ Public Module Mod_Dessins
         Dim MyPenB As New SolidBrush(Color.Gray)
         Dim MyFontNum As New Font("Arial", 7)
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         xo = 0
         xe = 0
@@ -12086,7 +12086,7 @@ Public Module Mod_Dessins
         '----------------------------------------------------------------------------------------
         '   03/11/23 :  Création - LeT (créé pour le logiciel TORSION)
         '----------------------------------------------------------------------------------------
-        '   Affichage d'une expréssion complète contenant plusieurs indices
+        '   AffichageOptFeu d'une expréssion complète contenant plusieurs indices
         '   Les indices sont encadrés par des "\-"
         '   Les fractions sont encadrés par des "\f"
         '   Le numérateur et le dénominateur des fractions sont séparés par "\d"
@@ -12185,7 +12185,7 @@ Public Module Mod_Dessins
         '----------------------------------------------------------------------------------
         '   04/12/23 :  Creation - POM - Version 1.00
         '----------------------------------------------------------------------------------
-        '   Affichage d'une expression
+        '   AffichageOptFeu d'une expression
         '----------------------------------------------------------------------------------
         '   Expression  [E] :   Ligne à afficher
         '   MyGr        [E] :   Graphics dans lequel on affiche

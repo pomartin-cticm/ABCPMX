@@ -132,7 +132,7 @@ Public Class Frm_PPModePropre
 
         MyPoutre.Modal.Analyse(MyPoutre, RatioQ, IndexQ)
 
-        '--> Affichage des résultats
+        '--> AffichageOptFeu des résultats
 
         If MyPoutre.Modal.ErrorCode = 0 Then
             Me.txt_Frequence.Text = GetStringInUnit(MyPoutre.Modal.Frequence, Enu_TypeVariable.SansType, 3, 2, False)
@@ -249,11 +249,11 @@ Public Class Frm_PPModePropre
 
         dCar = 0.8 * EcartZ / 2
 
-        '--> Affichage de la poutre
+        '--> AffichageOptFeu de la poutre
 
         AddLigne(myGr, MyPenPoutre, 0, 0, Longueur, 0, MyParAff)
 
-        '--> Affichage des noeuds
+        '--> AffichageOptFeu des noeuds
 
         For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
             If iNode = iNodeMax Then
@@ -268,7 +268,7 @@ Public Class Frm_PPModePropre
             End If
         Next
 
-        '--> Affichage des appuis
+        '--> AffichageOptFeu des appuis
 
         Dim indAppuis() As Integer = Nothing
         Dim NbApp As Integer

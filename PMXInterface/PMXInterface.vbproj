@@ -180,6 +180,30 @@
     <Compile Include="Fenetres\Filles\Frm_OptionsFeu.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_OptionsFeuN.Designer.vb">
+      <DependentUpon>Frm_OptionsFeuN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_OptionsFeuN.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_OptionsFeuN_Calcul.Designer.vb">
+      <DependentUpon>Frm_OptionsFeuN_Calcul.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_OptionsFeuN_Calcul.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_OptionsFeuN_Parametres.Designer.vb">
+      <DependentUpon>Frm_OptionsFeuN_Parametres.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_OptionsFeuN_Parametres.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_OptionsFeuN_Poutre.Designer.vb">
+      <DependentUpon>Frm_OptionsFeuN_Poutre.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_OptionsFeuN_Poutre.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_SectionIFB.Designer.vb">
       <DependentUpon>Frm_SectionIFB.vb</DependentUpon>
     </Compile>
@@ -538,6 +562,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_OptionsFeu.resx">
       <DependentUpon>Frm_OptionsFeu.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_OptionsFeuN.resx">
+      <DependentUpon>Frm_OptionsFeuN.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_OptionsFeuN_Calcul.resx">
+      <DependentUpon>Frm_OptionsFeuN_Calcul.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_OptionsFeuN_Parametres.resx">
+      <DependentUpon>Frm_OptionsFeuN_Parametres.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_OptionsFeuN_Poutre.resx">
+      <DependentUpon>Frm_OptionsFeuN_Poutre.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_SectionIFB.resx">
       <DependentUpon>Frm_SectionIFB.vb</DependentUpon>

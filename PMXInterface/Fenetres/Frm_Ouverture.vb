@@ -28,7 +28,7 @@ Public Class Frm_Ouverture
     End Sub
 
     ''' <summary>
-    ''' Affichage du texte de la fenêtre dans la langue séléctionnée
+    ''' AffichageOptFeu du texte de la fenêtre dans la langue séléctionnée
     ''' </summary>
     Public Sub GestionLangue()
 
@@ -189,7 +189,7 @@ Public Class Frm_Ouverture
 
             Frm_AjoutePP.TraitementSaisie(lok)
 
-            '--> Affichage de la soudure créee
+            '--> AffichageOptFeu de la soudure créee
             '   Frm_MAIN.AffichageFenetreFille()
 
             If lOK Then

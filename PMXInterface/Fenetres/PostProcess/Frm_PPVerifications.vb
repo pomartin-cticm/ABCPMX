@@ -30,10 +30,10 @@ Public Class Frm_PPVerifications
     Dim strCritereMV As String
     Dim strNoCritere As String
 
-    Dim lDessCritere As Boolean = True      ' Affichage du critère
-    Dim lDessAction As Boolean = True       ' Affichage diagramme action
-    Dim lDessResistance As Boolean = True   ' Affichage diagramme resistance
-    Dim lDessNumeros As Boolean = False     ' Affichage des numéros noeuds
+    Dim lDessCritere As Boolean = True      ' AffichageOptFeu du critère
+    Dim lDessAction As Boolean = True       ' AffichageOptFeu diagramme action
+    Dim lDessResistance As Boolean = True   ' AffichageOptFeu diagramme resistance
+    Dim lDessNumeros As Boolean = False     ' AffichageOptFeu des numéros noeuds
 
     Dim CritereA As New cls_Critere(MyProjet.Poutres(MyProjet.IndEnCours).Nodes.nbNodes, cls_Poutre.nbCombELU, MyProjet.Poutres(MyProjet.IndEnCours).IndiceDerniereTravee)
     'Dim CritereA As New cls_Critere(MyProjet.Poutres(MyProjet.IndEnCours).Nodes.nbNodes)
@@ -414,11 +414,11 @@ Public Class Frm_PPVerifications
 
         dCar = 0.95 * EcartZ / 2
 
-        '--> Affichage de la poutre
+        '--> AffichageOptFeu de la poutre
 
         AddLigne(myGr, MyPenPoutre, 0, 0, Longueur, 0, MyParAff)
 
-        '--> Affichage des noeuds
+        '--> AffichageOptFeu des noeuds
 
         For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
             If iNode = myCritere.iNodeM Then
@@ -432,7 +432,7 @@ Public Class Frm_PPVerifications
             End If
         Next
 
-        '--> Affichage des appuis
+        '--> AffichageOptFeu des appuis
 
         Dim indAppuis() As Integer = Nothing
         Dim NbApp As Integer
@@ -442,13 +442,13 @@ Public Class Frm_PPVerifications
             DessineAppui(myGr, MyPoutre.Nodes.xGlobal(indAppuis(iApp)), dApp, MyParAff)
         Next
 
-        '--> Affichage du critère
+        '--> AffichageOptFeu du critère
 
         If lCritere And (Not lNoCritere) Then
             DessineCritere(myGr, myCritere.Critere, myCritere.CritereMax, MyPoutre, dCar, ColorCrit, MyParAff)
         End If
 
-        '--> Affichage des actions et résistances
+        '--> AffichageOptFeu des actions et résistances
 
         If (lAction Or lResistance) And (Not lNoCritere) Then
 

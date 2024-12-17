@@ -202,6 +202,12 @@ INFO_G2					= Charge permanente additionnelle (après coulage du béton)
 INFO_Q1					= Charge d'exploitation 1
 INFO_Q2					= Charge d'exploitation 2
 INFO_QC					= Charge de construction
+COMPOSITEBEAM			= Poutre mixte
+STEELBEAM				= Poutre acier
+STEELENCASEDBEAM		= Poutre acier partiellement enrobée
+MODULAR					= Coefficient d'équivalence
+SLAB					= Dalle
+ENCASEMENT				= Enrobage
 
 #FRM_COMBINATIONS
 TITLE					= Combinaisons
@@ -459,6 +465,8 @@ AXISTEMP				= température à l'axe
 FRENCHNA				= Conductivité thermique du béton selon AN française
 CONSTANTRHOC			= Masse volumique du béton constante
 MOISTURECONTENT			= Teneur en eau
+ENCASEDROOTFILLET		= Les congés de raccordement sont pris en compte dans le calcul des sections enrobées selon l'Annexe F de l'EN 1994-1-2
+SIZEELT					= Épaisseur des éléments
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Coefficients d'accompagnement

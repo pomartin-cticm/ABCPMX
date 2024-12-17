@@ -425,7 +425,7 @@ Module Mod_NoteCalcul
         Dim PRd As Decimal
         Dim nSum As Decimal
 
-        '--( Affichage du type
+        '--( AffichageOptFeu du type
 
         If myBeam.lIntermediaire Then
             Select Case myBeam.Section.TypeSection
@@ -826,7 +826,7 @@ Module Mod_NoteCalcul
         '----------------------------------------------------------------------------------------------
         '   13/08/24 :  Création - Version 1.00 - POM
         '----------------------------------------------------------------------------------------------
-        '   Affichage du critère de degré de connexion dans la note de synthèse du projet
+        '   AffichageOptFeu du critère de degré de connexion dans la note de synthèse du projet
         '----------------------------------------------------------------------------------------------
         '   DegreC      [E] :   Degre de connexion
         '   DegreMin    [E] :   Degre minimal de connexion
@@ -861,7 +861,7 @@ Module Mod_NoteCalcul
         If iTravee = 0 Then SymbT = "(LC) "
         If iTravee = 2 Then SymbT = "(RC) "
 
-        '--( Affichage
+        '--( AffichageOptFeu
 
         AddligneNoRetour(TabulC & SymbT & strGras & SymbEta & GetStringInUnitN(DegreC, Enu_TypeVariable.SansType, 3, 2, False, True) _
                        & Comp & SymbEtaMin & GetStringInUnitN(DegreMin, Enu_TypeVariable.SansType, 3, 2, False, True) & strFinGras)
@@ -879,7 +879,7 @@ Module Mod_NoteCalcul
         '----------------------------------------------------------------------------------------------
         '   13/08/24 :  Création - Version 1.00 - POM
         '----------------------------------------------------------------------------------------------
-        '   Affichage d'un critère (ELU) dans la note de synthèse du projet
+        '   AffichageOptFeu d'un critère (ELU) dans la note de synthèse du projet
         '----------------------------------------------------------------------------------------------
         '   Critere     [E] :   Valeur du critère
         '   myTab       [E] :   Tabulation pour positionner le critère
@@ -903,7 +903,7 @@ Module Mod_NoteCalcul
             KeyImg = "ERROR"
         End If
 
-        '--( Affichage
+        '--( AffichageOptFeu
 
         AddligneNoRetour(TabulC & strGras & SymbolG & GetStringInUnit(Critere, Enu_TypeVariable.SansType, 4, 3, False) & strFinGras)
 
@@ -1651,7 +1651,7 @@ Module Mod_NoteCalcul
         '----------------------------------------------------------------------------------------------
         '   08/08/24 :  Création - POM
         '----------------------------------------------------------------------------------------------
-        '   Affichage d'un tableau des valeurs de fy et fu pour les PRS
+        '   AffichageOptFeu d'un tableau des valeurs de fy et fu pour les PRS
         '----------------------------------------------------------------------------------------------
         '   mySection       [E] :   Section concernée
         '   lSym            [E] :   Indique si PRS mono ou bi symétrique
@@ -1712,14 +1712,14 @@ Module Mod_NoteCalcul
         '----------------------------------------------------------------------------------------------
         '   08/08/24 :  Création - POM
         '----------------------------------------------------------------------------------------------
-        '   Affichage de l'entete du tableau des valeurs de fy et fu pour les PRS
+        '   AffichageOptFeu de l'entete du tableau des valeurs de fy et fu pour les PRS
         '----------------------------------------------------------------------------------------------
         '   lSym            [E] :   Indique si PRS mono ou bi symétrique
         '----------------------------------------------------------------------------------------------
 
         Const tPOS As Integer = 13
 
-        '--( Affichage de l'entête
+        '--( AffichageOptFeu de l'entête
 
         AddLigneNDC("\TABLEAU " & CStr(tPOS), False)
 
@@ -2344,7 +2344,7 @@ Module Mod_NoteCalcul
         End If
         AddTitreNdC(2, BlocG("DATAPROPPING"))
 
-        '--> Affichage de l'étaiement
+        '--> AffichageOptFeu de l'étaiement
 
         Select Case MyBeam.TypeEtaiement
             Case cls_Poutre.EnuTypeEtaiement.FullyPropped
@@ -2536,7 +2536,7 @@ Module Mod_NoteCalcul
             SautePage()
         End If
 
-        '--> Affichage des maitiens latéraux
+        '--> AffichageOptFeu des maitiens latéraux
 
         AddTitreNdC(2, BlocG("LATERALR"))
 
@@ -3437,7 +3437,7 @@ Module Mod_NoteCalcul
 
         AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 0, True))
         If lAppBeta Then
-            '--| Affichage de la valeur de beta, le cas échéant
+            '--| AffichageOptFeu de la valeur de beta, le cas échéant
             zSurH = (MyBeam.Dalle.zTop - zANP) / MyBeam.HauteurTotaleSectionMixte
             If lOK Then
                 '--| Cas du ratio z/h dans les limites du calcul plastique
@@ -4382,7 +4382,7 @@ Module Mod_NoteCalcul
 
         lRetrait = False                      '#ALERTE Pour le moment, à pondérer plus tard
 
-        '--> Affichage de la combinaison
+        '--> AffichageOptFeu de la combinaison
 
         Dim strELU As String = strRacineELU
         strELU += "_0"
@@ -4398,7 +4398,7 @@ Module Mod_NoteCalcul
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
 
-        '--> Affichage de la combinaison
+        '--> AffichageOptFeu de la combinaison
 
         EditionTableauEfforts(myPoutre, MEd, VEd,
                               Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
@@ -4431,7 +4431,7 @@ Module Mod_NoteCalcul
 
         lRetrait = True
 
-        '--> Affichage de la combinaison
+        '--> AffichageOptFeu de la combinaison
 
         Dim strELU As String = BlocAnalyse("ULS")
         strELU += "_C_0"
@@ -4447,7 +4447,7 @@ Module Mod_NoteCalcul
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
 
-        '--> Affichage de la combinaison
+        '--> AffichageOptFeu de la combinaison
 
         EditionTableauEfforts(myPoutre, MEd, VEd,
                               Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
@@ -4485,7 +4485,7 @@ Module Mod_NoteCalcul
         iTravDeb = myPoutre.IndicePremiereTravee
         iTravFin = myPoutre.IndiceDerniereTravee
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         '# Entête
 
@@ -4581,7 +4581,7 @@ Module Mod_NoteCalcul
 
         lRetrait = True
 
-        '--> Affichage de la combinaison
+        '--> AffichageOptFeu de la combinaison
 
         AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELF, iCombi, lRetrait)
 
@@ -4594,7 +4594,7 @@ Module Mod_NoteCalcul
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
 
-        '--> Affichage de la combinaison
+        '--> AffichageOptFeu de la combinaison
 
         EditionTableauEfforts(myPoutre, MEd, VEd,
             Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
@@ -4627,7 +4627,7 @@ Module Mod_NoteCalcul
 
         lRetrait = True
 
-        '--> Affichage de la combinaison
+        '--> AffichageOptFeu de la combinaison
 
         AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELS, iCombi, lRetrait)
 
@@ -4640,7 +4640,7 @@ Module Mod_NoteCalcul
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
 
-        '--> Affichage de la combinaison
+        '--> AffichageOptFeu de la combinaison
 
         EditionTableauEfforts(myPoutre, MEd, VEd,
                               Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
@@ -4673,7 +4673,7 @@ Module Mod_NoteCalcul
 
         lRetrait = True
 
-        '--> Affichage de la combinaison
+        '--> AffichageOptFeu de la combinaison
 
         AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELCS, iCombi, lRetrait)
 
@@ -4686,7 +4686,7 @@ Module Mod_NoteCalcul
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
 
-        '--> Affichage de la combinaison
+        '--> AffichageOptFeu de la combinaison
 
         EditionTableauEfforts(myPoutre, MEd, VEd,
                               Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
@@ -4702,7 +4702,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage d'une ligne de tableau MV - cas noeud d'extremité de la poutre
+        '   AffichageOptFeu d'une ligne de tableau MV - cas noeud d'extremité de la poutre
         '-------------------------------------------------------------------------------------------
         '   lMultiSpan  [E] :   Indique si plusieurs travées
         '   lGauche     [E] :   Indique si extremité gauche ou droite de la poutre
@@ -4784,7 +4784,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage d'une ligne de tableau MV - cas d'un noeud sur appui intermédiaire
+        '   AffichageOptFeu d'une ligne de tableau MV - cas d'un noeud sur appui intermédiaire
         '-------------------------------------------------------------------------------------------
         '   lMultiSpan  [E] :   Indique si plusieurs travées
         '   NCol        [E] :   Nombre de colonnes
@@ -4881,7 +4881,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage d'une ligne de tableau MV - cas général
+        '   AffichageOptFeu d'une ligne de tableau MV - cas général
         '-------------------------------------------------------------------------------------------
         '   lMultiSpan  [E] :   Indique si plusieurs travées
         '   NCol        [E] :   Nombre de colonnes
@@ -5066,7 +5066,7 @@ Module Mod_NoteCalcul
 
         Chaine = ChaineCombinaison(myPoutre, myCombi, iCombi, lRetrait)
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         AddTitreNdC(3, myCombi.Symbole(iCombi))
         AddLigneNDC(TABW2 & Chaine)
@@ -5145,7 +5145,7 @@ Module Mod_NoteCalcul
         ChargeA.EnveloppesMoments(Mmax, iNodeMaxMoment, Mmin, iNodeMinMoment)           'obtention des valeurs et noeuds des moments enveloppes 
         ChargeA.EnveloppesTranchants(Vmax, iNodeMaxTranchant, Vmin, iNodeMinTranchant)  'obtention des valeurs et noeuds des moments enveloppes 
 
-        '--> Affichage du cas de charge
+        '--> AffichageOptFeu du cas de charge
 
         AddTitreNdC(3, ChargeA.Symbol & " : " & ChargeA.Nom)
 
@@ -5154,11 +5154,11 @@ Module Mod_NoteCalcul
             Exit Sub
         End If
 
-        '--> Affichage des réactions
+        '--> AffichageOptFeu des réactions
 
         EditionChargeAReactions(MyPoutreLoc, ChargeA)
 
-        '--> Affichage du tableau des sollicitations
+        '--> AffichageOptFeu du tableau des sollicitations
 
         EditionTableauEfforts(MyPoutreLoc, ChargeA.MYY, ChargeA.VZ,
                               Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
@@ -5359,16 +5359,16 @@ Module Mod_NoteCalcul
 
         EnteteTableauPointContrainte(NCol, Pos, LargCol)
 
-        '--( Affichage des points du profilé
+        '--( AffichageOptFeu des points du profilé
 
         BlocTableauPointContrainte(myBeam, myBeam.PtsSigma.iProfile(0), myBeam.PtsSigma.iProfile(1), BlocAnalyse("PROFILE"), NCol, Pos, LargCol)
 
-        '--( Affichage des points de la dalle
+        '--( AffichageOptFeu des points de la dalle
 
         If lMixte Then _
         BlocTableauPointContrainte(myBeam, myBeam.PtsSigma.iBetonDalle(0), myBeam.PtsSigma.iBetonDalle(1), BlocAnalyse("SLABC"), NCol, Pos, LargCol)
 
-        '--( Affichage des points des armatures de la dalle
+        '--( AffichageOptFeu des points des armatures de la dalle
 
         If lMixte Then _
         BlocTableauPointContrainte(myBeam, myBeam.PtsSigma.iArmaDalle(0), myBeam.PtsSigma.iArmaDalle(1), BlocAnalyse("SLABREINFORCEMENTS"), NCol, Pos, LargCol)
@@ -5405,7 +5405,7 @@ Module Mod_NoteCalcul
 
         If ((iZero = -1) Or (iUn = -1)) Then Exit Sub
 
-        '--( Affichage des points du profilé
+        '--( AffichageOptFeu des points du profilé
 
         For i = iZero To iUn
 
@@ -5449,7 +5449,7 @@ Module Mod_NoteCalcul
         LargCol(1) = 11
         LargCol(2) = 11
 
-        '--( Affichage de l'entête
+        '--( AffichageOptFeu de l'entête
 
         AddLigneNDC("\TABLEAU " & CStr(Pos), False)
 
@@ -5480,11 +5480,11 @@ Module Mod_NoteCalcul
 
         If nbLignes + NbLignesReq > MAXLIGNEPPAG Then SautePage()
 
-        '--> Affichage de la combinaison
+        '--> AffichageOptFeu de la combinaison
 
         AffichageCombinaisonCharge(myBeam, myBeam.CombiA_ELU, iCombi, True)
 
-        '--> Affichage du tableau des contraintes
+        '--> AffichageOptFeu du tableau des contraintes
 
         EditionTableauContraintesCombi(myBeam, SigmaCombi)
 
@@ -5511,7 +5511,7 @@ Module Mod_NoteCalcul
 
         If nbLignes + NbLignesReq > MAXLIGNEPPAG Then SautePage()
 
-        '--> Affichage du cas de charge
+        '--> AffichageOptFeu du cas de charge
 
         AddTitreNdC(3, myBeam.ChargesA(iCas).Symbol & " : " & myBeam.ChargesA(iCas).Nom)
 
@@ -5520,12 +5520,12 @@ Module Mod_NoteCalcul
             Exit Sub
         End If
 
-        '--> Affichage du tableau des contraintes sous moment positifs
+        '--> AffichageOptFeu du tableau des contraintes sous moment positifs
 
         If lAfficheSigmaM Then AddLigneNDC(TABW3 & BlocAnalyse("ASSMPOS"))
         EditionTableauContraintes(myBeam, SigmaCasP, iCas)
 
-        '--> Affichage du tableau des contraintes sous moment positifs
+        '--> AffichageOptFeu du tableau des contraintes sous moment positifs
 
         If lAfficheSigmaM Then
             AddLigneNDC(TABW3 & BlocAnalyse("ASSMNEG"))
@@ -5565,7 +5565,7 @@ Module Mod_NoteCalcul
         iTravDeb = myBeam.IndicePremiereTravee
         iTravFin = myBeam.IndiceDerniereTravee
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         '# Entête
 
@@ -5642,7 +5642,7 @@ Module Mod_NoteCalcul
         iTravDeb = myBeam.IndicePremiereTravee
         iTravFin = myBeam.IndiceDerniereTravee
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         '# Entête
 
@@ -5788,7 +5788,7 @@ Module Mod_NoteCalcul
             myBords(1) = Bordures.Tous
         End If
 
-        '--( Affichage de la ligne
+        '--( AffichageOptFeu de la ligne
 
         For k As Integer = kDeb To kFin
 
@@ -5878,7 +5878,7 @@ Module Mod_NoteCalcul
             myBords(1) = Bordures.Tous
         End If
 
-        '--( Affichage de la ligne
+        '--( AffichageOptFeu de la ligne
 
 
         For k As Integer = kDeb To kFin
@@ -6529,7 +6529,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage de la synthèse d'un critère
+        '   AffichageOptFeu de la synthèse d'un critère
         '-------------------------------------------------------------------------------------------
         '   myBeam          [E] :
         '   Critere         [E] :
@@ -6559,7 +6559,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage de la synthèse d'un critère
+        '   AffichageOptFeu de la synthèse d'un critère
         '-------------------------------------------------------------------------------------------
         '   CritereMax      [E] :   Valeur maix du critère
         '   Symbol          [E] :   Symbole pour le critère
@@ -6585,7 +6585,7 @@ Module Mod_NoteCalcul
         PrepareStyleCritere(CritereMax, strGras, strFinGras, strOK, lOK)
         If lFeu Then RacineEL = strRacineELF Else RacineEL = strRacineELU
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         If lFeu Then myTabul = TABW2 Else myTabul = TABW3
 
@@ -6604,7 +6604,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage de la synthèse d'un critère de déversement
+        '   AffichageOptFeu de la synthèse d'un critère de déversement
         '-------------------------------------------------------------------------------------------
         '   Critere     [E] :
         '   Symbol      [E] :
@@ -6625,7 +6625,7 @@ Module Mod_NoteCalcul
 
         PrepareStyleCritere(Valeur, strGras, strFinGras, strOK, lOK)
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         AddLigneNDC(TABW3 & Titre & TABAFF & strGras &
                     Symbol & TABEGAL & GetStringInUnit(Valeur, Enu_TypeVariable.SansType, 3, 2, False) &
@@ -6639,7 +6639,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage de la synthèse d'un critère
+        '   AffichageOptFeu de la synthèse d'un critère
         '-------------------------------------------------------------------------------------------
         '   Valeur      [E] :   Valeur maximale du critere
         '   strGras     [E] :
@@ -6685,7 +6685,7 @@ Module Mod_NoteCalcul
 
         iNodeM = Critere.CritereCombiN(iCombi, iTravee) + 1
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         'AddCellule(LC3, vBordure, PositionTexteInCell.Centre, StyleG & GetStringInUnit(ValCrit, Enu_TypeVariable.SansType, 3, 2, False) & " (N" & CStr(iNodeM) & ")" & StyleGFin)
         AffichageCritereELU_N(ValCrit, Critere.CritereMax, iNodeM, vBordure)
@@ -6696,7 +6696,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage de la valeur d'un critère sur une travée dans le tableau correspondant
+        '   AffichageOptFeu de la valeur d'un critère sur une travée dans le tableau correspondant
         '-------------------------------------------------------------------------------------------
         '   valCritereCombiT    [E] :   Critère affiché dans la cellule
         '   valCritereEnveloppe [E] :   Indice de la travée
@@ -6719,7 +6719,7 @@ Module Mod_NoteCalcul
             StyleGFin = "\g"
         End If
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         AddCellule(LC3, vBordure, PositionTexteInCell.Centre, StyleG & GetStringInUnit(valCritereCombiT, Enu_TypeVariable.SansType, 4, 3, False) & " (N" & CStr(iNodeM) & ")" & StyleGFin)
 
@@ -6750,7 +6750,7 @@ Module Mod_NoteCalcul
             StyleGFin = "\g"
         End If
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         AddCellule(LC3, vBordure, PositionTexteInCell.Centre, StyleG & GetStringInUnit(ValCrit, Enu_TypeVariable.SansType, 3, 2, False) & " (N" & CStr(iNodeM) & ")" & StyleGFin)
 
@@ -6760,7 +6760,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage détaillé des critères ELU par combinaison
+        '   AffichageOptFeu détaillé des critères ELU par combinaison
         '-------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre
         '   lConstructionP  [E] :   Indique si phase de construction, pour les poutres mixtes
@@ -6778,7 +6778,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage dans le tableau des critères ELU des résultats pour une combinaison
+        '   AffichageOptFeu dans le tableau des critères ELU des résultats pour une combinaison
         '-------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
         '   NCOL        [E] :   Nombre de colonnes dans le tableau
@@ -6880,7 +6880,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage détaillé des critères ELU par combinaison
+        '   AffichageOptFeu détaillé des critères ELU par combinaison
         '-------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre
         '   lConstructionP  [E] :   Indique si phase de construction, pour les poutres mixtes
@@ -6917,7 +6917,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   14/03/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage détaillé des critères ELU par combinaison et par travée (le cas échéant)
+        '   AffichageOptFeu détaillé des critères ELU par combinaison et par travée (le cas échéant)
         '   Cas d'une poutre acier, en calcul élastique VM
         '-------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre
@@ -6962,7 +6962,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   14/03/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage détaillé des critères ELU par combinaison et par travée (le cas échéant)
+        '   AffichageOptFeu détaillé des critères ELU par combinaison et par travée (le cas échéant)
         '   Cas d'une poutre acier, en calcul plastique ou élastique classe 3
         '-------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre
@@ -7006,7 +7006,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
+        '   AffichageOptFeu d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
         '   Cas d'une poutre acier en calcul plastique ou élastique classe 3
         '-------------------------------------------------------------------------------------------
         '   MyBeam      [E] :   Poutre traitée
@@ -7061,18 +7061,18 @@ Module Mod_NoteCalcul
                 AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
             End If
 
-            '==( Affichage de GammaM
+            '==( AffichageOptFeu de GammaM
             AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereM, i, iCombi, MyBordures(i))
 
-            '==( Affichage de GammaV
+            '==( AffichageOptFeu de GammaV
             AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereV, i, iCombi, MyBordures(i))
 
-            '==( Affichage de GammaMV
+            '==( AffichageOptFeu de GammaMV
             If lInterMV Then
                 AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereMV, i, iCombi, MyBordures(i))
             End If
 
-            '==( Affichage du voilement par cisaillement 
+            '==( AffichageOptFeu du voilement par cisaillement 
             If lShearB Then
                 AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereVb, i, iCombi, MyBordures(i))
                 If lInterMVb And lCalculPlastic Then _
@@ -7087,7 +7087,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
+        '   AffichageOptFeu d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
         '   Cas d'une poutre mixte en calcul élastique VM
         '-------------------------------------------------------------------------------------------
         '   MyBeam      [E] :   Poutre traitée
@@ -7134,23 +7134,23 @@ Module Mod_NoteCalcul
                 AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
             End If
 
-            '==( Affichage de Gamma Sigma a
+            '==( AffichageOptFeu de Gamma Sigma a
             AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereSigmaA, i, iCombi, MyBordures(i))
 
-            '==( Affichage de Gamma Tau a
+            '==( AffichageOptFeu de Gamma Tau a
             AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereTauA, i, iCombi, MyBordures(i))
 
-            '==( Affichage de Gamma Sigma eq,a
+            '==( AffichageOptFeu de Gamma Sigma eq,a
             AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereSigmaVM, i, iCombi, MyBordures(i))
 
-            '==( Affichage de Gamma Sigma c
+            '==( AffichageOptFeu de Gamma Sigma c
             AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereSigmaC, i, iCombi, MyBordures(i))
 
-            '==( Affichage de Gamma Sigma armac
+            '==( AffichageOptFeu de Gamma Sigma armac
             If lMultiSpan Then _
             AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereSigmaArmaC, i, iCombi, MyBordures(i))
 
-            '==( Affichage des critères de contraintes dans l'enrobage
+            '==( AffichageOptFeu des critères de contraintes dans l'enrobage
             If lEnrob Then
                 AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereSigmaE, i, iCombi, MyBordures(i))
                 AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereSigmaArmaE, i, iCombi, MyBordures(i))
@@ -7293,7 +7293,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage dans le tableau des critères ELU des résultats pour une combinaison
+        '   AffichageOptFeu dans le tableau des critères ELU des résultats pour une combinaison
         '-------------------------------------------------------------------------------------------
         '   MyBeam      [E] :   Poutre traitée
         '   lMultiSpan  [E] :   Si poutre à plusieurs travées
@@ -7345,21 +7345,21 @@ Module Mod_NoteCalcul
                 AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
             End If
             If lElastic Then
-                '==( Affichage du critère de résistance élastique du profilé acier - Contraintes normales
+                '==( AffichageOptFeu du critère de résistance élastique du profilé acier - Contraintes normales
                 If lMixte Then
                     AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereSigmaA, i, iCombi, MyBordures(i))
                 Else
                     AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereSigmaA, i, iCombi, MyBordures(i))
                 End If
 
-                '==( Affichage du critère de résistance élastique du profilé acier - Contraintes de cisaillement
+                '==( AffichageOptFeu du critère de résistance élastique du profilé acier - Contraintes de cisaillement
                 If lMixte Then
                     AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereTauA, i, iCombi, MyBordures(i))
                 Else
                     AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereTauA, i, iCombi, MyBordures(i))
                 End If
 
-                '==( Affichage du critère de résistance élastique du profilé acier - Contraintes équivalentes de Von Mises
+                '==( AffichageOptFeu du critère de résistance élastique du profilé acier - Contraintes équivalentes de Von Mises
                 If lMixte Then
                     AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereSigmaVM, i, iCombi, MyBordures(i))
                 Else
@@ -7386,7 +7386,7 @@ Module Mod_NoteCalcul
                 End If
 
             Else
-                '==( Affichage de GammaM
+                '==( AffichageOptFeu de GammaM
                 If lMixte Then
                     'AffichageCritereELU(MyBeam.VerifMixte(iVerif).CritereM, iNodeD, iNodeF, MyBordures(i))
                     AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereM, i, iCombi, MyBordures(i))
@@ -7394,7 +7394,7 @@ Module Mod_NoteCalcul
                     'AffichageCritereELU(MyBeam.VerifAcier(iVerif).CritereM, iNodeD, iNodeF, MyBordures(i))
                     AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereM, i, iCombi, MyBordures(i))
                 End If
-                '==( Affichage de GammaV
+                '==( AffichageOptFeu de GammaV
                 If lMixte Then
                     'AffichageCritereELU(MyBeam.VerifMixte(iVerif).CritereV, iNodeD, iNodeF, MyBordures(i))
                     AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereV, i, iCombi, MyBordures(i))
@@ -7402,7 +7402,7 @@ Module Mod_NoteCalcul
                     'AffichageCritereELU(MyBeam.VerifAcier(iVerif).CritereV, iNodeD, iNodeF, MyBordures(i))
                     AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereV, i, iCombi, MyBordures(i))
                 End If
-                '==( Affichage de GammaMV
+                '==( AffichageOptFeu de GammaMV
                 If lInterMV Then
                     If lMixte Then
                         AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereMV, i, iCombi, MyBordures(i))
@@ -7556,7 +7556,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage dans le tableau des critères ELU des résultats pour une combinaison
+        '   AffichageOptFeu dans le tableau des critères ELU des résultats pour une combinaison
         '-------------------------------------------------------------------------------------------
         '   MyBeam      [E] :   Poutre traitée
         '   lMultiSpan  [E] :   Si poutre à plusieurs travées
@@ -7603,19 +7603,19 @@ Module Mod_NoteCalcul
                 AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
             End If
 
-            '=== Affichage des critères
+            '=== AffichageOptFeu des critères
 
             If MyBeam.VerifMixte(iVerif).lCalculPlastic Then
                 '# Calcul plastique #############################################################################
-                '==( Affichage de GammaM
+                '==( AffichageOptFeu de GammaM
 
                 AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereM, i, iCombi, MyBordures(i))
 
-                '==( Affichage de GammaV
+                '==( AffichageOptFeu de GammaV
 
                 AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereV, i, iCombi, MyBordures(i))
 
-                '==( Affichage de GammaMV
+                '==( AffichageOptFeu de GammaMV
                 If lInterMV Then
 
                     AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereMV, i, iCombi, MyBordures(i))
@@ -7625,13 +7625,13 @@ Module Mod_NoteCalcul
             ElseIf MyBeam.Param.lElasticDesignVM Then
                 '# Calcul élastique critère de VM #############################################################################
 
-                '==( Affichage du critère de résistance élastique du profilé acier - Contraintes normales
+                '==( AffichageOptFeu du critère de résistance élastique du profilé acier - Contraintes normales
                 AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereSigmaA, i, iCombi, MyBordures(i))
 
-                '==( Affichage du critère de résistance élastique du profilé acier - Contraintes de cisaillement
+                '==( AffichageOptFeu du critère de résistance élastique du profilé acier - Contraintes de cisaillement
                 AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereTauA, i, iCombi, MyBordures(i))
 
-                '==( Affichage du critère de résistance élastique du profilé acier - Contraintes équivalentes de Von Mises
+                '==( AffichageOptFeu du critère de résistance élastique du profilé acier - Contraintes équivalentes de Von Mises
                 AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereSigmaVM, i, iCombi, MyBordures(i))
 
 
@@ -7655,7 +7655,7 @@ Module Mod_NoteCalcul
             Else
                 '# Calcul élastique classe 3 #############################################################################
 
-                '==( Affichage du critère de résistance élastique de la section en flexion
+                '==( AffichageOptFeu du critère de résistance élastique de la section en flexion
 
                 'valeur = Math.Max(MyBeam.VerifMixte(iVerif).CritereSigmaA.CritereMax, MyBeam.VerifMixte(iVerif).CritereSigmaC.CritereMax)
                 'If lMultiSpan Then
@@ -7669,11 +7669,11 @@ Module Mod_NoteCalcul
                 'AffichageCritereELU_N(valeur, 0, 0, MyBordures(i))
                 AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereM, i, iCombi, MyBordures(i))
 
-                '==( Affichage de GammaV
+                '==( AffichageOptFeu de GammaV
 
                 AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereV, i, iCombi, MyBordures(i))
 
-                '==( Affichage de GammaMV
+                '==( AffichageOptFeu de GammaMV
                 If lInterMV Then
 
                     AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereMV, i, iCombi, MyBordures(i))
@@ -7764,7 +7764,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   14/12/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage du degré de connexion d'une travée et de la valeur mini
+        '   AffichageOptFeu du degré de connexion d'une travée et de la valeur mini
         '-------------------------------------------------------------------------------------------
         '   MyBeam      [E] :   Poutre à traiter
         '   iVerif      [E] :   Indice de la vérification
@@ -7974,7 +7974,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage détaillé des critères ELU par combinaison
+        '   AffichageOptFeu détaillé des critères ELU par combinaison
         '-------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre
         '   iVerif          [E] :   
@@ -8029,7 +8029,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   14/03/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage détaillé des critères ELU par combinaison et par travée (le cas échéant)
+        '   AffichageOptFeu détaillé des critères ELU par combinaison et par travée (le cas échéant)
         '   Cas d'une poutre acier, en calcul élastique VM
         '-------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre
@@ -8075,7 +8075,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   14/03/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage détaillé des critères ELU par combinaison et par travée (le cas échéant)
+        '   AffichageOptFeu détaillé des critères ELU par combinaison et par travée (le cas échéant)
         '   Cas d'une poutre acier, en calcul plastique ou élastique classe 3
         '-------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre
@@ -8121,7 +8121,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
+        '   AffichageOptFeu d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
         '   Cas d'une poutre acier en calcul plastique ou élastique classe 3
         '-------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre traitée
@@ -8180,25 +8180,25 @@ Module Mod_NoteCalcul
                 AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
             End If
 
-            '==( Affichage de GammaM
+            '==( AffichageOptFeu de GammaM
             AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereM, i, iCombi, MyBordures(i))
 
-            '==( Affichage de GammaV
+            '==( AffichageOptFeu de GammaV
             AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereV, i, iCombi, MyBordures(i))
 
-            '==( Affichage de GammaMV
+            '==( AffichageOptFeu de GammaMV
             If lInterMV Then
                 AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereMV, i, iCombi, MyBordures(i))
             End If
 
-            '==( Affichage du voilement par cisaillement 
+            '==( AffichageOptFeu du voilement par cisaillement 
             If lShearB Then
                 AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereVb, i, iCombi, MyBordures(i))
                 If lInterMVb Then _
                 AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereMVb, i, iCombi, MyBordures(i))
             End If
 
-            '==( Affichage du déversement
+            '==( AffichageOptFeu du déversement
             AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereLTB, i, iCombi, MyBordures(i))
 
         Next
@@ -8210,7 +8210,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
+        '   AffichageOptFeu d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
         '   Cas d'une poutre acier en calcul elastique VM
         '-------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre traitée
@@ -8262,17 +8262,17 @@ Module Mod_NoteCalcul
                 AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
             End If
 
-            '==( Affichage du critère de résistance élastique du profilé acier - Contraintes normales
+            '==( AffichageOptFeu du critère de résistance élastique du profilé acier - Contraintes normales
 
             AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereSigmaA, i, iCombi, MyBordures(i))
 
-            '==( Affichage du critère de résistance élastique du profilé acier - Contraintes de cisaillement
+            '==( AffichageOptFeu du critère de résistance élastique du profilé acier - Contraintes de cisaillement
             AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereTauA, i, iCombi, MyBordures(i))
 
-            '==( Affichage du critère de résistance élastique du profilé acier - Contraintes équivalentes de Von Mises
+            '==( AffichageOptFeu du critère de résistance élastique du profilé acier - Contraintes équivalentes de Von Mises
             AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereSigmaVM, i, iCombi, MyBordures(i))
 
-            '==( Affichage des critère de résistance élastique pour l'enrobage, béton et armatures
+            '==( AffichageOptFeu des critère de résistance élastique pour l'enrobage, béton et armatures
             If lEnrob Then
                 '# Contraintes béton enrobage
                 AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereSigmaE, i, iCombi, MyBordures(i))
@@ -8282,7 +8282,7 @@ Module Mod_NoteCalcul
 
             End If
 
-            '==( Affichage du déversement
+            '==( AffichageOptFeu du déversement
             AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereLTB, i, iCombi, MyBordures(i))
         Next
 
@@ -8745,7 +8745,7 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(2, BlocELS("EIGENFREQUENCIES"))
 
-        '--( Affichage
+        '--( AffichageOptFeu
 
         If lDefQ(0) Then
             '# Si au moins une charge Q est définie, on affiche la fréquence sous les combi G+iQ
@@ -8900,7 +8900,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   05/02/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage du tableau des flèches par combinaison
+        '   AffichageOptFeu du tableau des flèches par combinaison
         '-------------------------------------------------------------------------------------------
         '   MyBeam      [E] :
         '   lETA        [E] :   Indique si flèche normales ou flèches ETA (prenant en compte le glissement)
@@ -9098,7 +9098,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage du tableau des flèches par cdc
+        '   AffichageOptFeu du tableau des flèches par cdc
         '-------------------------------------------------------------------------------------------
         '   MyBeam      [E] :
         '   lETA        [E] :   Indique si flèche normales ou flèches ETA (prenant en compte le glissement)
@@ -9353,7 +9353,7 @@ Module Mod_NoteCalcul
 
         AddLigneNDC(TABW2 & BlocHiVoss("COMBIMASS") & pTABVAR & "G + " & GetStringInUnit(MyBeam.Hivoss.ratioQ, Enu_TypeVariable.SansType, 3, 1, False) & " Q" & Format(MyBeam.Hivoss.IndexQ, "0"))
 
-        '--[ Affichage des fréquences propres et de la masse modale
+        '--[ AffichageOptFeu des fréquences propres et de la masse modale
 
         SauteLigne()
         If MyBeam.Hivoss.lFreqDalle And LogicielOptions.lExpert Then
@@ -9366,7 +9366,7 @@ Module Mod_NoteCalcul
         SauteLigne()
         AddLigneNDC(TABW2 & BlocHiVoss("MODALMASS") & pTABVAR & GetStringInUnit(MyBeam.Hivoss.MassModale, Enu_TypeVariable.SansType, 3, 0, False) & " kg")
 
-        '--[ Affichage résultats
+        '--[ AffichageOptFeu résultats
 
         If MyBeam.Hivoss.HCategorie = "A" Then
             MySymb = "<"
@@ -9481,7 +9481,7 @@ Module Mod_NoteCalcul
 
     '    AddLigneNDC(TABW2 & BlocHiVoss("COMBIMASS") & pTABVAR & "G + " & GetStringInUnit(MyBeam.Hivoss.ratioQ, Enu_TypeVariable.SansType, 3, 1, False) & " Q" & Format(MyBeam.Hivoss.IndexQ, "0"))
 
-    '    '--[ Affichage des fréquences propres et de la masse modale
+    '    '--[ AffichageOptFeu des fréquences propres et de la masse modale
 
     '    SauteLigne()
     '    If MyBeam.Hivoss.lFreqDalle And LogicielOptions.lExpert Then
@@ -10075,7 +10075,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage d'une ligne de du tableau des noeuds du maillage EF
+        '   AffichageOptFeu d'une ligne de du tableau des noeuds du maillage EF
         '-------------------------------------------------------------------------------------------
         '   lMultiSpan  [E] :   Indique si plusieurs travées
         '   NCol        [E] :   Nombre de colonnes
@@ -10118,7 +10118,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Affichage d'une ligne de du tableau des noeuds du maillage EF
+        '   AffichageOptFeu d'une ligne de du tableau des noeuds du maillage EF
         '-------------------------------------------------------------------------------------------
         '   lMultiSpan  [E] :   Indique si plusieurs travées
         '   NCol        [E] :   Nombre de colonnes
@@ -10435,7 +10435,7 @@ Module Mod_NoteCalcul
 
         Next
 
-        '--( Affichage des Moments
+        '--( AffichageOptFeu des Moments
 
         EnteteTableauMelRdMixte(myBeam, NCol, Pos, LargCol)
 
@@ -10493,7 +10493,7 @@ Module Mod_NoteCalcul
             kFin = 1
         End If
 
-        '--( Affichage
+        '--( AffichageOptFeu
 
         For k = kDeb To kFin
             InitialiseLigneTableau(NCOL, HLIGNE)
@@ -10545,7 +10545,7 @@ Module Mod_NoteCalcul
         Dim strELU As String = BlocAnalyse("ULS")
         strELU += "_0"
 
-        '--( Affichage de l'entête
+        '--( AffichageOptFeu de l'entête
 
         AddLigneNDC("\TABLEAU " & CStr(Pos), False)
 
@@ -10862,7 +10862,7 @@ Module Mod_NoteCalcul
         '-----------------------------------------------------------------------------------------------------------------
         '   22/10/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
-        '   Affichage de courbe de résultats pour les calculs au feu
+        '   AffichageOptFeu de courbe de résultats pour les calculs au feu
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre Calculée au feu
         '-----------------------------------------------------------------------------------------------------------------
@@ -10994,7 +10994,7 @@ Module Mod_NoteCalcul
 
         Const POS As Integer = 10
 
-        '--( Affichage de l'entête
+        '--( AffichageOptFeu de l'entête
 
         AddLigneNDC("\TABLEAU " & CStr(POS), False)
 
@@ -11042,7 +11042,7 @@ Module Mod_NoteCalcul
         kY = EN_Feu.ReducFyAcier(myVerifFeu.TempAStep(iStep))
         kE = EN_Feu.ReducEyAcier(myVerifFeu.TempAStep(iStep))
 
-        '--( Affichage
+        '--( AffichageOptFeu
 
         InitialiseLigneTableau(NCOL, HLIGNE)
 
@@ -11145,7 +11145,7 @@ Module Mod_NoteCalcul
 
         Const POS As Integer = 10
 
-        '--( Affichage de l'entête
+        '--( AffichageOptFeu de l'entête
 
         AddLigneNDC("\TABLEAU " & CStr(Pos), False)
 
@@ -11429,7 +11429,7 @@ Module Mod_NoteCalcul
 
         Const POS As Integer = 10
 
-        '--( Affichage de l'entête
+        '--( AffichageOptFeu de l'entête
 
         AddLigneNDC("\TABLEAU " & CStr(POS), False)
 
@@ -11669,7 +11669,7 @@ Module Mod_NoteCalcul
 
         Const POS As Integer = 10
 
-        '--( Affichage de l'entête
+        '--( AffichageOptFeu de l'entête
 
         AddLigneNDC("\TABLEAU " & CStr(POS), False)
 
@@ -11746,7 +11746,7 @@ Module Mod_NoteCalcul
 
         If NbReq + nbLignes > MAXLIGNEPPAG Then SautePage()
 
-        '--( Affichage tableau
+        '--( AffichageOptFeu tableau
 
         EnteteTableauTempDalleFeuMixte(NCOL, LargCol, nbArma)
         For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
@@ -11856,7 +11856,7 @@ Module Mod_NoteCalcul
 
         Const POS As Integer = 10
 
-        '--( Affichage de l'entête
+        '--( AffichageOptFeu de l'entête
 
         AddLigneNDC("\TABLEAU " & CStr(POS), False)
 
@@ -11928,7 +11928,7 @@ Module Mod_NoteCalcul
 
         If NbReq + nbLignes > MAXLIGNEPPAG Then SautePage()
 
-        '--( Affichage tableau
+        '--( AffichageOptFeu tableau
 
         EnteteTableauTempVerifFeuMixte(NCOL, LargCol, lBoard, lAcierSeul)
         For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
@@ -12001,7 +12001,7 @@ Module Mod_NoteCalcul
 
         Const POS As Integer = 10
 
-        '--( Affichage de l'entête
+        '--( AffichageOptFeu de l'entête
 
         AddLigneNDC("\TABLEAU " & CStr(POS), False)
 
@@ -12199,7 +12199,7 @@ Module Mod_NoteCalcul
 
         Const POS As Integer = 10
 
-        '--( Affichage de l'entête
+        '--( AffichageOptFeu de l'entête
 
         AddLigneNDC("\TABLEAU " & CStr(POS), False)
 
@@ -12233,7 +12233,7 @@ Module Mod_NoteCalcul
         '--( Déclaration
 
 
-        '--( Affichage
+        '--( AffichageOptFeu
 
         InitialiseLigneTableau(NCOL, HLIGNE)
 

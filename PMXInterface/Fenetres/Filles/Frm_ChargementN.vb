@@ -81,6 +81,11 @@ Public Class Frm_ChargementN
     Dim MyParAff As Struc_Affichage
 
     Const FORCECDEF As Decimal = 1000           ' Force concentrée par défaut
+
+    Dim strPoutreMixte As String = "Poutre mixte"
+    Dim strPoutreAcierEnrob As String = "Poutre acier partiellement enrobée"
+    Dim strPoutreAcier As String = "Poutre acier"
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -99,13 +104,14 @@ Public Class Frm_ChargementN
         PrepareFlechesNavigation()
         MAJI_BtnNavigation()
         AfficherPoutreEnCours()
-        MAJIAffichageNomChargeEnCours()
+        MAJIAffichageChargeEnCours()
         MAJIAffichageChargeSurfacique()
         MAJIAffichageTableauxLineique()
         MAJIAffichageButtonsLineiques()
         MAJIAffichageTableauxPonctuel()
         MAJIAffichageButtonsPonctuels()
         MAJIReactions()
+        'MAJI_InfoCharges()
         lBuild = False
     End Sub
 
@@ -303,6 +309,16 @@ Public Class Frm_ChargementN
 
                 Me.lbl_UnitLeftSupport.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
                 Me.lbl_UnitRightSupport.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+
+
+                '=== Etat de la dalle
+
+                strPoutreMixte = Bloc("COMPOSITEBEAM")
+                strPoutreAcier = Bloc("STEELBEAM")
+                strPoutreAcierEnrob = Bloc("STEELENCASEDBEAM")
+                Me.lbl_NCoef.Text = Bloc("MODULAR")
+                Me.lbl_Ndalle.Text = Bloc("SLAB")
+                Me.lbl_Nenrob.Text = Bloc("ENCASEMENT")
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -643,10 +659,35 @@ Public Class Frm_ChargementN
 #End Region
 
 #Region " Evènements "
-    Private Sub MAJIAffichageNomChargeEnCours()
+
+    Private Sub MAJIAffichageChargeEnCours()
+
+        '--( Déclarations
+
+        Dim lMixte As Boolean = MyPoutreLoc.lMixte
+        Dim lEnrob As Boolean = MyPoutreLoc.lEnrobage
+        Dim strCasNormal As String
+        Dim lNDalle As Boolean = False
+        Dim lNEnrob As Boolean = False
+        Dim nDalle As Decimal
+        Dim nEnrob As Decimal
+        Dim RH As Decimal
+        Dim t0 As Decimal
+        Dim PsiL As Decimal
+        Dim TimeT As Decimal = MyPoutreLoc.Param.AgeT
+        Dim H0Dalle As Decimal = MyPoutreLoc.Dalle.NotionalSizeH0(MyPoutreLoc)
+        Dim H0Enrob As Decimal = MyPoutreLoc.Section.NotionalSizeEnrobage
+        Dim lConstruction As Boolean
+
+        '--( Initialisation
+
+        RH = MyPoutreLoc.Param.RH
+
+        '=== MISE A JOUR DU NOM DU CHARGEMENT =============================================================================
+
         Select Case True
             Case rad_G1.Checked
-                If MyPoutreLoc.lMixte Then
+                If lMixte Then
                     Me.lbl_NameLoad.Text = strInfoG1
                 Else
                     Me.lbl_NameLoad.Text = strInfoG
@@ -661,6 +702,123 @@ Public Class Frm_ChargementN
             Case rad_Qc.Checked
                 Me.lbl_NameLoad.Text = strInfoQc
         End Select
+
+        '=== MISE A JOUR DU TYPE DE CHARGE ==================================================================================
+
+        Dim strEtaiementSans As String = "Sans étaiement"
+        Dim strEtaiementTotal As String = "Étaiement complet"
+        Dim strEtaiementPoints As String = "Étaiements ponctuels"
+
+        Me.lbl_Etaiement.Text = ""
+
+        If lMixte Then
+            strCasNormal = strPoutreMixte
+        ElseIf lEnrob Then
+            strCasNormal = strPoutreAcierEnrob
+        Else
+            strCasNormal = strPoutreAcier
+        End If
+        Select Case True
+            Case rad_G1.Checked, rad_Qc.Checked
+                lConstruction = rad_Qc.Checked
+                If lMixte Then
+                    lNEnrob = lEnrob
+                    Select Case MyPoutreLoc.TypeEtaiement
+                        Case cls_Poutre.EnuTypeEtaiement.FullyPropped
+                            Me.lbl_EtatDalle.Text = strPoutreMixte
+                            lNDalle = True
+                            Me.lbl_Etaiement.Text = strEtaiementTotal
+                        Case cls_Poutre.EnuTypeEtaiement.PointPropped
+                            lNDalle = False
+                            Me.lbl_Etaiement.Text = strEtaiementPoints
+                        Case cls_Poutre.EnuTypeEtaiement.UnPropped
+                            If lEnrob Then
+                                Me.lbl_EtatDalle.Text = strPoutreAcierEnrob
+                            Else
+                                Me.lbl_EtatDalle.Text = strPoutreAcier
+                            End If
+                            lNDalle = False
+                            Me.lbl_Etaiement.Text = strEtaiementSans
+                    End Select
+                Else
+                    Me.lbl_EtatDalle.Text = strCasNormal
+                    lNDalle = False
+                    lNEnrob = lEnrob
+                End If
+                PsiL = MyPoutreLoc.Param.PsiLPermanent
+                If lNDalle Then
+                    t0 = MyPoutreLoc.Param.AgeT0G1(0)
+                    nDalle = MyPoutreLoc.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, t0, PsiL)
+                End If
+                If lNEnrob Then
+                    If lConstruction Then
+                        nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalenceCT
+                    Else
+                        t0 = MyPoutreLoc.Param.AgeT0G1(1)
+                        nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalence(RH, H0Enrob, TimeT, t0, PsiL)
+                    End If
+                End If
+
+            Case rad_G2.Checked
+                Me.lbl_EtatDalle.Text = strCasNormal
+                lNDalle = lMixte
+                lNEnrob = lEnrob
+                PsiL = MyPoutreLoc.Param.PsiLPermanent
+                If lNDalle Then
+                    t0 = MyPoutreLoc.Param.AgeT0G2(0)
+                    nDalle = MyPoutreLoc.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, t0, PsiL)
+                End If
+                If lNEnrob Then
+                    t0 = MyPoutreLoc.Param.AgeT0G2(1)
+                    nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalence(RH, H0Enrob, TimeT, t0, PsiL)
+                End If
+            Case rad_Q1.Checked
+                Me.lbl_EtatDalle.Text = strCasNormal
+                lNDalle = lMixte
+                lNEnrob = lEnrob
+                If lNDalle Then
+                    nDalle = MyPoutreLoc.Dalle.beton.CoefficientEquivalenceCT
+                End If
+                If lNEnrob Then
+                    nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalenceCT
+                End If
+            Case rad_Q2.Checked
+                Me.lbl_EtatDalle.Text = strCasNormal
+                lNDalle = lMixte
+                lNEnrob = lEnrob
+                If lNDalle Then
+                    nDalle = MyPoutreLoc.Dalle.beton.CoefficientEquivalenceCT
+                End If
+                If lNEnrob Then
+                    nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalenceCT
+                End If
+
+        End Select
+
+        '=== MISE A JOUR DES COEFFICIENTS EQUIVALENCE ACIER BETON ===========================================================
+
+        Me.pan_Ndalle.Visible = lNDalle
+        If lNDalle Then
+            Me.txt_Ndalle.Text = GetStringInUnitN(nDalle, Enu_TypeVariable.SansType, 3, 2, False, True)
+        End If
+
+        Me.pan_Nenrob.Visible = lNEnrob
+        If lNEnrob Then
+            Me.txt_Nenrob.Text = GetStringInUnitN(nEnrob, Enu_TypeVariable.SansType, 3, 2, False, True)
+        End If
+
+        Me.lbl_NCoef.Visible = lNEnrob Or lNDalle
+        Me.pan_CoefEquivalence.Visible = lNEnrob Or lNDalle
+    End Sub
+
+    Private Sub MAJI_InfoCharges()
+
+        Me.pan_Parametres.Visible = MyPoutreLoc.lMixte Or MyPoutreLoc.lEnrobage
+
+        Me.pan_Ndalle.Visible = MyPoutreLoc.lMixte
+
+        Me.pan_Nenrob.Visible = MyPoutreLoc.lEnrobage
+
     End Sub
 
 #End Region
@@ -698,7 +856,7 @@ Public Class Frm_ChargementN
             NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
             NbChargePonctuelle = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Count
 
-            MAJIAffichageNomChargeEnCours()
+            MAJIAffichageChargeEnCours()
             MAJIAffichageChargeSurfacique()
             MAJIAffichageButtonsLineiques()
             MAJIAffichageTableauxLineique()
@@ -854,7 +1012,7 @@ Public Class Frm_ChargementN
 
     Private Sub MAJIAffichageChargeSurfacique(Optional lMAJLargeur As Boolean = True, Optional lMAJPression As Boolean = True)
 
-        'MAJ Affichage des valeurs dans la section charge surfacique 
+        'MAJ AffichageOptFeu des valeurs dans la section charge surfacique 
 
         'If lMAJLargeur Then txt_WidthApplication.Text = MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
         If lMAJLargeur Then txt_WidthApplication.Text = MyPoutreLoc.LargeurInfluence

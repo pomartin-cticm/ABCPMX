@@ -26,12 +26,12 @@ Public Class Frm_PPCasDeCharge
     Dim VmaxG As Decimal
     Dim VminG As Decimal
 
-    Dim lDessDeformee As Boolean = True     ' Affichage de la déformée
-    Dim lDessMoment As Boolean = True       ' Affichage diagramme moments
-    Dim lDessEffortT As Boolean = True      ' Affichage diagramme efforts tranchants
-    Dim lDessInerties As Boolean = True     ' Affichage des inerties
-    Dim lDessNumeros As Boolean = False     ' Affichage des numéros noeuds
-    Dim lDessCharges As Boolean = False     ' Affichage des charges
+    Dim lDessDeformee As Boolean = True     ' AffichageOptFeu de la déformée
+    Dim lDessMoment As Boolean = True       ' AffichageOptFeu diagramme moments
+    Dim lDessEffortT As Boolean = True      ' AffichageOptFeu diagramme efforts tranchants
+    Dim lDessInerties As Boolean = True     ' AffichageOptFeu des inerties
+    Dim lDessNumeros As Boolean = False     ' AffichageOptFeu des numéros noeuds
+    Dim lDessCharges As Boolean = False     ' AffichageOptFeu des charges
     Dim lDessEchLocal As Boolean = False
 
     Private ColorDeg As Color = Color.Cornsilk
@@ -364,11 +364,11 @@ Public Class Frm_PPCasDeCharge
         'iNodeMin = tab_iNodeMmax(iCas)
         'End If
 
-        '--> Affichage de la poutre
+        '--> AffichageOptFeu de la poutre
 
         AddLigne(myGr, MyPenPoutre, 0, 0, Longueur, 0, MyParAff)
 
-        '--> Affichage des noeuds
+        '--> AffichageOptFeu des noeuds
 
         For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
             If iNode = iNodeMax Then
@@ -383,7 +383,7 @@ Public Class Frm_PPCasDeCharge
             End If
         Next
 
-        '--> Affichage des appuis
+        '--> AffichageOptFeu des appuis
 
         'DessineAppui(myGr, MyPoutre.xPositionAppui(True, 1), dApp, MyParAff)
         'DessineAppui(myGr, MyPoutre.xPositionAppui(False, 1), dApp, MyParAff)
@@ -510,7 +510,7 @@ Public Class Frm_PPCasDeCharge
     '    Dim xo, xe, yo, ye As Decimal
     '    Dim myPenC As New Pen(CouleurC, 1.5)
 
-    '    '--> Affichage
+    '    '--> AffichageOptFeu
 
     '    xo = 0
     '    xe = 0
@@ -652,7 +652,7 @@ Public Class Frm_PPCasDeCharge
         Const EPSX As Decimal = 0.5
         Dim qR As Decimal
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         xo = xPos(0)
         xe = xo

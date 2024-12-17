@@ -83,7 +83,7 @@
         '
         '-------------------------------------------------------------------------------------------
         '
-        '   Affichage du répertoire de travail dans une picture box (pour controle de la longueur)
+        '   AffichageOptFeu du répertoire de travail dans une picture box (pour controle de la longueur)
         '
         '-------------------------------------------------------------------------------------------
         '
@@ -117,7 +117,7 @@
         MyGr.DrawLine(MyPenBord, 0, 0, sWI, 0)
         MyGr.DrawLine(MyPenBord, sWI - 1, 0, sWI - 1, sHI - 1)
 
-        '--[ Affichage du nom du répertoire
+        '--[ AffichageOptFeu du nom du répertoire
 
         Chaine = Repertoire
         xChaine = BORDURE

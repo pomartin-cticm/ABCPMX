@@ -111,7 +111,7 @@ Public Class Frm_PMX
 
         AffichageRecentFiles()
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         'Si le chemin d'un fichier est passé en argument
         '--> c'est-à-dire que le logiciel est ouvert par le biais d'un fichier pmx
@@ -441,7 +441,7 @@ Public Class Frm_PMX
         '--> Si ajout d'une nouvelle section
         If dg = DialogResult.OK Then
 
-            '--> Affichage de la section créee
+            '--> AffichageOptFeu de la section créee
             'AffichageFenetreFille()
 
             '--> Mise à jour du TreeView
@@ -900,13 +900,14 @@ Public Class Frm_PMX
 
             Case EnuFenetres.Chargements
 
-                Dim lNew As Boolean = Me.chk_NewF.Checked
 
-                If lNew Then
-                    Frm_ChargementN.ShowDialog()
-                Else
-                    Frm_Chargement.ShowDialog()
-                End If
+
+                Frm_ChargementN.ShowDialog()
+                'If lNew Then
+                '    Frm_ChargementN.ShowDialog()
+                'Else
+                '    Frm_Chargement.ShowDialog()
+                'End If
 
 
             Case EnuFenetres.Gamma
@@ -926,7 +927,13 @@ Public Class Frm_PMX
 
 
             Case EnuFenetres.Incendie
-                Frm_OptionsFeu.ShowDialog()
+                Dim lNew As Boolean = Me.chk_NewF.Checked
+                Frm_OptionsFeuN.ShowDialog()
+                'If lNew Then
+                '    Frm_OptionsFeuN.ShowDialog()
+                'Else
+                '    Frm_OptionsFeu.ShowDialog()
+                'End If
 
             Case EnuFenetres.OptionsCalculPoutre
                 Frm_OptionsCalculPoutre.ShowDialog()
@@ -1619,7 +1626,7 @@ Public Class Frm_PMX
 #Region " Fichiers Recents "
 
     ''' <summary>
-    ''' Affichage des 10 derniers fichiers utilisés
+    ''' AffichageOptFeu des 10 derniers fichiers utilisés
     ''' </summary>
     Public Sub AffichageRecentFiles()
 

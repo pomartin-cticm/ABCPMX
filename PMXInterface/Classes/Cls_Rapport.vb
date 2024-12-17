@@ -534,7 +534,7 @@ Public Class Cls_Rapport
                 lGauche = True
             End If
 
-            '--[ Affichage du texte
+            '--[ AffichageOptFeu du texte
 
             If nMots > 4 Then
 
@@ -648,11 +648,11 @@ Public Class Cls_Rapport
                 Case "RBA"                        'Retour sur balise
                     lSuite = False
                     YPen = YBalise
-                Case "IMG"                          'Affichage d'un dessin on ne traite pas
+                Case "IMG"                          'AffichageOptFeu d'un dessin on ne traite pas
                     lSuite = False
                 Case "DIA"
                     lSuite = False
-                Case "IMF"                          'Affichage d'un dessin à une position forcée
+                Case "IMF"                          'AffichageOptFeu d'un dessin à une position forcée
                     lSuite = False                  'On ne traite pas
 
                 Case "TI0", "TI1"                        'Titre principal
@@ -768,7 +768,7 @@ Public Class Cls_Rapport
         '
         '----------------------------------------------------------------------------------
         '
-        '   Affichage de l'environnement commun de toutes les pages
+        '   AffichageOptFeu de l'environnement commun de toutes les pages
         '
         '----------------------------------------------------------------------------------
         '
@@ -830,11 +830,11 @@ Public Class Cls_Rapport
         '-------------------------------------------------------------
         '
         '   10/01/08 :  Creation - Version 1.00
-        '   06/01/16 :  Modification - V3.03 : Affichage du logo custom - POM
+        '   06/01/16 :  Modification - V3.03 : AffichageOptFeu du logo custom - POM
         '
         '-------------------------------------------------------------
         '
-        '   Affichage de l'environnement commun de toutes les pages
+        '   AffichageOptFeu de l'environnement commun de toutes les pages
         '
         '-------------------------------------------------------------
         '
@@ -927,18 +927,18 @@ Public Class Cls_Rapport
         yTrait = kECH * (RAPPORTA4 * sWi - BORDURE - TaillePied + YTop)
         MyGr.DrawLine(MyPenTrait, kECH * BORDURE, yTrait, kECH * (sWi - BORDURE), yTrait)
 
-        '--[ Affichage de la date
+        '--[ AffichageOptFeu de la date
 
         yPos = yTrait + kECH * TaillePied / 4
         xPos = kECH * (BORDURE + TaillePied / 4)
         MyGr.DrawString(DateEdit, PoliceEnTete, Brushes.Black, xPos, yPos)
 
-        '--[ Affichage du pied de page  (V3.01 - 17/09/14)
+        '--[ AffichageOptFeu du pied de page  (V3.01 - 17/09/14)
 
         xPos = kECH * (BORDURE + 0.5 * (sWi - MyGr.MeasureString(FootNote, PoliceEnTete).Width))
         MyGr.DrawString(FootNote, PoliceEnTete, Brushes.Black, xPos, yPos)
 
-        '--[ Affichage du numéro de la page
+        '--[ AffichageOptFeu du numéro de la page
 
         Chaine = CStr(indPage + 1) & " / " & CStr(Me.NombrePages)
         xPos = kECH * (sWi - BORDURE - (TaillePied / 4)) - MyGr.MeasureString(Chaine, PoliceEnTete).Width
@@ -989,7 +989,7 @@ Public Class Cls_Rapport
         '
         '----------------------------------------------------------------------------------
         '
-        '   Affichage de la ligne séparant deux pages
+        '   AffichageOptFeu de la ligne séparant deux pages
         '
         '----------------------------------------------------------------------------------
         '
@@ -1017,7 +1017,7 @@ Public Class Cls_Rapport
         '
         '----------------------------------------------------------------------------------
         '
-        '   Affichage d'une légende, centrée en iCentre % de la page
+        '   AffichageOptFeu d'une légende, centrée en iCentre % de la page
         '
         '----------------------------------------------------------------------------------
         '
@@ -1048,7 +1048,7 @@ Public Class Cls_Rapport
         '
         '----------------------------------------------------------------------------------
         '
-        '   Affichage du titre principal du document
+        '   AffichageOptFeu du titre principal du document
         '
         '----------------------------------------------------------------------------------
         '
@@ -1098,7 +1098,7 @@ Public Class Cls_Rapport
         '
         '----------------------------------------------------------------------------------
         '
-        '   Affichage d'un titre
+        '   AffichageOptFeu d'un titre
         '
         '----------------------------------------------------------------------------------
         '
@@ -1139,7 +1139,7 @@ Public Class Cls_Rapport
         '
         '----------------------------------------------------------------------------------
         '
-        '   Affichage d'un dessin dans le rapport (balise \IMG)
+        '   AffichageOptFeu d'un dessin dans le rapport (balise \IMG)
         '
         '----------------------------------------------------------------------------------
         '
@@ -1310,7 +1310,7 @@ Public Class Cls_Rapport
     '    '
     '    '----------------------------------------------------------------------------------
     '    '
-    '    '   Affichage des diagrammes d'un cas de charge d'un dessin dans le rapport (balise \DIA)
+    '    '   AffichageOptFeu des diagrammes d'un cas de charge d'un dessin dans le rapport (balise \DIA)
     '    '
     '    '----------------------------------------------------------------------------------
     '    '
@@ -1367,7 +1367,7 @@ Public Class Cls_Rapport
         '
         '----------------------------------------------------------------------------------
         '
-        '   Affichage d'un tableau
+        '   AffichageOptFeu d'un tableau
         '
         '----------------------------------------------------------------------------------
         '
@@ -1443,7 +1443,7 @@ Public Class Cls_Rapport
         '
         '----------------------------------------------------------------------------------
         '
-        '   Affichage d'une cellule de tableau
+        '   AffichageOptFeu d'une cellule de tableau
         '
         '----------------------------------------------------------------------------------
         '
@@ -1465,7 +1465,7 @@ Public Class Cls_Rapport
         If nMots >= 4 Then
             Largeur = Val(Mots(2)) * sWi / 100
 
-            '--[ Affichage d'un fond de cellule
+            '--[ AffichageOptFeu d'un fond de cellule
             If Mots(1).ToUpper = "CELF" Then
                 MyGr.FillRectangle(New SolidBrush(ColorCellFond), XPen, YPen, Largeur, hLigne)
             ElseIf Mots(1).ToUpper = "CELC" Then
@@ -1494,7 +1494,7 @@ Public Class Cls_Rapport
                 MyGr.DrawLine(Pens.Black, XPen, YPen, XPen, YPen + hLigne)
             End If
 
-            '--[ Affichage du texte
+            '--[ AffichageOptFeu du texte
 
             If nMots > 4 Then
 
@@ -1538,7 +1538,7 @@ Public Class Cls_Rapport
         '
         '----------------------------------------------------------------------------------
         '
-        '   Affichage du contenu d'une cellule de tableau
+        '   AffichageOptFeu du contenu d'une cellule de tableau
         '
         '----------------------------------------------------------------------------------
         '
@@ -1647,7 +1647,7 @@ Public Class Cls_Rapport
         '
         '----------------------------------------------------------------------------------
         '
-        '   Affichage d'un texte justifié entre deux marges
+        '   AffichageOptFeu d'un texte justifié entre deux marges
         '
         '----------------------------------------------------------------------------------
         '
@@ -1705,7 +1705,7 @@ Public Class Cls_Rapport
             End If
         Next
 
-        '--> Affichage des lignes justifiées
+        '--> AffichageOptFeu des lignes justifiées
 
         iLast = LigneIndexes.Count - 1
 
@@ -1746,7 +1746,7 @@ Public Class Cls_Rapport
         '
         '----------------------------------------------------------------------------------
         '
-        '   Affichage d'une ligne
+        '   AffichageOptFeu d'une ligne
         '
         '----------------------------------------------------------------------------------
         '
@@ -1816,10 +1816,10 @@ Public Class Cls_Rapport
                 Case "RBA"                        'Retour sur balise
                     lSuite = False
                     YPen = YBalise
-                Case "IMG"                          'Affichage d'un dessin
+                Case "IMG"                          'AffichageOptFeu d'un dessin
                     lSuite = False
                     Me.DrawDessin(MyGr, Ligne.Substring(4), sWi, sHI, lRetourCharriot)
-                Case "IMF"                          'Affichage d'un dessin à une position forcée
+                Case "IMF"                          'AffichageOptFeu d'un dessin à une position forcée
                     lSuite = False                  'sur la dernière balise
                     Dim YPenBack As Single = YPen
                     YPen = YBalise

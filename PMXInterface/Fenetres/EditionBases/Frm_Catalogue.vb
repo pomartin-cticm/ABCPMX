@@ -336,7 +336,7 @@ Public Class Frm_Catalogue
     End Sub
 
     Private Sub TransfertSaisieGridProfile(ByVal Gamme As String, ByVal Profile As String, ByRef MySection As Cls_Section)
-        '--> Affichage des stats de la section séléctionée
+        '--> AffichageOptFeu des stats de la section séléctionée
         lbl_val_Ht.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Ht, Enu_TypeVariable.Dimension, 4, 3, True, True)
         lbl_val_Bf.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Bf, Enu_TypeVariable.Dimension, 4, 3, True, True)
         lbl_val_Tf.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Tf, Enu_TypeVariable.Dimension, 4, 3, True, True)
@@ -360,7 +360,7 @@ Public Class Frm_Catalogue
         PoidsPropreLoc = MyPoutreLoc.ChargeRepartiePP()
         MySection.ProfilA.InitialiseProprietes()
 
-        '--> Affichage des propriétés de la section séléctionnée
+        '--> AffichageOptFeu des propriétés de la section séléctionnée
 
         lbl_val_G.Text = GetStringInUnit(PoidsPropreLoc.qPP_ProfilAcier / MyPoutreLoc.Param.GraviteG, Enu_TypeVariable.SansType, 4, 3, False)
         lbl_val_A.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.Aire, Enu_TypeVariable.AireCM2, 4, 3, False)
@@ -401,7 +401,7 @@ Public Class Frm_Catalogue
         lbl_val_Tw.MouseEnter, img_Tw.MouseEnter,
         lbl_val_Rc.MouseEnter, img_Rc.MouseEnter
 
-        '--> Affichage en rouge sur le dessin des flèches et valeurs de la dimension MouseEnter
+        '--> AffichageOptFeu en rouge sur le dessin des flèches et valeurs de la dimension MouseEnter
         If sender.Equals(img_Ht) Or sender.Equals(lbl_val_Ht) Then
             type = "Ht"
         ElseIf sender.Equals(img_Bf) Or sender.Equals(lbl_val_Bf) Then

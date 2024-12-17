@@ -42,6 +42,17 @@ Partial Class Frm_ChargementN
         Me.lbl_Span = New System.Windows.Forms.Label()
         Me.lbl_ReactionsAppuis = New System.Windows.Forms.Label()
         Me.pan_ChoixCharges = New System.Windows.Forms.Panel()
+        Me.pan_CoefEquivalence = New System.Windows.Forms.Panel()
+        Me.pan_Nenrob = New System.Windows.Forms.Panel()
+        Me.lbl_Nenrob = New System.Windows.Forms.Label()
+        Me.txt_Nenrob = New System.Windows.Forms.TextBox()
+        Me.lbl_NCoef = New System.Windows.Forms.Label()
+        Me.pan_Ndalle = New System.Windows.Forms.Panel()
+        Me.lbl_Ndalle = New System.Windows.Forms.Label()
+        Me.txt_Ndalle = New System.Windows.Forms.TextBox()
+        Me.pan_Parametres = New System.Windows.Forms.Panel()
+        Me.lbl_Etaiement = New System.Windows.Forms.Label()
+        Me.lbl_EtatDalle = New System.Windows.Forms.Label()
         Me.pan_ChoixCas = New System.Windows.Forms.Panel()
         Me.rad_G1 = New System.Windows.Forms.RadioButton()
         Me.rad_Q1 = New System.Windows.Forms.RadioButton()
@@ -142,6 +153,10 @@ Partial Class Frm_ChargementN
         Me.TLpan_PanneauGauche.SuspendLayout()
         Me.pan_ReactionsAppuis.SuspendLayout()
         Me.pan_ChoixCharges.SuspendLayout()
+        Me.pan_CoefEquivalence.SuspendLayout()
+        Me.pan_Nenrob.SuspendLayout()
+        Me.pan_Ndalle.SuspendLayout()
+        Me.pan_Parametres.SuspendLayout()
         Me.pan_ChoixCas.SuspendLayout()
         Me.pan_Span.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -324,6 +339,7 @@ Partial Class Frm_ChargementN
         Me.txt_RightSupport.ReadOnly = True
         Me.txt_RightSupport.Size = New System.Drawing.Size(58, 20)
         Me.txt_RightSupport.TabIndex = 81
+        Me.txt_RightSupport.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lbl_UnitLeftSupport
         '
@@ -342,6 +358,7 @@ Partial Class Frm_ChargementN
         Me.txt_LeftSupport.ReadOnly = True
         Me.txt_LeftSupport.Size = New System.Drawing.Size(58, 20)
         Me.txt_LeftSupport.TabIndex = 81
+        Me.txt_LeftSupport.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lbl_Span
         '
@@ -375,6 +392,8 @@ Partial Class Frm_ChargementN
         '
         Me.pan_ChoixCharges.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_ChoixCharges.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ChoixCharges.Controls.Add(Me.pan_CoefEquivalence)
+        Me.pan_ChoixCharges.Controls.Add(Me.pan_Parametres)
         Me.pan_ChoixCharges.Controls.Add(Me.pan_ChoixCas)
         Me.pan_ChoixCharges.Controls.Add(Me.lbl_ChoixCharge)
         Me.pan_ChoixCharges.Controls.Add(Me.lbl_NameLoad)
@@ -385,6 +404,108 @@ Partial Class Frm_ChargementN
         Me.pan_ChoixCharges.Size = New System.Drawing.Size(250, 250)
         Me.pan_ChoixCharges.TabIndex = 2
         '
+        'pan_CoefEquivalence
+        '
+        Me.pan_CoefEquivalence.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_CoefEquivalence.Controls.Add(Me.pan_Nenrob)
+        Me.pan_CoefEquivalence.Controls.Add(Me.lbl_NCoef)
+        Me.pan_CoefEquivalence.Controls.Add(Me.pan_Ndalle)
+        Me.pan_CoefEquivalence.Location = New System.Drawing.Point(3, 174)
+        Me.pan_CoefEquivalence.Name = "pan_CoefEquivalence"
+        Me.pan_CoefEquivalence.Size = New System.Drawing.Size(242, 72)
+        Me.pan_CoefEquivalence.TabIndex = 78
+        '
+        'pan_Nenrob
+        '
+        Me.pan_Nenrob.Controls.Add(Me.lbl_Nenrob)
+        Me.pan_Nenrob.Controls.Add(Me.txt_Nenrob)
+        Me.pan_Nenrob.Location = New System.Drawing.Point(0, 43)
+        Me.pan_Nenrob.Name = "pan_Nenrob"
+        Me.pan_Nenrob.Size = New System.Drawing.Size(234, 24)
+        Me.pan_Nenrob.TabIndex = 2
+        '
+        'lbl_Nenrob
+        '
+        Me.lbl_Nenrob.Location = New System.Drawing.Point(5, 5)
+        Me.lbl_Nenrob.Name = "lbl_Nenrob"
+        Me.lbl_Nenrob.Size = New System.Drawing.Size(165, 13)
+        Me.lbl_Nenrob.TabIndex = 85
+        Me.lbl_Nenrob.Text = "lbl_Nenrob"
+        Me.lbl_Nenrob.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txt_Nenrob
+        '
+        Me.txt_Nenrob.BackColor = System.Drawing.Color.LightGray
+        Me.txt_Nenrob.Location = New System.Drawing.Point(173, 1)
+        Me.txt_Nenrob.Name = "txt_Nenrob"
+        Me.txt_Nenrob.ReadOnly = True
+        Me.txt_Nenrob.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Nenrob.TabIndex = 84
+        '
+        'lbl_NCoef
+        '
+        Me.lbl_NCoef.Location = New System.Drawing.Point(1, 0)
+        Me.lbl_NCoef.Name = "lbl_NCoef"
+        Me.lbl_NCoef.Size = New System.Drawing.Size(232, 16)
+        Me.lbl_NCoef.TabIndex = 3
+        Me.lbl_NCoef.Text = "lbl_NCoef"
+        Me.lbl_NCoef.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'pan_Ndalle
+        '
+        Me.pan_Ndalle.Controls.Add(Me.lbl_Ndalle)
+        Me.pan_Ndalle.Controls.Add(Me.txt_Ndalle)
+        Me.pan_Ndalle.Location = New System.Drawing.Point(0, 19)
+        Me.pan_Ndalle.Name = "pan_Ndalle"
+        Me.pan_Ndalle.Size = New System.Drawing.Size(234, 24)
+        Me.pan_Ndalle.TabIndex = 1
+        '
+        'lbl_Ndalle
+        '
+        Me.lbl_Ndalle.Location = New System.Drawing.Point(5, 5)
+        Me.lbl_Ndalle.Name = "lbl_Ndalle"
+        Me.lbl_Ndalle.Size = New System.Drawing.Size(165, 13)
+        Me.lbl_Ndalle.TabIndex = 85
+        Me.lbl_Ndalle.Text = "lbl_Ndalle"
+        Me.lbl_Ndalle.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txt_Ndalle
+        '
+        Me.txt_Ndalle.BackColor = System.Drawing.Color.LightGray
+        Me.txt_Ndalle.Location = New System.Drawing.Point(173, 1)
+        Me.txt_Ndalle.Name = "txt_Ndalle"
+        Me.txt_Ndalle.ReadOnly = True
+        Me.txt_Ndalle.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Ndalle.TabIndex = 84
+        '
+        'pan_Parametres
+        '
+        Me.pan_Parametres.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Parametres.Controls.Add(Me.lbl_Etaiement)
+        Me.pan_Parametres.Controls.Add(Me.lbl_EtatDalle)
+        Me.pan_Parametres.Location = New System.Drawing.Point(3, 131)
+        Me.pan_Parametres.Name = "pan_Parametres"
+        Me.pan_Parametres.Size = New System.Drawing.Size(242, 44)
+        Me.pan_Parametres.TabIndex = 80
+        '
+        'lbl_Etaiement
+        '
+        Me.lbl_Etaiement.Location = New System.Drawing.Point(4, 25)
+        Me.lbl_Etaiement.Name = "lbl_Etaiement"
+        Me.lbl_Etaiement.Size = New System.Drawing.Size(232, 16)
+        Me.lbl_Etaiement.TabIndex = 1
+        Me.lbl_Etaiement.Text = "lbl_Etaiement"
+        Me.lbl_Etaiement.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'lbl_EtatDalle
+        '
+        Me.lbl_EtatDalle.Location = New System.Drawing.Point(5, 2)
+        Me.lbl_EtatDalle.Name = "lbl_EtatDalle"
+        Me.lbl_EtatDalle.Size = New System.Drawing.Size(232, 20)
+        Me.lbl_EtatDalle.TabIndex = 0
+        Me.lbl_EtatDalle.Text = "lbl_EtatDalle"
+        Me.lbl_EtatDalle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'pan_ChoixCas
         '
         Me.pan_ChoixCas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
@@ -393,9 +514,9 @@ Partial Class Frm_ChargementN
         Me.pan_ChoixCas.Controls.Add(Me.rad_G2)
         Me.pan_ChoixCas.Controls.Add(Me.rad_Q2)
         Me.pan_ChoixCas.Controls.Add(Me.rad_Qc)
-        Me.pan_ChoixCas.Location = New System.Drawing.Point(12, 35)
+        Me.pan_ChoixCas.Location = New System.Drawing.Point(3, 24)
         Me.pan_ChoixCas.Name = "pan_ChoixCas"
-        Me.pan_ChoixCas.Size = New System.Drawing.Size(217, 80)
+        Me.pan_ChoixCas.Size = New System.Drawing.Size(242, 80)
         Me.pan_ChoixCas.TabIndex = 78
         '
         'rad_G1
@@ -412,7 +533,7 @@ Partial Class Frm_ChargementN
         'rad_Q1
         '
         Me.rad_Q1.AutoSize = True
-        Me.rad_Q1.Location = New System.Drawing.Point(114, 7)
+        Me.rad_Q1.Location = New System.Drawing.Point(130, 7)
         Me.rad_Q1.Name = "rad_Q1"
         Me.rad_Q1.Size = New System.Drawing.Size(60, 17)
         Me.rad_Q1.TabIndex = 0
@@ -434,7 +555,7 @@ Partial Class Frm_ChargementN
         'rad_Q2
         '
         Me.rad_Q2.AutoSize = True
-        Me.rad_Q2.Location = New System.Drawing.Point(114, 30)
+        Me.rad_Q2.Location = New System.Drawing.Point(130, 30)
         Me.rad_Q2.Name = "rad_Q2"
         Me.rad_Q2.Size = New System.Drawing.Size(60, 17)
         Me.rad_Q2.TabIndex = 0
@@ -445,7 +566,7 @@ Partial Class Frm_ChargementN
         'rad_Qc
         '
         Me.rad_Qc.AutoSize = True
-        Me.rad_Qc.Location = New System.Drawing.Point(114, 53)
+        Me.rad_Qc.Location = New System.Drawing.Point(130, 53)
         Me.rad_Qc.Name = "rad_Qc"
         Me.rad_Qc.Size = New System.Drawing.Size(60, 17)
         Me.rad_Qc.TabIndex = 0
@@ -456,7 +577,7 @@ Partial Class Frm_ChargementN
         'lbl_ChoixCharge
         '
         Me.lbl_ChoixCharge.AutoSize = True
-        Me.lbl_ChoixCharge.Location = New System.Drawing.Point(11, 16)
+        Me.lbl_ChoixCharge.Location = New System.Drawing.Point(7, 7)
         Me.lbl_ChoixCharge.Name = "lbl_ChoixCharge"
         Me.lbl_ChoixCharge.Size = New System.Drawing.Size(83, 13)
         Me.lbl_ChoixCharge.TabIndex = 79
@@ -465,9 +586,9 @@ Partial Class Frm_ChargementN
         'lbl_NameLoad
         '
         Me.lbl_NameLoad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_NameLoad.Location = New System.Drawing.Point(12, 121)
+        Me.lbl_NameLoad.Location = New System.Drawing.Point(3, 103)
         Me.lbl_NameLoad.Name = "lbl_NameLoad"
-        Me.lbl_NameLoad.Size = New System.Drawing.Size(217, 29)
+        Me.lbl_NameLoad.Size = New System.Drawing.Size(242, 29)
         Me.lbl_NameLoad.TabIndex = 78
         Me.lbl_NameLoad.Text = "lbl_NameLoad"
         Me.lbl_NameLoad.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1456,6 +1577,12 @@ Partial Class Frm_ChargementN
         Me.pan_ReactionsAppuis.PerformLayout()
         Me.pan_ChoixCharges.ResumeLayout(False)
         Me.pan_ChoixCharges.PerformLayout()
+        Me.pan_CoefEquivalence.ResumeLayout(False)
+        Me.pan_Nenrob.ResumeLayout(False)
+        Me.pan_Nenrob.PerformLayout()
+        Me.pan_Ndalle.ResumeLayout(False)
+        Me.pan_Ndalle.PerformLayout()
+        Me.pan_Parametres.ResumeLayout(False)
         Me.pan_ChoixCas.ResumeLayout(False)
         Me.pan_ChoixCas.PerformLayout()
         Me.pan_Span.ResumeLayout(False)
@@ -1586,4 +1713,15 @@ Partial Class Frm_ChargementN
     Friend WithEvents txt_Indice_Ponctuelle As TextBox
     Friend WithEvents ErrorProvider_Frm_Chargement As ErrorProvider
     Friend WithEvents imgList_Navigation As ImageList
+    Friend WithEvents pan_Parametres As Panel
+    Friend WithEvents lbl_EtatDalle As Label
+    Friend WithEvents lbl_NCoef As Label
+    Friend WithEvents pan_Nenrob As Panel
+    Friend WithEvents lbl_Nenrob As Label
+    Friend WithEvents txt_Nenrob As TextBox
+    Friend WithEvents pan_Ndalle As Panel
+    Friend WithEvents lbl_Ndalle As Label
+    Friend WithEvents txt_Ndalle As TextBox
+    Friend WithEvents pan_CoefEquivalence As Panel
+    Friend WithEvents lbl_Etaiement As Label
 End Class

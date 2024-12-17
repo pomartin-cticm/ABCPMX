@@ -159,21 +159,36 @@ Public Class Frm_Connection
     ''' Initialise les valeurs des variables locales 
     ''' </summary>
     Private Sub InitialiserVariables()
+
+        '--( Déclarations
+
+        Dim lMixte As Boolean
+        Dim lTrans As Boolean       ' Nervure perpendiculaire à la poutre
+        Dim lNCont As Boolean       ' Nervure béton continue sur semelle
+
+        '--( Dupplication de la poutre en cours
+
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
 
+        '--( Initialisation des paramètres
+
         NbTravees = MyPoutreLoc.NbTravees
+        lMixte = (MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte)
+        lTrans = (MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+        lNCont = Not (MyPoutreLoc.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu)
 
         'Par défaut on affiche la première travée sur deux appuis
         traveeEnCours = 1
 
-
         MAJ_Valeurs_Limites()
 
-        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
-            lBacTransv = True
-        Else
-            lBacTransv = False
-        End If
+        'If lMixte And lTrans Then
+        '    lBacTransv = True
+        'Else
+        '    lBacTransv = False
+        'End If
+        '== On applique les dispositions de bacs perpendiculaires si la nervure est continue
+        lBacTransv = lMixte And lTrans And lNCont
 
         'Corrige les valeurs de certaines variables si nécessaire (utile en cas d'un changement de certaines valeurs dans les fenêtres précédentes)
         For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee

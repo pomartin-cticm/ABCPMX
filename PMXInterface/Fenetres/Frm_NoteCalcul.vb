@@ -65,7 +65,7 @@ Public Class Frm_NoteCalcul
 
     Public Sub GestionLangue()
         '--------------------------------------------------------------------
-        '   Affichage du texte de la fenêtre dans la langue séléctionnée
+        '   AffichageOptFeu du texte de la fenêtre dans la langue séléctionnée
         '--------------------------------------------------------------------
 
         If File.Exists(LogicielFichiers.Langue) Then
@@ -905,7 +905,7 @@ Public Class Frm_NoteCalcul
             Me.TableLayoutPanel_NDC.ColumnStyles(0).Width = widthImage - widthImage * (TrackBar_Zoom.Value / 100)
             Me.TableLayoutPanel_NDC.ColumnStyles(2).Width = widthImage - widthImage * (TrackBar_Zoom.Value / 100)
 
-            '--> Affichage des boutons pour zoomer et dézoomer
+            '--> AffichageOptFeu des boutons pour zoomer et dézoomer
             If TrackBar_Zoom.Value = 100 Then
                 Btn_Zoomer.Enabled = False
             ElseIf TrackBar_Zoom.Value = 0 Then

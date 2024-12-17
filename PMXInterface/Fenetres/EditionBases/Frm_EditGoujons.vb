@@ -209,7 +209,7 @@ Public Class Frm_EditGoujons
         iStud = Me.Grid_Studs.Rows.Count
         Me.Grid_Studs.Rows(iStud - 1).Height = 20
 
-        '--[ Affichage
+        '--[ AffichageOptFeu
 
         Me.Grid_Studs(i0 + 0, iStud - 1).Value = MyBaseG_loc.nom
         Me.Grid_Studs(i0 + 1, iStud - 1).Value = GetStringNoUnit(MyBaseG_loc.hsc, Enu_TypeVariable.Dimension) 'hauteur totale

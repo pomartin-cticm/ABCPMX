@@ -390,7 +390,7 @@ Public Class Frm_Enrobage
     End Sub
 
     ''' <summary>
-    ''' Affichage des données du lit d'armatures à l'affichage, pour la section en cours
+    ''' AffichageOptFeu des données du lit d'armatures à l'affichage, pour la section en cours
     ''' </summary>
     Private Sub AffichageLitArmaturesEnCours()
         Dim iArma As Integer
@@ -462,7 +462,7 @@ Public Class Frm_Enrobage
 
 
     ''' <summary>
-    ''' Affichage d'une diamètre dans une combo box déjà remplie
+    ''' AffichageOptFeu d'une diamètre dans une combo box déjà remplie
     ''' </summary>
     ''' <param name="MyCombo">      [E/S]   Combobox                        </param>
     ''' <param name="MyDiametre">   [E]     Valeur du diamètre à afficher   </param>

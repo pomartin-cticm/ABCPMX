@@ -564,7 +564,7 @@ Public Class Frm_SectionSFB
         '
         '----------------------------------------------------------------------------------------------
         '
-        '   Affichage graphique de la section dans la fenêtre
+        '   AffichageOptFeu graphique de la section dans la fenêtre
         '
         '----------------------------------------------------------------------------------------------
         '
@@ -741,7 +741,7 @@ Public Class Frm_SectionSFB
         '
         '----------------------------------------------------------------------------------------------
         '
-        '   Affichage de l'épaisseur max et de fy calcul
+        '   AffichageOptFeu de l'épaisseur max et de fy calcul
         '
         '----------------------------------------------------------------------------------------------
         '
@@ -822,7 +822,7 @@ Public Class Frm_SectionSFB
         '
         '----------------------------------------------------------------------------------------------
         '
-        '   Affichage de l'épaisseur max et de fy calcul
+        '   AffichageOptFeu de l'épaisseur max et de fy calcul
         '
         '----------------------------------------------------------------------------------------------
         '
@@ -1572,7 +1572,7 @@ Public Class Frm_SectionSFB
         '
         '-----------------------------------------------------------------------------------------------------
         '
-        '   Affichage à l'écran de la liste des aciers compatibles
+        '   AffichageOptFeu à l'écran de la liste des aciers compatibles
         '
         '-----------------------------------------------------------------------------------------------------
         '
@@ -1600,7 +1600,7 @@ Public Class Frm_SectionSFB
 
         lTous = (Choice <> EnuChoiceAcier.BaseIfNoStandardSteel) Or (Choice = EnuChoiceAcier.BaseIfNoStandardSteel And nDispo = 0)
 
-        '--> Affichage
+        '--> AffichageOptFeu
 
         nbSteels = 0
         iRank = 0
@@ -1638,7 +1638,7 @@ Public Class Frm_SectionSFB
         iRank += 1
         Me.GridAciers.Rows(iRank - 1).Height = 14
 
-        '--> Affichage de la nuance en fonction de nouvelle nuance ou pas ?
+        '--> AffichageOptFeu de la nuance en fonction de nouvelle nuance ou pas ?
 
         If lNewGrade Then
             Me.GridAciers(0, iRank - 1).Value = MySteel.Nuance
@@ -1648,7 +1648,7 @@ Public Class Frm_SectionSFB
             Me.GridAciers(0, iRank - 1).Style.ForeColor = Me.GridAciers.BackgroundColor
         End If
 
-        '--> Affichage de la qualité
+        '--> AffichageOptFeu de la qualité
 
         If lNewGrade Or lNewQualite Then
             Me.GridAciers(1, iRank - 1).Value = MySteel.Qualite
@@ -1662,7 +1662,7 @@ Public Class Frm_SectionSFB
             Me.GridAciers(1, iRank - 1).Style.ForeColor = Me.GridAciers.BackgroundColor
         End If
 
-        '--> Affichage de la courbe de réduction
+        '--> AffichageOptFeu de la courbe de réduction
 
         Me.GridAciers(2, iRank - 1).Value = MySteel.Reduc
 

@@ -841,7 +841,7 @@ Public Class Frm_Chargement
 
     Private Sub MAJIAffichageChargeSurfacique(Optional lMAJLargeur As Boolean = True, Optional lMAJPression As Boolean = True)
 
-        'MAJ Affichage des valeurs dans la section charge surfacique 
+        'MAJ AffichageOptFeu des valeurs dans la section charge surfacique 
 
         'If lMAJLargeur Then txt_WidthApplication.Text = MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
         If lMAJLargeur Then txt_WidthApplication.Text = MyPoutreLoc.LargeurInfluence

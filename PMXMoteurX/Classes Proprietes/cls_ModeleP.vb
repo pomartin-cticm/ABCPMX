@@ -1461,7 +1461,7 @@ Public Class cls_ModeleP
                 'lActif = lLitActif(iPos) Or Me.Enrobage.LitArma(iArma).lBarreActive(iArma, iPos)
                 lActif = mySection.Enrobage.LitArma(iArma).lBarreActive(iArma, iPos)
 
-                If lActif Then
+                If lActif And (NbBarres > 0) Then
                     For iBarre = 1 To NbBarres
                         zArma = mySection.zPosArmaEnrobage(iArma, iPos, iBarre)
                         PhiA = mySection.Enrobage.LitArma(iArma).PhiBarre(iPos)
@@ -1534,7 +1534,7 @@ Public Class cls_ModeleP
             lActif = lLitActif(iArma) Or mySection.Enrobage.LitArma(iArma).lActiveExt
             PhiA = mySection.Enrobage.LitArma(iArma).PhiExt
 
-            If lActif And NbBarres > 0 Then
+            If lActif And (NbBarres > 0) Then
 
                 For iBarre = 0 To NbBarres - 1
                     yBarre = yArmaExt - yDecalArmaBord(iBarre) * PhiA

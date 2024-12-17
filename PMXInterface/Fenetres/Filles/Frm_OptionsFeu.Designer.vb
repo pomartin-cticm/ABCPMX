@@ -38,6 +38,7 @@ Partial Class Frm_OptionsFeu
         Me.lbl_ParamCalcul = New System.Windows.Forms.Label()
         Me.pan_ParamCalcul = New System.Windows.Forms.Panel()
         Me.pan_OptionsFEM = New System.Windows.Forms.Panel()
+        Me.etq_UnitU = New System.Windows.Forms.Label()
         Me.chk_RhoCconstante = New System.Windows.Forms.CheckBox()
         Me.txt_U = New System.Windows.Forms.TextBox()
         Me.chk_ANFrance = New System.Windows.Forms.CheckBox()
@@ -126,7 +127,6 @@ Partial Class Frm_OptionsFeu
         Me.chk_ArmaFroid = New System.Windows.Forms.CheckBox()
         Me.chk_AcierGalva = New System.Windows.Forms.CheckBox()
         Me.ErrorProvider_Frm_OptionsFeu = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.etq_UnitU = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -386,6 +386,16 @@ Partial Class Frm_OptionsFeu
         Me.pan_OptionsFEM.Name = "pan_OptionsFEM"
         Me.pan_OptionsFEM.Size = New System.Drawing.Size(353, 77)
         Me.pan_OptionsFEM.TabIndex = 121
+        '
+        'etq_UnitU
+        '
+        Me.etq_UnitU.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitU.AutoSize = True
+        Me.etq_UnitU.Location = New System.Drawing.Point(255, 50)
+        Me.etq_UnitU.Name = "etq_UnitU"
+        Me.etq_UnitU.Size = New System.Drawing.Size(55, 13)
+        Me.etq_UnitU.TabIndex = 122
+        Me.etq_UnitU.Text = "etq_UnitU"
         '
         'chk_RhoCconstante
         '
@@ -1216,16 +1226,6 @@ Partial Class Frm_OptionsFeu
         '
         Me.ErrorProvider_Frm_OptionsFeu.ContainerControl = Me
         '
-        'etq_UnitU
-        '
-        Me.etq_UnitU.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitU.AutoSize = True
-        Me.etq_UnitU.Location = New System.Drawing.Point(255, 50)
-        Me.etq_UnitU.Name = "etq_UnitU"
-        Me.etq_UnitU.Size = New System.Drawing.Size(55, 13)
-        Me.etq_UnitU.TabIndex = 122
-        Me.etq_UnitU.Text = "etq_UnitU"
-        '
         'Frm_OptionsFeu
         '
         Me.AcceptButton = Me.btn_OK
@@ -1235,6 +1235,8 @@ Partial Class Frm_OptionsFeu
         Me.ClientSize = New System.Drawing.Size(746, 551)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_OptionsFeu"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_OptionsFeu"

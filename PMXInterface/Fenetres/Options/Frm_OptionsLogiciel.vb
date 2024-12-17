@@ -432,7 +432,7 @@ Public Class Frm_OptionsLogiciel
 
     Private Sub AccesModeExpert()
 
-        '--> Affichage de la fenêtre fille Expert
+        '--> AffichageOptFeu de la fenêtre fille Expert
         'AfficheMaFille(Frm_O_Expert.TableLayoutPanel_Contenu)
         LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.Expert
         AfficherFenetreFille()

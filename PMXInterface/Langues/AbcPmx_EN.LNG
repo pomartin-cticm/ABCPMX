@@ -202,6 +202,12 @@ INFO_G2					= Additional permanent loads (after concrete pouring)
 INFO_Q1					= Live load 1
 INFO_Q2					= Live load 2
 INFO_QC					= Construction phase live load
+COMPOSITEBEAM			= Composite beam
+STEELBEAM				= Steel beam
+STEELENCASEDBEAM		= Partially encased steel beam
+MODULAR					= Modular ratio
+SLAB					= Slab
+ENCASEMENT				= Encasement
 
 #FRM_COMBINATIONS
 TITLE					= Combinations
@@ -459,6 +465,8 @@ AXISTEMP				= temperature at axis
 FRENCHNA				= Thermal conductivity of concrete according to French NA
 CONSTANTRHOC			= Constant density of concrete
 MOISTURECONTENT			= Moisture content
+ENCASEDROOTFILLET		= Root fillets are taken into account in the fire design of encased section according to Annex F of EN 1994-1-2
+SIZEELT					= Size of the elements
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Combination factors

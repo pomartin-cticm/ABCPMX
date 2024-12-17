@@ -226,7 +226,7 @@ Module Mod_OutilsGraph
         MyGr.FillRectangle(MyBrushFond, xEo - xDecal - FLOU, yEo - yDecal, Wmax + 2 * FLOU, Hmax)
         MyGr.DrawRectangle(MyPen, xEo - xDecal - FLOU, yEo - yDecal, Wmax + 2 * FLOU, Hmax)
 
-        '--> Affichage des textes dans le cadre
+        '--> AffichageOptFeu des textes dans le cadre
 
         yCum = 0
         For i = 0 To NbChaine - 1
@@ -307,7 +307,7 @@ Module Mod_OutilsGraph
         '----------------------------------------------------------------------------------------
         '   04/12/23 :  Création - Version 1.00 - POM
         '----------------------------------------------------------------------------------------
-        '   Affichage d'un cercle
+        '   AffichageOptFeu d'un cercle
         '----------------------------------------------------------------------------------------
         '   MyGr        [E] :   
         '   MyPen       [E] :   
@@ -333,7 +333,7 @@ Module Mod_OutilsGraph
         '
         '----------------------------------------------------------------------------------------
         '
-        '   Affichage de l'ouverture rebouchée aux extrémités
+        '   AffichageOptFeu de l'ouverture rebouchée aux extrémités
         '
         '----------------------------------------------------------------------------------------
         '
@@ -399,7 +399,7 @@ Module Mod_OutilsGraph
 
         Next
 
-        '--[ Affichage de la zone
+        '--[ AffichageOptFeu de la zone
 
         RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts + 1, MyParAff, True)
         RemplirZone(MyGr, MyHatch, xPts, yPts, nbPts + 1, MyParAff, True)
@@ -414,7 +414,7 @@ Module Mod_OutilsGraph
         '
         '----------------------------------------------------------------------------------------
         '
-        '   Affichage de l'ouverture rebouchée aux extrémités d'une poutre courbe
+        '   AffichageOptFeu de l'ouverture rebouchée aux extrémités d'une poutre courbe
         '
         '----------------------------------------------------------------------------------------
         '
@@ -483,7 +483,7 @@ Module Mod_OutilsGraph
 
         Next
 
-        '--[ Affichage de la zone
+        '--[ AffichageOptFeu de la zone
 
         RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts + 1, MyParAff, True)
         RemplirZone(MyGr, MyHatch, xPts, yPts, nbPts + 1, MyParAff, True)
@@ -495,7 +495,7 @@ Module Mod_OutilsGraph
                        ByVal ParAff As struc_Affichage, ByVal lContour As Boolean)
         '----------------------------------------------------------------------------------------
         '
-        '   Affichage d'un cercle
+        '   AffichageOptFeu d'un cercle
         '
         '----------------------------------------------------------------------------------------
         '
@@ -524,7 +524,7 @@ Module Mod_OutilsGraph
                        ByVal ParAff As Struc_Affichage, ByVal lContour As Boolean, ByVal pen As Pen)
         '----------------------------------------------------------------------------------------
         '
-        '   Affichage d'un cercle
+        '   AffichageOptFeu d'un cercle
         '
         '----------------------------------------------------------------------------------------
         '
@@ -552,7 +552,7 @@ Module Mod_OutilsGraph
                        ByVal ParAff As Struc_Affichage)
         '----------------------------------------------------------------------------------------
         '
-        '   Affichage d'un arc
+        '   AffichageOptFeu d'un arc
         '
         '----------------------------------------------------------------------------------------
         '
@@ -582,7 +582,7 @@ Module Mod_OutilsGraph
                          EpaisseurContour As Decimal, ByVal ParAff As Struc_Affichage, ByVal lContour As Boolean)
         '----------------------------------------------------------------------------------------
         '
-        '   Affichage du tour d'un cercle 
+        '   AffichageOptFeu du tour d'un cercle 
         '   --> Ajout BD - 09/04/2020
         '----------------------------------------------------------------------------------------
         '
@@ -645,7 +645,7 @@ Module Mod_OutilsGraph
         '
         '-----------------------------------------------------------------------------------------------------
         '
-        '   Affichage d'un rectangle plein
+        '   AffichageOptFeu d'un rectangle plein
         '
         '-----------------------------------------------------------------------------------------------------
         '
@@ -683,7 +683,7 @@ Module Mod_OutilsGraph
         '
         '-----------------------------------------------------------------------------------------------------
         '
-        '   Affichage d'un rectangle plein avec possibilité de maitriser le dessin des contours 
+        '   AffichageOptFeu d'un rectangle plein avec possibilité de maitriser le dessin des contours 
         '
         '-----------------------------------------------------------------------------------------------------
         '
@@ -720,7 +720,7 @@ Module Mod_OutilsGraph
 #Region " Lignes "
 
     ''' <summary>
-    ''' Affichage à l'écran d'une ligne
+    ''' AffichageOptFeu à l'écran d'une ligne
     ''' </summary>
     ''' <param name="MyGr">     [E] Graphics                                                        </param>
     ''' <param name="xo">       [E] Coordonnées x origine de la ligne dans le repère de l'objet   </param>
@@ -1004,7 +1004,7 @@ Module Mod_OutilsGraph
         '
         '----------------------------------------------------------------------------------------
         '
-        '   Affichage d'un symbole (+indice) d'équation
+        '   AffichageOptFeu d'un symbole (+indice) d'équation
         '
         '----------------------------------------------------------------------------------------
         '
@@ -1072,7 +1072,7 @@ Module Mod_OutilsGraph
     '    '
     '    '----------------------------------------------------------------------------------------
     '    '
-    '    '   Affichage d'un symbole (+indice) d'équation
+    '    '   AffichageOptFeu d'un symbole (+indice) d'équation
     '    '
     '    '----------------------------------------------------------------------------------------
     '    '
@@ -1199,7 +1199,7 @@ Module Mod_OutilsGraph
                           ByVal lContour As Boolean, ByVal lRemplissage As Boolean)
         '-------------------------------------------------------------------------------------
         '
-        '   Affichage d'une zone définie par une liste de points dans un graphics
+        '   AffichageOptFeu d'une zone définie par une liste de points dans un graphics
         '
         '-------------------------------------------------------------------------------------
         '
@@ -1298,7 +1298,7 @@ Module Mod_OutilsGraph
 #Region " Affichage du logo Logiciel "
 
     ''' <summary>
-    ''' Affichage du nom logiciel - Page de garde + En haut à gauche
+    ''' AffichageOptFeu du nom logiciel - Page de garde + En haut à gauche
     ''' 22/11/19 - MODIF BD pour Innno3DJoints
     ''' </summary>
     ''' <param name="MyGr">Graphics dans lequel on affiche</param>

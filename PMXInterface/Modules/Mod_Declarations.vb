@@ -334,6 +334,14 @@ Public Module Mod_Declarations
 
 #Region " Enumérations "
 
+    Public Enum Enu_AffichageOptions
+        Poutre
+        Calcul
+        Parametres
+    End Enum
+
+    Public AffichageOptFeu As Enu_AffichageOptions = Enu_AffichageOptions.Poutre
+
     Public Enum Enu_AffichageEL
         ELS
         ELU

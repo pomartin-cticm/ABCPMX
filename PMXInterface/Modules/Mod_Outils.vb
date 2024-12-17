@@ -103,7 +103,7 @@ Module Mod_Outils
     End Function
 
     ''' <summary>
-    ''' Affichage d'un ErrorProvider en fonction d'une erreur
+    ''' AffichageOptFeu d'un ErrorProvider en fonction d'une erreur
     ''' </summary>
     ''' <param name="iSaisie"></param>
     ''' <param name="Control"></param>
@@ -137,7 +137,7 @@ Module Mod_Outils
     End Sub
 
     '''' <summary>
-    '''' Affichage d'un ErrorProvider en fonction d'une erreur
+    '''' AffichageOptFeu d'un ErrorProvider en fonction d'une erreur
     '''' </summary>
     '''' <param name="iSaisie"></param>
     '''' <param name="Control"></param>
@@ -165,7 +165,7 @@ Module Mod_Outils
     'End Sub
 
     '''' <summary>
-    '''' Affichage d'un ErrorProvider en fonction d'une erreur
+    '''' AffichageOptFeu d'un ErrorProvider en fonction d'une erreur
     '''' </summary>
     '''' <param name="iSaisie"></param>
     '''' <param name="Control"></param>
@@ -193,7 +193,7 @@ Module Mod_Outils
     'End Sub
 
     '''' <summary>
-    '''' Affichage d'un ErrorProvider en fonction d'une erreur dans une dataGridView
+    '''' AffichageOptFeu d'un ErrorProvider en fonction d'une erreur dans une dataGridView
     '''' </summary>
     '''' <param name="iSaisie"></param>
     '''' <param name="cell"></param>
@@ -637,7 +637,7 @@ Module Mod_Outils
         'MyFormat = GetFormatSignificatif(ValeurU, nbSign, nbDigitMax)
         MyFormat = GetFormatSignificatifN(ValeurU, nbSign, nbDigitMax)
 
-        If ValeurU >= 0 Then lAbsolu = False '--> Affichage VA seulement si valeur négative
+        If ValeurU >= 0 Then lAbsolu = False '--> AffichageOptFeu VA seulement si valeur négative
 
         If lUnite Then
             If lAbsolu Then
@@ -1089,7 +1089,7 @@ Module Mod_Outils
                         End If
                     Next
 
-                    '--> Affichage
+                    '--> AffichageOptFeu
                     If NewVersionAvailable Then
 
                         '--> Message d'avertissement - Nouvelle version dispo
@@ -1141,7 +1141,7 @@ Module Mod_Outils
 #Region " Dessin des symboles "
 
     ''' <summary>
-    ''' Affichage d'un symbole (+indice) d'équation
+    ''' AffichageOptFeu d'un symbole (+indice) d'équation
     ''' </summary>
     ''' <param name="MyGr">Graphics dans lequel on dessine</param>
     ''' <param name="BrushEcrire">Pinceau pour écrire</param>

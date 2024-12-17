@@ -38,7 +38,7 @@ Public Class Frm_Juridique
 
     Private Sub GestionLangue()
         '--------------------------------------------------------------------
-        '   Affichage du texte de la fenêtre dans la langue séléctionnée
+        '   AffichageOptFeu du texte de la fenêtre dans la langue séléctionnée
         '--------------------------------------------------------------------
 
         If File.Exists(LogicielFichiers.Langue) Then

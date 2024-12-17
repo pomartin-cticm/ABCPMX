@@ -397,6 +397,7 @@ Public Class cls_VerifFeuEnrobe
         Dim FySup, FyInf, FyW As Decimal
         Const Signe As Decimal = 1
         Const lValeurRd As Boolean = True
+        Dim lConges As Boolean = myOptions.lCongesEnrobe
 
         '--> Initialisation
 
@@ -407,7 +408,7 @@ Public Class cls_VerifFeuEnrobe
 
         '--> Modélisation du profilé acier
 
-        MaillageProfileAMPlus(mySection.ProfilA, Gammas, Time, RhoV, mySection.Enrobage.Ratio_bc, FySup, FyInf, FyW, myModele)
+        MaillageProfileAMPlus(mySection.ProfilA, Gammas, Time, RhoV, mySection.Enrobage.Ratio_bc, FySup, FyInf, FyW, lconges, myModele)
 
         '# Béton d'enrobage
 
@@ -489,7 +490,7 @@ Public Class cls_VerifFeuEnrobe
 
                 lActif = mySection.Enrobage.LitArma(iArma).lBarreActive(iArma, iPos)
 
-                If lActif Then
+                If lActif And (NbBarres > 0) Then
 
                     Ha = mySection.ProfilA.ha
                     Bc = mySection.ProfilA.Bfs * mySection.Enrobage.Ratio_bc
@@ -591,7 +592,7 @@ Public Class cls_VerifFeuEnrobe
     End Sub
 
     Private Sub MaillageProfileAMPlus(myProfile As cls_ProfilA, Gammas As cls_Gamma, Time As Decimal, RhoV As Decimal, Ratio_Bc As Decimal,
-                                      FySup As Decimal, FyInf As Decimal, FyW As Decimal, ByRef myModele As cls_ModeleP)
+                                      FySup As Decimal, FyInf As Decimal, FyW As Decimal, lConges As Boolean, ByRef myModele As cls_ModeleP)
         '--------------------------------------------------------------------------------------------------------------------------
         '   18/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------
@@ -606,6 +607,7 @@ Public Class cls_VerifFeuEnrobe
         '   FySup       [E] :   Limite d'élasticité de la semelle sup
         '   FyInf       [E] :   Limite d'élasticité de la semelle inf
         '   FyW         [E] :   Limite d'élasticité de l'âme
+        '   lConges     [E] :   Indique si on prend en compte les congés de raccordement
         '   myModele    [S] :   Modelisation du profilé
         '--------------------------------------------------------------------------------------------------------------------------
 
@@ -662,7 +664,7 @@ Public Class cls_VerifFeuEnrobe
 
         myModele.AddMaille(myProfile.AireFi, myProfile.Tfi, zRef - myProfile.ha + myProfile.Tfi / 2, 1, 1, 1, ReducKa * FyInf, 1, Gammas.GammaM_fi)
 
-        If myProfile.Rcs > 0 Then
+        If lConges And (myProfile.Rcs > 0) Then
 
             '# Congés supérieurs
 
@@ -675,11 +677,11 @@ Public Class cls_VerifFeuEnrobe
                 Fywi = FyW * (1 - zcG * (1 - ReducKa))
             End If
 
-            myModele.AddMailleConges(myProfile.Rcs, zRef - myProfile.Tfs, 1, 1, 1, Fywi, (1 - RhoV), Gammas.GammaM_fi, cls_Maille.EnuTypeMaille.CongeSup)
+            '  myModele.AddMailleConges(myProfile.Rcs, zRef - myProfile.Tfs, 1, 1, 1, Fywi, (1 - RhoV), Gammas.GammaM_fi, cls_Maille.EnuTypeMaille.CongeSup)
 
         End If
 
-        If myProfile.Rci > 0 Then
+        If lConges And (myProfile.Rci > 0) Then
 
             '# Congés inférieurs
 
@@ -692,7 +694,7 @@ Public Class cls_VerifFeuEnrobe
                 Fywi = FyW
             End If
 
-            myModele.AddMailleConges(myProfile.Rci, zRef - myProfile.ha + myProfile.Tfi, 1, 1, 1, Fywi, (1 - RhoV), Gammas.GammaM_fi, cls_Maille.EnuTypeMaille.CongeInf)
+            '  myModele.AddMailleConges(myProfile.Rci, zRef - myProfile.ha + myProfile.Tfi, 1, 1, 1, Fywi, (1 - RhoV), Gammas.GammaM_fi, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 

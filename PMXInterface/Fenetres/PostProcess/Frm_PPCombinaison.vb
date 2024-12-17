@@ -46,10 +46,10 @@ Public Class Frm_PPCombinaison
 
     '# Options pour le dessin
 
-    Dim lDessDeformee As Boolean = True     ' Affichage de la déformée
-    Dim lDessMoment As Boolean = True       ' Affichage diagramme moments
-    Dim lDessEffortT As Boolean = True      ' Affichage diagramme efforts tranchants
-    Dim lDessNumeros As Boolean = False     ' Affichage des numéros noeuds
+    Dim lDessDeformee As Boolean = True     ' AffichageOptFeu de la déformée
+    Dim lDessMoment As Boolean = True       ' AffichageOptFeu diagramme moments
+    Dim lDessEffortT As Boolean = True      ' AffichageOptFeu diagramme efforts tranchants
+    Dim lDessNumeros As Boolean = False     ' AffichageOptFeu des numéros noeuds
 
 #End Region
 
@@ -211,7 +211,7 @@ Public Class Frm_PPCombinaison
 
         Dim Indice As Integer = Me.cmb_Combi.SelectedIndex
 
-        '--> Affichage de la combinaison sélectionnée
+        '--> AffichageOptFeu de la combinaison sélectionnée
 
         Select Case iLimitState
             Case INDULTIME
@@ -666,11 +666,11 @@ Public Class Frm_PPCombinaison
 
         dCar = 0.8 * EcartZ / 2
 
-        '--> Affichage de la poutre
+        '--> AffichageOptFeu de la poutre
 
         AddLigne(myGr, 0, 0, Longueur, 0, MyParAff)
 
-        '--> Affichage des noeuds
+        '--> AffichageOptFeu des noeuds
 
         For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
             If iNode = iNodeMmax Then MyPen = MyPenSelect Else MyPen = MyPenPoutre
@@ -682,7 +682,7 @@ Public Class Frm_PPCombinaison
             End If
         Next
 
-        '--> Affichage des appuis
+        '--> AffichageOptFeu des appuis
 
         'DessineAppui(myGr, MyPoutre.xPositionAppui(True, 1), dApp, MyParAff)
         'DessineAppui(myGr, MyPoutre.xPositionAppui(False, 1), dApp, MyParAff)
