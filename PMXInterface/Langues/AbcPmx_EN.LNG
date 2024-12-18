@@ -520,6 +520,7 @@ TITLE					= Floor vibration parameters
 TOTALDAMPING			= Total damping
 WITH					= With
 FREQUENCYSLAB			= Frequency including the effect of the slab
+MGENEANALYTIC			= Generalised mass with the formulas of Hivoss method for single span beams
 
 #FRM_IDENTIFICATION
 CANCEL					= Cancel

@@ -670,6 +670,7 @@ Public Class cls_Projet
             Lines.Add("BLOCK " & BkHIVOSS)
 
             AjouteLigneFrmt(Lines, "lHivossMethod", .lHivossMethod)
+            AjouteLigneFrmt(Lines, "lMGeneNum", .lMgenNumerique)
             AjouteLigneFrmt(Lines, "RatioQ", .ratioQ)
             AjouteLigneFrmt(Lines, "VariableQ", .choixQ)
             AjouteLigneFrmt(Lines, "FloorUse", .UtilisationPlancher)
@@ -2845,12 +2846,14 @@ Public Class cls_Projet
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
+
         Dim i As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
         Const NBCAR As Integer = 6
 
         '--> Traitement
+
         For i = Index0 To IndexFin
             DecomposeLine(Lignes(i), Mots, nbMots)
 
@@ -2860,6 +2863,7 @@ Public Class cls_Projet
                 With myHivoss
                     Select Case MotCle
                         Case "LHIVOS" : .lHivossMethod = Mots(nbMots)
+                        Case "LMGENE" : .lMgenNumerique = Mots(nbMots)
                         Case "RATIOQ" : .ratioQ = CDec(TraiteReal(Mots(nbMots)))
                         Case "VARIAB" : .choixQ = Mots(nbMots)
                         Case "FLOORU" : .UtilisationPlancher = Mots(nbMots)
@@ -3114,8 +3118,5 @@ Public Class cls_Projet
     'End Sub
 
 #End Region
-
-
-
 
 End Class

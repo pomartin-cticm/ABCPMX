@@ -443,7 +443,7 @@ Public Module Mod_Declarations
     'Private Const PORTEEMAX As Decimal = 25
 
     Public Const ENTRAXEMIN As Decimal = 0.5
-    Public Const ENTRAXEMAX As Decimal = 10
+    Public Const ENTRAXEMAX As Decimal = 25
 
     'Private Const CONSOLEMIN As Decimal = 0.5
     'Private Const RATIOCONSOLEMAX As Decimal = 0.3

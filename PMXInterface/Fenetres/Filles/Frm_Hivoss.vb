@@ -33,7 +33,6 @@ Public Class Frm_Hivoss
         InitialiserFenetre()
     End Sub
 
-
     Public Sub InitialiserFenetre()
         lBuild = True
         InitialiserVariables()
@@ -179,6 +178,8 @@ Public Class Frm_Hivoss
 
                 Me.chk_FrenquenceDalle.Text = Bloc("FREQUENCYSLAB")
 
+                Me.chk_MasseGenForfait.Text = Bloc("MGENEANALYTIC")
+
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -284,6 +285,8 @@ Public Class Frm_Hivoss
 
         Me.chk_FrenquenceDalle.Checked = MyPoutreLoc.Hivoss.lFreqDalle
 
+        Me.chk_MasseGenForfait.Checked = Not MyPoutreLoc.Hivoss.lMgenNumerique
+
     End Sub
 
 #End Region
@@ -303,7 +306,6 @@ Public Class Frm_Hivoss
         End If
     End Sub
 
-
     Private Function ValideSaisieFenetre() As Boolean
         Return True
     End Function
@@ -319,6 +321,7 @@ Public Class Frm_Hivoss
         GereTransfertValeur(MyPoutreLoc.Hivoss.AmortiFinition_D3, MyProjet.Poutres(MyProjet.IndEnCours).Hivoss.AmortiFinition_D3, lModif)
         GereTransfertValeur(MyPoutreLoc.Hivoss.AmortiTotal_Dtot, MyProjet.Poutres(MyProjet.IndEnCours).Hivoss.AmortiTotal_Dtot, lModif)
         GereTransfertValeur(MyPoutreLoc.Hivoss.lFreqDalle, MyProjet.Poutres(MyProjet.IndEnCours).Hivoss.lFreqDalle, lModif)
+        GereTransfertValeur(MyPoutreLoc.Hivoss.lMgenNumerique, MyProjet.Poutres(MyProjet.IndEnCours).Hivoss.lMgenNumerique, lModif)
 
         If MyProjet.Poutres(MyProjet.IndEnCours).Hivoss.choixQ <> MyPoutreLoc.Hivoss.choixQ Then
             lModif = True
@@ -547,6 +550,11 @@ Public Class Frm_Hivoss
     Private Sub chk_FrenquenceDalle_CheckedChanged(sender As Object, e As EventArgs) Handles chk_FrenquenceDalle.CheckedChanged
         If lBuild Then Exit Sub
         MyPoutreLoc.Hivoss.lFreqDalle = Me.chk_FrenquenceDalle.Checked
+    End Sub
+
+    Private Sub chk_MasseGenForfait_CheckedChanged(sender As Object, e As EventArgs) Handles chk_MasseGenForfait.CheckedChanged
+        If lBuild Then Exit Sub
+        MyPoutreLoc.Hivoss.lMgenNumerique = Not Me.chk_MasseGenForfait.Checked
     End Sub
 
 #End Region

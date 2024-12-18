@@ -519,7 +519,8 @@ SWIMMINGSCREED			= Chappe flottante
 TITLE					= Confort vibratoire des planchers
 TOTALDAMPING			= Amortissement total
 WITH					= Avec
-FREQUENCYSLAB			= Fréquence incluant l'effet de la dalle													
+FREQUENCYSLAB			= Fréquence incluant l'effet de la dalle	
+MGENEANALYTIC			= Masse généralisée calculée avec les formules Hivoss pour les poutres à 1 travée												
 
 #FRM_IDENTIFICATION
 CANCEL					= Annuler

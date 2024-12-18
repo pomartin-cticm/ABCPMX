@@ -1813,7 +1813,7 @@ Public Module Mod_Dessins
         If lCote Then
 
             If Not lIntermediaire And myBeam.Section.lSlimFloor Then BeffG = Bfs / 2
-            DessinCoteFrmDalle(myGr, myBeam, myFont, lIntermediaire, LargeurProfil, iSelect, MyParAff, dCar, BeffG, BeffD, strMsg, zREF)
+            DessinCoteFrmDalle(myGr, myBeam, myFont, lIntermediaire, LargeurProfil, iSelect, MyParAff, dCar, BeffG, BeffD, strMsg, zREF, lCofraplus220)
 
         End If
     End Sub
@@ -1821,7 +1821,7 @@ Public Module Mod_Dessins
     Private Sub DessinCoteFrmDalle(ByRef MyGr As Graphics, myBeam As cls_Poutre, myFont As Font,
                                    lIntermediaire As Boolean, LargeurProfil As Decimal, iSelect As Integer,
                                    MyParAffA As Struc_Affichage, dCar As Decimal,
-                                   BeffG As Decimal, BeffD As Decimal, strMsg() As String, ZREF As Decimal)
+                                   BeffG As Decimal, BeffD As Decimal, strMsg() As String, ZREF As Decimal, lCofraplus220 As Boolean)
         '-----------------------------------------------------------------------------------------------
         '   07/07/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
@@ -1835,6 +1835,7 @@ Public Module Mod_Dessins
         '   dCar        [E] :   Dimension pour l'affichage
         '   bEffG, BEffD[E] :   Largeur de dalle représentée à gauche et à droite
         '   strMsg      [E] :   Messages issus du fichier langue
+        '   lCofraplus220[E] :  Indique si bac CofraPlus 220 le cas échéant
         '-----------------------------------------------------------------------------------------------
         '   iSelect:    0 : hauteur totale de dalle
         '               1 : renformis
@@ -1866,7 +1867,6 @@ Public Module Mod_Dessins
 
         MyColor = StyleCouleur(iSelect, -2)
         MyPen.Color = MyColor
-
 
         If myBeam.Section.lSlimFloor Then
             yo = ZREF
@@ -2008,9 +2008,13 @@ Public Module Mod_Dessins
                 xCoteZ = -BeffG + dCar
             End If
 
-
-            yo = myBeam.Dalle.Bac.Hp
-            ye = myBeam.Dalle.zTop
+            If lCofraplus220 Then
+                yo = 0
+                ye = myBeam.Dalle.zTop
+            Else
+                yo = myBeam.Dalle.Bac.Hp
+                ye = myBeam.Dalle.zTop
+            End If
 
             AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
             AddLigne(MyGr, MyPen, xCoteZ, ye, xCoteZ, ye + dCar / 2, MyParAffA)
@@ -2023,8 +2027,13 @@ Public Module Mod_Dessins
             MyColor = StyleCouleur(iSelect, -2)
             MyPen.Color = MyColor
 
-            yo = 0
-            ye = myBeam.Dalle.Bac.Hp
+            If lCofraplus220 Then
+                ye = 0
+                yo = -myBeam.Dalle.Bac.Hp
+            Else
+                yo = 0
+                ye = myBeam.Dalle.Bac.Hp
+            End If
 
             AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
             AddLigne(MyGr, MyPen, xCoteZ, yo - dCar / 2, xCoteZ, yo, MyParAffA)

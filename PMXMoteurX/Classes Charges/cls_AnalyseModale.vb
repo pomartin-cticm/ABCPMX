@@ -16,6 +16,7 @@ Public Class cls_AnalyseModale
 
     Dim pMassTotal As Decimal       ' Masse totale prise en compte pour l'analyse modale
     Dim pMassModal As Decimal       ' Masse modale
+    Dim pMassGeneral As Decimal     ' Masse généralisée
 
     Dim pDeformee() As Decimal      ' Deformée modale
 
@@ -58,6 +59,12 @@ Public Class cls_AnalyseModale
     Public ReadOnly Property MassModal As Decimal
         Get
             Return Me.pMassModal
+        End Get
+    End Property
+
+    Public ReadOnly Property MassGeneral As Decimal
+        Get
+            Return Me.pMassGeneral
         End Get
     End Property
 
@@ -147,6 +154,7 @@ Public Class cls_AnalyseModale
             End If
 
             Me.pMassModal = MyOutput_MOD.MasseMod(0)
+            Me.pMassGeneral = MyOutput_MOD.MasseGen(0)
             Me.pMassTotal = MyOutput_MOD.MasseTot
 
             ReDim Me.pDeformee(MyPoutre.Nodes.nbNodes - 1)

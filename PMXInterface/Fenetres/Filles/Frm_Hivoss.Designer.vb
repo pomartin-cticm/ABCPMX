@@ -62,6 +62,7 @@ Partial Class Frm_Hivoss
         Me.cmb_ratioQ = New System.Windows.Forms.ComboBox()
         Me.lbl_ComboMasseFrequence = New System.Windows.Forms.Label()
         Me.chk_methodeHIVOSS = New System.Windows.Forms.CheckBox()
+        Me.chk_MasseGenForfait = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -435,6 +436,7 @@ Partial Class Frm_Hivoss
         '
         Me.pan_SaisieOptions.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieOptions.Controls.Add(Me.chk_MasseGenForfait)
         Me.pan_SaisieOptions.Controls.Add(Me.chk_FrenquenceDalle)
         Me.pan_SaisieOptions.Controls.Add(Me.cmb_UtilisationPlancher)
         Me.pan_SaisieOptions.Controls.Add(Me.lbl_UtilisationPlancher)
@@ -453,7 +455,7 @@ Partial Class Frm_Hivoss
         'chk_FrenquenceDalle
         '
         Me.chk_FrenquenceDalle.AutoSize = True
-        Me.chk_FrenquenceDalle.Location = New System.Drawing.Point(19, 187)
+        Me.chk_FrenquenceDalle.Location = New System.Drawing.Point(19, 183)
         Me.chk_FrenquenceDalle.Name = "chk_FrenquenceDalle"
         Me.chk_FrenquenceDalle.Size = New System.Drawing.Size(131, 17)
         Me.chk_FrenquenceDalle.TabIndex = 7
@@ -520,6 +522,17 @@ Partial Class Frm_Hivoss
         Me.chk_methodeHIVOSS.TabIndex = 0
         Me.chk_methodeHIVOSS.Text = "chk_methodeHIVOSS"
         Me.chk_methodeHIVOSS.UseVisualStyleBackColor = True
+        '
+        'chk_MasseGenForfait
+        '
+        Me.chk_MasseGenForfait.CheckAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.chk_MasseGenForfait.Location = New System.Drawing.Point(19, 206)
+        Me.chk_MasseGenForfait.Name = "chk_MasseGenForfait"
+        Me.chk_MasseGenForfait.Size = New System.Drawing.Size(324, 42)
+        Me.chk_MasseGenForfait.TabIndex = 8
+        Me.chk_MasseGenForfait.Text = "chk_MasseGenForfait"
+        Me.chk_MasseGenForfait.TextAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.chk_MasseGenForfait.UseVisualStyleBackColor = True
         '
         'Frm_Hivoss
         '
@@ -602,4 +615,5 @@ Partial Class Frm_Hivoss
     Friend WithEvents img_D2Symbol As PictureBox
     Friend WithEvents cmb_D2Value As ComboBox
     Friend WithEvents chk_FrenquenceDalle As CheckBox
+    Friend WithEvents chk_MasseGenForfait As CheckBox
 End Class

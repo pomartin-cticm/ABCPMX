@@ -110,6 +110,8 @@ Public Class cls_MethodHivoss
     Public OsRMS As Decimal                         ' Valeur du paramètre OS RMS issue de l'analyse Hivoss
     Public indConfort As Integer                    ' Indice de confort (0 pour recommended ; 1 pour critical ; 2 pour not recommended)
 
+    Public lMgenNumerique As Boolean                ' Indique si on prend la valeur de masse généralisée issue de la DLL_CTICM_MODAL
+
 #End Region
 
 #Region " Variables privées "
@@ -168,6 +170,8 @@ Public Class cls_MethodHivoss
         lFreqDalle = False
 
         CalculAmortissement()
+
+        lMgenNumerique = True
 
     End Sub
 
@@ -836,7 +840,11 @@ Public Class cls_MethodHivoss
         myBeam.Modal.Analyse(myBeam, Me.ratioQ, Me.IndexQ)
         Me.Frequence = myBeam.Modal.Frequence
 
-        Me.MassModale = myBeam.Modal.MassTotal / 2              ' A MODIFIER ? pour les multispan
+        If (myBeam.NbTravees = 1) And Not Me.lMgenNumerique Then
+            Me.MassModale = myBeam.Modal.MassTotal / 2
+        Else
+            Me.MassModale = myBeam.Modal.MassGeneral
+        End If
 
         ''--[ Prise en compte de la fréquence propre de dalle pour les poutres mixtes:
 

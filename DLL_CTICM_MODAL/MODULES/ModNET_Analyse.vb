@@ -329,10 +329,25 @@ Module ModNET_Analyse
 
             CodeERR = 14
 
+            Dim MAX_D As Double
+
             For IV = 1 To NBVP
 
                 'Masse totale
                 RESULTATS.MAS_TOT(ICAS) = MASSE_TOTALE
+
+                'NORMALISATION DU VECTEUR PROPRE : DMAX=1
+                '--------------------------------------------
+                MAX_D = 0
+                For I = 1 To IDIM
+                    If Math.Abs(VECTP(IV, I)) > MAX_D Then
+                        MAX_D = Math.Abs(VECTP(IV, I))
+                    End If
+                Next
+                For I = 1 To IDIM
+                    VECTP(IV, I) = VECTP(IV, I) / MAX_D
+                Next
+
 
                 DMD = 0
                 DMDELTA = 0
