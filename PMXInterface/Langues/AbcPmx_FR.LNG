@@ -254,7 +254,7 @@ RIBS					= Ondes
 ROW_NUMBER				= Nombre de files
 SPAN					= Travée
 STUDS					= Goujons
-WIDTH					= Largeur
+WIDTH					= Longueur
 WARNING_CMBTRAVEE		= L'ensemble des informations renseignées doit être correct pour sélectionner une autre travée
 ADD						= Ajouter
 DELETE					= Supprimer
@@ -937,7 +937,6 @@ COPY					= Copie
 GAZ						= Gaz chauds
 STEELPROFILE			= Profilé acier
 
-
 #OPTCALCULMAIN
 TITLE					= Options de calcul
 APPLY					= Appliquer
@@ -946,6 +945,7 @@ GAMMA					= Coefficients nationaux par défaut
 SCOPE					= Domaine d'application
 CALCUL					= Options de calcul
 SLIMFLOOR				= Dalles et planchers minces
+CONNECTORS				= Connecteurs
 FIRE					= Calcul à l'incendie
 MODIF					= Attention : la modification des paramètres sera prise en compte lors de l'ajout de nouvelles poutres uniquement. 
 MODIF2					= Les valeurs des paramètres des poutres déjà créées resteront inchangées.  
@@ -977,6 +977,12 @@ SELFWEIGHT				= Poids propre
 OTHERPERMANENT			= Autres charges permanentes
 SHRINKAGE				= Retrait
 ETAW					= Voilement par cisaillement
+
+#OPTCALCONNECTORS
+TITLE					= Options pour les connecteurs
+DIMENSIONS				= Dimensions
+DIAMIN					= Diamètre minimal
+DIAMAX					= Diamètre maximal
 
 #OPTCALGAMMA
 TITLE					= Coefficients nationaux

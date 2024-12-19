@@ -442,7 +442,7 @@ Public Module Mod_Declarations
     'Private Const PORTEEMIN As Decimal = 5
     'Private Const PORTEEMAX As Decimal = 25
 
-    Public Const ENTRAXEMIN As Decimal = 0.5
+    Public Const ENTRAXEMIN As Decimal = 0.5                    ' Entraxe mini entre poutres voisines
     Public Const ENTRAXEMAX As Decimal = 25
 
     'Private Const CONSOLEMIN As Decimal = 0.5
@@ -460,15 +460,36 @@ Public Module Mod_Declarations
     Public Const PSI_COMBINAISON_MIN As Decimal = 0
     Public Const PSI_COMBINAISON_MAX As Decimal = 1
 
-    Public Const GAMMA_RESISTANCE_MIN As Decimal = 1        ' Comment on divise par gamma, autant éviter les valeurs nulles !
+    Public Const GAMMA_RESISTANCE_MIN As Decimal = 1            ' Comment on divise par gamma, autant éviter les valeurs nulles !
     Public Const GAMMA_RESISTANCE_MAX As Decimal = 2
 
-    Public Const DIASTUDMIN As Double = 0.016       ' Diametre minimal des goujons
-    Public Const DIASTUDMAX As Double = 0.022       ' Diametre maximal des goujons
+    Public Const DIASTUDMIN As Double = 0.016                   ' Diametre minimal des goujons
+    Public Const DIASTUDMAX As Double = 0.022                   ' Diametre maximal des goujons
 
-    Public Const DELTASAISIE As Double = 0.001       ' Tolérance sur les bornes de saisie  (issu d'ACB+)
+    Public Const DELTASAISIE As Double = 0.001                  ' Tolérance sur les bornes de saisie  (issu d'ACB+)
 
     Public Const ETA_Catalogue As Decimal = 1
+
+    Public Const ENROBAGEMIN As Decimal = 20 / 1000             ' Enrobage mini des connecteurs (ou des armatures)
+    Public Const RAPHsurDMIN_G1 As Decimal = 3                  ' Rapport H sur D mini pour les connecteurs, selon génération 1 des EN 1994
+    Public Const RAPHsurDMIN_G2 As Decimal = 3.9                ' Rapport H sur D mini pour les connecteurs, selon génération 2 des EN 1994
+    Public Const RAPHsurDSURBAC As Decimal = 2                  ' Rapport H sur D mini au dessus du bac, pour les connecteurs
+
+    Public Const GOUJ_DMIN As Decimal = 16 / 1000               ' Diamètre minimal des goujons soudés   ( clause 6.6.1.2(1) de l'EC4 actuel)
+    Public Const GOUJ_DMAXDEF As Decimal = 25 / 1000            ' Diamètre maxi des goujons soudés, cas général (clause 6.6.1.2(1) de l'EC4 actuel)
+    Public Const GOUJ_DMAXPERPREP As Decimal = 22 / 1000        ' Diamètre maxi des goujons soudés, cas dalle mixte perpendiculaire, bac prépercé
+    Public Const GOUJ_DMAXPERWT As Decimal = 20 / 1000          ' Diamètre maxi des goujons soudés, cas dalle mixte perpendiculaire, soudage à travers bac
+
+    Public Const GOUJ_RAPESPXsurD_MIN As Decimal = 5            ' Rapport espacement longitudinal mini sur diamètre, pour les goujons soudés
+    Public Const GOUJ_RAPESPXsurTD_MAX As Decimal = 6           ' Rapport espacement longitudinal maxi sur epaisseur dalle, pour les goujons soudés
+    Public Const GOUJ_RAPESPX As Decimal = 0.8                  ' Espacement longitudinal maxi, pour les goujons soudés
+
+    Public Const GOUJ_RAPESPYsurD_PLEINE_MIN As Decimal = 2.5   ' Rapport espacement transversal mini sur diamètre, pour les goujons soudés dans dalle pleine
+    Public Const GOUJ_RAPESPYsurD_MIXTE_MIN As Decimal = 4      ' Rapport espacement transversal mini sur diamètre, pour les goujons soudés dans dalle mixte
+
+    Public Const GOUJ_DBORD_MIN As Decimal = 20 / 1000          ' Distance minimale au bord d'un goujon (à partir face externe)
+
+    Public Const BAC_LARGAPP_MIN As Decimal = 50 / 1000         ' Largeur minimale de l'appui d'un bac sur semelle
 
 #End Region
 
@@ -683,6 +704,7 @@ Public Module Mod_Declarations
         Scope
         Slimfloor
         Incendie
+        Connecteurs
     End Enum
 
     Public Enum Enu_OptionsLogiciel

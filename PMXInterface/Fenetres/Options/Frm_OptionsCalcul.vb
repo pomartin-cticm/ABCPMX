@@ -70,7 +70,7 @@ Public Class Frm_OptionsCalcul
             '--> Déclaration
 
             Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, True)
-            Dim BlocALire() As String = {"OPTCALCULMAIN", "OPTCALGAMMA", "OPTCALSCOPE", "OPTCALCALCUL", "OPTCALSLIMFLOOR", "OPTCALFIRE"}
+            Dim BlocALire() As String = {"OPTCALCULMAIN", "OPTCALGAMMA", "OPTCALSCOPE", "OPTCALCALCUL", "OPTCALSLIMFLOOR", "OPTCALFIRE", "OPTCALCONNECTORS"}
             Dim lBlocEnCours As Boolean = False
             Dim BlocEnCours As String = Nothing
             Dim MotCle, Argument As String
@@ -147,6 +147,7 @@ Public Class Frm_OptionsCalcul
             Me.PoMbtn_Calcul.Caption = MyBloc("CALCUL")
             Me.PoMbtn_SlimFloor.Caption = MyBloc("SLIMFLOOR")
             Me.PoMbtn_Fire.Caption = MyBloc("FIRE")
+            Me.PoMbtn_Connecteurs.Caption = MyBloc("CONNECTORS")
 
             Me.btn_Appliquer.Text = MyBloc("APPLY")
             Me.btn_Cancel.Text = MyBloc("CANCEL")
@@ -172,6 +173,7 @@ Public Class Frm_OptionsCalcul
         PreparePomBouton(PoMbtn_Scope)
         PreparePomBouton(PoMbtn_SlimFloor)
         PreparePomBouton(PoMbtn_Calcul)
+        PreparePomBouton(PoMbtn_Connecteurs)
         PreparePomBouton(PoMbtn_Fire)
 
         Select Case LastIndexW.OptionsCalcul
@@ -190,6 +192,9 @@ Public Class Frm_OptionsCalcul
             Case Enu_OptionsCalcul.Incendie
                 Me.PoMbtn_Fire.Checked = True
                 Me.PoMbtn_Fire.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
+            Case Enu_OptionsCalcul.Connecteurs
+                Me.PoMbtn_Connecteurs.Checked = True
+                Me.PoMbtn_Connecteurs.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
         End Select
 
     End Sub
@@ -268,6 +273,11 @@ Public Class Frm_OptionsCalcul
 
                 Me.pan_Contenu.Controls.Add(Frm_OptionsCalculIncendie.pan_Incendie)
                 Frm_OptionsCalculIncendie.InitialiserFenetre()
+
+            Case Enu_OptionsCalcul.Connecteurs
+
+                Me.pan_Contenu.Controls.Add(Frm_OptionsCalculConnecteurs.pan_General)
+                Frm_OptionsCalculConnecteurs.InitialiserFrm()
 
         End Select
 
@@ -422,7 +432,7 @@ Public Class Frm_OptionsCalcul
 #Region "    Gestion des boutons - Paint Overrides "
 
     Private Sub PomBoutonsClick(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-    Handles PoMBtn_Gamma.Click, PoMbtn_Scope.Click, PoMbtn_Calcul.Click, PoMbtn_Fire.Click, PoMbtn_SlimFloor.Click
+    Handles PoMBtn_Gamma.Click, PoMbtn_Scope.Click, PoMbtn_Calcul.Click, PoMbtn_Fire.Click, PoMbtn_SlimFloor.Click, PoMbtn_Connecteurs.Click
 
         If Not sender.checked Then  '-> Si bouton déjà séléctionné :
             sender.checked = True       'on le garde checké
@@ -451,6 +461,10 @@ Public Class Frm_OptionsCalcul
 
             Case Me.PoMbtn_Fire.Name
                 LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Incendie
+                AfficherFenetreFille()
+
+            Case PoMbtn_Connecteurs.Name
+                LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Connecteurs
                 AfficherFenetreFille()
 
         End Select
@@ -489,6 +503,7 @@ Public Class Frm_OptionsCalcul
         If SenderName <> Me.PoMbtn_Calcul.Name Then Me.PoMbtn_Calcul.Checked = False
         If SenderName <> Me.PoMbtn_SlimFloor.Name Then Me.PoMbtn_SlimFloor.Checked = False
         If SenderName <> Me.PoMbtn_Fire.Name Then Me.PoMbtn_Fire.Checked = False
+        If SenderName <> Me.PoMbtn_Connecteurs.Name Then Me.PoMbtn_Connecteurs.Checked = False
 
     End Sub
 
@@ -497,9 +512,6 @@ Public Class Frm_OptionsCalcul
         Me.lSettingsReset = True
     End Sub
 
-
-
 #End Region
-
 
 End Class

@@ -1467,7 +1467,7 @@ Public Module Mod_Dessins
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
-        '   MyPoutreLoc [E] :   Poutre locale        '   
+        '   myBeam [E] :   Poutre locale        '   
         '-----------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -5587,7 +5587,7 @@ Public Module Mod_Dessins
             AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParaff1, True, True)
 
             If lAffSymbol Then Chaine = "D1" Else Chaine = GetStringInUnit(myBeam.EntraxeD1, Enu_TypeVariable.Longueur, 4, 2, False)
-            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, myFontNormal, 0.5 * (xo + xe), yCote, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         End If
         '--> Entraxe à droite
@@ -5601,7 +5601,7 @@ Public Module Mod_Dessins
         AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParaff1, True, True)
 
         If lAffSymbol Then Chaine = "D2" Else Chaine = GetStringInUnit(myBeam.EntraxeD2, Enu_TypeVariable.Longueur, 4, 2, False)
-        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, myFontNormal, 0.5 * (xo + xe), yCote, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         '--> Trémie Gauche
 
@@ -5615,7 +5615,7 @@ Public Module Mod_Dessins
             AddFleche(MyGr, MyPen, xo, yCoteS, xe, yCoteS, MyParaff1, True, True)
 
             If lAffSymbol Then Chaine = "Dsl1" Else Chaine = GetStringInUnit(myBeam.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, False)
-            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCoteS, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, myFontNormal, 0.5 * (xo + xe), yCoteS, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         End If
 
@@ -5631,7 +5631,7 @@ Public Module Mod_Dessins
             AddFleche(MyGr, MyPen, xo, yCoteS, xe, yCoteS, MyParaff1, True, True)
 
             If lAffSymbol Then Chaine = "Dsl2" Else Chaine = GetStringInUnit(myBeam.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, False)
-            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCoteS, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, myFontNormal, 0.5 * (xo + xe), yCoteS, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         End If
 
@@ -5935,23 +5935,24 @@ Public Module Mod_Dessins
 
 #Region "Dessins pour la connection (FRM_CONNECTION)"
 
-    Public Sub DessinFrmConnection_Connecteurs(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double, MyPoutreLoc As cls_Poutre,
-                          ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+    Public Sub DessinFrmConnection_Connecteurs(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double,
+                                               myBeam As cls_Poutre,
+                                               ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   24/06/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
-        '   Dessin du Bac Acier
+        '   Dessin d'une vignette montrant un zoom sur le connecteur
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
-        '   MyPoutreLoc [E] :   Poutre locale        '   
+        '   myBeam      [E] :   Poutre dont on dessine la connexion 
         '-----------------------------------------------------------------------------------------------
 
         '--> Declarations
 
-        Dim MyParAff As Struc_Affichage
+        Dim myParAff As Struc_Affichage
 
         Dim ColorPen As Color = Color.Blue
         Dim ColorRedPen As Color = Color.Red
@@ -5962,6 +5963,7 @@ Public Module Mod_Dessins
 
         Dim myBrushBac As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.LightGray, Color.DarkGray)
         Dim myBrushBeton As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.Gray, CouleurBeton)
+        'Dim myBrushBac As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.Gray, CouleurBeton)
         Dim myBrushProfilA As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), CouleurAcier, CouleurAcier)
         Dim myBrushConnecteur As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), CouleurConnect, CouleurConnect)
 
@@ -5970,6 +5972,432 @@ Public Module Mod_Dessins
         Dim MyPen As New Pen(ColorPen)
         Dim MyPenRed As New Pen(ColorRedPen)
         Dim MyFontNormal As Font = FontBase
+        Dim myPenDash As New Pen(Color.Black, 0.75)
+
+        'Dim xPts() As Single = Nothing
+        'Dim yPts() As Single = Nothing
+        'Dim nbPts As Integer
+        Dim lMixte As Boolean = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte)
+        Dim lParallel As Boolean = (myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele)
+        Dim lCofraplus220 As Boolean = myBeam.Dalle.Bac.lCofraplus220
+        'Dim lNervureContinue As Boolean = Not (myBeam.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu)
+        Dim Bfs, Tfs, Tw, zTop As Decimal
+        Dim xo As Decimal
+        Dim Chaine As String
+        Dim dGouj, hSc As Decimal
+        Dim xCote As Decimal
+
+        '--( Initialisation
+
+        Bfs = myBeam.Section.ProfilA.Bfs
+        Tfs = myBeam.Section.ProfilA.Tfs
+        Tw = myBeam.Section.ProfilA.Tw
+        zTop = myBeam.Dalle.zTop
+        dGouj = myBeam.Dalle.Goujons.d
+        hSc = myBeam.Dalle.Goujons.hsc
+        xCote = -0.75 * Bfs
+
+        '--( Préparation des paramètres d'affichage
+
+        DessinFrmConnection_Connecteurs_myParAff(myBeam, pWi, pHi, kAdjust, xLeft, yTop, myParAff)
+
+        '--( Dessin de la dalle
+
+        If lMixte Then
+            If lParallel Then
+
+                DessinFrmConnection_Connecteurs_DalleMixteParallel(myGr, myParAff, myBeam, 2 * myBeam.Dalle.Bac.Ep, myBrushBeton, myBrushBac, myPenDash)
+                xCote = -0.75 * myBeam.Dalle.Bac.Ep
+
+            ElseIf lCofraplus220 Then
+
+                DessinFrmConnection_Connecteurs_DalleMixteCofraplus220(myGr, myParAff, myBeam, 2 * Bfs, myBrushBeton, myBrushBac, myPenDash)
+
+            Else
+
+                DessinFrmConnection_Connecteurs_DalleMixteTrans(myGr, myParAff, myBeam, 2 * Bfs, myBrushBeton, myBrushBac, myPenDash)
+
+            End If
+        Else
+
+            DessinFrmConnection_Connecteurs_DallePleine(myGr, myParAff, myBeam, 2 * Bfs, myBrushBeton)
+
+        End If
+
+        '--( Dessin du connecteur
+
+        Dim xGoujon As Decimal = 0
+        Dim yGoujon As Decimal = 0
+
+        'Dessin du corps du goujon
+        AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dGouj / 2, yGoujon, xGoujon + dGouj / 2, yGoujon + hSc, myParAff, True, True)
+        'Dessin de la tete du goujon
+        Dim dTete, hTete As Decimal
+        myBeam.Dalle.Goujons.DimensionsTete(dTete, hTete)
+
+        AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + hSc - hTete, xGoujon + dTete / 2, yGoujon + hSc, myParAff, True, True)
+
+        '--( Dessin de la semelle supérieure et de l'âme de la poutre
+
+        Dim xSemelleSup As Decimal = 0
+        Dim ySemelleSup As Decimal = 0
+        AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - Bfs / 2, ySemelleSup - Tfs, xSemelleSup + Bfs / 2, ySemelleSup, myParAff, True, True)
+
+        Dim xAme As Decimal = xSemelleSup
+        Dim yAme As Decimal = ySemelleSup - Tfs
+        AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - Tw / 2, yAme - myBeam.Section.ProfilA.HauteurAmeHw, xAme + Tw / 2, yAme, myParAff, True, True)
+
+        '--( Cotation
+
+        AddFleche(myGr, MyPenContour, xCote, 0, xCote, zTop, myParAff, True, True)
+
+        Chaine = GetStringInUnitN(zTop, Enu_TypeVariable.Dimension, 4, 3, False, True)
+
+        AddTexte(myGr, New SolidBrush(Color.Black), Chaine, MyFontNormal, xCote, 0.5 * zTop, myParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
+
+    End Sub
+
+    Private Sub DessinFrmConnection_Connecteurs_DalleMixteTrans(myGr As Graphics, myParAff As Struc_Affichage, myBeam As cls_Poutre, bDalle As Decimal,
+                                                                myBrushBeton As Brush, myBrushBac As Brush, myPenBac As Pen)
+        '-----------------------------------------------------------------------------------------------
+        '   18/12/24 :  Version 1.00 - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin d'une dalle mixte transversale pour la vignette montrant un zoom sur le connecteur
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre dont on dessine la connexion 
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   bDalle      [E] :   Largeur de la dalle représentée
+        '   myBrushBeton[E] :   Pinceau utilisé pour le béton
+        '   myBrushBac  [E] :   Pinceau utilisé pour le bac
+        '   myPenBac    [E] :   Stylo pour le contour du bac
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lNervCont As Boolean = Not (myBeam.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu)
+        Dim zTop As Decimal = myBeam.Dalle.zTop
+        Dim Hp As Decimal = myBeam.Dalle.Bac.Hp
+        Dim Bfs As Decimal = myBeam.Section.ProfilA.Bfs
+        Const bApp As Decimal = 0.05
+
+        '--( Dalle pleine
+
+        AddRectanglePlein(myGr, myBrushBeton, MyPenContour, -bDalle / 2, 0, bDalle / 2, myBeam.Dalle.Ep_td, myParAff, True, False)
+
+        '--( Bacs
+
+        If lNervCont Then
+
+            AddRectanglePlein(myGr, myBrushBac, MyPenContour, -bDalle / 2, 0, +bDalle / 2, Hp, myParAff, True, False)
+            AddLigne(myGr, myPenBac, -bDalle / 2, Hp, bDalle / 2, Hp, myParAff)
+
+        Else
+
+            AddRectanglePlein(myGr, myBrushBac, MyPenContour, -bDalle / 2, 0, -Bfs / 2 + bApp, Hp, myParAff, True, False)
+            AddRectanglePlein(myGr, myBrushBac, MyPenContour, bDalle / 2, 0, +Bfs / 2 - bApp, Hp, myParAff, True, False)
+            AddLigne(myGr, myPenBac, -Bfs / 2 + bApp, 0, -Bfs / 2 + bApp, Hp, myParAff)
+            AddLigne(myGr, myPenBac, -Bfs / 2 + bApp, Hp, -bDalle / 2, Hp, myParAff)
+            AddLigne(myGr, myPenBac, Bfs / 2 - bApp, 0, Bfs / 2 - bApp, Hp, myParAff)
+            AddLigne(myGr, myPenBac, Bfs / 2 - bApp, Hp, bDalle / 2, Hp, myParAff)
+
+        End If
+
+        '--( compléments lignes de la dalle
+
+        AddLigne(myGr, MyPenContour, -bDalle / 2, zTop, bDalle / 2, zTop, myParAff)
+        AddLigne(myGr, MyPenContour, -bDalle / 2, 0, bDalle / 2, 0, myParAff)
+
+    End Sub
+
+    Private Sub DessinFrmConnection_Connecteurs_DallePleine(myGr As Graphics, myParAff As Struc_Affichage, myBeam As cls_Poutre, bDalle As Decimal,
+                                                            myBrushBeton As Brush)
+        '-----------------------------------------------------------------------------------------------
+        '   18/12/24 :  Version 1.00 - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin d'une dalle pleine pour la vignette montrant un zoom sur le connecteur
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre dont on dessine la connexion 
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   bDalle      [E] :   Largeur de la dalle représentée
+        '   myBrushBeton[E] :   Pinceau utilisé pour le béton
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lRenformis As Boolean = Not IsEqual(myBeam.Dalle.EpRenformis, 0)
+        Dim zTop As Decimal = myBeam.Dalle.zTop
+
+        '--( Traitement
+
+        If lRenformis Then
+
+            ' == Dalle pleine avec renformis
+
+            '----| Déclarations locales 
+            Dim xPts() As Single = Nothing
+            Dim yPts() As Single = Nothing
+            Dim nbPts As Integer
+            Dim Bfs As Decimal
+            Dim Th, xTh As Decimal
+            Dim ThetaRd As Decimal
+
+            '----| Initialisations
+
+            Bfs = myBeam.Section.ProfilA.Bfs
+            Th = myBeam.Dalle.Ep_th
+            ThetaRd = myBeam.Dalle.ThetaRd
+            xTh = Th * Math.Tan(ThetaRd)
+
+            nbPts = 0
+            AjoutePoint(-Bfs / 2, 0, xPts, yPts, nbPts)
+            AjoutePoint(-Bfs / 2 - xTh, Th, xPts, yPts, nbPts)
+            AjoutePoint(-bDalle / 2, Th, xPts, yPts, nbPts)
+            AjoutePoint(-bDalle / 2, zTop, xPts, yPts, nbPts)
+            AjoutePoint(bDalle / 2, zTop, xPts, yPts, nbPts)
+            AjoutePoint(bDalle / 2, Th, xPts, yPts, nbPts)
+            AjoutePoint(Bfs / 2 + xTh, Th, xPts, yPts, nbPts)
+            AjoutePoint(Bfs / 2, 0, xPts, yPts, nbPts)
+
+            RemplirZone(myGr, myBrushBeton, xPts, yPts, nbPts, myParAff, False)
+
+            AddLigne(myGr, MyPenContour, -bDalle / 2, zTop, bDalle / 2, zTop, myParAff)
+
+            AddLigne(myGr, MyPenContour, -bDalle / 2, Th, -Bfs / 2 - xTh, Th, myParAff)
+            AddLigne(myGr, MyPenContour, bDalle / 2, Th, Bfs / 2 + xTh, Th, myParAff)
+
+            AddLigne(myGr, MyPenContour, -Bfs / 2, 0, -Bfs / 2 - xTh, Th, myParAff)
+            AddLigne(myGr, MyPenContour, Bfs / 2, 0, Bfs / 2 + xTh, Th, myParAff)
+
+            AddLigne(myGr, MyPenContour, Bfs / 2, 0, -Bfs / 2, 0, myParAff)
+
+        Else
+
+            ' == Dalle pleine standart
+
+            AddRectanglePlein(myGr, myBrushBeton, MyPenContour, -bDalle / 2, 0, bDalle / 2, myBeam.Dalle.Ep_td, myParAff, True, False)
+
+            '--( compléments lignes de la dalle
+
+            AddLigne(myGr, MyPenContour, -bDalle / 2, zTop, bDalle / 2, zTop, myParAff)
+            AddLigne(myGr, MyPenContour, -bDalle / 2, 0, bDalle / 2, 0, myParAff)
+
+        End If
+
+
+    End Sub
+
+    Private Sub DessinFrmConnection_Connecteurs_DalleMixteParallel(myGr As Graphics, myParAff As Struc_Affichage, myBeam As cls_Poutre, bDalle As Decimal,
+                                                                   myBrushBeton As Brush, myBrushBac As Brush, myPenBac As Pen)
+        '-----------------------------------------------------------------------------------------------
+        '   18/12/24 :  Version 1.00 - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin d'une dalle mixte parallèle pour la vignette montrant un zoom sur le connecteur
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre dont on dessine la connexion 
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   bDalle      [E] :   Largeur de la dalle représentée
+        '   myBrushBeton[E] :   Pinceau utilisé pour le béton
+        '   myBrushBac  [E] :   Pinceau utilisé pour le bac
+        '   myPenBac    [E] :   Stylo pour le contour du bac
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
+        Dim nbPts As Integer
+        Dim zTop As Decimal = myBeam.Dalle.zTop
+        Dim EpBac As Decimal = myBeam.Dalle.Bac.Ep
+
+        '--( Dessin du bac
+
+        '--> Calcul des points du pourtour du bac
+        myBeam.Dalle.Bac.PrepareContourBacSimple1Nervure(xPts, yPts, nbPts)
+
+        '--> Remplissage contour
+        RemplirZone(myGr, myBrushBac, xPts, yPts, nbPts, myParAff, True)
+
+        '--( Dessin de la dalle béton
+
+        '--> Calcul des points du pourtour de la dalle
+
+        Dim xPts_Dalle(xPts.Length / 2 + 1) As Single
+        Dim yPts_Dalle(xPts.Length / 2 + 1) As Single
+
+        For i As Integer = 0 To xPts.Length / 2 - 1
+            xPts_Dalle(i) = xPts(i)
+            yPts_Dalle(i) = yPts(i)
+        Next
+        xPts_Dalle(xPts.Length / 2) = xPts(xPts.Length / 2 - 1)
+        xPts_Dalle(xPts.Length / 2 + 1) = xPts(0)
+
+        yPts_Dalle(xPts.Length / 2) = myBeam.Dalle.Ep_td
+        yPts_Dalle(xPts.Length / 2 + 1) = myBeam.Dalle.Ep_td
+
+        nbPts = xPts_Dalle.Length
+
+        '--> Remplissage contour
+
+        RemplirZone(myGr, myBrushBeton, xPts_Dalle, yPts_Dalle, nbPts, myParAff, False)
+
+        '--( Traits de finition
+
+        AddLigne(myGr, MyPenContour, -EpBac / 2, zTop, +EpBac / 2, zTop, myParAff)
+
+    End Sub
+
+    Private Sub DessinFrmConnection_Connecteurs_DalleMixteCofraplus220(myGr As Graphics, myParAff As Struc_Affichage, myBeam As cls_Poutre, bDalle As Decimal,
+                                                                       myBrushBeton As Brush, myBrushBac As Brush, myPenBac As Pen)
+        '-----------------------------------------------------------------------------------------------
+        '   18/12/24 :  Version 1.00 - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin d'une dalle mixte avec Cofraplus 220 pour la vignette montrant un zoom sur le connecteur
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre dont on dessine la connexion 
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   bDalle      [E] :   Largeur de la dalle représentée
+        '   myBrushBeton[E] :   Pinceau utilisé pour le béton
+        '   myBrushBac  [E] :   Pinceau utilisé pour le bac
+        '   myPenBac    [E] :   Stylo pour le contour du bac
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
+        Dim nbPts As Integer
+        Dim zTop As Decimal
+        Dim Bfs, Hp As Decimal
+        Dim xo As Decimal
+
+        '--( Initialisation
+
+        zTop = myBeam.Dalle.zTop
+        Bfs = myBeam.Section.ProfilA.Bfs
+        Hp = myBeam.Dalle.Bac.Hp
+
+        '--( Préparation du contour de la dalle
+
+        nbPts = 0
+        AjoutePoint(-Bfs / 2, 0, xPts, yPts, nbPts)
+        AjoutePoint(Bfs / 2, 0, xPts, yPts, nbPts)
+        AjoutePoint(Bfs / 2, -Hp, xPts, yPts, nbPts)
+        AjoutePoint(bDalle / 2, -Hp, xPts, yPts, nbPts)
+        AjoutePoint(bDalle / 2, zTop, xPts, yPts, nbPts)
+        AjoutePoint(-bDalle / 2, zTop, xPts, yPts, nbPts)
+        AjoutePoint(-bDalle / 2, -Hp, xPts, yPts, nbPts)
+        AjoutePoint(-Bfs / 2, -Hp, xPts, yPts, nbPts)
+
+        RemplirZone(myGr, myBrushBeton, xPts, yPts, nbPts, myParAff, False, True)
+
+        '--( Partie bacs
+
+        AddRectanglePlein(myGr, myBrushBac, MyPenContour, -bDalle / 2, 0, -Bfs / 2, -Hp, myParAff, True, False)
+        AddRectanglePlein(myGr, myBrushBac, MyPenContour, bDalle / 2, 0, +Bfs / 2, -Hp, myParAff, True, False)
+
+        '--( Ligne de contour
+
+        AddLigne(myGr, MyPenContour, -bDalle / 2, zTop, bDalle / 2, zTop, myParAff)
+
+        xo = Bfs / 2
+        AddLigne(myGr, MyPenContour, xo, 0, xo, -Hp, myParAff)
+        AddLigne(myGr, MyPenContour, -xo, 0, -xo, -Hp, myParAff)
+        AddLigne(myGr, MyPenContour, xo, 0, -xo, 0, myParAff)
+
+        AddLigne(myGr, myPenBac, -bDalle / 2, 0, -Bfs / 2, 0, myParAff)
+        AddLigne(myGr, myPenBac, bDalle / 2, 0, Bfs / 2, 0, myParAff)
+
+    End Sub
+
+    Private Sub DessinFrmConnection_Connecteurs_myParAff(myBeam As cls_Poutre, pWi As Single, pHi As Single, kAdjust As Double,
+                                                         xLeft As Decimal, yTop As Decimal, ByRef myParAff As Struc_Affichage)
+        '-----------------------------------------------------------------------------------------------
+        '   18/12/24 :  Version 1.00 - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Prépare le myParAff utilisé dans DessinFrmConnection_Connecteurs
+        '   Dessin d'une vignette montrant un zoom sur le connecteur
+        '-----------------------------------------------------------------------------------------------
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '   myBeam      [E] :   Poutre dont on dessine la connexion 
+        '   myParAff    [S] :   Paramètres d'affichage
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim lMixte As Boolean = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte)
+        Dim lParallel As Boolean = (myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele)
+
+        '--( Valeurs enveloppes
+
+        If lMixte And lParallel Then
+
+            xMax = myBeam.Dalle.Bac.Ep / 2
+
+        ElseIf lMixte Then
+
+            xMax = myBeam.Section.ProfilA.Bfs
+
+        Else
+
+            xMax = myBeam.Section.ProfilA.Bfs + myBeam.Dalle.Ep_th * Math.Tan(myBeam.Dalle.ThetaRd)
+
+        End If
+        xMin = -xMax
+
+        yMin = -myBeam.Section.ProfilA.Tfs
+        yMax = Math.Max(myBeam.Dalle.zTop, myBeam.Dalle.Goujons.hsc)
+
+        '--( Preparation de myparaff
+
+        ParametresAffichage(myParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+    End Sub
+
+    Public Sub DessinFrmConnection_ConnecteursOLD(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double,
+                                               myBeam As cls_Poutre,
+                                               ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   24/06/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin du Bac Acier
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '   myBeam      [E] :   Poutre dont on dessine la connexion 
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Declarations
+
+        Dim myParAff As Struc_Affichage
+
+        Dim ColorPen As Color = Color.Blue
+        Dim ColorRedPen As Color = Color.Red
+
+        Dim CouleurBeton As Color = CouleurBetonNormal
+        Dim CouleurAcier As Color = CouleurAcierNormal
+        Dim CouleurConnect As Color = CouleurConnecteurNormal
+
+        Dim myBrushBac As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.LightGray, Color.DarkGray)
+        Dim myBrushBeton As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.Gray, CouleurBeton)
+        'Dim myBrushBac As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.Gray, CouleurBeton)
+        Dim myBrushProfilA As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), CouleurAcier, CouleurAcier)
+        Dim myBrushConnecteur As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), CouleurConnect, CouleurConnect)
+
+        Dim MyPenBrush As New SolidBrush(ColorPen)
+        Dim MyPenRedBrush As New SolidBrush(ColorRedPen)
+        Dim MyPen As New Pen(ColorPen)
+        Dim MyPenRed As New Pen(ColorRedPen)
+        Dim MyFontNormal As Font = FontBase
+        Dim myPenDash As New Pen(Color.Black, 0.75)
 
         Dim xMin, yMin, xMax, yMax As Double
         Dim dCar As Decimal
@@ -5977,32 +6405,45 @@ Public Module Mod_Dessins
         Dim xPts() As Single = Nothing
         Dim yPts() As Single = Nothing
         Dim nbPts As Integer
+        Dim lMixte As Boolean = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte)
+        Dim lParallel As Boolean = (myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele)
+        Dim lCofraplus220 As Boolean = myBeam.Dalle.Bac.lCofraplus220
+        Dim lNervureContinue As Boolean = Not (myBeam.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu)
+        Dim Bfs, zTop, Hp As Decimal
+        Dim xo, xe As Decimal
+        Dim Chaine As String
 
         '--> Initialisation
-        dCar = MyPoutreLoc.Dalle.Ep_td
+
+        dCar = myBeam.Dalle.Ep_td
 
         '--> Dessin des éléments
 
-        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
+        If lMixte And lParallel Then
+
+            '===========================================================================================================================================
+            '= CAS D'UNE DALLE MIXTE, NERVURE PARALLELE : on voit la nervure en coupe
+            '===========================================================================================================================================
 
             '--> Dessin du bac acier
 
-            With MyPoutreLoc.Dalle.Bac
+            With myBeam.Dalle.Bac
 
                 '--> Preparation de la zone d'affichage - Calcul de ParAff
                 xMin = - .Ep / 2
                 xMax = .Ep / 2
 
-                yMin = -MyPoutreLoc.Section.ProfilA.Tfs
-                yMax = Math.Max(MyPoutreLoc.Dalle.Ep_td, MyPoutreLoc.Dalle.Goujons.hsc)
+                yMin = -myBeam.Section.ProfilA.Tfs
+                yMax = Math.Max(myBeam.Dalle.Ep_td, myBeam.Dalle.Goujons.hsc)
 
-                ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+                ParametresAffichage(myParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
                 '--> Calcul des points du pourtour du bac
                 .PrepareContourBacSimple1Nervure(xPts, yPts, nbPts)
 
                 '--> Remplissage contour
-                RemplirZone(myGr, myBrushBac, xPts, yPts, nbPts, MyParAff, True)
+                RemplirZone(myGr, myBrushBac, xPts, yPts, nbPts, myParAff, True)
+
             End With
 
             '--> Dessin de la dalle béton
@@ -6019,13 +6460,13 @@ Public Module Mod_Dessins
             xPts_Dalle(xPts.Length / 2) = xPts(xPts.Length / 2 - 1)
             xPts_Dalle(xPts.Length / 2 + 1) = xPts(0)
 
-            yPts_Dalle(xPts.Length / 2) = MyPoutreLoc.Dalle.Ep_td
-            yPts_Dalle(xPts.Length / 2 + 1) = MyPoutreLoc.Dalle.Ep_td
+            yPts_Dalle(xPts.Length / 2) = myBeam.Dalle.Ep_td
+            yPts_Dalle(xPts.Length / 2 + 1) = myBeam.Dalle.Ep_td
 
             nbPts = xPts_Dalle.Length
 
             '--> Remplissage contour
-            RemplirZone(myGr, myBrushBeton, xPts_Dalle, yPts_Dalle, nbPts, MyParAff, True)
+            RemplirZone(myGr, myBrushBeton, xPts_Dalle, yPts_Dalle, nbPts, myParAff, True)
 
             '--> Dessin du goujon
 
@@ -6033,41 +6474,154 @@ Public Module Mod_Dessins
             Dim yGoujon As Decimal = yPts(yPts.Length / 4)
 
             'Dessin du corps du goujon
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Goujons.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Goujons.d / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - myBeam.Dalle.Goujons.d / 2, yGoujon, xGoujon + myBeam.Dalle.Goujons.d / 2, yGoujon + myBeam.Dalle.Goujons.hsc, myParAff, True, True)
             'Dessin de la tete du goujon
             Dim dTete, hTete As Decimal
-            MyPoutreLoc.Dalle.Goujons.DimensionsTete(dTete, hTete)
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc, MyParAff, True, True)
+            myBeam.Dalle.Goujons.DimensionsTete(dTete, hTete)
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + myBeam.Dalle.Goujons.hsc - hTete, xGoujon + dTete / 2, yGoujon + myBeam.Dalle.Goujons.hsc, myParAff, True, True)
 
             'Dessin de la semelle supérieure et de l'âme de la poutre
             Dim xSemelleSup As Decimal = 0
             Dim ySemelleSup As Decimal = yPts(3 * yPts.Length / 4)
-            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - MyPoutreLoc.Section.ProfilA.Bfs / 2 / 2, ySemelleSup - MyPoutreLoc.Section.ProfilA.Tfs, xSemelleSup + MyPoutreLoc.Section.ProfilA.Bfs / 2 / 2, ySemelleSup, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - myBeam.Section.ProfilA.Bfs / 2 / 2, ySemelleSup - myBeam.Section.ProfilA.Tfs, xSemelleSup + myBeam.Section.ProfilA.Bfs / 2 / 2, ySemelleSup, myParAff, True, True)
 
             Dim xAme As Decimal = xSemelleSup
-            Dim yAme As Decimal = ySemelleSup - MyPoutreLoc.Section.ProfilA.Tfs
-            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - MyPoutreLoc.Section.ProfilA.Tw / 2, yAme - MyPoutreLoc.Section.ProfilA.HauteurAmeHw, xAme + MyPoutreLoc.Section.ProfilA.Tw / 2, yAme, MyParAff, True, True)
+            Dim yAme As Decimal = ySemelleSup - myBeam.Section.ProfilA.Tfs
+            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - myBeam.Section.ProfilA.Tw / 2, yAme - myBeam.Section.ProfilA.HauteurAmeHw, xAme + myBeam.Section.ProfilA.Tw / 2, yAme, myParAff, True, True)
 
         Else
 
-            With MyPoutreLoc.Section.ProfilA
+            Bfs = myBeam.Section.ProfilA.Bfs
+            zTop = myBeam.Dalle.zTop
+            Hp = myBeam.Dalle.Bac.Hp
+
+            If lMixte And lCofraplus220 Then
+
+                '===========================================================================================================================================
+                '= CAS D'UNE DALLE MIXTE, AVEC COFRAPLUS 220
+                '===========================================================================================================================================
+
+                xMin = -Bfs
+                xMax = Bfs
+
+                yMin = -myBeam.Section.ProfilA.Tfs
+                yMax = Math.Max(myBeam.Dalle.zTop, myBeam.Dalle.Goujons.hsc)
+
+                ParametresAffichage(myParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+                '--> Dessin de la dalle
+
+                nbPts = 0
+                AjoutePoint(-Bfs / 2, 0, xPts, yPts, nbPts)
+                AjoutePoint(Bfs / 2, 0, xPts, yPts, nbPts)
+                AjoutePoint(Bfs / 2, -Hp, xPts, yPts, nbPts)
+                AjoutePoint(Bfs, -Hp, xPts, yPts, nbPts)
+                AjoutePoint(Bfs, zTop, xPts, yPts, nbPts)
+                AjoutePoint(-Bfs, zTop, xPts, yPts, nbPts)
+                AjoutePoint(-Bfs, -Hp, xPts, yPts, nbPts)
+                AjoutePoint(-Bfs / 2, -Hp, xPts, yPts, nbPts)
+
+                RemplirZone(myGr, myBrushBeton, xPts, yPts, nbPts, myParAff, False, True)
+
+                '--( Partie bacs
+
+                AddRectanglePlein(myGr, myBrushBac, MyPenContour, -Bfs, 0, -Bfs / 2, -Hp, myParAff, True, False)
+                AddRectanglePlein(myGr, myBrushBac, MyPenContour, Bfs, 0, +Bfs / 2, -Hp, myParAff, True, False)
+
+                xo = -Bfs
+                xe = Bfs
+                AddLigne(myGr, MyPenContour, xo, zTop, xe, zTop, myParAff)
+
+                xo = Bfs / 2
+                AddLigne(myGr, MyPenContour, xo, 0, xo, -Hp, myParAff)
+                AddLigne(myGr, MyPenContour, -xo, 0, -xo, -Hp, myParAff)
+                AddLigne(myGr, MyPenContour, xo, 0, -xo, 0, myParAff)
+
+                AddLigne(myGr, myPenDash, -Bfs, 0, -Bfs / 2, 0, myParAff)
+                AddLigne(myGr, myPenDash, Bfs, 0, Bfs / 2, 0, myParAff)
+
+
+            ElseIf lMixte And (Not lNervureContinue) Then
+
+                '===========================================================================================================================================
+                '= CAS D'UNE DALLE MIXTE, NERVURE PERPENDICULAIRE AVEC NERVURE NON CONTINUE : on voit la nervure longitudinale en coupe
+                '===========================================================================================================================================
 
                 '--> Preparation de la zone d'affichage - Calcul de ParAff
-                xMin = - .Bfs
-                xMax = .Bfs
+                xMin = -Bfs
+                xMax = Bfs
 
-                yMin = -MyPoutreLoc.Section.ProfilA.Tfs
-                yMax = Math.Max(MyPoutreLoc.Dalle.Ep_td, MyPoutreLoc.Dalle.Goujons.hsc)
+                yMin = -myBeam.Section.ProfilA.Tfs
+                yMax = Math.Max(myBeam.Dalle.Ep_td, myBeam.Dalle.Goujons.hsc)
 
-                ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+                ParametresAffichage(myParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
-            End With
-            '--> Dessin de la dalle béton
+                '--> Dessin de la dalle béton
 
-            Dim xBeton As Decimal = 0
-            Dim yBeton As Decimal = 0
+                Dim xBeton As Decimal = 0
+                Dim yBeton As Decimal = 0
+                Const bApp As Decimal = 0.05
 
-            AddRectanglePlein(myGr, myBrushBeton, MyPenContour, xBeton - MyPoutreLoc.Section.ProfilA.Bfs, yBeton, xBeton + MyPoutreLoc.Section.ProfilA.Bfs, yBeton + MyPoutreLoc.Dalle.Ep_td, MyParAff, True, True)
+                AddRectanglePlein(myGr, myBrushBeton, MyPenContour, xBeton - Bfs, yBeton, xBeton + Bfs, yBeton + myBeam.Dalle.Ep_td, myParAff, True, False)
+
+
+                '--( Partie bac
+
+                AddRectanglePlein(myGr, myBrushBac, MyPenContour, xBeton - Bfs, yBeton, xBeton - Bfs / 2 + bApp, Hp, myParAff, True, False)
+                AddRectanglePlein(myGr, myBrushBac, MyPenContour, xBeton + Bfs, yBeton, xBeton + Bfs / 2 - bApp, Hp, myParAff, True, False)
+                AddLigne(myGr, myPenDash, xBeton - Bfs / 2 + bApp, 0, xBeton - Bfs / 2 + bApp, Hp, myParAff)
+                AddLigne(myGr, myPenDash, xBeton - Bfs / 2 + bApp, Hp, xBeton - Bfs, Hp, myParAff)
+                AddLigne(myGr, myPenDash, xBeton + Bfs / 2 - bApp, 0, xBeton + Bfs / 2 - bApp, Hp, myParAff)
+                AddLigne(myGr, myPenDash, xBeton + Bfs / 2 - bApp, Hp, xBeton + Bfs, Hp, myParAff)
+
+                '--( compléments lignes de la dalle
+
+                xo = -Bfs
+                xe = Bfs
+                AddLigne(myGr, MyPenContour, xo, zTop, xe, zTop, myParAff)
+                AddLigne(myGr, MyPenContour, xo, yBeton, xe, yBeton, myParAff)
+
+            Else
+
+                '===========================================================================================================================================
+                '= AUTRES CAS
+                '===========================================================================================================================================
+
+                With myBeam.Section.ProfilA
+
+                    '--> Preparation de la zone d'affichage - Calcul de ParAff
+                    xMin = - .Bfs
+                    xMax = .Bfs
+
+                    yMin = -myBeam.Section.ProfilA.Tfs
+                    yMax = Math.Max(myBeam.Dalle.Ep_td, myBeam.Dalle.Goujons.hsc)
+
+                    ParametresAffichage(myParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+                End With
+
+                '--> Dessin de la dalle béton
+
+                Dim xBeton As Decimal = 0
+                Dim yBeton As Decimal = 0
+
+                AddRectanglePlein(myGr, myBrushBeton, MyPenContour, xBeton - myBeam.Section.ProfilA.Bfs, yBeton, xBeton + myBeam.Section.ProfilA.Bfs, yBeton + myBeam.Dalle.Ep_td, myParAff, True, False)
+
+                '--( Partie bac pour les dalles mixtes
+
+                If lMixte Then
+                    AddRectanglePlein(myGr, myBrushBac, MyPenContour, -Bfs, 0, Bfs, Hp, myParAff, True, False)
+                End If
+
+                '--( Compléments lignes
+
+                AddLigne(myGr, MyPenContour, -Bfs, zTop, +Bfs, zTop, myParAff)
+                AddLigne(myGr, MyPenContour, -Bfs, 0, +Bfs, 0, myParAff)
+
+                If lMixte Then
+                    AddLigne(myGr, myPenDash, -Bfs, Hp, +Bfs, Hp, myParAff)
+                End If
+            End If
 
             '--> Dessin du goujon
 
@@ -6075,22 +6629,32 @@ Public Module Mod_Dessins
             Dim yGoujon As Decimal = 0
 
             'Dessin du corps du goujon
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Goujons.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Goujons.d / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - myBeam.Dalle.Goujons.d / 2, yGoujon, xGoujon + myBeam.Dalle.Goujons.d / 2, yGoujon + myBeam.Dalle.Goujons.hsc, myParAff, True, True)
             'Dessin de la tete du goujon
             Dim dTete, hTete As Decimal
-            MyPoutreLoc.Dalle.Goujons.DimensionsTete(dTete, hTete)
+            myBeam.Dalle.Goujons.DimensionsTete(dTete, hTete)
 
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + myBeam.Dalle.Goujons.hsc - hTete, xGoujon + dTete / 2, yGoujon + myBeam.Dalle.Goujons.hsc, myParAff, True, True)
 
             '--> Dessin de la semelle supérieure et de l'âme de la poutre
 
             Dim xSemelleSup As Decimal = 0
             Dim ySemelleSup As Decimal = 0
-            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - MyPoutreLoc.Section.ProfilA.Bfs / 2 / 2, ySemelleSup - MyPoutreLoc.Section.ProfilA.Tfs, xSemelleSup + MyPoutreLoc.Section.ProfilA.Bfs / 2 / 2, ySemelleSup, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - myBeam.Section.ProfilA.Bfs / 2 / 2, ySemelleSup - myBeam.Section.ProfilA.Tfs, xSemelleSup + myBeam.Section.ProfilA.Bfs / 2 / 2, ySemelleSup, myParAff, True, True)
 
             Dim xAme As Decimal = xSemelleSup
-            Dim yAme As Decimal = ySemelleSup - MyPoutreLoc.Section.ProfilA.Tfs
-            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - MyPoutreLoc.Section.ProfilA.Tw / 2, yAme - MyPoutreLoc.Section.ProfilA.HauteurAmeHw, xAme + MyPoutreLoc.Section.ProfilA.Tw / 2, yAme, MyParAff, True, True)
+            Dim yAme As Decimal = ySemelleSup - myBeam.Section.ProfilA.Tfs
+            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - myBeam.Section.ProfilA.Tw / 2, yAme - myBeam.Section.ProfilA.HauteurAmeHw, xAme + myBeam.Section.ProfilA.Tw / 2, yAme, myParAff, True, True)
+
+            '--( Cotation
+
+            xo = -0.75 * Bfs
+
+            AddFleche(myGr, MyPenContour, xo, 0, xo, zTop, myParAff, True, True)
+
+            Chaine = GetStringInUnitN(zTop, Enu_TypeVariable.Dimension, 4, 3, False, True)
+
+            AddTexte(myGr, New SolidBrush(Color.Black), Chaine, MyFontNormal, xo, 0.5 * zTop, myParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
 
         End If
 
@@ -9675,7 +10239,7 @@ Public Module Mod_Dessins
 
 #Region " Outils pour le dessin de la dalle "
 
-    Private Sub DessineDalleMixtePerpendiculaireCfp220(ByRef MyGr As Graphics, MyPoutre As cls_Poutre, MyParAffA As Struc_Affichage,
+    Private Sub DessineDalleMixtePerpendiculaireCfp220(ByRef MyGr As Graphics, myBeam As cls_Poutre, MyParAffA As Struc_Affichage,
                                                        MyBrushDP As Brush, BeffRed As Decimal)
         '---------------------------------------------------------------------------------------------------------------------------
         '   08/08/23    :   Création - POM
@@ -9694,14 +10258,14 @@ Public Module Mod_Dessins
 
         Dim MyPenContour As New Pen(Color.Black, 1)
 
-        Dim Hp As Decimal = MyPoutre.Dalle.Bac.Hp
+        Dim Hp As Decimal = myBeam.Dalle.Bac.Hp
         Dim xPts() As Single = Nothing
         Dim yPts() As Single = Nothing
         Dim nbPts As Integer
-        Dim Bfs As Decimal = MyPoutre.Section.ProfilA.Bfs
-        Dim zTop As Decimal = MyPoutre.Dalle.zTop
+        Dim Bfs As Decimal = myBeam.Section.ProfilA.Bfs
+        Dim zTop As Decimal = myBeam.Dalle.zTop
         Dim xo, xe As Decimal
-        Dim wApp As Decimal = MyPoutre.Dalle.Bac.wAppui
+        Dim wApp As Decimal = myBeam.Dalle.Bac.wAppui
 
         '--> Préparation du contour de la dalle
 

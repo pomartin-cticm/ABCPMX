@@ -2,7 +2,6 @@
 
 Public Class Frm_OptionsCalculCalcul
 
-
 #Region " Variables locales "
 
 

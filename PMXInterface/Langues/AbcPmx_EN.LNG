@@ -254,11 +254,11 @@ RIBS					= Ribs
 ROW_NUMBER				= Number of rows
 SPAN					= Span
 STUDS					= Studs
-WIDTH					= Width
+WIDTH					= Length
 WARNING_CMBTRAVEE		= All the input data must be correct to select an other the span
 ADD						= Add
 DELETE					= Delete
-FLANGE_STUD			= Stud welded on the upper flange
+FLANGE_STUD				= Stud welded on the upper flange
 WEB_STUD				= Stud welded on the web
 WEB_REINF				= Dowels
 CLASS					= Class
@@ -961,6 +961,7 @@ CANCEL					= Cancel
 GAMMA					= Default national factors
 SCOPE					= Scope of application
 CALCUL					= Calculation options
+CONNECTORS				= Connectors
 SLIMFLOOR				= Slabs and slimfloors
 FIRE					= Fire design
 MODIF					= Warning : parameter modifications will be taken into account when adding new beams only. 
@@ -993,6 +994,12 @@ SELFWEIGHT				= Self weight
 OTHERPERMANENT			= Other permanent loads
 SHRINKAGE				= Shrinkage
 ETAW					= Shear buckling
+
+#OPTCALCONNECTORS
+TITLE					= Options for welded studs
+DIMENSIONS				= Dimensions
+DIAMIN					= Minimal diameter
+DIAMAX					= Maximal diameter
 
 #OPTCALGAMMA
 TITLE					= Default national factors
