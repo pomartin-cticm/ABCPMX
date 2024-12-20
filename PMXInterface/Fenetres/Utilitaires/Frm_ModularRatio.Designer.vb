@@ -80,6 +80,11 @@ Partial Class Frm_ModularRatio
         Me.TLpan_Droite = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_CoefficientAnnexB = New System.Windows.Forms.Label()
         Me.pan_AnnexB = New System.Windows.Forms.Panel()
+        Me.img_PhiT = New System.Windows.Forms.PictureBox()
+        Me.imgBetaC = New System.Windows.Forms.PictureBox()
+        Me.img_Phi0 = New System.Windows.Forms.PictureBox()
+        Me.img_BetaT0 = New System.Windows.Forms.PictureBox()
+        Me.img_BetaFcm = New System.Windows.Forms.PictureBox()
         Me.img_PhiRH = New System.Windows.Forms.PictureBox()
         Me.lbl_PhiT = New System.Windows.Forms.Label()
         Me.lbl_BetaC = New System.Windows.Forms.Label()
@@ -94,11 +99,6 @@ Partial Class Frm_ModularRatio
         Me.txt_BetaFcm = New System.Windows.Forms.TextBox()
         Me.txt_PhiRH = New System.Windows.Forms.TextBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.img_BetaFcm = New System.Windows.Forms.PictureBox()
-        Me.img_BetaT0 = New System.Windows.Forms.PictureBox()
-        Me.img_Phi0 = New System.Windows.Forms.PictureBox()
-        Me.imgBetaC = New System.Windows.Forms.PictureBox()
-        Me.img_PhiT = New System.Windows.Forms.PictureBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -123,13 +123,13 @@ Partial Class Frm_ModularRatio
         CType(Me.img_n0, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLpan_Droite.SuspendLayout()
         Me.pan_AnnexB.SuspendLayout()
+        CType(Me.img_PhiT, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.imgBetaC, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Phi0, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_BetaT0, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_BetaFcm, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PhiRH, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_BetaFcm, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_BetaT0, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Phi0, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.imgBetaC, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_PhiT, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -792,6 +792,46 @@ Partial Class Frm_ModularRatio
         Me.pan_AnnexB.Size = New System.Drawing.Size(250, 293)
         Me.pan_AnnexB.TabIndex = 3
         '
+        'img_PhiT
+        '
+        Me.img_PhiT.Location = New System.Drawing.Point(75, 218)
+        Me.img_PhiT.Name = "img_PhiT"
+        Me.img_PhiT.Size = New System.Drawing.Size(86, 20)
+        Me.img_PhiT.TabIndex = 107
+        Me.img_PhiT.TabStop = False
+        '
+        'imgBetaC
+        '
+        Me.imgBetaC.Location = New System.Drawing.Point(75, 174)
+        Me.imgBetaC.Name = "imgBetaC"
+        Me.imgBetaC.Size = New System.Drawing.Size(86, 20)
+        Me.imgBetaC.TabIndex = 106
+        Me.imgBetaC.TabStop = False
+        '
+        'img_Phi0
+        '
+        Me.img_Phi0.Location = New System.Drawing.Point(75, 134)
+        Me.img_Phi0.Name = "img_Phi0"
+        Me.img_Phi0.Size = New System.Drawing.Size(86, 20)
+        Me.img_Phi0.TabIndex = 105
+        Me.img_Phi0.TabStop = False
+        '
+        'img_BetaT0
+        '
+        Me.img_BetaT0.Location = New System.Drawing.Point(75, 92)
+        Me.img_BetaT0.Name = "img_BetaT0"
+        Me.img_BetaT0.Size = New System.Drawing.Size(86, 20)
+        Me.img_BetaT0.TabIndex = 104
+        Me.img_BetaT0.TabStop = False
+        '
+        'img_BetaFcm
+        '
+        Me.img_BetaFcm.Location = New System.Drawing.Point(75, 52)
+        Me.img_BetaFcm.Name = "img_BetaFcm"
+        Me.img_BetaFcm.Size = New System.Drawing.Size(86, 20)
+        Me.img_BetaFcm.TabIndex = 103
+        Me.img_BetaFcm.TabStop = False
+        '
         'img_PhiRH
         '
         Me.img_PhiRH.Location = New System.Drawing.Point(75, 12)
@@ -912,49 +952,8 @@ Partial Class Frm_ModularRatio
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'img_BetaFcm
-        '
-        Me.img_BetaFcm.Location = New System.Drawing.Point(75, 52)
-        Me.img_BetaFcm.Name = "img_BetaFcm"
-        Me.img_BetaFcm.Size = New System.Drawing.Size(86, 20)
-        Me.img_BetaFcm.TabIndex = 103
-        Me.img_BetaFcm.TabStop = False
-        '
-        'img_BetaT0
-        '
-        Me.img_BetaT0.Location = New System.Drawing.Point(75, 92)
-        Me.img_BetaT0.Name = "img_BetaT0"
-        Me.img_BetaT0.Size = New System.Drawing.Size(86, 20)
-        Me.img_BetaT0.TabIndex = 104
-        Me.img_BetaT0.TabStop = False
-        '
-        'img_Phi0
-        '
-        Me.img_Phi0.Location = New System.Drawing.Point(75, 134)
-        Me.img_Phi0.Name = "img_Phi0"
-        Me.img_Phi0.Size = New System.Drawing.Size(86, 20)
-        Me.img_Phi0.TabIndex = 105
-        Me.img_Phi0.TabStop = False
-        '
-        'imgBetaC
-        '
-        Me.imgBetaC.Location = New System.Drawing.Point(75, 174)
-        Me.imgBetaC.Name = "imgBetaC"
-        Me.imgBetaC.Size = New System.Drawing.Size(86, 20)
-        Me.imgBetaC.TabIndex = 106
-        Me.imgBetaC.TabStop = False
-        '
-        'img_PhiT
-        '
-        Me.img_PhiT.Location = New System.Drawing.Point(75, 218)
-        Me.img_PhiT.Name = "img_PhiT"
-        Me.img_PhiT.Size = New System.Drawing.Size(86, 20)
-        Me.img_PhiT.TabIndex = 107
-        Me.img_PhiT.TabStop = False
-        '
         'Frm_ModularRatio
         '
-        Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Annuler
@@ -997,13 +996,13 @@ Partial Class Frm_ModularRatio
         Me.TLpan_Droite.PerformLayout()
         Me.pan_AnnexB.ResumeLayout(False)
         Me.pan_AnnexB.PerformLayout()
+        CType(Me.img_PhiT, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.imgBetaC, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Phi0, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_BetaT0, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_BetaFcm, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PhiRH, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_BetaFcm, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_BetaT0, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Phi0, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.imgBetaC, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_PhiT, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

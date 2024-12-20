@@ -3397,7 +3397,7 @@ Module Mod_NoteCalcul
         Dim zANP, MplRd As Decimal
         Dim zANPk, MplRk As Decimal
         Dim EN1994 As New cls_Eurocodes
-        Dim BetaM As Decimal
+        Dim BetaM, BetaMk As Decimal
         Dim lOK, lAppBeta As Boolean
         Dim Reference As String
         Dim zSurH As Decimal
@@ -3439,9 +3439,10 @@ Module Mod_NoteCalcul
         MyBeam.Section.ProprietesPlastiquesMixteMyy(1, False, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zANPk, MplRk)
 
         BetaM = EN1994.ReductionFactorBeta(MyBeam.Dalle.zTop - zANP, MyBeam.HauteurTotaleSectionMixte, MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1, lOK)
+        BetaMk = EN1994.ReductionFactorBeta(MyBeam.Dalle.zTop - zANPk, MyBeam.HauteurTotaleSectionMixte, MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1, lOK)
         lAppBeta = EN1994.IsBetaApplicable(MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1)
 
-        AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(BetaM * MplRd, Enu_TypeVariable.Moment, 4, 0, True))
         If lAppBeta Then
             '--| AffichageOptFeu de la valeur de beta, le cas échéant
             zSurH = (MyBeam.Dalle.zTop - zANP) / MyBeam.HauteurTotaleSectionMixte
@@ -3466,7 +3467,7 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & BlocSP("ACCORDINGTO") & TABAFF & Reference)
         End If
         AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 1, True))
-        AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnit(MplRk, Enu_TypeVariable.Moment, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnit(BetaMk * MplRk, Enu_TypeVariable.Moment, 4, 0, True))
 
         '--> Propriétés console gauche
 

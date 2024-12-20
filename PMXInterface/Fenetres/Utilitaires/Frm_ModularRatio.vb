@@ -212,7 +212,7 @@ Public Class Frm_ModularRatio
         Dim RH As Decimal = cls_OptionsCalcul.tabRH(Me.cmb_RH.SelectedIndex)
         Dim PsiL As Decimal = tabPsiL(Me.cmb_PsiL.SelectedIndex)
         Dim n0 As Decimal = MonBeton.CoefficientEquivalenceCT
-        Dim nL As Decimal = MonBeton.CoefficientEquivalence(rh, RayonH0, AgeT, AgeT0, psil)
+        Dim nL As Decimal = MonBeton.CoefficientEquivalence(RH, RayonH0, AgeT, AgeT0, PsiL)
 
         Me.txt_n0.Text = GetStringInUnit(n0, Enu_TypeVariable.SansType, 3, 2, False)
         Me.txt_nL.Text = GetStringInUnit(nL, Enu_TypeVariable.SansType, 3, 2, False)
@@ -298,20 +298,23 @@ Public Class Frm_ModularRatio
         Dim ValMin, ValMax As Decimal
         Dim lValMin As Boolean = True
         Dim lValMax As Boolean = True
-        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+        Dim kUnit As Decimal
 
         Select Case MyTxt.Name
 
             Case Me.txt_AgeT.Name
                 ValMin = AgeT0 + 1
                 lValMax = False
+                kUnit = 1
 
             Case Me.txt_AgeT0.Name
                 ValMin = 1
                 ValMax = AgeT - 1
                 lValMax = True
+                kUnit = 1
 
             Case Me.txt_H0.Name
+                kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
                 ValMin = 0.02 / kUnit
                 lValMax = False
         End Select

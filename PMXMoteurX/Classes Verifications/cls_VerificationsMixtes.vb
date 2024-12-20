@@ -769,6 +769,12 @@
         Dim RdConnex As Decimal
         Dim RConnexG, RConnexD As Decimal
         Dim lOK As Boolean = True
+        Dim Beta As Decimal
+        Dim myEN1994 As New cls_Eurocodes
+        Dim zTop As Decimal
+        Dim lGene1 As Boolean
+        Dim Nuance As String
+        Dim lOKPl As Boolean
 
         '--( Initialisation
 
@@ -776,6 +782,9 @@
         iTravFin = myBeam.IndiceDerniereTravee
         ReDim pzANP(NbNodes - 1, 1)
         ReDim pMPlRd(NbNodes - 1, 1)
+        zTop = myBeam.Dalle.zTop
+        lGene1 = myBeam.Param.lGeneration1
+        Nuance = myBeam.Section.Acier.Nuance
 
         '--> Traitement
 
@@ -823,9 +832,17 @@
                 myBeam.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, myBeam.Param.Gamma, rhoVLoc, bEff(iNode),
                                                                RdConnex, myBeam.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
 
+                '--( Traitement du coefficient beta
+
+                If Signe > 0 Then
+                    Beta = myEN1994.ReductionFactorBeta(zTop - pzANP(iNode, kDeb), myBeam.HauteurTotaleSectionMixte, Nuance, lGene1, lOKPl)
+                Else
+                    Beta = 1
+                End If
+
                 If kfin > kDeb Then
                     pzANP(iNode, kfin) = pzANP(iNode, kDeb)
-                    pMPlRd(iNode, kfin) = pMPlRd(iNode, kDeb)
+                    pMPlRd(iNode, kfin) = Beta * pMPlRd(iNode, kDeb)
                 End If
 
             Next
@@ -840,74 +857,74 @@
     End Sub
 
 
-    Private Sub MaillageProprietesPlastiques(iCombi As Integer, MyPoutre As cls_Poutre, MEd(,) As Decimal, DeltaRd() As List(Of Decimal), bEff() As Decimal,
-                                             ByRef pzANP(,) As Decimal, ByRef pMPlRd(,) As Decimal, Optional rhoV As Decimal(,) = Nothing)
-        '----------------------------------------------------------------------------------------------------------
-        '   02/11/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Calcul des propriétés plastiques le long de la barre en fonction de 
-        '   du moment sollicitant et du degré de connection
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam          [E] :   Poutre traitée
-        '   MEd             [E] :   Diagramme de moment aux ELU
-        '   DeltaRd         [E] :   Cumul des résistance des PRd entre les sections et les points de moment nul
-        '   bEff            [E] :   Largeur efficace de dalle
-        '   RhoV            [E] :   Coefficient pour l'interaction MV
-        '   pzANP           [S] :   position ANP
-        '   pMplRd          [S] :   moment plastique (en fonction du signe de MEd)
-        '----------------------------------------------------------------------------------------------------------
+    'Private Sub MaillageProprietesPlastiques(iCombi As Integer, MyPoutre As cls_Poutre, MEd(,) As Decimal, DeltaRd() As List(Of Decimal), bEff() As Decimal,
+    '                                         ByRef pzANP(,) As Decimal, ByRef pMPlRd(,) As Decimal, Optional rhoV As Decimal(,) = Nothing)
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   02/11/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Calcul des propriétés plastiques le long de la barre en fonction de 
+    '    '   du moment sollicitant et du degré de connection
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   myBeam          [E] :   Poutre traitée
+    '    '   MEd             [E] :   Diagramme de moment aux ELU
+    '    '   DeltaRd         [E] :   Cumul des résistance des PRd entre les sections et les points de moment nul
+    '    '   bEff            [E] :   Largeur efficace de dalle
+    '    '   RhoV            [E] :   Coefficient pour l'interaction MV
+    '    '   pzANP           [S] :   position ANP
+    '    '   pMplRd          [S] :   moment plastique (en fonction du signe de MEd)
+    '    '----------------------------------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
-        Dim iTravee As Integer
-        Dim iTravDeb, iTravFin As Integer
-        Dim iNode As Integer
-        Dim iNodeDeb, iNodeFin As Integer
-        Dim kDeb, kfin As Integer
-        Dim rhoVLoc As Decimal
-        Dim Signe As Decimal
+    '    Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
+    '    Dim iTravee As Integer
+    '    Dim iTravDeb, iTravFin As Integer
+    '    Dim iNode As Integer
+    '    Dim iNodeDeb, iNodeFin As Integer
+    '    Dim kDeb, kfin As Integer
+    '    Dim rhoVLoc As Decimal
+    '    Dim Signe As Decimal
 
-        '--> Initialisation
+    '    '--> Initialisation
 
-        iTravDeb = MyPoutre.IndicePremiereTravee
-        iTravFin = MyPoutre.IndiceDerniereTravee
-        ReDim pzANP(NbNodes - 1, 1)
-        ReDim pMPlRd(NbNodes - 1, 1)
+    '    iTravDeb = MyPoutre.IndicePremiereTravee
+    '    iTravFin = MyPoutre.IndiceDerniereTravee
+    '    ReDim pzANP(NbNodes - 1, 1)
+    '    ReDim pMPlRd(NbNodes - 1, 1)
 
-        '--> Traitement
+    '    '--> Traitement
 
-        For iTravee = iTravDeb To iTravFin
+    '    For iTravee = iTravDeb To iTravFin
 
-            iNodeDeb = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
-            iNodeFin = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+    '        iNodeDeb = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+    '        iNodeFin = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
-            For iNode = iNodeDeb To iNodeFin
-                If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
-                If iNode = iNodeFin Then kfin = 0 Else kfin = 1
+    '        For iNode = iNodeDeb To iNodeFin
+    '            If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
+    '            If iNode = iNodeFin Then kfin = 0 Else kfin = 1
 
-                If IsEqual(MEd(iNode, kDeb), 0) Then Signe = 1 Else Signe = Math.Sign(MEd(iNode, kDeb))
+    '            If IsEqual(MEd(iNode, kDeb), 0) Then Signe = 1 Else Signe = Math.Sign(MEd(iNode, kDeb))
 
-                If rhoV Is Nothing Then
-                    rhoVLoc = 0
-                Else
-                    rhoVLoc = rhoV(iCombi, iNode)
-                End If
+    '            If rhoV Is Nothing Then
+    '                rhoVLoc = 0
+    '            Else
+    '                rhoVLoc = rhoV(iCombi, iNode)
+    '            End If
 
-                'myBeam.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, myBeam.Param.Gamma, RhoV,
-                '                                                 bEff(iNode), DeltaRd(iTravee)(iNodeDeb + iNode), myBeam.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
-                MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, rhoVLoc,
-                                                                 bEff(iNode), DeltaRd(iTravee)(iNode - iNodeDeb), MyPoutre.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
+    '            'myBeam.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, myBeam.Param.Gamma, RhoV,
+    '            '                                                 bEff(iNode), DeltaRd(iTravee)(iNodeDeb + iNode), myBeam.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
+    '            MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, rhoVLoc,
+    '                                                             bEff(iNode), DeltaRd(iTravee)(iNode - iNodeDeb), MyPoutre.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
 
-                If kfin > kDeb Then
-                    pzANP(iNode, kfin) = pzANP(iNode, kDeb)
-                    pMPlRd(iNode, kfin) = pMPlRd(iNode, kDeb)
-                End If
-            Next
+    '            If kfin > kDeb Then
+    '                pzANP(iNode, kfin) = pzANP(iNode, kDeb)
+    '                pMPlRd(iNode, kfin) = pMPlRd(iNode, kDeb)
+    '            End If
+    '        Next
 
-        Next
+    '    Next
 
-    End Sub
+    'End Sub
 
     Private Sub MaillageProprietesMfRd(MyPoutre As cls_Poutre, MEd(,) As Decimal, DeltaRd(,) As List(Of Decimal), bEff() As Decimal, ByRef pMfRd(,) As Decimal)
         '----------------------------------------------------------------------------------------------------------
