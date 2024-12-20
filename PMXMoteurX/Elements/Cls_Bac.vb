@@ -438,6 +438,16 @@ Public Class cls_Bac
         End Get
     End Property
 
+    ''' <summary>
+    ''' Indique si le calcul du PRd utilise les règles pour les nervures orientées perpendiculairement à l'axe de la poutre
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property lPerpendiculairePRd As Boolean
+        Get
+            Return (Me.lPerpendiculaire And Me.lNervuresContinues)
+        End Get
+    End Property
+
     Public Function RigiditeCisaillementSimplifiee(EntraxeD As Decimal) As Decimal
         '-------------------------------------------------------------------------------------
         '   19/12/23 :  Création - POM

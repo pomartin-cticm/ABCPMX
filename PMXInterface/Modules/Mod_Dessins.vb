@@ -1095,23 +1095,23 @@ Public Module Mod_Dessins
     End Sub
 
     Private Sub DessineDalleMixteParallele_Frm_Main(ByRef MyGr As Graphics, MyDalle As cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage,
-                                           MyBrushDP As Brush, EntraxeD2 As Decimal, lIntermediaire As Boolean,
-                                                   Optional EntraxeD1 As Decimal = 0, Optional dCar As Decimal = 0)
+                                                    MyBrushDP As Brush, EntraxeD2 As Decimal, lIntermediaire As Boolean,
+                                                    Optional EntraxeD1 As Decimal = 0, Optional dCar As Decimal = 0)
         '---------------------------------------------------------------------------------------------------------------------------
         '   10/11/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
         '   Représentation d'une dalle mixte avec nervures parallèles à la poutre - Frm_Main
         '---------------------------------------------------------------------------------------------------------------------------
-        '   MyGr        [E] :   Graphics
-        '   MyDalle     [E] :   
-        '   Ha          [E] :   Hauteur du profilé métallique
-        '   Bfs         [E] :   Largeur de la semelle supérieure
-        '   MyParAffA   [E] :   Paramètres d'affichage   
-        '   MyBrushDP   [E] :   Pinceau pour le remplissage de la dalle
+        '   MyGr            [E] :   Graphics
+        '   MyDalle         [E] :   
+        '   Ha              [E] :   Hauteur du profilé métallique
+        '   Bfs             [E] :   Largeur de la semelle supérieure
+        '   MyParAffA       [E] :   Paramètres d'affichage   
+        '   MyBrushDP       [E] :   Pinceau pour le remplissage de la dalle
         '   EntraxeD1       [E] :   EntraxeD1 avec la poutre/bord gauche
         '   EntraxeD2       [E] :   EntraxeD2 avec la poutre de droite
         '   dCar            [E] :   Grandeur utilisée pour faire déborder le dessin de la dalle à gauche et à droite de cette valeur
-        '   lIntermediare   [E] : Indique si la poutre est une poutre intermédiare (True) ou non (False)
+        '   lIntermediare   [E] :   Indique si la poutre est une poutre intermédiare (True) ou non (False)
         '---------------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -1120,31 +1120,189 @@ Public Module Mod_Dessins
         Dim yPts() As Single = Nothing
         Dim nbPts As Integer
 
-
         '--> Contour
 
-        PrepareContourDalleMixteParallel_Frm_Main(MyDalle, Bfs, xPts, yPts, nbPts, EntraxeD2, lIntermediaire, EntraxeD1, dCar)
+        PrepareContourDalleMixteParallel_Frm_MainN(MyDalle, Bfs, xPts, yPts, nbPts, EntraxeD2, lIntermediaire, EntraxeD1, dCar)
 
         RemplirZone(MyGr, MyBrushDP, xPts, yPts, nbPts, MyParAffA, True, True)
 
     End Sub
 
+    Private Sub PrepareContourDalleMixteParallel_Frm_MainN(ByVal myDalle As cls_Dalle, Bfs As Decimal,
+                                                           ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer,
+                                                           EntraxeD2 As Decimal, lIntermediaire As Boolean,
+                                                           EntraxeD1 As Decimal, dCar As Decimal)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   19/12/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Préparaton des points définissant le contour d'une dalle mixte/ nervures parallèles - Frm_Main
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyDalle         [E] :   Classe dalle
+        '   Bfs             [E] :   Largeur de la semelle sup
+        '   EntraxeD1       [E] :   EntraxeD1 avec la poutre/bord gauche
+        '   EntraxeD2       [E] :   EntraxeD2 avec la poutre de droite
+        '   dCar            [E] :   Grandeur utilisée pour faire déborder le dessin de la dalle à gauche et à droite de cette valeur
+        '   lIntermediare   [E] :   Indique si la poutre est une poutre intermédiare (True) ou non (False)
+        '   xPts, yPts      [S] :   Coordonnées de points définissant le contour
+        '   nbPts           [S] :   Nombre de points dans le contour
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim AxePos(1) As Decimal
+        Dim wExtMin(1) As Decimal
+        Dim wExt() As Decimal = Nothing
+        Dim zTop As Decimal = myDalle.zTop
+        Dim xGauche As Decimal
+
+        '--( Initialisation
+
+        nbPts = 0
+
+        '--( Préparation des points pour la partie entre la poutre traitée et la poutre à droite
+
+        'AxePos(0) = 0
+        'AxePos(1) = EntraxeD2
+        wExtMin = {0, 0}
+        AxePos = {0, EntraxeD2}
+
+        AjoutePointsCoutourDalleMixteParallelEntreAxes(myDalle.Bac, AxePos, wExtMin, wExt, xPts, yPts, nbPts)
+
+        '--( Travée suivante à droite
+
+        AxePos = {EntraxeD2, EntraxeD2 + dCar}
+        wExtMin = {wExt(1), wExt(1)}
+
+        AjoutePointsCoutourDalleMixteParallelEntreAxes(myDalle.Bac, AxePos, wExtMin, wExt, xPts, yPts, nbPts)
+
+        '--( Bouclage de la dalle par le haut
+
+        AjoutePoint(EntraxeD2 + dCar, zTop, xPts, yPts, nbPts)
+
+        If lIntermediaire Then
+            xGauche = -EntraxeD1 - dCar
+        Else
+            xGauche = -EntraxeD1
+        End If
+
+        AjoutePoint(xGauche, zTop, xPts, yPts, nbPts)
+
+        '--( Travée à gauche de la solive gauche si poutre intermédiaire
+
+        If lIntermediaire Then
+            AxePos = {-EntraxeD1 - dCar, -EntraxeD1}
+            wExtMin = {0, 0}
+            AjoutePointsCoutourDalleMixteParallelEntreAxes(myDalle.Bac, AxePos, wExtMin, wExt, xPts, yPts, nbPts)
+
+        End If
+
+        '--( Travée gauche
+
+        AxePos = {-EntraxeD1, 0}
+        wExtMin = {0, 0}
+        AjoutePointsCoutourDalleMixteParallelEntreAxes(myDalle.Bac, AxePos, wExtMin, wExt, xPts, yPts, nbPts)
+
+    End Sub
+
+    Private Sub AjoutePointsCoutourDalleMixteParallelEntreAxes(myBac As cls_Bac,
+                                                               AxePos() As Decimal, wExtMin() As Decimal, ByRef wExt() As Decimal,
+                                                               ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   19/12/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Ajouts des points définissant le contour d'une dalle mixte/ nervures parallèles entre deux axes
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   myBac           [E] :   Paramètres du bac
+        '   AxePos          [E] :   Positions des 2 axes entre lesquels on dessine les points
+        '   wExtMin         [E] :   Largeur mini de la demi-onde aux extremités à gauche et à droite
+        '   wExt            [S] :   Largeur de la demi onde aux extremités à gauche et à droite
+        '   xPts, yPts      [S] :   Coordonnées de points définissant le contour
+        '   nbPts           [S] :   Nombre de points dans le contour
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Bb As Decimal = myBac.Bb
+        Dim Bt As Decimal = myBac.Bt
+        Dim Ep As Decimal = myBac.Ep
+        Dim Hp As Decimal = myBac.Hp
+        Dim Hrs As Decimal = myBac.h_rs
+        Dim Br As Decimal = Ep - Bt
+        Dim BrB As Decimal = Ep - Bb
+
+        Dim Distance, dN As Decimal
+        Dim xDecal(1) As Decimal
+        Dim NbOndes As Integer
+        Dim wAdd, DeltaB As Decimal
+        Dim x0 As Decimal
+        Dim lRaid As Boolean = Not IsEqual(Hrs, 0)
+        ReDim wExt(1)
+        Dim BbRaid, BtRaid, DeltaBraid As Decimal
+        Dim xCentre As Decimal
+
+        '--( Préparation - calcul du nombre d'ondes
+
+        xDecal(0) = Math.Max(0, wExtMin(0) - Bb / 2)
+        xDecal(1) = Math.Max(0, wExtMin(1) - Bb / 2)
+        Distance = AxePos(1) - AxePos(0) - xDecal(0) - xDecal(1)
+
+        NbOndes = Math.Floor(Distance / Ep)
+
+        dN = NbOndes * Ep
+        wAdd = (Distance - dN) / 2
+
+        x0 = AxePos(0) + wAdd + xDecal(0)
+        DeltaB = (Bt - Bb) / 2
+        wExt(0) = wAdd + xDecal(0) + Bb / 2
+        wExt(1) = wAdd + xDecal(1) + Bb / 2
+
+        If lRaid Then
+            BbRaid = cls_Bac.RATIOB1R * Br
+            BtRaid = cls_Bac.RATIOB2R * Br
+            DeltaBraid = (Br - BbRaid) / 2
+        End If
+
+        '--( Ajout des points
+
+        AjoutePoint(AxePos(0), 0, xPts, yPts, nbPts)
+
+        For i As Integer = 0 To NbOndes - 1
+
+            xCentre = x0 + (i + 0.5) * Ep
+
+            AjoutePoint(xCentre - BrB / 2, 0, xPts, yPts, nbPts)
+            AjoutePoint(xCentre - Br / 2, Hp, xPts, yPts, nbPts)
+            If lRaid Then
+                AjoutePoint(xCentre - BbRaid / 2, Hp, xPts, yPts, nbPts)
+                AjoutePoint(xCentre - BtRaid / 2, Hp + Hrs, xPts, yPts, nbPts)
+                AjoutePoint(xCentre + BtRaid / 2, Hp + Hrs, xPts, yPts, nbPts)
+                AjoutePoint(xCentre + BbRaid / 2, Hp, xPts, yPts, nbPts)
+            End If
+            AjoutePoint(xCentre + Br / 2, Hp, xPts, yPts, nbPts)
+            AjoutePoint(xCentre + BrB / 2, 0, xPts, yPts, nbPts)
+
+        Next
+
+        AjoutePoint(AxePos(1), 0, xPts, yPts, nbPts)
+    End Sub
+
     Private Sub PrepareContourDalleMixteParallel_Frm_Main(ByVal MyDalle As cls_Dalle, Bfs As Decimal,
-                                                 ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer, EntraxeD2 As Decimal, lIntermediaire As Boolean,
-                                                   Optional EntraxeD1 As Decimal = 0, Optional dCar As Decimal = 0)
+                                                          ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer,
+                                                          EntraxeD2 As Decimal, lIntermediaire As Boolean,
+                                                          EntraxeD1 As Decimal, dCar As Decimal)
         '---------------------------------------------------------------------------------------------------------------------------
         '   10/11/23    :   Création - GUD
         '---------------------------------------------------------------------------------------------------------------------------
         '   Préparaton des points définissant le contour d'une dalle mixte/ nervures parallèles - Frm_Main
         '---------------------------------------------------------------------------------------------------------------------------
-        '   MyDalle     [E] :   Classe dalle
-        '   Bfs         [E] :   Largeur de la semelle sup
+        '   MyDalle         [E] :   Classe dalle
+        '   Bfs             [E] :   Largeur de la semelle sup
         '   EntraxeD1       [E] :   EntraxeD1 avec la poutre/bord gauche
         '   EntraxeD2       [E] :   EntraxeD2 avec la poutre de droite
         '   dCar            [E] :   Grandeur utilisée pour faire déborder le dessin de la dalle à gauche et à droite de cette valeur
-        '   lIntermediare   [E] : Indique si la poutre est une poutre intermédiare (True) ou non (False)
-        '   xPts, yPts  [S] :   Coordonnées de points définissant le contour
-        '   nbPts       [S] :   Nombre de points dans le contour
+        '   lIntermediare   [E] :   Indique si la poutre est une poutre intermédiare (True) ou non (False)
+        '   xPts, yPts      [S] :   Coordonnées de points définissant le contour
+        '   nbPts           [S] :   Nombre de points dans le contour
         '---------------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -1171,7 +1329,6 @@ Public Module Mod_Dessins
         End If
 
         decalBac = EntraxeD2 - Math.Floor(EntraxeD2 / MyDalle.Bac.Ep) * MyDalle.Bac.Ep
-
 
         '--> on commence le contour par le côté droit inférieur
 

@@ -75,6 +75,8 @@ Public Class Frm_OptionsLogiciel
     Structure struc_LocalOptionsNdC
         Dim lShowHivossCurve As Boolean
         Dim lDispFMDiagrams As Boolean
+        Dim lDispFMTables As Boolean
+        Dim lDispFMMinMax As Boolean
         Dim lDispFMLoadCase As Boolean
         Dim lDispFM_ULS As Boolean
         Dim lDispFM_SLS As Boolean
@@ -297,6 +299,8 @@ Public Class Frm_OptionsLogiciel
         pLocalOptionsNdC.lShowHivossCurve = OptionsNdC.lShowHivossCurve
         pLocalOptionsNdC.lDispFMLoadCase = OptionsNdC.lDispFMLoadCase
         pLocalOptionsNdC.lDispFMDiagrams = OptionsNdC.lDispFMDiagrams
+        pLocalOptionsNdC.lDispFMTables = OptionsNdC.lDispFMTables
+        pLocalOptionsNdC.lDispFMMinMax = OptionsNdC.lDispFMMinMax
         pLocalOptionsNdC.lDispFM_SLS = OptionsNdC.lDispFM_SLS
         pLocalOptionsNdC.lDispFM_FLS = OptionsNdC.lDispFM_FLS
         pLocalOptionsNdC.lDispFM_ULS = OptionsNdC.lDispFM_ULS
@@ -512,6 +516,8 @@ Public Class Frm_OptionsLogiciel
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispFM_FLS, OptionsNdC.lDispFM_FLS, lModif)
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispFMLoadCase, OptionsNdC.lDispFMLoadCase, lModif)
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispFMDiagrams, OptionsNdC.lDispFMDiagrams, lModif)
+        GereTransfertValeur(Me.pLocalOptionsNdC.lDispFMTables, OptionsNdC.lDispFMTables, lModif)
+        GereTransfertValeur(Me.pLocalOptionsNdC.lDispFMMinMax, OptionsNdC.lDispFMMinMax, lModif)
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispSigmaCharges, OptionsNdC.lDispSigmaCharges, lModif)
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispMelRdMixte, OptionsNdC.lDispMelPoutreMixte, lModif)
 

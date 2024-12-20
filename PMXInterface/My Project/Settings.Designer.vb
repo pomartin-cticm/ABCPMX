@@ -1288,6 +1288,30 @@ Namespace My
                 Me("GammaS_fi") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lNdCShowFMTables() As Boolean
+            Get
+                Return CType(Me("lNdCShowFMTables"),Boolean)
+            End Get
+            Set
+                Me("lNdCShowFMTables") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lNdCShowFMEnveloppes() As Boolean
+            Get
+                Return CType(Me("lNdCShowFMEnveloppes"),Boolean)
+            End Get
+            Set
+                Me("lNdCShowFMEnveloppes") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

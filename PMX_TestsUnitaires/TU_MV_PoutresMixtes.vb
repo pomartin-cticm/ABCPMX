@@ -219,6 +219,9 @@ Imports PMXMoteur2
 #Region " VALIDATION : résistance des connecteurs (ELU)"
 
         Dim Fctk_005 As Decimal = myPoutre.Dalle.beton.Fctk_005
+        Dim lPerpPRd As Boolean = myPoutre.Dalle.Bac.lPerpendiculairePRd
+        Dim lDalleP As Boolean = myPoutre.Dalle.lPleineOuPrefa
+        Dim lCofra220 As Boolean = myPoutre.Dalle.Bac.lCofraplus220 And (Not lDalleP) And myPoutre.Dalle.Bac.lPerpendiculaire
 
         Valeur = myPoutre.Dalle.Goujons.PRdDallePleineG1G2Acier(myPoutre.Param.Gamma.GammaVs)
         ValRef = 81.7 * 1000
@@ -229,23 +232,23 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Calcul avec 1 connecteur par onde 
-        Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine, 'VALEUR CORRIGEE avec Ecm = 31 GPA
-                                                      myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
+        Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, lDalleP, 'VALEUR CORRIGEE avec Ecm = 31 GPA
+                                                      lPerpPRd, lCofra220, myPoutre.Dalle.Bac,
                                                       myPoutre.NrTransZone(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
                                                       31000, Fctk_005, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 52.5 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
-        Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine, 'VALEUR CORRIGEE avec Ecm = 31 GPA
-                                                      myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
+        Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, lDalleP, 'VALEUR CORRIGEE avec Ecm = 31 GPA
+                                                      lPerpPRd, lCofra220, myPoutre.Dalle.Bac,
                                                       myPoutre.NrTransZone(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
                                                       myPoutre.Dalle.beton.Ecm, Fctk_005, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 52.897 * 1000 'VALEUR CALCULEE à la main avec le vrai Ecm = 31.476 GPa
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Calcul avec 2 connecteurs par ondes
-        Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
-                                                      myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
+        Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, lDalleP,
+                                                      lPerpPRd, lCofra220, myPoutre.Dalle.Bac,
                                                       2, myPoutre.Dalle.beton.Fck,
                                                       31000, Fctk_005, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 37.1 * 1000
@@ -275,7 +278,7 @@ Imports PMXMoteur2
         ValRef = 2635 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification de la valeur de Nc,Rd à mi travée
 
-        'Valeur = myPoutre.VerifMixte(0).DegConnex(myPoutre.IndicePremiereTravee, 0)
+        'Valeur = myBeam.VerifMixte(0).DegConnex(myBeam.IndicePremiereTravee, 0)
         Valeur = myPoutre.VerifMixte(0).EtaEnveloppe(myPoutre.CombiA_ELU.nbCombi, myPoutre.IndicePremiereTravee)
         ValRef = 1 * (7 / 0.207) * 52.516 * 1000 / (2636 * 1000) '= 0.674
         ValRef = 67 * 52.92 / 2 / 2635
@@ -386,7 +389,7 @@ Imports PMXMoteur2
 
 #Region " VALIDATION : Dimensionnement des armatures transversales (ELU)"
 
-        ' myPoutre.VerifMixte(0).CalculArmaturesTransversales()
+        ' myBeam.VerifMixte(0).CalculArmaturesTransversales()
 
         ''--> TauEd
 
@@ -507,8 +510,8 @@ Imports PMXMoteur2
 
         Dim InertieY, Mel As Decimal
 
-        'myPoutre.Section.ProprietesElastiquesAcierMyy(1, myPoutre.Param.Gamma, zANE, InertieY, MRk)
-        'myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, zANE, 0, InertieY, MRk)
+        'myBeam.Section.ProprietesElastiquesAcierMyy(1, myBeam.Param.Gamma, zANE, InertieY, MRk)
+        'myBeam.Section.ProprietesElastiquesMyy(1, True, myBeam.Param.Gamma, zANE, 0, InertieY, MRk)
         'ValRef = InertieY * 10 ^ 8
         'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
@@ -557,7 +560,7 @@ Imports PMXMoteur2
         '--> Fleches due à G2
 
         Valeur = myPoutre.ChargesA(1).FlecheMax * 1000
-        'myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(0).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        'myBeam.Section.ProprietesElastiquesMixteMyy(1, True, myBeam.Param.Gamma, 0, myBeam.Elements(0).nEqDalle, Beff, myBeam.Dalle, zANE, InertieY, Mel)
         ValRef = 5 * 4.2 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 73534 * 10 ^ (-8)) * 1000 '13.6 mm
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
@@ -670,8 +673,8 @@ Imports PMXMoteur2
 
         '# CHARGES
         myPoutre.InitialisePoidsPropres()
-        'myPoutre.ChargesU("G2").QSurf(myPoutre.IndicePremiereTravee) = 1.4 * 1000
-        'myPoutre.ChargesU("Q1").QSurf(myPoutre.IndicePremiereTravee) = 2.5 * 1000
+        'myBeam.ChargesU("G2").QSurf(myBeam.IndicePremiereTravee) = 1.4 * 1000
+        'myBeam.ChargesU("Q1").QSurf(myBeam.IndicePremiereTravee) = 2.5 * 1000
         myPoutre.ChargesU("QC").QSurf(myPoutre.IndicePremiereTravee) = 0.5 * 1000
         myPoutre.ChargesU("QC").FReparties(myPoutre.IndicePremiereTravee).Add(New cls_ForceRepartie(14 / 2 - 3 / 2, 1 * 3 * 1000, 14 / 2 + 3 / 2, 1 * 3 * 1000, 0)) '1 kN/m2 répartie s/ 3mx3m et centré à mi-travée
 
@@ -770,7 +773,7 @@ Imports PMXMoteur2
         'VERIFICATION DE LA POUTRE 
 
         myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, True) 'Poutre seul durant la phase de construction
-        'myPoutre.VerifMixte(0).Z_VerificationELU(myPoutre) 'Poutre mixte
+        'myBeam.VerifMixte(0).Z_VerificationELU(myBeam) 'Poutre mixte
 
 #End Region
 
@@ -1002,7 +1005,7 @@ Imports PMXMoteur2
         'VERIFICATION DE LA POUTRE 
 
         myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, True) 'Poutre seul durant la phase de construction
-        'myPoutre.VerifMixte(0).Z_VerificationELU(myPoutre) 'Vérification durant la phase finale -> Voir Cas test 2023 n°4
+        'myBeam.VerifMixte(0).Z_VerificationELU(myBeam) 'Vérification durant la phase finale -> Voir Cas test 2023 n°4
 
 #End Region
 
@@ -1127,8 +1130,8 @@ Imports PMXMoteur2
 
         Dim zANE, InertieY, Mel As Decimal
 
-        'myPoutre.Section.ProprietesElastiquesAcierMyy(1, myPoutre.Param.Gamma, zANE, InertieY, Mel)
-        'myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel, True)
+        'myBeam.Section.ProprietesElastiquesAcierMyy(1, myBeam.Param.Gamma, zANE, InertieY, Mel)
+        'myBeam.Section.ProprietesElastiquesMyy(1, True, myBeam.Param.Gamma, 0, zANE, InertieY, Mel, True)
         'ValRef = InertieY * 10 ^ 8
         'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
@@ -1155,13 +1158,13 @@ Imports PMXMoteur2
 
         '--> Fleches due à G1
 
-        'Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
+        'Valeur = myBeam.ChargesA(0).FlecheMax * 1000
         'ValRef = 30.6
         'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))  'GUD: Le calcul de la fleche G1 se fait avec les nEqLT. Il faudrait les faire avec nCT pour la phase construction (création d'un deuxieme cas G1?)
 
         '--> Fleches due à Q
 
-        'Valeur = myPoutre.ChargesA(4).FlecheMax * 1000
+        'Valeur = myBeam.ChargesA(4).FlecheMax * 1000
         'ValRef = 6.5
         'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
@@ -1431,32 +1434,32 @@ Imports PMXMoteur2
 
 #Region " Initialisation de la poutre "
 
-        Dim myPoutre As New cls_Poutre(NomCas)
+        Dim myBeam As New cls_Poutre(NomCas)
         Dim ValRef, Valeur As Decimal
 
-        myPoutre.Initialise_CoefficientsCombinaisons()
-        myPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage
+        myBeam.Initialise_CoefficientsCombinaisons()
+        myBeam.Section.TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage
 
 #End Region
 
 #Region " Renseignement des paramètres "
 
         '# GEOMETRIE
-        myPoutre.lTraveeConsoleGauche = False
-        myPoutre.lTraveeConsoleDroite = False
-        myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) = 12.5 '12.5m
-        myPoutre.lTremieGauche = False
-        myPoutre.lTremieDroite = False
-        myPoutre.lIntermediaire = True
-        myPoutre.EntraxeD1 = 2.5
-        myPoutre.EntraxeD2 = 2.5
+        myBeam.lTraveeConsoleGauche = False
+        myBeam.lTraveeConsoleDroite = False
+        myBeam.LongueurTravee(myBeam.IndicePremiereTravee) = 12.5 '12.5m
+        myBeam.lTremieGauche = False
+        myBeam.lTremieDroite = False
+        myBeam.lIntermediaire = True
+        myBeam.EntraxeD1 = 2.5
+        myBeam.EntraxeD2 = 2.5
 
-        myPoutre.Section.ProfilA.GenereProfileIPE500A()
-        myPoutre.Section.ProfilA.InitialiseProprietes()
+        myBeam.Section.ProfilA.GenereProfileIPE500A()
+        myBeam.Section.ProfilA.InitialiseProprietes()
 
-        myPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage
+        myBeam.Section.TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage
 
-        With myPoutre.Section.Enrobage
+        With myBeam.Section.Enrobage
             .Beton.Classe = "C25/30"
             .Beton.Ecm = 31000
 
@@ -1492,63 +1495,63 @@ Imports PMXMoteur2
             .Beton.RhoC = 25 / (9.81 * 10 ^ (-3)) 'Modification de la masse volumique du béton pour arrivée à une charge volumique de 25 kN/m3 (permet de retrouver les valeurs de l'article)
         End With
 
-        myPoutre.Section.Enrobage.AcierArmatures.Classe = "B500"
-        myPoutre.Section.Enrobage.AcierArmatures.MAJProprietes()
+        myBeam.Section.Enrobage.AcierArmatures.Classe = "B500"
+        myBeam.Section.Enrobage.AcierArmatures.MAJProprietes()
 
-        With myPoutre.Dalle
+        With myBeam.Dalle
             .type = cls_Dalle.Enum_TypeDalle.Mixte
             .Ep_td = 140 / 1000
 
             .beton.RhoC = 25 / (9.81 * 10 ^ (-3)) 'Modification de la masse volumique du béton pour arrivée à une charge volumique de 25 kN/m3 (permet de retrouver les valeurs de l'article)
         End With
 
-        For i As Integer = 0 To myPoutre.Dalle.LitArma.Count - 1 'on ne prend pas en compte les armatures dans le calcul dans l'exemple traité 
-            myPoutre.Dalle.LitArma(i).lActive = False
+        For i As Integer = 0 To myBeam.Dalle.LitArma.Count - 1 'on ne prend pas en compte les armatures dans le calcul dans l'exemple traité 
+            myBeam.Dalle.LitArma(i).lActive = False
         Next
 
-        myPoutre.Dalle.Bac.InitialiseCofraPlus60_075()
-        myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
-        myPoutre.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.BetonSeulContinu 'permet de prendre en compte le bac pour le calcul des armatures transversales
+        myBeam.Dalle.Bac.InitialiseCofraPlus60_075()
+        myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
+        myBeam.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.BetonSeulContinu 'permet de prendre en compte le bac pour le calcul des armatures transversales
 
-        With myPoutre.Dalle.Goujons
+        With myBeam.Dalle.Goujons
             .hsc = 100 / 1000
             .d = 19 / 1000
         End With
 
-        myPoutre.NombreZones(myPoutre.IndicePremiereTravee) = 1
-        myPoutre.NrTransZone(myPoutre.IndicePremiereTravee, 0) = 2
-        myPoutre.Espacement_Bac_TransZone(myPoutre.IndicePremiereTravee, 0) = 1
-        myPoutre.EspacementZone(myPoutre.IndicePremiereTravee, 0) = 0.207
-        myPoutre.LongueurZone(myPoutre.IndicePremiereTravee, 0) = myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee)
-        myPoutre.lAutomaticDesign = False
+        myBeam.NombreZones(myBeam.IndicePremiereTravee) = 1
+        myBeam.NrTransZone(myBeam.IndicePremiereTravee, 0) = 2
+        myBeam.Espacement_Bac_TransZone(myBeam.IndicePremiereTravee, 0) = 1
+        myBeam.EspacementZone(myBeam.IndicePremiereTravee, 0) = 0.207
+        myBeam.LongueurZone(myBeam.IndicePremiereTravee, 0) = myBeam.LongueurTravee(myBeam.IndicePremiereTravee)
+        myBeam.lAutomaticDesign = False
 
         '# MATERIAUX
-        myPoutre.Section.Acier.InitialiseAcierS355EC3()
+        myBeam.Section.Acier.InitialiseAcierS355EC3()
 
-        With myPoutre.Dalle.beton
+        With myBeam.Dalle.beton
             .Classe = "C25/30"
             .Ecm = 31000
         End With
 
-        myPoutre.Dalle.Goujons.Fu = 450
+        myBeam.Dalle.Goujons.Fu = 450
 
-        myPoutre.Dalle.Bac.msurf = 8.53 '8.53 kg/m2
-        myPoutre.Dalle.Bac.fyp = 350
+        myBeam.Dalle.Bac.msurf = 8.53 '8.53 kg/m2
+        myBeam.Dalle.Bac.fyp = 350
 
         '# CHARGES
-        myPoutre.InitialisePoidsPropres() '/!\ Les valeurs calculées par le logiciel ne sont pas exactement les mêmes que dans l'article. Elles seront recalculées à la main
-        myPoutre.ChargesU("G1").QSurf(myPoutre.IndicePremiereTravee) = 25 * 0.0097 * 1000  ' *2.5 = 0.6318 kN/ml - > charge permanente supplémentaire induit par l'effet de marrre (cf article)
-        myPoutre.ChargesU("G2").QSurf(myPoutre.IndicePremiereTravee) = 1 * 1000
-        myPoutre.ChargesU("Q1").QSurf(myPoutre.IndicePremiereTravee) = 2.5 * 1000
+        myBeam.InitialisePoidsPropres() '/!\ Les valeurs calculées par le logiciel ne sont pas exactement les mêmes que dans l'article. Elles seront recalculées à la main
+        myBeam.ChargesU("G1").QSurf(myBeam.IndicePremiereTravee) = 25 * 0.0097 * 1000  ' *2.5 = 0.6318 kN/ml - > charge permanente supplémentaire induit par l'effet de marrre (cf article)
+        myBeam.ChargesU("G2").QSurf(myBeam.IndicePremiereTravee) = 1 * 1000
+        myBeam.ChargesU("Q1").QSurf(myBeam.IndicePremiereTravee) = 2.5 * 1000
 
         '# COEFFICIENTS PARTIELS
-        myPoutre.Initialise_CoefficientsCombinaisons() 'Initialise les coefficients par défaut 
-        myPoutre.lCombELU(0) = True 'activation de la première combinaison ELU par défaut (1.35G + 1.5Q)
-        myPoutre.lCombELS(0) = True 'activation de la première combinaison ELS par défaut (G + Q)
-        myPoutre.lCombELCURules(0) = False 'activation de la première combinaison ELU pendant la phase de construction activée 
-        myPoutre.lCombELCSRules(0) = False 'activation de la première combinaison ELS pendant la phase de construction activée 
+        myBeam.Initialise_CoefficientsCombinaisons() 'Initialise les coefficients par défaut 
+        myBeam.lCombELU(0) = True 'activation de la première combinaison ELU par défaut (1.35G + 1.5Q)
+        myBeam.lCombELS(0) = True 'activation de la première combinaison ELS par défaut (G + Q)
+        myBeam.lCombELCURules(0) = False 'activation de la première combinaison ELU pendant la phase de construction activée 
+        myBeam.lCombELCSRules(0) = False 'activation de la première combinaison ELS pendant la phase de construction activée 
 
-        With myPoutre.Param.Gamma
+        With myBeam.Param.Gamma
             .GammaM0 = 1
             .GammaM1 = 1
             .GammaC = 1.5
@@ -1556,7 +1559,7 @@ Imports PMXMoteur2
             .GammaVc = 1.25
             .GammaVs = 1.25
         End With
-        myPoutre.Param.EtaW = 1
+        myBeam.Param.EtaW = 1
 #End Region
 
 #Region " Lancement des calculs "
@@ -1573,28 +1576,28 @@ Imports PMXMoteur2
         strRacineELSC = "SLS_C"
 
         '# INITIALISATION DES TABLEAUX DES VERIFICATION
-        Select Case myPoutre.Section.TypeSection
+        Select Case myBeam.Section.TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
-                ReDim myPoutre.VerifAcier(0)
-                myPoutre.VerifAcier(0) = New cls_VerificationsAcier
+                ReDim myBeam.VerifAcier(0)
+                myBeam.VerifAcier(0) = New cls_VerificationsAcier
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
-                ReDim myPoutre.VerifMixte(0)
-                myPoutre.VerifMixte(0) = New cls_VerificationsMixtes
-                If myPoutre.TypeEtaiement <> cls_Poutre.EnuTypeEtaiement.FullyPropped Then
+                ReDim myBeam.VerifMixte(0)
+                myBeam.VerifMixte(0) = New cls_VerificationsMixtes
+                If myBeam.TypeEtaiement <> cls_Poutre.EnuTypeEtaiement.FullyPropped Then
                     ' Quand on est pas totalement étayé, on ajoute la vérification en phase de construction
-                    ReDim myPoutre.VerifAcier(0)
-                    myPoutre.VerifAcier(0) = New cls_VerificationsAcier
+                    ReDim myBeam.VerifAcier(0)
+                    myBeam.VerifAcier(0) = New cls_VerificationsAcier
                 End If
         End Select
 
         '# INITIALISATION DES CALCULS
-        myPoutre.InitialiseCalculs(NomChargesA)
-        myPoutre.AAA_CalculMNVInternesN()
-        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, myPoutre.lCombELU, myPoutre.CoefCombELU, strRacineELU, myPoutre.CombiA_ELU)
-        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELS, myPoutre.lCombELS, myPoutre.CoefCombELS, strRacineELS, myPoutre.CombiA_ELS)
-        myPoutre.InitialiseCombiA(cls_Poutre.nbCombFeu, myPoutre.lCombFeu, myPoutre.CoefCombFeu, strRacineELF, myPoutre.CombiA_ELF)
-        'myPoutre.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myPoutre.lCombELCURules, myPoutre.CoefCombELCU, strRacineELUC, myPoutre.CombiA_ELCU)
-        'myPoutre.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myPoutre.lCombELCSRules, myPoutre.CoefCombELCS, strRacineELSC, myPoutre.CombiA_ELCS)
+        myBeam.InitialiseCalculs(NomChargesA)
+        myBeam.AAA_CalculMNVInternesN()
+        myBeam.InitialiseCombiA(cls_Poutre.nbCombELU, myBeam.lCombELU, myBeam.CoefCombELU, strRacineELU, myBeam.CombiA_ELU)
+        myBeam.InitialiseCombiA(cls_Poutre.nbCombELS, myBeam.lCombELS, myBeam.CoefCombELS, strRacineELS, myBeam.CombiA_ELS)
+        myBeam.InitialiseCombiA(cls_Poutre.nbCombFeu, myBeam.lCombFeu, myBeam.CoefCombFeu, strRacineELF, myBeam.CombiA_ELF)
+        'myBeam.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myBeam.lCombELCURules, myBeam.CoefCombELCU, strRacineELUC, myBeam.CombiA_ELCU)
+        'myBeam.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myBeam.lCombELCSRules, myBeam.CoefCombELCS, strRacineELSC, myBeam.CombiA_ELCS)
 
         '# COMBINAISON DES EFFORTS A L'ELU
         Dim MEd(,) As Decimal = Nothing
@@ -1603,15 +1606,15 @@ Imports PMXMoteur2
         Dim VEd(,) As Decimal = Nothing
         Dim VEdMax, VEdMin, iNodeVMin, iNodeVMax As Decimal
 
-        myPoutre.CombiA_ELU.CombineMoments(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, False) 'Combinaison des moments pour la combinaison 0
-        myPoutre.CombiA_ELU.CombineEffortsT(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, False) 'Combinaison des tranchants pour la combinaison 0
+        myBeam.CombiA_ELU.CombineMoments(0, myBeam.Nodes.nbNodes, myBeam.ChargesA, MEd, False) 'Combinaison des moments pour la combinaison 0
+        myBeam.CombiA_ELU.CombineEffortsT(0, myBeam.Nodes.nbNodes, myBeam.ChargesA, VEd, False) 'Combinaison des tranchants pour la combinaison 0
 
-        EnveloppeTableauEfforts(MEd, myPoutre.Nodes.nbNodes, MEdMax, MEdMin, iNodeMMax, iNodeMMin)
-        EnveloppeTableauEfforts(VEd, myPoutre.Nodes.nbNodes, VEdMax, VEdMin, iNodeVMax, iNodeVMin)
+        EnveloppeTableauEfforts(MEd, myBeam.Nodes.nbNodes, MEdMax, MEdMin, iNodeMMax, iNodeMMin)
+        EnveloppeTableauEfforts(VEd, myBeam.Nodes.nbNodes, VEdMax, VEdMin, iNodeVMax, iNodeVMin)
 
         '# VERIFICATION DE LA POUTRE 
 
-        myPoutre.VerifMixte(0).Z_VerificationELU(myPoutre) 'Vérification durant la phase finale -> Voir Cas test 2023 n°4
+        myBeam.VerifMixte(0).Z_VerificationELU(myBeam) 'Vérification durant la phase finale -> Voir Cas test 2023 n°4
 
 #End Region
 
@@ -1625,8 +1628,8 @@ Imports PMXMoteur2
 
         'G1
 
-        myPoutre.ChargesA(0).EnveloppesMoments(MG1max, iNodeMax, MG1min, iNodeMin)
-        myPoutre.ChargesA(0).EnveloppesTranchants(VG1max, iNodeMax, VG1min, iNodeMin)
+        myBeam.ChargesA(0).EnveloppesMoments(MG1max, iNodeMax, MG1min, iNodeMin)
+        myBeam.ChargesA(0).EnveloppesTranchants(VG1max, iNodeMax, VG1min, iNodeMin)
 
         Valeur = MG1max
         ValRef = 202.7 * 10 ^ 3
@@ -1638,8 +1641,8 @@ Imports PMXMoteur2
 
         'G2
 
-        myPoutre.ChargesA(1).EnveloppesMoments(MG2max, iNodeMax, MG2min, iNodeMin)
-        myPoutre.ChargesA(1).EnveloppesTranchants(VG2max, iNodeMax, VG2min, iNodeMin)
+        myBeam.ChargesA(1).EnveloppesMoments(MG2max, iNodeMax, MG2min, iNodeMin)
+        myBeam.ChargesA(1).EnveloppesTranchants(VG2max, iNodeMax, VG2min, iNodeMin)
 
         Valeur = MG2max
         ValRef = 48.8 * 10 ^ 3
@@ -1651,8 +1654,8 @@ Imports PMXMoteur2
 
         'Q
 
-        myPoutre.ChargesA(2).EnveloppesMoments(MQmax, iNodeMax, MQmin, iNodeMin)
-        myPoutre.ChargesA(2).EnveloppesTranchants(VQmax, iNodeMax, VQmin, iNodeMin)
+        myBeam.ChargesA(2).EnveloppesMoments(MQmax, iNodeMax, MQmin, iNodeMin)
+        myBeam.ChargesA(2).EnveloppesTranchants(VQmax, iNodeMax, VQmin, iNodeMin)
 
         Valeur = MQmax
         ValRef = 122.1 * 10 ^ 3
@@ -1676,7 +1679,7 @@ Imports PMXMoteur2
 
 #Region " VALIDATION : Classification de la section (ELU) "
 
-        Valeur = myPoutre.Section.ClasseProfilAcierSeulCompressionPureFlexionPure(False, myPoutre.Param.lGeneration1)
+        Valeur = myBeam.Section.ClasseProfilAcierSeulCompressionPureFlexionPure(False, myBeam.Param.lGeneration1)
         ValRef = 1
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
@@ -1684,28 +1687,28 @@ Imports PMXMoteur2
 
 #Region " VALIDATION : Résistance des connecteurs (ELU) "
 
-        Dim Fctk_005 As Decimal = myPoutre.Dalle.beton.Fctk_005
+        Dim Fctk_005 As Decimal = myBeam.Dalle.beton.Fctk_005
+        Dim lPerpPRd As Boolean = myBeam.Dalle.Bac.lPerpendiculairePRd
+        Dim lDalleP As Boolean = myBeam.Dalle.lPleineOuPrefa
+        Dim lCofra220 As Boolean = myBeam.Dalle.Bac.lCofraplus220 And (Not lDalleP) And myBeam.Dalle.Bac.lPerpendiculaire
 
-        Valeur = myPoutre.Dalle.Goujons.PRdDallePleineG1G2Acier(myPoutre.Param.Gamma.GammaVs)
+        Valeur = myBeam.Dalle.Goujons.PRdDallePleineG1G2Acier(myBeam.Param.Gamma.GammaVs)
         ValRef = 81.7 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
-        Valeur = myPoutre.Dalle.Goujons.PRdDallePleineG1Beton(myPoutre.Dalle.beton.Fck, 31000, myPoutre.Param.Gamma.GammaVc)
+        Valeur = myBeam.Dalle.Goujons.PRdDallePleineG1Beton(myBeam.Dalle.beton.Fck, 31000, myBeam.Param.Gamma.GammaVc)
         ValRef = 73.7 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Calcul avec 2 connecteurs par ondes
-        Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
-                                                         myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
-                                                         2, myPoutre.Dalle.beton.Fck,
-                                                         31000, Fctk_005, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
+        Valeur = myBeam.Dalle.Goujons.ResistancePRd(myBeam.Param.lGeneration1, lDalleP, lPerpPRd, lCofra220, myBeam.Dalle.Bac,
+                                                    2, myBeam.Dalle.beton.Fck, 31000, Fctk_005, myBeam.Param.Gamma.GammaVs, myBeam.Param.Gamma.GammaVc)
         ValRef = 37.1 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
-        Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
-                                                         myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
-                                                         2, myPoutre.Dalle.beton.Fck, myPoutre.Dalle.beton.Ecm, Fctk_005,
-                                                         myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
+        Valeur = myBeam.Dalle.Goujons.ResistancePRd(myBeam.Param.lGeneration1, lDalleP, lPerpPRd, lCofra220, myBeam.Dalle.Bac,
+                                                    2, myBeam.Dalle.beton.Fck, myBeam.Dalle.beton.Ecm, Fctk_005,
+                                                    myBeam.Param.Gamma.GammaVs, myBeam.Param.Gamma.GammaVc)
         ValRef = 37.44 * 1000 'valeur recalculée à la main
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
@@ -1714,7 +1717,7 @@ Imports PMXMoteur2
 
 #Region " VALIDATION : Degré de connection minimal (ELU) "
 
-        Valeur = myPoutre.VerifMixte(0).DegConnexMin(myPoutre.IndicePremiereTravee)
+        Valeur = myBeam.VerifMixte(0).DegConnexMin(myBeam.IndicePremiereTravee)
         ValRef = 0.625
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
@@ -1722,23 +1725,23 @@ Imports PMXMoteur2
 
 #Region " VALIDATION : Dimensionnement de la connection (ELU) "
 
-        Valeur = myPoutre.Section.ResistanceTractionProfile(myPoutre.Param.Gamma.GammaM0)
+        Valeur = myBeam.Section.ResistanceTractionProfile(myBeam.Param.Gamma.GammaM0)
         ValRef = 3589 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification de la valeur de Na,Rd
 
-        Valeur = myPoutre.Section.NResistanceArmaturesEnrobage(myPoutre.Param.Gamma.GammaS)
+        Valeur = myBeam.Section.NResistanceArmaturesEnrobage(myBeam.Param.Gamma.GammaS)
         ValRef = 142.1 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification de la valeur de Ns
 
         Dim Beff As Decimal
         Dim lSimple As Boolean = True 'booléen qui indique qu'on va utiliser le modèle simplifié pour le calcul de beff
-        Beff = myPoutre.BeffDalle(myPoutre.Nodes.xTravee(iNodeMMax), myPoutre.IndicePremiereTravee, lSimple, False)
-        Valeur = myPoutre.Dalle.NResistanceCompressionDalle(Beff, myPoutre.Param.Gamma.GammaC)
+        Beff = myBeam.BeffDalle(myBeam.Nodes.xTravee(iNodeMMax), myBeam.IndicePremiereTravee, lSimple, False)
+        Valeur = myBeam.Dalle.NResistanceCompressionDalle(Beff, myBeam.Param.Gamma.GammaC)
         ValRef = 2904 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification de la valeur de Nc,Rd à mi travée
 
-        'Valeur = myPoutre.VerifMixte(0).DegConnex(myPoutre.IndicePremiereTravee, 0)
-        Valeur = myPoutre.VerifMixte(0).EtaEnveloppe(myPoutre.CombiA_ELU.nbCombi, myPoutre.IndicePremiereTravee)
+        'Valeur = myBeam.VerifMixte(0).DegConnex(myBeam.IndicePremiereTravee, 0)
+        Valeur = myBeam.VerifMixte(0).EtaEnveloppe(myBeam.CombiA_ELU.nbCombi, myBeam.IndicePremiereTravee)
         ValRef = 30.19 * 2 * 37.1 / 2904 '= 0.771 -> Valeur recalculée à la main pour tenir compte de la linéarisation de la résistance des connecteurs
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
@@ -1750,11 +1753,11 @@ Imports PMXMoteur2
 
         Dim zANE, MRd As Decimal
 
-        Valeur = myPoutre.VerifMixte(0).CritereM.Resistance(iNodeMMax)
+        Valeur = myBeam.VerifMixte(0).CritereM.Resistance(iNodeMMax)
         ValRef = 1186 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
 
-        Valeur = myPoutre.VerifMixte(0).CritereM.CritereMax
+        Valeur = myBeam.VerifMixte(0).CritereM.CritereMax
         ValRef = 0.441
         Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
 
@@ -1764,11 +1767,11 @@ Imports PMXMoteur2
 
         'A L'ELU
 
-        Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0, myPoutre.Param.EtaW)
+        Valeur = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM0, myBeam.Param.EtaW)
         ValRef = 1033 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à l'effort tranchant
 
-        Valeur = myPoutre.VerifMixte(0).CritereV.CritereMax
+        Valeur = myBeam.VerifMixte(0).CritereV.CritereMax
         ValRef = 0.162
         Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à l'effort tranchant
 
@@ -1785,7 +1788,7 @@ Imports PMXMoteur2
 
 #Region " VALIDATION : Résistance au voilement (ELU) "
 
-        Assert.IsTrue(myPoutre.Section.IsVoilementParCisaillement(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
+        Assert.IsTrue(myBeam.Section.IsVoilementParCisaillement(myBeam.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
 
 #End Region
 
@@ -1793,13 +1796,13 @@ Imports PMXMoteur2
 
         '--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
 
-        myPoutre.Section.ProprietesPlastiquesMyy(1, False, myPoutre.Param.Gamma, rhoVELU, zANE, MRd)
+        myBeam.Section.ProprietesPlastiquesMyy(1, False, myBeam.Param.Gamma, rhoVELU, zANE, MRd)
 
-        Valeur = myPoutre.VerifMixte(0).CritereMV.Resistance(iNodeMMax)
+        Valeur = myBeam.VerifMixte(0).CritereMV.Resistance(iNodeMMax)
         ValRef = 1186 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx))   ' Vérification du calcul de la résistance à la flexion simple de la section mixte 
 
-        Valeur = myPoutre.VerifMixte(0).CritereMV.CritereMax
+        Valeur = myBeam.VerifMixte(0).CritereMV.CritereMax
         ValRef = 0.441                                          ' GUD: valeur recalculée pour les mêmes raisons que ci-dessu. Dans l'article, le critère est égal à 0.84 
         Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx)   ' Vérification du critère de la résistance à la flexion
 
@@ -1807,7 +1810,7 @@ Imports PMXMoteur2
 
 #Region " VALIDATION : Dimensionnement des armatures transversales (ELU) "
 
-        'myPoutre.CalculArmaturesTransversales()
+        'myBeam.CalculArmaturesTransversales()
 
         '--> TauEd
 
@@ -1816,7 +1819,7 @@ Imports PMXMoteur2
         ksf = (1.25 - b0 / 2) / 2.5
 
         Valeur = ksf * 2 * 37.44 / (0.207 * 82) 'Valeur recalculée avec la valeur correcte de PRd
-        ValRef = myPoutre.VerifMixte(0).TauEd(myPoutre.IndicePremiereTravee, 0, 0)
+        ValRef = myBeam.VerifMixte(0).TauEd(myBeam.IndicePremiereTravee, 0, 0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la contrainte tangentielle 
 
         '--> Thetaf
@@ -1824,13 +1827,13 @@ Imports PMXMoteur2
         Valeur = 0.5 * Math.Asin(2 * 2.06 / (0.54 * 16.7)) ' 13.59° -> VALEUR RECALCULEE car dans l'article on considère conservativement theta = 45°
         Valeur = Math.Max(Valeur, 27 * Math.PI / 180) 'Borne inférieure
         Valeur = Math.Min(Valeur, 45 * Math.PI / 180) 'Borne supérieure
-        ValRef = myPoutre.VerifMixte(0).Thetaf(myPoutre.IndicePremiereTravee, 0, 0)
+        ValRef = myBeam.VerifMixte(0).Thetaf(myBeam.IndicePremiereTravee, 0, 0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'angle de la bielle
 
         '--> As,trans
 
         Valeur = 2.055 * 10 ^ (-4) 'valeur recalculée à la main
-        ValRef = myPoutre.VerifMixte(0).As_s_transv(myPoutre.IndicePremiereTravee, 0, 0)
+        ValRef = myBeam.VerifMixte(0).As_s_transv(myBeam.IndicePremiereTravee, 0, 0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul des armatures transversales
 
 #End Region
@@ -1841,7 +1844,7 @@ Imports PMXMoteur2
 
         Dim n0 As Decimal = 210 / 31.476 '= 6.6717
         Valeur = n0 'calcul manuel car l'article n0 = 210/31
-        ValRef = myPoutre.Dalle.beton.CoefficientEquivalenceCT()
+        ValRef = myBeam.Dalle.beton.CoefficientEquivalenceCT()
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
         '--> Vérification des calculs des coefficients d'équivalences à LT de la DALLE (50 ans)
@@ -1859,25 +1862,25 @@ Imports PMXMoteur2
         '--> h0
 
         Valeur = h0
-        ValRef = myPoutre.Dalle.NotionalSizeH0(myPoutre)
+        ValRef = myBeam.Dalle.NotionalSizeH0(myBeam)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Phi RH
 
         Valeur = PHIrh
-        ValRef = myPoutre.Dalle.beton.PhiRH(myPoutre.Param.RH, h0)
+        ValRef = myBeam.Dalle.beton.PhiRH(myBeam.Param.RH, h0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '-->Beta fcm
 
         Valeur = betaFcm
-        ValRef = myPoutre.Dalle.beton.BetaFcm()
+        ValRef = myBeam.Dalle.beton.BetaFcm()
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Beta t0
 
         Valeur = betaT0
-        ValRef = myPoutre.Dalle.beton.Beta_t0(ageT0)
+        ValRef = myBeam.Dalle.beton.Beta_t0(ageT0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> phi0 n'est pas évalué par une fonction à part entière
@@ -1885,13 +1888,13 @@ Imports PMXMoteur2
         '--> BetaH
 
         'Valeur = betaH
-        'ValRef = myPoutre.Dalle.beton.BetaH(myPoutre.Param.RH, h0)
+        'ValRef = myBeam.Dalle.beton.BetaH(myBeam.Param.RH, h0)
         'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> BetaC(t,t0)
 
         Valeur = betaCTT0
-        ValRef = myPoutre.Dalle.beton.BetaC_tt0(myPoutre.Param.RH, h0, ageT, ageT0)
+        ValRef = myBeam.Dalle.beton.BetaC_tt0(myBeam.Param.RH, h0, ageT, ageT0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
         '--> phi(t,t0) n'est pas évalué par une fonction à part entière
@@ -1901,13 +1904,13 @@ Imports PMXMoteur2
         '--> Coefficient d'équivalence LT CP nL
 
         Valeur = n0 * (1 + 1.1 * phiTT0) '27.5183638
-        ValRef = myPoutre.Elements(0).nEqDalle
+        ValRef = myBeam.Elements(0).nEqDalle
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Coefficient d'équivalent CE nL
 
         Valeur = n0 '6.67
-        ValRef = myPoutre.Elements(2).nEqDalle
+        ValRef = myBeam.Elements(2).nEqDalle
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Coefficient d'équivalent CE SH
@@ -1924,7 +1927,7 @@ Imports PMXMoteur2
         phiTT0 = phi0 * betaCTT0
 
         Valeur = n0 * (1 + 0.55 * phiTT0) '26.0715
-        ValRef = myPoutre.Elements(4).nEqDalle
+        ValRef = myBeam.Elements(4).nEqDalle
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Vérification des calculs des coefficients d'équivalences à LT de l'ENROBAGE (50 ans)
@@ -1945,25 +1948,25 @@ Imports PMXMoteur2
         '--> h0
 
         Valeur = h0
-        ValRef = myPoutre.Section.NotionalSizeEnrobage
+        ValRef = myBeam.Section.NotionalSizeEnrobage
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Phi RH
 
         Valeur = PHIrh
-        ValRef = myPoutre.Section.Enrobage.Beton.PhiRH(myPoutre.Param.RH, h0)
+        ValRef = myBeam.Section.Enrobage.Beton.PhiRH(myBeam.Param.RH, h0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '-->Beta fcm
 
         Valeur = betaFcm
-        ValRef = myPoutre.Section.Enrobage.Beton.BetaFcm()
+        ValRef = myBeam.Section.Enrobage.Beton.BetaFcm()
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Beta t0
 
         Valeur = betaT0
-        ValRef = myPoutre.Section.Enrobage.Beton.Beta_t0(ageT0)
+        ValRef = myBeam.Section.Enrobage.Beton.Beta_t0(ageT0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> phi0 n'est pas évalué par une fonction à part entière
@@ -1971,13 +1974,13 @@ Imports PMXMoteur2
         '--> BetaH
 
         'Valeur = betaH
-        'ValRef = myPoutre.Dalle.beton.BetaH(myPoutre.Param.RH, h0)
+        'ValRef = myBeam.Dalle.beton.BetaH(myBeam.Param.RH, h0)
         'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> BetaC(t,t0)
 
         Valeur = betaCTT0
-        ValRef = myPoutre.Section.Enrobage.Beton.BetaC_tt0(myPoutre.Param.RH, h0, ageT, ageT0)
+        ValRef = myBeam.Section.Enrobage.Beton.BetaC_tt0(myBeam.Param.RH, h0, ageT, ageT0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
         '--> phi(t,t0) n'est pas évalué par une fonction à part entière
@@ -1987,13 +1990,13 @@ Imports PMXMoteur2
         '--> Coefficient d'équivalence LT CP nL
 
         Valeur = n0 * (1 + 1.1 * phiTT0) '27.5183638
-        ValRef = myPoutre.Elements(0).nEqEnrob
+        ValRef = myBeam.Elements(0).nEqEnrob
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Coefficient d'équivalent CE nL
 
         Valeur = n0 '6.67
-        ValRef = myPoutre.Elements(2).nEqEnrob
+        ValRef = myBeam.Elements(2).nEqEnrob
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Coefficient d'équivalent CE SH
@@ -2010,22 +2013,22 @@ Imports PMXMoteur2
         phiTT0 = phi0 * betaCTT0
 
         Valeur = n0 * (1 + 0.55 * phiTT0) '26.0715
-        ValRef = myPoutre.Elements(4).nEqEnrob
+        ValRef = myBeam.Elements(4).nEqEnrob
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Propriétés en phase de coulage, poutre non etayée
 
         Valeur = 42930
-        ValRef = myPoutre.Section.ProfilA.InertieY * 10 ^ 8
+        ValRef = myBeam.Section.ProfilA.InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
         Dim InertieY, Mel As Decimal
 
-        'myPoutre.Section.ProprietesElastiquesAcierMyy(1, myPoutre.Param.Gamma, zANE, InertieY, MRd)
+        'myBeam.Section.ProprietesElastiquesAcierMyy(1, myBeam.Param.Gamma, zANE, InertieY, MRd)
         'ValRef = InertieY * 10 ^ 8
         'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel, True)
+        myBeam.Section.ProprietesElastiquesMyy(1, True, myBeam.Param.Gamma, 0, zANE, InertieY, Mel, True)
         ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
@@ -2033,7 +2036,7 @@ Imports PMXMoteur2
 
         Valeur = 99139
 
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 24.3, 27.1, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        myBeam.Section.ProprietesElastiquesMixteMyy(1, True, myBeam.Param.Gamma, 24.3, 27.1, Beff, myBeam.Dalle, zANE, InertieY, Mel)
         ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
@@ -2045,7 +2048,7 @@ Imports PMXMoteur2
 
         Valeur = 142271
 
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 6.77, 6.77, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        myBeam.Section.ProprietesElastiquesMixteMyy(1, True, myBeam.Param.Gamma, 6.77, 6.77, Beff, myBeam.Dalle, zANE, InertieY, Mel)
         ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
@@ -2058,39 +2061,39 @@ Imports PMXMoteur2
 #Region " VALIDATION : Calcul des fleches (ELS) "
 
         '--> Fleches due à G1
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 23.68, 1, 0, myPoutre.Dalle, zANE, InertieY, Mel)
+        myBeam.Section.ProprietesElastiquesMixteMyy(1, True, myBeam.Param.Gamma, 23.68, 1, 0, myBeam.Dalle, zANE, InertieY, Mel)
 
-        Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
+        Valeur = myBeam.ChargesA(0).FlecheMax * 1000
         ValRef = 5 * 10.38 * (12.5 * 1000) ^ 4 / (384 * 210000 * InertieY * 10 ^ 12) '33.34 mm
 
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Fleches due à G2
 
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 23.68, 26.57, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        myBeam.Section.ProprietesElastiquesMixteMyy(1, True, myBeam.Param.Gamma, 23.68, 26.57, Beff, myBeam.Dalle, zANE, InertieY, Mel)
 
-        Valeur = myPoutre.ChargesA(1).FlecheMax * 1000
+        Valeur = myBeam.ChargesA(1).FlecheMax * 1000
         ValRef = 5 * 2.5 * (12.5 * 1000) ^ 4 / (384 * 210000 * InertieY * 10 ^ 12) '3.8 mm
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
         '--> Fleches due à Q
 
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 6.6718, 6.6718, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        myBeam.Section.ProprietesElastiquesMixteMyy(1, True, myBeam.Param.Gamma, 6.6718, 6.6718, Beff, myBeam.Dalle, zANE, InertieY, Mel)
 
-        Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
+        Valeur = myBeam.ChargesA(2).FlecheMax * 1000
         ValRef = 5 * 6.25 * (12.5 * 1000) ^ 4 / (384 * 210000 * InertieY * 10 ^ 12) '6.63 mm
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
         '--> Fleche due au retrait 
 
-        Valeur = myPoutre.ChargesA(5).FlecheMax * 1000
+        Valeur = myBeam.ChargesA(5).FlecheMax * 1000
         Dim NR, deltazG, Mr, deltaR As Decimal
-        NR = 325 * 10 ^ (-6) * myPoutre.Section.Acier.EYoung / myPoutre.Elements(4).nEqDalle * Beff * myPoutre.Dalle.EpaisseurActive * 10 ^ 6 'N
+        NR = 325 * 10 ^ (-6) * myBeam.Section.Acier.EYoung / myBeam.Elements(4).nEqDalle * Beff * myBeam.Dalle.EpaisseurActive * 10 ^ 6 'N
 
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 24.74, 25.19, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        deltazG = myPoutre.Dalle.Bac.Hp + myPoutre.Dalle.EpaisseurActive / 2 - zANE
+        myBeam.Section.ProprietesElastiquesMixteMyy(1, True, myBeam.Param.Gamma, 24.74, 25.19, Beff, myBeam.Dalle, zANE, InertieY, Mel)
+        deltazG = myBeam.Dalle.Bac.Hp + myBeam.Dalle.EpaisseurActive / 2 - zANE
         Mr = NR * deltazG
-        deltaR = (Mr * myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) ^ 2) / (8 * myPoutre.Section.Acier.EYoung * 10 ^ 6 * InertieY)
+        deltaR = (Mr * myBeam.LongueurTravee(myBeam.IndicePremiereTravee) ^ 2) / (8 * myBeam.Section.Acier.EYoung * 10 ^ 6 * InertieY)
         ValRef = deltaR * 1000 '10.02 mm
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
@@ -2098,8 +2101,8 @@ Imports PMXMoteur2
 
 #Region " VALIDATION : Fréquence propre (ELS) "
 
-        myPoutre.Modal.Analyse(myPoutre, 0.2, myPoutre.Hivoss.IndexQ)
-        Valeur = myPoutre.Modal.Frequence
+        myBeam.Modal.Analyse(myBeam, 0.2, myBeam.Hivoss.IndexQ)
+        Valeur = myBeam.Modal.Frequence
 
         ValRef = 4.6
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
@@ -2243,8 +2246,8 @@ Imports PMXMoteur2
         myPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, myPoutre.lCombELU, myPoutre.CoefCombELU, strRacineELU, myPoutre.CombiA_ELU)
         myPoutre.InitialiseCombiA(cls_Poutre.nbCombELS, myPoutre.lCombELS, myPoutre.CoefCombELS, strRacineELS, myPoutre.CombiA_ELS)
         myPoutre.InitialiseCombiA(cls_Poutre.nbCombFeu, myPoutre.lCombFeu, myPoutre.CoefCombFeu, strRacineELF, myPoutre.CombiA_ELF)
-        'myPoutre.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myPoutre.lCombELCURules, myPoutre.CoefCombELCU, strRacineELUC, myPoutre.CombiA_ELCU)
-        'myPoutre.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myPoutre.lCombELCSRules, myPoutre.CoefCombELCS, strRacineELSC, myPoutre.CombiA_ELCS)
+        'myBeam.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myBeam.lCombELCURules, myBeam.CoefCombELCU, strRacineELUC, myBeam.CombiA_ELCU)
+        'myBeam.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myBeam.lCombELCSRules, myBeam.CoefCombELCS, strRacineELSC, myBeam.CombiA_ELCS)
 
         '# COMBINAISON DES EFFORTS A L'ELU
         Dim MEd(,) As Decimal = Nothing
@@ -2442,6 +2445,11 @@ Imports PMXMoteur2
 
 #Region " VALIDATION : Résistance des connecteurs (ELU) "
 
+        Dim lPerpPRd As Boolean = myPoutre.Dalle.Bac.lPerpendiculairePRd
+        Dim lDalleP As Boolean = myPoutre.Dalle.lPleineOuPrefa
+        Dim lCofra220 As Boolean = myPoutre.Dalle.Bac.lCofraplus220 And (Not lDalleP) And myPoutre.Dalle.Bac.lPerpendiculaire
+
+
         Valeur = myPoutre.Dalle.Goujons.PRdDallePleineG1G2Acier(myPoutre.Param.Gamma.GammaVs)
         ValRef = 81.7 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
@@ -2452,8 +2460,7 @@ Imports PMXMoteur2
 
         '--> Calcul avec 2 connecteurs par ondes
 
-        Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
-                                                      myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
+        Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, lDalleP, lPerpPRd, lCofra220, myPoutre.Dalle.Bac,
                                                       2, myPoutre.Dalle.beton.Fck, myPoutre.Dalle.beton.Ecm, myPoutre.Dalle.beton.Fctk_005,
                                                       myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 41.13 * 1000
@@ -2674,8 +2681,8 @@ Imports PMXMoteur2
         myPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, myPoutre.lCombELU, myPoutre.CoefCombELU, strRacineELU, myPoutre.CombiA_ELU)
         myPoutre.InitialiseCombiA(cls_Poutre.nbCombELS, myPoutre.lCombELS, myPoutre.CoefCombELS, strRacineELS, myPoutre.CombiA_ELS)
         myPoutre.InitialiseCombiA(cls_Poutre.nbCombFeu, myPoutre.lCombFeu, myPoutre.CoefCombFeu, strRacineELF, myPoutre.CombiA_ELF)
-        'myPoutre.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myPoutre.lCombELCURules, myPoutre.CoefCombELCU, strRacineELUC, myPoutre.CombiA_ELCU)
-        'myPoutre.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myPoutre.lCombELCSRules, myPoutre.CoefCombELCS, strRacineELSC, myPoutre.CombiA_ELCS)
+        'myBeam.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myBeam.lCombELCURules, myBeam.CoefCombELCU, strRacineELUC, myBeam.CombiA_ELCU)
+        'myBeam.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myBeam.lCombELCSRules, myBeam.CoefCombELCS, strRacineELSC, myBeam.CombiA_ELCS)
 
         '# COMBINAISON DES EFFORTS A L'ELU
         Dim MEd(,) As Decimal = Nothing
@@ -2883,8 +2890,11 @@ Imports PMXMoteur2
 
         '--> Calcul avec 2 connecteurs par ondes
 
-        Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
-                                                      myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
+        Dim lPerpPRd As Boolean = myPoutre.Dalle.Bac.lPerpendiculairePRd
+        Dim lDalleP As Boolean = Not myPoutre.Dalle.lMixte
+        Dim lCofra220 As Boolean = myPoutre.Dalle.Bac.lCofraplus220 And (Not lDalleP) And myPoutre.Dalle.Bac.lPerpendiculaire
+
+        Valeur = myPoutre.Dalle.Goujons.ResistancePRd(myPoutre.Param.lGeneration1, lDalleP, lPerpPRd, lCofra220, myPoutre.Dalle.Bac,
                                                       2, myPoutre.Dalle.beton.Fck, myPoutre.Dalle.beton.Ecm, myPoutre.Dalle.beton.Fctk_005,
                                                       myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 41.13 * 1000

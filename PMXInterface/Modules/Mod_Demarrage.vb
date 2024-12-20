@@ -239,6 +239,8 @@ Public Module Mod_Demarrage
             OptionsNdC.lDispFM_ULS = My.Settings.lNdCDispFM_ELU
             OptionsNdC.lDispFMLoadCase = My.Settings.lNdCDispLoadCase
             OptionsNdC.lDispFMDiagrams = My.Settings.lNdCShowDiagram
+            OptionsNdC.lDispFMTables = My.Settings.lNdCShowFMTables
+            OptionsNdC.lDispFMMinMax = My.Settings.lNdCShowFMEnveloppes
             OptionsNdC.lDispSigmaCharges = My.Settings.lNdCDispSigmaCharges
             OptionsNdC.lDispMelPoutreMixte = My.Settings.lNdCDispMelMixte
 

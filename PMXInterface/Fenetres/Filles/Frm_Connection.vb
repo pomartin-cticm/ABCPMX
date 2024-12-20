@@ -751,7 +751,7 @@ Public Class Frm_Connection
     End Sub
 
     Private Sub DessinConnection(sender As Object, e As PaintEventArgs) Handles img_Connection.Paint
-        DessinFrmConnection_Connection(e.Graphics, MyPoutreLoc, fontfrm, Me.img_Connection.ClientRectangle.Width, Me.img_Connection.ClientRectangle.Height, 1, traveeEnCours, Not MyPoutreLoc.lAutomaticDesign, strStud)
+        DessinFrmConnection_Connection(e.Graphics, MyPoutreLoc, FontFrm, Me.img_Connection.ClientRectangle.Width, Me.img_Connection.ClientRectangle.Height, 1, traveeEnCours, Not MyPoutreLoc.lAutomaticDesign, strStud)
     End Sub
 
     Private Sub DessinConnecteurs(sender As Object, e As PaintEventArgs) Handles img_Stud.Paint
@@ -785,12 +785,12 @@ Public Class Frm_Connection
         'Définition des valeurs limites pour les caractéristiques des goujons
         '--( Hauteur mini des goujons
         If MyPoutreLoc.Param.lGeneration1 Then
-            Hauteur_Goujon_MIN = RAPHsurDMIN_G1 * MyPoutreLoc.Dalle.Goujons.d
+            Hauteur_Goujon_MIN = GOUJ_RAPHsurDMIN_G1 * MyPoutreLoc.Dalle.Goujons.d
         Else
-            Hauteur_Goujon_MIN = RAPHsurDMIN_G2 * MyPoutreLoc.Dalle.Goujons.d
+            Hauteur_Goujon_MIN = GOUJ_RAPHsurDMIN_G2 * MyPoutreLoc.Dalle.Goujons.d
         End If
         If lMixte And (Not lCofraPlus220) Then
-            Hauteur_Goujon_MIN = Math.Max(Hauteur_Goujon_MIN, MyPoutreLoc.Dalle.Bac.Hp + RAPHsurDSURBAC * MyPoutreLoc.Dalle.Goujons.d)
+            Hauteur_Goujon_MIN = Math.Max(Hauteur_Goujon_MIN, MyPoutreLoc.Dalle.Bac.Hp + GOUJ_RAPHsurDSURBAC * MyPoutreLoc.Dalle.Goujons.d)
         End If
 
         '--( Hauteur maxi du goujon

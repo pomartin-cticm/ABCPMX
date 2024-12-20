@@ -1945,6 +1945,10 @@ Module Mod_Outils
 
 #End Region
 
+#Region " Valeurs enveloppes "
 
+
+
+#End Region
 
 End Module

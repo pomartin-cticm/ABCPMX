@@ -114,8 +114,112 @@
 
     'End Sub
 
+
+#End Region
+
+#Region " Gestion des erreurs "
+
+    Public Sub GestionErreur(strMod As String, Routine As String, Erreur As String)
+        '-----------------------------------------------------------------------------------------------
+        '   01/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Gestion des erreurs captées par le logiciel
+        '-----------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------
+
+        MsgBox(Erreur & " [" & strMod & " | " & Routine & "]")
+
+    End Sub
+
+
+
+#End Region
+
+#Region " Valeurs enveloppes "
+
+    Public Sub EnveloppeTableau2DparTravee(myBeam As cls_Poutre, myTab(,) As Decimal, ByRef ValEnv(,) As Decimal, ByRef iValNode(,) As Integer)
+        '-----------------------------------------------------------------------------------------------------------
+        '   20/12/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie les moments enveloppes issues des résultats du calcul EF / par travée
+        '-----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   myTab       [E] :   Tableau des valeurs à analyser
+        '   ValEnv      [S] :   Tableau des valeurs enveloppes (indice 1 : travée, indice 2 : 0 pour max et 1 pour min)
+        '   iValNode    [S] :   Tableau des noeuds où sont atteints les valeurs enveloppes
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim iTravee As Integer
+        Dim iTravDeb As Integer
+        Dim iTravFin As Integer
+        Dim iNode As Integer
+        Dim iNodeDeb As Integer
+        Dim iNodeFin As Integer
+        Dim iNodeMiTrav As Integer
+        Dim xMiT As Decimal
+        Dim k, kDeb, kFin As Integer
+        Dim jEnv As Integer
+        Const EPSILON As Decimal = 1 / 10 ^ 5
+
+        '--( Initialisation
+
+        iTravDeb = myBeam.IndicePremiereTravee
+        iTravFin = myBeam.IndiceDerniereTravee
+
+        ReDim ValEnv(iTravFin, 1)
+        ReDim iValNode(iTravFin, 1)
+
+        '--( Boucle sur les travées
+
+        For iTravee = iTravDeb To iTravFin
+
+            iNodeDeb = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeFin = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+
+            xMiT = (myBeam.xPositionAppui(True, iTravee) + myBeam.xPositionAppui(False, iTravee)) / 2
+            iNodeMiTrav = myBeam.GetIndiceNoeudFromXglobal(xMiT)
+
+            ValEnv(iTravee, 0) = myTab(iNodeDeb, 1)
+            ValEnv(iTravee, 1) = myTab(iNodeDeb, 1)
+            iValNode(iTravee, 0) = iNodeDeb
+            iValNode(iTravee, 1) = iNodeDeb
+
+            kDeb = 0
+
+            For iNode = iNodeDeb + 1 To iNodeFin
+                If iNode = iNodeFin Then kFin = 0 Else kFin = 1
+
+                For k = kDeb To kFin
+
+                    For jEnv = 0 To 1
+
+                        If IsEqual(myTab(iNode, k), ValEnv(iTravee, jEnv), epsilon) Then
+                            If (iNode = iNodeMiTrav) Then
+                                iValNode(iTravee, jEnv) = iNode
+                            End If
+
+                        ElseIf IsGreater((1 - 2 * jEnv) * (myTab(iNode, k) - ValEnv(iTravee, jEnv)), 0, epsilon) Then
+
+                            ValEnv(iTravee, jEnv) = myTab(iNode, k)
+                            iValNode(iTravee, jEnv) = iNode
+
+                        End If
+
+                    Next
+
+                Next
+
+            Next
+
+        Next
+
+    End Sub
+
+
     Public Sub EnveloppeTableauEfforts(MyTab(,) As Decimal, NbNodes As Integer, ByRef ValMax As Decimal, ByRef ValMin As Decimal,
-                                 ByRef iNodeValMax As Integer, ByRef iNodeValMin As Integer)
+                                      ByRef iNodeValMax As Integer, ByRef iNodeValMin As Integer)
         '-----------------------------------------------------------------------------------------------------------
         '   09/09/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
@@ -165,22 +269,5 @@
 
 #End Region
 
-#Region " Gestion des erreurs "
-
-    Public Sub GestionErreur(strMod As String, Routine As String, Erreur As String)
-        '-----------------------------------------------------------------------------------------------
-        '   01/05/24 :  Création - POM
-        '-----------------------------------------------------------------------------------------------
-        '   Gestion des erreurs captées par le logiciel
-        '-----------------------------------------------------------------------------------------------
-        '-----------------------------------------------------------------------------------------------
-
-        MsgBox(Erreur & " [" & strMod & " | " & Routine & "]")
-
-    End Sub
-
-
-
-#End Region
 
 End Module

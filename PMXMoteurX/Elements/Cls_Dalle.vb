@@ -329,6 +329,15 @@
         End Get
     End Property
 
+    ''' <summary>
+    ''' Indique si la dalle est pleine
+    ''' </summary>
+    Public ReadOnly Property lPleineOuPrefa As Boolean
+        Get
+            Return (Me.type = Enum_TypeDalle.PartiellementPrefabriquee) Or (Me.type = Enum_TypeDalle.Pleine)
+        End Get
+    End Property
+
 
     ''' <summary>
     ''' Retourne la largeur d'appui d'une prédalle sur la semelle

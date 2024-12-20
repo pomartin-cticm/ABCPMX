@@ -260,83 +260,6 @@
 
     End Function
 
-    Public Sub EnveloppesFleche(ByRef fMax As Decimal, ByRef fMin As Decimal)
-        '-----------------------------------------------------------------------------------------------------------
-        '   09/09/23 :  Création - POM
-        '-----------------------------------------------------------------------------------------------------------
-        '   Renvoie les flèches enveloppes issues des résultats du calcul EF
-        '-----------------------------------------------------------------------------------------------------------
-        '   fMax        [S] :   Valeur max de la flèche
-        '   fMin        [S] :   Valeur min de la flèche
-        '-----------------------------------------------------------------------------------------------------------
-
-        '--> Déclarations
-
-        Dim NbNodes As Integer
-
-        '--> Traitement
-
-        If Me.lRunCalcul Then
-
-            NbNodes = Me.UZ.GetUpperBound(0) + 1
-            fMax = Me.UZ(0)
-            fMin = Me.UZ(0)
-            For iNode As Integer = 1 To NbNodes - 1
-                fMax = Math.Max(UZ(iNode), fMax)
-                fMin = Math.Min(UZ(iNode), fMin)
-            Next
-
-        End If
-
-    End Sub
-
-    Public Sub EnveloppesTranchants(ByRef Vmax As Decimal, ByRef iNodeMax As Integer, ByRef Vmin As Decimal, ByRef iNodeMin As Integer)
-        '-----------------------------------------------------------------------------------------------------------
-        '   09/09/23 :  Création - POM
-        '-----------------------------------------------------------------------------------------------------------
-        '   Renvoie les efforts tranchants enveloppes issues des résultats du calcul EF
-        '-----------------------------------------------------------------------------------------------------------
-        '   VMax        [E] :   Valeur max de V
-        '   VMin        [E] :   Valeur min de V
-        '-----------------------------------------------------------------------------------------------------------
-
-        '--> Déclarations
-
-        Dim NbNodes As Integer
-
-        '--> Calcul
-
-        If Me.lRunCalcul Then
-            NbNodes = Me.UZ.GetUpperBound(0) + 1
-            Mod_Outils.EnveloppeTableauEfforts(Me.VZ, NbNodes, Vmax, Vmin, iNodeMax, iNodeMin)
-        End If
-
-    End Sub
-
-    Public Sub EnveloppesMoments(ByRef Mmax As Decimal, ByRef iNodeMax As Integer, ByRef Mmin As Decimal, ByRef iNodeMin As Integer)
-        '-----------------------------------------------------------------------------------------------------------
-        '   09/09/23 :  Création - POM
-        '-----------------------------------------------------------------------------------------------------------
-        '   Renvoie les moments enveloppes issues des résultats du calcul EF
-        '-----------------------------------------------------------------------------------------------------------
-        '   MMax        [S] :   Valeur max de la flèche
-        '   MMin        [S] :   Valeur min de la flèche
-        '   iNodeMax    [S] :   Indice du noeud avec le moment maxi
-        '   iNodeMin    [S] :   Indice du noeud avec le moment mini
-        '-----------------------------------------------------------------------------------------------------------
-
-        '--> Déclarations
-
-        Dim NbNodes As Integer
-
-        '--> Calcul
-
-        If Me.lRunCalcul Then
-            NbNodes = Me.UZ.GetUpperBound(0) + 1
-            Mod_Outils.EnveloppeTableauEfforts(Me.MYY, NbNodes, Mmax, Mmin, iNodeMax, iNodeMin)
-        End If
-
-    End Sub
 
     Public Function NombreFRep(iTravP As Integer, iTravD As Integer) As Integer
         '-----------------------------------------------------------------------------------------------------------
@@ -437,5 +360,127 @@
     End Function
 
 #End Region
+
+#Region " Valeurs enveloppes "
+
+
+    Public Sub EnveloppesFleche(ByRef fMax As Decimal, ByRef fMin As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie les flèches enveloppes issues des résultats du calcul EF
+        '-----------------------------------------------------------------------------------------------------------
+        '   fMax        [S] :   Valeur max de la flèche
+        '   fMin        [S] :   Valeur min de la flèche
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim NbNodes As Integer
+
+        '--> Traitement
+
+        If Me.lRunCalcul Then
+
+            NbNodes = Me.UZ.GetUpperBound(0) + 1
+            fMax = Me.UZ(0)
+            fMin = Me.UZ(0)
+            For iNode As Integer = 1 To NbNodes - 1
+                fMax = Math.Max(UZ(iNode), fMax)
+                fMin = Math.Min(UZ(iNode), fMin)
+            Next
+
+        End If
+
+    End Sub
+
+    Public Sub EnveloppesTranchants(ByRef Vmax As Decimal, ByRef iNodeMax As Integer, ByRef Vmin As Decimal, ByRef iNodeMin As Integer)
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie les efforts tranchants enveloppes issues des résultats du calcul EF
+        '-----------------------------------------------------------------------------------------------------------
+        '   VMax        [E] :   Valeur max de V
+        '   VMin        [E] :   Valeur min de V
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim NbNodes As Integer
+
+        '--> Calcul
+
+        If Me.lRunCalcul Then
+            NbNodes = Me.UZ.GetUpperBound(0) + 1
+            Mod_Outils.EnveloppeTableauEfforts(Me.VZ, NbNodes, Vmax, Vmin, iNodeMax, iNodeMin)
+        End If
+
+    End Sub
+
+    Public Sub EnveloppesMoments(ByRef Mmax As Decimal, ByRef iNodeMax As Integer, ByRef Mmin As Decimal, ByRef iNodeMin As Integer)
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie les moments enveloppes issues des résultats du calcul EF
+        '-----------------------------------------------------------------------------------------------------------
+        '   MMax        [S] :   Valeur max de la flèche
+        '   MMin        [S] :   Valeur min de la flèche
+        '   iNodeMax    [S] :   Indice du noeud avec le moment maxi
+        '   iNodeMin    [S] :   Indice du noeud avec le moment mini
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim NbNodes As Integer
+
+        '--> Calcul
+
+        If Me.lRunCalcul Then
+            NbNodes = Me.UZ.GetUpperBound(0) + 1
+            Mod_Outils.EnveloppeTableauEfforts(Me.MYY, NbNodes, Mmax, Mmin, iNodeMax, iNodeMin)
+        End If
+
+    End Sub
+
+    Public Sub EnveloppesMomentsParTravee(myBeam As cls_Poutre, ByRef Menv(,) As Decimal, ByRef iMnode(,) As Integer)
+        '-----------------------------------------------------------------------------------------------------------
+        '   20/12/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie les moments enveloppes issues des résultats du calcul EF / par travée
+        '-----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   Menv        [S] :   Tableau des moments enveloppes (indice 1 : travée, indice 2 : 0 pour max et 1 pour min)
+        '   iMnode      [S] :   Tableau des noeuds où sont atteints les valeurs enveloppes
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Calcul
+
+        If Me.lRunCalcul Then
+            EnveloppeTableau2DparTravee(myBeam, Me.MYY, Menv, iMnode)
+        End If
+
+    End Sub
+
+    Public Sub EnveloppesTranchantsParTravee(myBeam As cls_Poutre, ByRef Venv(,) As Decimal, ByRef iVnode(,) As Integer)
+        '-----------------------------------------------------------------------------------------------------------
+        '   20/12/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie les moments enveloppes issues des résultats du calcul EF / par travée
+        '-----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   Menv        [S] :   Tableau des moments enveloppes (indice 1 : travée, indice 2 : 0 pour max et 1 pour min)
+        '   iMnode      [S] :   Tableau des noeuds où sont atteints les valeurs enveloppes
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Calcul
+
+        If Me.lRunCalcul Then
+            EnveloppeTableau2DparTravee(myBeam, Me.VZ, Venv, iVnode)
+        End If
+
+    End Sub
+
+#End Region
+
 
 End Class

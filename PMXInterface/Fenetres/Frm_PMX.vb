@@ -1335,6 +1335,8 @@ Public Class Frm_PMX
         My.Settings.lNdCDispFM_ELU = OptionsNdC.lDispFM_ULS
         My.Settings.lNdCDispLoadCase = OptionsNdC.lDispFMLoadCase
         My.Settings.lNdCShowDiagram = OptionsNdC.lDispFMDiagrams
+        My.Settings.lNdCShowFMTables = OptionsNdC.lDispFMTables
+        My.Settings.lNdCShowFMEnveloppes = OptionsNdC.lDispFMMinMax
         My.Settings.lNdCDispSigmaCharges = OptionsNdC.lDispSigmaCharges
         My.Settings.lNdCDispMelMixte = OptionsNdC.lDispMelPoutreMixte
 

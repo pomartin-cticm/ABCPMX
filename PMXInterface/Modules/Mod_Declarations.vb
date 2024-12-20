@@ -471,9 +471,9 @@ Public Module Mod_Declarations
     Public Const ETA_Catalogue As Decimal = 1
 
     Public Const ENROBAGEMIN As Decimal = 20 / 1000             ' Enrobage mini des connecteurs (ou des armatures)
-    Public Const RAPHsurDMIN_G1 As Decimal = 3                  ' Rapport H sur D mini pour les connecteurs, selon génération 1 des EN 1994
-    Public Const RAPHsurDMIN_G2 As Decimal = 3.9                ' Rapport H sur D mini pour les connecteurs, selon génération 2 des EN 1994
-    Public Const RAPHsurDSURBAC As Decimal = 2                  ' Rapport H sur D mini au dessus du bac, pour les connecteurs
+    Public Const GOUJ_RAPHsurDMIN_G1 As Decimal = 3             ' Rapport H sur D mini pour les connecteurs, selon génération 1 des EN 1994
+    Public Const GOUJ_RAPHsurDMIN_G2 As Decimal = 3.9           ' Rapport H sur D mini pour les connecteurs, selon génération 2 des EN 1994
+    Public Const GOUJ_RAPHsurDSURBAC As Decimal = 2             ' Rapport H sur D mini au dessus du bac, pour les connecteurs
 
     Public Const GOUJ_DMIN As Decimal = 16 / 1000               ' Diamètre minimal des goujons soudés   ( clause 6.6.1.2(1) de l'EC4 actuel)
     Public Const GOUJ_DMAXDEF As Decimal = 25 / 1000            ' Diamètre maxi des goujons soudés, cas général (clause 6.6.1.2(1) de l'EC4 actuel)
@@ -585,6 +585,8 @@ Public Module Mod_Declarations
         Dim lShowHivossCurve As Boolean         ' Indique si affichage des courbes Hivoss
         Dim lDispFMLoadCase As Boolean          ' Indique si affichage des sollicitations par cas de charge
         Dim lDispFMDiagrams As Boolean          ' Indique si affichage des diagrammes de sollicitations
+        Dim lDispFMTables As Boolean            ' Indique si affichage des tableaux de sollicitations
+        Dim lDispFMMinMax As Boolean            ' Indique si affichage des valeurs enveloppes des sollicitations
         Dim lDispFM_ULS As Boolean              ' Indique si affichage des sollicitations sous ELU
         Dim lDispFM_SLS As Boolean              ' Indique si affichage des sollicitations sous ELS
         Dim lDispFM_FLS As Boolean              ' Indique si affichage des sollicitations sous ELU fatigue
@@ -615,6 +617,8 @@ Public Module Mod_Declarations
             .lShowHivossCurve = My.Settings.lNdCCourbeHivoss
             .lDispFMLoadCase = My.Settings.lNdCDispLoadCase
             .lDispFMDiagrams = My.Settings.lNdCShowDiagram
+            .lDispFMTables = My.Settings.lNdCShowFMTables
+            .lDispFMMinMax = My.Settings.lNdCShowFMEnveloppes
             .lDispFM_ULS = My.Settings.lNdCDispFM_ELU
             .lDispFM_SLS = My.Settings.lNdCDispFM_ELS
             .lDispFM_FLS = My.Settings.lNdCDispFM_ELF

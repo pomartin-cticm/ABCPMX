@@ -1,4 +1,5 @@
 ﻿Imports System.Collections.Specialized.BitVector32
+Imports System.IO
 Imports System.Reflection
 Imports System.Reflection.Emit
 Imports System.Runtime.InteropServices
@@ -573,8 +574,10 @@ Module Mod_NoteCalcul
                             & GetStringInUnitN(myBeam.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 3, False, True)
 
             Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
-            Dim lDalleP As Boolean = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine)
-            Dim lPerp As Boolean = (myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+            Dim lDalleP As Boolean = (myBeam.Dalle.lPleineOuPrefa)
+            Dim lPerp As Boolean = myBeam.Dalle.Bac.lPerpendiculaire
+            Dim lPerpPRd As Boolean = myBeam.Dalle.Bac.lPerpendiculairePRd
+            Dim lCofra220 As Boolean = (Not lDalleP) And lPerp And myBeam.Dalle.Bac.lCofraplus220
             Dim FcK As Decimal = myBeam.Dalle.beton.Fck
             Dim Fctk_005 As Decimal = myBeam.Dalle.beton.Fctk_005
             Dim GammaVs As Decimal = myBeam.Param.Gamma.GammaVs
@@ -582,7 +585,7 @@ Module Mod_NoteCalcul
             Dim Ecm As Decimal = myBeam.Dalle.beton.Ecm
             Dim Nr As Integer = myBeam.NrTransZone(1, 0)
 
-            PRd = myBeam.Dalle.Goujons.ResistancePRd(lGeneration1, lDalleP, lPerp, myBeam.Dalle.Bac, Nr, FcK, Ecm, Fctk_005, GammaVs, GammaVc)
+            PRd = myBeam.Dalle.Goujons.ResistancePRd(lGeneration1, lDalleP, lPerpPRd, lCofra220, myBeam.Dalle.Bac, Nr, FcK, Ecm, Fctk_005, GammaVs, GammaVc)
             ChainePRd = "P\-Rd\= " & GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 4, 3, True, True)
             If Not lDalleP Then
                 ChainePRd = ChainePRd & " - n\-r\= = " & CStr(Nr)
@@ -2150,15 +2153,18 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & BlocG("FYSC_CONNECTORS") & TABAFF & "f\-ysc\=" & TABEGAL & GetStringInUnit(.Fy, Enu_TypeVariable.Contrainte, 4, 0, True))
                 AddLigneNDC(TABW2 & BlocG("FUSC_CONNECTORS") & TABAFF & "f\-usc\=" & TABEGAL & GetStringInUnit(.Fu, Enu_TypeVariable.Contrainte, 4, 0, True))
 
-                Dim lGeneration1, lDallePleine, lPerp As Boolean 'Déclaration des variables locales qui serviront dans la fonction ResistancePRd
+                Dim lGeneration1, lDallePleine, lPerp, lPerpPRd As Boolean 'Déclaration des variables locales qui serviront dans la fonction ResistancePRd
                 Dim nr_min, nr_max As Integer
                 Dim Ecm, Fck As Decimal
                 Dim gammaVs, gammaVc As Decimal
                 Dim Fctk_005 As Decimal = MyBeam.Dalle.beton.Fctk_005
+                Dim lCofra220 As Boolean
 
                 lGeneration1 = MyBeam.Param.lGeneration1
-                lDallePleine = (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
-                lPerp = (MyBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+                lDallePleine = MyBeam.Dalle.lPleineOuPrefa
+                lPerp = (MyBeam.Dalle.Bac.lPerpendiculaire)
+                lPerpPRd = MyBeam.Dalle.Bac.lPerpendiculairePRd
+                lCofra220 = (Not lDallePleine) And lPerp And MyBeam.Dalle.Bac.lCofraplus220
 
                 nr_min = MyBeam.nr_min
                 nr_max = MyBeam.nr_max
@@ -2171,19 +2177,19 @@ Module Mod_NoteCalcul
 
                 If lDallePleine Then
                     AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL &
-                                GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, Fctk_005, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
+                                GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerpPRd, lCofra220, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, Fctk_005, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
                 Else 'dalle mixte
                     If lPerp Then
                         For nr_boucle As Integer = nr_min To nr_max
                             AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL &
-                                        GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, Fctk_005, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True) & " (n\-r\= = " & nr_boucle & ")")
+                                        GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerpPRd, lCofra220, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, Fctk_005, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True) & " (n\-r\= = " & nr_boucle & ")")
                             ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
                             AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\=" & TABEGAL &
                                         GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True) & " (n\-r\= = " & nr_boucle & ")")
                         Next
                     Else 'dalle parallèlle
                         AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL &
-                                    GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, Fctk_005, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
+                                    GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerpPRd, lCofra220, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, Fctk_005, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
                         ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-l\= =" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
                         AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-l\=" & TABEGAL &
                                     GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True))
@@ -4372,11 +4378,6 @@ Module Mod_NoteCalcul
         Dim lRetrait As Boolean = True
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
-        Dim Mmin, Mmax, Vmin, Vmax As Decimal
-        Dim iNodeMinMoment As Integer = -1
-        Dim iNodeMaxMoment As Integer = -1
-        Dim iNodeMinTranchant As Integer = -1
-        Dim iNodeMaxTranchant As Integer = -1
 
         '--> Initialisation
 
@@ -4394,15 +4395,22 @@ Module Mod_NoteCalcul
         myPoutre.CombiA_ELU.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
         myPoutre.CombiA_ELU.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
 
-        'Récupère les valeurs enveloppes
-        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
-        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
 
-        '--> AffichageOptFeu de la combinaison
+        '--> Affichage du tableau complet des sollicitations de la combinaison
 
-        EditionTableauEfforts(myPoutre, MEd, VEd,
-                              Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
-                              Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
+        If OptionsNdC.lDispFMTables Then
+
+            EditionTableauEffortsCompletCombi(myPoutre, MEd, VEd)
+
+        End If
+
+        '--> Affichage des enveloppes
+
+        If OptionsNdC.lDispFMMinMax Then
+
+            EditionTableauEffortsEnveloppeCombi(myPoutre, MEd, VEd)
+
+        End If
 
     End Sub
 
@@ -4421,11 +4429,6 @@ Module Mod_NoteCalcul
         Dim lRetrait As Boolean = True
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
-        Dim Mmin, Mmax, Vmin, Vmax As Decimal
-        Dim iNodeMinMoment As Integer = -1
-        Dim iNodeMaxMoment As Integer = -1
-        Dim iNodeMinTranchant As Integer = -1
-        Dim iNodeMaxTranchant As Integer = -1
 
         '--> Initialisation
 
@@ -4443,15 +4446,83 @@ Module Mod_NoteCalcul
         myPoutre.CombiA_ELCU.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
         myPoutre.CombiA_ELCU.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
 
-        'Récupère les valeurs enveloppes
+        '--> Affichage du tableau complet des sollicitations de la combinaison
+
+        If OptionsNdC.lDispFMTables Then
+
+            EditionTableauEffortsCompletCombi(myPoutre, MEd, VEd)
+
+        End If
+
+        '--> Affichage des enveloppes
+
+        If OptionsNdC.lDispFMMinMax Then
+
+            EditionTableauEffortsEnveloppeCombi(myPoutre, MEd, VEd)
+
+        End If
+
+    End Sub
+
+    Private Sub EditionTableauEffortsCompletCombi(myBeam As cls_Poutre, MEd(,) As Decimal, VEd(,) As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   20/12/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition du tableau complet des valeurs d'efforts et moments pour une combinaison
+        '-------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   MEd         [E] :   Tableau des moments le long de la poutre pour la combinaison
+        '   VEd         [E] :   Tableau des efforts tranchants le long de la poutre pour la combinaison
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Mmin, Mmax, Vmin, Vmax As Decimal
+        Dim iNodeMinMoment As Integer = -1
+        Dim iNodeMaxMoment As Integer = -1
+        Dim iNodeMinTranchant As Integer = -1
+        Dim iNodeMaxTranchant As Integer = -1
+
+        '--( Valeurs enveloppes
+
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
 
-        '--> AffichageOptFeu de la combinaison
+        '--( Tableau
 
-        EditionTableauEfforts(myPoutre, MEd, VEd,
+        EditionTableauEfforts(myBeam, MEd, VEd,
                               Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
                               Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
+
+
+    End Sub
+
+    Private Sub EditionTableauEffortsEnveloppeCombi(myBeam As cls_Poutre, MEd(,) As Decimal, VEd(,) As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   20/12/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition du tableau des valeurs enveloppes d'efforts et moments pour une combinaison
+        '-------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   MEd         [E] :   Tableau des moments le long de la poutre pour la combinaison
+        '   VEd         [E] :   Tableau des efforts tranchants le long de la poutre pour la combinaison
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim VEnv(,) As Decimal = Nothing
+        Dim MEnv(,) As Decimal = Nothing
+        Dim iVNode(,) As Integer = Nothing
+        Dim iMNode(,) As Integer = Nothing
+
+        '--( Valeurs enveloppes
+
+        PMXMoteur2.Mod_Outils.EnveloppeTableau2DparTravee(myBeam, VEd, VEnv, iVNode)
+        PMXMoteur2.Mod_Outils.EnveloppeTableau2DparTravee(myBeam, MEd, MEnv, iMNode)
+
+        '--( Tableau
+
+        EditionTableauEffortsEnveloppes(myBeam, MEnv, VEnv)
 
     End Sub
 
@@ -4571,11 +4642,6 @@ Module Mod_NoteCalcul
         Dim lRetrait As Boolean = True
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
-        Dim Mmin, Mmax, Vmin, Vmax As Decimal
-        Dim iNodeMinMoment As Integer = -1
-        Dim iNodeMaxMoment As Integer = -1
-        Dim iNodeMinTranchant As Integer = -1
-        Dim iNodeMaxTranchant As Integer = -1
 
         '--> Initialisation
 
@@ -4590,15 +4656,21 @@ Module Mod_NoteCalcul
         myPoutre.CombiA_ELF.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
         myPoutre.CombiA_ELF.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
 
-        'Récupère les valeurs enveloppes
-        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
-        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
+        '--> Affichage du tableau complet des sollicitations de la combinaison
 
-        '--> AffichageOptFeu de la combinaison
+        If OptionsNdC.lDispFMTables Then
 
-        EditionTableauEfforts(myPoutre, MEd, VEd,
-            Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
-            Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
+            EditionTableauEffortsCompletCombi(myPoutre, MEd, VEd)
+
+        End If
+
+        '--> Affichage des enveloppes
+
+        If OptionsNdC.lDispFMMinMax Then
+
+            EditionTableauEffortsEnveloppeCombi(myPoutre, MEd, VEd)
+
+        End If
 
     End Sub
 
@@ -4617,11 +4689,6 @@ Module Mod_NoteCalcul
         Dim lRetrait As Boolean = True
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
-        Dim Mmin, Mmax, Vmin, Vmax As Decimal
-        Dim iNodeMinMoment As Integer = -1
-        Dim iNodeMaxMoment As Integer = -1
-        Dim iNodeMinTranchant As Integer = -1
-        Dim iNodeMaxTranchant As Integer = -1
 
         '--> Initialisation
 
@@ -4636,16 +4703,21 @@ Module Mod_NoteCalcul
         myPoutre.CombiA_ELS.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
         myPoutre.CombiA_ELS.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
 
-        'Récupère les valeurs enveloppes
-        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
-        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
+        '--> Affichage du tableau complet des sollicitations de la combinaison
 
-        '--> AffichageOptFeu de la combinaison
+        If OptionsNdC.lDispFMTables Then
 
-        EditionTableauEfforts(myPoutre, MEd, VEd,
-                              Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
-                              Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
+            EditionTableauEffortsCompletCombi(myPoutre, MEd, VEd)
 
+        End If
+
+        '--> Affichage des enveloppes
+
+        If OptionsNdC.lDispFMMinMax Then
+
+            EditionTableauEffortsEnveloppeCombi(myPoutre, MEd, VEd)
+
+        End If
     End Sub
 
     Private Sub EditionAnalyseCombiELS_Construction(myPoutre As cls_Poutre, iCombi As Integer)
@@ -4663,11 +4735,6 @@ Module Mod_NoteCalcul
         Dim lRetrait As Boolean = True
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
-        Dim Mmin, Mmax, Vmin, Vmax As Decimal
-        Dim iNodeMinMoment As Integer = -1
-        Dim iNodeMaxMoment As Integer = -1
-        Dim iNodeMinTranchant As Integer = -1
-        Dim iNodeMaxTranchant As Integer = -1
 
         '--> Initialisation
 
@@ -4682,15 +4749,21 @@ Module Mod_NoteCalcul
         myPoutre.CombiA_ELCS.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
         myPoutre.CombiA_ELCS.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
 
-        'Récupère les valeurs enveloppes
-        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
-        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
+        '--> Affichage du tableau complet des sollicitations de la combinaison
 
-        '--> AffichageOptFeu de la combinaison
+        If OptionsNdC.lDispFMTables Then
 
-        EditionTableauEfforts(myPoutre, MEd, VEd,
-                              Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
-                              Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
+            EditionTableauEffortsCompletCombi(myPoutre, MEd, VEd)
+
+        End If
+
+        '--> Affichage des enveloppes
+
+        If OptionsNdC.lDispFMMinMax Then
+
+            EditionTableauEffortsEnveloppeCombi(myPoutre, MEd, VEd)
+
+        End If
 
     End Sub
 
@@ -5145,7 +5218,7 @@ Module Mod_NoteCalcul
         ChargeA.EnveloppesMoments(Mmax, iNodeMaxMoment, Mmin, iNodeMinMoment)           'obtention des valeurs et noeuds des moments enveloppes 
         ChargeA.EnveloppesTranchants(Vmax, iNodeMaxTranchant, Vmin, iNodeMinTranchant)  'obtention des valeurs et noeuds des moments enveloppes 
 
-        '--> AffichageOptFeu du cas de charge
+        '--> Affichage du cas de charge
 
         AddTitreNdC(3, ChargeA.Symbol & " : " & ChargeA.Nom)
 
@@ -5154,15 +5227,118 @@ Module Mod_NoteCalcul
             Exit Sub
         End If
 
-        '--> AffichageOptFeu des réactions
+        '--> Affichage des réactions
 
         EditionChargeAReactions(MyPoutreLoc, ChargeA)
 
-        '--> AffichageOptFeu du tableau des sollicitations
+        '--> Affichage du tableau des sollicitations
 
-        EditionTableauEfforts(MyPoutreLoc, ChargeA.MYY, ChargeA.VZ,
-                              Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
-                              Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
+        If OptionsNdC.lDispFMTables Then
+            EditionTableauEfforts(MyPoutreLoc, ChargeA.MYY, ChargeA.VZ,
+                                  Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
+                                  Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
+
+        End If
+
+        '--> Affichage des valeurs enveloppe
+
+        If OptionsNdC.lDispFMMinMax Then
+
+            Dim MEnv(,) As Decimal = Nothing
+            Dim iMNode(,) As Integer = Nothing
+
+            ChargeA.EnveloppesMomentsParTravee(MyPoutreLoc, MEnv, iMNode)
+
+            Dim VEnv(,) As Decimal = Nothing
+            Dim iVNode(,) As Integer = Nothing
+
+            ChargeA.EnveloppesTranchantsParTravee(MyPoutreLoc, VEnv, iVNode)
+
+            EditionTableauEffortsEnveloppes(MyPoutreLoc, MEnv, VEnv)
+
+        End If
+
+    End Sub
+
+    Private Sub EditionTableauEffortsEnveloppes(myBeam As cls_Poutre, MEnv(,) As Decimal, VEnv(,) As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   20/12/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des sollicitations enveloppes dans la poutre après analyse pour un cas de charge
+        '-------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   MEnv        [E] :   Tableau des moments enveloppes par travée
+        '   VEnv        [E] :   Tableau des efforts enveloppes par travée
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim NCol As Integer
+        Dim POS As Integer
+        Dim iTravDeb, iTravFin, iTravee As Integer
+        Dim iAff As Integer
+
+        '--( Préparation
+
+        iTravDeb = myBeam.IndicePremiereTravee
+        iTravFin = myBeam.IndiceDerniereTravee
+
+        If nbLignes + myBeam.NbTravees * HLIGNE + HLIGNEENTETE > MAXLIGNEPPAG Then
+            SautePage()
+        End If
+
+        EnteteTableauEffortsEnveloppes(NCol, pos)
+
+        '--( Lignes du tableau
+
+        For iTravee = iTravDeb To iTravFin
+
+            iAff = iTravee - iTravDeb + 1
+
+            InitialiseLigneTableau(NCol, HLIGNE)
+
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iAff))
+
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(VEnv(iTravee, 1), Enu_TypeVariable.Effort, 4, 3, False, True))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(VEnv(iTravee, 0), Enu_TypeVariable.Effort, 4, 3, False, True))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(MEnv(iTravee, 1), Enu_TypeVariable.Moment, 4, 3, False, True))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(MEnv(iTravee, 0), Enu_TypeVariable.Moment, 4, 3, False, True))
+
+        Next
+
+        FinTableau()
+    End Sub
+
+    Private Sub EnteteTableauEffortsEnveloppes(ByRef NCol As Integer, ByRef Pos As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   20/12/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition de l'entete du tableau des sollicitations internes
+        '-------------------------------------------------------------------------------------------
+        '   NCol        [S] :   Nombre de colonnes
+        '   Pos         [S] :   Position du tableau / bord gauche
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations 
+
+        Const strMin As String = "min"
+        Const strMax As String = "max"
+
+        '--( Initialisation
+
+        NCol = 5
+        Pos = 20
+
+        AddLigneNDC("\TABLEAU " & CStr(Pos), False)
+
+        InitialiseLigneTableau(NCol, HLIGNEENTETE)
+
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("SPAN"))
+
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "V\-" & strMin & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "V\-" & strMax & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "M\-" & strMin & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitMoment) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "M\-" & strMax & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitMoment) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
 
     End Sub
 
@@ -5231,30 +5407,6 @@ Module Mod_NoteCalcul
         SauteLigne()
 
     End Sub
-
-    'Private Function IndiceTravee(Node As Integer, iNodeAppui As Integer()) As Integer()
-    '    '-------------------------------------------------------------------------------------------
-    '    '   10/11/23 :  Création - GUD
-    '    '-------------------------------------------------------------------------------------------
-    '    '   Permet de renvoyer l'indice de la travée à laquelle appartient le noeud 
-    '    '   Dans le cas où le noeud appartient à deux travées, l'indice de la travée renvoyée est celle de gauche (sauf pour le tout premier noeud)
-    '    '-------------------------------------------------------------------------------------------
-
-    '    Dim indTravee(1) As Integer
-
-    '    For j As Integer = 0 To iNodeAppui.Count - 1 'On ne commence pas à l'indice 0 exprès car l'indice de la travée du premier noeud est 1
-    '        If Node <= iNodeAppui(j) Then
-    '            indTravee(0) = j + 1
-    '            If Node = iNodeAppui(j) And j <> iNodeAppui.Count - 1 Then
-    '                indTravee(1) = indTravee(0) + 1
-    '            Else
-    '                indTravee(1) = indTravee(0)
-    '            End If
-    '            Return indTravee
-    '        End If
-    '    Next
-
-    'End Function
 
 #End Region
 
@@ -8796,7 +8948,6 @@ Module Mod_NoteCalcul
         '--( Traitement
 
         InitialiseLigne(NCOL, HLIGNE)
-
         AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Gauche, chainecombi)
         iCol = 0
 
@@ -11358,7 +11509,8 @@ Module Mod_NoteCalcul
         Dim ThetaC As Decimal
         Dim lLeger As Boolean
         Dim lPleine As Boolean
-        Dim lPerp As Boolean
+        Dim lPerp, lPerpPRd As Boolean
+        Dim lCofra220 As Boolean
         Dim Fck, Ecm, Fctk_005 As Decimal
         Dim Nr As Decimal = 1
         Dim GammaVfi As Decimal
@@ -11369,8 +11521,12 @@ Module Mod_NoteCalcul
         ThetaV = myBeam.VerifFeuMixte.TempVStep(iStep)
         ThetaC = myBeam.VerifFeuMixte.TempVcStep(iStep)
         lLeger = myBeam.Dalle.beton.lLeger
-        lPleine = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee) Or (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine)
-        lPerp = (myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+
+        lPleine = myBeam.Dalle.lPleineOuPrefa
+        lPerp = myBeam.Dalle.Bac.lPerpendiculaire
+        lPerpPRd = myBeam.Dalle.Bac.lPerpendiculaire
+        lCofra220 = myBeam.Dalle.Bac.lCofraplus220
+
         GammaVfi = myBeam.Param.Gamma.GammaV_fi
         Fck = myBeam.Dalle.beton.Fck
         Ecm = myBeam.Dalle.beton.Ecm
@@ -11397,7 +11553,7 @@ Module Mod_NoteCalcul
         AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
                    GetStringInUnitN(EN_Feu.ReducFckBeton(ThetaC, lLeger), Enu_TypeVariable.SansType, 4, 3, False))
 
-        PRd = myBeam.Dalle.Goujons.PRdStudFeu(ThetaV, ThetaC, myBeam.Param.lGeneration1, lLeger, lPleine, lPerp,
+        PRd = myBeam.Dalle.Goujons.PRdStudFeu(ThetaV, ThetaC, myBeam.Param.lGeneration1, lLeger, lPleine, lPerpPRd, lCofra220,
                                               myBeam.Dalle.Bac, Nr, Fck, Ecm, Fctk_005, GammaVfi, GammaVfi)
 
         AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,

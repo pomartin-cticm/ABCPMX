@@ -721,7 +721,7 @@ Public Class cls_GoujonSoude
 
 #Region " Resistance du connecteur - Fonction globale "
 
-    Public Function ResistancePRd(lGeneration1 As Boolean, lDallePleine As Boolean, lPerpendiculaire As Boolean,
+    Public Function ResistancePRd(lGeneration1 As Boolean, lDallePleine As Boolean, lPerpendiculaire As Boolean, lCofraPlus220 As Boolean,
                                   MyBac As cls_Bac, nR As Integer,
                                   Fck As Decimal, Ecm As Decimal, Fctk_005 As Decimal, gammaVS As Decimal, gammaVC As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
@@ -732,6 +732,7 @@ Public Class cls_GoujonSoude
         '   lGeneration1    [E] :   Indique si première ou seconde génération de l'EN
         '   lDallePleine    [E] :   Indique si dalle pleine ou dalle mixte
         '   lPerpendiculaire[E] :   Indique si bac perpendiculaire, pour les dalles mixtes
+        '   lCofraplus220   [E]:    Indique la présence d'un bac Cofraplus 220
         '   MyBac           [E] :   Bac pour les dalles mixtes
         '   nR              [E] :   Nombre de connecteur par rangée
         '   FcK, Ecm        [E] :   Résistance à la compression et module élastique du béton
@@ -743,13 +744,14 @@ Public Class cls_GoujonSoude
         '--> Déclaration
 
         Dim pPRd As Decimal = 0
+        Dim lDallePleineEq As Boolean = lDallePleine Or (lCofraPlus220)
 
         '--> Traitement
 
         If lGeneration1 Then
             '# Génération 1 de l'EN 
 
-            If lDallePleine Then
+            If lDallePleineEq Then
                 pPRd = Me.PRdDallePleineG1(Fck, Ecm, gammaVS, gammaVC)
             Else
                 If lPerpendiculaire Then
@@ -762,7 +764,7 @@ Public Class cls_GoujonSoude
         Else
             '# Génération 2 de l'EN 
 
-            If lDallePleine Then
+            If lDallePleineEq Then
                 pPRd = Me.PRdDallePleineG2(Fck, Ecm, gammaVS, gammaVC)
             Else
                 If lPerpendiculaire Then
@@ -819,7 +821,7 @@ Public Class cls_GoujonSoude
 #Region " Résistance des connecteurs à chaud "
 
     Public Function PRdStudFeu(ThetaV As Decimal, ThetaC As Decimal, lGeneration1 As Boolean, lBetonLeger As Boolean,
-                               lDallePleine As Boolean, lPerpendiculaire As Boolean, MyBac As cls_Bac, nR As Integer,
+                               lDallePleine As Boolean, lPerpendiculaire As Boolean, lCofraPlus220 As Boolean, MyBac As cls_Bac, nR As Integer,
                                Fck As Decimal, Ecm As Decimal, Fctk_005 As Decimal, gammaVS As Decimal, gammaVC As Decimal) As Decimal
         '------------------------------------------------------------------------------------------------------------------------
         '   30/10/24 :  Création - POM
@@ -832,6 +834,7 @@ Public Class cls_GoujonSoude
         '   lBetonLeger     [E] :   Indique si béton léger
         '   lDallePleine    [E] :   Indique si dalle pleine ou dalle mixte
         '   lPerpendiculaire[E] :   Indique si bac perpendiculaire, pour les dalles mixtes
+        '   lCofraPlus220   [E] :   Indique l'utilisation d'un bac perpendiculaire Cofraplus220 (donc règles de dalle pleine)
         '   MyBac           [E] :   Bac pour les dalles mixtes
         '   nR              [E] :   Nombre de connecteur par rangée
         '   FcK, Ecm        [E] :   Résistance à la compression et module élastique du béton    (à froid)
@@ -891,7 +894,7 @@ Public Class cls_GoujonSoude
             '## PRd en dalle pleine
             PRdDP = Math.Min(0.8 * kuTheta * PRdS, kcTheta * PRdC)
 
-            If lDallePleine Then
+            If lDallePleine Or lCofraPlus220 Then
                 PRd = PRdDP
             Else
                 If lPerpendiculaire Then

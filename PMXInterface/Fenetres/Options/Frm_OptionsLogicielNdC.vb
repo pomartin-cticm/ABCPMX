@@ -1,6 +1,5 @@
 ﻿Public Class Frm_OptionsLogicielNdC
 
-
 #Region " Variables "
 
     Dim lBuild As Boolean
@@ -20,7 +19,6 @@
 
         lBuild = False
 
-
     End Sub
 
     Private Sub GestionLangue(ByVal MyBloc As Dictionary(Of String, String))
@@ -28,11 +26,15 @@
 
             Me.lbl_Sollicitations.Text = MyBloc("FORCESANDMOMENTS")
             Me.chk_DisplayLoadCases.Text = MyBloc("DISPLAYFMLOADCASES")
-            Me.chk_Diagrammes.Text = MyBloc("DISPLAYDIAGRAMS")
             Me.chk_DisplayFM_ELU.Text = MyBloc("DISPLAYFMULS")
             Me.chk_DisplayFM_ELS.Text = MyBloc("DISPLAYFMSLS")
             Me.chk_DisplayFM_ELF.Text = MyBloc("DISPLAYFMFLS")
             Me.chk_SigmaCharges.Text = MyBloc("DISPLAYSIGMA")
+
+            Me.grp_FMOptions.Text = MyBloc("DISPLAYOPTIONS")
+            Me.chk_Diagrammes.Text = MyBloc("DISPLAYDIAGRAMS")
+            Me.chk_FM_Tables.Text = MyBloc("DISPLAYTABLES")
+            Me.chk_FM_Enveloppes.Text = MyBloc("DISPLAYMINMAX")
 
             Me.lbl_ELU.Text = MyBloc("ULS")
             Me.chk_DisplayMelPoutreMixte.Text = MyBloc("DISPMELCOMPOSITEBEAMS")
@@ -51,8 +53,6 @@
     Private Sub GestionStyle()
 
         Me.pan_NdC.Dock = DockStyle.Fill
-
-
 
         Me.lbl_Sollicitations.BackColor = CouleurBackBandeaux
         Me.lbl_Sollicitations.ForeColor = CouleurForeBandeaux
@@ -74,12 +74,15 @@
         Me.chk_ShowHivossDiagram.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lShowHivossCurve
 
         Me.chk_DisplayLoadCases.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispFMLoadCase
-        Me.chk_Diagrammes.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispFMDiagrams
         Me.chk_DisplayFM_ELU.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispFM_ULS
         Me.chk_DisplayFM_ELS.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispFM_SLS
         Me.chk_DisplayFM_ELF.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispFM_FLS
         Me.chk_SigmaCharges.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispSigmaCharges
         Me.chk_DisplayMelPoutreMixte.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispMelRdMixte
+
+        Me.chk_Diagrammes.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispFMDiagrams
+        Me.chk_FM_Tables.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispFMTables
+        Me.chk_FM_Enveloppes.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispFMMinMax
 
     End Sub
 
@@ -117,6 +120,14 @@
 
     Private Sub chk_DisplayMelPoutreMixte_CheckedChanged(sender As Object, e As EventArgs) Handles chk_DisplayMelPoutreMixte.CheckedChanged
         Frm_OptionsLogiciel.pLocalOptionsNdC.lDispMelRdMixte = Me.chk_DisplayMelPoutreMixte.Checked
+    End Sub
+
+    Private Sub chk_FM_Enveloppes_CheckedChanged(sender As Object, e As EventArgs) Handles chk_FM_Enveloppes.CheckedChanged
+        Frm_OptionsLogiciel.pLocalOptionsNdC.lDispFMMinMax = Me.chk_FM_Enveloppes.Checked
+    End Sub
+
+    Private Sub chk_FM_Tables_CheckedChanged(sender As Object, e As EventArgs) Handles chk_FM_Tables.CheckedChanged
+        Frm_OptionsLogiciel.pLocalOptionsNdC.lDispFMTables = Me.chk_FM_Tables.Checked
     End Sub
 
 #End Region

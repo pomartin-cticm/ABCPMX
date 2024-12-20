@@ -231,13 +231,15 @@ Public Class cls_Poutre
         Dim Nr As Integer
         Dim PRd As Decimal
         Dim lGeneration1 As Boolean = Me.Param.lGeneration1
-        Dim lDallePleine As Boolean = Not (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte)
+        Dim lDallePleine As Boolean = Me.Dalle.lPleineOuPrefa
         Dim lPerp As Boolean = Me.Dalle.Bac.lPerpendiculaire
+        Dim lPerpPRd As Boolean = Me.Dalle.Bac.lPerpendiculairePRd
         Dim FcK, Ecm As Decimal
         Dim GammaVs, GammaVc As Decimal
         Dim sX As Decimal
         Dim myFluxRd As Decimal
         Dim Fctk_005 As Decimal
+        Dim lCofra220 As Boolean = (Not lDallePleine) And lPerp And Me.Dalle.Bac.lCofraplus220
 
         GammaVs = Me.Param.Gamma.GammaVs
         GammaVc = Me.Param.Gamma.GammaVc
@@ -248,7 +250,7 @@ Public Class cls_Poutre
         '--( Calcul
 
         Nr = Me.NrTransZone(iTravee, iZone)
-        PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, Nr, FcK, Ecm, Fctk_005, GammaVs, GammaVc)
+        PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerpPRd, lCofra220, Me.Dalle.Bac, Nr, FcK, Ecm, Fctk_005, GammaVs, GammaVc)
         sX = Me.EntraxeLongiGoujons(iTravee, iZone)
         myFluxRd = Nr * PRd / sX
 
@@ -2931,7 +2933,7 @@ Public Class cls_Poutre
         Dim kSc, PRd As Decimal
         Dim DeltaD As Decimal
         Dim lGeneration1 As Boolean = Me.Param.lGeneration1
-        Dim lDallePleine, lPerp As Boolean
+        Dim lDallePleine, lPerp, lCofra220, lPerpPRd As Boolean
         Dim Ecm, Fck As Decimal
         Dim gammaVs, gammaVc As Decimal
         Dim Fctk_005 As Decimal
@@ -2956,8 +2958,10 @@ Public Class cls_Poutre
         '# Zone de connexion
         ReDim IndZoneConnex(Me.Nodes.iNodeExtTrav(iTraveeFin, 1) - 1)
 
-        lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
-        lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
+        lDallePleine = Me.Dalle.lPleineOuPrefa
+        lPerp = Me.Dalle.Bac.lPerpendiculaire
+        lPerpPRd = Me.Dalle.Bac.lPerpendiculairePRd
+        lCofra220 = (Not lDallePleine) And Me.Dalle.Bac.lCofraplus220 And lPerp
         Ecm = Me.Dalle.beton.Ecm
         Fck = Me.Dalle.beton.Fck
         Fctk_005 = Me.Dalle.beton.Fctk_005
@@ -2994,7 +2998,7 @@ Public Class cls_Poutre
 
                         nR = Me.NrTransZone(iTravee, IndZoneConnex(iElt))
                         sX = Me.EntraxeLongiGoujons(iTravee, IndZoneConnex(iElt))
-                        PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
+                        PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerpPRd, lCofra220, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
                         kSc = 0.7 * PRd / DeltaD
 
                         cStiff = nR * kSc / sX
@@ -4250,14 +4254,14 @@ Public Class cls_Poutre
 
         If Not lMixte Then pEtatDalle = cls_CasDeCharge.EnuEtatDalle.Acier Else pEtatDalle = cls_CasDeCharge.EnuEtatDalle.Mixte
 
-        If (Not lMixte) Or lEtaitComplet Then
+        If (Not lMixte) Then
             IndiceG = Me.IndiceTabElts(lMixte, nEqDalleG1, nEqEnrobG1)
 
             Me.ChargesA.Add(New cls_CasDeCharge(strChargesPermanentes, "G", IndiceG, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente, pEtatDalle))
             InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("G1"), TraveesTous)
         End If
 
-        '# Charges de poids propres pour les poutres mixtes non étayées
+        '# Charges de poids propres pour les poutres mixtes 
 
         If lMixte Then
 
@@ -4266,6 +4270,10 @@ Public Class cls_Poutre
 
             If lNonEtaye Then
                 Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1, Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente, pEtatDalleNonMixte))
+                'InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
+                InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("G1"), TraveesTous)
+            ElseIf lEtaitComplet Then
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1, Me.IndiceTabElts(True, nEqDalleG1, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente, pEtatDalle))
                 'InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("G1"), TraveesTous)
             Else
@@ -5483,7 +5491,7 @@ Public Class cls_Poutre
 
         '--> Déclarations
 
-        'Dim i As Integer
+        Dim lEtaiTotal As Boolean = (Me.TypeEtaiement = EnuTypeEtaiement.FullyPropped)
 
         '--> Initialisation des tableaux de verification
 
@@ -5497,7 +5505,7 @@ Public Class cls_Poutre
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 ReDim Me.VerifMixte(0)
                 Me.VerifMixte(0) = New cls_VerificationsMixtes
-                If Me.TypeEtaiement <> EnuTypeEtaiement.FullyPropped Then
+                If Not lEtaiTotal Then
                     ' Quand on est pas totalement étayé, on ajoute la vérification en phase de construction
                     ReDim Me.VerifAcier(0)
                     Me.VerifAcier(0) = New cls_VerificationsAcier
@@ -5552,6 +5560,8 @@ Public Class cls_Poutre
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 '# Vérification des poutres mixtes en phase finale aux ELU
                 Me.VerifMixte(0).Z_VerificationELU(Me)
+                '# Vérification des poutres mixtes en phase de construction aux ELU
+                If Not lEtaiTotal Then _
                 Me.VerifAcier(0).Z_VerificationELU(Me, True)
 
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
@@ -6055,23 +6065,27 @@ Public Class cls_Poutre
         Dim PRd As Decimal
         Dim lGeneration1 As Boolean
         Dim lDallePleine As Boolean
-        Dim lPerp As Boolean
+        Dim lPerp, lPerpPRd As Boolean
         Dim Ecm, Fck As Decimal
         Dim Fctk_005 As Decimal
         Dim gammaVs, gammaVc As Decimal
         Dim nR As Integer
         Dim pEspace As Decimal
-        Dim lBacNervuresPerpContinues As Boolean
+        'Dim lBacNervuresPerpContinues As Boolean
         Dim LongZone As Decimal
         Dim NbCZone As Integer
         Dim lLeger As Boolean
+        Dim lCofra220 As Boolean
 
         '--> Initialisation
 
         ReDim DensitePRdZone(Me.IndiceDerniereTravee, 2)
         lGeneration1 = Me.Param.lGeneration1
-        lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
-        lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
+        lDallePleine = Me.Dalle.lPleineOuPrefa
+        lPerp = Me.Dalle.Bac.lPerpendiculaire
+        lPerpPRd = Me.Dalle.Bac.lPerpendiculairePRd
+        lCofra220 = Me.Dalle.Bac.lCofraplus220 And lPerp And (Not lDallePleine)
+
         Ecm = Me.Dalle.beton.Ecm
         Fck = Me.Dalle.beton.Fck
         Fctk_005 = Me.Dalle.beton.Fctk_005
@@ -6083,7 +6097,7 @@ Public Class cls_Poutre
             gammaVc = Me.Param.Gamma.GammaVc
         End If
 
-        lBacNervuresPerpContinues = (Me.Dalle.lMixte And Me.Dalle.Bac.lPerpendiculaire And Me.Dalle.Bac.lNervuresContinues)
+        'lBacNervuresPerpContinues = (Me.Dalle.lMixte And Me.Dalle.Bac.lPerpendiculaire And Me.Dalle.Bac.lNervuresContinues)
         lLeger = Me.Dalle.beton.lLeger
 
         '--> Traitement
@@ -6096,9 +6110,9 @@ Public Class cls_Poutre
                 nR = Me.NrTransZone(iTravee, iZone)
 
                 If lIncendie Then
-                    PRd = Me.Dalle.Goujons.PRdStudFeu(ThetaV, ThetaC, lGeneration1, lLeger, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
+                    PRd = Me.Dalle.Goujons.PRdStudFeu(ThetaV, ThetaC, lGeneration1, lLeger, lDallePleine, lPerpPRd, lCofra220, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
                 Else
-                    PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
+                    PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerpPRd, lCofra220, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
                 End If
 
                 NbCZone = Me.NombreGoujonTotParZone(iTravee, iZone)
