@@ -165,6 +165,7 @@ Public Class Frm_Connection
         Dim lMixte As Boolean
         Dim lTrans As Boolean       ' Nervure perpendiculaire à la poutre
         Dim lNCont As Boolean       ' Nervure béton continue sur semelle
+        Dim lCf220 As Boolean       ' Dalle mixte avec cofraplus 220
 
         '--( Dupplication de la poutre en cours
 
@@ -176,6 +177,7 @@ Public Class Frm_Connection
         lMixte = (MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte)
         lTrans = (MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
         lNCont = Not (MyPoutreLoc.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu)
+        lCf220 = MyPoutreLoc.Dalle.Bac.lCofraplus220
 
         'Par défaut on affiche la première travée sur deux appuis
         traveeEnCours = 1
@@ -187,8 +189,8 @@ Public Class Frm_Connection
         'Else
         '    lBacTransv = False
         'End If
-        '== On applique les dispositions de bacs perpendiculaires si la nervure est continue
-        lBacTransv = lMixte And lTrans And lNCont
+        '== On applique les dispositions de bacs perpendiculaires si la nervure est continue, et hors bac cofraplus 220
+        lBacTransv = lMixte And lTrans And lNCont And (Not lCf220)
 
         'Corrige les valeurs de certaines variables si nécessaire (utile en cas d'un changement de certaines valeurs dans les fenêtres précédentes)
         For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee

@@ -109,6 +109,21 @@
 #End Region
 
 #Region " Propriétés "
+
+    ''' <summary>
+    ''' Indique si la dalle est connectée par des goujons
+    ''' </summary>
+    ''' <returns></returns>
+
+    Public ReadOnly Property lConnexionParGoujons
+        Get
+            Dim lStud As Boolean
+            lStud = (Me.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup) _
+                 Or (Me.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme)
+            Return lStud
+        End Get
+    End Property
+
     ''' <summary>
     '''  surface par unité de largeur (m²/m)
     ''' </summary>

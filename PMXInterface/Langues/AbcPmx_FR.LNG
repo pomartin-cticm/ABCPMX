@@ -654,16 +654,21 @@ PARAMETERS				= Paramètres
 RELATIVEHUMIDITY		= Humidité ralative
 PSIL					= Multiplicateur de fluage
 CONCRETEPROP			= Propriétés du béton
-RESULTS					= Résultats
+RESULTS					= Coefficients d'équivalence
 AGET					= Age du béton
 AGET0					= Age du béton lors du chargement
 CONCRETE				= Classe du béton
 NOTIONALSIZE			= Rayon moyen de l'élément béton
 COEFANNEXB				= Coefficients / Annexe B EN 1992-1-1
 LONGTERM_N				= Coefficient d'équivalence pour les charges permanentes
-SHORTTERM_N				= Coefficient d'équivalence pour les charges d'exploitation
+SHORTTERM_N				= Chargement à court terme
 RCOMPRESSION			= Résistance à la compression
-RTENSION				= Résistance à la traction							   
+RTENSION				= Résistance à la traction		
+LOADS					= Type de chargement
+LIVELOADS				= Charges d'exploitation
+PERMANENTLOADS			= Charges permanentes
+SHRINKAGE				= Retrait
+IMPOSEDD				= Déformations imposées				   
 
 #FRM_PPLOADCASE
 TITLE					= Cas de charge

@@ -694,9 +694,14 @@ Public Class Frm_Dalle
 
         MAJI_ChangeBac()
         If lCofraPlus220 <> lOldCfp220 Then
+            lBuild = True
             Dim Td As Decimal = Tc + MyDalleLoc.Bac.Hp
             MyDalleLoc.Ep_td = Td
-            Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.Ep_td, Enu_TypeVariable.Dimension)
+            Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.Ep_td, Enu_TypeVariable.Dimension)
+            Me.rdb_EpPleine.Checked = True
+            DefEpMixte = Enu_DefEpMixte.Pleine
+            MAJI_SaisieEpMixte()
+            lBuild = False
         End If
 
         AfficheNomBacEnCours()

@@ -1348,7 +1348,7 @@
         thetaf_min_neg = 36 / 180 * Math.PI 'angle min  de la bielle en zone de flexion négative
         thetaf_max = Math.PI / 4
 
-        If myBeam.Dalle.lMixte Then
+        If myBeam.Dalle.lMixte And (Not myBeam.Dalle.Bac.lCofraplus220) Then
             b0min = 4 * myBeam.Dalle.Goujons.d
         Else
             b0min = 2.5 * myBeam.Dalle.Goujons.d
@@ -1609,7 +1609,10 @@
 
                 Next
 
-                If myBeam.Dalle.lMixte And myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire And myBeam.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus Then
+                Dim lDalMixte As Boolean = myBeam.Dalle.lMixte
+                Dim lBacCont As Boolean = (myBeam.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus) And (Not myBeam.Dalle.Bac.lCofraplus220)
+
+                If lDalMixte And lPerp And lBacCont Then
                     k_bacPE1 = 1
                 Else
                     k_bacPE1 = 0

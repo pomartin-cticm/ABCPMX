@@ -6,7 +6,8 @@ Public Class Frm_ModularRatio
 #Region " Attributs "
 
     Dim lBuild As Boolean
-    Dim tabPsiL() As Decimal = {0, 0.55, 1.1, 1.5}
+    Dim tabPsiL() As Decimal = {0, 1.1, 0.55, 1.5}
+    Dim tabCharges(3) As String
 
     Dim AgeT As Integer = 50 * 365
     Dim AgeT0 As Integer = 28
@@ -14,6 +15,11 @@ Public Class Frm_ModularRatio
     Dim MonBeton As New cls_Beton
 
     Dim RayonH0 As Decimal = 0.2
+
+    Const iLive As Integer = 0
+    Const iPerm As Integer = 1
+    Const iShri As Integer = 2
+    Const iDefI As Integer = 3
 
 #End Region
 
@@ -41,7 +47,7 @@ Public Class Frm_ModularRatio
     Private Sub InitialiserFenetre()
         RemplirComboRH()
         RemplirComboBeton()
-        RemplirComboPsiL()
+        RemplirComboCharges()
 
         Me.txt_AgeT.Text = GetStringInUnit(AgeT, Enu_TypeVariable.SansType, 2, 0, False)
         Me.txt_AgeT0.Text = GetStringInUnit(AgeT0, Enu_TypeVariable.SansType, 2, 0, False)
@@ -74,17 +80,17 @@ Public Class Frm_ModularRatio
 
     End Sub
 
-    Private Sub RemplirComboPsiL()
+    Private Sub RemplirComboCharges()
 
-        Me.cmb_PsiL.Items.Clear()
+        Me.cmb_Charge.Items.Clear()
 
-        For i As Integer = 0 To Me.tabPsiL.GetUpperBound(0)
+        For i As Integer = 0 To Me.tabCharges.GetUpperBound(0)
 
-            Me.cmb_PsiL.Items.Add(GetStringInUnit(Me.tabPsiL(i), Enu_TypeVariable.SansType, 2, 2, False))
+            Me.cmb_Charge.Items.Add(Me.tabCharges(i))
 
         Next
 
-        Me.cmb_PsiL.SelectedIndex = 0
+        Me.cmb_Charge.SelectedIndex = 0
 
     End Sub
 
@@ -131,6 +137,12 @@ Public Class Frm_ModularRatio
 
                 Me.lbl_CoefficientAnnexB.Text = Bloc("COEFANNEXB")
 
+                Me.lbl_Charge.Text = Bloc("LOADS")
+                Me.tabCharges(0) = Bloc("LIVELOADS")
+                Me.tabCharges(1) = Bloc("PERMANENTLOADS")
+                Me.tabCharges(2) = Bloc("SHRINKAGE")
+                Me.tabCharges(3) = Bloc("IMPOSEDD")
+
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_ModularRatio/GestionLangue")
@@ -173,6 +185,7 @@ Public Class Frm_ModularRatio
         PrepareTextBoxDipo(Me.txt_Phi0, False)
         PrepareTextBoxDipo(Me.txt_PhiRH, False)
         PrepareTextBoxDipo(Me.txt_PhiT, False)
+        PrepareTextBoxDipo(Me.txt_PsiL2, False)
 
         PrepareTextBoxDipo(Me.txt_n0, False)
         PrepareTextBoxDipo(Me.txt_nL, False)
@@ -210,12 +223,14 @@ Public Class Frm_ModularRatio
     Private Sub MAJI_Coefficients()
 
         Dim RH As Decimal = cls_OptionsCalcul.tabRH(Me.cmb_RH.SelectedIndex)
-        Dim PsiL As Decimal = tabPsiL(Me.cmb_PsiL.SelectedIndex)
+        Dim PsiL As Decimal = tabPsiL(Me.cmb_Charge.SelectedIndex)
         Dim n0 As Decimal = MonBeton.CoefficientEquivalenceCT
         Dim nL As Decimal = MonBeton.CoefficientEquivalence(RH, RayonH0, AgeT, AgeT0, PsiL)
 
         Me.txt_n0.Text = GetStringInUnit(n0, Enu_TypeVariable.SansType, 3, 2, False)
         Me.txt_nL.Text = GetStringInUnit(nL, Enu_TypeVariable.SansType, 3, 2, False)
+
+        Me.txt_PsiL2.Text = GetStringInUnitN(PsiL, Enu_TypeVariable.SansType, 3, 2, False, True)
 
         Dim PhiRH As Decimal = MonBeton.PhiRH(RH, RayonH0)
 
@@ -241,6 +256,8 @@ Public Class Frm_ModularRatio
 
         Me.txt_PhiT.Text = GetStringInUnit(PhiT, Enu_TypeVariable.SansType, 3, 2, False)
 
+        Me.lbl_CoefLongTerme.Text = Me.cmb_Charge.Text
+
     End Sub
 
 #End Region
@@ -263,7 +280,7 @@ Public Class Frm_ModularRatio
 
     End Sub
 
-    Private Sub cmb_PsiL_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_PsiL.SelectedIndexChanged
+    Private Sub cmb_PsiL_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Charge.SelectedIndexChanged
 
         If lBuild Then Exit Sub
         MAJI_Coefficients()
@@ -356,7 +373,8 @@ Public Class Frm_ModularRatio
 
 #Region " Dessin des symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_PsiL.Paint, img_RH.Paint, img_H0.Paint, img_AgeT0.Paint, img_AgeT.Paint, img_Fctm.Paint, img_Fcm.Paint, img_Fck.Paint, img_Ecm.Paint, img_nL.Paint, img_n0.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_PsiL2.Paint, img_RH.Paint, img_H0.Paint,
+        img_AgeT0.Paint, img_AgeT.Paint, img_Fctm.Paint, img_Fcm.Paint, img_Fck.Paint, img_Ecm.Paint, img_nL.Paint, img_n0.Paint
 
         '--> Déclarations
 
@@ -384,7 +402,7 @@ Public Class Frm_ModularRatio
                 strSymbol = "RH"
                 strIndice = ""
 
-            Case Me.img_PsiL.Name
+            Case Me.img_PsiL2.Name
                 strSymbol = "y"
                 strIndice = "L"
                 lGrec = True

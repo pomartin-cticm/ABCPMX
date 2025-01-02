@@ -277,7 +277,8 @@ Public Class cls_Poutre
 
         lRib = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte) _
             And (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) _
-            And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
+            And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu) _
+            And (Not Me.Dalle.Bac.lCofraplus220)
 
         '--( Calcul
 
@@ -291,22 +292,23 @@ Public Class cls_Poutre
 
     End Function
     ''' <summary>
-    ''' Propriétés renvoyant le nombre de lits d'armatures transversales disposées 
+    ''' Propriétés renvoyant le nombre de lits d'armatures transversales disposées dans la dalle,
+    ''' pour la reprise du cisaillement longitudinal
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property NbTransverseLayer As Integer
+    Public ReadOnly Property NombreLitsTransversaux As Integer
         Get
             Dim NbLayer As Integer
 
-            If Me.Dalle.lMixte Then
+            If Me.Dalle.lMixte And (Not Me.Dalle.Bac.lCofraplus220) Then
                 NbLayer = 1
             Else
-                If Me.Dalle.Goujons.hsc - 70 / 1000 <= Me.Dalle.Ep_th Then 'espace suffisant pour disposer 3 lits d'armatures transversales 
-                    NbLayer = 3
-                Else
-                    NbLayer = 2
-                End If
-
+                'If Me.Dalle.Goujons.hsc - 70 / 1000 <= Me.Dalle.Ep_th Then 'espace suffisant pour disposer 3 lits d'armatures transversales 
+                '    NbLayer = 3
+                'Else
+                '    NbLayer = 2
+                'End If
+                NbLayer = 2
             End If
 
             Return NbLayer
@@ -4292,8 +4294,13 @@ Public Class cls_Poutre
 
         '--> Charges d'exploitation
 
+        Dim lChargeQc As Boolean
+
+        lChargeQc = lMixte And Not (Me.TypeEtaiement = EnuTypeEtaiement.FullyPropped)
+
         IndiceQ = Me.IndiceTabElts(lMixte, nEqDalleCT, nEqEnrobCT)
-        IndiceQc = Me.IndiceTabElts(False, nEqDalleCT, nEqEnrobCT) 'On ne prend pas en compte la dalle ici
+        If lChargeQc Then _
+        IndiceQc = Me.IndiceTabElts(False, nEqDalleCT, nEqEnrobCT)          'On ne prend pas en compte la dalle ici
 
         Dim LabelQ() As String = {symbQ1, symbQ2, symbQC}
         Dim IndQ() As Integer = {IndiceQ, IndiceQ, IndiceQc}
@@ -4302,7 +4309,9 @@ Public Class cls_Poutre
         Me.lMultiQ = {False, False, False}
 
         Dim iQFin As Integer
-        If lMixte Then iQFin = 2 Else iQFin = 1
+        'If lMixte Then iQFin = 2 Else iQFin = 1
+        If lChargeQc Then iQFin = 2 Else iQFin = 1
+        'Le cas de charge de construction n'est pris en compte que si poutre mixte non totalement étayée
 
         For iq As Integer = 0 To iQFin
             lMultiT = Me.ChargesU(LabelQ(iq)).EstMultiTravee(Me.IndicePremiereTravee, Me.IndiceDerniereTravee)
@@ -4451,11 +4460,12 @@ Public Class cls_Poutre
         Dim G As Decimal = Me.Param.GraviteG
 
         Dim dc As Decimal 'largeur de calcul pour le PP
-        If lIntermediaire Then
-            dc = Me.EntraxeD1 / 2 + Me.EntraxeD2 / 2
-        Else
-            dc = Me.EntraxeD1 + Me.EntraxeD2 / 2
-        End If
+        'If lIntermediaire Then
+        '    dc = Me.EntraxeD1 / 2 + Me.EntraxeD2 / 2
+        'Else
+        '    dc = Me.EntraxeD1 + Me.EntraxeD2 / 2
+        'End If
+        dc = Me.LargeurInfluence
 
         '--> Calcul
         With G_PP

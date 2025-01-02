@@ -46,8 +46,7 @@ Partial Class Frm_ModularRatio
         Me.txt_AgeT = New System.Windows.Forms.TextBox()
         Me.img_AgeT = New System.Windows.Forms.PictureBox()
         Me.lbl_AgeT = New System.Windows.Forms.Label()
-        Me.cmb_PsiL = New System.Windows.Forms.ComboBox()
-        Me.img_PsiL = New System.Windows.Forms.PictureBox()
+        Me.cmb_Charge = New System.Windows.Forms.ComboBox()
         Me.lbl_PsiL = New System.Windows.Forms.Label()
         Me.cmb_RH = New System.Windows.Forms.ComboBox()
         Me.img_RH = New System.Windows.Forms.PictureBox()
@@ -99,6 +98,9 @@ Partial Class Frm_ModularRatio
         Me.txt_BetaFcm = New System.Windows.Forms.TextBox()
         Me.txt_PhiRH = New System.Windows.Forms.TextBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.img_PsiL2 = New System.Windows.Forms.PictureBox()
+        Me.txt_PsiL2 = New System.Windows.Forms.TextBox()
+        Me.lbl_Charge = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -110,7 +112,6 @@ Partial Class Frm_ModularRatio
         CType(Me.img_H0, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_AgeT0, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_AgeT, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_PsiL, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLpan_Milieu.SuspendLayout()
         Me.pan_Beton.SuspendLayout()
@@ -130,6 +131,7 @@ Partial Class Frm_ModularRatio
         CType(Me.img_BetaFcm, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PhiRH, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_PsiL2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -273,6 +275,7 @@ Partial Class Frm_ModularRatio
         '
         Me.pan_SaisiePortee.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisiePortee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisiePortee.Controls.Add(Me.lbl_Charge)
         Me.pan_SaisiePortee.Controls.Add(Me.etq_UnitDim)
         Me.pan_SaisiePortee.Controls.Add(Me.txt_H0)
         Me.pan_SaisiePortee.Controls.Add(Me.img_H0)
@@ -285,9 +288,7 @@ Partial Class Frm_ModularRatio
         Me.pan_SaisiePortee.Controls.Add(Me.txt_AgeT)
         Me.pan_SaisiePortee.Controls.Add(Me.img_AgeT)
         Me.pan_SaisiePortee.Controls.Add(Me.lbl_AgeT)
-        Me.pan_SaisiePortee.Controls.Add(Me.cmb_PsiL)
-        Me.pan_SaisiePortee.Controls.Add(Me.img_PsiL)
-        Me.pan_SaisiePortee.Controls.Add(Me.lbl_PsiL)
+        Me.pan_SaisiePortee.Controls.Add(Me.cmb_Charge)
         Me.pan_SaisiePortee.Controls.Add(Me.cmb_RH)
         Me.pan_SaisiePortee.Controls.Add(Me.img_RH)
         Me.pan_SaisiePortee.Controls.Add(Me.lbl_RelativeRH)
@@ -406,34 +407,26 @@ Partial Class Frm_ModularRatio
         Me.lbl_AgeT.TabIndex = 77
         Me.lbl_AgeT.Text = "lbl_AgeT"
         '
-        'cmb_PsiL
+        'cmb_Charge
         '
-        Me.cmb_PsiL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.cmb_Charge.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmb_PsiL.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_PsiL.FormattingEnabled = True
-        Me.cmb_PsiL.Location = New System.Drawing.Point(134, 110)
-        Me.cmb_PsiL.Name = "cmb_PsiL"
-        Me.cmb_PsiL.Size = New System.Drawing.Size(84, 21)
-        Me.cmb_PsiL.TabIndex = 76
-        '
-        'img_PsiL
-        '
-        Me.img_PsiL.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_PsiL.Location = New System.Drawing.Point(86, 110)
-        Me.img_PsiL.Name = "img_PsiL"
-        Me.img_PsiL.Size = New System.Drawing.Size(46, 20)
-        Me.img_PsiL.TabIndex = 75
-        Me.img_PsiL.TabStop = False
+        Me.cmb_Charge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Charge.FormattingEnabled = True
+        Me.cmb_Charge.Location = New System.Drawing.Point(86, 110)
+        Me.cmb_Charge.Name = "cmb_Charge"
+        Me.cmb_Charge.Size = New System.Drawing.Size(132, 21)
+        Me.cmb_Charge.TabIndex = 76
         '
         'lbl_PsiL
         '
         Me.lbl_PsiL.AutoSize = True
-        Me.lbl_PsiL.Location = New System.Drawing.Point(8, 92)
+        Me.lbl_PsiL.Location = New System.Drawing.Point(19, 262)
         Me.lbl_PsiL.Name = "lbl_PsiL"
         Me.lbl_PsiL.Size = New System.Drawing.Size(43, 13)
         Me.lbl_PsiL.TabIndex = 74
         Me.lbl_PsiL.Text = "lbl_PsiL"
+        Me.lbl_PsiL.Visible = False
         '
         'cmb_RH
         '
@@ -767,6 +760,8 @@ Partial Class Frm_ModularRatio
         '
         Me.pan_AnnexB.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_AnnexB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_AnnexB.Controls.Add(Me.img_PsiL2)
+        Me.pan_AnnexB.Controls.Add(Me.txt_PsiL2)
         Me.pan_AnnexB.Controls.Add(Me.img_PhiT)
         Me.pan_AnnexB.Controls.Add(Me.imgBetaC)
         Me.pan_AnnexB.Controls.Add(Me.img_Phi0)
@@ -779,6 +774,7 @@ Partial Class Frm_ModularRatio
         Me.pan_AnnexB.Controls.Add(Me.lbl_BetaT0)
         Me.pan_AnnexB.Controls.Add(Me.lbl_BetaFcm)
         Me.pan_AnnexB.Controls.Add(Me.lbl_PhiRH)
+        Me.pan_AnnexB.Controls.Add(Me.lbl_PsiL)
         Me.pan_AnnexB.Controls.Add(Me.txt_PhiT)
         Me.pan_AnnexB.Controls.Add(Me.txt_BetaC)
         Me.pan_AnnexB.Controls.Add(Me.txt_Phi0)
@@ -952,6 +948,31 @@ Partial Class Frm_ModularRatio
         '
         Me.ErrorProvider.ContainerControl = Me
         '
+        'img_PsiL2
+        '
+        Me.img_PsiL2.Location = New System.Drawing.Point(75, 259)
+        Me.img_PsiL2.Name = "img_PsiL2"
+        Me.img_PsiL2.Size = New System.Drawing.Size(86, 20)
+        Me.img_PsiL2.TabIndex = 109
+        Me.img_PsiL2.TabStop = False
+        '
+        'txt_PsiL2
+        '
+        Me.txt_PsiL2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_PsiL2.Location = New System.Drawing.Point(161, 259)
+        Me.txt_PsiL2.Name = "txt_PsiL2"
+        Me.txt_PsiL2.Size = New System.Drawing.Size(58, 20)
+        Me.txt_PsiL2.TabIndex = 108
+        '
+        'lbl_Charge
+        '
+        Me.lbl_Charge.AutoSize = True
+        Me.lbl_Charge.Location = New System.Drawing.Point(8, 92)
+        Me.lbl_Charge.Name = "lbl_Charge"
+        Me.lbl_Charge.Size = New System.Drawing.Size(57, 13)
+        Me.lbl_Charge.TabIndex = 89
+        Me.lbl_Charge.Text = "lbl_Charge"
+        '
         'Frm_ModularRatio
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -978,7 +999,6 @@ Partial Class Frm_ModularRatio
         CType(Me.img_H0, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_AgeT0, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_AgeT, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_PsiL, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TLpan_Milieu.ResumeLayout(False)
         Me.TLpan_Milieu.PerformLayout()
@@ -1003,6 +1023,7 @@ Partial Class Frm_ModularRatio
         CType(Me.img_BetaFcm, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PhiRH, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_PsiL2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1021,8 +1042,7 @@ Partial Class Frm_ModularRatio
     Friend WithEvents lbl_RelativeRH As Label
     Friend WithEvents img_RH As PictureBox
     Friend WithEvents cmb_RH As ComboBox
-    Friend WithEvents cmb_PsiL As ComboBox
-    Friend WithEvents img_PsiL As PictureBox
+    Friend WithEvents cmb_Charge As ComboBox
     Friend WithEvents lbl_PsiL As Label
     Friend WithEvents lbl_AgeT As Label
     Friend WithEvents cmb_ClasseBeton As ComboBox
@@ -1083,4 +1103,7 @@ Partial Class Frm_ModularRatio
     Friend WithEvents imgBetaC As PictureBox
     Friend WithEvents img_Phi0 As PictureBox
     Friend WithEvents img_BetaT0 As PictureBox
+    Friend WithEvents img_PsiL2 As PictureBox
+    Friend WithEvents txt_PsiL2 As TextBox
+    Friend WithEvents lbl_Charge As Label
 End Class

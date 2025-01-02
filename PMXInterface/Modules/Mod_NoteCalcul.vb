@@ -1945,6 +1945,9 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Fctm, Enu_TypeVariable.Contrainte, 4, 2, True))
         AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
 
+        AddLigneNDC(TABW2 & BlocG("RHO_CONCRETE") & TABAFF & "\Sr\s\-c\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.RhoC, Enu_TypeVariable.SansType, 4, 0, False) & " kg/m3")
+
+
         '=== Armatures longitudinales ======================================================================
 
         If Not MyBeam.lSlimFloor Then _
@@ -1961,6 +1964,58 @@ Module Mod_NoteCalcul
         '=== CONNECTEURS & CONNEXION ===========================================================================================
 
         EditionParametresConnecteursEtConnexion(MyBeam)
+
+        '=== MASSES ============================================================================================================
+
+        EditionParametresMassesDalle(MyBeam)
+
+    End Sub
+
+    Private Sub EditionParametresMassesDalle(myBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   02/01/25 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des masses de la dalle
+        '----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim mBeton As Decimal
+        Dim mBac As Decimal = 0
+        Dim mConnectors As Decimal = 0
+        Dim dC As Decimal = myBeam.LargeurInfluence
+        Dim GraviteG As Decimal = myBeam.Param.GraviteG
+        Dim Chaine As String
+        Dim qSlab As Decimal
+
+        '--( Calcul et affichage des masses
+
+        AddTitreNdC(3, BlocG("Q_MASS_WEIGHT"))
+
+        '# béton
+
+        mBeton = myBeam.Dalle.Aire(dC, myBeam.Section.ProfilA.Bfs) * myBeam.Dalle.beton.RhoC
+
+        AddLigneNDC(TABW2 & BlocG("M_CONCRETE") & TABAFF & "m\-c\=" & TABEGAL & GetStringInUnit(mBeton, Enu_TypeVariable.SansType, 4, 3, False, True) & " kg/m")
+
+        '# bac
+
+        If myBeam.Dalle.lMixte Then
+            mBac = dC * myBeam.Dalle.Bac.msurf
+            AddLigneNDC(TABW2 & BlocG("M_SHEET") & TABAFF & "m\-p\=" & TABEGAL & GetStringInUnit(mBac, Enu_TypeVariable.SansType, 4, 3, False, True) & " kg/m")
+        End If
+
+        '# connecteurs
+
+        If myBeam.lMixte Then
+
+        End If
+
+        '# bilan dalle
+
+        qSlab = (mBeton + mBac) * GraviteG
+        Chaine = BlocG("SLAB")
+        AddLigneNDC(TABW2 & BlocG("Q_SLAB") & TABAFF & "q\-" & Chaine & "\=" & TABEGAL & GetStringInUnit(qSlab, Enu_TypeVariable.ChargeSurfacique, 4, 3, True, True))
 
     End Sub
 
@@ -2130,6 +2185,9 @@ Module Mod_NoteCalcul
             '=== CONNEXION =================================================================================================================
 
             EditionParametresConnexion(MyBeam)
+
+            EditionParametresConnexionNbConnecteurs(MyBeam)
+
         End If
     End Sub
 
@@ -2144,7 +2202,7 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocG("CONNECTORS"))
 
-        If MyBeam.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup Or MyBeam.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme Then
+        If MyBeam.Dalle.lConnexionParGoujons Then
 
             With MyBeam.Dalle.Goujons
                 'AddLigneNDC(TABW2 & BlocG("NAME_CONNECTORS") & TABAFF & .nom)
@@ -2176,16 +2234,20 @@ Module Mod_NoteCalcul
                 gammaVc = MyBeam.Param.Gamma.GammaVc
 
                 If lDallePleine Then
+
                     AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL &
                                 GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerpPRd, lCofra220, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, Fctk_005, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
+
                 Else 'dalle mixte
                     If lPerp Then
                         For nr_boucle As Integer = nr_min To nr_max
                             AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL &
                                         GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerpPRd, lCofra220, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, Fctk_005, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True) & " (n\-r\= = " & nr_boucle & ")")
                             ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
-                            AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\=" & TABEGAL &
+                            If (Not lCofra220) And lPerpPRd Then
+                                AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\=" & TABEGAL &
                                         GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True) & " (n\-r\= = " & nr_boucle & ")")
+                            End If
                         Next
                     Else 'dalle parallèlle
                         AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL &
@@ -2332,7 +2394,46 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionParametresEtaiement(MyBeam As cls_Poutre)
+    Private Sub EditionParametresConnexionNbConnecteurs(myBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   02/01/25 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition nombre total de connecteurs
+        '----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Const TABAFFLOC As String = "\T65"
+        Dim lMulti As Boolean = (myBeam.NbTravees > 1)
+        Dim nbStuds As Integer
+        Dim iTravDev As Integer = myBeam.IndicePremiereTravee
+        Dim iTravFin As Integer = myBeam.IndiceDerniereTravee
+        Dim Chaine As String = BlocG("SPAN")
+
+        '--( Traitement
+
+        If lMulti Then
+
+            nbStuds = myBeam.NombreGoujonTot(iTravDev)
+            AddLigneNDC(TABW2 & BlocG("STUDS_NUMBER") & TABAFF & Chaine & " 1:" & TABAFFLOC & CStr(nbStuds))
+
+            For iTrav As Integer = iTravDev + 1 To iTravFin
+
+                nbStuds = myBeam.NombreGoujonTot(iTrav)
+                AddLigneNDC(TABAFF & Chaine & " " & CStr(iTrav - iTravDev + 1) & ":" & TABAFFLOC & CStr(nbStuds))
+
+            Next
+
+        Else
+
+            nbStuds = myBeam.NombreGoujonTot(iTravDev)
+            AddLigneNDC(TABW2 & BlocG("STUDS_NUMBER") & TABAFF & CStr(nbStuds))
+
+        End If
+
+    End Sub
+
+    Private Sub EditionParametresEtaiement(myBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - Version 1.00 - POM
         '----------------------------------------------------------------------------------------------
@@ -2352,7 +2453,7 @@ Module Mod_NoteCalcul
 
         '--> AffichageOptFeu de l'étaiement
 
-        Select Case MyBeam.TypeEtaiement
+        Select Case myBeam.TypeEtaiement
             Case cls_Poutre.EnuTypeEtaiement.FullyPropped
                 AddLigneNDC(TABW2 & BlocG("TYPE_PROPPING") & TABAFF & BlocG("FULLYPROPPED"))
             Case cls_Poutre.EnuTypeEtaiement.UnPropped
@@ -2360,29 +2461,29 @@ Module Mod_NoteCalcul
             Case cls_Poutre.EnuTypeEtaiement.PointPropped
                 AddLigneNDC(TABW2 & BlocG("TYPE_PROPPING") & TABAFF & BlocG("POINTPROPPED"))
 
-                If MyBeam.lTraveeConsoleGauche Then
-                    If MyBeam.lEtaisConsoleGauche Then
+                If myBeam.lTraveeConsoleGauche Then
+                    If myBeam.lEtaisConsoleGauche Then
                         AddLigneNDC(TABW2 & BlocG("ENDPROPPEDLEFTCANT") & TABAFF & BlocG("YES"))
                     Else
                         AddLigneNDC(TABW2 & BlocG("ENDPROPPEDLEFTCANT") & TABAFF & BlocG("NO"))
                     End If
                 End If
 
-                If MyBeam.lTraveeConsoleDroite Then
-                    If MyBeam.lEtaisConsoleDroite Then
+                If myBeam.lTraveeConsoleDroite Then
+                    If myBeam.lEtaisConsoleDroite Then
                         AddLigneNDC(TABW2 & BlocG("ENDPROPPEDRIGHTCANT") & TABAFF & BlocG("YES"))
                     Else
                         AddLigneNDC(TABW2 & BlocG("ENDPROPPEDRIGHTCANT") & TABAFF & BlocG("NO"))
                     End If
                 End If
 
-                If MyBeam.lTraveeConsoleGauche Or MyBeam.lTraveeConsoleDroite Then
-                    AddLigneNDC(TABW2 & BlocG("NBPROPPINGWITHCANT") & TABAFF & MyBeam.NbEtaiement)
+                If myBeam.lTraveeConsoleGauche Or myBeam.lTraveeConsoleDroite Then
+                    AddLigneNDC(TABW2 & BlocG("NBPROPPINGWITHCANT") & TABAFF & myBeam.NbEtaiement)
                 Else
-                    AddLigneNDC(TABW2 & BlocG("NBPROPPINGWITHOUTCANT") & TABAFF & MyBeam.NbEtaiement)
+                    AddLigneNDC(TABW2 & BlocG("NBPROPPINGWITHOUTCANT") & TABAFF & myBeam.NbEtaiement)
                 End If
 
-                If MyBeam.lEtaisSousProfileAcier Then
+                If myBeam.lEtaisSousProfileAcier Then
                     AddLigneNDC(TABW2 & BlocG("PROPPINGLOCATION") & TABAFF & BlocG("UNDERSTEEL"))
                 Else
                     AddLigneNDC(TABW2 & BlocG("PROPPINGLOCATION") & TABAFF & BlocG("UNDERSLAB"))
@@ -6078,7 +6179,7 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(2, BlocELU("CRITERIA_TRANSREBAR"))
 
-        AddLigneNDC(TABW2 & BlocELU("NBTRANSVERSELAYER") & TABAFF & MyBeam.NbTransverseLayer)
+        AddLigneNDC(TABW2 & BlocELU("NBTRANSVERSELAYER") & TABAFF & MyBeam.NombreLitsTransversaux)
         AddLigneNDC(TABW2 & BlocELU("MINTRANSVERSEREINF") & TABAFF _
                   & "\Sr\s\-t,min\=" & TABEGAL & GetStringInUnitN(MyBeam.RhoArmaTMin * 100, Enu_TypeVariable.SansType, 3, -1, False, True) & " %   " _
                   & "(A\-sf\=/s\-f\= = " & GetStringInUnitN(MyBeam.AsArmaTMinEC2, Enu_TypeVariable.AireCM2, 3, -1, False, True) _
@@ -6093,7 +6194,7 @@ Module Mod_NoteCalcul
 
         Dim l_aa, l_bb, l_cc, l_dd As Boolean 'indique quels mode de ruine on vérifie
 
-        If MyBeam.Dalle.lMixte Then
+        If (MyBeam.Dalle.lMixte) And (Not MyBeam.Dalle.Bac.lCofraplus220) Then
             strFailureMode = str_aa
             l_aa = True
             l_bb = False
@@ -6106,7 +6207,7 @@ Module Mod_NoteCalcul
             End If
         Else
             l_cc = False
-            If MyBeam.NbTransverseLayer = 2 Then 'cas solid slab without prefabricated part (Table 51 du MT)
+            If MyBeam.NombreLitsTransversaux = 2 Then 'cas solid slab without prefabricated part (Table 51 du MT)
                 strFailureMode = str_aa & ", " & str_bb
                 l_aa = True
                 l_bb = True
@@ -6174,6 +6275,7 @@ Module Mod_NoteCalcul
         Dim lNote As Boolean = False
         Dim strNote As String = ""
         Const pLC9 As Integer = 12
+        Dim nbLitsT As Integer = myBeam.NombreLitsTransversaux
 
         '--( Initialisation
 
@@ -6222,7 +6324,7 @@ Module Mod_NoteCalcul
                         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre,
                                    GetStringInUnit(myBeam.VerifMixte(iVerif).As_s_transv(i, j, k), Enu_TypeVariable.AireCM2, 4, 2, False) & strNote)
 
-                        AddCellule(pLC9, Bordures.Tous, PositionTexteInCell.Centre, ArmaTrans(myBeam.Dalle, k))
+                        AddCellule(pLC9, Bordures.Tous, PositionTexteInCell.Centre, ArmaTrans(nbLitsT, k))
 
                     End If
 
@@ -6240,13 +6342,13 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Function ArmaTrans(myDalle As cls_Dalle, iArea As Integer) As String
+    Private Function ArmaTrans(nbLitsT As Integer, iArea As Integer) As String
         '-------------------------------------------------------------------------------------------
         '   01/10/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Renvoie les armatures transversales reprenant le cisaillement en fct de la surface potentielle de ruine
         '-------------------------------------------------------------------------------------------
-        '   myDalle     [E] :   Dalle
+        '   nbLitsT     [E] :   Nombre de lits d'armatures transversaux
         '   iArea       [E] :   Indice de la surface potentielle de ruine
         '-------------------------------------------------------------------------------------------
 
@@ -6259,7 +6361,8 @@ Module Mod_NoteCalcul
 
         '* Nombre de lits d'armatures transversales
 
-        nbT = myDalle.NbLitsArmaActifs
+        'nbT = myDalle.NbLitsArmaActifs
+        nbT = nbLitsT
 
         '--( Traitement
 
