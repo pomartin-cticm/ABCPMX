@@ -2816,7 +2816,7 @@ Public Class cls_Poutre
         '   nEqDal          [E] :   Si mixte, coefficient d'équivalence acier béton pour la dalle
         '   nEqEc           [E] :   Coefficient d'équivalence acier béton pour l'enrobage
         '   pSigneM         [E] :   Table de signes de moment le long de la poutre
-        '   lShadow         [E] :   Indique une table d'élts pour cas de charge shadow
+        '   lShadow         [E] :   Indique une table d'élts pour cas de charge shadow (prenant en compte la rigidité de la connexion)
         '-------------------------------------------------------------------------------------------
 
         '--> Déclaration

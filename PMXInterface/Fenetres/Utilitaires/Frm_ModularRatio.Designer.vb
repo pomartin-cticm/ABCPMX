@@ -34,6 +34,7 @@ Partial Class Frm_ModularRatio
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Parameters = New System.Windows.Forms.Label()
         Me.pan_SaisiePortee = New System.Windows.Forms.Panel()
+        Me.lbl_Charge = New System.Windows.Forms.Label()
         Me.etq_UnitDim = New System.Windows.Forms.Label()
         Me.txt_H0 = New System.Windows.Forms.TextBox()
         Me.img_H0 = New System.Windows.Forms.PictureBox()
@@ -47,7 +48,6 @@ Partial Class Frm_ModularRatio
         Me.img_AgeT = New System.Windows.Forms.PictureBox()
         Me.lbl_AgeT = New System.Windows.Forms.Label()
         Me.cmb_Charge = New System.Windows.Forms.ComboBox()
-        Me.lbl_PsiL = New System.Windows.Forms.Label()
         Me.cmb_RH = New System.Windows.Forms.ComboBox()
         Me.img_RH = New System.Windows.Forms.PictureBox()
         Me.lbl_RelativeRH = New System.Windows.Forms.Label()
@@ -79,6 +79,8 @@ Partial Class Frm_ModularRatio
         Me.TLpan_Droite = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_CoefficientAnnexB = New System.Windows.Forms.Label()
         Me.pan_AnnexB = New System.Windows.Forms.Panel()
+        Me.img_PsiL2 = New System.Windows.Forms.PictureBox()
+        Me.txt_PsiL2 = New System.Windows.Forms.TextBox()
         Me.img_PhiT = New System.Windows.Forms.PictureBox()
         Me.imgBetaC = New System.Windows.Forms.PictureBox()
         Me.img_Phi0 = New System.Windows.Forms.PictureBox()
@@ -91,6 +93,7 @@ Partial Class Frm_ModularRatio
         Me.lbl_BetaT0 = New System.Windows.Forms.Label()
         Me.lbl_BetaFcm = New System.Windows.Forms.Label()
         Me.lbl_PhiRH = New System.Windows.Forms.Label()
+        Me.lbl_PsiL = New System.Windows.Forms.Label()
         Me.txt_PhiT = New System.Windows.Forms.TextBox()
         Me.txt_BetaC = New System.Windows.Forms.TextBox()
         Me.txt_Phi0 = New System.Windows.Forms.TextBox()
@@ -98,9 +101,6 @@ Partial Class Frm_ModularRatio
         Me.txt_BetaFcm = New System.Windows.Forms.TextBox()
         Me.txt_PhiRH = New System.Windows.Forms.TextBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.img_PsiL2 = New System.Windows.Forms.PictureBox()
-        Me.txt_PsiL2 = New System.Windows.Forms.TextBox()
-        Me.lbl_Charge = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -124,6 +124,7 @@ Partial Class Frm_ModularRatio
         CType(Me.img_n0, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLpan_Droite.SuspendLayout()
         Me.pan_AnnexB.SuspendLayout()
+        CType(Me.img_PsiL2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PhiT, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.imgBetaC, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Phi0, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -131,7 +132,6 @@ Partial Class Frm_ModularRatio
         CType(Me.img_BetaFcm, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PhiRH, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_PsiL2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -299,11 +299,20 @@ Partial Class Frm_ModularRatio
         Me.pan_SaisiePortee.Size = New System.Drawing.Size(250, 293)
         Me.pan_SaisiePortee.TabIndex = 1
         '
+        'lbl_Charge
+        '
+        Me.lbl_Charge.AutoSize = True
+        Me.lbl_Charge.Location = New System.Drawing.Point(8, 92)
+        Me.lbl_Charge.Name = "lbl_Charge"
+        Me.lbl_Charge.Size = New System.Drawing.Size(57, 13)
+        Me.lbl_Charge.TabIndex = 89
+        Me.lbl_Charge.Text = "lbl_Charge"
+        '
         'etq_UnitDim
         '
         Me.etq_UnitDim.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitDim.AutoSize = True
-        Me.etq_UnitDim.Location = New System.Drawing.Point(197, 262)
+        Me.etq_UnitDim.Location = New System.Drawing.Point(213, 257)
         Me.etq_UnitDim.Name = "etq_UnitDim"
         Me.etq_UnitDim.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim.TabIndex = 88
@@ -312,7 +321,7 @@ Partial Class Frm_ModularRatio
         'txt_H0
         '
         Me.txt_H0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_H0.Location = New System.Drawing.Point(133, 259)
+        Me.txt_H0.Location = New System.Drawing.Point(149, 254)
         Me.txt_H0.Name = "txt_H0"
         Me.txt_H0.Size = New System.Drawing.Size(58, 20)
         Me.txt_H0.TabIndex = 86
@@ -320,7 +329,7 @@ Partial Class Frm_ModularRatio
         'img_H0
         '
         Me.img_H0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_H0.Location = New System.Drawing.Point(86, 259)
+        Me.img_H0.Location = New System.Drawing.Point(102, 254)
         Me.img_H0.Name = "img_H0"
         Me.img_H0.Size = New System.Drawing.Size(46, 20)
         Me.img_H0.TabIndex = 87
@@ -329,7 +338,7 @@ Partial Class Frm_ModularRatio
         'lbl_DimensionH0
         '
         Me.lbl_DimensionH0.AutoSize = True
-        Me.lbl_DimensionH0.Location = New System.Drawing.Point(8, 239)
+        Me.lbl_DimensionH0.Location = New System.Drawing.Point(8, 234)
         Me.lbl_DimensionH0.Name = "lbl_DimensionH0"
         Me.lbl_DimensionH0.Size = New System.Drawing.Size(86, 13)
         Me.lbl_DimensionH0.TabIndex = 85
@@ -341,7 +350,7 @@ Partial Class Frm_ModularRatio
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_ClasseBeton.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_ClasseBeton.FormattingEnabled = True
-        Me.cmb_ClasseBeton.Location = New System.Drawing.Point(134, 12)
+        Me.cmb_ClasseBeton.Location = New System.Drawing.Point(123, 12)
         Me.cmb_ClasseBeton.Name = "cmb_ClasseBeton"
         Me.cmb_ClasseBeton.Size = New System.Drawing.Size(84, 21)
         Me.cmb_ClasseBeton.TabIndex = 84
@@ -358,7 +367,7 @@ Partial Class Frm_ModularRatio
         'txt_AgeT0
         '
         Me.txt_AgeT0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_AgeT0.Location = New System.Drawing.Point(133, 161)
+        Me.txt_AgeT0.Location = New System.Drawing.Point(149, 155)
         Me.txt_AgeT0.Name = "txt_AgeT0"
         Me.txt_AgeT0.Size = New System.Drawing.Size(58, 20)
         Me.txt_AgeT0.TabIndex = 81
@@ -366,7 +375,7 @@ Partial Class Frm_ModularRatio
         'img_AgeT0
         '
         Me.img_AgeT0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_AgeT0.Location = New System.Drawing.Point(86, 161)
+        Me.img_AgeT0.Location = New System.Drawing.Point(102, 155)
         Me.img_AgeT0.Name = "img_AgeT0"
         Me.img_AgeT0.Size = New System.Drawing.Size(46, 20)
         Me.img_AgeT0.TabIndex = 82
@@ -384,7 +393,7 @@ Partial Class Frm_ModularRatio
         'txt_AgeT
         '
         Me.txt_AgeT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_AgeT.Location = New System.Drawing.Point(133, 208)
+        Me.txt_AgeT.Location = New System.Drawing.Point(149, 203)
         Me.txt_AgeT.Name = "txt_AgeT"
         Me.txt_AgeT.Size = New System.Drawing.Size(58, 20)
         Me.txt_AgeT.TabIndex = 78
@@ -392,7 +401,7 @@ Partial Class Frm_ModularRatio
         'img_AgeT
         '
         Me.img_AgeT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_AgeT.Location = New System.Drawing.Point(86, 208)
+        Me.img_AgeT.Location = New System.Drawing.Point(102, 203)
         Me.img_AgeT.Name = "img_AgeT"
         Me.img_AgeT.Size = New System.Drawing.Size(46, 20)
         Me.img_AgeT.TabIndex = 79
@@ -413,20 +422,10 @@ Partial Class Frm_ModularRatio
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_Charge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_Charge.FormattingEnabled = True
-        Me.cmb_Charge.Location = New System.Drawing.Point(86, 110)
+        Me.cmb_Charge.Location = New System.Drawing.Point(75, 110)
         Me.cmb_Charge.Name = "cmb_Charge"
         Me.cmb_Charge.Size = New System.Drawing.Size(132, 21)
         Me.cmb_Charge.TabIndex = 76
-        '
-        'lbl_PsiL
-        '
-        Me.lbl_PsiL.AutoSize = True
-        Me.lbl_PsiL.Location = New System.Drawing.Point(19, 262)
-        Me.lbl_PsiL.Name = "lbl_PsiL"
-        Me.lbl_PsiL.Size = New System.Drawing.Size(43, 13)
-        Me.lbl_PsiL.TabIndex = 74
-        Me.lbl_PsiL.Text = "lbl_PsiL"
-        Me.lbl_PsiL.Visible = False
         '
         'cmb_RH
         '
@@ -434,7 +433,7 @@ Partial Class Frm_ModularRatio
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_RH.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_RH.FormattingEnabled = True
-        Me.cmb_RH.Location = New System.Drawing.Point(134, 63)
+        Me.cmb_RH.Location = New System.Drawing.Point(123, 59)
         Me.cmb_RH.Name = "cmb_RH"
         Me.cmb_RH.Size = New System.Drawing.Size(84, 21)
         Me.cmb_RH.TabIndex = 73
@@ -442,7 +441,7 @@ Partial Class Frm_ModularRatio
         'img_RH
         '
         Me.img_RH.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_RH.Location = New System.Drawing.Point(86, 63)
+        Me.img_RH.Location = New System.Drawing.Point(75, 59)
         Me.img_RH.Name = "img_RH"
         Me.img_RH.Size = New System.Drawing.Size(46, 20)
         Me.img_RH.TabIndex = 72
@@ -788,6 +787,22 @@ Partial Class Frm_ModularRatio
         Me.pan_AnnexB.Size = New System.Drawing.Size(250, 293)
         Me.pan_AnnexB.TabIndex = 3
         '
+        'img_PsiL2
+        '
+        Me.img_PsiL2.Location = New System.Drawing.Point(75, 259)
+        Me.img_PsiL2.Name = "img_PsiL2"
+        Me.img_PsiL2.Size = New System.Drawing.Size(86, 20)
+        Me.img_PsiL2.TabIndex = 109
+        Me.img_PsiL2.TabStop = False
+        '
+        'txt_PsiL2
+        '
+        Me.txt_PsiL2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_PsiL2.Location = New System.Drawing.Point(161, 259)
+        Me.txt_PsiL2.Name = "txt_PsiL2"
+        Me.txt_PsiL2.Size = New System.Drawing.Size(58, 20)
+        Me.txt_PsiL2.TabIndex = 108
+        '
         'img_PhiT
         '
         Me.img_PhiT.Location = New System.Drawing.Point(75, 218)
@@ -896,6 +911,16 @@ Partial Class Frm_ModularRatio
         Me.lbl_PhiRH.Text = "lbl_PhiRH"
         Me.lbl_PhiRH.Visible = False
         '
+        'lbl_PsiL
+        '
+        Me.lbl_PsiL.AutoSize = True
+        Me.lbl_PsiL.Location = New System.Drawing.Point(19, 262)
+        Me.lbl_PsiL.Name = "lbl_PsiL"
+        Me.lbl_PsiL.Size = New System.Drawing.Size(43, 13)
+        Me.lbl_PsiL.TabIndex = 74
+        Me.lbl_PsiL.Text = "lbl_PsiL"
+        Me.lbl_PsiL.Visible = False
+        '
         'txt_PhiT
         '
         Me.txt_PhiT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -948,31 +973,6 @@ Partial Class Frm_ModularRatio
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'img_PsiL2
-        '
-        Me.img_PsiL2.Location = New System.Drawing.Point(75, 259)
-        Me.img_PsiL2.Name = "img_PsiL2"
-        Me.img_PsiL2.Size = New System.Drawing.Size(86, 20)
-        Me.img_PsiL2.TabIndex = 109
-        Me.img_PsiL2.TabStop = False
-        '
-        'txt_PsiL2
-        '
-        Me.txt_PsiL2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_PsiL2.Location = New System.Drawing.Point(161, 259)
-        Me.txt_PsiL2.Name = "txt_PsiL2"
-        Me.txt_PsiL2.Size = New System.Drawing.Size(58, 20)
-        Me.txt_PsiL2.TabIndex = 108
-        '
-        'lbl_Charge
-        '
-        Me.lbl_Charge.AutoSize = True
-        Me.lbl_Charge.Location = New System.Drawing.Point(8, 92)
-        Me.lbl_Charge.Name = "lbl_Charge"
-        Me.lbl_Charge.Size = New System.Drawing.Size(57, 13)
-        Me.lbl_Charge.TabIndex = 89
-        Me.lbl_Charge.Text = "lbl_Charge"
-        '
         'Frm_ModularRatio
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1016,6 +1016,7 @@ Partial Class Frm_ModularRatio
         Me.TLpan_Droite.PerformLayout()
         Me.pan_AnnexB.ResumeLayout(False)
         Me.pan_AnnexB.PerformLayout()
+        CType(Me.img_PsiL2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PhiT, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.imgBetaC, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Phi0, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1023,7 +1024,6 @@ Partial Class Frm_ModularRatio
         CType(Me.img_BetaFcm, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PhiRH, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_PsiL2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

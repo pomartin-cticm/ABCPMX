@@ -57,7 +57,7 @@ Public Module Mod_Demarrage
         LogicielInfo.Version.Annee = 2024
         LogicielInfo.Version.Principal = 1
         LogicielInfo.Version.Indice = 0
-        LogicielInfo.Version.Beta = 2
+        LogicielInfo.Version.Beta = 3
 
         Dim Chaine As String = ""
 

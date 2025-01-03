@@ -12,6 +12,9 @@ Public Class Frm_ModularRatio
     Dim AgeT As Integer = 50 * 365
     Dim AgeT0 As Integer = 28
 
+    Dim AgeT0_SH As Integer = 1
+    Dim AgeT0_Normal As Integer = 28
+
     Dim MonBeton As New cls_Beton
 
     Dim RayonH0 As Decimal = 0.2
@@ -20,6 +23,9 @@ Public Class Frm_ModularRatio
     Const iPerm As Integer = 1
     Const iShri As Integer = 2
     Const iDefI As Integer = 3
+
+    Dim iCharge As Integer
+    Dim iChargePrec As Integer
 
 #End Region
 
@@ -50,9 +56,17 @@ Public Class Frm_ModularRatio
         RemplirComboCharges()
 
         Me.txt_AgeT.Text = GetStringInUnit(AgeT, Enu_TypeVariable.SansType, 2, 0, False)
-        Me.txt_AgeT0.Text = GetStringInUnit(AgeT0, Enu_TypeVariable.SansType, 2, 0, False)
 
         Me.txt_H0.Text = GetStringInUnit(RayonH0, Enu_TypeVariable.Dimension, 3, 2, False)
+
+        AfficherAgeT0()
+        MAJI_TxtAgeT0()
+
+    End Sub
+
+    Private Sub AfficherAgeT0()
+
+        Me.txt_AgeT0.Text = GetStringInUnit(AgeT0, Enu_TypeVariable.SansType, 2, 0, False)
 
     End Sub
 
@@ -92,6 +106,8 @@ Public Class Frm_ModularRatio
 
         Me.cmb_Charge.SelectedIndex = 0
 
+        iCharge = 0
+        iChargePrec = 0
     End Sub
 
     Private Sub RemplirComboBeton()
@@ -283,7 +299,38 @@ Public Class Frm_ModularRatio
     Private Sub cmb_PsiL_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Charge.SelectedIndexChanged
 
         If lBuild Then Exit Sub
+
+        iCharge = Me.cmb_Charge.SelectedIndex
+        If ((iCharge = 2) And (iChargePrec <> 2)) _
+        Or ((iCharge <> 2) And (iChargePrec = 2)) Then
+            MAJI_AgeT0()
+        End If
+
         MAJI_Coefficients()
+        iChargePrec = iCharge
+
+    End Sub
+
+    Private Sub MAJI_AgeT0()
+        lBuild = True
+
+        If iCharge = 2 Then
+
+            AgeT0 = AgeT0_SH
+
+        Else
+
+            AgeT0 = AgeT0_Normal
+
+        End If
+        MAJI_TxtAgeT0()
+        AfficherAgeT0()
+
+        lBuild = False
+    End Sub
+    Private Sub MAJI_TxtAgeT0()
+
+        PrepareTextBoxDipo(Me.txt_AgeT0, Not (iCharge = 2))
 
     End Sub
 
@@ -299,6 +346,7 @@ Public Class Frm_ModularRatio
                     AgeT = Valeur
                 Case Me.txt_AgeT0.Name
                     AgeT0 = Valeur
+                    AgeT0_Normal = Valeur
             End Select
         End If
         MAJI_Coefficients()
