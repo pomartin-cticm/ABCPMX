@@ -79,8 +79,8 @@ SLIMFLOORIFB_A			= Non composite slim floor IFB-A
 SLIMFLOORIFB_ACOMPO		= Composite slim floor IFB-A
 SLIMFLOORIFB_B			= Non composite slim floor IFB-B
 SLIMFLOORIFB_BCOMPO		= Composite slim floor IFB-B
-SLIMFLOORSAB			= Non composite slim floor SAB
-SLIMFLOORSABCOMPO		= Composite slim floor SAB
+SLIMFLOORSAB			= Non composite slim floor AFB
+SLIMFLOORSABCOMPO		= Composite slim floor AFB
 NOTAVAILABLE			= Not available in this version
 
 #FRM_BEAMOPTIONS
@@ -202,6 +202,12 @@ INFO_G2					= Additional permanent loads (after concrete pouring)
 INFO_Q1					= Live load 1
 INFO_Q2					= Live load 2
 INFO_QC					= Construction phase live load
+COMPOSITEBEAM			= Composite beam
+STEELBEAM				= Steel beam
+STEELENCASEDBEAM		= Partially encased steel beam
+MODULAR					= Modular ratio
+SLAB					= Slab
+ENCASEMENT				= Encasement
 
 #FRM_COMBINATIONS
 TITLE					= Combinations
@@ -248,11 +254,11 @@ RIBS					= Ribs
 ROW_NUMBER				= Number of rows
 SPAN					= Span
 STUDS					= Studs
-WIDTH					= Width
+WIDTH					= Length
 WARNING_CMBTRAVEE		= All the input data must be correct to select an other the span
 ADD						= Add
 DELETE					= Delete
-FLANGE_STUD			= Stud welded on the upper flange
+FLANGE_STUD				= Stud welded on the upper flange
 WEB_STUD				= Stud welded on the web
 WEB_REINF				= Dowels
 CLASS					= Class
@@ -456,6 +462,11 @@ TEMPREBARS				= Temperature of rebars equal to the
 AVERAGETEMP				= average temperature
 MAXTEMP2				= maximal temperature
 AXISTEMP				= temperature at axis
+FRENCHNA				= Thermal conductivity of concrete according to French NA
+CONSTANTRHOC			= Constant density of concrete
+MOISTURECONTENT			= Moisture content
+ENCASEDROOTFILLET		= Root fillets are taken into account in the fire design of encased section according to Annex F of EN 1994-1-2
+SIZEELT					= Size of the elements
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Combination factors
@@ -509,6 +520,7 @@ TITLE					= Floor vibration parameters
 TOTALDAMPING			= Total damping
 WITH					= With
 FREQUENCYSLAB			= Frequency including the effect of the slab
+MGENEANALYTIC			= Generalised mass with the formulas of Hivoss method for single span beams
 
 #FRM_IDENTIFICATION
 CANCEL					= Cancel
@@ -560,6 +572,7 @@ SOFTOPT					= Software options
 COPYPICTURE				= Copy picture
 DELBEAM					= Delete beam
 DUPBEAM					= Duplicate beam
+ADDBEAMFILE				= Add beam from file
 ERRORCAPACITY			= The maximum capacity of the list has been reached, no new additions are possible
 ERROREMPTYCELL			= Empty cell
 ERRORNONNUMERIC			= Non-numeric value
@@ -593,7 +606,7 @@ TSBSECTIONA				= Steel section
 TSBSECTIONSFB			= SFB slimfloor section
 TSBSECTIONIFBA			= IFB type A slimfloor section
 TSBSECTIONIFBB			= IFB type B slimfloor section
-TSBSECTIONSAB			= SAB slimfloor section
+TSBSECTIONSAB			= AFB slimfloor section
 TSBSLAB					= Slab
 TSBSPACINGS				= Transverse configuration
 TSBSPANS				= Spans
@@ -641,16 +654,22 @@ PARAMETERS				= Parameters
 RELATIVEHUMIDITY		= Relative humidity
 PSIL					= Creep multiplier
 CONCRETEPROP			= Properties of concrete
-RESULTS					= Results
+RESULTS					= Modular ratios
 AGET					= Age of concrete
 AGET0					= Age of concrete at loading
 CONCRETE				= Concrete class
 NOTIONALSIZE			= Notional size of the concrete element
 COEFANNEXB				= Coefficients / Annex B EN 1992-1-1
 LONGTERM_N				= Modular ratio for permanent loads
-SHORTTERM_N				= Modular ratio for live loads
+SHORTTERM_N				= Short term loading
 RCOMPRESSION			= Resistances to compression
 RTENSION				= Resistance to tension
+LOADS					= Type of loads
+LIVELOADS				= Live loads
+PERMANENTLOADS			= Permanent loads
+SHRINKAGE				= Shrinkage
+IMPOSEDD				= Imposed deformations
+
 
 #FRM_PPLOADCASE
 TITLE					= Load cases
@@ -814,7 +833,7 @@ SPANS					= Span lengths
 LEFTSLABCONTINUITY		= The slab is continuous at the left support
 RIGHTSLABCONTINUITY		= The slab is continuous at the right support
 
-#FRM_STANDARDSTEELSECTIONS
+#FRM_STEELSECTIONSUSUAL
 AUTOMATICHA				= Total height automatically assessed
 AUTOMATICHW				= Height of the web automatically assessed
 CANCEL					= Cancel
@@ -835,6 +854,10 @@ UPPERF					= Upper flange
 WEB						= Web 
 WELDEDSYM				= Bi-symmetrical welded section
 WELDEDP					= Mono-symmetrical welded section
+PLATE					= Reinforcing plate under the lower flange
+PLATEW					= Width
+PLATET					= Thickness
+PLATEGRADE				= Steel grade
 
 #FRM_START
 BROWSEFILES				= Browse
@@ -898,7 +921,7 @@ SERIAL					= Serial
 STEEL					= Steel
 STEELGRADE				= Steel grade
 TITLE					= Definition of the steel profile
-SABSECTION				= SAB section
+SABSECTION				= AFB section
 WIDTH					= Width
 
 #FRM_SFBSECTIONS
@@ -914,7 +937,7 @@ SERIAL					= Serial
 STEEL					= Steel
 STEELGRADE				= Steel grade
 TITLE					= Definition of the steel profile
-SABSECTION				= SAB Section
+SABSECTION				= AFB Section
 WIDTH					= Width
 
 #GENERAL
@@ -934,6 +957,8 @@ FLS						= FLS
 ULSC					= ULS-C
 SLSC					= SLS-C
 COPY                    = Copy
+GAZ						= Hot gazes
+STEELPROFILE			= Steel profile
 
 #OPTCALCULMAIN
 TITLE					= Calculation options
@@ -942,6 +967,7 @@ CANCEL					= Cancel
 GAMMA					= Default national factors
 SCOPE					= Scope of application
 CALCUL					= Calculation options
+CONNECTORS				= Connectors
 SLIMFLOOR				= Slabs and slimfloors
 FIRE					= Fire design
 MODIF					= Warning : parameter modifications will be taken into account when adding new beams only. 
@@ -974,6 +1000,26 @@ SELFWEIGHT				= Self weight
 OTHERPERMANENT			= Other permanent loads
 SHRINKAGE				= Shrinkage
 ETAW					= Shear buckling
+
+#OPTCALCONNECTORS
+TITLE					= Options for welded studs
+DIMENSIONS				= Dimensions
+DIAMIN					= Minimal diameter
+DIAMAX					= Maximal diameter
+DEFAULT					= Default value
+DMAXPREPUNCHED			= With prepunched transverse sheeting
+DMAXWELDEDTHROUGH		= With welded through transverse sheeting
+RATIOH_D				= Ratio height / diameter
+EUROCODEGEN1			= Eurocodes first generation
+EUROCODEGEN2			= Eurocodes second generation
+DETAILING				= Detailing
+HEIGHTABOVESHEETING		= Minimal height of studs above transverse sheeting
+EDGEDISTANCE			= Minimal distance to a flange edge
+SPACING					= Spacing of studs
+SPACINGLONGI			= Longitudinal spacing
+SPACINGTRANS			= Transverse spacing
+COMPOSITESLAB			= Composite slab
+SOLIDSLAB				= Solid slab
 
 #OPTCALGAMMA
 TITLE					= Default national factors
@@ -1043,7 +1089,10 @@ DISPLAYFMLOADCASES		= Display forces and moments for load cases
 DISPLAYFMULS			= Display forces and moments at ultimate LS
 DISPLAYFMSLS			= Display forces and moments at serviceability LS
 DISPLAYFMFLS			= Display forces and moments at fire LS
-DISPLAYDIAGRAMS			= Display diagrams
+DISPLAYDIAGRAMS			= Diagrams
+DISPLAYOPTIONS			= Options for forces and moments display
+DISPLAYTABLES			= Tables
+DISPLAYMINMAX			= Envelope values
 DISPLAYSIGMA			= Display elastic stresses
 ULS						= Ultimate Limit States
 DISPMELCOMPOSITEBEAMS	= Display elastic moments of composite beams

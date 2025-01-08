@@ -79,8 +79,8 @@ SLIMFLOORIFB_A			= Section dalle mince IFB-A non mixte
 SLIMFLOORIFB_ACOMPO		= Section dalle mince IFB-A mixte
 SLIMFLOORIFB_B			= Section dalle mince IFB-B non mixte
 SLIMFLOORIFB_BCOMPO		= Section dalle mince IFB-B mixte
-SLIMFLOORSAB			= Section dalle mince SAB non mixte
-SLIMFLOORSABCOMPO		= Section dalle mince SAB mixte
+SLIMFLOORSAB			= Section dalle mince AFB non mixte
+SLIMFLOORSABCOMPO		= Section dalle mince AFB mixte
 NOTAVAILABLE			= non disponible dans cette version
 
 #FRM_BEAMOPTIONS
@@ -202,6 +202,12 @@ INFO_G2					= Charge permanente additionnelle (après coulage du béton)
 INFO_Q1					= Charge d'exploitation 1
 INFO_Q2					= Charge d'exploitation 2
 INFO_QC					= Charge de construction
+COMPOSITEBEAM			= Poutre mixte
+STEELBEAM				= Poutre acier
+STEELENCASEDBEAM		= Poutre acier partiellement enrobée
+MODULAR					= Coefficient d'équivalence
+SLAB					= Dalle
+ENCASEMENT				= Enrobage
 
 #FRM_COMBINATIONS
 TITLE					= Combinaisons
@@ -248,7 +254,7 @@ RIBS					= Ondes
 ROW_NUMBER				= Nombre de files
 SPAN					= Travée
 STUDS					= Goujons
-WIDTH					= Largeur
+WIDTH					= Longueur
 WARNING_CMBTRAVEE		= L'ensemble des informations renseignées doit être correct pour sélectionner une autre travée
 ADD						= Ajouter
 DELETE					= Supprimer
@@ -456,6 +462,11 @@ TEMPREBARS				= Température des armatures égale à la
 AVERAGETEMP				= température moyenne
 MAXTEMP2				= température maximale
 AXISTEMP				= température à l'axe
+FRENCHNA				= Conductivité thermique du béton selon AN française
+CONSTANTRHOC			= Masse volumique du béton constante
+MOISTURECONTENT			= Teneur en eau
+ENCASEDROOTFILLET		= Les congés de raccordement sont pris en compte dans le calcul des sections enrobées selon l'Annexe F de l'EN 1994-1-2
+SIZEELT					= Épaisseur des éléments
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Coefficients d'accompagnement
@@ -508,7 +519,8 @@ SWIMMINGSCREED			= Chappe flottante
 TITLE					= Confort vibratoire des planchers
 TOTALDAMPING			= Amortissement total
 WITH					= Avec
-FREQUENCYSLAB			= Fréquence incluant l'effet de la dalle													
+FREQUENCYSLAB			= Fréquence incluant l'effet de la dalle	
+MGENEANALYTIC			= Masse généralisée calculée avec les formules Hivoss pour les poutres à 1 travée												
 
 #FRM_IDENTIFICATION
 CANCEL					= Annuler
@@ -560,6 +572,7 @@ SOFTOPT					= Options du logiciel
 COPYPICTURE				= Copier l'image
 DELBEAM					= Supprimer la poutre
 DUPBEAM					= Dupliquer la poutre
+ADDBEAMFILE				= Ajouter une poutre issue d'un fichier
 ERRORCAPACITY			= La capacité maximale de la liste a été atteinte, aucun nouvel ajout n'est possible 
 ERROREMPTYCELL			= Cellule vide
 ERRORNONNUMERIC			= Valeur non numérique
@@ -593,7 +606,7 @@ TSBSECTIONA				= Profilé acier
 TSBSECTIONSFB			= Section slimfloor SFB
 TSBSECTIONIFBA			= Section slimfloor IFB type A
 TSBSECTIONIFBB			= Section slimfloor IFB type B
-TSBSECTIONSAB			= Section slimfloor SAB
+TSBSECTIONSAB			= Section slimfloor AFB
 TSBSLAB					= Dalle
 TSBSPACINGS				= Configuration transversale
 TSBSPANS				= Portées
@@ -641,16 +654,21 @@ PARAMETERS				= Paramètres
 RELATIVEHUMIDITY		= Humidité ralative
 PSIL					= Multiplicateur de fluage
 CONCRETEPROP			= Propriétés du béton
-RESULTS					= Résultats
+RESULTS					= Coefficients d'équivalence
 AGET					= Age du béton
 AGET0					= Age du béton lors du chargement
 CONCRETE				= Classe du béton
 NOTIONALSIZE			= Rayon moyen de l'élément béton
 COEFANNEXB				= Coefficients / Annexe B EN 1992-1-1
 LONGTERM_N				= Coefficient d'équivalence pour les charges permanentes
-SHORTTERM_N				= Coefficient d'équivalence pour les charges d'exploitation
+SHORTTERM_N				= Chargement à court terme
 RCOMPRESSION			= Résistance à la compression
-RTENSION				= Résistance à la traction							   
+RTENSION				= Résistance à la traction		
+LOADS					= Type de chargement
+LIVELOADS				= Charges d'exploitation
+PERMANENTLOADS			= Charges permanentes
+SHRINKAGE				= Retrait
+IMPOSEDD				= Déformations imposées				   
 
 #FRM_PPLOADCASE
 TITLE					= Cas de charge
@@ -813,7 +831,7 @@ SPANS					= Portées
 LEFTSLABCONTINUITY		= La dalle est continue sur l'appui gauche
 RIGHTSLABCONTINUITY		= La dalle est continue sur l'appui droit
 
-#FRM_STANDARDSTEELSECTIONS
+#FRM_STEELSECTIONSUSUAL
 AUTOMATICHA				= Hauteur totale automatiquement calculée
 AUTOMATICHW				= Hauteur de l'âme automatiquement calculée
 CANCEL					= Annuler
@@ -834,6 +852,10 @@ UPPERF					= Semelle supérieure
 WEB						= Âme 
 WELDEDSYM				= PRS bisymétrique
 WELDEDP					= PRS mono-symétrique
+PLATE					= Plat de renfort sous la semelle inférieure
+PLATEW					= Largeur
+PLATET					= Épaisseur
+PLATEGRADE				= Nuance
 
 #FRM_START
 BROWSEFILES				= Parcourir
@@ -897,7 +919,7 @@ SERIAL					= Série
 STEEL					= Acier
 STEELGRADE				= Nuance d'acier
 TITLE					= Définition de la poutre acier
-SABSECTION				= Section SAB
+SABSECTION				= Section AFB
 WIDTH					= Largeur
 
 #GENERAL
@@ -917,6 +939,8 @@ FLS						= ELF
 ULSC					= ELU_C
 SLSC					= ELS_C
 COPY					= Copie
+GAZ						= Gaz chauds
+STEELPROFILE			= Profilé acier
 
 #OPTCALCULMAIN
 TITLE					= Options de calcul
@@ -926,6 +950,7 @@ GAMMA					= Coefficients nationaux par défaut
 SCOPE					= Domaine d'application
 CALCUL					= Options de calcul
 SLIMFLOOR				= Dalles et planchers minces
+CONNECTORS				= Connecteurs
 FIRE					= Calcul à l'incendie
 MODIF					= Attention : la modification des paramètres sera prise en compte lors de l'ajout de nouvelles poutres uniquement. 
 MODIF2					= Les valeurs des paramètres des poutres déjà créées resteront inchangées.  
@@ -957,6 +982,26 @@ SELFWEIGHT				= Poids propre
 OTHERPERMANENT			= Autres charges permanentes
 SHRINKAGE				= Retrait
 ETAW					= Voilement par cisaillement
+
+#OPTCALCONNECTORS
+TITLE					= Options pour les connecteurs
+DIMENSIONS				= Dimensions
+DIAMIN					= Diamètre minimal
+DIAMAX					= Diamètre maximal
+DEFAULT					= par défaut
+DMAXPREPUNCHED			= avec bac perpendiculaire prépercé
+DMAXWELDEDTHROUGH		= soudage à travers un bac perpendiculaire
+RATIOH_D				= Ratio hauteur / diamètre
+EUROCODEGEN1			= Eurocodes génération 1
+EUROCODEGEN2			= Eurocodes génération 2
+DETAILING				= Details constructifs
+HEIGHTABOVESHEETING		= Hauteur mini du goujon au dessus d'un bac perpendiculaire
+EDGEDISTANCE			= Distance mini au bord d'un 	e semelle
+SPACING					= Espacement des connecteurs
+SPACINGLONGI			= Espacement longitudinal
+SPACINGTRANS			= Espacement transversal
+COMPOSITESLAB			= Dalle mixte
+SOLIDSLAB				= Dalle pleine
 
 #OPTCALGAMMA
 TITLE					= Coefficients nationaux
@@ -1026,7 +1071,10 @@ DISPLAYFMLOADCASES		= Afficher les sollicitations par cas de charge
 DISPLAYFMULS			= Afficher les sollicitations par combinaison ELU
 DISPLAYFMSLS			= Afficher les sollicitations par combinaison ELS
 DISPLAYFMFLS			= Afficher les sollicitations par combinaison Feu
-DISPLAYDIAGRAMS			= Afficher les diagrammes de sollicitations
+DISPLAYOPTIONS			= Options pour l'affichage des sollicitations
+DISPLAYDIAGRAMS			= Diagrammes de sollicitations
+DISPLAYTABLES			= Tableau de sollicitations
+DISPLAYMINMAX			= Valeurs enveloppes
 DISPLAYSIGMA			= Afficher les contraintes élastiques
 ULS						= Etats Limites Ultimes
 DISPMELCOMPOSITEBEAMS	= Afficher les moments élastiques des poutres mixtes

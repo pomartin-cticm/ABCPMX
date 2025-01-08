@@ -128,7 +128,6 @@ Public Class Frm_PMX
         Else
             lBuild = False
             Frm_Ouverture.ShowDialog()    '--> Fenetre Ouverture
-
         End If
 
         Me.AffichageRecentFiles()
@@ -635,7 +634,6 @@ Public Class Frm_PMX
 #End Region
 
 #Region " Gestion Barre d'outils poutre "
-
 
     Private Sub TechnicalToolStripMenuItemN_Click(sender As Object, e As EventArgs) Handles TechnicalToolStripMenuItemN.Click
         OuvertureRapport(True)

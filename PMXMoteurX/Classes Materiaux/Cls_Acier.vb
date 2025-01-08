@@ -515,7 +515,6 @@ Public Class cls_Acier
 
     End Sub
 
-
     Public Sub InitialiseAcierS460EC3()
         '------------------------------------------------------------------------------------------
         '   09/08/24 :  Création - POM
@@ -548,6 +547,38 @@ Public Class cls_Acier
 
     End Sub
 
+
+    Public Sub InitialiseAcierS420EC3()
+        '------------------------------------------------------------------------------------------
+        '   09/08/24 :  Création - POM
+        '------------------------------------------------------------------------------------------
+        '   Initialisation d'un acier S460 JR pour les tests unitaires (pas d'accès à la base de données)
+        '------------------------------------------------------------------------------------------
+        '------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyPlage As strucPlage
+
+        '--> Initialisations
+
+        Me.Plages.Clear()
+
+        Me.Nuance = "S420"
+        Me.Qualite = "EC3"
+        Me.EpMax = 0.08
+
+        MyPlage.Ep = 0.003
+        MyPlage.Fu = 520
+        MyPlage.Fy = 420
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.04
+        MyPlage.Fu = 520
+        MyPlage.Fy = 390
+        Me.Plages.Add(MyPlage)
+
+    End Sub
 #End Region
 
 #Region " Ecriture Fichier "

@@ -227,6 +227,24 @@ Public Class cls_Bac
 
     End Sub
 
+    Public Sub InitialiseCofraplus220()
+
+        Me.Bb = 0.085
+        Me.Bt = 0.165
+        Me.h_rs = 0
+        Me.Hp = 0.22
+        Me.Ep = 0.75
+        Me.LargeurModule = 0.75
+        Me.Ieff = 1063 / 10 ^ 8
+        Me.msurf = 16.65
+        Me.fyp = 350
+        Me.Tp = 0.00125
+
+        Me.Etiquette = "Cofraplus_220"
+
+
+    End Sub
+
 
 #End Region
 
