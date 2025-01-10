@@ -337,11 +337,11 @@ Public Class Frm_Catalogue
 
     Private Sub TransfertSaisieGridProfile(ByVal Gamme As String, ByVal Profile As String, ByRef MySection As Cls_Section)
         '--> AffichageOptFeu des stats de la section séléctionée
-        lbl_val_Ht.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Ht, Enu_TypeVariable.Dimension, 4, 3, True, True)
-        lbl_val_Bf.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Bf, Enu_TypeVariable.Dimension, 4, 3, True, True)
-        lbl_val_Tf.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Tf, Enu_TypeVariable.Dimension, 4, 3, True, True)
-        lbl_val_Tw.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Tw, Enu_TypeVariable.Dimension, 4, 3, True, True)
-        lbl_val_Rc.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Rc, Enu_TypeVariable.Dimension, 4, 3, True, True)
+        lbl_val_Ht.Text = GetStringInUnitP(MyCatalogue.Series(Gamme).Profiles(Profile).Ht, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiInterface, True)
+        lbl_val_Bf.Text = GetStringInUnitP(MyCatalogue.Series(Gamme).Profiles(Profile).Bf, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiInterface, True)
+        lbl_val_Tf.Text = GetStringInUnitP(MyCatalogue.Series(Gamme).Profiles(Profile).Tf, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiInterface, True)
+        lbl_val_Tw.Text = GetStringInUnitP(MyCatalogue.Series(Gamme).Profiles(Profile).Tw, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiInterface, True)
+        lbl_val_Rc.Text = GetStringInUnitP(MyCatalogue.Series(Gamme).Profiles(Profile).Rc, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiInterface, True)
 
         '--> Mise à jour des paramètres des sections affichées
         MySection.ProfilA.ha = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
@@ -365,13 +365,13 @@ Public Class Frm_Catalogue
         lbl_val_G.Text = GetStringInUnit(PoidsPropreLoc.qPP_ProfilAcier / MyPoutreLoc.Param.GraviteG, Enu_TypeVariable.SansType, 4, 3, False)
         lbl_val_A.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.Aire, Enu_TypeVariable.AireCM2, 4, 3, False)
         lbl_val_Iy.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.InertieY, Enu_TypeVariable.InertieCM4, 4, 3, False)
-        lbl_val_Wely.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.ModuleWelY, Enu_TypeVariable.ModuleCM3, 4, 3, False)
-        lbl_val_Wply.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.ModuleWplY, Enu_TypeVariable.ModuleCM3, 4, 3, False)
+        lbl_val_Wely.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.ModuleWelY, Enu_TypeVariable.WModuleCM3, 4, 3, False)
+        lbl_val_Wply.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.ModuleWplY, Enu_TypeVariable.WModuleCM3, 4, 3, False)
         lbl_val_iy2.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.RayonGirationiY, Enu_TypeVariable.LongueurCM, 4, 3, False)
         lbl_val_Avz.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.AireAv(ETA_Catalogue), Enu_TypeVariable.AireCM2, 4, 3, False)
         lbl_val_Iz.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.InertieZ, Enu_TypeVariable.InertieCM4, 4, 3, False)
-        lbl_val_Welz.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.ModuleWelZ, Enu_TypeVariable.ModuleCM3, 4, 3, False)
-        lbl_val_Wplz.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.ModuleWplz, Enu_TypeVariable.ModuleCM3, 4, 3, False)
+        lbl_val_Welz.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.ModuleWelZ, Enu_TypeVariable.WModuleCM3, 4, 3, False)
+        lbl_val_Wplz.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.ModuleWplz, Enu_TypeVariable.WModuleCM3, 4, 3, False)
         lbl_val_iz2.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.RayonGirationiZ, Enu_TypeVariable.LongueurCM, 4, 3, False)
         lbl_val_It.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.InertieT, Enu_TypeVariable.InertieCM4, 4, 3, False)
 

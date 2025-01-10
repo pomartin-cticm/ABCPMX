@@ -1312,6 +1312,30 @@ Namespace My
                 Me("lNdCShowFMEnveloppes") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
+        Public Property indUnitWModule() As Integer
+            Get
+                Return CType(Me("indUnitWModule"),Integer)
+            End Get
+            Set
+                Me("indUnitWModule") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
+        Public Property indUnitInertie() As Integer
+            Get
+                Return CType(Me("indUnitInertie"),Integer)
+            End Get
+            Set
+                Me("indUnitInertie") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

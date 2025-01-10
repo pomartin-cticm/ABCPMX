@@ -1152,7 +1152,7 @@ Partial Class Frm_PMX
         Me.AddPoutreTSMenuItemN.Image = CType(resources.GetObject("AddPoutreTSMenuItemN.Image"), System.Drawing.Image)
         Me.AddPoutreTSMenuItemN.Name = "AddPoutreTSMenuItemN"
         Me.AddPoutreTSMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.A), System.Windows.Forms.Keys)
-        Me.AddPoutreTSMenuItemN.Size = New System.Drawing.Size(312, 22)
+        Me.AddPoutreTSMenuItemN.Size = New System.Drawing.Size(316, 26)
         Me.AddPoutreTSMenuItemN.Text = "AddPoutreTSMenuItemN"
         '
         'DeletePoutreTSMenuItemN
@@ -1160,7 +1160,7 @@ Partial Class Frm_PMX
         Me.DeletePoutreTSMenuItemN.Image = CType(resources.GetObject("DeletePoutreTSMenuItemN.Image"), System.Drawing.Image)
         Me.DeletePoutreTSMenuItemN.Name = "DeletePoutreTSMenuItemN"
         Me.DeletePoutreTSMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
-        Me.DeletePoutreTSMenuItemN.Size = New System.Drawing.Size(312, 22)
+        Me.DeletePoutreTSMenuItemN.Size = New System.Drawing.Size(316, 26)
         Me.DeletePoutreTSMenuItemN.Text = "DeletePoutreTSMenuItemN"
         '
         'DuplicatePoutreTSMenuItemN
@@ -1168,33 +1168,35 @@ Partial Class Frm_PMX
         Me.DuplicatePoutreTSMenuItemN.Image = CType(resources.GetObject("DuplicatePoutreTSMenuItemN.Image"), System.Drawing.Image)
         Me.DuplicatePoutreTSMenuItemN.Name = "DuplicatePoutreTSMenuItemN"
         Me.DuplicatePoutreTSMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.D), System.Windows.Forms.Keys)
-        Me.DuplicatePoutreTSMenuItemN.Size = New System.Drawing.Size(312, 22)
+        Me.DuplicatePoutreTSMenuItemN.Size = New System.Drawing.Size(316, 26)
         Me.DuplicatePoutreTSMenuItemN.Text = "DuplicatePoutreTSMenuItemN"
         '
         'ToolStripSeparator18
         '
         Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
-        Me.ToolStripSeparator18.Size = New System.Drawing.Size(309, 6)
+        Me.ToolStripSeparator18.Size = New System.Drawing.Size(313, 6)
         '
         'CalculCoeffToolStripMenuItemN
         '
         Me.CalculCoeffToolStripMenuItemN.Image = CType(resources.GetObject("CalculCoeffToolStripMenuItemN.Image"), System.Drawing.Image)
         Me.CalculCoeffToolStripMenuItemN.Name = "CalculCoeffToolStripMenuItemN"
         Me.CalculCoeffToolStripMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.E), System.Windows.Forms.Keys)
-        Me.CalculCoeffToolStripMenuItemN.Size = New System.Drawing.Size(312, 22)
+        Me.CalculCoeffToolStripMenuItemN.Size = New System.Drawing.Size(316, 26)
         Me.CalculCoeffToolStripMenuItemN.Text = "CalculCoeffToolStripMenuItemN"
+        Me.CalculCoeffToolStripMenuItemN.Visible = False
         '
         'ToolStripSeparator19
         '
         Me.ToolStripSeparator19.Name = "ToolStripSeparator19"
-        Me.ToolStripSeparator19.Size = New System.Drawing.Size(309, 6)
+        Me.ToolStripSeparator19.Size = New System.Drawing.Size(313, 6)
+        Me.ToolStripSeparator19.Visible = False
         '
         'CalculationSheetToolStripMenuItemN
         '
         Me.CalculationSheetToolStripMenuItemN.Image = CType(resources.GetObject("CalculationSheetToolStripMenuItemN.Image"), System.Drawing.Image)
         Me.CalculationSheetToolStripMenuItemN.Name = "CalculationSheetToolStripMenuItemN"
         Me.CalculationSheetToolStripMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.C), System.Windows.Forms.Keys)
-        Me.CalculationSheetToolStripMenuItemN.Size = New System.Drawing.Size(312, 22)
+        Me.CalculationSheetToolStripMenuItemN.Size = New System.Drawing.Size(316, 26)
         Me.CalculationSheetToolStripMenuItemN.Text = "CalculationSheetToolStripMenuItemN"
         '
         'btn_OptionsN

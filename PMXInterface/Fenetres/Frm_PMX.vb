@@ -372,6 +372,29 @@ Public Class Frm_PMX
 
 #End Region
 
+#Region "===FERMETURE==="
+
+    Private Sub FermerLogiciel()
+        Me.Close()
+    End Sub
+
+    Private Sub Frm_PMX_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If Not MyProjet.lSaved And Not MyProjet.lNouvellePoutre Then e.Cancel = EnregistrerAvantFermeture()
+    End Sub
+
+    Private Function EnregistrerAvantFermeture() As Boolean
+
+        Dim lCancel As Boolean
+
+        Dim lAvertissementFermeture As DialogResult = MessageBox.Show(strMsgFermetureFrm, LogicielInfo.NomLogiciel, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+        lCancel = Not (lAvertissementFermeture = DialogResult.Yes Or lAvertissementFermeture = DialogResult.No)
+        If lAvertissementFermeture = DialogResult.Yes Then EnregistrerProjetEnCours() 'enregistrement du projet en cours
+
+        Return lCancel
+
+    End Function
+
+#End Region
 #Region " Provisoire "
 
     Private Sub PaintPanel(sender As Object, e As PaintEventArgs)
@@ -414,8 +437,6 @@ Public Class Frm_PMX
     End Sub
 
     Private Sub AfficheProjetEnCours()
-
-
 
     End Sub
 
@@ -668,6 +689,24 @@ Public Class Frm_PMX
 
     End Sub
 
+    Private Sub TSMenuProject_Click(sender As Object, e As EventArgs) Handles AddPoutreTSMenuItemN.Click, DeletePoutreTSMenuItemN.Click, DuplicatePoutreTSMenuItemN.Click,
+            CalculCoeffToolStripMenuItemN.Click, CalculationSheetToolStripMenuItemN.Click
+
+        Select Case sender.name
+            Case AddPoutreTSMenuItemN.Name
+                AjouterPoutre()
+            Case DeletePoutreTSMenuItemN.Name
+                SupprimerPoutre()
+            Case DuplicatePoutreTSMenuItemN.Name
+                DupliquerPoutre()
+            Case CalculCoeffToolStripMenuItemN.Name
+                Frm_ModularRatio.ShowDialog()
+                Frm_ModularRatio.Dispose()
+            Case CalculationSheetToolStripMenuItemN.Name
+                SyntheseNdC()
+        End Select
+
+    End Sub
 
     Private Sub GestionBoutonsBarreOutilGenerale(sender As Object, e As EventArgs) Handles TSbtn_EditStuds.Click, TSbtn_EditProfiles.Click, TSbtn_EditBacs.Click, AboutToolStripMenuItemN.Click, SupportToolStripMenuItemN.Click
 
@@ -1263,6 +1302,10 @@ Public Class Frm_PMX
         My.Settings.indUnitEffort = LogicielOptions.IndUnitEffort
         My.Settings.indUnitMoment = LogicielOptions.IndUnitMoment
 
+        '# Inertie et module de flexion
+        My.Settings.indUnitWModule = LogicielOptions.IndUnitModuleW
+        My.Settings.indUnitInertie = LogicielOptions.IndUnitInerties
+
         '# Coefficients partiels
         My.Settings.GammaMZero = LogicielOptions.Gamma.GammaM0
         My.Settings.GammaM1 = LogicielOptions.Gamma.GammaM1
@@ -1675,29 +1718,6 @@ Public Class Frm_PMX
 
 
     End Sub
-
-#End Region
-
-#Region "===FERMETURE==="
-
-    Private Sub FermerLogiciel()
-        Me.Close()
-    End Sub
-
-    Private Sub Frm_PMX_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If Not MyProjet.lSaved And Not MyProjet.lNouvellePoutre Then e.Cancel = EnregistrerAvantFermeture()
-    End Sub
-
-    Private Function EnregistrerAvantFermeture() As Boolean
-        Dim lCancel As Boolean
-
-        Dim lAvertissementFermeture As DialogResult = MessageBox.Show(strMsgFermetureFrm, LogicielInfo.NomLogiciel, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-        lCancel = Not (lAvertissementFermeture = DialogResult.Yes Or lAvertissementFermeture = DialogResult.No)
-        If lAvertissementFermeture = DialogResult.Yes Then EnregistrerProjetEnCours() 'enregistrement du projet en cours
-
-        Return lCancel
-
-    End Function
 
 #End Region
 

@@ -185,11 +185,13 @@ Public Module Mod_Demarrage
         LogicielInfo.NbDigitMax_Longueur = {0, 1, 3}
 
         LogicielInfo.Unit_ModuleW = {"mm3", "cm3", "m3"}           'Unités des modules de flexion - cm3 par défaut    (interne m3)
+        LogicielInfo.Unit_ModuleW_NdC = {"mm\+3\=", "cm\+3\=", "m\+3\="}           'Unités des modules de flexion - cm3 par défaut    (interne m3)
         LogicielInfo.Transfert_ModuleW = {0.001 ^ 3, 0.01 ^ 3, 1 ^ 3}
         LogicielInfo.Format_ModuleW = {"0.0", "0.00", "0.0000"}
         LogicielInfo.NbDigitMax_ModuleW = {0, 0, 6}
 
         LogicielInfo.Unit_Inerties = {"mm4", "cm4", "m4"}           'Unités des inerties - cm4 par défaut    (interne m4)
+        LogicielInfo.Unit_Inerties_NdC = {"mm\+4\=", "cm\+4\=", "m\+4\="}           'Unités des inerties - cm4 par défaut    (interne m4)
         LogicielInfo.Transfert_Inerties = {0.001 ^ 4, 0.01 ^ 4, 1 ^ 4}
         LogicielInfo.Format_Inerties = {"0.0", "0.00", "0.0000"}
         LogicielInfo.NbDigitMax_Inerties = {0, 0, 6}
@@ -231,6 +233,10 @@ Public Module Mod_Demarrage
             '# Efforts et moments
             LogicielOptions.IndUnitEffort = Array.IndexOf(LogicielInfo.Unit_Effort, LogicielInfo.Unit_Effort(My.Settings.indUnitEffort))
             LogicielOptions.IndUnitMoment = Array.IndexOf(LogicielInfo.Unit_Moment, LogicielInfo.Unit_Moment(My.Settings.indUnitMoment))
+
+            '# Inertie et module de flexion
+            LogicielOptions.IndUnitModuleW = Array.IndexOf(LogicielInfo.Unit_ModuleW, LogicielInfo.Unit_ModuleW(My.Settings.indUnitWModule))
+            LogicielOptions.IndUnitInerties = Array.IndexOf(LogicielInfo.Unit_Inerties, LogicielInfo.Unit_Inerties(My.Settings.indUnitInertie))
 
             '--> Options Note de calcul
             OptionsNdC.lShowHivossCurve = My.Settings.lNdCCourbeHivoss

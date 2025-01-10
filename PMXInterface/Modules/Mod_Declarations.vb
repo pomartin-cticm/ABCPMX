@@ -199,12 +199,14 @@ Public Module Mod_Declarations
 
         '--> Unités pour les modules de flexion
         Public Unit_ModuleW() As String                 'pour les textes
+        Public Unit_ModuleW_NdC() As String             'pour les NdC
         Public Transfert_ModuleW() As Decimal           'pour les conversions
         Public Format_ModuleW() As String               'pour l'affichage - précision
         Public NbDigitMax_ModuleW() As Integer          'nombre maxi de decimale pour l'affichage   
 
         '--> Unités pour les inerties
         Public Unit_Inerties() As String                'pour les textes
+        Public Unit_Inerties_NdC() As String            'pour la NdC
         Public Transfert_Inerties() As Decimal          'pour les conversions
         Public Format_Inerties() As String              'pour l'affichage - précision
         Public NbDigitMax_Inerties() As Integer         'nombre maxi de decimale pour l'affichage    
@@ -373,8 +375,11 @@ Public Module Mod_Declarations
         LongueurCM
         Masse
         Massivete
+        MasseVolumique
+        MasseSurfacique
         Millimetre
-        ModuleCM3
+        WModuleCM3
+        WModule
         ModuleY
         Moment
         Rigidite
@@ -726,6 +731,12 @@ Public Module Mod_Declarations
     End Structure
 
     Public LastIndexW As strucLastIndexWindow
+
+    Public Enum Enu_AfficheUnite
+        OuiInterface
+        OuiNdC
+        Non
+    End Enum
 
 #End Region
 

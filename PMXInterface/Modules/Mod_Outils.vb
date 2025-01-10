@@ -601,10 +601,16 @@ Module Mod_Outils
                 kUnitU = LogicielInfo.Transfert_Inerties(LogicielOptions.IndUnitInerties)
                 Unite = SEP & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties)
 
-            Case Enu_TypeVariable.ModuleCM3
+            Case Enu_TypeVariable.WModuleCM3
 
                 kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 3
                 Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+3\="
+
+            Case Enu_TypeVariable.WModule
+
+                kUnitU = LogicielInfo.Transfert_ModuleW(LogicielOptions.IndUnitModuleW)
+                Unite = SEP & LogicielInfo.Unit_ModuleW(LogicielOptions.IndUnitModuleW)
+
 
             Case Enu_TypeVariable.AireLongueurNDC
 
@@ -655,8 +661,8 @@ Module Mod_Outils
 
     End Function
 
-    Public Function GetStringInUnitN(ByVal Valeur As Decimal, ByVal Type As Enu_TypeVariable,
-                                     ByVal nbSign As Integer, ByVal nbDigitMax As Integer, ByVal lUnite As Boolean,
+    Public Function GetStringInUnitP(ByVal Valeur As Decimal, ByVal Type As Enu_TypeVariable,
+                                     ByVal nbSign As Integer, ByVal nbDigitMax As Integer, ByVal AffUnite As Enu_AfficheUnite,
                                      Optional ByVal lSupZero As Boolean = False) As String
         '--------------------------------------------------------------------------------------------------------------------------------
         '   24/04/24 :  Création - POM - V1.00
@@ -667,7 +673,7 @@ Module Mod_Outils
         '   Type            [E] :   Type de la valeur (pour les unités)
         '   nbSign          [E] :   Nombre de chiffres caractéristiques
         '   nbDigitMax      [E] :   Nombre maxi de chiffres après la virgule
-        '   lUnite          [E] :   Indique si on affiche l'unité
+        '   AffUnite        [E] :   Indique si on affiche l'unité, et si oui pour quelle destination
         '   lSupZero        [E] :   Indique si on supprime les zéros non significatifs après la virgule
         '--------------------------------------------------------------------------------------------------------------------------------
 
@@ -678,10 +684,12 @@ Module Mod_Outils
         'Dim lUniteReconnue As Boolean = true
         Dim MyFormat As String
         Dim Unite As String = ""
+        Dim lUnite As Boolean = (AffUnite <> Enu_AfficheUnite.Non)
+        Dim lNdC As Boolean = (AffUnite = Enu_AfficheUnite.OuiNdC)
 
         '--[ Traitement
 
-        PrepareAffichageUnite(Type, kUnitU, Unite)
+        PrepareAffichageUnite(Type, lNdC, kUnitU, Unite)
 
         Dim Chaine As String
 
@@ -696,13 +704,14 @@ Module Mod_Outils
 
     End Function
 
-    Private Sub PrepareAffichageUnite(ByVal Type As Enu_TypeVariable, ByRef kUnitU As Double, ByRef Unite As String)
+    Private Sub PrepareAffichageUnite(ByVal Type As Enu_TypeVariable, lNdC As Boolean, ByRef kUnitU As Double, ByRef Unite As String)
         '--------------------------------------------------------------------------------------------------------------------------------
         '   24/04/24 :  Création - POM - V1.00
         '--------------------------------------------------------------------------------------------------------------------------------
         '   Gestion de l'affichage des chaines numériques sous forme de chaine de caractères
         '--------------------------------------------------------------------------------------------------------------------------------
         '   Type            [E] :   Type de la valeur (pour les unités)
+        '   lNdC            [E] :   Inidique si unité pour la note de calcul
         '   kUnit           [S] :   Coefficient pour l'affichage de la valeur dans la bonne unité
         '   Unite           [S] :   Symbole de l'unité
         '--------------------------------------------------------------------------------------------------------------------------------
@@ -711,6 +720,14 @@ Module Mod_Outils
 
         Select Case Type
 
+            Case Enu_TypeVariable.AireLongueurNDC
+
+                kUnitU = LogicielInfo.Transfert_Longueur(2) ^ 2
+                If lNdC Then
+                    Unite = SEP & LogicielInfo.Unit_Longueur(2) & "\+2\="
+                Else
+                    Unite = SEP & LogicielInfo.Unit_Longueur(2) & "2"
+                End If
             Case Enu_TypeVariable.AireCM2
 
                 kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 2
@@ -719,11 +736,19 @@ Module Mod_Outils
             Case Enu_TypeVariable.AireMM2
 
                 kUnitU = LogicielInfo.Transfert_Longueur(0) ^ 2
-                Unite = SEP & LogicielInfo.Unit_Longueur(0) & "\+2\="
+                If lNdC Then
+                    Unite = SEP & LogicielInfo.Unit_Longueur(0) & "\+2\="
+                Else
+                    Unite = SEP & LogicielInfo.Unit_Longueur(0) & "2"
+                End If
 
             Case Enu_TypeVariable.ChargeSurfacique
                 kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2
-                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\="
+                If lNdC Then
+                    Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\="
+                Else
+                    Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\="
+                End If
 
             Case Enu_TypeVariable.Contrainte
                 kUnitU = LogicielInfo.Transfert_Contraintes(LogicielOptions.IndUnitContraintes)
@@ -760,17 +785,29 @@ Module Mod_Outils
             Case Enu_TypeVariable.Inertie
 
                 kUnitU = LogicielInfo.Transfert_Inerties(LogicielOptions.IndUnitInerties)
-                Unite = SEP & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties)
+                If lNdC Then
+                    Unite = SEP & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties)
+                Else
+                    Unite = SEP & LogicielInfo.Unit_Inerties_NdC(LogicielOptions.IndUnitInerties)
+                End If
 
             Case Enu_TypeVariable.InertieCM4
 
                 kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 4
-                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+4\="
+                If lNdC Then
+                    Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+4\="
+                Else
+                    Unite = SEP & LogicielInfo.Unit_Longueur(1) & "4"
+                End If
 
             Case Enu_TypeVariable.InertieWCM6
 
                 kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 6
-                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+6\="
+                If lNdC Then
+                    Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+6\="
+                Else
+                    Unite = SEP & LogicielInfo.Unit_Longueur(1) & "6"
+                End If
 
             Case Enu_TypeVariable.Longueur
 
@@ -790,16 +827,51 @@ Module Mod_Outils
             Case Enu_TypeVariable.Massivete
 
                 kUnitU = 1
-                Unite = "m\+-1\="
+                If lNdC Then
+                    Unite = "m\+-1\="
+                Else
+                    Unite = "m-1"
+                End If
+
+            Case Enu_TypeVariable.MasseVolumique
+
+                kUnitU = 1
+                If lNdC Then
+                    Unite = "kg/m\+3\="
+                Else
+                    Unite = "kg/m3"
+                End If
+
+            Case Enu_TypeVariable.MasseSurfacique
+
+                kUnitU = 1
+                If lNdC Then
+                    Unite = "kg/m\+2\="
+                Else
+                    Unite = "kg/m2"
+                End If
 
             Case Enu_TypeVariable.ModuleY
                 kUnitU = LogicielInfo.Transfert_ModulesY(LogicielOptions.IndUnitModulesY)
                 Unite = SEP & LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
 
-            Case Enu_TypeVariable.ModuleCM3
+            Case Enu_TypeVariable.WModule
+
+                kUnitU = LogicielInfo.Transfert_ModuleW(LogicielOptions.IndUnitModuleW)
+                If lNdC Then
+                    Unite = SEP & LogicielInfo.Unit_ModuleW_NdC(LogicielOptions.IndUnitModuleW)
+                Else
+                    Unite = SEP & LogicielInfo.Unit_ModuleW(LogicielOptions.IndUnitModuleW)
+                End If
+
+            Case Enu_TypeVariable.WModuleCM3
 
                 kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 3
-                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+3\="
+                If lNdC Then
+                    Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+3\="
+                Else
+                    Unite = SEP & LogicielInfo.Unit_Longueur(1) & "3"
+                End If
 
             Case Enu_TypeVariable.Millimetre
 

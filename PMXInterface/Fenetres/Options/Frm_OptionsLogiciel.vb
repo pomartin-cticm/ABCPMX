@@ -504,6 +504,7 @@ Public Class Frm_OptionsLogiciel
         GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitContraintes, LogicielOptions.IndUnitContraintes, lModif)
         GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitEffort, LogicielOptions.IndUnitEffort, lModif)
         GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitInerties, LogicielOptions.IndUnitInerties, lModif)
+        GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitModuleW, LogicielOptions.IndUnitModuleW, lModif)
         GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitMoment, LogicielOptions.IndUnitMoment, lModif)
 
         GereTransfertValeur(Me.pLocallDefaultRepW, LogicielRep.lTravailDefaut, lModif)

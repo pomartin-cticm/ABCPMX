@@ -42,6 +42,7 @@
         Public IndUnitInerties As Integer           'Indice de l'unité des inerties
         Public IndUnitContraintes As Integer        'Indice de l'unité des contraintes
         Public IndUnitModulesY As Integer           'Indice de l'unité des modules d'élasticité
+        Public IndUnitModuleW As Integer            'Indice de l'unité des modules de flexion
 
         Public UserName As String                   'Nom de l'utilisateur
         Public CompanyName As String                'Nom de l'entreprise
