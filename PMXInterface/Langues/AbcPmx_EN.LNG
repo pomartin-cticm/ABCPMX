@@ -1059,6 +1059,11 @@ SOLIDSLABTH				= Thickness of solid slab
 COMPOSITESLABTH			= Thickness of composite slab (above ribs)
 CONCRETEPROP			= Properties of concrete
 RHOLWC					= Density of light weight concrete
+WELDEDSECTION			= Dimensions of welded sections
+WEBTHICKNESS			= Thickness of the web
+WEBHEIGHT				= Height of the web
+FLANGETHICKNESS			= Thickness of the flanges
+FLANGEWIDTH				= Width of the flanges
 
 #OPTCALSLIMFLOOR
 TITLE					= Slimfloors

@@ -77,6 +77,44 @@ Partial Class Frm_OptionsCalculScope
         Me.img_PorteeL2 = New System.Windows.Forms.PictureBox()
         Me.lbl_Scope = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.lbl_PRS = New System.Windows.Forms.Label()
+        Me.img_hw = New System.Windows.Forms.PictureBox()
+        Me.txt_HwMin = New System.Windows.Forms.TextBox()
+        Me.etq_UnitD3 = New System.Windows.Forms.Label()
+        Me.txt_HwMax = New System.Windows.Forms.TextBox()
+        Me.etq_UnitD4 = New System.Windows.Forms.Label()
+        Me.lbl_HauteurAme = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.lbl_EpAme = New System.Windows.Forms.Label()
+        Me.img_Tw = New System.Windows.Forms.PictureBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.txt_TwMin = New System.Windows.Forms.TextBox()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.etq_UnitD5 = New System.Windows.Forms.Label()
+        Me.etq_UnitD6 = New System.Windows.Forms.Label()
+        Me.txt_TwMax = New System.Windows.Forms.TextBox()
+        Me.Panel6 = New System.Windows.Forms.Panel()
+        Me.lbl_LargeurSemelles = New System.Windows.Forms.Label()
+        Me.img_Bf = New System.Windows.Forms.PictureBox()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.txt_BfMin = New System.Windows.Forms.TextBox()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.etq_UnitD7 = New System.Windows.Forms.Label()
+        Me.etq_UnitD8 = New System.Windows.Forms.Label()
+        Me.txt_BfMax = New System.Windows.Forms.TextBox()
+        Me.Panel7 = New System.Windows.Forms.Panel()
+        Me.lbl_EpSemelles = New System.Windows.Forms.Label()
+        Me.img_Tf = New System.Windows.Forms.PictureBox()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.txt_TfMin = New System.Windows.Forms.TextBox()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.etq_UnitD9 = New System.Windows.Forms.Label()
+        Me.etq_UnitD10 = New System.Windows.Forms.Label()
+        Me.txt_TfMax = New System.Windows.Forms.TextBox()
         Me.pan_Scope.SuspendLayout()
         Me.TLpan_Conteneur.SuspendLayout()
         Me.pan_Conteneur.SuspendLayout()
@@ -93,6 +131,15 @@ Partial Class Frm_OptionsCalculScope
         CType(Me.img_PorteeConsoleMin, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PorteeL2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel3.SuspendLayout()
+        CType(Me.img_hw, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel4.SuspendLayout()
+        Me.Panel5.SuspendLayout()
+        CType(Me.img_Tw, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel6.SuspendLayout()
+        CType(Me.img_Bf, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel7.SuspendLayout()
+        CType(Me.img_Tf, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Scope
@@ -103,7 +150,7 @@ Partial Class Frm_OptionsCalculScope
         Me.pan_Scope.Location = New System.Drawing.Point(30, 29)
         Me.pan_Scope.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Scope.Name = "pan_Scope"
-        Me.pan_Scope.Size = New System.Drawing.Size(739, 472)
+        Me.pan_Scope.Size = New System.Drawing.Size(739, 539)
         Me.pan_Scope.TabIndex = 1
         '
         'TLpan_Conteneur
@@ -117,11 +164,12 @@ Partial Class Frm_OptionsCalculScope
         Me.TLpan_Conteneur.Name = "TLpan_Conteneur"
         Me.TLpan_Conteneur.RowCount = 1
         Me.TLpan_Conteneur.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_Conteneur.Size = New System.Drawing.Size(739, 436)
+        Me.TLpan_Conteneur.Size = New System.Drawing.Size(739, 516)
         Me.TLpan_Conteneur.TabIndex = 0
         '
         'pan_Conteneur
         '
+        Me.pan_Conteneur.Controls.Add(Me.Panel3)
         Me.pan_Conteneur.Controls.Add(Me.pan_Materiau)
         Me.pan_Conteneur.Controls.Add(Me.Panel2)
         Me.pan_Conteneur.Controls.Add(Me.Panel1)
@@ -130,7 +178,7 @@ Partial Class Frm_OptionsCalculScope
         Me.pan_Conteneur.Location = New System.Drawing.Point(0, 0)
         Me.pan_Conteneur.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Conteneur.Name = "pan_Conteneur"
-        Me.pan_Conteneur.Size = New System.Drawing.Size(739, 436)
+        Me.pan_Conteneur.Size = New System.Drawing.Size(739, 516)
         Me.pan_Conteneur.TabIndex = 0
         '
         'pan_Materiau
@@ -146,7 +194,7 @@ Partial Class Frm_OptionsCalculScope
         Me.pan_Materiau.Controls.Add(Me.Label10)
         Me.pan_Materiau.Controls.Add(Me.txt_RhoC_LWC_Max)
         Me.pan_Materiau.Controls.Add(Me.lbl_Materiau)
-        Me.pan_Materiau.Location = New System.Drawing.Point(5, 252)
+        Me.pan_Materiau.Location = New System.Drawing.Point(5, 437)
         Me.pan_Materiau.Name = "pan_Materiau"
         Me.pan_Materiau.Size = New System.Drawing.Size(731, 68)
         Me.pan_Materiau.TabIndex = 147
@@ -267,7 +315,7 @@ Partial Class Frm_OptionsCalculScope
         Me.Panel2.Controls.Add(Me.Label1)
         Me.Panel2.Controls.Add(Me.lbl_Renformis)
         Me.Panel2.Controls.Add(Me.img_Th)
-        Me.Panel2.Location = New System.Drawing.Point(5, 117)
+        Me.Panel2.Location = New System.Drawing.Point(5, 302)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(731, 133)
         Me.Panel2.TabIndex = 146
@@ -682,11 +730,425 @@ Partial Class Frm_OptionsCalculScope
         '
         Me.ErrorProvider.ContainerControl = Me
         '
+        'Panel3
+        '
+        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel3.Controls.Add(Me.Panel7)
+        Me.Panel3.Controls.Add(Me.Panel6)
+        Me.Panel3.Controls.Add(Me.Panel5)
+        Me.Panel3.Controls.Add(Me.Panel4)
+        Me.Panel3.Controls.Add(Me.lbl_PRS)
+        Me.Panel3.Location = New System.Drawing.Point(4, 117)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(732, 146)
+        Me.Panel3.TabIndex = 148
+        '
+        'lbl_PRS
+        '
+        Me.lbl_PRS.AutoSize = True
+        Me.lbl_PRS.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_PRS.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_PRS.Location = New System.Drawing.Point(5, 3)
+        Me.lbl_PRS.Name = "lbl_PRS"
+        Me.lbl_PRS.Size = New System.Drawing.Size(45, 13)
+        Me.lbl_PRS.TabIndex = 127
+        Me.lbl_PRS.Text = "lbl_PRS"
+        Me.lbl_PRS.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'img_hw
+        '
+        Me.img_hw.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_hw.Location = New System.Drawing.Point(548, 2)
+        Me.img_hw.Name = "img_hw"
+        Me.img_hw.Size = New System.Drawing.Size(46, 20)
+        Me.img_hw.TabIndex = 129
+        Me.img_hw.TabStop = False
+        '
+        'txt_HwMin
+        '
+        Me.txt_HwMin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_HwMin.Location = New System.Drawing.Point(443, 2)
+        Me.txt_HwMin.Name = "txt_HwMin"
+        Me.txt_HwMin.Size = New System.Drawing.Size(58, 20)
+        Me.txt_HwMin.TabIndex = 128
+        Me.txt_HwMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'etq_UnitD3
+        '
+        Me.etq_UnitD3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitD3.AutoSize = True
+        Me.etq_UnitD3.Location = New System.Drawing.Point(507, 6)
+        Me.etq_UnitD3.Name = "etq_UnitD3"
+        Me.etq_UnitD3.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitD3.TabIndex = 130
+        Me.etq_UnitD3.Text = "mm"
+        '
+        'txt_HwMax
+        '
+        Me.txt_HwMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_HwMax.Location = New System.Drawing.Point(616, 2)
+        Me.txt_HwMax.Name = "txt_HwMax"
+        Me.txt_HwMax.Size = New System.Drawing.Size(58, 20)
+        Me.txt_HwMax.TabIndex = 131
+        '
+        'etq_UnitD4
+        '
+        Me.etq_UnitD4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitD4.AutoSize = True
+        Me.etq_UnitD4.Location = New System.Drawing.Point(680, 6)
+        Me.etq_UnitD4.Name = "etq_UnitD4"
+        Me.etq_UnitD4.Size = New System.Drawing.Size(39, 13)
+        Me.etq_UnitD4.TabIndex = 132
+        Me.etq_UnitD4.Text = "Label1"
+        '
+        'lbl_HauteurAme
+        '
+        Me.lbl_HauteurAme.AutoSize = True
+        Me.lbl_HauteurAme.Location = New System.Drawing.Point(36, 6)
+        Me.lbl_HauteurAme.Name = "lbl_HauteurAme"
+        Me.lbl_HauteurAme.Size = New System.Drawing.Size(82, 13)
+        Me.lbl_HauteurAme.TabIndex = 133
+        Me.lbl_HauteurAme.Text = "lbl_HauteurAme"
+        Me.lbl_HauteurAme.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Label12
+        '
+        Me.Label12.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label12.AutoSize = True
+        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(600, 5)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(13, 13)
+        Me.Label12.TabIndex = 134
+        Me.Label12.Text = "≤"
+        Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label13
+        '
+        Me.Label13.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label13.AutoSize = True
+        Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label13.Location = New System.Drawing.Point(530, 5)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(13, 13)
+        Me.Label13.TabIndex = 135
+        Me.Label13.Text = "≤"
+        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Panel4
+        '
+        Me.Panel4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel4.Controls.Add(Me.lbl_HauteurAme)
+        Me.Panel4.Controls.Add(Me.img_hw)
+        Me.Panel4.Controls.Add(Me.Label13)
+        Me.Panel4.Controls.Add(Me.txt_HwMin)
+        Me.Panel4.Controls.Add(Me.Label12)
+        Me.Panel4.Controls.Add(Me.etq_UnitD3)
+        Me.Panel4.Controls.Add(Me.etq_UnitD4)
+        Me.Panel4.Controls.Add(Me.txt_HwMax)
+        Me.Panel4.Location = New System.Drawing.Point(3, 18)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(726, 25)
+        Me.Panel4.TabIndex = 136
+        '
+        'Panel5
+        '
+        Me.Panel5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel5.Controls.Add(Me.lbl_EpAme)
+        Me.Panel5.Controls.Add(Me.img_Tw)
+        Me.Panel5.Controls.Add(Me.Label8)
+        Me.Panel5.Controls.Add(Me.txt_TwMin)
+        Me.Panel5.Controls.Add(Me.Label11)
+        Me.Panel5.Controls.Add(Me.etq_UnitD5)
+        Me.Panel5.Controls.Add(Me.etq_UnitD6)
+        Me.Panel5.Controls.Add(Me.txt_TwMax)
+        Me.Panel5.Location = New System.Drawing.Point(3, 44)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(726, 25)
+        Me.Panel5.TabIndex = 137
+        '
+        'lbl_EpAme
+        '
+        Me.lbl_EpAme.AutoSize = True
+        Me.lbl_EpAme.Location = New System.Drawing.Point(36, 6)
+        Me.lbl_EpAme.Name = "lbl_EpAme"
+        Me.lbl_EpAme.Size = New System.Drawing.Size(57, 13)
+        Me.lbl_EpAme.TabIndex = 133
+        Me.lbl_EpAme.Text = "lbl_EpAme"
+        Me.lbl_EpAme.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'img_Tw
+        '
+        Me.img_Tw.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Tw.Location = New System.Drawing.Point(548, 2)
+        Me.img_Tw.Name = "img_Tw"
+        Me.img_Tw.Size = New System.Drawing.Size(46, 20)
+        Me.img_Tw.TabIndex = 129
+        Me.img_Tw.TabStop = False
+        '
+        'Label8
+        '
+        Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(530, 5)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(13, 13)
+        Me.Label8.TabIndex = 135
+        Me.Label8.Text = "≤"
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'txt_TwMin
+        '
+        Me.txt_TwMin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_TwMin.Location = New System.Drawing.Point(443, 2)
+        Me.txt_TwMin.Name = "txt_TwMin"
+        Me.txt_TwMin.Size = New System.Drawing.Size(58, 20)
+        Me.txt_TwMin.TabIndex = 128
+        Me.txt_TwMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'Label11
+        '
+        Me.Label11.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.Location = New System.Drawing.Point(600, 5)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(13, 13)
+        Me.Label11.TabIndex = 134
+        Me.Label11.Text = "≤"
+        Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'etq_UnitD5
+        '
+        Me.etq_UnitD5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitD5.AutoSize = True
+        Me.etq_UnitD5.Location = New System.Drawing.Point(507, 6)
+        Me.etq_UnitD5.Name = "etq_UnitD5"
+        Me.etq_UnitD5.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitD5.TabIndex = 130
+        Me.etq_UnitD5.Text = "mm"
+        '
+        'etq_UnitD6
+        '
+        Me.etq_UnitD6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitD6.AutoSize = True
+        Me.etq_UnitD6.Location = New System.Drawing.Point(680, 6)
+        Me.etq_UnitD6.Name = "etq_UnitD6"
+        Me.etq_UnitD6.Size = New System.Drawing.Size(39, 13)
+        Me.etq_UnitD6.TabIndex = 132
+        Me.etq_UnitD6.Text = "Label1"
+        '
+        'txt_TwMax
+        '
+        Me.txt_TwMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_TwMax.Location = New System.Drawing.Point(616, 2)
+        Me.txt_TwMax.Name = "txt_TwMax"
+        Me.txt_TwMax.Size = New System.Drawing.Size(58, 20)
+        Me.txt_TwMax.TabIndex = 131
+        '
+        'Panel6
+        '
+        Me.Panel6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel6.Controls.Add(Me.lbl_LargeurSemelles)
+        Me.Panel6.Controls.Add(Me.img_Bf)
+        Me.Panel6.Controls.Add(Me.Label14)
+        Me.Panel6.Controls.Add(Me.txt_BfMin)
+        Me.Panel6.Controls.Add(Me.Label15)
+        Me.Panel6.Controls.Add(Me.etq_UnitD7)
+        Me.Panel6.Controls.Add(Me.etq_UnitD8)
+        Me.Panel6.Controls.Add(Me.txt_BfMax)
+        Me.Panel6.Location = New System.Drawing.Point(3, 70)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Size = New System.Drawing.Size(726, 25)
+        Me.Panel6.TabIndex = 138
+        '
+        'lbl_LargeurSemelles
+        '
+        Me.lbl_LargeurSemelles.AutoSize = True
+        Me.lbl_LargeurSemelles.Location = New System.Drawing.Point(36, 6)
+        Me.lbl_LargeurSemelles.Name = "lbl_LargeurSemelles"
+        Me.lbl_LargeurSemelles.Size = New System.Drawing.Size(101, 13)
+        Me.lbl_LargeurSemelles.TabIndex = 133
+        Me.lbl_LargeurSemelles.Text = "lbl_LargeurSemelles"
+        Me.lbl_LargeurSemelles.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'img_Bf
+        '
+        Me.img_Bf.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Bf.Location = New System.Drawing.Point(548, 2)
+        Me.img_Bf.Name = "img_Bf"
+        Me.img_Bf.Size = New System.Drawing.Size(46, 20)
+        Me.img_Bf.TabIndex = 129
+        Me.img_Bf.TabStop = False
+        '
+        'Label14
+        '
+        Me.Label14.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.Location = New System.Drawing.Point(530, 5)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(13, 13)
+        Me.Label14.TabIndex = 135
+        Me.Label14.Text = "≤"
+        Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'txt_BfMin
+        '
+        Me.txt_BfMin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_BfMin.Location = New System.Drawing.Point(443, 2)
+        Me.txt_BfMin.Name = "txt_BfMin"
+        Me.txt_BfMin.Size = New System.Drawing.Size(58, 20)
+        Me.txt_BfMin.TabIndex = 128
+        Me.txt_BfMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'Label15
+        '
+        Me.Label15.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label15.AutoSize = True
+        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Location = New System.Drawing.Point(600, 5)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(13, 13)
+        Me.Label15.TabIndex = 134
+        Me.Label15.Text = "≤"
+        Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'etq_UnitD7
+        '
+        Me.etq_UnitD7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitD7.AutoSize = True
+        Me.etq_UnitD7.Location = New System.Drawing.Point(507, 6)
+        Me.etq_UnitD7.Name = "etq_UnitD7"
+        Me.etq_UnitD7.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitD7.TabIndex = 130
+        Me.etq_UnitD7.Text = "mm"
+        '
+        'etq_UnitD8
+        '
+        Me.etq_UnitD8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitD8.AutoSize = True
+        Me.etq_UnitD8.Location = New System.Drawing.Point(680, 6)
+        Me.etq_UnitD8.Name = "etq_UnitD8"
+        Me.etq_UnitD8.Size = New System.Drawing.Size(39, 13)
+        Me.etq_UnitD8.TabIndex = 132
+        Me.etq_UnitD8.Text = "Label1"
+        '
+        'txt_BfMax
+        '
+        Me.txt_BfMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_BfMax.Location = New System.Drawing.Point(616, 2)
+        Me.txt_BfMax.Name = "txt_BfMax"
+        Me.txt_BfMax.Size = New System.Drawing.Size(58, 20)
+        Me.txt_BfMax.TabIndex = 131
+        '
+        'Panel7
+        '
+        Me.Panel7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel7.Controls.Add(Me.lbl_EpSemelles)
+        Me.Panel7.Controls.Add(Me.img_Tf)
+        Me.Panel7.Controls.Add(Me.Label16)
+        Me.Panel7.Controls.Add(Me.txt_TfMin)
+        Me.Panel7.Controls.Add(Me.Label17)
+        Me.Panel7.Controls.Add(Me.etq_UnitD9)
+        Me.Panel7.Controls.Add(Me.etq_UnitD10)
+        Me.Panel7.Controls.Add(Me.txt_TfMax)
+        Me.Panel7.Location = New System.Drawing.Point(3, 96)
+        Me.Panel7.Name = "Panel7"
+        Me.Panel7.Size = New System.Drawing.Size(726, 25)
+        Me.Panel7.TabIndex = 139
+        '
+        'lbl_EpSemelles
+        '
+        Me.lbl_EpSemelles.AutoSize = True
+        Me.lbl_EpSemelles.Location = New System.Drawing.Point(36, 6)
+        Me.lbl_EpSemelles.Name = "lbl_EpSemelles"
+        Me.lbl_EpSemelles.Size = New System.Drawing.Size(78, 13)
+        Me.lbl_EpSemelles.TabIndex = 133
+        Me.lbl_EpSemelles.Text = "lbl_EpSemelles"
+        Me.lbl_EpSemelles.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'img_Tf
+        '
+        Me.img_Tf.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Tf.Location = New System.Drawing.Point(548, 2)
+        Me.img_Tf.Name = "img_Tf"
+        Me.img_Tf.Size = New System.Drawing.Size(46, 20)
+        Me.img_Tf.TabIndex = 129
+        Me.img_Tf.TabStop = False
+        '
+        'Label16
+        '
+        Me.Label16.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label16.AutoSize = True
+        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label16.Location = New System.Drawing.Point(530, 5)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(13, 13)
+        Me.Label16.TabIndex = 135
+        Me.Label16.Text = "≤"
+        Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'txt_TfMin
+        '
+        Me.txt_TfMin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_TfMin.Location = New System.Drawing.Point(443, 2)
+        Me.txt_TfMin.Name = "txt_TfMin"
+        Me.txt_TfMin.Size = New System.Drawing.Size(58, 20)
+        Me.txt_TfMin.TabIndex = 128
+        Me.txt_TfMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'Label17
+        '
+        Me.Label17.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label17.AutoSize = True
+        Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label17.Location = New System.Drawing.Point(600, 5)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(13, 13)
+        Me.Label17.TabIndex = 134
+        Me.Label17.Text = "≤"
+        Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'etq_UnitD9
+        '
+        Me.etq_UnitD9.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitD9.AutoSize = True
+        Me.etq_UnitD9.Location = New System.Drawing.Point(507, 6)
+        Me.etq_UnitD9.Name = "etq_UnitD9"
+        Me.etq_UnitD9.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitD9.TabIndex = 130
+        Me.etq_UnitD9.Text = "mm"
+        '
+        'etq_UnitD10
+        '
+        Me.etq_UnitD10.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitD10.AutoSize = True
+        Me.etq_UnitD10.Location = New System.Drawing.Point(680, 6)
+        Me.etq_UnitD10.Name = "etq_UnitD10"
+        Me.etq_UnitD10.Size = New System.Drawing.Size(39, 13)
+        Me.etq_UnitD10.TabIndex = 132
+        Me.etq_UnitD10.Text = "Label1"
+        '
+        'txt_TfMax
+        '
+        Me.txt_TfMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_TfMax.Location = New System.Drawing.Point(616, 2)
+        Me.txt_TfMax.Name = "txt_TfMax"
+        Me.txt_TfMax.Size = New System.Drawing.Size(58, 20)
+        Me.txt_TfMax.TabIndex = 131
+        '
         'Frm_OptionsCalculScope
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(853, 546)
+        Me.ClientSize = New System.Drawing.Size(853, 595)
         Me.Controls.Add(Me.pan_Scope)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "Frm_OptionsCalculScope"
@@ -710,6 +1172,20 @@ Partial Class Frm_OptionsCalculScope
         CType(Me.img_PorteeConsoleMin, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PorteeL2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
+        CType(Me.img_hw, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel4.ResumeLayout(False)
+        Me.Panel4.PerformLayout()
+        Me.Panel5.ResumeLayout(False)
+        Me.Panel5.PerformLayout()
+        CType(Me.img_Tw, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel6.ResumeLayout(False)
+        Me.Panel6.PerformLayout()
+        CType(Me.img_Bf, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel7.ResumeLayout(False)
+        Me.Panel7.PerformLayout()
+        CType(Me.img_Tf, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -768,4 +1244,42 @@ Partial Class Frm_OptionsCalculScope
     Friend WithEvents txt_RhoC_LWC_Max As TextBox
     Friend WithEvents lbl_Materiau As Label
     Friend WithEvents etq_UnitMassV2 As Label
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents img_hw As PictureBox
+    Friend WithEvents txt_HwMin As TextBox
+    Friend WithEvents etq_UnitD3 As Label
+    Friend WithEvents txt_HwMax As TextBox
+    Friend WithEvents etq_UnitD4 As Label
+    Friend WithEvents lbl_HauteurAme As Label
+    Friend WithEvents Label12 As Label
+    Friend WithEvents Label13 As Label
+    Friend WithEvents lbl_PRS As Label
+    Friend WithEvents Panel6 As Panel
+    Friend WithEvents lbl_LargeurSemelles As Label
+    Friend WithEvents img_Bf As PictureBox
+    Friend WithEvents Label14 As Label
+    Friend WithEvents txt_BfMin As TextBox
+    Friend WithEvents Label15 As Label
+    Friend WithEvents etq_UnitD7 As Label
+    Friend WithEvents etq_UnitD8 As Label
+    Friend WithEvents txt_BfMax As TextBox
+    Friend WithEvents Panel5 As Panel
+    Friend WithEvents lbl_EpAme As Label
+    Friend WithEvents img_Tw As PictureBox
+    Friend WithEvents Label8 As Label
+    Friend WithEvents txt_TwMin As TextBox
+    Friend WithEvents Label11 As Label
+    Friend WithEvents etq_UnitD5 As Label
+    Friend WithEvents etq_UnitD6 As Label
+    Friend WithEvents txt_TwMax As TextBox
+    Friend WithEvents Panel4 As Panel
+    Friend WithEvents Panel7 As Panel
+    Friend WithEvents lbl_EpSemelles As Label
+    Friend WithEvents img_Tf As PictureBox
+    Friend WithEvents Label16 As Label
+    Friend WithEvents txt_TfMin As TextBox
+    Friend WithEvents Label17 As Label
+    Friend WithEvents etq_UnitD9 As Label
+    Friend WithEvents etq_UnitD10 As Label
+    Friend WithEvents txt_TfMax As TextBox
 End Class

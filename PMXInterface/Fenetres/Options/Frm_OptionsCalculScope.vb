@@ -47,6 +47,16 @@
             Me.lbl_Materiau.Text = MyBloc("CONCRETEPROP")
             Me.lbl_RhoBetonLeger.Text = MyBloc("RHOLWC")
 
+            '#-------------------- DIMENSIONS D'UN PRS
+
+            Me.lbl_PRS.Text = MyBloc("WELDEDSECTION")
+
+            Me.lbl_EpAme.Text = MyBloc("WEBTHICKNESS")
+            Me.lbl_HauteurAme.Text = MyBloc("WEBHEIGHT")
+
+            Me.lbl_EpSemelles.Text = MyBloc("FLANGETHICKNESS")
+            Me.lbl_LargeurSemelles.Text = MyBloc("FLANGEWIDTH")
+
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues")
             'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -73,11 +83,31 @@
         PrepareTextBoxDipo(Me.txt_RhoC_LWC_Min, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_RhoC_LWC_Max, LogicielOptions.lExpert)
 
+        PrepareTextBoxDipo(Me.txt_HwMin, False)
+        PrepareTextBoxDipo(Me.txt_HwMax, False)
+        PrepareTextBoxDipo(Me.txt_TwMin, False)
+        PrepareTextBoxDipo(Me.txt_TwMax, False)
+
+        PrepareTextBoxDipo(Me.txt_BfMin, False)
+        PrepareTextBoxDipo(Me.txt_BfMax, False)
+        PrepareTextBoxDipo(Me.txt_TfMin, False)
+        PrepareTextBoxDipo(Me.txt_TfMax, False)
+
     End Sub
 
     Private Sub GestionUnites()
+
         Me.etq_UnitD1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitD2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD6.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD7.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD8.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD9.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD10.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+
         Me.etq_UnitL1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
@@ -111,6 +141,19 @@
 
         Me.txt_RhoC_LWC_Max.Text = GetStringInUnit(LocalOptionsScope.RhoCBetonLegerMax, Enu_TypeVariable.SansType, 4, 2, False)
         Me.txt_RhoC_LWC_Min.Text = GetStringInUnit(LocalOptionsScope.RhoCBetonLegerMin, Enu_TypeVariable.SansType, 4, 2, False)
+
+        '--( Dimensions d'un PRS
+
+        Me.txt_HwMin.Text = GetStringInUnitN(LocalOptionsScope.HwMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_HwMax.Text = GetStringInUnitN(LocalOptionsScope.HwMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_TwMin.Text = GetStringInUnitN(LocalOptionsScope.TwMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_TwMax.Text = GetStringInUnitN(LocalOptionsScope.TwMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+
+        Me.txt_BfMin.Text = GetStringInUnitN(LocalOptionsScope.BfMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_BfMax.Text = GetStringInUnitN(LocalOptionsScope.BfMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_TfMin.Text = GetStringInUnitN(LocalOptionsScope.TfMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_TfMax.Text = GetStringInUnitN(LocalOptionsScope.TfMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+
 
     End Sub
 
@@ -239,7 +282,9 @@
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_ThetaRd.Paint, img_PorteeMini.Paint, img_PorteeConsoleMin.Paint, img_PorteeL2.Paint, img_Td1.Paint, img_xTd.Paint, img_Th.Paint, img_EpDalleMixte.Paint, img_RhoC.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_ThetaRd.Paint, img_PorteeMini.Paint, img_PorteeConsoleMin.Paint,
+        img_PorteeL2.Paint, img_Td1.Paint, img_xTd.Paint, img_Th.Paint, img_EpDalleMixte.Paint, img_RhoC.Paint,
+        img_Tw.Paint, img_Tf.Paint, img_hw.Paint, img_Bf.Paint
 
         '--> Déclarations
 
@@ -259,6 +304,21 @@
         AlignH = Enu_AlignementH.Centre
 
         Select Case sender.name
+
+            Case Me.img_Tw.Name
+                strSymbol = "t"
+                strIndice = "w"
+            Case Me.img_hw.Name
+                strSymbol = "h"
+                strIndice = "w"
+            Case Me.img_Tf.Name
+                strSymbol = "t"
+                strIndice = "f"
+            Case Me.img_Bf.Name
+                strSymbol = "b"
+                strIndice = "f"
+
+
             Case Me.img_EpDalleMixte.Name
                 strSymbol = "t"
                 strIndice = "c"

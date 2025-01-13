@@ -1018,8 +1018,8 @@ TITLE					= Calcul incendie
 CONSTANTS				= Constantes
 PARAMETERS				= Paramètres de calcul
 BOLTZMAN				= Constante de Boltzman
-EMISSIVITYC				= Emissivité du béton
-EMISSIVITYF				= Emissivité du feu
+EMISSIVITYC				= Émissivité du béton
+EMISSIVITYF				= Émissivité du feu
 CONVECTIONFACTORSLAB	= Coefficient de convection au-dessus de la dalle
 CONVECTIONFACTOR		= Coefficient de convection
 FORMFACTOR				= Coefficient de forme
@@ -1041,6 +1041,11 @@ SOLIDSLABTH				= Epaisseur de la dalle béton
 COMPOSITESLABTH			= Epaisseur de la dalle mixte (au-dessus du bac)
 CONCRETEPROP			= Propriétés du béton
 RHOLWC					= Masse volumique du béton léger
+WELDEDSECTION			= Dimensions des sections soudées
+WEBTHICKNESS			= Épaisseur de l'âme
+WEBHEIGHT				= Hauteur de l'âme
+FLANGETHICKNESS			= Épaisseur des semelles
+FLANGEWIDTH				= Largeur des semelles
 
 #OPTCALSLIMFLOOR
 TITLE					= Planchers minces
@@ -1048,7 +1053,7 @@ SLABS					= Dalles
 SLIMFLOORDIM			= Dimensions des slimfloors
 DEPTHMAX				= Hauteur maximale d'un profil laminé intégré
 SLABSUPPORTMIN			= Largeur minimale d'un support de dalle
-THICKNESSMIN			= Epaisseur minimale du plat
+THICKNESSMIN			= Épaisseur minimale du plat
 
 #OPTSOFTMAIN
 TITLE					= Options logiciel
@@ -1076,7 +1081,7 @@ DISPLAYDIAGRAMS			= Diagrammes de sollicitations
 DISPLAYTABLES			= Tableau de sollicitations
 DISPLAYMINMAX			= Valeurs enveloppes
 DISPLAYSIGMA			= Afficher les contraintes élastiques
-ULS						= Etats Limites Ultimes
+ULS						= États Limites Ultimes
 DISPMELCOMPOSITEBEAMS	= Afficher les moments élastiques des poutres mixtes
 
 #OPTSOFTDATABASES

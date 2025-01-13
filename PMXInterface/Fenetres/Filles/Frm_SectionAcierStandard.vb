@@ -1442,20 +1442,37 @@ Public Class Frm_SectionAcierStandard
 
         Select Case MyTxt.Name
             Case Me.txt_Ha.Name
-                ValMin = HWMINI + 2 * TFMINI
-                ValMax = HWMAXI + 2 * TFMINI
+                'ValMin = HWMINI + 2 * TFMINI
+                'ValMax = HWMAXI + 2 * TFMINI
+                ValMin = OptionsScope.HwMin + 2 * OptionsScope.TfMin
+                ValMax = OptionsScope.HwMax + 2 * OptionsScope.TfMin
+
             Case Me.txt_Hw.Name
-                ValMin = HWMINI
-                ValMax = HWMAXI
+                'ValMin = HWMINI
+                'ValMax = HWMAXI
+                ValMin = OptionsScope.HwMin
+                ValMax = OptionsScope.HwMax
+
             Case Me.txt_Bfi.Name, Me.txt_Bfs.Name
-                ValMin = BFMINI
-                ValMax = BFMAXI
+                'ValMin = BFMINI
+                'ValMax = BFMAXI
+
+                ValMin = OptionsScope.BfMin
+                ValMax = OptionsScope.BfMax
+
             Case Me.txt_Tfi.Name, Me.txt_Tfs.Name
-                ValMin = TFMINI
-                ValMax = EPMAXI
+                'ValMin = TFMINI
+                'ValMax = EPMAXI
+                ValMin = OptionsScope.TfMin
+                ValMax = OptionsScope.TfMax
+
+
             Case Me.txt_Tw.Name
-                ValMin = TWMINI
-                ValMax = EPMAXI
+                'ValMin = TWMINI
+                'ValMax = EPMAXI
+                ValMin = OptionsScope.TwMin
+                ValMax = OptionsScope.TwMax
+
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin / kUnit, lValMax, ValMax / kUnit)
 

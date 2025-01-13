@@ -243,6 +243,17 @@ Public Module Mod_Declarations
         Public EpDalleMixteMin As Decimal       ' Epaisseur de dalle mixte mini (au dessus du bac)
         Public RhoCBetonLegerMax As Decimal     ' Masse volumique maximale d'un béton léger
         Public RhoCBetonLegerMin As Decimal     ' Masse volumique minimale d'un béton léger
+
+        Public HwMin As Decimal                 ' Hauteur mini d'un panneau d'âme PRS
+        Public HwMax As Decimal                 ' Hauteur maxi d'un panneau d'âme PRS
+        Public TwMin As Decimal                 ' Epaisseur mini d'un panneau d'âme PRS
+        Public TwMax As Decimal                 ' Epaisser maxi d'un panneau d'âme PRS
+
+        Public BfMin As Decimal                 ' Largeur mini d'une semelle
+        Public BfMax As Decimal                 ' Largeur maxi d'une semelle
+        Public TfMin As Decimal                 ' Epaisseur mini d'une semelle
+        Public TfMax As Decimal                 ' Epaisseur maxi d'une semelle
+
     End Structure
 
     Public Structure struc_ReglagesLogiciel
@@ -282,6 +293,16 @@ Public Module Mod_Declarations
         OptionsScope.RhoCBetonLegerMin = My.Settings.RhoCBetonLegerMin
 
         OptionsScope.RatioEpPredalleMax = My.Settings.RatioEpPredalleMax
+
+        OptionsScope.HwMin = 100 / 1000
+        OptionsScope.HwMax = 1500 / 1000
+        OptionsScope.TwMin = 3 / 1000
+        OptionsScope.TwMax = 50 / 1000
+
+        OptionsScope.BfMin = 100 / 1000
+        OptionsScope.BfMax = 500 / 1000
+        OptionsScope.TfMin = 6 / 1000
+        OptionsScope.TfMax = 100 / 1000
 
     End Sub
 
