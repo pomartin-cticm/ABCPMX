@@ -270,7 +270,7 @@ Public Class Frm_OptionsFeu
 
             Me.chk_ArmaFroid.Checked = MyPoutreLoc.ParamFeu.lArmaFormeeAFroid
             Me.chk_DalleFEM.Checked = MyPoutreLoc.ParamFeu.lDalleFEM
-            Me.txt_EpProtec.Text = GetStringInUnitN(.EpProtection, Enu_TypeVariable.Dimension, 3, 2, False, True)
+            Me.txt_EpProtec.Text = GetStringInUnitN(.EpProtection, Enu_TypeVariable.Dimension, 3, 2, Enu_AfficheUnite.Non, True)
 
             GestionPositionElements() 'Gère les positions des éléments dans la partie de droite
             MAJI_TypeProtection()
@@ -278,7 +278,7 @@ Public Class Frm_OptionsFeu
             '--> Options de calcul
 
             MAJI_FEM()
-            Me.txt_tDalleFEMmax.Text = GetStringInUnitN(.tDalleEFmax, Enu_TypeVariable.Dimension, 3, 2, False, True)
+            Me.txt_tDalleFEMmax.Text = GetStringInUnitN(.tDalleEFmax, Enu_TypeVariable.Dimension, 3, 2, Enu_AfficheUnite.Non, True)
             Me.chk_ArmaComp.Checked = MyPoutreLoc.ParamFeu.lArmaCompression
             Me.chk_ReductionConcreteStrenght.Checked = MyPoutreLoc.ParamFeu.lReductionConcreteStrength
             Select Case MyPoutreLoc.ParamFeu.MethodTempArma
@@ -296,7 +296,7 @@ Public Class Frm_OptionsFeu
             Me.chk_RhoCconstante.Checked = Not .lRhoCvar
             Me.chk_ANFrance.Checked = .lANFrance
 
-            Me.txt_U.Text = GetStringInUnitN(.TeneurU, Enu_TypeVariable.SansType, 3, 2, False, True)
+            Me.txt_U.Text = GetStringInUnitN(.TeneurU, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True)
 
         End With
 

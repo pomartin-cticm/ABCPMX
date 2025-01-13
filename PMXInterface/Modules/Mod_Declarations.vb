@@ -732,6 +732,8 @@ Public Module Mod_Declarations
 
     Public LastIndexW As strucLastIndexWindow
 
+    Public Const NON_U As Enu_AfficheUnite = Enu_AfficheUnite.Non
+
     Public Enum Enu_AfficheUnite
         OuiInterface
         OuiNdC

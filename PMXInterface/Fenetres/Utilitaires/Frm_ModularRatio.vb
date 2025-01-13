@@ -243,34 +243,34 @@ Public Class Frm_ModularRatio
         Dim n0 As Decimal = MonBeton.CoefficientEquivalenceCT
         Dim nL As Decimal = MonBeton.CoefficientEquivalence(RH, RayonH0, AgeT, AgeT0, PsiL)
 
-        Me.txt_n0.Text = GetStringInUnit(n0, Enu_TypeVariable.SansType, 3, 2, False)
-        Me.txt_nL.Text = GetStringInUnit(nL, Enu_TypeVariable.SansType, 3, 2, False)
+        Me.txt_n0.Text = GetStringInUnitN(n0, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
+        Me.txt_nL.Text = GetStringInUnitN(nL, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
 
-        Me.txt_PsiL2.Text = GetStringInUnitN(PsiL, Enu_TypeVariable.SansType, 3, 2, False, True)
+        Me.txt_PsiL2.Text = GetStringInUnitN(PsiL, Enu_TypeVariable.SansType, 3, 2, NON_U, True)
 
         Dim PhiRH As Decimal = MonBeton.PhiRH(RH, RayonH0)
 
-        Me.txt_PhiRH.Text = GetStringInUnit(PhiRH, Enu_TypeVariable.SansType, 3, 2, False)
+        Me.txt_PhiRH.Text = GetStringInUnitN(PhiRH, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
 
         Dim BetaFcm As Decimal = MonBeton.BetaFcm
 
-        Me.txt_BetaFcm.Text = GetStringInUnit(BetaFcm, Enu_TypeVariable.SansType, 3, 2, False)
+        Me.txt_BetaFcm.Text = GetStringInUnitN(BetaFcm, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
 
         Dim BetaT0 As Decimal = MonBeton.Beta_t0(AgeT0)
 
-        Me.txt_BetaT0.Text = GetStringInUnit(BetaT0, Enu_TypeVariable.SansType, 3, 2, False)
+        Me.txt_BetaT0.Text = GetStringInUnitN(BetaT0, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
 
         Dim Phi0 As Decimal = PhiRH * BetaFcm * BetaT0
 
-        Me.txt_Phi0.Text = GetStringInUnit(Phi0, Enu_TypeVariable.SansType, 3, 2, False)
+        Me.txt_Phi0.Text = GetStringInUnitN(Phi0, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
 
         Dim BetaC As Decimal = MonBeton.BetaC_tt0(RH, RayonH0, AgeT, AgeT0)
 
-        Me.txt_BetaC.Text = GetStringInUnit(BetaC, Enu_TypeVariable.SansType, 3, 2, False)
+        Me.txt_BetaC.Text = GetStringInUnitN(BetaC, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
 
         Dim PhiT As Decimal = Phi0 * BetaC
 
-        Me.txt_PhiT.Text = GetStringInUnit(PhiT, Enu_TypeVariable.SansType, 3, 2, False)
+        Me.txt_PhiT.Text = GetStringInUnitN(PhiT, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
 
         Me.lbl_CoefLongTerme.Text = Me.cmb_Charge.Text
 

@@ -95,19 +95,17 @@
         Select Case sender.name
 
             Case Me.txt_Bac.Name
-                ' MsgBox("Edition des bacs A PROGRAMMER")
 
                 Frm_EditBaseBacsAcier.ShowDialog()
                 Frm_EditBaseBacsAcier.Dispose()
 
 
             Case Me.txt_Studs.Name
-                MsgBox("Edition des connecteurs A PROGRAMMER")
-                'Frm_EditGoujons.ShowDialog()
-                'Frm_EditGoujons.Dispose()
+
+                Frm_EditGoujons.ShowDialog()
+                Frm_EditGoujons.Dispose()
 
             Case Me.txt_Profiles.Name
-                MsgBox("Edition des profilés A PROGRAMMER")
 
                 'If My.Computer.Keyboard.CtrlKeyDown Then
                 '    ChangeReglageSub()
@@ -115,6 +113,8 @@
                 '    Frm_Catalogue.ShowDialog()
                 '    Frm_Catalogue.Dispose()
                 'End If
+                Frm_Catalogue.ShowDialog()
+                Frm_Catalogue.Dispose()
 
         End Select
 

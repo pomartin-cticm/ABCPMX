@@ -101,7 +101,7 @@ Public Class Frm_OptionsFeuN_Calcul
             '--> Options de calcul
 
             MAJI_FEM(myBeam)
-            Me.txt_tDalleFEMmax.Text = GetStringInUnitN(.tDalleEFmax, Enu_TypeVariable.Dimension, 3, 2, False, True)
+            Me.txt_tDalleFEMmax.Text = GetStringInUnitN(.tDalleEFmax, Enu_TypeVariable.Dimension, 3, 2, Enu_AfficheUnite.Non, True)
             Me.chk_ArmaComp.Checked = .lArmaCompression
             Me.chk_ReductionConcreteStrenght.Checked = .lReductionConcreteStrength
             Select Case .MethodTempArma
@@ -117,7 +117,7 @@ Public Class Frm_OptionsFeuN_Calcul
             Me.chk_RhoCconstante.Checked = Not .lRhoCvar
             Me.chk_ANFrance.Checked = .lANFrance
 
-            Me.txt_U.Text = GetStringInUnitN(.TeneurU, Enu_TypeVariable.SansType, 3, 2, False, True)
+            Me.txt_U.Text = GetStringInUnitN(.TeneurU, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True)
 
             MAJI_OptionsFEM()
         End With

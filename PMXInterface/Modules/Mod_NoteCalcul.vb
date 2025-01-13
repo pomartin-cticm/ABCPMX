@@ -466,7 +466,7 @@ Module Mod_NoteCalcul
             indFin = myBeam.IndiceDerniereTravee
 
             For iTravee = indDeb To indFin
-                Chaine = Chaine & GetStringInUnitP(myBeam.LongueurTravee(iTravee), Enu_TypeVariable.Longueur, 4, 3, Enu_AfficheUnite.OuiNdC, True)
+                Chaine = Chaine & GetStringInUnitN(myBeam.LongueurTravee(iTravee), Enu_TypeVariable.Longueur, 4, 3, Enu_AfficheUnite.OuiNdC, True)
 
                 If iTravee < indFin Then
                     Chaine = Chaine & " | "
@@ -475,14 +475,14 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW1 & BlocG("SPANLENGTHS") & TABS1 & Chaine)
 
         Else
-            AddLigneNDC(TABW1 & BlocG("SPANLENGTH") & TABS1 & GetStringInUnitP(myBeam.LongueurTravee(1), Enu_TypeVariable.Longueur, 4, 3, Enu_AfficheUnite.OuiNdC, True))
+            AddLigneNDC(TABW1 & BlocG("SPANLENGTH") & TABS1 & GetStringInUnitN(myBeam.LongueurTravee(1), Enu_TypeVariable.Longueur, 4, 3, Enu_AfficheUnite.OuiNdC, True))
         End If
 
 
         '--( Profilé
 
         Acier = myBeam.Section.Acier.Nuance & " " & myBeam.Section.Acier.Qualite & " (" & myBeam.Section.Acier.NormeProduit & ")"
-        Masse = BlocG("MASS") & ": " & GetStringInUnitP(myBeam.MasseTotalePoutre, Enu_TypeVariable.Masse, 4, 3, Enu_AfficheUnite.OuiNdC, True)
+        Masse = BlocG("MASS") & ": " & GetStringInUnitN(myBeam.MasseTotalePoutre, Enu_TypeVariable.Masse, 4, 3, Enu_AfficheUnite.OuiNdC, True)
 
         If myBeam.Section.lLamine Then
             '# Laminé
@@ -498,19 +498,19 @@ Module Mod_NoteCalcul
 
             '-- Semelle sup
             Chaine = Chaine _
-                   & GetStringInUnitP(myBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True) & "x" _
-                   & GetStringInUnitP(myBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True)
+                   & GetStringInUnitN(myBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True) & "x" _
+                   & GetStringInUnitN(myBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True)
 
             '-- âme
             Chaine = Chaine & " | " _
-                   & GetStringInUnitP(myBeam.Section.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True) & "x" _
-                   & GetStringInUnitP(myBeam.Section.ProfilA.Tw, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True)
+                   & GetStringInUnitN(myBeam.Section.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True) & "x" _
+                   & GetStringInUnitN(myBeam.Section.ProfilA.Tw, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True)
 
             '-- semelle inf
             If myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym Then
                 Chaine = Chaine & " | " _
-                       & GetStringInUnitP(myBeam.Section.ProfilA.Bfi, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True) & "x" _
-                       & GetStringInUnitP(myBeam.Section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True)
+                       & GetStringInUnitN(myBeam.Section.ProfilA.Bfi, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True) & "x" _
+                       & GetStringInUnitN(myBeam.Section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True)
 
             End If
 
@@ -525,9 +525,9 @@ Module Mod_NoteCalcul
 
         Select Case myBeam.Dalle.type
             Case cls_Dalle.Enum_TypeDalle.Pleine
-                Chaine = BlocG("SLABSOLID") & TABS1 & "t\-d\= = " & GetStringInUnitP(myBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True)
+                Chaine = BlocG("SLABSOLID") & TABS1 & "t\-d\= = " & GetStringInUnitN(myBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True)
                 If Not IsEqual(myBeam.Dalle.Ep_th, 0) Then
-                    Chaine = Chaine & TABS2 & BlocG("CHAUNCH") & " t\-h\= = " & GetStringInUnitP(myBeam.Dalle.Ep_th, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True)
+                    Chaine = Chaine & TABS2 & BlocG("CHAUNCH") & " t\-h\= = " & GetStringInUnitN(myBeam.Dalle.Ep_th, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True)
                 End If
             Case cls_Dalle.Enum_TypeDalle.Mixte
                 Chaine = BlocG("SLABCOMPOSITE")
@@ -538,7 +538,7 @@ Module Mod_NoteCalcul
                         Chaine = Chaine & TABS2 & BlocG("RIBSTRANS")
                 End Select
             Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
-                Chaine = BlocG("SLABPREF") & TABS2 & "t\-d\= = " & GetStringInUnitP(myBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True)
+                Chaine = BlocG("SLABPREF") & TABS2 & "t\-d\= = " & GetStringInUnitN(myBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True)
 
         End Select
         AddLigneNDC(TABS1 & Chaine)
@@ -547,7 +547,7 @@ Module Mod_NoteCalcul
 
         If lMixte Then
             AddLigneNDC(TABS1 & BlocG("CONCRETE") & " : " & myBeam.Dalle.beton.Classe _
-                      & TABS2 & "f\-sk\= = " & GetStringInUnitP(myBeam.Dalle.beton.Fck, Enu_TypeVariable.ContrainteMPa, 4, 3, Enu_AfficheUnite.OuiNdC, True))
+                      & TABS2 & "f\-sk\= = " & GetStringInUnitN(myBeam.Dalle.beton.Fck, Enu_TypeVariable.ContrainteMPa, 4, 3, Enu_AfficheUnite.OuiNdC, True))
         End If
 
         '--( Connexion
@@ -575,8 +575,8 @@ Module Mod_NoteCalcul
                 Chaine = CStr(myBeam.NombreGoujonTot(1)) & " " & BlocG("STUDS") & " "
             End If
 
-            Chaine = Chaine & GetStringInUnitP(myBeam.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True) & "x" _
-                            & GetStringInUnitP(myBeam.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True)
+            Chaine = Chaine & GetStringInUnitN(myBeam.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True) & "x" _
+                            & GetStringInUnitN(myBeam.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True)
 
             Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
             Dim lDalleP As Boolean = (myBeam.Dalle.lPleineOuPrefa)
@@ -591,7 +591,7 @@ Module Mod_NoteCalcul
             Dim Nr As Integer = myBeam.NrTransZone(1, 0)
 
             PRd = myBeam.Dalle.Goujons.ResistancePRd(lGeneration1, lDalleP, lPerpPRd, lCofra220, myBeam.Dalle.Bac, Nr, FcK, Ecm, Fctk_005, GammaVs, GammaVc)
-            ChainePRd = "P\-Rd\= " & GetStringInUnitP(PRd, Enu_TypeVariable.Effort, 4, 3, Enu_AfficheUnite.OuiNdC, True)
+            ChainePRd = "P\-Rd\= " & GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 4, 3, Enu_AfficheUnite.OuiNdC, True)
             If Not lDalleP Then
                 ChainePRd = ChainePRd & " - n\-r\= = " & CStr(Nr)
             End If
@@ -822,7 +822,7 @@ Module Mod_NoteCalcul
             myGoI = Math.Max(myBeam.VerifAcier(iVerif).GorgesSoudures(1), myBeam.VerifAcier(iVerif).GorgesSouduresMini(1))
 
             AddLigneNDC("\T" & CStr(myTab(iTabNext)) & "a\-w\= = " &
-                        GetStringInUnitP(Math.Max(myGoS, myGoI), Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True))
+                        GetStringInUnitN(Math.Max(myGoS, myGoI), Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True))
         End If
 
         SauteLigne()
@@ -871,8 +871,8 @@ Module Mod_NoteCalcul
 
         '--( AffichageOptFeu
 
-        AddligneNoRetour(TabulC & SymbT & strGras & SymbEta & GetStringInUnitP(DegreC, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True) _
-                       & Comp & SymbEtaMin & GetStringInUnitP(DegreMin, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True) & strFinGras)
+        AddligneNoRetour(TabulC & SymbT & strGras & SymbEta & GetStringInUnitN(DegreC, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True) _
+                       & Comp & SymbEtaMin & GetStringInUnitN(DegreMin, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True) & strFinGras)
 
         If lRetour Then
             AddLigneNDC("\IMG " & KeyImg & " " & CStr(iTabulI) & " 2 0 Nocadre")
@@ -969,11 +969,11 @@ Module Mod_NoteCalcul
             For iTravee = iTravD To iTravF
                 Chaine = Chaine _
                        & "\T" & myTab(iTravee - iTravD) & mySymbT(iTravee - iTravD) & ": " _
-                       & GetStringInUnitP(myFleches(iTravee), Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True)
+                       & GetStringInUnitN(myFleches(iTravee), Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True)
             Next
 
         Else
-            Chaine = "\T" & myTab(0) & GetStringInUnitP(myFleches(1), Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True)
+            Chaine = "\T" & myTab(0) & GetStringInUnitN(myFleches(1), Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True)
         End If
 
         AddLigneNDC("\T11" & BlocG("SLSDEFLECTIONS") & Chaine)
@@ -990,9 +990,9 @@ Module Mod_NoteCalcul
             End Select
 
             AddLigneNDC("\T11" & BlocG("SLSHIVOSS") _
-                      & "\T" & CStr(myTab(0)) & "f = " & GetStringInUnitP(mybeam.Hivoss.Frequence, Enu_TypeVariable.Frequence, 3, 2, Enu_AfficheUnite.OuiNdC, True) _
-                      & "\T" & CStr(myTab(1)) & "m\-mod\= = " & GetStringInUnitP(mybeam.Hivoss.MassModale, Enu_TypeVariable.Masse, 3, 2, Enu_AfficheUnite.OuiNdC, True) _
-                      & "\T" & CStr(myTab(2)) & "d = " & GetStringInUnitP(mybeam.Hivoss.Amortissement * 100, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True) & "%")
+                      & "\T" & CStr(myTab(0)) & "f = " & GetStringInUnitN(mybeam.Hivoss.Frequence, Enu_TypeVariable.Frequence, 3, 2, Enu_AfficheUnite.OuiNdC, True) _
+                      & "\T" & CStr(myTab(1)) & "m\-mod\= = " & GetStringInUnitN(mybeam.Hivoss.MassModale, Enu_TypeVariable.Masse, 3, 2, Enu_AfficheUnite.OuiNdC, True) _
+                      & "\T" & CStr(myTab(2)) & "d = " & GetStringInUnitN(mybeam.Hivoss.Amortissement * 100, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True) & "%")
             AddLigneNDC("\T" & CStr(myTab(0)) & BlocG("CZONE") & ": " & mybeam.Hivoss.HCategorie & "\T" & CStr(myTab(1)) & "=> " & Chaine)
         End If
 
@@ -1119,7 +1119,7 @@ Module Mod_NoteCalcul
                     End Select
 
                     AddLigneNDC(TABW2 & BlocFEU("PROTECTIONTYPE") & TABAFF & Chaine)
-                    AddLigneNDC(TABW2 & BlocFEU("PRO_THICK") & TABAFF & "d\-p\= = " & GetStringInUnitP(myBeam.ParamFeu.EpProtection, Enu_TypeVariable.Dimension, 4, 2, Enu_AfficheUnite.Non, True) & " °C")
+                    AddLigneNDC(TABW2 & BlocFEU("PRO_THICK") & TABAFF & "d\-p\= = " & GetStringInUnitN(myBeam.ParamFeu.EpProtection, Enu_TypeVariable.Dimension, 4, 2, Enu_AfficheUnite.Non, True) & " °C")
 
                     AddLigneNDC(TABW2 & BlocFEU("PRO_PROP") & ":")
 
@@ -1129,17 +1129,17 @@ Module Mod_NoteCalcul
                     LambdaP = myBeam.ParamFeu.Protection_Conductivite
                     RhoP = myBeam.ParamFeu.Protection_MasseVol
 
-                    AddLigneNDC(TABW2 & " - " & BlocFEU("PRO_DENS") & ":" & TABAFF & "\Sr\s\-p\= = " & GetStringInUnitP(RhoP, Enu_TypeVariable.MasseVolumique, 4, 2, Enu_AfficheUnite.OuiNdC, True))
-                    AddLigneNDC(TABW2 & " - " & BlocFEU("PRO_THCOND") & ":" & TABAFF & "\Sl\s\-p\= = " & GetStringInUnitP(LambdaP, Enu_TypeVariable.SansType, 4, 2, Enu_AfficheUnite.Non, True) & " W/mK")
-                    AddLigneNDC(TABW2 & " - " & BlocFEU("PRO_SHEAT") & ":" & TABAFF & "c\-p\= = " & GetStringInUnitP(cP, Enu_TypeVariable.SansType, 4, 2, Enu_AfficheUnite.Non, True) & " J/kgK")
+                    AddLigneNDC(TABW2 & " - " & BlocFEU("PRO_DENS") & ":" & TABAFF & "\Sr\s\-p\= = " & GetStringInUnitN(RhoP, Enu_TypeVariable.MasseVolumique, 4, 2, Enu_AfficheUnite.OuiNdC, True))
+                    AddLigneNDC(TABW2 & " - " & BlocFEU("PRO_THCOND") & ":" & TABAFF & "\Sl\s\-p\= = " & GetStringInUnitN(LambdaP, Enu_TypeVariable.SansType, 4, 2, Enu_AfficheUnite.Non, True) & " W/mK")
+                    AddLigneNDC(TABW2 & " - " & BlocFEU("PRO_SHEAT") & ":" & TABAFF & "c\-p\= = " & GetStringInUnitN(cP, Enu_TypeVariable.SansType, 4, 2, Enu_AfficheUnite.Non, True) & " J/kgK")
 
             End Select
 
-            AddLigneNDC(TABW2 & BlocFEU("CONVECTIONALPHAC") & TABAFF & "\Sa\s\-c\= = " & GetStringInUnitP(myBeam.ParamFeu.ConvectionCoef, Enu_TypeVariable.SansType, 4, 2, Enu_AfficheUnite.Non, True) & " W/m\+2\=K")
-            AddLigneNDC(TABW2 & BlocFEU("BOLTZMANNC") & TABAFF & "\Ss\s = " & GetStringInUnitP(cls_OptionsFeu.BOLTZMANN * 10 ^ 8, Enu_TypeVariable.SansType, 4, 2, Enu_AfficheUnite.Non, True) & " x 10\+8\= W/m\+2\=K\+4\=")
-            AddLigneNDC(TABW2 & BlocFEU("FIREEMISSIVITY") & TABAFF & "\Se\s\-f\= = " & GetStringInUnitP(myBeam.ParamFeu.EmissivityFire, Enu_TypeVariable.SansType, 4, 2, Enu_AfficheUnite.Non, True))
-            AddLigneNDC(TABW2 & BlocFEU("FORMFACTOR") & TABAFF & "\Sf\s = " & GetStringInUnitP(myBeam.ParamFeu.PhiViewFactor, Enu_TypeVariable.SansType, 4, 2, Enu_AfficheUnite.Non, True))
-            AddLigneNDC(TABW2 & BlocFEU("REFTEMP") & TABAFF & "\Sq\s\-0\= = " & GetStringInUnitP(myBeam.ParamFeu.TempRef, Enu_TypeVariable.Temperature, 4, 2, Enu_AfficheUnite.OuiNdC, True))
+            AddLigneNDC(TABW2 & BlocFEU("CONVECTIONALPHAC") & TABAFF & "\Sa\s\-c\= = " & GetStringInUnitN(myBeam.ParamFeu.ConvectionCoef, Enu_TypeVariable.SansType, 4, 2, Enu_AfficheUnite.Non, True) & " W/m\+2\=K")
+            AddLigneNDC(TABW2 & BlocFEU("BOLTZMANNC") & TABAFF & "\Ss\s = " & GetStringInUnitN(cls_OptionsFeu.BOLTZMANN * 10 ^ 8, Enu_TypeVariable.SansType, 4, 2, Enu_AfficheUnite.Non, True) & " x 10\+8\= W/m\+2\=K\+4\=")
+            AddLigneNDC(TABW2 & BlocFEU("FIREEMISSIVITY") & TABAFF & "\Se\s\-f\= = " & GetStringInUnitN(myBeam.ParamFeu.EmissivityFire, Enu_TypeVariable.SansType, 4, 2, Enu_AfficheUnite.Non, True))
+            AddLigneNDC(TABW2 & BlocFEU("FORMFACTOR") & TABAFF & "\Sf\s = " & GetStringInUnitN(myBeam.ParamFeu.PhiViewFactor, Enu_TypeVariable.SansType, 4, 2, Enu_AfficheUnite.Non, True))
+            AddLigneNDC(TABW2 & BlocFEU("REFTEMP") & TABAFF & "\Sq\s\-0\= = " & GetStringInUnitN(myBeam.ParamFeu.TempRef, Enu_TypeVariable.Temperature, 4, 2, Enu_AfficheUnite.OuiNdC, True))
 
             If myBeam.lMixte Then
                 If myBeam.ParamFeu.lDalleFEM Then
@@ -1508,29 +1508,29 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocG("DIM_PROFILE"))
 
-        AddLigneNDC(TABW2 & BlocG("HS_PROFILE") & TABAFF & "h\-s\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.ha, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("HS_PROFILE") & TABAFF & "h\-s\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.ha, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
         If lLamine Then
-            AddLigneNDC(TABW2 & BlocG("BF_PROFILE") & TABAFF & "b\-f\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
-            AddLigneNDC(TABW2 & BlocG("TF_PROFILE") & TABAFF & "t\-f\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+            AddLigneNDC(TABW2 & BlocG("BF_PROFILE") & TABAFF & "b\-f\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+            AddLigneNDC(TABW2 & BlocG("TF_PROFILE") & TABAFF & "t\-f\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
         Else
             If lPRSSym Then
-                AddLigneNDC(TABW2 & BlocG("BF_PROFILE") & TABAFF & "b\-fs\==b\-fi\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 0, OUI, True))
-                AddLigneNDC(TABW2 & BlocG("TF_PROFILE") & TABAFF & "t\-fs\==t\-fi\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, OUI, True))
+                AddLigneNDC(TABW2 & BlocG("BF_PROFILE") & TABAFF & "b\-fs\==b\-fi\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 0, OUI, True))
+                AddLigneNDC(TABW2 & BlocG("TF_PROFILE") & TABAFF & "t\-fs\==t\-fi\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, OUI, True))
             Else
-                AddLigneNDC(TABW2 & BlocG("BFS_PROFILE") & TABAFF & "b\-fs\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
-                AddLigneNDC(TABW2 & BlocG("TFS_PROFILE") & TABAFF & "t\-fs\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
-                AddLigneNDC(TABW2 & BlocG("BFI_PROFILE") & TABAFF & "b\-fi\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Bfi, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
-                AddLigneNDC(TABW2 & BlocG("TFI_PROFILE") & TABAFF & "t\-fi\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+                AddLigneNDC(TABW2 & BlocG("BFS_PROFILE") & TABAFF & "b\-fs\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+                AddLigneNDC(TABW2 & BlocG("TFS_PROFILE") & TABAFF & "t\-fs\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+                AddLigneNDC(TABW2 & BlocG("BFI_PROFILE") & TABAFF & "b\-fi\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Bfi, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+                AddLigneNDC(TABW2 & BlocG("TFI_PROFILE") & TABAFF & "t\-fi\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
             End If
         End If
-        AddLigneNDC(TABW2 & BlocG("HW_PROFILE") & TABAFF & "h\-w\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("HW_PROFILE") & TABAFF & "h\-w\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
         '== On affiche dw que pour les profilés laminés
         If lLamine Then _
-        AddLigneNDC(TABW2 & BlocG("DW_PROFILE") & TABAFF & "d\-w\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.HauteurAmeDw, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
-        AddLigneNDC(TABW2 & BlocG("TW_PROFILE") & TABAFF & "t\-w\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Tw, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("DW_PROFILE") & TABAFF & "d\-w\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.HauteurAmeDw, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("TW_PROFILE") & TABAFF & "t\-w\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Tw, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
 
         If lLamine Then
-            AddLigneNDC(TABW2 & BlocG("RC_PROFILE") & TABAFF & "r" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Rcs, Enu_TypeVariable.Dimension, 2, -1, OUI, True))
+            AddLigneNDC(TABW2 & BlocG("RC_PROFILE") & TABAFF & "r" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Rcs, Enu_TypeVariable.Dimension, 2, -1, OUI, True))
         Else
             '== On n'affiche pas la gorge de soudure (non définie par l'utilisateur)
             'AddLigneNDC(TABW2 & BlocG("AWELD_PROFILE") & TABAFF & "a" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.aW, Enu_TypeVariable.Dimension, 2, -1, True))
@@ -1552,34 +1552,34 @@ Module Mod_NoteCalcul
         AddTitreNdC(3, BlocG("CHAR_PROFILE"))
         MyBeam.Section.ProfilA.InitialiseProprietes()
 
-        AddLigneNDC(TABW2 & BlocG("A_PROFILE") & TABAFF & "A" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Aire, Enu_TypeVariable.AireCM2, 4, 2, OUI, True))
-        AddLigneNDC(TABW2 & BlocG("AV_PROFILE") & TABAFF & "A\-v\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.AireAv(MyBeam.Param.EtaW), Enu_TypeVariable.AireCM2, 4, 2, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("A_PROFILE") & TABAFF & "A" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Aire, Enu_TypeVariable.AireCM2, 4, 2, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("AV_PROFILE") & TABAFF & "A\-v\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.AireAv(MyBeam.Param.EtaW), Enu_TypeVariable.AireCM2, 4, 2, OUI, True))
 
-        AddLigneNDC(TABW2 & BlocG("IY_PROFILE") & TABAFF & "I\-y\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.InertieY, Enu_TypeVariable.Inertie, 4, 0, Enu_AfficheUnite.OuiNdC))
-        AddLigneNDC(TABW2 & BlocG("ZCENTROID") & TABAFF & "z\-G\=" & TABEGAL & GetStringInUnitP(-MyBeam.Section.ProfilA.zG, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("IY_PROFILE") & TABAFF & "I\-y\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.InertieY, Enu_TypeVariable.Inertie, 4, 0, Enu_AfficheUnite.OuiNdC, False))
+        AddLigneNDC(TABW2 & BlocG("ZCENTROID") & TABAFF & "z\-G\=" & TABEGAL & GetStringInUnitN(-MyBeam.Section.ProfilA.zG, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
         If Not lSymetric Then
-            AddLigneNDC(TABW2 & BlocG("ZSHEAR") & TABAFF & "z\-S\=" & TABEGAL & GetStringInUnitP(-MyBeam.Section.ProfilA.zS, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
+            AddLigneNDC(TABW2 & BlocG("ZSHEAR") & TABAFF & "z\-S\=" & TABEGAL & GetStringInUnitN(-MyBeam.Section.ProfilA.zS, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
         End If
-        AddLigneNDC(TABW2 & BlocG("RGYRATION") & TABAFF & "i\-y\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.GirationY, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("RGYRATION") & TABAFF & "i\-y\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.GirationY, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
 
-        AddLigneNDC(TABW2 & BlocG("IZ_PROFILE") & TABAFF & "I\-z\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.InertieZ, Enu_TypeVariable.Inertie, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("WEL_Y_PROFILE") & TABAFF & "W\-el,y\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.ModuleWelY, Enu_TypeVariable.WModule, 4, 1, OUI))
+        AddLigneNDC(TABW2 & BlocG("IZ_PROFILE") & TABAFF & "I\-z\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.InertieZ, Enu_TypeVariable.Inertie, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("WEL_Y_PROFILE") & TABAFF & "W\-el,y\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.ModuleWelY, Enu_TypeVariable.WModule, 4, 1, OUI, False))
         'If lLamine Then
-        AddLigneNDC(TABW2 & BlocG("WEL_Z_PROFILE") & TABAFF & "W\-el,z\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.ModuleWelZ, Enu_TypeVariable.WModule, 4, 1, OUI))
+        AddLigneNDC(TABW2 & BlocG("WEL_Z_PROFILE") & TABAFF & "W\-el,z\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.ModuleWelZ, Enu_TypeVariable.WModule, 4, 1, OUI, False))
         'End If
         If lLamine Then
-            AddLigneNDC(TABW2 & BlocG("WPL_Y_PROFILE") & TABAFF & "W\-pl,y\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.ModuleWplY, Enu_TypeVariable.WModule, 4, 1, OUI))
-            AddLigneNDC(TABW2 & BlocG("WPL_Z_PROFILE") & TABAFF & "W\-pl,z\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.ModuleWplz, Enu_TypeVariable.WModule, 4, 1, OUI))
+            AddLigneNDC(TABW2 & BlocG("WPL_Y_PROFILE") & TABAFF & "W\-pl,y\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.ModuleWplY, Enu_TypeVariable.WModule, 4, 1, OUI, False))
+            AddLigneNDC(TABW2 & BlocG("WPL_Z_PROFILE") & TABAFF & "W\-pl,z\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.ModuleWplz, Enu_TypeVariable.WModule, 4, 1, OUI, False))
         End If
-        AddLigneNDC(TABW2 & BlocG("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.InertieT, Enu_TypeVariable.Inertie, 4, 2, OUI))
-        AddLigneNDC(TABW2 & BlocG("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, OUI))
+        AddLigneNDC(TABW2 & BlocG("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.InertieT, Enu_TypeVariable.Inertie, 4, 2, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, OUI, False))
         SauteLigne()
-        AddLigneNDC(TABW2 & BlocG("MASS_LIN_PROFILE") & TABAFF & "m\-lin\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.MassLineiqueProfilA, Enu_TypeVariable.SansType, 4, 1, Enu_AfficheUnite.Non) & " kg/m")
-        AddLigneNDC(TABW2 & BlocG("MASS_PROFILE") & TABAFF & "m" & TABEGAL & GetStringInUnitP(MyBeam.MasseTotalePoutre, Enu_TypeVariable.Masse, 4, 1, OUI))
-        AddLigneNDC(TABW2 & BlocG("TOT_PAINT_SURF") & TABAFF & "S" & TABEGAL & GetStringInUnitP(MyBeam.SurfacePeintureTotalePoutre(True), Enu_TypeVariable.AireLongueurNDC, 4, 3, OUI))
-        AddLigneNDC(TABW2 & BlocG("PAINT_SURF") & TABAFF & "S" & TABEGAL & GetStringInUnitP(MyBeam.SurfacePeintureTotalePoutre(False), Enu_TypeVariable.AireLongueurNDC, 4, 3, OUI))
-        AddLigneNDC(TABW2 & BlocG("TOT_MASSIVENESS") & TABAFF & "M" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Massivete(True), Enu_TypeVariable.Massivete, 4, 1, OUI))
-        AddLigneNDC(TABW2 & BlocG("MASSIVENESS") & TABAFF & "M'" & TABEGAL & GetStringInUnitP(MyBeam.Section.ProfilA.Massivete(False), Enu_TypeVariable.Massivete, 4, 1, OUI))
+        AddLigneNDC(TABW2 & BlocG("MASS_LIN_PROFILE") & TABAFF & "m\-lin\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.MassLineiqueProfilA, Enu_TypeVariable.SansType, 4, 1, NON_U, False) & " kg/m")
+        AddLigneNDC(TABW2 & BlocG("MASS_PROFILE") & TABAFF & "m" & TABEGAL & GetStringInUnitN(MyBeam.MasseTotalePoutre, Enu_TypeVariable.Masse, 4, 1, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("TOT_PAINT_SURF") & TABAFF & "S" & TABEGAL & GetStringInUnitN(MyBeam.SurfacePeintureTotalePoutre(True), Enu_TypeVariable.AireLongueurNDC, 4, 3, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("PAINT_SURF") & TABAFF & "S" & TABEGAL & GetStringInUnitN(MyBeam.SurfacePeintureTotalePoutre(False), Enu_TypeVariable.AireLongueurNDC, 4, 3, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("TOT_MASSIVENESS") & TABAFF & "M" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Massivete(True), Enu_TypeVariable.Massivete, 4, 1, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("MASSIVENESS") & TABAFF & "M'" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.Massivete(False), Enu_TypeVariable.Massivete, 4, 1, OUI, False))
 
         '----------------------------------------------------------------------------------------------------------------------------
         '# Acier du profilé ### -----------------------------------------------------------------------------------------------------
@@ -1596,8 +1596,8 @@ Module Mod_NoteCalcul
         End If
 
         If lLamine Then
-            AddLigneNDC(TABW2 & BlocG("FY_PROFILE") & TABAFF & "f\-y\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.FySup, Enu_TypeVariable.Contrainte, 4, 0, OUI))
-            AddLigneNDC(TABW2 & BlocG("FU_PROFILE") & TABAFF & "f\-u\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.FuSup, Enu_TypeVariable.Contrainte, 4, 0, OUI))
+            AddLigneNDC(TABW2 & BlocG("FY_PROFILE") & TABAFF & "f\-y\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.FySup, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
+            AddLigneNDC(TABW2 & BlocG("FU_PROFILE") & TABAFF & "f\-u\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.FuSup, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
         Else
             SauteLigne()
             EditionTableauFyFuPRS(MyBeam.Section, lSymetric)
@@ -1605,8 +1605,8 @@ Module Mod_NoteCalcul
             'AddLigneNDC(TABW2 & BlocG("FYW_PROFILE") & TABAFF & "f\-y,w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.FyW, Enu_TypeVariable.Contrainte, 4, 0, True))
             'AddLigneNDC(TABW2 & BlocG("FYFI_PROFILE") & TABAFF & "f\-y,fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.FyInf, Enu_TypeVariable.Contrainte, 4, 0, True))
         End If
-        AddLigneNDC(TABW2 & BlocG("E_PROFILE") & TABAFF & "E" & TABEGAL & GetStringInUnitP(MyBeam.Section.Acier.EYoung, Enu_TypeVariable.Contrainte, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("RHO_PROFILE") & TABAFF & "\Sr\s" & TABEGAL & GetStringInUnitP(MyBeam.Section.Acier.Rho, Enu_TypeVariable.MasseVolumique, 4, 0, OUI))
+        AddLigneNDC(TABW2 & BlocG("E_PROFILE") & TABAFF & "E" & TABEGAL & GetStringInUnitN(MyBeam.Section.Acier.EYoung, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("RHO_PROFILE") & TABAFF & "\Sr\s" & TABEGAL & GetStringInUnitN(MyBeam.Section.Acier.Rho, Enu_TypeVariable.MasseVolumique, 4, 0, OUI, False))
 
         Dim zANP, MplRd As Decimal
         Dim zANE, InertieY, MelRd As Decimal
@@ -1618,40 +1618,40 @@ Module Mod_NoteCalcul
         '----------------------------------------------------------------------------------------------------------------------------
 
         AddTitreNdC(3, BlocG("RESISTANCE_PROFILE"))
-        AddLigneNDC(TABW2 & BlocG("TRAC_RES") & TABAFF & "N\-t,Rd\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.ResistanceTractionProfile(MyBeam.Param.Gamma.GammaM0), Enu_TypeVariable.Effort, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("SHEAR_RES") & TABAFF & "V\-pl,Rd\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.VplRd(MyBeam.Param.Gamma.GammaM0, MyBeam.Param.EtaW), Enu_TypeVariable.Effort, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("PLAS_MOM_RES") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnitP(MplRd, Enu_TypeVariable.Moment, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("ZPLASTIC") & TABAFF & "z\-ANP\=" & TABEGAL & GetStringInUnitP(-zANP, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("TRAC_RES") & TABAFF & "N\-t,Rd\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ResistanceTractionProfile(MyBeam.Param.Gamma.GammaM0), Enu_TypeVariable.Effort, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("SHEAR_RES") & TABAFF & "V\-pl,Rd\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.VplRd(MyBeam.Param.Gamma.GammaM0, MyBeam.Param.EtaW), Enu_TypeVariable.Effort, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("PLAS_MOM_RES") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnitN(MplRd, Enu_TypeVariable.Moment, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("ZPLASTIC") & TABAFF & "z\-ANP\=" & TABEGAL & GetStringInUnitN(-zANP, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
 
-        AddLigneNDC(TABW2 & BlocG("ELAS_MOM_RES") & TABAFF & "M\-el,Rd\=" & TABEGAL & GetStringInUnitP(MelRd, Enu_TypeVariable.Moment, 4, 0, OUI))
+        AddLigneNDC(TABW2 & BlocG("ELAS_MOM_RES") & TABAFF & "M\-el,Rd\=" & TABEGAL & GetStringInUnitN(MelRd, Enu_TypeVariable.Moment, 4, 0, OUI, False))
 
         SauteLigne()
-        AddLigneNDC(TABW2 & BlocG("BENDING_CLASS") & TABAFF & GetStringInUnitP(MyBeam.Section.ClasseProfilAcierSeulCompressionPureFlexionPure(False, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, non))
-        AddLigneNDC(TABW2 & BlocG("COMPRESSION_CLASS") & TABAFF & GetStringInUnitP(MyBeam.Section.ClasseProfilAcierSeulCompressionPureFlexionPure(True, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, non))
+        AddLigneNDC(TABW2 & BlocG("BENDING_CLASS") & TABAFF & GetStringInUnitN(MyBeam.Section.ClasseProfilAcierSeulCompressionPureFlexionPure(False, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, NON, False))
+        AddLigneNDC(TABW2 & BlocG("COMPRESSION_CLASS") & TABAFF & GetStringInUnitN(MyBeam.Section.ClasseProfilAcierSeulCompressionPureFlexionPure(True, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, NON, False))
         SauteLigne()
         If Not MyBeam.Section.lSlimFloor Then
             If MyBeam.Section.lEnrobage Then
                 If Not MyBeam.Section.IsVoilementParCisaillement(MyBeam.Param.EtaW) Then
                     AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "d\-w\=/t\-w\= = " _
-                                & GetStringInUnitP((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, NON) & " ≤ 124\Se\s = " _
-                                & GetStringInUnitP(124 * MyBeam.Section.Epsilon_W, Enu_TypeVariable.SansType, 3, 1, NON))
+                                & GetStringInUnitN((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, NON, False) & " ≤ 124\Se\s = " _
+                                & GetStringInUnitN(124 * MyBeam.Section.Epsilon_W, Enu_TypeVariable.SansType, 3, 1, NON, False))
                     AddLigneNDC(TABW2 & TABVAR5 & BlocG("NO_NEED_CHECK_WB"))
                 Else
                     AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "d\-w\=/t\-w\= = " _
-                                & GetStringInUnitP((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, NON) & " > 124\Se\s = " _
-                                & GetStringInUnitP(124 * MyBeam.Section.Epsilon_W, Enu_TypeVariable.SansType, 3, 1, NON))
+                                & GetStringInUnitN((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, NON, False) & " > 124\Se\s = " _
+                                & GetStringInUnitN(124 * MyBeam.Section.Epsilon_W, Enu_TypeVariable.SansType, 3, 1, NON, False))
                     AddLigneNDC(TABW2 & TABVAR5 & BlocG("NEED_CHECK_WB"))
                 End If
             Else
                 If Not MyBeam.Section.IsVoilementParCisaillement(MyBeam.Param.EtaW) Then
                     AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " _
-                                & GetStringInUnitP((MyBeam.Section.ProfilA.HauteurAmeHw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, NON) & " ≤ 72\Se\s/\Sh\s = " _
-                                & GetStringInUnitP(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, NON))
+                                & GetStringInUnitN((MyBeam.Section.ProfilA.HauteurAmeHw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, NON, False) & " ≤ 72\Se\s/\Sh\s = " _
+                                & GetStringInUnitN(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, NON, False))
                     AddLigneNDC(TABW2 & TABVAR5 & BlocG("NO_NEED_CHECK_WB"))
                 Else
                     AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & TABEGAL _
-                                & GetStringInUnitP((MyBeam.Section.ProfilA.HauteurAmeHw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, NON) & " > 72\Se\s/\Sh\s = " _
-                                & GetStringInUnitP(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, NON))
+                                & GetStringInUnitN((MyBeam.Section.ProfilA.HauteurAmeHw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, NON, False) & " > 72\Se\s/\Sh\s = " _
+                                & GetStringInUnitN(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, NON, False))
                     AddLigneNDC(TABW2 & TABVAR5 & BlocG("NEED_CHECK_WB"))
                 End If
             End If
@@ -1659,7 +1659,7 @@ Module Mod_NoteCalcul
             Dim lTwoAdjacentCantilevers As Boolean
             lTwoAdjacentCantilevers = MyBeam.lTraveeConsoleGauche And MyBeam.lTraveeConsoleDroite
             If MyBeam.Section.IsVoilementParCisaillement(MyBeam.Param.EtaW) Then _
-                AddLigneNDC(TABW2 & BlocG("SHEAR_BUC") & TABAFF & "V\-b,Rd\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.VbRd(MyBeam.Param.Gamma.GammaM1, MyBeam.Param.EtaW, lTwoAdjacentCantilevers), Enu_TypeVariable.Effort, 4, 0, OUI))
+                AddLigneNDC(TABW2 & BlocG("SHEAR_BUC") & TABAFF & "V\-b,Rd\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.VbRd(MyBeam.Param.Gamma.GammaM1, MyBeam.Param.EtaW, lTwoAdjacentCantilevers), Enu_TypeVariable.Effort, 4, 0, OUI, False))
 
         End If
 
@@ -1696,8 +1696,8 @@ Module Mod_NoteCalcul
             Label = BlocG("UFLANGE")
         End If
         AddCellule(LargCOL(0), Bordures.Tous, PositionTexteInCell.Centre, Label)
-        AddCellule(LargCOL(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(mySection.FySup, Enu_TypeVariable.ContrainteMPa, 4, 0, NON))
-        AddCellule(LargCOL(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(mySection.FuSup, Enu_TypeVariable.ContrainteMPa, 4, 0, NON))
+        AddCellule(LargCOL(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(mySection.FySup, Enu_TypeVariable.ContrainteMPa, 4, 0, NON, False))
+        AddCellule(LargCOL(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(mySection.FuSup, Enu_TypeVariable.ContrainteMPa, 4, 0, NON, False))
 
         '# Âme
 
@@ -1706,8 +1706,8 @@ Module Mod_NoteCalcul
         Label = BlocG("WEB")
 
         AddCellule(LargCOL(0), Bordures.Tous, PositionTexteInCell.Centre, Label)
-        AddCellule(LargCOL(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(mySection.FyW, Enu_TypeVariable.ContrainteMPa, 4, 0, NON))
-        AddCellule(LargCOL(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(mySection.FuW, Enu_TypeVariable.ContrainteMPa, 4, 0, NON))
+        AddCellule(LargCOL(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(mySection.FyW, Enu_TypeVariable.ContrainteMPa, 4, 0, NON, False))
+        AddCellule(LargCOL(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(mySection.FuW, Enu_TypeVariable.ContrainteMPa, 4, 0, NON, False))
 
         '# Semelle inf
 
@@ -1717,8 +1717,8 @@ Module Mod_NoteCalcul
             Label = BlocG("LFLANGE")
 
             AddCellule(LargCOL(0), Bordures.Tous, PositionTexteInCell.Centre, Label)
-            AddCellule(LargCOL(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(mySection.FyInf, Enu_TypeVariable.ContrainteMPa, 4, 0, NON))
-            AddCellule(LargCOL(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(mySection.FuInf, Enu_TypeVariable.ContrainteMPa, 4, 0, NON))
+            AddCellule(LargCOL(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(mySection.FyInf, Enu_TypeVariable.ContrainteMPa, 4, 0, NON, False))
+            AddCellule(LargCOL(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(mySection.FuInf, Enu_TypeVariable.ContrainteMPa, 4, 0, NON, False))
 
         End If
 
@@ -1763,9 +1763,9 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocG("GEOMETRY_PART_ENC"))
 
-        AddLigneNDC(TABW2 & BlocG("RATIO_BC_PART_ENC") & TABAFF & "b\-c\=/b\-f\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.Enrobage.Ratio_bc, Enu_TypeVariable.SansType, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("BC_PART_ENC") & TABAFF & "b\-c\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.LargeurEnrobagePartielBc, Enu_TypeVariable.Dimension, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.NotionalSizeEnrobage, Enu_TypeVariable.Dimension, 4, 0, OUI))
+        AddLigneNDC(TABW2 & BlocG("RATIO_BC_PART_ENC") & TABAFF & "b\-c\=/b\-f\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.Enrobage.Ratio_bc, Enu_TypeVariable.SansType, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("BC_PART_ENC") & TABAFF & "b\-c\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.LargeurEnrobagePartielBc, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.NotionalSizeEnrobage, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
 
 
         '--> Béton
@@ -1780,10 +1780,10 @@ Module Mod_NoteCalcul
         End If
 
         AddLigneNDC(TABW2 & BlocG("CLASS_CONCRETE") & TABAFF & MyBeam.Section.Enrobage.Beton.Classe)
-        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.Enrobage.Beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.Enrobage.Beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.Enrobage.Beton.Fctm, Enu_TypeVariable.Contrainte, 4, 2, OUI))
-        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.Enrobage.Beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, OUI))
+        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.Enrobage.Beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.Enrobage.Beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.Enrobage.Beton.Fctm, Enu_TypeVariable.Contrainte, 4, 2, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.Enrobage.Beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
 
         '--> Armatures
 
@@ -1819,31 +1819,31 @@ Module Mod_NoteCalcul
                 If .NbExt = 0 And .NbMil = 0 And .NbInt = 0 Then
                     AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
                 Else
-                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(.zPosRatio, Enu_TypeVariable.Dimension, 4, 0, OUI))
+                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.zPosRatio, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
                 End If
 
                 If .NbExt = 0 Then
                     AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("NONE"))
                 Else
-                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(.NbExt, Enu_TypeVariable.SansType, 4, 0, NON) & " x " & GetStringInUnit(.PhiExt, Enu_TypeVariable.Dimension, 4, 0, OUI))
+                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.NbExt, Enu_TypeVariable.SansType, 4, 0, NON, False) & " x " & GetStringInUnitN(.PhiExt, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
                 End If
 
                 If .NbMil = 0 Then
                     AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("NONE"))
                 Else
-                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(.NbMil, Enu_TypeVariable.SansType, 4, 0, NON) & " x " & GetStringInUnit(.PhiMil, Enu_TypeVariable.Dimension, 4, 0, OUI))
+                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.NbMil, Enu_TypeVariable.SansType, 4, 0, NON, False) & " x " & GetStringInUnitN(.PhiMil, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
                 End If
 
                 If .NbInt = 0 Then
                     AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("NONE"))
                 Else
-                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(.NbInt, Enu_TypeVariable.SansType, 4, 0, NON) & " x " & GetStringInUnit(.PhiInt, Enu_TypeVariable.Dimension, 4, 0, OUI))
+                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.NbInt, Enu_TypeVariable.SansType, 4, 0, NON, False) & " x " & GetStringInUnitN(.PhiInt, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
                 End If
 
                 If .NbExt = 0 And .NbMil = 0 And .NbInt = 0 Then
                     AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
                 Else
-                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(2 * .Aire, Enu_TypeVariable.AireCM2, 4, 2, OUI))
+                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(2 * .Aire, Enu_TypeVariable.AireCM2, 4, 2, OUI, False))
                 End If
             End With
         Next
@@ -1857,8 +1857,8 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocG("MATERIAL_LONGI_REINF"))
         AddLigneNDC(TABW2 & BlocG("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Section.Enrobage.AcierArmatures.Classe)
-        AddLigneNDC(TABW2 & BlocG("FYS_REINFORCEMENT") & TABAFF & GetStringInUnitP(MyBeam.Section.Enrobage.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("ES_REINFORCEMENT") & TABAFF & GetStringInUnitP(MyBeam.Section.Enrobage.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, OUI))
+        AddLigneNDC(TABW2 & BlocG("FYS_REINFORCEMENT") & TABAFF & GetStringInUnitN(MyBeam.Section.Enrobage.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("ES_REINFORCEMENT") & TABAFF & GetStringInUnitN(MyBeam.Section.Enrobage.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
 
 
 
@@ -1874,9 +1874,9 @@ Module Mod_NoteCalcul
             Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant
                 AddLigneNDC(TABW2 & BlocG("STIRRUP_ARRANGEMENT") & TABAFF & BlocG("THROUGH_STIRRUPS"))
         End Select
-        AddLigneNDC(TABW2 & BlocG("DSI_LAYERS") & TABAFF & GetStringInUnitP(MyBeam.Section.Enrobage.Etriers_Phi, Enu_TypeVariable.Dimension, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("HOR_COVERAGE") & TABAFF & "u\-y\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.Enrobage.Etriers_EnrobageY, Enu_TypeVariable.Dimension, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("VER_COVERAGE") & TABAFF & "u\-z\=" & TABEGAL & GetStringInUnitP(MyBeam.Section.Enrobage.Etriers_EnrobageZ, Enu_TypeVariable.Dimension, 4, 0, OUI))
+        AddLigneNDC(TABW2 & BlocG("DSI_LAYERS") & TABAFF & GetStringInUnitN(MyBeam.Section.Enrobage.Etriers_Phi, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("HOR_COVERAGE") & TABAFF & "u\-y\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.Enrobage.Etriers_EnrobageY, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("VER_COVERAGE") & TABAFF & "u\-z\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.Enrobage.Etriers_EnrobageZ, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
 
         AddLigneNDC("\IMG PARTIAL_ENCASEMENT 15 70 25 NoCadre")
         nbLignes += 15
@@ -1909,20 +1909,20 @@ Module Mod_NoteCalcul
         Select Case MyBeam.Dalle.type
             Case cls_Dalle.Enum_TypeDalle.Pleine
                 AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("SOLID_SLAB"))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 0, OUI))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_HAUNCH") & TABAFF & "t\-h\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.Ep_th, Enu_TypeVariable.Dimension, 4, 0, OUI))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_HAUNCH") & TABAFF & "t\-h\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.Ep_th, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
             Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("SOLID_SLAB_PRECAST"))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 0, OUI))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_PRECAST") & TABAFF & "t\-pc\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.preDalle_ep, Enu_TypeVariable.Dimension, 4, 0, OUI))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_JOINT") & TABAFF & "t\-j\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.preDalle_tjoint, Enu_TypeVariable.Dimension, 4, 0, OUI))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_PRECAST") & TABAFF & "t\-pc\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.preDalle_ep, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_JOINT") & TABAFF & "t\-j\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.preDalle_tjoint, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
             Case cls_Dalle.Enum_TypeDalle.Mixte
                 AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("COMPOSITE_SLAB"))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 0, OUI))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_ABOVE_DECK") & TABAFF & "t\-c\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.EpaisseurActive, Enu_TypeVariable.Dimension, 4, 0, OUI))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_ABOVE_DECK") & TABAFF & "t\-c\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.EpaisseurActive, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
         End Select
 
-        If lMixte Then AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.NotionalSizeH0(MyBeam), Enu_TypeVariable.Dimension, 4, 0, OUI))
+        If lMixte Then AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.NotionalSizeH0(MyBeam), Enu_TypeVariable.Dimension, 4, 0, OUI, False))
 
         If lMixte Then
             If (Not MyBeam.lTraveeConsoleGauche) Then
@@ -1955,12 +1955,12 @@ Module Mod_NoteCalcul
         End If
 
         AddLigneNDC(TABW2 & BlocG("CLASS_CONCRETE") & TABAFF & MyBeam.Dalle.beton.Classe)
-        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.beton.Fcm, Enu_TypeVariable.Contrainte, 4, 1, OUI))
-        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.beton.Fctm, Enu_TypeVariable.Contrainte, 4, 2, OUI))
-        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, OUI))
+        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.beton.Fcm, Enu_TypeVariable.Contrainte, 4, 1, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.beton.Fctm, Enu_TypeVariable.Contrainte, 4, 2, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
 
-        AddLigneNDC(TABW2 & BlocG("RHO_CONCRETE") & TABAFF & "\Sr\s\-c\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.beton.RhoC, Enu_TypeVariable.MasseVolumique, 4, 0, OUI))
+        AddLigneNDC(TABW2 & BlocG("RHO_CONCRETE") & TABAFF & "\Sr\s\-c\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.beton.RhoC, Enu_TypeVariable.MasseVolumique, 4, 0, OUI, False))
 
 
         '=== Armatures longitudinales ======================================================================
@@ -2011,13 +2011,13 @@ Module Mod_NoteCalcul
 
         mBeton = myBeam.Dalle.Aire(dC, myBeam.Section.ProfilA.Bfs) * myBeam.Dalle.beton.RhoC
 
-        AddLigneNDC(TABW2 & BlocG("M_CONCRETE") & TABAFF & "m\-c\=" & TABEGAL & GetStringInUnitP(mBeton, Enu_TypeVariable.SansType, 4, 3, NON, True) & " kg/m")
+        AddLigneNDC(TABW2 & BlocG("M_CONCRETE") & TABAFF & "m\-c\=" & TABEGAL & GetStringInUnitN(mBeton, Enu_TypeVariable.SansType, 4, 3, NON, True) & " kg/m")
 
         '# bac
 
         If myBeam.Dalle.lMixte Then
             mBac = dC * myBeam.Dalle.Bac.msurf
-            AddLigneNDC(TABW2 & BlocG("M_SHEET") & TABAFF & "m\-p\=" & TABEGAL & GetStringInUnitP(mBac, Enu_TypeVariable.SansType, 4, 3, NON, True) & " kg/m")
+            AddLigneNDC(TABW2 & BlocG("M_SHEET") & TABAFF & "m\-p\=" & TABEGAL & GetStringInUnitN(mBac, Enu_TypeVariable.SansType, 4, 3, NON, True) & " kg/m")
         End If
 
         '# connecteurs
@@ -2030,7 +2030,7 @@ Module Mod_NoteCalcul
 
         qSlab = (mBeton + mBac) * GraviteG
         Chaine = BlocG("SLAB")
-        AddLigneNDC(TABW2 & BlocG("Q_SLAB") & TABAFF & "q\-" & Chaine & "\=" & TABEGAL & GetStringInUnitP(qSlab, Enu_TypeVariable.ChargeSurfacique, 4, 3, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("Q_SLAB") & TABAFF & "q\-" & Chaine & "\=" & TABEGAL & GetStringInUnitN(qSlab, Enu_TypeVariable.ChargeSurfacique, 4, 3, OUI, True))
 
     End Sub
 
@@ -2080,8 +2080,8 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocG("MATERIAL_LONGI_REINF"))
         AddLigneNDC(TABW2 & BlocG("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Dalle.AcierArmatures.Classe)
-        AddLigneNDC(TABW2 & BlocG("FYS_REINFORCEMENT") & TABAFF & "f\-sk\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, OUI))
-        AddLigneNDC(TABW2 & BlocG("ES_REINFORCEMENT") & TABAFF & "E\-s\=" & TABEGAL & GetStringInUnitP(MyBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, OUI))
+        AddLigneNDC(TABW2 & BlocG("FYS_REINFORCEMENT") & TABAFF & "f\-sk\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
+        AddLigneNDC(TABW2 & BlocG("ES_REINFORCEMENT") & TABAFF & "E\-s\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
 
         'SauteLigne()
         If nbLignes + 30 > MAXLIGNEPPAG Then SautePage()
@@ -2122,22 +2122,22 @@ Module Mod_NoteCalcul
 
         With MyBeam.Dalle.Bac
 
-            AddLigneNDC(TABW2 & BlocG("TP_PSS") & TABAFF & "t\-p\=" & TABEGAL & GetStringInUnitP(.Tp, Enu_TypeVariable.Dimension, 4, 2, OUI))
-            AddLigneNDC(TABW2 & BlocG("EP_PSS") & TABAFF & "e\-p\=" & TABEGAL & GetStringInUnitP(.Ep, Enu_TypeVariable.Dimension, 4, 0, OUI))
+            AddLigneNDC(TABW2 & BlocG("TP_PSS") & TABAFF & "t\-p\=" & TABEGAL & GetStringInUnitN(.Tp, Enu_TypeVariable.Dimension, 4, 2, OUI, False))
+            AddLigneNDC(TABW2 & BlocG("EP_PSS") & TABAFF & "e\-p\=" & TABEGAL & GetStringInUnitN(.Ep, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
 
             If .HasRaidisseurSup Then
                 'AddLigneNDC(TABW2 & BlocG("HP_PSS") & TABAFF & "h\-p\= =" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\=" & TABEGAL & GetStringInUnitP(.Hp, Enu_TypeVariable.Dimension, 4, 0, OUI))
-                AddLigneNDC(TABW2 & BlocG("HPG_PSS") & TABAFF & "h\-pg\=" & TABEGAL & GetStringInUnitP(.Hauteur_hpg, Enu_TypeVariable.Dimension, 4, 0, OUI))
+                AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\=" & TABEGAL & GetStringInUnitN(.Hp, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+                AddLigneNDC(TABW2 & BlocG("HPG_PSS") & TABAFF & "h\-pg\=" & TABEGAL & GetStringInUnitN(.Hauteur_hpg, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
             Else
-                AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\=" & TABEGAL & GetStringInUnitP(.Hp, Enu_TypeVariable.Dimension, 4, 0, OUI))
+                AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\=" & TABEGAL & GetStringInUnitN(.Hp, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
             End If
 
-            AddLigneNDC(TABW2 & BlocG("BB_PSS") & TABAFF & "b\-b\=" & TABEGAL & GetStringInUnitP(.Bb, Enu_TypeVariable.Dimension, 4, 0, OUI))
-            AddLigneNDC(TABW2 & BlocG("BT_PSS") & TABAFF & "b\-t\=" & TABEGAL & GetStringInUnitP(.Bt, Enu_TypeVariable.Dimension, 4, 0, OUI))
-            AddLigneNDC(TABW2 & BlocG("MUP_PSS") & TABAFF & "\Sm\s\-p\=" & TABEGAL & GetStringInUnitP(.msurf, Enu_TypeVariable.MasseSurfacique, 4, 2, OUI))
-            AddLigneNDC(TABW2 & BlocG("FP_PSS") & TABAFF & "f\-p\=" & TABEGAL & GetStringInUnitP(.fyp, Enu_TypeVariable.Contrainte, 4, 0, OUI))
-            AddLigneNDC(TABW2 & BlocG("IPU_PSS") & TABAFF & "I\-pu\=" & TABEGAL & GetStringInUnitP(.Ieff, Enu_TypeVariable.InertieCM4, 4, 2, OUI) & "/m")
+            AddLigneNDC(TABW2 & BlocG("BB_PSS") & TABAFF & "b\-b\=" & TABEGAL & GetStringInUnitN(.Bb, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+            AddLigneNDC(TABW2 & BlocG("BT_PSS") & TABAFF & "b\-t\=" & TABEGAL & GetStringInUnitN(.Bt, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+            AddLigneNDC(TABW2 & BlocG("MUP_PSS") & TABAFF & "\Sm\s\-p\=" & TABEGAL & GetStringInUnitN(.msurf, Enu_TypeVariable.MasseSurfacique, 4, 2, OUI, False))
+            AddLigneNDC(TABW2 & BlocG("FP_PSS") & TABAFF & "f\-p\=" & TABEGAL & GetStringInUnitN(.fyp, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
+            AddLigneNDC(TABW2 & BlocG("IPU_PSS") & TABAFF & "I\-pu\=" & TABEGAL & GetStringInUnitN(.Ieff, Enu_TypeVariable.InertieCM4, 4, 2, OUI, False) & "/m")
 
             'If .Orientation = cls_Bac.Enum_Orientation.Parallele Then
             '    If .AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe Then
@@ -2221,10 +2221,10 @@ Module Mod_NoteCalcul
 
             With MyBeam.Dalle.Goujons
                 'AddLigneNDC(TABW2 & BlocG("NAME_CONNECTORS") & TABAFF & .nom)
-                AddLigneNDC(TABW2 & BlocG("HSC_CONNECTORS") & TABAFF & "h\-sc\=" & TABEGAL & GetStringInUnitP(.hsc, Enu_TypeVariable.Dimension, 4, 0, oui))
-                AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d " & TABEGAL & GetStringInUnitP(.d, Enu_TypeVariable.Dimension, 4, 0, OUI))
-                AddLigneNDC(TABW2 & BlocG("FYSC_CONNECTORS") & TABAFF & "f\-ysc\=" & TABEGAL & GetStringInUnitP(.Fy, Enu_TypeVariable.Contrainte, 4, 0, OUI))
-                AddLigneNDC(TABW2 & BlocG("FUSC_CONNECTORS") & TABAFF & "f\-usc\=" & TABEGAL & GetStringInUnitP(.Fu, Enu_TypeVariable.Contrainte, 4, 0, OUI))
+                AddLigneNDC(TABW2 & BlocG("HSC_CONNECTORS") & TABAFF & "h\-sc\=" & TABEGAL & GetStringInUnitN(.hsc, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+                AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d " & TABEGAL & GetStringInUnitN(.d, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+                AddLigneNDC(TABW2 & BlocG("FYSC_CONNECTORS") & TABAFF & "f\-ysc\=" & TABEGAL & GetStringInUnitN(.Fy, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
+                AddLigneNDC(TABW2 & BlocG("FUSC_CONNECTORS") & TABAFF & "f\-usc\=" & TABEGAL & GetStringInUnitN(.Fu, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
 
                 Dim lGeneration1, lDallePleine, lPerp, lPerpPRd As Boolean 'Déclaration des variables locales qui serviront dans la fonction ResistancePRd
                 Dim nr_min, nr_max As Integer
@@ -2252,26 +2252,26 @@ Module Mod_NoteCalcul
                 If lDallePleine Then
 
                     PRd = .ResistancePRd(lGeneration1, lDallePleine, lPerpPRd, lCofra220, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
-                    AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnitP(PRd, Enu_TypeVariable.Effort, 4, 1, OUI))
+                    AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 4, 1, OUI, False))
 
                 Else 'dalle mixte
                     If lPerp Then
                         For nr_boucle As Integer = nr_min To nr_max
                             PRd = .ResistancePRd(lGeneration1, lDallePleine, lPerpPRd, lCofra220, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
-                            AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnitP(PRd, Enu_TypeVariable.Effort, 4, 1, OUI) & " (n\-r\= = " & nr_boucle & ")")
+                            AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 4, 1, OUI, False) & " (n\-r\= = " & nr_boucle & ")")
                             ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
                             If (Not lCofra220) And lPerpPRd Then
                                 AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\=" & TABEGAL &
-                                        GetStringInUnitP(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, NON) & " (n\-r\= = " & nr_boucle & ")")
+                                        GetStringInUnitN(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, NON, False) & " (n\-r\= = " & nr_boucle & ")")
                             End If
                         Next
                     Else 'dalle parallèlle
                         PRd = .ResistancePRd(lGeneration1, lDallePleine, lPerpPRd, lCofra220, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
                         AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL &
-                                    GetStringInUnitP(PRd, Enu_TypeVariable.Effort, 4, 1, OUI))
+                                    GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 4, 1, OUI, False))
                         ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-l\= =" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
                         AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-l\=" & TABEGAL &
-                                    GetStringInUnitP(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, NON))
+                                    GetStringInUnitN(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, NON, False))
                     End If
                 End If
 
@@ -2280,7 +2280,7 @@ Module Mod_NoteCalcul
         Else
 
             With MyBeam.Dalle.ConnecteurArmature
-                AddLigneNDC(TABW2 & BlocG("D_ARMA") & TABAFF & "d " & TABEGAL & GetStringInUnitP(.ds, Enu_TypeVariable.Dimension, 4, 0, OUI))
+                AddLigneNDC(TABW2 & BlocG("D_ARMA") & TABAFF & "d " & TABEGAL & GetStringInUnitN(.ds, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
 
                 Dim lDallePleine, lPerp As Boolean 'Déclaration des variables locales qui serviront dans la fonction ResistancePRd
 
@@ -2381,17 +2381,17 @@ Module Mod_NoteCalcul
 
                         InitialiseLigne(nbColonne, HLIGNE, True)
                         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, iTraveeAffichee)
-                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(.LongueurZone(i, j), Enu_TypeVariable.Longueur, 4, 0, NON))
-                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(.NrTransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON))
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.LongueurZone(i, j), Enu_TypeVariable.Longueur, 4, 0, NON, False))
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.NrTransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON, False))
                         If lDalleMixteEtPerp Then
                             If .Espacement_Bac_TransZone(i, j) = 1 Then
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(.Espacement_Bac_TransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON) & " " & BlocG("RIB"))
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.Espacement_Bac_TransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON, False) & " " & BlocG("RIB"))
                             Else
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(.Espacement_Bac_TransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON) & " " & BlocG("RIBS"))
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.Espacement_Bac_TransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON, False) & " " & BlocG("RIBS"))
                                 End
                             End If
                         End If
-                        AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(.EspacementZone(i, j), Enu_TypeVariable.Dimension, 4, 0, NON))
+                        AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.EspacementZone(i, j), Enu_TypeVariable.Dimension, 4, 0, NON, False))
 
                         iTraveeAffichee += 1
 
@@ -3566,15 +3566,15 @@ Module Mod_NoteCalcul
             zSurH = (MyBeam.Dalle.zTop - zANP) / MyBeam.HauteurTotaleSectionMixte
             If lOK Then
                 '--| Cas du ratio z/h dans les limites du calcul plastique
-                AddLigneNDC(TABW2 & BlocSP("BETAMPLASTIC") & TABAFF & "\Sb\s" & TABEGAL & GetStringInUnitP(BetaM, Enu_TypeVariable.SansType, 4, 3, NON, True))
-                AddLigneNDC(TABW2 & BlocSP("FORZSURH") & TABAFF & "z/H" & TABEGAL & GetStringInUnitP(zSurH, Enu_TypeVariable.SansType, 4, 3, NON, True))
+                AddLigneNDC(TABW2 & BlocSP("BETAMPLASTIC") & TABAFF & "\Sb\s" & TABEGAL & GetStringInUnitN(BetaM, Enu_TypeVariable.SansType, 4, 3, NON, True))
+                AddLigneNDC(TABW2 & BlocSP("FORZSURH") & TABAFF & "z/H" & TABEGAL & GetStringInUnitN(zSurH, Enu_TypeVariable.SansType, 4, 3, NON, True))
 
             Else
 
                 zSurHLim = EN1994.LimiteZsurHplastic(MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1)
                 '--| Cas du ratio z/h en dehors des limites du calcul plastique
-                AddLigneNDC(TABW2 & RemplaceDollar(BlocSP("RATIOZHABOVELIMIT"), GetStringInUnitP(zSurH, Enu_TypeVariable.SansType, 4, 3, NON, True)))
-                AddLigneNDC(TABW2 & BlocSP("RATIOZHLIM") & TABAFF & "z/H <" & TABEGAL & GetStringInUnitP(zSurHLim, Enu_TypeVariable.SansType, 4, 3, NON, True))
+                AddLigneNDC(TABW2 & RemplaceDollar(BlocSP("RATIOZHABOVELIMIT"), GetStringInUnitN(zSurH, Enu_TypeVariable.SansType, 4, 3, NON, True)))
+                AddLigneNDC(TABW2 & BlocSP("RATIOZHLIM") & TABAFF & "z/H <" & TABEGAL & GetStringInUnitN(zSurHLim, Enu_TypeVariable.SansType, 4, 3, NON, True))
             End If
             '--| Références
             If MyBeam.Param.lGeneration1 Then
@@ -3584,8 +3584,8 @@ Module Mod_NoteCalcul
             End If
             AddLigneNDC(TABW2 & BlocSP("ACCORDINGTO") & TABAFF & Reference)
         End If
-        AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnitP(zANP, Enu_TypeVariable.Dimension, 4, 1, OUI))
-        AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnitP(BetaMk * MplRk, Enu_TypeVariable.Moment, 4, 0, OUI))
+        AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnitN(zANP, Enu_TypeVariable.Dimension, 4, 1, OUI, False))
+        AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnitN(BetaMk * MplRk, Enu_TypeVariable.Moment, 4, 0, OUI, False))
 
         '--> Propriétés console gauche
 
@@ -3642,7 +3642,7 @@ Module Mod_NoteCalcul
             bEff = MyBeam.BeffDalle(0, iTravee, OptionsCalcul.lLargeurEfficaceSimplifiee, False)
         End If
 
-        AddLigneNDC(TABW2 & BlocSP("EFFECTIVEW") & TABAFF & "b\-eff\=" & TABEGAL & GetStringInUnitP(bEff, Enu_TypeVariable.Longueur, 3, 2, OUI))
+        AddLigneNDC(TABW2 & BlocSP("EFFECTIVEW") & TABAFF & "b\-eff\=" & TABEGAL & GetStringInUnitN(bEff, Enu_TypeVariable.Longueur, 3, 2, OUI, False))
 
         '# Propriétés élastiques
 
@@ -3660,8 +3660,8 @@ Module Mod_NoteCalcul
                 MyBeam.Section.ProfilA.ProprietesMyy(-1, True, MyBeam.Param.Gamma.GammaM0, zANE, InertieY, MelRd, zANP, MplRd)
 
                 AddLigneNDC(TABW3 & "\U" & BlocSP("CONSTRUCTIONP") & "\u" &
-                            TABAFF & "I\-el,y\=" & TABEGAL & GetStringInUnitP(InertieY, Enu_TypeVariable.Inertie, 3, 2, OUI))
-                AddLigneNDC(TABAFF & "z\-el,y\=" & TABEGAL & GetStringInUnitP(zANE, Enu_TypeVariable.Dimension, 3, 2, OUI))
+                            TABAFF & "I\-el,y\=" & TABEGAL & GetStringInUnitN(InertieY, Enu_TypeVariable.Inertie, 3, 2, OUI, False))
+                AddLigneNDC(TABAFF & "z\-el,y\=" & TABEGAL & GetStringInUnitN(zANE, Enu_TypeVariable.Dimension, 3, 2, OUI, False))
 
             End If
 
@@ -3675,8 +3675,8 @@ Module Mod_NoteCalcul
                 strDebut = ""
             End If
 
-            AddLigneNDC(strDebut & TABAFF & "I\-el,y\=" & TABEGAL & GetStringInUnitP(InertieY, Enu_TypeVariable.Inertie, 3, 2, OUI))
-            AddLigneNDC(TABAFF & "z\-el,y\=" & TABEGAL & GetStringInUnitP(zANE, Enu_TypeVariable.Dimension, 3, 2, OUI))
+            AddLigneNDC(strDebut & TABAFF & "I\-el,y\=" & TABEGAL & GetStringInUnitN(InertieY, Enu_TypeVariable.Inertie, 3, 2, OUI, False))
+            AddLigneNDC(TABAFF & "z\-el,y\=" & TABEGAL & GetStringInUnitN(zANE, Enu_TypeVariable.Dimension, 3, 2, OUI, False))
 
         End If
 
@@ -3686,8 +3686,8 @@ Module Mod_NoteCalcul
 
         MyBeam.Section.ProprietesPlastiquesMixteMyy(-1, True, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zANP, MplRd)
 
-        AddLigneNDC(TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnitP(MplRd, Enu_TypeVariable.Moment, 3, 2, OUI))
-        AddLigneNDC(TABAFF & "z\-pl,y\=" & TABEGAL & GetStringInUnitP(zANP, Enu_TypeVariable.Dimension, 3, 2, OUI))
+        AddLigneNDC(TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnitN(MplRd, Enu_TypeVariable.Moment, 3, 2, OUI, False))
+        AddLigneNDC(TABAFF & "z\-pl,y\=" & TABEGAL & GetStringInUnitN(zANP, Enu_TypeVariable.Dimension, 3, 2, OUI, False))
 
     End Sub
 
@@ -4932,7 +4932,7 @@ Module Mod_NoteCalcul
 
         '# Effort tranchant
 
-        stringVEd = GetStringInUnitP(VEd, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, NON)
+        stringVEd = GetStringInUnitN(VEd, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, NON, False)
 
         If iNode = iNodeMinTranchant Or iNode = iNodeMaxTranchant Then
             If IsEqual(VEd, Vmin) Or IsEqual(VEd, Vmax) Then
@@ -4950,7 +4950,7 @@ Module Mod_NoteCalcul
 
         '# Moment fléchissant
 
-        stringMEd = GetStringInUnitP(MEd, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, NON)
+        stringMEd = GetStringInUnitN(MEd, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, NON, False)
 
         If iNode = iNodeMinMoment Or iNode = iNodeMaxMoment Then
             If IsEqual(MEd, Mmin) Or IsEqual(MEd, Mmax) Then
@@ -5013,8 +5013,8 @@ Module Mod_NoteCalcul
 
         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee) & " / " & CStr(iTravee + 1))
 
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(xPosT, Enu_TypeVariable.Longueur, 3, 2, NON) & " / 0")
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(xPosG, Enu_TypeVariable.Longueur, 3, 2, NON))
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(xPosT, Enu_TypeVariable.Longueur, 3, 2, NON, False) & " / 0")
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(xPosG, Enu_TypeVariable.Longueur, 3, 2, NON, False))
 
         '# Effort tranchant
 
@@ -5041,8 +5041,8 @@ Module Mod_NoteCalcul
 
         '# Moment fléchissant
 
-        stringMEdG = GetStringInUnitP(MEdG, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, NON)
-        stringMEdD = GetStringInUnitP(MEdD, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, NON)
+        stringMEdG = GetStringInUnitN(MEdG, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, NON, False)
+        stringMEdD = GetStringInUnitN(MEdD, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, NON, False)
 
         If iNode = iNodeMinMoment Or iNode = iNodeMaxMoment Then
             If IsEqual(MEdG, Mmin) Or IsEqual(MEdG, Mmax) Then
@@ -5418,10 +5418,10 @@ Module Mod_NoteCalcul
 
             AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iAff))
 
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(VEnv(iTravee, 1), Enu_TypeVariable.Effort, 4, 3, NON, True))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(VEnv(iTravee, 0), Enu_TypeVariable.Effort, 4, 3, NON, True))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(MEnv(iTravee, 1), Enu_TypeVariable.Moment, 4, 3, NON, True))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(MEnv(iTravee, 0), Enu_TypeVariable.Moment, 4, 3, NON, True))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(VEnv(iTravee, 1), Enu_TypeVariable.Effort, 4, 3, NON, True))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(VEnv(iTravee, 0), Enu_TypeVariable.Effort, 4, 3, NON, True))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(MEnv(iTravee, 1), Enu_TypeVariable.Moment, 4, 3, NON, True))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(MEnv(iTravee, 0), Enu_TypeVariable.Moment, 4, 3, NON, True))
 
         Next
 
@@ -6198,8 +6198,8 @@ Module Mod_NoteCalcul
 
         AddLigneNDC(TABW2 & BlocELU("NBTRANSVERSELAYER") & TABAFF & MyBeam.NombreLitsTransversaux)
         AddLigneNDC(TABW2 & BlocELU("MINTRANSVERSEREINF") & TABAFF _
-                  & "\Sr\s\-t,min\=" & TABEGAL & GetStringInUnitP(MyBeam.RhoArmaTMin * 100, Enu_TypeVariable.SansType, 3, -1, NON, True) & " %   " _
-                  & "(A\-sf\=/s\-f\= = " & GetStringInUnitP(MyBeam.AsArmaTMinEC2, Enu_TypeVariable.AireCM2, 3, -1, NON, True) _
+                  & "\Sr\s\-t,min\=" & TABEGAL & GetStringInUnitN(MyBeam.RhoArmaTMin * 100, Enu_TypeVariable.SansType, 3, -1, NON, True) & " %   " _
+                  & "(A\-sf\=/s\-f\= = " & GetStringInUnitN(MyBeam.AsArmaTMinEC2, Enu_TypeVariable.AireCM2, 3, -1, NON, True) _
                   & "cm\+2\=/m)")
 
         Dim strFailureMode As String = ""
@@ -6321,11 +6321,11 @@ Module Mod_NoteCalcul
 
                         AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(i - iTravDeb + 1))
                         AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(j + 1))
-                        AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(myBeam.NrTransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON))
+                        AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myBeam.NrTransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON, False))
                         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, strA(k))
-                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(myBeam.VerifMixte(iVerif).TauEd(i, j, k), Enu_TypeVariable.Contrainte, 4, 2, NON))
-                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(GetAngleInDegree(myBeam.VerifMixte(iVerif).Thetaf(i, j, k)), Enu_TypeVariable.SansType, 4, 2, NON, True))
-                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(myBeam.VerifMixte(iVerif).Gamma_sf(i, j, k), Enu_TypeVariable.SansType, 4, 2, NON))
+                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myBeam.VerifMixte(iVerif).TauEd(i, j, k), Enu_TypeVariable.Contrainte, 4, 2, NON, False))
+                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(GetAngleInDegree(myBeam.VerifMixte(iVerif).Thetaf(i, j, k)), Enu_TypeVariable.SansType, 4, 2, NON, True))
+                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myBeam.VerifMixte(iVerif).Gamma_sf(i, j, k), Enu_TypeVariable.SansType, 4, 2, NON, False))
 
                         If IsEqual(myBeam.VerifMixte(iVerif).As_s_transv(i, j, k), 0) _
                         And myBeam.Dalle.lMixte _
@@ -6337,7 +6337,7 @@ Module Mod_NoteCalcul
                         End If
 
                         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre,
-                                   GetStringInUnitP(myBeam.VerifMixte(iVerif).As_s_transv(i, j, k), Enu_TypeVariable.AireCM2, 4, 2, NON) & strNote)
+                                   GetStringInUnitN(myBeam.VerifMixte(iVerif).As_s_transv(i, j, k), Enu_TypeVariable.AireCM2, 4, 2, NON, False) & strNote)
 
                         AddCellule(pLC9, Bordures.Tous, PositionTexteInCell.Centre, ArmaTrans(nbLitsT, k))
 
@@ -8068,11 +8068,11 @@ Module Mod_NoteCalcul
         End If
 
         AddLigneNDC(TABW2 & BlocELU("DEGREEOFSHEARCONNEC") & infoM & TABAFF & strGras &
-                    Symbol & TABEGAL & GetStringInUnitP(Eta, Enu_TypeVariable.SansType, 4, 3, NON, True) &
+                    Symbol & TABEGAL & GetStringInUnitN(Eta, Enu_TypeVariable.SansType, 4, 3, NON, True) &
                     TABOK & strFinGras & "\BAL")
         AfficheBalise(lOK)
         AddLigneNDC(TABW2 & BlocELU("MINDEGREE") & TABAFF & strGras &
-                    SymbolMin & TABEGAL & GetStringInUnitP(EtaMin, Enu_TypeVariable.SansType, 4, 3, NON, True) &
+                    SymbolMin & TABEGAL & GetStringInUnitN(EtaMin, Enu_TypeVariable.SansType, 4, 3, NON, True) &
                     strFinGras)
 
     End Sub
@@ -11115,15 +11115,15 @@ Module Mod_NoteCalcul
 
             End If
 
-            AddLigneNDC(TABW2 & BlocFEU("SECTIONFACTOR") & TABAFF & "A\-m\=/V = " & GetStringInUnitP(Massivete, Enu_TypeVariable.Massivete, 4, 2, OUI, True))
-            AddLigneNDC(TABW2 & BlocFEU("SECTIONFACTORBOX") & TABAFF & "(A\-m\=/V)\-b\= = " & GetStringInUnitP(MassiveteBox, Enu_TypeVariable.Massivete, 4, 2, OUI, True))
+            AddLigneNDC(TABW2 & BlocFEU("SECTIONFACTOR") & TABAFF & "A\-m\=/V = " & GetStringInUnitN(Massivete, Enu_TypeVariable.Massivete, 4, 2, OUI, True))
+            AddLigneNDC(TABW2 & BlocFEU("SECTIONFACTORBOX") & TABAFF & "(A\-m\=/V)\-b\= = " & GetStringInUnitN(MassiveteBox, Enu_TypeVariable.Massivete, 4, 2, OUI, True))
 
         End If
 
         '--( Facteur d'ombre
 
         If Not lProtege Then
-            AddLigneNDC(TABW2 & BlocFEU("SHADOWFACTOR") & TABAFF & "k\-sh\= = " & GetStringInUnitP(kSh, Enu_TypeVariable.SansType, 4, 2, NON, True))
+            AddLigneNDC(TABW2 & BlocFEU("SHADOWFACTOR") & TABAFF & "k\-sh\= = " & GetStringInUnitN(kSh, Enu_TypeVariable.SansType, 4, 2, NON, True))
         End If
 
     End Sub
@@ -11317,17 +11317,17 @@ Module Mod_NoteCalcul
         InitialiseLigneTableau(NCOL, HLIGNE)
 
         AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
-        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempAStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI))
-        AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(kY, Enu_TypeVariable.SansType, 4, 3, NON))
-        AddCellule(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(kE, Enu_TypeVariable.SansType, 4, 3, NON))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempAStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+        AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(kY, Enu_TypeVariable.SansType, 4, 3, NON, False))
+        AddCellule(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(kE, Enu_TypeVariable.SansType, 4, 3, NON, False))
 
-        AddCellule(LargCol(4), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON))
-        AddCellule(LargCol(5), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON))
+        AddCellule(LargCol(4), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
+        AddCellule(LargCol(5), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
         If lBuckling Then
-            AddCellule(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON))
+            AddCellule(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
             iCol = 7
         End If
-        AddCellule(LargCol(iCol), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.CritereLTB(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON))
+        AddCellule(LargCol(iCol), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereLTB(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
 
     End Sub
 
@@ -11663,20 +11663,20 @@ Module Mod_NoteCalcul
         AddCellule(LargCol(0), BTous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
 
         AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
-                   GetStringInUnitP(ThetaV, Enu_TypeVariable.Temperature, 3, 2, OUI))
+                   GetStringInUnitN(ThetaV, Enu_TypeVariable.Temperature, 3, 2, OUI, False))
         AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
-                   GetStringInUnitP(EN_Feu.ReducFuAcier(ThetaV), Enu_TypeVariable.SansType, 4, 3, NON))
+                   GetStringInUnitN(EN_Feu.ReducFuAcier(ThetaV), Enu_TypeVariable.SansType, 4, 3, NON, False))
 
         AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
-                   GetStringInUnitP(ThetaC, Enu_TypeVariable.Temperature, 3, 2, NON))
+                   GetStringInUnitN(ThetaC, Enu_TypeVariable.Temperature, 3, 2, NON, False))
         AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
-                   GetStringInUnitP(EN_Feu.ReducFckBeton(ThetaC, lLeger), Enu_TypeVariable.SansType, 4, 3, NON))
+                   GetStringInUnitN(EN_Feu.ReducFckBeton(ThetaC, lLeger), Enu_TypeVariable.SansType, 4, 3, NON, False))
 
         PRd = myBeam.Dalle.Goujons.PRdStudFeu(ThetaV, ThetaC, myBeam.Param.lGeneration1, lLeger, lPleine, lPerpPRd, lCofra220,
                                               myBeam.Dalle.Bac, Nr, Fck, Ecm, Fctk_005, GammaVfi, GammaVfi)
 
         AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
-                   GetStringInUnitP(PRd, Enu_TypeVariable.Effort, 3, 2, OUI))
+                   GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 3, 2, OUI, False))
 
     End Sub
 
@@ -11877,17 +11877,17 @@ Module Mod_NoteCalcul
 
         AddCellule(LargCol(0), BordSup, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
 
-        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI))
-        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, 3, 2, NON))
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
-        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, OUI))
-        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempDalleStep(iStep, 1), Enu_TypeVariable.Temperature, 3, 2, OUI))
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 1), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
 
-        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI))
-        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, 3, 2, NON))
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
         For k As Integer = 0 To nbArma - 1
-            AddCellule(LargCol(1), BordSup, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempArmaStep(iStep)(k), Enu_TypeVariable.Temperature, 3, 2, OUI))
+            AddCellule(LargCol(1), BordSup, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempArmaStep(iStep)(k), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
         Next
 
         '## Ligne 2
@@ -11897,16 +11897,16 @@ Module Mod_NoteCalcul
         AddCellule(LargCol(0), Bordinf, PositionTexteInCell.Centre, "")
 
         AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
-        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, NON))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
-        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON))
-        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON))
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON, False))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
-        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI))
-        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON))
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
         For k As Integer = 0 To nbArma - 1
-            AddCellule(LargCol(1), Bordinf, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFskArmatures(myVerifFeu.TempArmaStep(iStep)(k), lArmaFroid), Enu_TypeVariable.SansType, 3, 2, NON))
+            AddCellule(LargCol(1), Bordinf, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFskArmatures(myVerifFeu.TempArmaStep(iStep)(k), lArmaFroid), Enu_TypeVariable.SansType, 3, 2, NON, False))
         Next
     End Sub
 
@@ -12069,14 +12069,14 @@ Module Mod_NoteCalcul
 
         AddCellule(LargCol(0), BordSup, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
 
-        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, OUI))
-        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempDalleStep(iStep, 1), Enu_TypeVariable.Temperature, 3, 2, OUI))
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 1), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
 
-        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI))
-        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, 3, 2, NON))
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
         For k As Integer = 0 To nbArma - 1
-            AddCellule(LargCol(1), BordSup, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempArmaStep(iStep)(k), Enu_TypeVariable.Temperature, 3, 2, OUI))
+            AddCellule(LargCol(1), BordSup, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempArmaStep(iStep)(k), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
         Next
 
         '## Ligne 2
@@ -12085,14 +12085,14 @@ Module Mod_NoteCalcul
 
         AddCellule(LargCol(0), Bordinf, PositionTexteInCell.Centre, "")
 
-        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON))
-        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON))
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON, False))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
-        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI))
-        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON))
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
         For k As Integer = 0 To nbArma - 1
-            AddCellule(LargCol(1), Bordinf, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFskArmatures(myVerifFeu.TempArmaStep(iStep)(k), lArmaFroid), Enu_TypeVariable.SansType, 3, 2, NON))
+            AddCellule(LargCol(1), Bordinf, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFskArmatures(myVerifFeu.TempArmaStep(iStep)(k), lArmaFroid), Enu_TypeVariable.SansType, 3, 2, NON, False))
         Next
     End Sub
 
@@ -12401,25 +12401,25 @@ Module Mod_NoteCalcul
         AddCellule(LargCol(0), BordSup, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
 
         If lUni Then
-            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI))
-            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON))
+            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
         Else
-            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI))
-            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON))
+            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
 
-            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempFiStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI))
-            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFyAcier(myVerifFeu.TempFiStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON))
+            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFiStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFiStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
 
-            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempWStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI))
-            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON))
+            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempWStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
         End If
 
         If Not lAcierSeul Then
-            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, OUI))
-            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempDalleStep(iStep, 1), Enu_TypeVariable.Temperature, 3, 2, OUI))
+            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 1), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
 
-            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI))
-            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON))
+            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
         End If
 
         InitialiseLigneTableau(NCOL, HLIGNE)
@@ -12428,7 +12428,7 @@ Module Mod_NoteCalcul
 
         If lUni Then
             AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
-            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON))
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
         Else
             AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
             AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, "")
@@ -12437,15 +12437,15 @@ Module Mod_NoteCalcul
             AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, "")
 
             AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
-            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON))
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
         End If
 
         If Not lAcierSeul Then
-            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON))
-            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON))
+            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
 
-            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitP(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI))
-            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitP(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON))
+            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
         End If
     End Sub
 
@@ -12515,12 +12515,12 @@ Module Mod_NoteCalcul
         AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
 
         AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre,
-                   GetStringInUnitP(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON))
+                   GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
         AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre,
-                   GetStringInUnitP(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON))
+                   GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
         If lBuckling Then
             AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre,
-                       GetStringInUnitP(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON))
+                       GetStringInUnitN(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
         End If
 
     End Sub

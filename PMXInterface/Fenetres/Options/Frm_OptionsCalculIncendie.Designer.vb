@@ -27,6 +27,10 @@ Partial Class Frm_OptionsCalculIncendie
         Me.TLpan_Conteneur = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Conteneur = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.img_TempMax = New System.Windows.Forms.PictureBox()
+        Me.lbl_TempMax = New System.Windows.Forms.Label()
+        Me.txt_TempMax = New System.Windows.Forms.TextBox()
+        Me.etq_UnitTemp2 = New System.Windows.Forms.Label()
         Me.img_Deltat = New System.Windows.Forms.PictureBox()
         Me.img_T0 = New System.Windows.Forms.PictureBox()
         Me.lbl_IncrementTemps = New System.Windows.Forms.Label()
@@ -64,14 +68,11 @@ Partial Class Frm_OptionsCalculIncendie
         Me.img_Sigma = New System.Windows.Forms.PictureBox()
         Me.lbl_Incendie = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.img_TempMax = New System.Windows.Forms.PictureBox()
-        Me.lbl_TempMax = New System.Windows.Forms.Label()
-        Me.txt_TempMax = New System.Windows.Forms.TextBox()
-        Me.etq_UnitTemp2 = New System.Windows.Forms.Label()
         Me.pan_Incendie.SuspendLayout()
         Me.TLpan_Conteneur.SuspendLayout()
         Me.pan_Conteneur.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        CType(Me.img_TempMax, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Deltat, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_T0, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
@@ -86,7 +87,6 @@ Partial Class Frm_OptionsCalculIncendie
         CType(Me.img_EpsilonC, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Sigma, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_TempMax, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Incendie
@@ -143,10 +143,48 @@ Partial Class Frm_OptionsCalculIncendie
         Me.Panel2.Controls.Add(Me.txt_TempReference)
         Me.Panel2.Controls.Add(Me.etq_UnitTemp1)
         Me.Panel2.Controls.Add(Me.lbl_Parametres)
-        Me.Panel2.Location = New System.Drawing.Point(3, 264)
+        Me.Panel2.Location = New System.Drawing.Point(3, 241)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(732, 195)
         Me.Panel2.TabIndex = 106
+        '
+        'img_TempMax
+        '
+        Me.img_TempMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_TempMax.Location = New System.Drawing.Point(532, 53)
+        Me.img_TempMax.Name = "img_TempMax"
+        Me.img_TempMax.Size = New System.Drawing.Size(46, 20)
+        Me.img_TempMax.TabIndex = 141
+        Me.img_TempMax.TabStop = False
+        '
+        'lbl_TempMax
+        '
+        Me.lbl_TempMax.AutoSize = True
+        Me.lbl_TempMax.Location = New System.Drawing.Point(39, 53)
+        Me.lbl_TempMax.Name = "lbl_TempMax"
+        Me.lbl_TempMax.Size = New System.Drawing.Size(70, 13)
+        Me.lbl_TempMax.TabIndex = 140
+        Me.lbl_TempMax.Text = "lbl_TempMax"
+        Me.lbl_TempMax.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txt_TempMax
+        '
+        Me.txt_TempMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_TempMax.Location = New System.Drawing.Point(578, 53)
+        Me.txt_TempMax.Name = "txt_TempMax"
+        Me.txt_TempMax.Size = New System.Drawing.Size(55, 20)
+        Me.txt_TempMax.TabIndex = 138
+        '
+        'etq_UnitTemp2
+        '
+        Me.etq_UnitTemp2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitTemp2.AutoSize = True
+        Me.etq_UnitTemp2.Location = New System.Drawing.Point(639, 56)
+        Me.etq_UnitTemp2.Name = "etq_UnitTemp2"
+        Me.etq_UnitTemp2.Size = New System.Drawing.Size(39, 13)
+        Me.etq_UnitTemp2.TabIndex = 139
+        Me.etq_UnitTemp2.Text = "Label1"
+        Me.etq_UnitTemp2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'img_Deltat
         '
@@ -271,7 +309,7 @@ Partial Class Frm_OptionsCalculIncendie
         Me.Panel1.Controls.Add(Me.img_Sigma)
         Me.Panel1.Location = New System.Drawing.Point(3, 31)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(732, 227)
+        Me.Panel1.Size = New System.Drawing.Size(732, 209)
         Me.Panel1.TabIndex = 105
         '
         'img_Phi
@@ -524,44 +562,6 @@ Partial Class Frm_OptionsCalculIncendie
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'img_TempMax
-        '
-        Me.img_TempMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_TempMax.Location = New System.Drawing.Point(532, 53)
-        Me.img_TempMax.Name = "img_TempMax"
-        Me.img_TempMax.Size = New System.Drawing.Size(46, 20)
-        Me.img_TempMax.TabIndex = 141
-        Me.img_TempMax.TabStop = False
-        '
-        'lbl_TempMax
-        '
-        Me.lbl_TempMax.AutoSize = True
-        Me.lbl_TempMax.Location = New System.Drawing.Point(39, 53)
-        Me.lbl_TempMax.Name = "lbl_TempMax"
-        Me.lbl_TempMax.Size = New System.Drawing.Size(70, 13)
-        Me.lbl_TempMax.TabIndex = 140
-        Me.lbl_TempMax.Text = "lbl_TempMax"
-        Me.lbl_TempMax.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'txt_TempMax
-        '
-        Me.txt_TempMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_TempMax.Location = New System.Drawing.Point(578, 53)
-        Me.txt_TempMax.Name = "txt_TempMax"
-        Me.txt_TempMax.Size = New System.Drawing.Size(55, 20)
-        Me.txt_TempMax.TabIndex = 138
-        '
-        'etq_UnitTemp2
-        '
-        Me.etq_UnitTemp2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitTemp2.AutoSize = True
-        Me.etq_UnitTemp2.Location = New System.Drawing.Point(639, 56)
-        Me.etq_UnitTemp2.Name = "etq_UnitTemp2"
-        Me.etq_UnitTemp2.Size = New System.Drawing.Size(39, 13)
-        Me.etq_UnitTemp2.TabIndex = 139
-        Me.etq_UnitTemp2.Text = "Label1"
-        Me.etq_UnitTemp2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
         'Frm_OptionsCalculIncendie
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -576,6 +576,7 @@ Partial Class Frm_OptionsCalculIncendie
         Me.pan_Conteneur.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
+        CType(Me.img_TempMax, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Deltat, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_T0, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
@@ -591,7 +592,6 @@ Partial Class Frm_OptionsCalculIncendie
         CType(Me.img_EpsilonC, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Sigma, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_TempMax, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

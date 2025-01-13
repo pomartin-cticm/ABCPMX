@@ -48,7 +48,7 @@ Public Class Frm_OptionsFeuN_Poutre
 
             Me.chk_ArmaFroid.Checked = myBeam.ParamFeu.lArmaFormeeAFroid
             'Me.chk_DalleFEM.Checked = myBeam.ParamFeu.lDalleFEM
-            Me.txt_EpProtec.Text = GetStringInUnitN(.EpProtection, Enu_TypeVariable.Dimension, 3, 2, False, True)
+            Me.txt_EpProtec.Text = GetStringInUnitN(.EpProtection, Enu_TypeVariable.Dimension, 3, 2, Enu_AfficheUnite.Non, True)
 
             MAJI_CalcuFeu(myBeam)
             MAJI_TypeProtection(myBeam)

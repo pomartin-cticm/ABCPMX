@@ -44,6 +44,7 @@
 
             '#-------------------- MATERIAU
 
+            Me.lbl_Materiau.Text = MyBloc("CONCRETEPROP")
             Me.lbl_RhoBetonLeger.Text = MyBloc("RHOLWC")
 
         Catch ex As Exception
@@ -212,6 +213,12 @@
 
                 ValMin = 0.1
                 ValMax = 1
+                kUnit = 1
+
+            Case Me.txt_ThetaH.Name
+
+                ValMin = 0
+                ValMax = 45
                 kUnit = 1
 
         End Select

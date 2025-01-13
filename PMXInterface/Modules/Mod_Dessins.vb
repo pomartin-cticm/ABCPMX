@@ -254,7 +254,7 @@ Public Module Mod_Dessins
             Dim xVcote As Decimal = 0 - 1 * dCar
 
             AddFleche(myGr, MyPen, xVcote, 0, xVcote, -hPro, MyParAff, True, True)
-            Chaine = GetStringInUnitN(hPro, Enu_TypeVariable.Dimension, 4, 3, False, True)
+            Chaine = GetStringInUnitN(hPro, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
             AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, xVcote, -hPro / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             '-- Hauteur de la dalle
@@ -265,7 +265,7 @@ Public Module Mod_Dessins
             AddLigne(myGr, xVcote, 0, xVcote, hDalle, MyParAff)
             AddFleche(myGr, MyPen, xVcote, hDalle, xVcote, hDalle + DeltaZ, MyParAff, True, False)
 
-            Chaine = GetStringInUnitN(hDalle, Enu_TypeVariable.Dimension, 4, 3, False, True)
+            Chaine = GetStringInUnitN(hDalle, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
             AddTexte(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, xVcote, hDalle + DeltaZ, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top, lContour, MyPen)
 
             '-- Hauteur totale
@@ -273,7 +273,7 @@ Public Module Mod_Dessins
             xVcote = 0 - 1.5 * dCar
 
             AddFleche(myGr, MyPen, xVcote, -hPro, xVcote, +hDalle, MyParAff, True, True)
-            Chaine = GetStringInUnitN(hPro + hDalle, Enu_TypeVariable.Dimension, 4, 3, False, True)
+            Chaine = GetStringInUnitN(hPro + hDalle, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
             AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, xVcote, -hPro / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
 
@@ -6208,7 +6208,7 @@ Public Module Mod_Dessins
 
         AddFleche(myGr, MyPenContour, xCote, 0, xCote, zTop, myParAff, True, True)
 
-        Chaine = GetStringInUnitN(zTop, Enu_TypeVariable.Dimension, 4, 3, False, True)
+        Chaine = GetStringInUnitN(zTop, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
 
         AddTexte(myGr, New SolidBrush(Color.Black), Chaine, MyFontNormal, xCote, 0.5 * zTop, myParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
 
@@ -6809,7 +6809,7 @@ Public Module Mod_Dessins
 
             AddFleche(myGr, MyPenContour, xo, 0, xo, zTop, myParAff, True, True)
 
-            Chaine = GetStringInUnitN(zTop, Enu_TypeVariable.Dimension, 4, 3, False, True)
+            Chaine = GetStringInUnitN(zTop, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
 
             AddTexte(myGr, New SolidBrush(Color.Black), Chaine, MyFontNormal, xo, 0.5 * zTop, myParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
 

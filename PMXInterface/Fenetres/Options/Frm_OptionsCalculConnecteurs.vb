@@ -89,22 +89,22 @@
 
     Private Sub AfficherValeurs()
 
-        Me.txt_DMin.Text = GetStringInUnitN(GOUJ_DMIN, Enu_TypeVariable.Dimension, 4, 3, False, True)
-        Me.txt_DMax1.Text = GetStringInUnitN(GOUJ_DMAXDEF, Enu_TypeVariable.Dimension, 4, 3, False, True)
-        Me.txt_DMax2.Text = GetStringInUnitN(GOUJ_DMAXPERPREP, Enu_TypeVariable.Dimension, 4, 3, False, True)
-        Me.txt_DMax3.Text = GetStringInUnitN(GOUJ_DMAXPERWT, Enu_TypeVariable.Dimension, 4, 3, False, True)
+        Me.txt_DMin.Text = GetStringInUnitN(GOUJ_DMIN, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_DMax1.Text = GetStringInUnitN(GOUJ_DMAXDEF, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_DMax2.Text = GetStringInUnitN(GOUJ_DMAXPERPREP, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_DMax3.Text = GetStringInUnitN(GOUJ_DMAXPERWT, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
 
-        Me.txt_RatioHsurD1.Text = GetStringInUnitN(GOUJ_RAPHsurDMIN_G1, Enu_TypeVariable.SansType, 4, 3, False, True)
-        Me.txt_RatioHsurD2.Text = GetStringInUnitN(GOUJ_RAPHsurDMIN_G2, Enu_TypeVariable.SansType, 4, 3, False, True)
+        Me.txt_RatioHsurD1.Text = GetStringInUnitN(GOUJ_RAPHsurDMIN_G1, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+        Me.txt_RatioHsurD2.Text = GetStringInUnitN(GOUJ_RAPHsurDMIN_G2, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
 
-        Me.txt_HsurD_Bac.Text = GetStringInUnitN(GOUJ_RAPHsurDSURBAC, Enu_TypeVariable.SansType, 4, 3, False, True)
-        Me.txt_eD.Text = GetStringInUnitN(GOUJ_DBORD_MIN, Enu_TypeVariable.Dimension, 4, 3, False, True)
+        Me.txt_HsurD_Bac.Text = GetStringInUnitN(GOUJ_RAPHsurDSURBAC, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+        Me.txt_eD.Text = GetStringInUnitN(GOUJ_DBORD_MIN, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
 
-        Me.txt_SxMax1.Text = GetStringInUnitN(GOUJ_RAPESPX, Enu_TypeVariable.Dimension, 4, 3, False, True)
-        Me.txt_SxMax2.Text = GetStringInUnitN(GOUJ_RAPESPXsurTD_MAX, Enu_TypeVariable.SansType, 4, 3, False, True)
+        Me.txt_SxMax1.Text = GetStringInUnitN(GOUJ_RAPESPX, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_SxMax2.Text = GetStringInUnitN(GOUJ_RAPESPXsurTD_MAX, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
 
-        Me.txt_syMin1.Text = GetStringInUnitN(GOUJ_RAPESPYsurD_PLEINE_MIN, Enu_TypeVariable.SansType, 4, 3, False, True)
-        Me.txt_syMin2.Text = GetStringInUnitN(GOUJ_RAPESPYsurD_MIXTE_MIN, Enu_TypeVariable.SansType, 4, 3, False, True)
+        Me.txt_syMin1.Text = GetStringInUnitN(GOUJ_RAPESPYsurD_PLEINE_MIN, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+        Me.txt_syMin2.Text = GetStringInUnitN(GOUJ_RAPESPYsurD_MIXTE_MIN, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
 
     End Sub
 

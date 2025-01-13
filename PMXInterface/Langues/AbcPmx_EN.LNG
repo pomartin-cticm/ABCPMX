@@ -980,7 +980,7 @@ ENGEN1					= First generation of Eurocodes
 ENGEN2					= Second generation of Eurocodes (drafts)
 SECTIONPROP				= Properties of cross-sections
 COMPRESSIONREBARS		= Rebars in compression taken into account
-SIMPLIFIEDEFFW			= Simplified distribution of the effective of the concrete flange
+SIMPLIFIEDEFFW			= Simplified distribution of the effective width of the concrete flange
 YOUNGSREBAR				= Young's modulus of reinforcements
 DELTACDEV				= Allowance for the deviation of rebars
 MODEL					= Numerical model parameters
@@ -1045,7 +1045,6 @@ SHADOWFACTOR			= Correction factor for the shadow effect
 TEMPREFERENCE			= Reference temperature
 TEMPMAX					= Maximal temperature
 
-
 #OPTCALSCOPE
 TITLE					= Scope of application
 BEAMDEF					= Definition of the beam
@@ -1058,6 +1057,7 @@ THETAHAUNCH				= Inclination angle of concrete haunches
 HAUNCHTH				= Thickness of slab haunch
 SOLIDSLABTH				= Thickness of solid slab
 COMPOSITESLABTH			= Thickness of composite slab (above ribs)
+CONCRETEPROP			= Properties of concrete
 RHOLWC					= Density of light weight concrete
 
 #OPTCALSLIMFLOOR
@@ -1076,7 +1076,7 @@ GENERAL					= General parameters
 DIRECTORIES				= Directories
 UNITS					= Units
 DATABASES				= Databases
-CALCULSHEET				= Calculation sheet
+CALCULSHEET				= Preliminary design report
 EXPERT					= Expert Mode
 EXPERTMODEACTIVE		= Expert Mode active
 
@@ -1153,7 +1153,7 @@ UNVALIDKEY				= Key is not valid
 TITLE					= General settings
 LANGUAGES				= Languages
 USERGI					= User interface
-CALCULREPORT			= Calculation report
+CALCULREPORT			= Preliminary design report
 IDENTIFICATION			= Identification
 USERNAME				= User name
 FIRM					= Firm

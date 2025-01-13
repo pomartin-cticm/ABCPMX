@@ -1027,7 +1027,6 @@ SHADOWFACTOR			= Coefficient de correction pour l'effet d'ombre
 TEMPREFERENCE			= Température de référence
 TEMPMAX					= Température maximale
 
-
 #OPTCALSCOPE
 TITLE					= Domaine d'application
 BEAMDEF					= Définition de la poutre
@@ -1040,6 +1039,7 @@ THETAHAUNCH				= Angle d'inclinaison des renformis
 HAUNCHTH				= Epaisseur des renformis
 SOLIDSLABTH				= Epaisseur de la dalle béton
 COMPOSITESLABTH			= Epaisseur de la dalle mixte (au-dessus du bac)
+CONCRETEPROP			= Propriétés du béton
 RHOLWC					= Masse volumique du béton léger
 
 #OPTCALSLIMFLOOR

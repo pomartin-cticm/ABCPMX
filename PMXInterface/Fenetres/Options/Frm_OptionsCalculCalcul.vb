@@ -315,10 +315,17 @@ Public Class Frm_OptionsCalculCalcul
         Select Case MyTxt.Name
             Case Me.txt_Es.Name
 
-                lValMax = False
+
                 kUnit = LogicielInfo.Transfert_ModulesY(LogicielOptions.IndUnitModulesY)
-                ValMin = 100000
-                ValMax = 500000
+                ValMin = 195000
+                ValMax = 210000
+                lValMax = True
+
+                If LogicielOptions.lExpert Then
+                    ValMin = 100000
+                    ValMax = 210000
+                    lValMax = False
+                End If
 
             Case Me.txt_DeltaCDev.Name
 

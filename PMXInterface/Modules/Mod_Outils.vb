@@ -484,186 +484,240 @@ Module Mod_Outils
 
     End Function
 
-    ''' <summary>
-    ''' Renvoie une chaine de caractères pour l'affichage d'une valeur
-    ''' </summary>
-    ''' <param name="Valeur">Valeur traitée</param>
-    ''' <param name="Type">Type de la valeur traitée</param>
-    ''' <param name="nbSign">Nombre de chiffres significatifs</param>
-    ''' <param name="nbDigitMax">Nombre maxi de digits après la virgule</param>
-    ''' <param name="lUnite">Indique si affichage des Unités</param>
-    ''' <param name="lAbsolu">Indique si la valeur doit être affiché comme une valeur absolue</param>
-    ''' <returns></returns>
     Public Function GetStringInUnit(ByVal Valeur As Decimal, ByVal Type As Enu_TypeVariable,
                                     ByVal nbSign As Integer, ByVal nbDigitMax As Integer, ByVal lUnite As Boolean,
                                     Optional ByVal lAbsolu As Boolean = False) As String
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   13/01/25 :  Création - POM - V1.00
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Gestion de l'affichage des chaines numériques sous forme de chaine de caractères
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Valeur          [E] :   Valeur numérique à afficher
+        '   Type            [E] :   Type de la valeur (pour les unités)
+        '   nbSign          [E] :   Nombre de chiffres caractéristiques
+        '   nbDigitMax      [E] :   Nombre maxi de chiffres après la virgule
+        '   lUnite          [E] :   Indique si on affiche l'unité,(au format interface)
+        '   lAbsolu         [E] :   Indique si on affiche en valeur absolue
+        '--------------------------------------------------------------------------------------------------------------------------------
 
-        '--[ Déclarations
+        '--( Déclaration
 
-        Dim ValeurU As Double
-        Dim kUnitU As Double
-        'Dim lUniteReconnue As Boolean = true
-        Dim MyFormat As String
-        Dim Unite As String = ""
-        Const SEP As String = " "
+        Dim ValeurP As Decimal
+        Dim AffU As Enu_AfficheUnite = Enu_AfficheUnite.Non
 
-        '--[ Traitement
+        '--( Préparation
 
-        Select Case Type
-
-            Case Enu_TypeVariable.Longueur
-
-                kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-                Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
-
-            Case Enu_TypeVariable.LongueurCM
-
-                kUnitU = LogicielInfo.Transfert_Longueur(1)
-                Unite = SEP & LogicielInfo.Unit_Longueur(1)
-
-            Case Enu_TypeVariable.Dimension
-
-                kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
-                Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-
-            Case Enu_TypeVariable.Rigidite
-
-                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
-
-            Case Enu_TypeVariable.Effort
-
-                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
-                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
-
-            Case Enu_TypeVariable.ChargeSurfacique
-                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2
-                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\="
-
-            Case Enu_TypeVariable.ForceRepartie
-                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
-
-            Case Enu_TypeVariable.Frequence
-                kUnitU = 1
-                Unite = SEP & "Hz"
-
-            Case Enu_TypeVariable.Moment
-
-                kUnitU = LogicielInfo.Transfert_Moment(LogicielOptions.IndUnitMoment)
-                Unite = SEP & LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment)
-
-            Case Enu_TypeVariable.ModuleY
-                kUnitU = LogicielInfo.Transfert_ModulesY(LogicielOptions.IndUnitModulesY)
-                Unite = SEP & LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
-
-            Case Enu_TypeVariable.Contrainte
-                kUnitU = LogicielInfo.Transfert_Contraintes(LogicielOptions.IndUnitContraintes)
-                Unite = SEP & LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
-
-            Case Enu_TypeVariable.ContrainteMPa
-
-                kUnitU = 1
-                Unite = SEP & "MPa"
-
-            Case Enu_TypeVariable.ContrainteGPa
-
-                kUnitU = 1000
-                Unite = SEP & "GPa"
-
-            'Case Enu_TypeVariable.Degre
-
-            '    kUnitU = 1
-            '    Unite = "°"
-
-            'Case Enu_TypeVariable.RadianToDegre
-
-            '    kUnitU = Math.PI / 180
-            '    Unite = "°"
-
-            Case Enu_TypeVariable.SansType
-
-                kUnitU = 1
-                Unite = ""
-
-            Case Enu_TypeVariable.InertieCM4
-
-                kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 4
-                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+4\="
-
-            Case Enu_TypeVariable.InertieWCM6
-
-                kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 6
-                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+6\="
-
-            Case Enu_TypeVariable.Inertie
-
-                kUnitU = LogicielInfo.Transfert_Inerties(LogicielOptions.IndUnitInerties)
-                Unite = SEP & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties)
-
-            Case Enu_TypeVariable.WModuleCM3
-
-                kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 3
-                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+3\="
-
-            Case Enu_TypeVariable.WModule
-
-                kUnitU = LogicielInfo.Transfert_ModuleW(LogicielOptions.IndUnitModuleW)
-                Unite = SEP & LogicielInfo.Unit_ModuleW(LogicielOptions.IndUnitModuleW)
-
-
-            Case Enu_TypeVariable.AireLongueurNDC
-
-                kUnitU = LogicielInfo.Transfert_Longueur(2) ^ 2
-                Unite = SEP & LogicielInfo.Unit_Longueur(2) & "\+2\="
-
-            Case Enu_TypeVariable.AireCM2
-
-                kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 2
-                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+2\="
-
-            Case Enu_TypeVariable.AireMM2
-
-                kUnitU = LogicielInfo.Transfert_Longueur(0) ^ 2
-                Unite = SEP & LogicielInfo.Unit_Longueur(0) & "\+2\="
-
-            Case Enu_TypeVariable.Millimetre
-
-                kUnitU = LogicielInfo.Transfert_Longueur(0)
-                Unite = SEP & LogicielInfo.Unit_Longueur(0)
-
-            Case Enu_TypeVariable.Temperature
-
-                kUnitU = 1
-                Unite = SEP & "°C"
-
-        End Select
-
-        ValeurU = Valeur / kUnitU
-        'MyFormat = GetFormatSignificatif(ValeurU, nbSign, nbDigitMax)
-        MyFormat = GetFormatSignificatifN(ValeurU, nbSign, nbDigitMax)
-
-        If ValeurU >= 0 Then lAbsolu = False '--> AffichageOptFeu VA seulement si valeur négative
-
-        If lUnite Then
-            If lAbsolu Then
-                Return "|" & Format(ValeurU, MyFormat) & "|" & Unite
-            Else
-                Return Format(ValeurU, MyFormat) & Unite
-            End If
+        If lAbsolu Then
+            ValeurP = Math.Abs(Valeur)
         Else
-            If lAbsolu Then
-                Return "|" & Format(ValeurU, MyFormat) & "|"
-            Else
-                Return Format(ValeurU, MyFormat)
-            End If
+            ValeurP = Valeur
         End If
+        If lUnite Then AffU = Enu_AfficheUnite.OuiInterface
+
+        '--( Traitement
+
+        Return GetStringInUnitN(Valeur, Type, nbSign, nbDigitMax, AffU, False)
 
     End Function
 
-    Public Function GetStringInUnitP(ByVal Valeur As Decimal, ByVal Type As Enu_TypeVariable,
+
+    '''' <summary>
+    '''' Renvoie une chaine de caractères pour l'affichage d'une valeur
+    '''' </summary>
+    '''' <param name="Valeur">Valeur traitée</param>
+    '''' <param name="Type">Type de la valeur traitée</param>
+    '''' <param name="nbSign">Nombre de chiffres significatifs</param>
+    '''' <param name="nbDigitMax">Nombre maxi de digits après la virgule</param>
+    '''' <param name="lUnite">Indique si affichage des Unités</param>
+    '''' <param name="lAbsolu">Indique si la valeur doit être affiché comme une valeur absolue</param>
+    '''' <returns></returns>
+    'Public Function GetStringInUnit(ByVal Valeur As Decimal, ByVal Type As Enu_TypeVariable,
+    '                                ByVal nbSign As Integer, ByVal nbDigitMax As Integer, ByVal lUnite As Boolean,
+    '                                Optional ByVal lAbsolu As Boolean = False) As String
+
+    '    '--[ Déclarations
+
+    '    Dim ValeurU As Double
+    '    Dim kUnitU As Double
+    '    'Dim lUniteReconnue As Boolean = true
+    '    Dim MyFormat As String
+    '    Dim Unite As String = ""
+    '    Const SEP As String = " "
+
+    '    '--[ Traitement
+
+    '    Select Case Type
+
+    '        Case Enu_TypeVariable.Longueur
+
+    '            kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+    '            Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+    '        Case Enu_TypeVariable.LongueurCM
+
+    '            kUnitU = LogicielInfo.Transfert_Longueur(1)
+    '            Unite = SEP & LogicielInfo.Unit_Longueur(1)
+
+    '        Case Enu_TypeVariable.Dimension
+
+    '            kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+    '            Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+
+    '        Case Enu_TypeVariable.Rigidite
+
+    '            kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+    '            Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+    '        Case Enu_TypeVariable.Effort
+
+    '            kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+    '            Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+
+    '        Case Enu_TypeVariable.ChargeSurfacique
+    '            kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2
+    '            Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\="
+
+    '        Case Enu_TypeVariable.ForceRepartie
+    '            kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+    '            Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+    '        Case Enu_TypeVariable.Frequence
+    '            kUnitU = 1
+    '            Unite = SEP & "Hz"
+
+    '        Case Enu_TypeVariable.Moment
+
+    '            kUnitU = LogicielInfo.Transfert_Moment(LogicielOptions.IndUnitMoment)
+    '            Unite = SEP & LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment)
+
+    '        Case Enu_TypeVariable.ModuleY
+    '            kUnitU = LogicielInfo.Transfert_ModulesY(LogicielOptions.IndUnitModulesY)
+    '            Unite = SEP & LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
+
+    '        Case Enu_TypeVariable.Contrainte
+    '            kUnitU = LogicielInfo.Transfert_Contraintes(LogicielOptions.IndUnitContraintes)
+    '            Unite = SEP & LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
+
+    '        Case Enu_TypeVariable.ContrainteMPa
+
+    '            kUnitU = 1
+    '            Unite = SEP & "MPa"
+
+    '        Case Enu_TypeVariable.ContrainteGPa
+
+    '            kUnitU = 1000
+    '            Unite = SEP & "GPa"
+
+    '        'Case Enu_TypeVariable.Degre
+
+    '        '    kUnitU = 1
+    '        '    Unite = "°"
+
+    '        'Case Enu_TypeVariable.RadianToDegre
+
+    '        '    kUnitU = Math.PI / 180
+    '        '    Unite = "°"
+
+    '        Case Enu_TypeVariable.SansType
+
+    '            kUnitU = 1
+    '            Unite = ""
+
+    '        Case Enu_TypeVariable.InertieCM4
+
+    '            kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 4
+    '            Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+4\="
+
+    '        Case Enu_TypeVariable.InertieWCM6
+
+    '            kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 6
+    '            Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+6\="
+
+    '        Case Enu_TypeVariable.Inertie
+
+    '            kUnitU = LogicielInfo.Transfert_Inerties(LogicielOptions.IndUnitInerties)
+    '            Unite = SEP & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties)
+
+    '        Case Enu_TypeVariable.WModuleCM3
+
+    '            kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 3
+    '            Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+3\="
+
+    '        Case Enu_TypeVariable.WModule
+
+    '            kUnitU = LogicielInfo.Transfert_ModuleW(LogicielOptions.IndUnitModuleW)
+    '            Unite = SEP & LogicielInfo.Unit_ModuleW(LogicielOptions.IndUnitModuleW)
+
+
+    '        Case Enu_TypeVariable.AireLongueurNDC
+
+    '            kUnitU = LogicielInfo.Transfert_Longueur(2) ^ 2
+    '            Unite = SEP & LogicielInfo.Unit_Longueur(2) & "\+2\="
+
+    '        Case Enu_TypeVariable.AireCM2
+
+    '            kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 2
+    '            Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+2\="
+
+    '        Case Enu_TypeVariable.AireMM2
+
+    '            kUnitU = LogicielInfo.Transfert_Longueur(0) ^ 2
+    '            Unite = SEP & LogicielInfo.Unit_Longueur(0) & "\+2\="
+
+    '        Case Enu_TypeVariable.Millimetre
+
+    '            kUnitU = LogicielInfo.Transfert_Longueur(0)
+    '            Unite = SEP & LogicielInfo.Unit_Longueur(0)
+
+    '        Case Enu_TypeVariable.Temperature
+
+    '            kUnitU = 1
+    '            Unite = SEP & "°C"
+
+    '    End Select
+
+    '    ValeurU = Valeur / kUnitU
+    '    'MyFormat = GetFormatSignificatif(ValeurU, nbSign, nbDigitMax)
+    '    MyFormat = GetFormatSignificatifN(ValeurU, nbSign, nbDigitMax)
+
+    '    If ValeurU >= 0 Then lAbsolu = False '--> AffichageOptFeu VA seulement si valeur négative
+
+    '    If lUnite Then
+    '        If lAbsolu Then
+    '            Return "|" & Format(ValeurU, MyFormat) & "|" & Unite
+    '        Else
+    '            Return Format(ValeurU, MyFormat) & Unite
+    '        End If
+    '    Else
+    '        If lAbsolu Then
+    '            Return "|" & Format(ValeurU, MyFormat) & "|"
+    '        Else
+    '            Return Format(ValeurU, MyFormat)
+    '        End If
+    '    End If
+
+    'End Function
+
+    'Public Function GetStringInUnitN(ByVal Valeur As Decimal, ByVal Type As Enu_TypeVariable,
+    '                                 ByVal nbSign As Integer, ByVal nbDigitMax As Integer,
+    '                                 Optional ByVal lSupZero As Boolean = False) As String
+    '    '--------------------------------------------------------------------------------------------------------------------------------
+    '    '   13/01/25 :  Création - POM - V1.00
+    '    '--------------------------------------------------------------------------------------------------------------------------------
+    '    '   Gestion de l'affichage des chaines numériques sous forme de chaine de caractères (pas d'affichage de l'unité)
+    '    '--------------------------------------------------------------------------------------------------------------------------------
+    '    '   Valeur          [E] :   Valeur numérique à afficher
+    '    '   Type            [E] :   Type de la valeur (pour les unités)
+    '    '   nbSign          [E] :   Nombre de chiffres caractéristiques
+    '    '   nbDigitMax      [E] :   Nombre maxi de chiffres après la virgule
+    '    '   lSupZero        [E] :   Indique si on supprime les zéros non significatifs après la virgule
+    '    '--------------------------------------------------------------------------------------------------------------------------------
+    '    Return GetStringInUnitN(Valeur, Type, nbSign, nbDigitMax, Enu_AfficheUnite.Non, lSupZero)
+    'End Function
+
+    Public Function GetStringInUnitN(ByVal Valeur As Decimal, ByVal Type As Enu_TypeVariable,
                                      ByVal nbSign As Integer, ByVal nbDigitMax As Integer, ByVal AffUnite As Enu_AfficheUnite,
-                                     Optional ByVal lSupZero As Boolean = False) As String
+                                     lSupZero As Boolean) As String
         '--------------------------------------------------------------------------------------------------------------------------------
         '   24/04/24 :  Création - POM - V1.00
         '--------------------------------------------------------------------------------------------------------------------------------

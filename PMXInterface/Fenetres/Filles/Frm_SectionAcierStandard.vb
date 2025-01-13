@@ -274,6 +274,8 @@ Public Class Frm_SectionAcierStandard
 
     Private Sub AfficherPoutreEnCours()
 
+        Const NON As Enu_AfficheUnite = Enu_AfficheUnite.Non
+
         Select Case MySectionLoc.ProfilA.typeProfileAcier
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine
                 Me.rdb_Lamine.Checked = True
@@ -297,13 +299,13 @@ Public Class Frm_SectionAcierStandard
             MySectionLoc.ProfilA.Tfi = MySectionLoc.ProfilA.Tfs
         End If
 
-        Me.txt_Ha.Text = GetStringInUnitN(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension, 4, 1, False, True)
-        Me.txt_Hw.Text = GetStringInUnitN(MySectionLoc.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 4, 1, False, True)
-        Me.txt_Bfi.Text = GetStringInUnitN(MySectionLoc.ProfilA.Bfi, Enu_TypeVariable.Dimension, 4, 1, False, True)
-        Me.txt_Bfs.Text = GetStringInUnitN(MySectionLoc.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 1, False, True)
-        Me.txt_Tfi.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tfi, Enu_TypeVariable.Dimension, 4, 1, False, True)
-        Me.txt_Tfs.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, False, True)
-        Me.txt_Tw.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tw, Enu_TypeVariable.Dimension, 4, 1, False, True)
+        Me.txt_Ha.Text = GetStringInUnitN(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension, 4, 1, NON, True)
+        Me.txt_Hw.Text = GetStringInUnitN(MySectionLoc.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 4, 1, NON, True)
+        Me.txt_Bfi.Text = GetStringInUnitN(MySectionLoc.ProfilA.Bfi, Enu_TypeVariable.Dimension, 4, 1, NON, True)
+        Me.txt_Bfs.Text = GetStringInUnitN(MySectionLoc.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 1, NON, True)
+        Me.txt_Tfi.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tfi, Enu_TypeVariable.Dimension, 4, 1, NON, True)
+        Me.txt_Tfs.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, NON, True)
+        Me.txt_Tw.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tw, Enu_TypeVariable.Dimension, 4, 1, NON, True)
 
         '== Plats
 
@@ -322,8 +324,8 @@ Public Class Frm_SectionAcierStandard
 
         Me.chk_Plat.Checked = MySectionLoc.ProfilA.lPlat
 
-        Me.txt_EpPlat.Text = GetStringInUnitN(MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False, True)
-        Me.txt_Wplat.Text = GetStringInUnitN(MySectionLoc.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 1, False, True)
+        Me.txt_EpPlat.Text = GetStringInUnitN(MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, Enu_AfficheUnite.Non, True)
+        Me.txt_Wplat.Text = GetStringInUnitN(MySectionLoc.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 1, Enu_AfficheUnite.Non, True)
         MAJI_Plats()
 
         '==> AffichageOptFeu de la nuance

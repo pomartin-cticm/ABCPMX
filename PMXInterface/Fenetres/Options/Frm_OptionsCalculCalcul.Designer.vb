@@ -135,7 +135,7 @@ Partial Class Frm_OptionsCalculCalcul
         Me.TLpan_Conteneur.Name = "TLpan_Conteneur"
         Me.TLpan_Conteneur.RowCount = 1
         Me.TLpan_Conteneur.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_Conteneur.Size = New System.Drawing.Size(739, 637)
+        Me.TLpan_Conteneur.Size = New System.Drawing.Size(739, 568)
         Me.TLpan_Conteneur.TabIndex = 0
         '
         'pan_Conteneur
@@ -151,7 +151,7 @@ Partial Class Frm_OptionsCalculCalcul
         Me.pan_Conteneur.Location = New System.Drawing.Point(0, 0)
         Me.pan_Conteneur.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Conteneur.Name = "pan_Conteneur"
-        Me.pan_Conteneur.Size = New System.Drawing.Size(739, 637)
+        Me.pan_Conteneur.Size = New System.Drawing.Size(739, 568)
         Me.pan_Conteneur.TabIndex = 0
         '
         'Panel4
@@ -161,7 +161,7 @@ Partial Class Frm_OptionsCalculCalcul
         Me.Panel4.Controls.Add(Me.lbl_ShearBuckling)
         Me.Panel4.Controls.Add(Me.txt_eta)
         Me.Panel4.Controls.Add(Me.img_Eta)
-        Me.Panel4.Location = New System.Drawing.Point(4, 543)
+        Me.Panel4.Location = New System.Drawing.Point(3, 470)
         Me.Panel4.Name = "Panel4"
         Me.Panel4.Size = New System.Drawing.Size(732, 91)
         Me.Panel4.TabIndex = 107
@@ -229,9 +229,9 @@ Partial Class Frm_OptionsCalculCalcul
         Me.Panel3.Controls.Add(Me.img_PsiLG)
         Me.Panel3.Controls.Add(Me.lbl_CreepMultiplier)
         Me.Panel3.Controls.Add(Me.lbl_LoadCases)
-        Me.Panel3.Location = New System.Drawing.Point(3, 359)
+        Me.Panel3.Location = New System.Drawing.Point(3, 295)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(732, 181)
+        Me.Panel3.Size = New System.Drawing.Size(732, 174)
         Me.Panel3.TabIndex = 107
         '
         'img_T0SH
@@ -525,9 +525,9 @@ Partial Class Frm_OptionsCalculCalcul
         Me.Panel2.Controls.Add(Me.img_dNodes)
         Me.Panel2.Controls.Add(Me.lbl_DistanceMaxNoeuds)
         Me.Panel2.Controls.Add(Me.lbl_Discretisation)
-        Me.Panel2.Location = New System.Drawing.Point(3, 222)
+        Me.Panel2.Location = New System.Drawing.Point(3, 189)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(732, 134)
+        Me.Panel2.Size = New System.Drawing.Size(732, 105)
         Me.Panel2.TabIndex = 106
         '
         'Label1
@@ -695,7 +695,7 @@ Partial Class Frm_OptionsCalculCalcul
         Me.Panel1.Controls.Add(Me.img_Es)
         Me.Panel1.Location = New System.Drawing.Point(3, 61)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(732, 158)
+        Me.Panel1.Size = New System.Drawing.Size(732, 127)
         Me.Panel1.TabIndex = 105
         '
         'chk_RebarsInCompression

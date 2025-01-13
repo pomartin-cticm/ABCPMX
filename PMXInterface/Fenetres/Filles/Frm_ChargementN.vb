@@ -799,12 +799,12 @@ Public Class Frm_ChargementN
 
         Me.pan_Ndalle.Visible = lNDalle
         If lNDalle Then
-            Me.txt_Ndalle.Text = GetStringInUnitN(nDalle, Enu_TypeVariable.SansType, 3, 2, False, True)
+            Me.txt_Ndalle.Text = GetStringInUnitN(nDalle, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True)
         End If
 
         Me.pan_Nenrob.Visible = lNEnrob
         If lNEnrob Then
-            Me.txt_Nenrob.Text = GetStringInUnitN(nEnrob, Enu_TypeVariable.SansType, 3, 2, False, True)
+            Me.txt_Nenrob.Text = GetStringInUnitN(nEnrob, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True)
         End If
 
         Me.lbl_NCoef.Visible = lNEnrob Or lNDalle

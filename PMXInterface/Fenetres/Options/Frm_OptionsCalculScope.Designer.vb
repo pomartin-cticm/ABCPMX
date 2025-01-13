@@ -146,9 +146,9 @@ Partial Class Frm_OptionsCalculScope
         Me.pan_Materiau.Controls.Add(Me.Label10)
         Me.pan_Materiau.Controls.Add(Me.txt_RhoC_LWC_Max)
         Me.pan_Materiau.Controls.Add(Me.lbl_Materiau)
-        Me.pan_Materiau.Location = New System.Drawing.Point(5, 260)
+        Me.pan_Materiau.Location = New System.Drawing.Point(5, 252)
         Me.pan_Materiau.Name = "pan_Materiau"
-        Me.pan_Materiau.Size = New System.Drawing.Size(731, 100)
+        Me.pan_Materiau.Size = New System.Drawing.Size(731, 68)
         Me.pan_Materiau.TabIndex = 147
         '
         'etq_UnitMassV2
@@ -267,7 +267,7 @@ Partial Class Frm_OptionsCalculScope
         Me.Panel2.Controls.Add(Me.Label1)
         Me.Panel2.Controls.Add(Me.lbl_Renformis)
         Me.Panel2.Controls.Add(Me.img_Th)
-        Me.Panel2.Location = New System.Drawing.Point(5, 121)
+        Me.Panel2.Location = New System.Drawing.Point(5, 117)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(731, 133)
         Me.Panel2.TabIndex = 146

@@ -907,11 +907,12 @@ Public Class Frm_Connection
     ''' MAJ des textboxs et comboboxs dans la zone des connecteurs
     ''' </summary>
     Private Sub MAJ_affichage_txt_connecteurs()
+        Const NON As Enu_AfficheUnite = Enu_AfficheUnite.Non
         Me.cmb_goujons.SelectedIndex = Array.IndexOf(tabLabelGoujons, MyPoutreLoc.Dalle.Goujons.nom)
-        Me.txt_hsc.Text = GetStringInUnitN(MyPoutreLoc.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 3, False, True)
-        Me.txt_d.Text = GetStringInUnitN(MyPoutreLoc.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 3, False, True)
-        Me.txt_fy.Text = GetStringInUnitN(MyPoutreLoc.Dalle.Goujons.Fy, Enu_TypeVariable.Contrainte, 4, 3, False, True)
-        Me.txt_fu.Text = GetStringInUnitN(MyPoutreLoc.Dalle.Goujons.Fu, Enu_TypeVariable.Contrainte, 4, 3, False, True)
+        Me.txt_hsc.Text = GetStringInUnitN(MyPoutreLoc.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 3, NON, True)
+        Me.txt_d.Text = GetStringInUnitN(MyPoutreLoc.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 3, NON, True)
+        Me.txt_fy.Text = GetStringInUnitN(MyPoutreLoc.Dalle.Goujons.Fy, Enu_TypeVariable.Contrainte, 4, 3, NON, True)
+        Me.txt_fu.Text = GetStringInUnitN(MyPoutreLoc.Dalle.Goujons.Fu, Enu_TypeVariable.Contrainte, 4, 3, NON, True)
     End Sub
 
     ''' <summary>

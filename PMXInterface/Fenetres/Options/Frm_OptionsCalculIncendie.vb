@@ -33,7 +33,7 @@ Public Class Frm_OptionsCalculIncendie
             Me.lbl_AlphaC.Text = MyBloc("CONVECTIONFACTOR")
             Me.lbl_AlphaCC.Text = MyBloc("CONVECTIONFACTORSLAB")
             Me.lbl_FormFactorPhi.Text = MyBloc("FORMFACTOR")
-            Me.lbl_ShadowKsh.Text = MyBloc("FORMFACTOR")
+            Me.lbl_ShadowKsh.Text = MyBloc("SHADOWFACTOR")
 
             Me.lbl_Parametres.Text = MyBloc("PARAMETERS")
             Me.lbl_TempReference.Text = MyBloc("TEMPREFERENCE")
@@ -72,16 +72,16 @@ Public Class Frm_OptionsCalculIncendie
 
     Private Sub AfficherOptionsEnCours()
 
-        Me.txt_Sigma.Text = GetStringInUnitN(cls_OptionsFeu.BOLTZMANN * 10 ^ 8, Enu_TypeVariable.SansType, 5, 4, False, True)
-        Me.txt_EmissiviteFeu.Text = GetStringInUnitN(OptionsFeu.EmissiviteF, Enu_TypeVariable.SansType, 5, 4, False, True)
-        Me.txt_EmissiviteBeton.Text = GetStringInUnitN(OptionsFeu.EmissiviteC, Enu_TypeVariable.SansType, 5, 4, False, True)
-        Me.txt_AlphaC.Text = GetStringInUnitN(OptionsFeu.AlphaC, Enu_TypeVariable.SansType, 5, 4, False, True)
-        Me.txt_AlphaCC.Text = GetStringInUnitN(OptionsFeu.AlphaCC, Enu_TypeVariable.SansType, 5, 4, False, True)
-        Me.txt_ksh.Text = GetStringInUnitN(OptionsFeu.ksh, Enu_TypeVariable.SansType, 5, 4, False, True)
-        Me.txt_Phi.Text = GetStringInUnitN(OptionsFeu.Phi, Enu_TypeVariable.SansType, 5, 4, False, True)
+        Me.txt_Sigma.Text = GetStringInUnitN(CDec(cls_OptionsFeu.BOLTZMANN * 10 ^ 8), Enu_TypeVariable.SansType, 5, 4, NON_U, True)
+        Me.txt_EmissiviteFeu.Text = GetStringInUnitN(OptionsFeu.EmissiviteF, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
+        Me.txt_EmissiviteBeton.Text = GetStringInUnitN(OptionsFeu.EmissiviteC, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
+        Me.txt_AlphaC.Text = GetStringInUnitN(OptionsFeu.AlphaC, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
+        Me.txt_AlphaCC.Text = GetStringInUnitN(OptionsFeu.AlphaCC, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
+        Me.txt_ksh.Text = GetStringInUnitN(OptionsFeu.ksh, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
+        Me.txt_Phi.Text = GetStringInUnitN(OptionsFeu.Phi, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
 
-        Me.txt_TempReference.Text = GetStringInUnitN(OptionsFeu.TempRef, Enu_TypeVariable.SansType, 4, 1, False, True)
-        Me.txt_TempMax.Text = GetStringInUnitN(cls_OptionsFeu.TempMax, Enu_TypeVariable.SansType, 4, 1, False, True)
+        Me.txt_TempReference.Text = GetStringInUnitN(OptionsFeu.TempRef, Enu_TypeVariable.SansType, 4, 1, NON_U, True)
+        Me.txt_TempMax.Text = GetStringInUnitN(cls_OptionsFeu.TempMax, Enu_TypeVariable.SansType, 4, 1, NON_U, True)
 
     End Sub
 
