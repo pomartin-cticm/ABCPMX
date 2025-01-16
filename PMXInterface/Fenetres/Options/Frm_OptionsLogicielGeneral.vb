@@ -37,6 +37,11 @@
             Me.lbl_Version.Text = MyBloc("VERSION")
             Me.lbl_Version2.Text = MyBloc("VERSION")
 
+            Me.lbl_Web.Text = MyBloc("WEB")
+            Me.chk_ControlFichier.Text = MyBloc("WEBFILE")
+            Me.chk_ControlVersion.Text = MyBloc("WEBVERSION")
+            Me.cmd_CheckUpdates.Text = MyBloc("WEBUPDATE")
+
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues")
             'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -166,6 +171,21 @@
             Case 0 : LogicielInfo.Maitre = EnuMaitre.CTICM
             Case 1 : LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
         End Select
+    End Sub
+
+    Private Sub cmd_CheckUpdates_Click(sender As Object, e As EventArgs) Handles cmd_CheckUpdates.Click
+        'Frm_UpDate.ShowDialog()
+        'Frm_UpDate.Dispose()
+    End Sub
+
+    Private Sub chk_ControlVersion_CheckedChanged(sender As Object, e As EventArgs) Handles chk_ControlVersion.CheckedChanged
+        If lBuild Then Exit Sub
+        Frm_OptionsLogiciel.pLocalLogicielOptions.lControlWebVersion = Me.chk_ControlVersion.Checked
+    End Sub
+
+    Private Sub chk_ControlFichier_CheckedChanged(sender As Object, e As EventArgs) Handles chk_ControlFichier.CheckedChanged
+        If lBuild Then Exit Sub
+        Frm_OptionsLogiciel.pLocalLogicielOptions.lControlWebFichier = Me.chk_ControlFichier.Checked
     End Sub
 
 #End Region

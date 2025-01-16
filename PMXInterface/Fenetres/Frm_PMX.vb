@@ -1289,6 +1289,10 @@ Public Class Frm_PMX
         My.Settings.UserName = LogicielOptions.UserName
         My.Settings.CompanyName = LogicielOptions.CompanyName
 
+        '# Controle mise à jour sur le web
+        My.Settings.lControlWebFichier = LogicielOptions.lControlWebFichier
+        My.Settings.lControlWebVersion = LogicielOptions.lControlWebVersion
+
         '--( Unités
         '# Dimensions et Longueurs
         My.Settings.indUnitDimension = LogicielOptions.IndUnitDimension

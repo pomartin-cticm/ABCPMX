@@ -1428,4 +1428,59 @@ Public Module Mod_BasesDonneesBinaires
 
 #End Region
 
+#Region "   Gestion des formats et indices "
+
+    Public Sub AnalyseInfoVersion(ByVal strVersion As String, ByVal iFormat As Short, ByRef InfoVersion As StrucVersionDtB)
+        '-----------------------------------------------------------------------------------------------------------------------
+        '
+        '   28/09/12 :  Création - V3.00 - POM
+        '
+        '-----------------------------------------------------------------------------------------------------------------------
+
+        Dim Longueur As Integer = strVersion.Length
+        Dim Pos As Integer = strVersion.IndexOf("_")
+
+        If Pos > -1 Then
+            InfoVersion.Year = CInt(strVersion.Substring(0, Pos))
+            InfoVersion.Indice = CInt(strVersion.Substring(Pos + 1, Longueur - Pos - 1))
+        End If
+
+        'InfoVersion.Year = CInt(strVersion.Substring(0, 4))
+        'InfoVersion.Indice = CInt(strVersion.Substring(5, 2))
+
+        InfoVersion.Format = iFormat
+    End Sub
+
+#End Region
+
+
+#Region "   Comparateur de version "
+
+    Public Function ExisteVersionPlusRecenteMemeFormat(ByVal InfoVActuel As StrucVersionDtB, ByVal InfoVCandidat As StrucVersionDtB) As Boolean
+        '-----------------------------------------------------------------------------------------------------------------------
+        '
+        '   28/09/12 :  Création - V3.00 - POM
+        '
+        '-----------------------------------------------------------------------------------------------------------------------
+        '
+        '   Indique si une version existe plus récente et avec le meme format
+        '
+        '-----------------------------------------------------------------------------------------------------------------------
+
+        Dim lExiste As Boolean = False
+
+        If InfoVActuel.Format = InfoVCandidat.Format Then
+            If InfoVCandidat.Year > InfoVActuel.Year Then
+                lExiste = True
+            ElseIf InfoVCandidat.Year = InfoVActuel.Year Then
+                If InfoVCandidat.Indice > InfoVActuel.Indice Then lExiste = True
+            End If
+        End If
+
+        Return lExiste
+    End Function
+
+#End Region
+
+
 End Module

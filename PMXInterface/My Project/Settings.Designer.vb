@@ -1336,6 +1336,30 @@ Namespace My
                 Me("indUnitInertie") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lControlWebVersion() As Boolean
+            Get
+                Return CType(Me("lControlWebVersion"),Boolean)
+            End Get
+            Set
+                Me("lControlWebVersion") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lControlWebFichier() As Boolean
+            Get
+                Return CType(Me("lControlWebFichier"),Boolean)
+            End Get
+            Set
+                Me("lControlWebFichier") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

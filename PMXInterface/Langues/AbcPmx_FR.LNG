@@ -1094,28 +1094,6 @@ CLICKTOEDIT				= Click on databases in blue to edit them
 FILTRESOFT				= Software filter
 HIDEFILTER				= Hide unauthorized profiles
 
-#RESERVE
-EPROFILS				= Base de données des profilés d'ArcelorMittal
-EACIER					= Base de données des aciers
-
-STEELAVAIL		= Afficher uniquement les aciers disponibles
-CHOIXSTEEL		= Options pour la sélection des aciers
-BASEONLY		= Uniquement les aciers de base
-STANDARDONLY	= Uniquement les aciers sous normes pour le profil sélectionné
-BASEANDSTANDARD = Aciers de base et acier sous normes disponibles pour le profil sélectionné
-BASEIFNOSTD		= Acier de base si aucun acier disponible pour le profil sélectionné
-ALLSTEEL		= Tous les aciers de la base de données
-HIDESTEELTHICK	= Masquer les aciers non compatibles avec l'épaisseur du profil
-GRPWEBFILES		= Mise à jour des bases de données depuis Internet
-NBWEBFILES		= Nombre de fichers web
-DELETEWEBF		= Supprimer tous les fichers web
-TTIPEDITBAC		= Cliquez pour modifier la base de données des bacs acier
-TTIPEDITHILTI	= Cliquez pour modifier la base de données des connecteurs Hilti
-TTIPEDITSTUDS	= Cliquer pour modifier la base de données des goujons
-UNIVERSALDTB	= Utiliser des bases de données généralisées
-SAVEOPTIONS		= Enregistrez ces options pour la prochaine session Expert
-EXPERTOPT		= Options d'expert
-SHOWEC3C		= Afficher les courbes de réductions de l'EC3	
 
 #OPTSOFTDIRECTORIES
 DIRECTORIES				= Répertoire
@@ -1145,6 +1123,10 @@ USERNAME				= Nom de l'utilisateur
 FIRM					= Entreprise
 INTERNETCHECKS			= Contrôles internet
 VERSION					= Version
+WEB						= Mise à jour - internet
+WEBVERSION				= Contrôle de la version au démarrage
+WEBFILE					= Contrôle de la base de données des profilés au démarrage
+WEBUPDATE				= Vérifier les mises à jour maintenant
 
 #OPTSOFTUNITS
 TITLE					= Unités

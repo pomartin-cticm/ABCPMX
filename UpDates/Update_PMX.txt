@@ -1,0 +1,10 @@
+﻿VERSION = 1.00
+MSG01EN	= The version 1.00 of PMX is now available
+MSG02EN	= Please follow this link for download
+MSG01FR	= La version 1.00 du logiciel PMX est disponible
+MSG02FR	= Cliquer sur le lien pour aller sur la page de téléchargement
+ADDRESS	= https://www.cticm.com/notre-librairie/?fwp_taxonomy_first_line=logiciel
+BASEPRO = 2024_01 1
+BASESTE = 2024_01 1
+DEBGPRO = 2024_01 1
+DEBGSTE = 2024_01 1

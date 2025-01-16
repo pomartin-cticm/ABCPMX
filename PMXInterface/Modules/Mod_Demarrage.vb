@@ -76,6 +76,26 @@ Public Module Mod_Demarrage
 
     End Sub
 
+    Public Function ABCPMXIndiceVersion() As Single
+        '------------------------------------------------------------------------------------------
+        '   16/01/25 :  Création - POM
+        '------------------------------------------------------------------------------------------
+        '
+        '   Retourne un réel pour représenter la version du logiciel
+        '
+        '------------------------------------------------------------------------------------------
+        '==R17-010
+
+        Dim kDiv As Single = 100
+        'If LogicielInfo.Version.Indice < 10 Then kDiv = 100
+
+        Dim IndV As Single = LogicielInfo.Version.Principal + LogicielInfo.Version.Indice / kDiv
+        IndV = CSng(Math.Round(IndV, 2))
+
+        Return IndV
+
+    End Function
+
     Private Function LabelMaitre() As String
         Dim Label As String = ""
         Select Case LogicielInfo.Maitre
@@ -118,13 +138,15 @@ Public Module Mod_Demarrage
 
         LogicielOptions.lDebug = False
 
-        LogicielInfo.NomLogiciel = "ABCPMX-II"
-
         Select Case LogicielInfo.Maitre
-            Case EnuMaitre.ArcelorMittal : LogicielInfo.MailSupport = EMAIL_ARCELORMITTAL
-            Case EnuMaitre.CTICM : LogicielInfo.MailSupport = EMAIL_CTICM
+            Case EnuMaitre.ArcelorMittal
+                LogicielInfo.MailSupport = EMAIL_ARCELORMITTAL
+                LogicielInfo.NomLogiciel = "ABC-PMX"
+
+            Case EnuMaitre.CTICM
+                LogicielInfo.MailSupport = EMAIL_CTICM
+                LogicielInfo.NomLogiciel = "ABC-PMX"
         End Select
-        ' LogicielInfo.MailSupport = "support.logiciels@cticm.com"
 
         LogicielInfo.Extension = "pmx"
         LogicielInfo.Racine = "ABCPMX"
@@ -207,6 +229,7 @@ Public Module Mod_Demarrage
         LogicielInfo.NbDigitMax_ModulesY = {0, 3}
 
         '--> Récupération des options du logiciel - modifiable par l'utilisateur
+        '=== Les paramètres sont enregistrés par la routine EnregistrerOptionsLogiciel / Frm_PMX
         Try
             '===> Options générales <============================================================================================
 
@@ -220,6 +243,11 @@ Public Module Mod_Demarrage
             '# Identification
             LogicielOptions.CompanyName = My.Settings.CompanyName
             LogicielOptions.UserName = My.Settings.UserName
+
+            '--> Contrôle mise à jour internet
+
+            LogicielOptions.lControlWebVersion = My.Settings.lControlWebVersion
+            LogicielOptions.lControlWebFichier = My.Settings.lControlWebFichier
 
             '--> Unités
             '# Dimensions Longueurs
@@ -322,6 +350,14 @@ Public Module Mod_Demarrage
 
         LogicielOptions.lFenetres = True
         LogicielInfo.DetailNDC = Enum_NiveauDetailNDC.Complete
+
+        '--( Controles WEB
+
+        Dim lNewVersion As Boolean
+        Dim lNewBasePro, lNewbaseSteel As Boolean
+        Dim vBasePro, vBaseSteel As StrucVersionDtB
+
+        InitialiseAccesInternet(lNewBasePro, vBasePro, lNewbaseSteel, vBaseSteel, lNewVersion, False, lDebug)
 
         '--> Options du domaine d'application et options de calcul
 

@@ -1112,30 +1112,6 @@ CLICKTOEDIT				= Click on databases in blue to edit them
 FILTRESOFT				= Software filter
 HIDEFILTER				= Hide unauthorized profiles
 
-#RESERVE
-EPROFILS		= ArcelorMittal Profiles database
-EACIER			= Steels database
-
-STEELAVAIL		= Show only available steels
-CHOIXSTEEL		= Options for the selection of steel
-BASEONLY		= Only base steels
-STANDARDONLY	= Only steel under norms available for the selected profile
-BASEANDSTANDARD = Base steel and steel under norms available for the selected profile
-BASEIFNOSTD		= Base steel if no steel available for the selected profile
-ALLSTEEL		= All steels of the database
-HIDESTEELTHICK	= Hide steels not compatible with profile thickness
-GRPWEBFILES		= Databases from internet update
-NBWEBFILES		= Number of web files
-DELETEWEBF		= Delete all web files
-TTIPEDITBAC		= Click to edit steel sheets database
-TTIPEDITHILTI	= Click to edit Hilti connectors database
-TTIPEDITSTUDS	= Click to edit studs database
-UNIVERSALDTB	= Use generalised databases
-SAVEOPTIONS		= Save these options for the next Expert session
-EXPERTOPT		= Expert options
-SHOWEC3C		= Show EC3 reduction curves	
-
-
 #OPTSOFTDIRECTORIES
 DIRECTORIES				= Directories
 INSTALL					= Installation directory
@@ -1164,7 +1140,10 @@ USERNAME				= User name
 FIRM					= Firm
 INTERNETCHECKS			= Internet checks
 VERSION					= Version
-
+WEB						= Internet Update
+WEBVERSION				= Control of the version at launch
+WEBFILE					= Control of the profiles database at launch
+WEBUPDATE				= Check updates now
 
 #OPTSOFTUNITS
 TITLE					= Units

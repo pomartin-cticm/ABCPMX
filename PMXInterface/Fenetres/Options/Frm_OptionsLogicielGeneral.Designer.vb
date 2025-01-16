@@ -23,6 +23,10 @@ Partial Class Frm_OptionsLogicielGeneral
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.pan_General = New System.Windows.Forms.Panel()
+        Me.pan_Version = New System.Windows.Forms.Panel()
+        Me.cmb_Maitre = New System.Windows.Forms.ComboBox()
+        Me.lbl_Version2 = New System.Windows.Forms.Label()
+        Me.lbl_Version = New System.Windows.Forms.Label()
         Me.pan_Identification = New System.Windows.Forms.Panel()
         Me.lbl_UserName = New System.Windows.Forms.Label()
         Me.txt_UserName = New System.Windows.Forms.TextBox()
@@ -36,19 +40,22 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.lbl_LangueGUI = New System.Windows.Forms.Label()
         Me.lst_LangueGUI = New System.Windows.Forms.ListBox()
         Me.lbl_Langues = New System.Windows.Forms.Label()
-        Me.pan_Version = New System.Windows.Forms.Panel()
-        Me.lbl_Version2 = New System.Windows.Forms.Label()
-        Me.lbl_Version = New System.Windows.Forms.Label()
-        Me.cmb_Maitre = New System.Windows.Forms.ComboBox()
+        Me.pan_Web = New System.Windows.Forms.Panel()
+        Me.lbl_Web = New System.Windows.Forms.Label()
+        Me.chk_ControlFichier = New System.Windows.Forms.CheckBox()
+        Me.chk_ControlVersion = New System.Windows.Forms.CheckBox()
+        Me.cmd_CheckUpdates = New System.Windows.Forms.Button()
         Me.pan_General.SuspendLayout()
+        Me.pan_Version.SuspendLayout()
         Me.pan_Identification.SuspendLayout()
         Me.pan_Langues.SuspendLayout()
-        Me.pan_Version.SuspendLayout()
+        Me.pan_Web.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
         '
         Me.pan_General.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_General.Controls.Add(Me.pan_Web)
         Me.pan_General.Controls.Add(Me.pan_Version)
         Me.pan_General.Controls.Add(Me.pan_Identification)
         Me.pan_General.Controls.Add(Me.pan_Langues)
@@ -57,6 +64,48 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.pan_General.Name = "pan_General"
         Me.pan_General.Size = New System.Drawing.Size(739, 472)
         Me.pan_General.TabIndex = 1
+        '
+        'pan_Version
+        '
+        Me.pan_Version.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Version.Controls.Add(Me.cmb_Maitre)
+        Me.pan_Version.Controls.Add(Me.lbl_Version2)
+        Me.pan_Version.Controls.Add(Me.lbl_Version)
+        Me.pan_Version.Location = New System.Drawing.Point(1, 330)
+        Me.pan_Version.Name = "pan_Version"
+        Me.pan_Version.Size = New System.Drawing.Size(737, 67)
+        Me.pan_Version.TabIndex = 102
+        '
+        'cmb_Maitre
+        '
+        Me.cmb_Maitre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Maitre.FormattingEnabled = True
+        Me.cmb_Maitre.Location = New System.Drawing.Point(117, 31)
+        Me.cmb_Maitre.Name = "cmb_Maitre"
+        Me.cmb_Maitre.Size = New System.Drawing.Size(189, 21)
+        Me.cmb_Maitre.TabIndex = 99
+        '
+        'lbl_Version2
+        '
+        Me.lbl_Version2.Location = New System.Drawing.Point(6, 32)
+        Me.lbl_Version2.Name = "lbl_Version2"
+        Me.lbl_Version2.Size = New System.Drawing.Size(105, 20)
+        Me.lbl_Version2.TabIndex = 98
+        Me.lbl_Version2.Text = "lbl_Version"
+        Me.lbl_Version2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lbl_Version
+        '
+        Me.lbl_Version.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Version.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Version.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_Version.Name = "lbl_Version"
+        Me.lbl_Version.Size = New System.Drawing.Size(737, 23)
+        Me.lbl_Version.TabIndex = 96
+        Me.lbl_Version.Text = "lbl_Version"
+        Me.lbl_Version.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_Identification
         '
@@ -67,7 +116,7 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.pan_Identification.Controls.Add(Me.lbl_Firm)
         Me.pan_Identification.Controls.Add(Me.txt_Firm)
         Me.pan_Identification.Controls.Add(Me.lbl_Identification)
-        Me.pan_Identification.Location = New System.Drawing.Point(1, 144)
+        Me.pan_Identification.Location = New System.Drawing.Point(1, 135)
         Me.pan_Identification.Name = "pan_Identification"
         Me.pan_Identification.Size = New System.Drawing.Size(737, 86)
         Me.pan_Identification.TabIndex = 101
@@ -128,7 +177,7 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.pan_Langues.Controls.Add(Me.lbl_Langues)
         Me.pan_Langues.Location = New System.Drawing.Point(1, 1)
         Me.pan_Langues.Name = "pan_Langues"
-        Me.pan_Langues.Size = New System.Drawing.Size(737, 137)
+        Me.pan_Langues.Size = New System.Drawing.Size(737, 132)
         Me.pan_Langues.TabIndex = 100
         '
         'lstbox_Test
@@ -190,47 +239,57 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.lbl_Langues.Text = "lbl_Langues"
         Me.lbl_Langues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'pan_Version
+        'pan_Web
         '
-        Me.pan_Version.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.pan_Web.Controls.Add(Me.cmd_CheckUpdates)
+        Me.pan_Web.Controls.Add(Me.chk_ControlFichier)
+        Me.pan_Web.Controls.Add(Me.chk_ControlVersion)
+        Me.pan_Web.Controls.Add(Me.lbl_Web)
+        Me.pan_Web.Location = New System.Drawing.Point(1, 223)
+        Me.pan_Web.Name = "pan_Web"
+        Me.pan_Web.Size = New System.Drawing.Size(737, 105)
+        Me.pan_Web.TabIndex = 103
+        '
+        'lbl_Web
+        '
+        Me.lbl_Web.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pan_Version.Controls.Add(Me.cmb_Maitre)
-        Me.pan_Version.Controls.Add(Me.lbl_Version2)
-        Me.pan_Version.Controls.Add(Me.lbl_Version)
-        Me.pan_Version.Location = New System.Drawing.Point(1, 235)
-        Me.pan_Version.Name = "pan_Version"
-        Me.pan_Version.Size = New System.Drawing.Size(737, 67)
-        Me.pan_Version.TabIndex = 102
+        Me.lbl_Web.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Web.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_Web.Name = "lbl_Web"
+        Me.lbl_Web.Size = New System.Drawing.Size(737, 23)
+        Me.lbl_Web.TabIndex = 97
+        Me.lbl_Web.Text = "lbl_Web"
+        Me.lbl_Web.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lbl_Version2
+        'chk_ControlFichier
         '
-        Me.lbl_Version2.Location = New System.Drawing.Point(6, 32)
-        Me.lbl_Version2.Name = "lbl_Version2"
-        Me.lbl_Version2.Size = New System.Drawing.Size(105, 20)
-        Me.lbl_Version2.TabIndex = 98
-        Me.lbl_Version2.Text = "lbl_Version"
-        Me.lbl_Version2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.chk_ControlFichier.Location = New System.Drawing.Point(9, 50)
+        Me.chk_ControlFichier.Name = "chk_ControlFichier"
+        Me.chk_ControlFichier.Size = New System.Drawing.Size(351, 24)
+        Me.chk_ControlFichier.TabIndex = 99
+        Me.chk_ControlFichier.Text = "chk_ControleFichier"
+        Me.chk_ControlFichier.UseVisualStyleBackColor = True
         '
-        'lbl_Version
+        'chk_ControlVersion
         '
-        Me.lbl_Version.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.chk_ControlVersion.Location = New System.Drawing.Point(9, 26)
+        Me.chk_ControlVersion.Name = "chk_ControlVersion"
+        Me.chk_ControlVersion.Size = New System.Drawing.Size(351, 24)
+        Me.chk_ControlVersion.TabIndex = 98
+        Me.chk_ControlVersion.Text = "chk_ControlVersion"
+        Me.chk_ControlVersion.UseVisualStyleBackColor = True
+        '
+        'cmd_CheckUpdates
+        '
+        Me.cmd_CheckUpdates.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_Version.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Version.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Version.Name = "lbl_Version"
-        Me.lbl_Version.Size = New System.Drawing.Size(737, 23)
-        Me.lbl_Version.TabIndex = 96
-        Me.lbl_Version.Text = "lbl_Version"
-        Me.lbl_Version.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'cmb_Maitre
-        '
-        Me.cmb_Maitre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_Maitre.FormattingEnabled = True
-        Me.cmb_Maitre.Location = New System.Drawing.Point(117, 31)
-        Me.cmb_Maitre.Name = "cmb_Maitre"
-        Me.cmb_Maitre.Size = New System.Drawing.Size(189, 21)
-        Me.cmb_Maitre.TabIndex = 99
+        Me.cmd_CheckUpdates.Location = New System.Drawing.Point(6, 77)
+        Me.cmd_CheckUpdates.Name = "cmd_CheckUpdates"
+        Me.cmd_CheckUpdates.Size = New System.Drawing.Size(728, 24)
+        Me.cmd_CheckUpdates.TabIndex = 104
+        Me.cmd_CheckUpdates.Text = "cmd_CheckUpdates"
+        Me.cmd_CheckUpdates.UseVisualStyleBackColor = True
         '
         'Frm_OptionsLogicielGeneral
         '
@@ -242,11 +301,12 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.Name = "Frm_OptionsLogicielGeneral"
         Me.Text = "Frm_OptionsLogicielGeneral"
         Me.pan_General.ResumeLayout(False)
+        Me.pan_Version.ResumeLayout(False)
         Me.pan_Identification.ResumeLayout(False)
         Me.pan_Identification.PerformLayout()
         Me.pan_Langues.ResumeLayout(False)
         Me.pan_Langues.PerformLayout()
-        Me.pan_Version.ResumeLayout(False)
+        Me.pan_Web.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -269,4 +329,9 @@ Partial Class Frm_OptionsLogicielGeneral
     Friend WithEvents lbl_Version2 As Label
     Friend WithEvents lbl_Version As Label
     Friend WithEvents cmb_Maitre As ComboBox
+    Friend WithEvents pan_Web As Panel
+    Friend WithEvents cmd_CheckUpdates As Button
+    Friend WithEvents chk_ControlFichier As CheckBox
+    Friend WithEvents chk_ControlVersion As CheckBox
+    Friend WithEvents lbl_Web As Label
 End Class

@@ -47,7 +47,10 @@ Public Class Frm_OptionsLogiciel
         Public RepertoireTravail As String          'Répertoire de l'espace de travail
         Public lRepTravailDefault As Boolean        'Répertoire de travail par défaut ou le dernier utilisé
 
-        Public lUpdateStart As Boolean              'Vérification des mises à jour au démarrage du logiciel
+        'Public lUpdateStart As Boolean              'Vérification des mises à jour au démarrage du logiciel
+
+        Public lControlWebVersion As Boolean        'Controle version logiciel au démarrage
+        Public lControlWebFichier As Boolean        'Controle version base profilés au démarrage
 
     End Structure
 
@@ -296,6 +299,9 @@ Public Class Frm_OptionsLogiciel
         pLocalLogicielOptions.UserName = LogicielOptions.UserName
         pLocalLogicielOptions.CompanyName = LogicielOptions.CompanyName
 
+        pLocalLogicielOptions.lControlWebVersion = LogicielOptions.lControlWebVersion
+        pLocalLogicielOptions.lControlWebFichier = LogicielOptions.lControlWebFichier
+
         pLocalOptionsNdC.lShowHivossCurve = OptionsNdC.lShowHivossCurve
         pLocalOptionsNdC.lDispFMLoadCase = OptionsNdC.lDispFMLoadCase
         pLocalOptionsNdC.lDispFMDiagrams = OptionsNdC.lDispFMDiagrams
@@ -498,6 +504,9 @@ Public Class Frm_OptionsLogiciel
 
         GereTransfertValeur(Me.pLocalLogicielOptions.UserName, LogicielOptions.UserName, lModif)
         GereTransfertValeur(Me.pLocalLogicielOptions.CompanyName, LogicielOptions.CompanyName, lModif)
+
+        GereTransfertValeur(Me.pLocalLogicielOptions.lControlWebFichier, LogicielOptions.lControlWebFichier, lModif)
+        GereTransfertValeur(Me.pLocalLogicielOptions.lControlWebVersion, LogicielOptions.lControlWebVersion, lModif)
 
         GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitDimension, LogicielOptions.IndUnitDimension, lModif)
         GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitLongueur, LogicielOptions.IndUnitLongueur, lModif)

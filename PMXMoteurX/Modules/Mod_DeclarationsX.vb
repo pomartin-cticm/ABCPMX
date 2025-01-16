@@ -50,7 +50,9 @@
         Public RepertoireTravail As String          'Répertoire de l'espace de travail
         Public lRepTravailDefault As Boolean        'Répertoire de travail par défaut ou le dernier utilisé
 
-        Public lUpdateStart As Boolean              'Vérification des mises à jour au démarrage du logiciel
+        'Public lUpdateStart As Boolean              'Vérification des mises à jour au démarrage du logiciel
+        Public lControlWebVersion As Boolean        'Controle version logiciel au démarrage
+        Public lControlWebFichier As Boolean        'Controle version base profilés au démarrage
 
         Public lFenetres As Boolean                 'Fenêtres indépendantes
 
