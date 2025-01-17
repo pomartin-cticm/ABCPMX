@@ -54,6 +54,19 @@ Public Class Frm_OptionsLogiciel
 
     End Structure
 
+    Structure struc_LocalOptionsNdC
+        Dim lShowHivossCurve As Boolean
+        Dim lDispFMDiagrams As Boolean
+        Dim lDispFMTables As Boolean
+        Dim lDispFMMinMax As Boolean
+        Dim lDispFMLoadCase As Boolean
+        Dim lDispFM_ULS As Boolean
+        Dim lDispFM_SLS As Boolean
+        Dim lDispFM_FLS As Boolean
+        Dim lDispSigmaCharges As Boolean
+        Dim lDispMelRdMixte As Boolean
+    End Structure
+
 #End Region
 
 #Region " Variables "
@@ -75,18 +88,8 @@ Public Class Frm_OptionsLogiciel
 
     Public pLocalOptionsNdC As struc_LocalOptionsNdC
 
-    Structure struc_LocalOptionsNdC
-        Dim lShowHivossCurve As Boolean
-        Dim lDispFMDiagrams As Boolean
-        Dim lDispFMTables As Boolean
-        Dim lDispFMMinMax As Boolean
-        Dim lDispFMLoadCase As Boolean
-        Dim lDispFM_ULS As Boolean
-        Dim lDispFM_SLS As Boolean
-        Dim lDispFM_FLS As Boolean
-        Dim lDispSigmaCharges As Boolean
-        Dim lDispMelRdMixte As Boolean
-    End Structure
+    Public pLocalOptionsDtbase As StrucOptionsDataBase
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -313,6 +316,7 @@ Public Class Frm_OptionsLogiciel
         pLocalOptionsNdC.lDispSigmaCharges = OptionsNdC.lDispSigmaCharges
         pLocalOptionsNdC.lDispMelRdMixte = OptionsNdC.lDispMelPoutreMixte
 
+        pLocalOptionsDtbase = OptionsDatabase
     End Sub
 
     Private Sub AfficherFenetreFille()
@@ -352,7 +356,6 @@ Public Class Frm_OptionsLogiciel
         End Select
 
     End Sub
-
 
 #End Region
 
@@ -530,6 +533,9 @@ Public Class Frm_OptionsLogiciel
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispFMMinMax, OptionsNdC.lDispFMMinMax, lModif)
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispSigmaCharges, OptionsNdC.lDispSigmaCharges, lModif)
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispMelRdMixte, OptionsNdC.lDispMelPoutreMixte, lModif)
+
+        If Me.pLocalOptionsDtbase.ChoiceSteel <> OptionsDatabase.ChoiceSteel Then lModif = True
+        OptionsDatabase.ChoiceSteel = Me.pLocalOptionsDtbase.ChoiceSteel
 
     End Sub
 

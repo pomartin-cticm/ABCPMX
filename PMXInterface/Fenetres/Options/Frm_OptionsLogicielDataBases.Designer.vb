@@ -136,6 +136,7 @@ Partial Class Frm_OptionsLogicielDataBases
         Me.chk_AciersNonCompatibleEpaisseur.TabIndex = 115
         Me.chk_AciersNonCompatibleEpaisseur.Text = "chk_AciersNonCompatibleEpaisseur"
         Me.chk_AciersNonCompatibleEpaisseur.UseVisualStyleBackColor = True
+        Me.chk_AciersNonCompatibleEpaisseur.Visible = False
         '
         'cmb_ChoixAcier
         '
@@ -145,7 +146,7 @@ Partial Class Frm_OptionsLogicielDataBases
         Me.cmb_ChoixAcier.FormattingEnabled = True
         Me.cmb_ChoixAcier.Location = New System.Drawing.Point(202, 47)
         Me.cmb_ChoixAcier.Name = "cmb_ChoixAcier"
-        Me.cmb_ChoixAcier.Size = New System.Drawing.Size(321, 21)
+        Me.cmb_ChoixAcier.Size = New System.Drawing.Size(501, 21)
         Me.cmb_ChoixAcier.TabIndex = 116
         '
         'pan_Profiles

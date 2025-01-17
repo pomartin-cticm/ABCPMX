@@ -234,6 +234,12 @@
     <Compile Include="Fenetres\Frm_ErreursMessages.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Frm_Update.Designer.vb">
+      <DependentUpon>Frm_Update.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Frm_Update.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Options\Frm_OptionsCalculConnecteurs.Designer.vb">
       <DependentUpon>Frm_OptionsCalculConnecteurs.vb</DependentUpon>
     </Compile>
@@ -596,6 +602,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Frm_ErreursMessages.resx">
       <DependentUpon>Frm_ErreursMessages.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Frm_Update.resx">
+      <DependentUpon>Frm_Update.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsCalculConnecteurs.resx">
       <DependentUpon>Frm_OptionsCalculConnecteurs.vb</DependentUpon>

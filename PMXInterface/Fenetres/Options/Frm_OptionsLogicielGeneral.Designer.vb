@@ -23,6 +23,11 @@ Partial Class Frm_OptionsLogicielGeneral
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.pan_General = New System.Windows.Forms.Panel()
+        Me.pan_Web = New System.Windows.Forms.Panel()
+        Me.cmd_CheckUpdates = New System.Windows.Forms.Button()
+        Me.chk_ControlFichier = New System.Windows.Forms.CheckBox()
+        Me.chk_ControlVersion = New System.Windows.Forms.CheckBox()
+        Me.lbl_Web = New System.Windows.Forms.Label()
         Me.pan_Version = New System.Windows.Forms.Panel()
         Me.cmb_Maitre = New System.Windows.Forms.ComboBox()
         Me.lbl_Version2 = New System.Windows.Forms.Label()
@@ -40,16 +45,11 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.lbl_LangueGUI = New System.Windows.Forms.Label()
         Me.lst_LangueGUI = New System.Windows.Forms.ListBox()
         Me.lbl_Langues = New System.Windows.Forms.Label()
-        Me.pan_Web = New System.Windows.Forms.Panel()
-        Me.lbl_Web = New System.Windows.Forms.Label()
-        Me.chk_ControlFichier = New System.Windows.Forms.CheckBox()
-        Me.chk_ControlVersion = New System.Windows.Forms.CheckBox()
-        Me.cmd_CheckUpdates = New System.Windows.Forms.Button()
         Me.pan_General.SuspendLayout()
+        Me.pan_Web.SuspendLayout()
         Me.pan_Version.SuspendLayout()
         Me.pan_Identification.SuspendLayout()
         Me.pan_Langues.SuspendLayout()
-        Me.pan_Web.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -64,6 +64,60 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.pan_General.Name = "pan_General"
         Me.pan_General.Size = New System.Drawing.Size(739, 472)
         Me.pan_General.TabIndex = 1
+        '
+        'pan_Web
+        '
+        Me.pan_Web.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Web.Controls.Add(Me.cmd_CheckUpdates)
+        Me.pan_Web.Controls.Add(Me.chk_ControlFichier)
+        Me.pan_Web.Controls.Add(Me.chk_ControlVersion)
+        Me.pan_Web.Controls.Add(Me.lbl_Web)
+        Me.pan_Web.Location = New System.Drawing.Point(1, 223)
+        Me.pan_Web.Name = "pan_Web"
+        Me.pan_Web.Size = New System.Drawing.Size(737, 105)
+        Me.pan_Web.TabIndex = 103
+        '
+        'cmd_CheckUpdates
+        '
+        Me.cmd_CheckUpdates.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmd_CheckUpdates.Location = New System.Drawing.Point(6, 77)
+        Me.cmd_CheckUpdates.Name = "cmd_CheckUpdates"
+        Me.cmd_CheckUpdates.Size = New System.Drawing.Size(728, 24)
+        Me.cmd_CheckUpdates.TabIndex = 104
+        Me.cmd_CheckUpdates.Text = "cmd_CheckUpdates"
+        Me.cmd_CheckUpdates.UseVisualStyleBackColor = True
+        '
+        'chk_ControlFichier
+        '
+        Me.chk_ControlFichier.Location = New System.Drawing.Point(9, 50)
+        Me.chk_ControlFichier.Name = "chk_ControlFichier"
+        Me.chk_ControlFichier.Size = New System.Drawing.Size(351, 24)
+        Me.chk_ControlFichier.TabIndex = 99
+        Me.chk_ControlFichier.Text = "chk_ControleFichier"
+        Me.chk_ControlFichier.UseVisualStyleBackColor = True
+        '
+        'chk_ControlVersion
+        '
+        Me.chk_ControlVersion.Location = New System.Drawing.Point(9, 26)
+        Me.chk_ControlVersion.Name = "chk_ControlVersion"
+        Me.chk_ControlVersion.Size = New System.Drawing.Size(351, 24)
+        Me.chk_ControlVersion.TabIndex = 98
+        Me.chk_ControlVersion.Text = "chk_ControlVersion"
+        Me.chk_ControlVersion.UseVisualStyleBackColor = True
+        '
+        'lbl_Web
+        '
+        Me.lbl_Web.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Web.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Web.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_Web.Name = "lbl_Web"
+        Me.lbl_Web.Size = New System.Drawing.Size(737, 23)
+        Me.lbl_Web.TabIndex = 97
+        Me.lbl_Web.Text = "lbl_Web"
+        Me.lbl_Web.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_Version
         '
@@ -239,58 +293,6 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.lbl_Langues.Text = "lbl_Langues"
         Me.lbl_Langues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'pan_Web
-        '
-        Me.pan_Web.Controls.Add(Me.cmd_CheckUpdates)
-        Me.pan_Web.Controls.Add(Me.chk_ControlFichier)
-        Me.pan_Web.Controls.Add(Me.chk_ControlVersion)
-        Me.pan_Web.Controls.Add(Me.lbl_Web)
-        Me.pan_Web.Location = New System.Drawing.Point(1, 223)
-        Me.pan_Web.Name = "pan_Web"
-        Me.pan_Web.Size = New System.Drawing.Size(737, 105)
-        Me.pan_Web.TabIndex = 103
-        '
-        'lbl_Web
-        '
-        Me.lbl_Web.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_Web.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Web.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Web.Name = "lbl_Web"
-        Me.lbl_Web.Size = New System.Drawing.Size(737, 23)
-        Me.lbl_Web.TabIndex = 97
-        Me.lbl_Web.Text = "lbl_Web"
-        Me.lbl_Web.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'chk_ControlFichier
-        '
-        Me.chk_ControlFichier.Location = New System.Drawing.Point(9, 50)
-        Me.chk_ControlFichier.Name = "chk_ControlFichier"
-        Me.chk_ControlFichier.Size = New System.Drawing.Size(351, 24)
-        Me.chk_ControlFichier.TabIndex = 99
-        Me.chk_ControlFichier.Text = "chk_ControleFichier"
-        Me.chk_ControlFichier.UseVisualStyleBackColor = True
-        '
-        'chk_ControlVersion
-        '
-        Me.chk_ControlVersion.Location = New System.Drawing.Point(9, 26)
-        Me.chk_ControlVersion.Name = "chk_ControlVersion"
-        Me.chk_ControlVersion.Size = New System.Drawing.Size(351, 24)
-        Me.chk_ControlVersion.TabIndex = 98
-        Me.chk_ControlVersion.Text = "chk_ControlVersion"
-        Me.chk_ControlVersion.UseVisualStyleBackColor = True
-        '
-        'cmd_CheckUpdates
-        '
-        Me.cmd_CheckUpdates.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmd_CheckUpdates.Location = New System.Drawing.Point(6, 77)
-        Me.cmd_CheckUpdates.Name = "cmd_CheckUpdates"
-        Me.cmd_CheckUpdates.Size = New System.Drawing.Size(728, 24)
-        Me.cmd_CheckUpdates.TabIndex = 104
-        Me.cmd_CheckUpdates.Text = "cmd_CheckUpdates"
-        Me.cmd_CheckUpdates.UseVisualStyleBackColor = True
-        '
         'Frm_OptionsLogicielGeneral
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -301,12 +303,12 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.Name = "Frm_OptionsLogicielGeneral"
         Me.Text = "Frm_OptionsLogicielGeneral"
         Me.pan_General.ResumeLayout(False)
+        Me.pan_Web.ResumeLayout(False)
         Me.pan_Version.ResumeLayout(False)
         Me.pan_Identification.ResumeLayout(False)
         Me.pan_Identification.PerformLayout()
         Me.pan_Langues.ResumeLayout(False)
         Me.pan_Langues.PerformLayout()
-        Me.pan_Web.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

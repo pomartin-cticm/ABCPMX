@@ -278,4 +278,165 @@ Module Mod_Internet
 
 #End Region
 
+#Region " Gestion recuperation info sur internet "
+
+
+    Public Sub RecupereDonneesMAJDebug(ByRef BlocMAJ As Dictionary(Of String, String),
+                                       ByRef lAccesOK As Boolean)
+        '---------------------------------------------------------------------------------------------
+        '   14/06/08 :  Création - Version 1.00
+        '---------------------------------------------------------------------------------------------
+        '   Simulation en local de récupération des données MAJ
+        '---------------------------------------------------------------------------------------------
+        '   BlocMAJ     [S] :   Messages récupérés dans le fichier des mises à jour
+        '   lAccesOK    [S] :   Indique si on a eu acces à internet ou pas
+        '---------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim FichierCible As String
+
+        '--( Lecture en local
+
+        FichierCible = LogicielRep.Config & "\" & FichierUpDate()
+
+        FichierCible = LogicielRep.Install & "\..\..\FICHIERS NEW\" & FichierUpDate()
+
+        If My.Computer.FileSystem.FileExists(FichierCible) Then
+            RecupereBlocUpdate(FichierCible, BlocMAJ)
+            lAccesOK = True
+        Else
+            lAccesOK = False
+        End If
+    End Sub
+
+    Public _
+        Sub RecupereDonneesMAJInternet(ByRef BlocMAJ As Dictionary(Of String, String),
+                                       ByRef lAccesOK As Boolean)
+        '---------------------------------------------------------------------------------------------
+        '
+        '   14/06/08 :  Création - Version 1.00
+        '
+        '---------------------------------------------------------------------------------------------
+        '
+        '   Si les acces internet de la machine sont disponibles
+        '   on telecharge le fichier Update_ACBPlus 
+        '   et on transmet le contenu des informations
+        '
+        '---------------------------------------------------------------------------------------------
+        '
+        '   BlocMAJ     [S] :   Messages récupérés dans le fichier des mises à jour
+        '   lAccesOK    [S] :   Indique si on a eu acces à internet ou pas
+        '
+        '---------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lFirstAttempt As Boolean = True
+        Dim lCont As Boolean = True
+        Const iMeth As Integer = 0
+        Dim MyWbC As WebClient = New WebClient
+
+        '--> Initialisation
+
+        AdresseInternet = AdresseInternetFirst
+
+        '--> Récupération internet
+
+        If My.Computer.Network.IsAvailable Then
+
+            '--[ Si le réseau est disponible, on récupère le fichier
+
+            Dim FichierSource, FichierCible As String
+            Dim lOK As Boolean = True
+
+            FichierCible = LogicielRep.Config & "\" & FichierUpDate()
+
+            Do While lCont
+                FichierSource = AdresseInternet & "/" & FichierUpDate()
+
+                Try
+                    If My.Computer.FileSystem.FileExists(FichierCible) Then
+                        My.Computer.FileSystem.DeleteFile(FichierCible)
+                    End If
+                    Select Case iMeth
+                        Case 0
+                            '--> Téléchargement en bloquant le cache
+                            MyWbC.CachePolicy = New System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore)
+                            MyWbC.DownloadFile(FichierSource, FichierCible)
+
+                        Case 1
+                            '--> Téléchargement
+
+                            My.Computer.Network.DownloadFile(FichierSource, FichierCible)
+
+                    End Select
+                Catch ex As Exception
+                    lOK = False
+                    lAccesOK = False
+                End Try
+                If (Not My.Computer.FileSystem.FileExists(FichierCible)) And lFirstAttempt Then lOK = False
+
+                '--[ Si la récuperation a reussi
+
+                If lOK Then
+
+                    lAccesOK = True
+                    LireFichierUpDate(BlocMAJ)
+
+                End If
+
+                '--> A t on récupéré le bon fichier ?
+
+                If Not BlocMAJ.ContainsKey("VERSION") Then lOK = False
+                lCont = (Not lOK) And lFirstAttempt
+                If lCont Then
+                    AdresseInternet = AdresseInternetSecours
+                    lFirstAttempt = False
+                    lOK = True
+                End If
+            Loop
+        Else
+
+            lAccesOK = False
+
+        End If
+
+    End Sub
+
+    Public Sub LireFichierUpDate(ByRef BlocMAJ As Dictionary(Of String, String))
+        '------------------------------------------------------------------------------------
+        '
+        '   16/06/08 :  Création - Version 1.00
+        '
+        '------------------------------------------------------------------------------------
+        '
+        '   Lecture du fichier UpDate récupéré sur internet
+        '
+        '------------------------------------------------------------------------------------
+        '
+        '   BlocMAJ [S] :   Liste des instructions de mises à jour
+        '
+        '------------------------------------------------------------------------------------
+
+        Dim FichierCible As String = LogicielRep.Config & "\" & FichierUpDate()
+
+        RecupereBlocUpdate(FichierCible, BlocMAJ)
+
+    End Sub
+
+    Private Sub RecupereBlocUpdate(FichierCible As String, ByRef BlocMAJ As Dictionary(Of String, String))
+        '------------------------------------------------------------------------------------
+        '   02/08/24 :  Création - POM
+        '------------------------------------------------------------------------------------
+        '------------------------------------------------------------------------------------
+
+        Dim BlocLine As New Cls_LinesOfFile(FichierCible, True)
+
+        BlocLine.CreationBloc(BlocMAJ)
+
+    End Sub
+
+#End Region
+
 End Module

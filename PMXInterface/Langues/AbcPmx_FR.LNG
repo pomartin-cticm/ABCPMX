@@ -1093,7 +1093,13 @@ STEELS					= Structural steels
 CLICKTOEDIT				= Click on databases in blue to edit them
 FILTRESOFT				= Software filter
 HIDEFILTER				= Hide unauthorized profiles
-
+CHOIXSTEEL				= Options la sélection de l'acier
+HIDESTEELTHICK			= Cacher les aciers non compatibles avec l'épaisseur du profilé
+BASEONLY				= Acier de base
+STANDARDONLY			= Uniquement  les aciers compatibles avec le profilé
+BASEANDSTANDARD 		= Aciers de base et aciers compatibles
+BASEIFNOSTD				= Aciers de base si aucun acier compatible
+ALLSTEEL				= Tous les aciers de la base
 
 #OPTSOFTDIRECTORIES
 DIRECTORIES				= Répertoire

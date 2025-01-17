@@ -345,7 +345,7 @@ Public Module Mod_Demarrage
             'LogicielOptions.EtaW = My.Settings.EtaW
 
         Catch ex As Exception
-            MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Mod_Demarrage/InitialiseLogiciel")
+            MsgBox("Erreur intialisation parameters | Error when initialising parameters", MsgBoxStyle.Critical, "Mod_Demarrage/InitialiseLogiciel")
         End Try
 
         LogicielOptions.lFenetres = True

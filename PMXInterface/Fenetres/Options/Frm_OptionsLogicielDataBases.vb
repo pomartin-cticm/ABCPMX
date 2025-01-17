@@ -22,6 +22,8 @@
 
 
     Private Sub GestionLangue(ByVal MyBloc As Dictionary(Of String, String))
+        Const DEUXPOINTS As String = " :"
+
         Try
 
             Me.lbl_DataBases.Text = MyBloc("DATABASES")
@@ -37,6 +39,8 @@
 
             Me.lbl_Acier.Text = MyBloc("STEELS")
 
+            Me.chk_AciersNonCompatibleEpaisseur.Text = MyBloc("HIDESTEELTHICK")
+            Me.lbl_ChoixSteel.Text = MyBloc("CHOIXSTEEL") & DEUXPOINTS
 
 
         Catch ex As Exception
@@ -65,6 +69,11 @@
         PrepareReadOnly(Me.txt_Studs)
         PrepareReadOnly(Me.txt_Profiles)
 
+        RemplirComboSteel(Frm_OptionsLogiciel.BlocLangues(BALISE))
+        If (Not LogicielOptions.lExpert) Then
+            Me.cmb_ChoixAcier.Enabled = False
+            Me.cmb_ChoixAcier.BackColor = CouleurReadOnly
+        End If
     End Sub
 
     Private Sub PrepareReadOnly(ByRef MyTextB As TextBox)
@@ -83,6 +92,27 @@
         Me.lbl_VersionSteel.Text = "V" & OptionsDatabase.VersionBaseAciers.Year.ToString & "_" & OptionsDatabase.VersionBaseAciers.Indice.ToString
 
         Me.txt_FiltreSoft.Text = OptionsDatabase.FiltreSoft
+
+        Me.chk_AciersNonCompatibleEpaisseur.Checked = OptionsDatabase.lNoSteelLowThick
+    End Sub
+
+    Private Sub RemplirComboSteel(ByVal MyBloc As Dictionary(Of String, String))
+
+        Me.cmb_ChoixAcier.Items.Clear()
+        Me.cmb_ChoixAcier.Items.Add(MyBloc("BASEONLY"))
+        Me.cmb_ChoixAcier.Items.Add(MyBloc("STANDARDONLY"))
+        Me.cmb_ChoixAcier.Items.Add(MyBloc("BASEANDSTANDARD"))
+        Me.cmb_ChoixAcier.Items.Add(MyBloc("BASEIFNOSTD"))
+        Me.cmb_ChoixAcier.Items.Add(MyBloc("ALLSTEEL"))
+
+        Select Case Frm_OptionsLogiciel.pLocalOptionsDtbase.ChoiceSteel
+            Case EnuChoiceAcier.AllSteel : Me.cmb_ChoixAcier.SelectedIndex = 4
+            Case EnuChoiceAcier.BaseAndStandardSteels : Me.cmb_ChoixAcier.SelectedIndex = 2
+            Case EnuChoiceAcier.BaseIfNoStandardSteel : Me.cmb_ChoixAcier.SelectedIndex = 3
+            Case EnuChoiceAcier.BaseSteelOnly : Me.cmb_ChoixAcier.SelectedIndex = 0
+            Case EnuChoiceAcier.StandardSteelOnly : Me.cmb_ChoixAcier.SelectedIndex = 1
+        End Select
+
     End Sub
 
 #End Region
@@ -118,6 +148,18 @@
 
         End Select
 
+    End Sub
+
+    Private Sub cmb_ChoixAcier_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ChoixAcier.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        Select Case Me.cmb_ChoixAcier.SelectedIndex
+            Case 4 : Frm_OptionsLogiciel.pLocalOptionsDtbase.ChoiceSteel = EnuChoiceAcier.AllSteel
+            Case 2 : Frm_OptionsLogiciel.pLocalOptionsDtbase.ChoiceSteel = EnuChoiceAcier.BaseAndStandardSteels
+            Case 3 : Frm_OptionsLogiciel.pLocalOptionsDtbase.ChoiceSteel = EnuChoiceAcier.BaseIfNoStandardSteel
+            Case 0 : Frm_OptionsLogiciel.pLocalOptionsDtbase.ChoiceSteel = EnuChoiceAcier.BaseSteelOnly
+            Case 1 : Frm_OptionsLogiciel.pLocalOptionsDtbase.ChoiceSteel = EnuChoiceAcier.StandardSteelOnly
+        End Select
     End Sub
 
 

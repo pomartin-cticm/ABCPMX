@@ -181,6 +181,7 @@ Public Class Frm_SectionAcierStandard
 
         Dim lPRS As Boolean
         Dim Ratio1, Ratio2 As Single
+        Dim lEnrob As Boolean
 
         Me.pan_Acier.Dock = DockStyle.Fill
         Me.img_Section.Dock = DockStyle.Fill
@@ -201,7 +202,8 @@ Public Class Frm_SectionAcierStandard
 
         '# (PRS accessibles en expert)
         lPRS = LogicielReglages.lPRS Or LogicielOptions.lExpert
-        Me.rdb_PRS.Visible = lPRS
+        lEnrob = MyProjet.Poutres(MyProjet.IndEnCours).lEnrobage
+        Me.rdb_PRS.Visible = lPRS And Not lenrob
         Me.rdb_PRS_symetrique.Visible = lPRS
         'Me.GridDelivery.Visible = LogicielReglages.lDelivery
         '  Me.lbl_Delivery.Visible = LogicielReglages.lDelivery
@@ -1754,7 +1756,6 @@ Public Class Frm_SectionAcierStandard
         For i As Integer = 0 To MyCatalogue.nbStandard - 1
             MySectionLoc.ProfilA.IndStandart(i) = MyCatalogue.Series(Gamme).Profiles(Profile).IndStandart(i)
         Next
-
 
     End Sub
 

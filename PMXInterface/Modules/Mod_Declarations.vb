@@ -444,6 +444,8 @@ Public Module Mod_Declarations
         SectionIFB
         SectionSAB
         Test
+        CheckUpDate
+        NouvelleVersion
     End Enum
 
     Public iFrmAppel As EnuFenetres
@@ -454,7 +456,7 @@ Public Module Mod_Declarations
     End Enum
 
     Public ComWindow As enu_ComWindow
-
+    Public iComWnd As EnuFenetres
 #End Region
 
 #Region " Constantes et valeurs par défaut "

@@ -62,6 +62,9 @@
         Me.lbl_Version.BackColor = CouleurBackBandeaux
         Me.lbl_Version.ForeColor = CouleurForeBandeaux
 
+        Me.lbl_Web.BackColor = CouleurBackBandeaux
+        Me.lbl_Web.ForeColor = CouleurForeBandeaux
+
         ' Me.lst_LangueNdC.Items(Me.lst_LangueNdC.SelectedIndex)
     End Sub
 
@@ -174,8 +177,9 @@
     End Sub
 
     Private Sub cmd_CheckUpdates_Click(sender As Object, e As EventArgs) Handles cmd_CheckUpdates.Click
-        'Frm_UpDate.ShowDialog()
-        'Frm_UpDate.Dispose()
+        iComWnd = EnuFenetres.CheckUpDate
+        Frm_Update.ShowDialog()
+        Frm_Update.Dispose()
     End Sub
 
     Private Sub chk_ControlVersion_CheckedChanged(sender As Object, e As EventArgs) Handles chk_ControlVersion.CheckedChanged

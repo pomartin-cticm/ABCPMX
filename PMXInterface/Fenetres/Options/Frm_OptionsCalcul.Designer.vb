@@ -26,6 +26,7 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
+        Me.PoMbtn_Connecteurs = New PMXInterface.POMbutton()
         Me.PoMbtn_SlimFloor = New PMXInterface.POMbutton()
         Me.PoMbtn_Fire = New PMXInterface.POMbutton()
         Me.PoMbtn_Calcul = New PMXInterface.POMbutton()
@@ -36,7 +37,6 @@ Partial Class Frm_OptionsCalcul
         Me.btn_Cancel = New System.Windows.Forms.Button()
         Me.btn_Appliquer = New System.Windows.Forms.Button()
         Me.pan_Contenu = New System.Windows.Forms.Panel()
-        Me.PoMbtn_Connecteurs = New PMXInterface.POMbutton()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
@@ -52,7 +52,7 @@ Partial Class Frm_OptionsCalcul
         Me.pan_Main.Location = New System.Drawing.Point(0, 0)
         Me.pan_Main.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(834, 450)
+        Me.pan_Main.Size = New System.Drawing.Size(834, 453)
         Me.pan_Main.TabIndex = 1
         '
         'TLpan_Main
@@ -68,7 +68,7 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 1
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(834, 450)
+        Me.TLpan_Main.Size = New System.Drawing.Size(834, 453)
         Me.TLpan_Main.TabIndex = 0
         '
         'pan_Gauche
@@ -79,7 +79,7 @@ Partial Class Frm_OptionsCalcul
         Me.pan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Gauche.Location = New System.Drawing.Point(3, 3)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(244, 444)
+        Me.pan_Gauche.Size = New System.Drawing.Size(244, 447)
         Me.pan_Gauche.TabIndex = 1
         '
         'TLpan_Gauche
@@ -107,8 +107,29 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
-        Me.TLpan_Gauche.Size = New System.Drawing.Size(242, 442)
+        Me.TLpan_Gauche.Size = New System.Drawing.Size(242, 445)
         Me.TLpan_Gauche.TabIndex = 0
+        '
+        'PoMbtn_Connecteurs
+        '
+        Me.PoMbtn_Connecteurs.Caption = "PoMbtn_Connecteurs"
+        Me.PoMbtn_Connecteurs.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
+        Me.PoMbtn_Connecteurs.Checked = False
+        Me.PoMbtn_Connecteurs.CouleurChecked = System.Drawing.Color.Orange
+        Me.PoMbtn_Connecteurs.CouleurContour = System.Drawing.Color.Black
+        Me.PoMbtn_Connecteurs.CouleurContourChecked = System.Drawing.Color.Black
+        Me.PoMbtn_Connecteurs.CouleurContourMouseOn = System.Drawing.Color.Black
+        Me.PoMbtn_Connecteurs.CouleurFond = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_Connecteurs.CouleurForGradient = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_Connecteurs.CouleurMouseOnBtn = System.Drawing.Color.Yellow
+        Me.PoMbtn_Connecteurs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PoMbtn_Connecteurs.Enable = True
+        Me.PoMbtn_Connecteurs.LContourFond = True
+        Me.PoMbtn_Connecteurs.Location = New System.Drawing.Point(3, 123)
+        Me.PoMbtn_Connecteurs.Name = "PoMbtn_Connecteurs"
+        Me.PoMbtn_Connecteurs.RatioArrondi = 0!
+        Me.PoMbtn_Connecteurs.Size = New System.Drawing.Size(236, 34)
+        Me.PoMbtn_Connecteurs.TabIndex = 6
         '
         'PoMbtn_SlimFloor
         '
@@ -125,11 +146,10 @@ Partial Class Frm_OptionsCalcul
         Me.PoMbtn_SlimFloor.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PoMbtn_SlimFloor.Enable = True
         Me.PoMbtn_SlimFloor.LContourFond = True
-        Me.PoMbtn_SlimFloor.Location = New System.Drawing.Point(5, 165)
-        Me.PoMbtn_SlimFloor.Margin = New System.Windows.Forms.Padding(5)
+        Me.PoMbtn_SlimFloor.Location = New System.Drawing.Point(3, 163)
         Me.PoMbtn_SlimFloor.Name = "PoMbtn_SlimFloor"
         Me.PoMbtn_SlimFloor.RatioArrondi = 0!
-        Me.PoMbtn_SlimFloor.Size = New System.Drawing.Size(232, 30)
+        Me.PoMbtn_SlimFloor.Size = New System.Drawing.Size(236, 34)
         Me.PoMbtn_SlimFloor.TabIndex = 5
         '
         'PoMbtn_Fire
@@ -147,11 +167,10 @@ Partial Class Frm_OptionsCalcul
         Me.PoMbtn_Fire.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PoMbtn_Fire.Enable = True
         Me.PoMbtn_Fire.LContourFond = True
-        Me.PoMbtn_Fire.Location = New System.Drawing.Point(5, 205)
-        Me.PoMbtn_Fire.Margin = New System.Windows.Forms.Padding(5)
+        Me.PoMbtn_Fire.Location = New System.Drawing.Point(3, 203)
         Me.PoMbtn_Fire.Name = "PoMbtn_Fire"
         Me.PoMbtn_Fire.RatioArrondi = 0!
-        Me.PoMbtn_Fire.Size = New System.Drawing.Size(232, 30)
+        Me.PoMbtn_Fire.Size = New System.Drawing.Size(236, 34)
         Me.PoMbtn_Fire.TabIndex = 4
         '
         'PoMbtn_Calcul
@@ -169,11 +188,10 @@ Partial Class Frm_OptionsCalcul
         Me.PoMbtn_Calcul.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PoMbtn_Calcul.Enable = True
         Me.PoMbtn_Calcul.LContourFond = True
-        Me.PoMbtn_Calcul.Location = New System.Drawing.Point(5, 85)
-        Me.PoMbtn_Calcul.Margin = New System.Windows.Forms.Padding(5)
+        Me.PoMbtn_Calcul.Location = New System.Drawing.Point(3, 83)
         Me.PoMbtn_Calcul.Name = "PoMbtn_Calcul"
         Me.PoMbtn_Calcul.RatioArrondi = 0!
-        Me.PoMbtn_Calcul.Size = New System.Drawing.Size(232, 30)
+        Me.PoMbtn_Calcul.Size = New System.Drawing.Size(236, 34)
         Me.PoMbtn_Calcul.TabIndex = 3
         '
         'PoMbtn_Scope
@@ -191,11 +209,10 @@ Partial Class Frm_OptionsCalcul
         Me.PoMbtn_Scope.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PoMbtn_Scope.Enable = True
         Me.PoMbtn_Scope.LContourFond = True
-        Me.PoMbtn_Scope.Location = New System.Drawing.Point(5, 45)
-        Me.PoMbtn_Scope.Margin = New System.Windows.Forms.Padding(5)
+        Me.PoMbtn_Scope.Location = New System.Drawing.Point(3, 43)
         Me.PoMbtn_Scope.Name = "PoMbtn_Scope"
         Me.PoMbtn_Scope.RatioArrondi = 0!
-        Me.PoMbtn_Scope.Size = New System.Drawing.Size(232, 30)
+        Me.PoMbtn_Scope.Size = New System.Drawing.Size(236, 34)
         Me.PoMbtn_Scope.TabIndex = 2
         '
         'PoMBtn_Gamma
@@ -213,11 +230,10 @@ Partial Class Frm_OptionsCalcul
         Me.PoMBtn_Gamma.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PoMBtn_Gamma.Enable = True
         Me.PoMBtn_Gamma.LContourFond = True
-        Me.PoMBtn_Gamma.Location = New System.Drawing.Point(5, 5)
-        Me.PoMBtn_Gamma.Margin = New System.Windows.Forms.Padding(5)
+        Me.PoMBtn_Gamma.Location = New System.Drawing.Point(3, 3)
         Me.PoMBtn_Gamma.Name = "PoMBtn_Gamma"
         Me.PoMBtn_Gamma.RatioArrondi = 0!
-        Me.PoMBtn_Gamma.Size = New System.Drawing.Size(232, 30)
+        Me.PoMBtn_Gamma.Size = New System.Drawing.Size(236, 34)
         Me.PoMBtn_Gamma.TabIndex = 0
         '
         'TLpan_PourLesBoutons
@@ -229,7 +245,7 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Cancel, 1, 1)
         Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Appliquer, 0, 1)
         Me.TLpan_PourLesBoutons.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLpan_PourLesBoutons.Location = New System.Drawing.Point(0, 382)
+        Me.TLpan_PourLesBoutons.Location = New System.Drawing.Point(0, 385)
         Me.TLpan_PourLesBoutons.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_PourLesBoutons.Name = "TLpan_PourLesBoutons"
         Me.TLpan_PourLesBoutons.RowCount = 2
@@ -280,30 +296,8 @@ Partial Class Frm_OptionsCalcul
         Me.pan_Contenu.Location = New System.Drawing.Point(250, 3)
         Me.pan_Contenu.Margin = New System.Windows.Forms.Padding(0, 3, 3, 3)
         Me.pan_Contenu.Name = "pan_Contenu"
-        Me.pan_Contenu.Size = New System.Drawing.Size(581, 444)
+        Me.pan_Contenu.Size = New System.Drawing.Size(581, 447)
         Me.pan_Contenu.TabIndex = 2
-        '
-        'PoMbtn_Connecteurs
-        '
-        Me.PoMbtn_Connecteurs.Caption = "PoMbtn_Connecteurs"
-        Me.PoMbtn_Connecteurs.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
-        Me.PoMbtn_Connecteurs.Checked = False
-        Me.PoMbtn_Connecteurs.CouleurChecked = System.Drawing.Color.Orange
-        Me.PoMbtn_Connecteurs.CouleurContour = System.Drawing.Color.Black
-        Me.PoMbtn_Connecteurs.CouleurContourChecked = System.Drawing.Color.Black
-        Me.PoMbtn_Connecteurs.CouleurContourMouseOn = System.Drawing.Color.Black
-        Me.PoMbtn_Connecteurs.CouleurFond = System.Drawing.Color.WhiteSmoke
-        Me.PoMbtn_Connecteurs.CouleurForGradient = System.Drawing.Color.WhiteSmoke
-        Me.PoMbtn_Connecteurs.CouleurMouseOnBtn = System.Drawing.Color.Yellow
-        Me.PoMbtn_Connecteurs.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PoMbtn_Connecteurs.Enable = True
-        Me.PoMbtn_Connecteurs.LContourFond = True
-        Me.PoMbtn_Connecteurs.Location = New System.Drawing.Point(5, 125)
-        Me.PoMbtn_Connecteurs.Margin = New System.Windows.Forms.Padding(5)
-        Me.PoMbtn_Connecteurs.Name = "PoMbtn_Connecteurs"
-        Me.PoMbtn_Connecteurs.RatioArrondi = 0!
-        Me.PoMbtn_Connecteurs.Size = New System.Drawing.Size(232, 30)
-        Me.PoMbtn_Connecteurs.TabIndex = 6
         '
         'Frm_OptionsCalcul
         '
@@ -311,11 +305,12 @@ Partial Class Frm_OptionsCalcul
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Cancel
-        Me.ClientSize = New System.Drawing.Size(834, 450)
+        Me.ClientSize = New System.Drawing.Size(834, 453)
         Me.Controls.Add(Me.pan_Main)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
+        Me.MaximumSize = New System.Drawing.Size(850, 1500)
         Me.MinimizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(850, 492)
         Me.Name = "Frm_OptionsCalcul"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_OptionsCalcul"

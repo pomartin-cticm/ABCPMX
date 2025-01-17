@@ -940,6 +940,24 @@ TITLE					= Definition of the steel profile
 SABSECTION				= AFB Section
 WIDTH					= Width
 
+#FRM_UPDATE
+TITLE					= Updates
+CLOSE					= Close
+GRPSOFTUPDATE			= $ Update
+WEBACCESFAILED1			= Impossible to check online the updates of VCA+
+WEBACCESFAILED2 		= Please check the connection of your computer 
+UPTODATE				= The current version $ is up-to-date
+GRPSECTIONS				= Profiles and steels databases
+NEWBASE					= A new database for profiles is available
+NEWBASESTEEL			= A new database for steels is available
+BASEUPTODATE			= The current database for profiles is up-to-date
+BASESTEELUPTOD			= The current database for steels is up-to-date
+DOWNLOAD				= Download the new databases
+SECTIONFAILED			= Check failed
+RESTART					= Download OK: The databases are up-to-date
+OPENLNK					= Open download page
+NOINFO					= Information about updates is missing
+
 #GENERAL
 SELFWEIGHT				= Self-weight
 OTHERG					= Other permanent loads
@@ -1111,6 +1129,13 @@ STEELS					= Structural steels
 CLICKTOEDIT				= Click on databases in blue to edit them
 FILTRESOFT				= Software filter
 HIDEFILTER				= Hide unauthorized profiles
+CHOIXSTEEL				= Options for the selection of steel
+HIDESTEELTHICK			= Hide steels not compatible with profile thickness
+BASEONLY				= Only base steels
+STANDARDONLY			= Only steel under norms available for the selected profile
+BASEANDSTANDARD 		= Base steel and steel under norms available for the selected profile
+BASEIFNOSTD				= Base steel if no steel available for the selected profile
+ALLSTEEL				= All steels of the database
 
 #OPTSOFTDIRECTORIES
 DIRECTORIES				= Directories
