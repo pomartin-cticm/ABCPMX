@@ -57,6 +57,8 @@
             Me.lbl_EpSemelles.Text = MyBloc("FLANGETHICKNESS")
             Me.lbl_LargeurSemelles.Text = MyBloc("FLANGEWIDTH")
 
+            Me.lbl_RapportAf.Text = MyBloc("RATIOFLANGEAREA")
+
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues")
             'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -92,6 +94,9 @@
         PrepareTextBoxDipo(Me.txt_BfMax, False)
         PrepareTextBoxDipo(Me.txt_TfMin, False)
         PrepareTextBoxDipo(Me.txt_TfMax, False)
+
+        PrepareTextBoxDipo(Me.txt_RapAfMax, False)
+        PrepareTextBoxDipo(Me.txt_RapAfMin, False)
 
     End Sub
 
@@ -144,16 +149,26 @@
 
         '--( Dimensions d'un PRS
 
-        Me.txt_HwMin.Text = GetStringInUnitN(LocalOptionsScope.HwMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        Me.txt_HwMax.Text = GetStringInUnitN(LocalOptionsScope.HwMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        Me.txt_TwMin.Text = GetStringInUnitN(LocalOptionsScope.TwMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        Me.txt_TwMax.Text = GetStringInUnitN(LocalOptionsScope.TwMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        If LogicielReglages.lPRS Then
+            Me.txt_HwMin.Text = GetStringInUnitN(LocalOptionsScope.HwMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+            Me.txt_HwMax.Text = GetStringInUnitN(LocalOptionsScope.HwMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+            Me.txt_TwMin.Text = GetStringInUnitN(LocalOptionsScope.TwMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+            Me.txt_TwMax.Text = GetStringInUnitN(LocalOptionsScope.TwMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
 
-        Me.txt_BfMin.Text = GetStringInUnitN(LocalOptionsScope.BfMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        Me.txt_BfMax.Text = GetStringInUnitN(LocalOptionsScope.BfMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        Me.txt_TfMin.Text = GetStringInUnitN(LocalOptionsScope.TfMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        Me.txt_TfMax.Text = GetStringInUnitN(LocalOptionsScope.TfMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+            Me.txt_BfMin.Text = GetStringInUnitN(LocalOptionsScope.BfMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+            Me.txt_BfMax.Text = GetStringInUnitN(LocalOptionsScope.BfMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+            Me.txt_TfMin.Text = GetStringInUnitN(LocalOptionsScope.TfMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+            Me.txt_TfMax.Text = GetStringInUnitN(LocalOptionsScope.TfMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
 
+            Me.txt_RapAfMax.Text = GetStringInUnitN(LocalOptionsScope.RapportAfMax, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+            Me.txt_RapAfMin.Text = GetStringInUnitN(LocalOptionsScope.RapportAfMin, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+        Else
+            Dim DeltaZ As Single = Me.pan_PRS.Top - Me.pan_Dalle.Top
+            Me.pan_Dalle.Top = Me.pan_PRS.Top
+            Me.pan_PRS.Visible = False
+            Me.pan_Materiau.Top += DeltaZ
+            Me.TLpan_Conteneur.Height += (DeltaZ)
+        End If
 
     End Sub
 
@@ -284,7 +299,7 @@
 
     Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_ThetaRd.Paint, img_PorteeMini.Paint, img_PorteeConsoleMin.Paint,
         img_PorteeL2.Paint, img_Td1.Paint, img_xTd.Paint, img_Th.Paint, img_EpDalleMixte.Paint, img_RhoC.Paint,
-        img_Tw.Paint, img_Tf.Paint, img_hw.Paint, img_Bf.Paint
+        img_Tw.Paint, img_Tf.Paint, img_hw.Paint, img_Bf.Paint, img_Aft.Paint, img_Afb.Paint
 
         '--> Déclarations
 
@@ -304,6 +319,15 @@
         AlignH = Enu_AlignementH.Centre
 
         Select Case sender.name
+
+            Case Me.img_Afb.Name
+                strSymbol = "A"
+                strIndice = "fb"
+                AlignH = Enu_AlignementH.Droite
+            Case Me.img_Aft.Name
+                strSymbol = "A"
+                strIndice = "ft"
+                AlignH = Enu_AlignementH.Gauche
 
             Case Me.img_Tw.Name
                 strSymbol = "t"

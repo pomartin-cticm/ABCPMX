@@ -73,6 +73,9 @@ Public Class Frm_SectionAcierStandard
     Dim AcierPlats As New List(Of strucAcierLocal)
     Private NuancesPlats() As String = {"S235", "S275", "S355"}
 
+
+    Dim strWarningA As String
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -147,6 +150,8 @@ Public Class Frm_SectionAcierStandard
                 strDeliveryConditions = Bloc("DELIVERYCOND")
                 str_InfoH(0) = Bloc("AUTOMATICHW")
                 str_InfoH(1) = Bloc("AUTOMATICHA")
+
+                strWarningA = Bloc("WARNINGRATIOAF")
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -581,7 +586,38 @@ Public Class Frm_SectionAcierStandard
     End Sub
 
     Private Function ValideSaisieFenetre() As Boolean
-        Return True
+
+        Dim lOK As Boolean = True
+
+        Dim Aft, Afb As Decimal
+        Dim RapA As Decimal
+        Dim Chaine As String
+        Dim strValMin As String
+        Dim strValMax As String
+
+        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym Then
+
+            Aft = MySectionLoc.ProfilA.AireFs
+            Afb = MySectionLoc.ProfilA.AireFi
+
+            RapA = Afb / Aft
+
+            If IsSmaller(RapA, OptionsScope.RapportAfMin) Or IsGreater(RapA, OptionsScope.RapportAfMax) Then
+
+                lOK = False
+                strValMin = GetStringInUnitN(OptionsScope.RapportAfMin, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+                strValMax = GetStringInUnitN(OptionsScope.RapportAfMax, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+
+                Chaine = RemplaceDollar(RemplaceDollar(strWarningA, strValMin), strValMax)
+
+                MsgBox(Chaine, MsgBoxStyle.Information, LogicielInfo.Racine)
+
+            End If
+
+        End If
+
+        Return lOK
+
     End Function
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)

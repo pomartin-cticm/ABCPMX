@@ -254,6 +254,9 @@ Public Module Mod_Declarations
         Public TfMin As Decimal                 ' Epaisseur mini d'une semelle
         Public TfMax As Decimal                 ' Epaisseur maxi d'une semelle
 
+        Public RapportAfMin As Decimal          ' Valeur minimal du rapport des aires de semelles PRS 
+        Public RapportAfMax As Decimal          ' Valeur maximal du rapport des aires de semelles PRS 
+
     End Structure
 
     Public Structure struc_ReglagesLogiciel
@@ -303,6 +306,9 @@ Public Module Mod_Declarations
         OptionsScope.BfMax = 500 / 1000
         OptionsScope.TfMin = 6 / 1000
         OptionsScope.TfMax = 100 / 1000
+
+        OptionsScope.RapportAfMax = 3
+        OptionsScope.RapportAfMin = 1
 
     End Sub
 

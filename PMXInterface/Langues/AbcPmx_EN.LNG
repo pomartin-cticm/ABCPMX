@@ -670,7 +670,6 @@ PERMANENTLOADS			= Permanent loads
 SHRINKAGE				= Shrinkage
 IMPOSEDD				= Imposed deformations
 
-
 #FRM_PPLOADCASE
 TITLE					= Load cases
 LOADCASE 				= Load cases
@@ -858,6 +857,7 @@ PLATE					= Reinforcing plate under the lower flange
 PLATEW					= Width
 PLATET					= Thickness
 PLATEGRADE				= Steel grade
+WARNINGRATIOAF			= The ratio of the area of the lower flange to the area of the upper flange should be greater or equal to $ and smaller or equal to $
 
 #FRM_START
 BROWSEFILES				= Browse
@@ -1082,6 +1082,7 @@ WEBTHICKNESS			= Thickness of the web
 WEBHEIGHT				= Height of the web
 FLANGETHICKNESS			= Thickness of the flanges
 FLANGEWIDTH				= Width of the flanges
+RATIOFLANGEAREA			= Ratio of the flanges areas
 
 #OPTCALSLIMFLOOR
 TITLE					= Slimfloors

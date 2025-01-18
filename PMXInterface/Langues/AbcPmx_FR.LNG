@@ -856,6 +856,7 @@ PLATE					= Plat de renfort sous la semelle inférieure
 PLATEW					= Largeur
 PLATET					= Épaisseur
 PLATEGRADE				= Nuance
+WARNINGRATIOAF			= Le rapport entre l'aire de la semelle inférieure et celui de l'aire supérieure doit être compris entre $ et $
 
 #FRM_START
 BROWSEFILES				= Parcourir
@@ -1046,6 +1047,7 @@ WEBTHICKNESS			= Épaisseur de l'âme
 WEBHEIGHT				= Hauteur de l'âme
 FLANGETHICKNESS			= Épaisseur des semelles
 FLANGEWIDTH				= Largeur des semelles
+RATIOFLANGEAREA			= Ratio des aires de semelle
 
 #OPTCALSLIMFLOOR
 TITLE					= Planchers minces
