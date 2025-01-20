@@ -75,6 +75,7 @@ Public Class Frm_SectionAcierStandard
 
 
     Dim strWarningA As String
+    Dim ErreurRatioAf As String
 
 #End Region
 
@@ -246,6 +247,15 @@ Public Class Frm_SectionAcierStandard
         Me.pan_Plat.Width = Me.Grid_ProfilesSup.Width + Me.Grid_ProfilesSup.Left - Me.lst_GammeS.Left
         RemplirCmbNuancesPlats()
 
+        '==Rapoort des aires
+
+        Dim strvalMin, strvalMax As String
+
+        strvalMin = GetStringInUnitN(OptionsScope.RapportAfMin, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+        strValMax = GetStringInUnitN(OptionsScope.RapportAfMax, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+
+        ErreurRatioAf = RemplaceDollar(RemplaceDollar(strWarningA, strValMin), strValMax)
+
     End Sub
 
     Private Sub GestionUnites()
@@ -276,6 +286,8 @@ Public Class Frm_SectionAcierStandard
         Me.TLpan_Gauche.Height = 410
 
         FontFrm = New Font(FontBase.Name, SizeFont)
+
+        PrepareTextBoxDipo(Me.txt_RatioAf, False)
 
     End Sub
 
@@ -313,6 +325,8 @@ Public Class Frm_SectionAcierStandard
         Me.txt_Tfi.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tfi, Enu_TypeVariable.Dimension, 4, 1, NON, True)
         Me.txt_Tfs.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, NON, True)
         Me.txt_Tw.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tw, Enu_TypeVariable.Dimension, 4, 1, NON, True)
+
+        MAJI_RatioAirePRS()
 
         '== Plats
 
@@ -1262,7 +1276,7 @@ Public Class Frm_SectionAcierStandard
 
 #Region " Dessin symboles "
 
-    Private Sub img_Symbol_Paint(sender As Object, e As PaintEventArgs) Handles img_Tw.Paint, img_Tfs.Paint, img_Tfi.Paint, img_Hw.Paint, img_Ht.Paint, img_Bfs.Paint, img_Bfi.Paint, img_Wplat.Paint, img_Tplat.Paint
+    Private Sub img_Symbol_Paint(sender As Object, e As PaintEventArgs) Handles img_Tw.Paint, img_Tfs.Paint, img_Tfi.Paint, img_Hw.Paint, img_Ht.Paint, img_Bfs.Paint, img_Bfi.Paint, img_Wplat.Paint, img_Tplat.Paint, img_Aft.Paint, img_Afb.Paint
 
         '--> Déclarations
 
@@ -1277,13 +1291,23 @@ Public Class Frm_SectionAcierStandard
         Dim hCar As Single = e.Graphics.MeasureString("X", FontSymbolNormal).Height
         Dim hIndice As Single = hCar / 2
         Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
+        Dim lEgal As Boolean
 
         '--> Initialisation
 
         lIndice = False
         lGrec = False
+        lEgal = True
 
         Select Case sender.name
+
+            Case img_Afb.Name
+                strSymbol = "A"
+                strIndice = "fb"
+                lEgal = False
+            Case img_Aft.Name
+                strSymbol = "/ A"
+                strIndice = "ft"
 
             Case Me.img_Bfi.Name
                 strSymbol = "b"
@@ -1317,7 +1341,7 @@ Public Class Frm_SectionAcierStandard
         '--> Dessin
 
         DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_AlignementH.Droite,
-                   FontSymbolNormal, FontSymbolNormal, FontSymbolIndice, 1.0!, True)
+                   FontSymbolNormal, FontSymbolNormal, FontSymbolIndice, 1.0!, legal)
 
     End Sub
 
@@ -1352,6 +1376,8 @@ Public Class Frm_SectionAcierStandard
         Dim Hcomp As Decimal
         Dim lSym As Boolean = (MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym)
         Dim lMAJHauteur As Boolean = False
+        Dim lMAJRatioAf As Boolean = False
+        Dim lPRSMonoS As Boolean = (MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym)
 
         If VerificationDonneesPRS(sender, Valeur) Then
             Select Case sender.name
@@ -1371,6 +1397,7 @@ Public Class Frm_SectionAcierStandard
                     MySectionLoc.ProfilA.Tw = Valeur
                 Case Me.txt_Bfs.Name
                     MySectionLoc.ProfilA.Bfs = Valeur
+                    lMAJRatioAf = lPRSMonoS
                     If lSym Then
                         MySectionLoc.ProfilA.Bfi = Valeur
                         Me.txt_Bfi.Text = Me.txt_Bfs.Text
@@ -1382,11 +1409,14 @@ Public Class Frm_SectionAcierStandard
                         Me.txt_Tfi.Text = Me.txt_Tfs.Text
                     End If
                     lMAJHauteur = True
+                    lMAJRatioAf = lPRSMonoS
                 Case Me.txt_Bfi.Name
                     MySectionLoc.ProfilA.Bfi = Valeur
+                    lMAJRatioAf = lPRSMonoS
                 Case Me.txt_Tfi.Name
                     MySectionLoc.ProfilA.Tfi = Valeur
                     lMAJHauteur = True
+                    lMAJRatioAf = lPRSMonoS
             End Select
         End If
 
@@ -1401,6 +1431,8 @@ Public Class Frm_SectionAcierStandard
                     Me.txt_Hw.Text = GetStringNoUnit(Hcomp, Enu_TypeVariable.Dimension)
             End Select
         End If
+
+        If lMAJRatioAf Then MAJI_RatioAirePRS()
 
         Me.img_Section.Invalidate()
         Me.img_ReductionCurve.Invalidate()
@@ -1460,13 +1492,13 @@ Public Class Frm_SectionAcierStandard
     ''' </summary>
     Private Function VerificationDonneesPRS(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
 
-        Const HWMINI As Decimal = 0.2
-        Const TFMINI As Decimal = 0.006
-        Const TWMINI As Decimal = 0.003
-        Const HWMAXI As Decimal = 2
-        Const BFMINI As Decimal = 0.12
-        Const BFMAXI As Decimal = 0.5
-        Const EPMAXI As Decimal = 0.5
+        'Const HWMINI As Decimal = 0.2
+        'Const TFMINI As Decimal = 0.006
+        'Const TWMINI As Decimal = 0.003
+        'Const HWMAXI As Decimal = 2
+        'Const BFMINI As Decimal = 0.12
+        'Const BFMAXI As Decimal = 0.5
+        'Const EPMAXI As Decimal = 0.5
 
         '--> Déclaration
         Dim lOk As Boolean = True
@@ -1554,11 +1586,15 @@ Public Class Frm_SectionAcierStandard
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine
                 Me.TLpan_Gauche.RowStyles(3).Height = 0
                 Me.TLpan_Gauche.RowStyles(2).Height = 290
-
-            Case Else
+                Me.TLpan_Gauche.RowStyles(4).Height = 0
+            Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
                 Me.TLpan_Gauche.RowStyles(2).Height = 0
                 Me.TLpan_Gauche.RowStyles(3).Height = 200
-
+                Me.TLpan_Gauche.RowStyles(4).Height = 0
+            Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
+                Me.TLpan_Gauche.RowStyles(2).Height = 0
+                Me.TLpan_Gauche.RowStyles(3).Height = 200
+                Me.TLpan_Gauche.RowStyles(4).Height = 30
         End Select
 
     End Sub
@@ -1652,19 +1688,50 @@ Public Class Frm_SectionAcierStandard
 
     Private Sub MAJ_DefinitionHauteur()
 
+        'Select Case DefinitionHauteur
+        '    Case Enu_DefinitionH.HauteurTotale
+        '        Me.txt_Ha.BackColor = SystemColors.Window
+        '        Me.txt_Hw.BackColor = SystemColors.ControlDark
+        '        Me.lbl_Info.Text = str_InfoH(0)
+        '    Case Enu_DefinitionH.HauteurAme
+        '        Me.txt_Hw.BackColor = SystemColors.Window
+        '        Me.txt_Ha.BackColor = SystemColors.ControlDark
+        '        Me.lbl_Info.Text = str_InfoH(1)
+        'End Select
+
+        'Me.txt_Ha.ReadOnly = (DefinitionHauteur = Enu_DefinitionH.HauteurAme)
+        'Me.txt_Hw.ReadOnly = (DefinitionHauteur = Enu_DefinitionH.HauteurTotale)
+
+        PrepareTextBoxDipo(Me.txt_Ha, DefinitionHauteur = Enu_DefinitionH.HauteurTotale)
+        PrepareTextBoxDipo(Me.txt_Hw, DefinitionHauteur = Enu_DefinitionH.HauteurAme)
+
         Select Case DefinitionHauteur
             Case Enu_DefinitionH.HauteurTotale
-                Me.txt_Ha.BackColor = SystemColors.Window
-                Me.txt_Hw.BackColor = SystemColors.ControlDark
                 Me.lbl_Info.Text = str_InfoH(0)
             Case Enu_DefinitionH.HauteurAme
-                Me.txt_Hw.BackColor = SystemColors.Window
-                Me.txt_Ha.BackColor = SystemColors.ControlDark
                 Me.lbl_Info.Text = str_InfoH(1)
         End Select
 
-        Me.txt_Ha.ReadOnly = (DefinitionHauteur = Enu_DefinitionH.HauteurAme)
-        Me.txt_Hw.ReadOnly = (DefinitionHauteur = Enu_DefinitionH.HauteurTotale)
+    End Sub
+
+    Private Sub MAJI_RatioAirePRS()
+
+        Dim RatioA As Decimal = MySectionLoc.ProfilA.AireFi / MySectionLoc.ProfilA.AireFs
+
+        Dim lOK As Boolean = True
+
+        If IsGreater(RatioA, OptionsScope.RapportAfMax) Then lOK = False
+        If IsSmaller(RatioA, OptionsScope.RapportAfMin) Then lOK = False
+
+        Me.txt_RatioAf.Text = GetStringInUnitN(RatioA, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+
+        If lOK Then
+            Me.txt_RatioAf.ForeColor = Me.txt_Tfs.ForeColor
+            ErrorProviderRatioAf.Clear()
+        Else
+            Me.txt_RatioAf.ForeColor = CouleurErreur
+            ErrorProviderRatioAf.SetError(Me.txt_RatioAf, ErreurRatioAf)
+        End If
 
     End Sub
 
@@ -2449,6 +2516,7 @@ Public Class Frm_SectionAcierStandard
             Return lOK
 
     End Function
+
 
 
 #End Region

@@ -98,6 +98,10 @@ Partial Class Frm_SectionAcierStandard
         Me.rdb_PRS = New System.Windows.Forms.RadioButton()
         Me.rdb_PRS_symetrique = New System.Windows.Forms.RadioButton()
         Me.rdb_Lamine = New System.Windows.Forms.RadioButton()
+        Me.pan_Areas = New System.Windows.Forms.Panel()
+        Me.img_Afb = New System.Windows.Forms.PictureBox()
+        Me.txt_RatioAf = New System.Windows.Forms.TextBox()
+        Me.img_Aft = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Section = New System.Windows.Forms.PictureBox()
         Me.pan_Acier = New System.Windows.Forms.Panel()
@@ -105,6 +109,7 @@ Partial Class Frm_SectionAcierStandard
         Me.img_ReductionCurve = New System.Windows.Forms.PictureBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.imgList_UY = New System.Windows.Forms.ImageList(Me.components)
+        Me.ErrorProviderRatioAf = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -130,11 +135,15 @@ Partial Class Frm_SectionAcierStandard
         CType(Me.img_Wplat, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_TypeSection.SuspendLayout()
+        Me.pan_Areas.SuspendLayout()
+        CType(Me.img_Afb, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Aft, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Acier.SuspendLayout()
         CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ErrorProviderRatioAf, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -390,17 +399,19 @@ Partial Class Frm_SectionAcierStandard
         Me.TLpan_Gauche.Controls.Add(Me.pan_Lamine, 0, 2)
         Me.TLpan_Gauche.Controls.Add(Me.lbl_Section, 0, 0)
         Me.TLpan_Gauche.Controls.Add(Me.pan_TypeSection, 0, 1)
+        Me.TLpan_Gauche.Controls.Add(Me.pan_Areas, 0, 4)
         Me.TLpan_Gauche.Dock = System.Windows.Forms.DockStyle.Top
         Me.TLpan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLpan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_Gauche.Name = "TLpan_Gauche"
-        Me.TLpan_Gauche.RowCount = 5
+        Me.TLpan_Gauche.RowCount = 6
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 290.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Gauche.Size = New System.Drawing.Size(336, 615)
+        Me.TLpan_Gauche.Size = New System.Drawing.Size(336, 700)
         Me.TLpan_Gauche.TabIndex = 0
         '
         'Pan_DimPRS
@@ -938,6 +949,43 @@ Partial Class Frm_SectionAcierStandard
         Me.rdb_Lamine.Text = "rdb_Lamine"
         Me.rdb_Lamine.UseVisualStyleBackColor = True
         '
+        'pan_Areas
+        '
+        Me.pan_Areas.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Areas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Areas.Controls.Add(Me.img_Afb)
+        Me.pan_Areas.Controls.Add(Me.txt_RatioAf)
+        Me.pan_Areas.Controls.Add(Me.img_Aft)
+        Me.pan_Areas.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Areas.Location = New System.Drawing.Point(0, 610)
+        Me.pan_Areas.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Areas.Name = "pan_Areas"
+        Me.pan_Areas.Size = New System.Drawing.Size(336, 30)
+        Me.pan_Areas.TabIndex = 5
+        '
+        'img_Afb
+        '
+        Me.img_Afb.Location = New System.Drawing.Point(147, 5)
+        Me.img_Afb.Name = "img_Afb"
+        Me.img_Afb.Size = New System.Drawing.Size(37, 20)
+        Me.img_Afb.TabIndex = 33
+        Me.img_Afb.TabStop = False
+        '
+        'txt_RatioAf
+        '
+        Me.txt_RatioAf.Location = New System.Drawing.Point(226, 4)
+        Me.txt_RatioAf.Name = "txt_RatioAf"
+        Me.txt_RatioAf.Size = New System.Drawing.Size(58, 20)
+        Me.txt_RatioAf.TabIndex = 31
+        '
+        'img_Aft
+        '
+        Me.img_Aft.Location = New System.Drawing.Point(183, 5)
+        Me.img_Aft.Name = "img_Aft"
+        Me.img_Aft.Size = New System.Drawing.Size(44, 20)
+        Me.img_Aft.TabIndex = 32
+        Me.img_Aft.TabStop = False
+        '
         'TableLayoutPanel2
         '
         Me.TableLayoutPanel2.ColumnCount = 1
@@ -1008,6 +1056,10 @@ Partial Class Frm_SectionAcierStandard
         Me.imgList_UY.Images.SetKeyName(0, "Fu")
         Me.imgList_UY.Images.SetKeyName(1, "Fy")
         '
+        'ErrorProviderRatioAf
+        '
+        Me.ErrorProviderRatioAf.ContainerControl = Me
+        '
         'Frm_SectionAcierStandard
         '
         Me.AcceptButton = Me.btn_OK
@@ -1053,11 +1105,16 @@ Partial Class Frm_SectionAcierStandard
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_TypeSection.ResumeLayout(False)
         Me.pan_TypeSection.PerformLayout()
+        Me.pan_Areas.ResumeLayout(False)
+        Me.pan_Areas.PerformLayout()
+        CType(Me.img_Afb, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Aft, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel2.ResumeLayout(False)
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Acier.ResumeLayout(False)
         CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ErrorProviderRatioAf, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1143,4 +1200,9 @@ Partial Class Frm_SectionAcierStandard
     Friend WithEvents lbl_Tplat As Label
     Friend WithEvents lbl_Wplat As Label
     Friend WithEvents lbl_NuancePlat As Label
+    Friend WithEvents pan_Areas As Panel
+    Friend WithEvents txt_RatioAf As TextBox
+    Friend WithEvents img_Aft As PictureBox
+    Friend WithEvents img_Afb As PictureBox
+    Friend WithEvents ErrorProviderRatioAf As ErrorProvider
 End Class

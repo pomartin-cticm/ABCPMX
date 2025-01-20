@@ -557,7 +557,8 @@ Public Module Mod_Declarations
     Public CouleurBackBandeaux As Color = BlueAM     ' SystemColors.ControlDarkDark
     Public CouleurForeBandeaux As Color = SystemColors.ControlLightLight
 
-    Public CouleurReadOnly As Color = SystemColors.Control       'PaleGrayAM     ' SystemColors.ControlDark
+    'Public CouleurReadOnly As Color = SystemColors.Control       'PaleGrayAM     ' SystemColors.ControlDark
+    Public CouleurReadOnly As Color = GrayAM
 
     Public LargeurColonneSaisie As Integer = 250
 
@@ -593,6 +594,9 @@ Public Module Mod_Declarations
 
 
     Public MyOrange As Color = Color.FromArgb(231, 62, 1)
+
+    Public CouleurErreur As Color = Color.DarkRed
+
 #End Region
 
 #Region " Variables globales "
