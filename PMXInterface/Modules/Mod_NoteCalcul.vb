@@ -1610,8 +1610,9 @@ Module Mod_NoteCalcul
 
         Dim zANP, MplRd As Decimal
         Dim zANE, InertieY, MelRd As Decimal
-        MyBeam.Section.ProprietesPlastiquesMyy(1, True, MyBeam.Param.Gamma, 0, zANP, MplRd, True)
-        MyBeam.Section.ProprietesElastiquesMyy(1, True, MyBeam.Param.Gamma, 1, zANE, InertieY, MelRd, True)
+        Dim lEnrobProp As Boolean = MyBeam.Param.lEnrobProp
+        MyBeam.Section.ProprietesPlastiquesMyy_Usuel(1, True, MyBeam.Param.Gamma, 0, zANP, MplRd, lenrobprop, True)
+        MyBeam.Section.ProprietesElastiquesMyy_Usuel(1, True, MyBeam.Param.Gamma, 1, zANE, InertieY, MelRd, lEnrobProp, True)
 
         '----------------------------------------------------------------------------------------------------------------------------
         '# Résistances du profilé ### -----------------------------------------------------------------------------------------------
@@ -3391,7 +3392,7 @@ Module Mod_NoteCalcul
 
         For iTab As Integer = 0 To NeqEnrob.Count - 1
 
-            LigneTableauPropElastiqueAcierEnrobe(MyBeam.Section, MyBeam.Param.Gamma, NeqEnrob(iTab), 1, NCOL)
+            LigneTableauPropElastiqueAcierEnrobe(MyBeam.Section, MyBeam.Param.Gamma, NeqEnrob(iTab), 1, MyBeam.Param.lEnrobProp, NCOL)
 
         Next
 
@@ -3410,7 +3411,7 @@ Module Mod_NoteCalcul
 
             For iTab As Integer = 0 To NeqEnrob.Count - 1
 
-                LigneTableauPropElastiqueAcierEnrobe(MyBeam.Section, MyBeam.Param.Gamma, NeqEnrob(iTab), -1, NCOL)
+                LigneTableauPropElastiqueAcierEnrobe(MyBeam.Section, MyBeam.Param.Gamma, NeqEnrob(iTab), -1, MyBeam.Param.lEnrobProp, NCOL)
 
             Next
 
@@ -3424,8 +3425,8 @@ Module Mod_NoteCalcul
         AddTitreNdC(2, BlocSP("PPROPERTIES"))
         AddTitreNdC(3, BlocSP("POSITIVEB"))
 
-        MyBeam.Section.ProprietesPlastiquesMyy(1, True, MyBeam.Param.Gamma, 0, zANP, MplRd)
-        MyBeam.Section.ProprietesPlastiquesMyy(1, False, MyBeam.Param.Gamma, 0, zANPk, MplRk)
+        MyBeam.Section.ProprietesPlastiquesMyy_Usuel(1, True, MyBeam.Param.Gamma, 0, zANP, MplRd, MyBeam.Param.lEnrobProp)
+        MyBeam.Section.ProprietesPlastiquesMyy_Usuel(1, False, MyBeam.Param.Gamma, 0, zANPk, MplRk, MyBeam.Param.lEnrobProp)
 
         AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 0, True))
         AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnit(-zANP, Enu_TypeVariable.Dimension, 4, 0, True))
@@ -3435,8 +3436,8 @@ Module Mod_NoteCalcul
 
             AddTitreNdC(3, BlocSP("NEGATIVEB"))
 
-            MyBeam.Section.ProprietesPlastiquesMyy(-1, True, MyBeam.Param.Gamma, 0, zANP, MplRd)
-            MyBeam.Section.ProprietesPlastiquesMyy(-1, False, MyBeam.Param.Gamma, 0, zANPk, MplRk)
+            MyBeam.Section.ProprietesPlastiquesMyy_Usuel(-1, True, MyBeam.Param.Gamma, 0, zANP, MplRd, MyBeam.Param.lEnrobProp)
+            MyBeam.Section.ProprietesPlastiquesMyy_Usuel(-1, False, MyBeam.Param.Gamma, 0, zANPk, MplRk, MyBeam.Param.lEnrobProp)
 
             AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 0, True))
             AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnit(-zANP, Enu_TypeVariable.Dimension, 4, 0, True))
@@ -3446,7 +3447,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub LigneTableauPropElastiqueAcierEnrobe(MySection As cls_Section, MyGammas As cls_Gamma, NEq As Decimal, SigneM As Decimal, ByRef NCOL As Integer)
+    Private Sub LigneTableauPropElastiqueAcierEnrobe(MySection As cls_Section, MyGammas As cls_Gamma, NEq As Decimal, SigneM As Decimal, lEnrobProp As Boolean, ByRef NCOL As Integer)
         '-------------------------------------------------------------------------------------------
         '   14/12/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -3462,7 +3463,7 @@ Module Mod_NoteCalcul
 
         '--> Calculs
 
-        MySection.ProprietesElastiquesMyy(SigneM, True, MyGammas, NEq, zANE, InertieY, MelRd)
+        MySection.ProprietesElastiquesMyy_Usuel(SigneM, True, MyGammas, NEq, zANE, InertieY, MelRd, lEnrobProp, False)
         MySection.ProprietesElastiquesMzz(1, True, MyGammas, NEq, zANE2, InertieZ, MelRd2)
 
         InertieT = MySection.InertieTorsionProfileEnrobe(NEq)
@@ -3741,6 +3742,7 @@ Module Mod_NoteCalcul
         Dim LargCol() As Integer = {20, 12, 10, 10}
         Dim iTab As Integer
         Dim strPhase As String
+        Dim lEnrobProp As Boolean = MyBeam.Param.lEnrobProp
 
         '--> Entête du Tableau
 
@@ -3768,7 +3770,7 @@ Module Mod_NoteCalcul
                 MyBeam.Section.ProprietesElastiquesMixteMyy(-1, True, MyBeam.Param.Gamma, NeqEnrob(iTab), 1, bEff, MyBeam.Dalle, zANE, InertieY, MelRd)
                 strPhase = BlocSP("COMPOSITE")
             Else
-                MyBeam.Section.ProprietesElastiquesMyy(-1, True, MyBeam.Param.Gamma, NeqEnrob(iTab), zANE, InertieY, MelRd)
+                MyBeam.Section.ProprietesElastiquesMyy_Usuel(-1, True, MyBeam.Param.Gamma, NeqEnrob(iTab), zANE, InertieY, MelRd, lEnrobProp, False)
                 strPhase = BlocSP("STEELENCASED")
             End If
 
@@ -3887,239 +3889,239 @@ Module Mod_NoteCalcul
     End Sub
 
 
-    Private Sub EditionProprietesSectionPoutreMixte(MyBeam As cls_Poutre)
-        '-------------------------------------------------------------------------------------------
-        '   16/08/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------
-        '   Edition des propriétés de sections pour une poutre mixte
-        '-------------------------------------------------------------------------------------------
+    'Private Sub EditionProprietesSectionPoutreMixte(MyBeam As cls_Poutre)
+    '    '-------------------------------------------------------------------------------------------
+    '    '   16/08/23 :  Création - POM
+    '    '-------------------------------------------------------------------------------------------
+    '    '   Edition des propriétés de sections pour une poutre mixte
+    '    '-------------------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        Dim NCOL As Integer, LargCol(1) As Integer, PosTab As Integer
+    '    Dim NCOL As Integer, LargCol(1) As Integer, PosTab As Integer
 
-        '--> Initialisation du tableau
+    '    '--> Initialisation du tableau
 
-        NCOL = 8
-        LargCol(0) = 15
-        LargCol(1) = 10
-        PosTab = 5
+    '    NCOL = 8
+    '    LargCol(0) = 15
+    '    LargCol(1) = 10
+    '    PosTab = 5
 
-        InitialiseTableauPropSectionMixte(NCOL, LargCol, PosTab)
+    '    InitialiseTableauPropSectionMixte(NCOL, LargCol, PosTab)
 
-        '--> Console gauche
+    '    '--> Console gauche
 
-        If MyBeam.lTraveeConsoleGauche Then
-            EditionPropSectionsPMixteConsole(MyBeam, True, NCOL, LargCol, PosTab)
-        End If
+    '    If MyBeam.lTraveeConsoleGauche Then
+    '        EditionPropSectionsPMixteConsole(MyBeam, True, NCOL, LargCol, PosTab)
+    '    End If
 
-        '--> Travées centrales
+    '    '--> Travées centrales
 
-        For i = 1 To MyBeam.NombreTraveesDeuxAppuis
-            EditionPropSectionsPMixteTravee(MyBeam, i, NCOL, LargCol, PosTab)
-        Next
+    '    For i = 1 To MyBeam.NombreTraveesDeuxAppuis
+    '        EditionPropSectionsPMixteTravee(MyBeam, i, NCOL, LargCol, PosTab)
+    '    Next
 
-        '--> Console droite
+    '    '--> Console droite
 
-        If MyBeam.lTraveeConsoleDroite Then
-            EditionPropSectionsPMixteConsole(MyBeam, False, NCOL, LargCol, PosTab)
-        End If
+    '    If MyBeam.lTraveeConsoleDroite Then
+    '        EditionPropSectionsPMixteConsole(MyBeam, False, NCOL, LargCol, PosTab)
+    '    End If
 
-        '--> Fin du tableau
+    '    '--> Fin du tableau
 
-        FinTableau()
-    End Sub
+    '    FinTableau()
+    'End Sub
 
-    Private Sub EditionPropSectionsPMixteTravee(MyBeam As cls_Poutre, iTravee As Integer, NCOL As Integer, LargCol() As Integer, PosTab As Integer)
-        '-------------------------------------------------------------------------------------------
-        '   16/08/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------
-        '   Edition des propriétés de sections pour une travée d'un poutre mixte
-        '-------------------------------------------------------------------------------------------
+    'Private Sub EditionPropSectionsPMixteTravee(MyBeam As cls_Poutre, iTravee As Integer, NCOL As Integer, LargCol() As Integer, PosTab As Integer)
+    '    '-------------------------------------------------------------------------------------------
+    '    '   16/08/23 :  Création - POM
+    '    '-------------------------------------------------------------------------------------------
+    '    '   Edition des propriétés de sections pour une travée d'un poutre mixte
+    '    '-------------------------------------------------------------------------------------------
 
-        Dim bEff As Decimal
-        Dim mSign As Decimal
-        Dim zANP, MplRd As Decimal
-        Dim zANE, MelRd As Decimal
-        Dim Inertie As Decimal
-        Dim myBord As Integer = Bordures.Tous
-        Dim ChaineT, ChaineS As String
-        Dim n0 As Decimal
+    '    Dim bEff As Decimal
+    '    Dim mSign As Decimal
+    '    Dim zANP, MplRd As Decimal
+    '    Dim zANE, MelRd As Decimal
+    '    Dim Inertie As Decimal
+    '    Dim myBord As Integer = Bordures.Tous
+    '    Dim ChaineT, ChaineS As String
+    '    Dim n0 As Decimal
 
-        '--> Initialisation
+    '    '--> Initialisation
 
-        If MyBeam.NombreTraveesDeuxAppuis = 1 Then
-            ChaineT = "travée principale"
-        Else
-            ChaineT = "travée " & CStr(iTravee)
-        End If
+    '    If MyBeam.NombreTraveesDeuxAppuis = 1 Then
+    '        ChaineT = "travée principale"
+    '    Else
+    '        ChaineT = "travée " & CStr(iTravee)
+    '    End If
 
-        '--> Sur appui gauche
+    '    '--> Sur appui gauche
 
-        bEff = MyBeam.BeffDalle(0, iTravee, False, False)
-        n0 = MyBeam.Dalle.beton.CoefficientEquivalenceCT
-        If iTravee = 1 And (Not MyBeam.lTraveeConsoleGauche) Then
-            mSign = 1
-            ChaineS = "Appui  G (M>0)"
-        Else
-            mSign = -1
-            ChaineS = "Appui  G (M<0)"
-        End If
+    '    bEff = MyBeam.BeffDalle(0, iTravee, False, False)
+    '    n0 = MyBeam.Dalle.beton.CoefficientEquivalenceCT
+    '    If iTravee = 1 And (Not MyBeam.lTraveeConsoleGauche) Then
+    '        mSign = 1
+    '        ChaineS = "Appui  G (M>0)"
+    '    Else
+    '        mSign = -1
+    '        ChaineS = "Appui  G (M<0)"
+    '    End If
 
-        MyBeam.Section.ProprietesPlastiquesMyy(mSign, True, MyBeam.Param.Gamma, n0, zANP, MplRd)
-        MyBeam.Section.ProprietesElastiquesMyy(mSign, True, MyBeam.Param.Gamma, 1, zANE, Inertie, MelRd)
+    '    MyBeam.Section.ProprietesPlastiquesMyy(mSign, True, MyBeam.Param.Gamma, n0, zANP, MplRd)
+    '    MyBeam.Section.ProprietesElastiquesMyy(mSign, True, MyBeam.Param.Gamma, 1, zANE, Inertie, MelRd)
 
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, ChaineT)
-        AddCellule(LargCol(0), myBord, PositionTexteInCell.Centre, ChaineS)
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(bEff, Enu_TypeVariable.Dimension, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(Inertie, Enu_TypeVariable.InertieCM4, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, ChaineT)
+    '    AddCellule(LargCol(0), myBord, PositionTexteInCell.Centre, ChaineS)
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(bEff, Enu_TypeVariable.Dimension, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(Inertie, Enu_TypeVariable.InertieCM4, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
 
-        '--> à mi travée
+    '    '--> à mi travée
 
-        bEff = MyBeam.BeffDalle(MyBeam.LongueurTravee(iTravee) / 2, iTravee, False, False)
-        mSign = 1
-        ChaineS = "Mi travée (M>0)"
-        MyBeam.Section.ProprietesPlastiquesMyy(mSign, True, MyBeam.Param.Gamma, n0, zANP, MplRd)
-        MyBeam.Section.ProprietesElastiquesMyy(mSign, True, MyBeam.Param.Gamma, 1, zANE, Inertie, MelRd)
+    '    bEff = MyBeam.BeffDalle(MyBeam.LongueurTravee(iTravee) / 2, iTravee, False, False)
+    '    mSign = 1
+    '    ChaineS = "Mi travée (M>0)"
+    '    MyBeam.Section.ProprietesPlastiquesMyy(mSign, True, MyBeam.Param.Gamma, n0, zANP, MplRd)
+    '    MyBeam.Section.ProprietesElastiquesMyy(mSign, True, MyBeam.Param.Gamma, 1, zANE, Inertie, MelRd)
 
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, "")
-        AddCellule(LargCol(0), myBord, PositionTexteInCell.Centre, ChaineS)
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(bEff, Enu_TypeVariable.Dimension, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(Inertie, Enu_TypeVariable.InertieCM4, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, "")
+    '    AddCellule(LargCol(0), myBord, PositionTexteInCell.Centre, ChaineS)
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(bEff, Enu_TypeVariable.Dimension, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(Inertie, Enu_TypeVariable.InertieCM4, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
 
-        '--> Sur appui gauche
+    '    '--> Sur appui gauche
 
-        bEff = MyBeam.BeffDalle(MyBeam.LongueurTravee(iTravee), iTravee, False, False)
-        n0 = MyBeam.Dalle.beton.CoefficientEquivalenceCT
-        If iTravee = MyBeam.NombreTraveesDeuxAppuis And (Not MyBeam.lTraveeConsoleDroite) Then
-            mSign = 1
-            ChaineS = "Appui  D (M>0)"
-        Else
-            mSign = -1
-            ChaineS = "Appui  D (M<0)"
-        End If
+    '    bEff = MyBeam.BeffDalle(MyBeam.LongueurTravee(iTravee), iTravee, False, False)
+    '    n0 = MyBeam.Dalle.beton.CoefficientEquivalenceCT
+    '    If iTravee = MyBeam.NombreTraveesDeuxAppuis And (Not MyBeam.lTraveeConsoleDroite) Then
+    '        mSign = 1
+    '        ChaineS = "Appui  D (M>0)"
+    '    Else
+    '        mSign = -1
+    '        ChaineS = "Appui  D (M<0)"
+    '    End If
 
-        MyBeam.Section.ProprietesPlastiquesMyy(mSign, True, MyBeam.Param.Gamma, n0, zANP, MplRd)
-        MyBeam.Section.ProprietesElastiquesMyy(mSign, True, MyBeam.Param.Gamma, 1, zANE, Inertie, MelRd)
+    '    MyBeam.Section.ProprietesPlastiquesMyy(mSign, True, MyBeam.Param.Gamma, n0, zANP, MplRd)
+    '    MyBeam.Section.ProprietesElastiquesMyy(mSign, True, MyBeam.Param.Gamma, 1, zANE, Inertie, MelRd)
 
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, ChaineT)
-        AddCellule(LargCol(0), myBord, PositionTexteInCell.Centre, ChaineS)
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(bEff, Enu_TypeVariable.Dimension, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(Inertie, Enu_TypeVariable.InertieCM4, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, ChaineT)
+    '    AddCellule(LargCol(0), myBord, PositionTexteInCell.Centre, ChaineS)
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(bEff, Enu_TypeVariable.Dimension, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(Inertie, Enu_TypeVariable.InertieCM4, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
 
-    End Sub
+    'End Sub
 
-    Private Sub EditionPropSectionsPMixteConsole(MyBeam As cls_Poutre, lGauche As Boolean, NCOL As Integer, LargCol() As Integer, PosTab As Integer)
-        '-------------------------------------------------------------------------------------------
-        '   16/08/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------
-        '   Edition des propriétés de sections pour la console d'un poutre mixte
-        '-------------------------------------------------------------------------------------------
-        '   lGauche     [E] :   Indique si console gauche
-        '-------------------------------------------------------------------------------------------
+    'Private Sub EditionPropSectionsPMixteConsole(MyBeam As cls_Poutre, lGauche As Boolean, NCOL As Integer, LargCol() As Integer, PosTab As Integer)
+    '    '-------------------------------------------------------------------------------------------
+    '    '   16/08/23 :  Création - POM
+    '    '-------------------------------------------------------------------------------------------
+    '    '   Edition des propriétés de sections pour la console d'un poutre mixte
+    '    '-------------------------------------------------------------------------------------------
+    '    '   lGauche     [E] :   Indique si console gauche
+    '    '-------------------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        Dim iTravee As Integer
-        Dim bEff As Decimal
-        Dim LTrav As Decimal
-        Const mSign As Decimal = -1
-        Dim zANP, MplRd As Decimal
-        Dim zANE, MelRd As Decimal
-        Dim Inertie As Decimal
-        Dim myBord As Integer = Bordures.Tous
-        Dim ChaineConsole As String
+    '    Dim iTravee As Integer
+    '    Dim bEff As Decimal
+    '    Dim LTrav As Decimal
+    '    Const mSign As Decimal = -1
+    '    Dim zANP, MplRd As Decimal
+    '    Dim zANE, MelRd As Decimal
+    '    Dim Inertie As Decimal
+    '    Dim myBord As Integer = Bordures.Tous
+    '    Dim ChaineConsole As String
 
-        '--> Initialisation du tableau
+    '    '--> Initialisation du tableau
 
-        'NCOL = 7
-        'LargCol(0) = 15
-        'LargCol(1) = 10
-        'PosTab = 10
+    '    'NCOL = 7
+    '    'LargCol(0) = 15
+    '    'LargCol(1) = 10
+    '    'PosTab = 10
 
-        'InitialiseTableauPropSectionMixte(NCOL, LargCol, PosTab)
+    '    'InitialiseTableauPropSectionMixte(NCOL, LargCol, PosTab)
 
-        '--> Calcul des propriétés de la section
+    '    '--> Calcul des propriétés de la section
 
-        If lGauche Then
-            iTravee = MyBeam.IndicePremiereTravee
-            ChaineConsole = "Console Gauche"
-        Else
-            iTravee = MyBeam.IndiceDerniereTravee
-            ChaineConsole = "Console droite"
-        End If
-        LTrav = MyBeam.LongueurTravee(iTravee)
-        bEff = MyBeam.BeffDalle(LTrav / 2, iTravee, False, False)
+    '    If lGauche Then
+    '        iTravee = MyBeam.IndicePremiereTravee
+    '        ChaineConsole = "Console Gauche"
+    '    Else
+    '        iTravee = MyBeam.IndiceDerniereTravee
+    '        ChaineConsole = "Console droite"
+    '    End If
+    '    LTrav = MyBeam.LongueurTravee(iTravee)
+    '    bEff = MyBeam.BeffDalle(LTrav / 2, iTravee, False, False)
 
-        MyBeam.Section.ProprietesPlastiquesMyy(mSign, True, MyBeam.Param.Gamma, 0, zANP, MplRd)
-        MyBeam.Section.ProprietesElastiquesMyy(mSign, True, MyBeam.Param.Gamma, 1, zANE, Inertie, MelRd)
+    '    MyBeam.Section.ProprietesPlastiquesMyy(mSign, True, MyBeam.Param.Gamma, 0, zANP, MplRd)
+    '    MyBeam.Section.ProprietesElastiquesMyy(mSign, True, MyBeam.Param.Gamma, 1, zANE, Inertie, MelRd)
 
-        '--> Propriétés sur toutes les sections
+    '    '--> Propriétés sur toutes les sections
 
-        InitialiseLigne(NCOL, HLIGNE)
+    '    InitialiseLigne(NCOL, HLIGNE)
 
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, ChaineConsole)
-        AddCellule(LargCol(0), myBord, PositionTexteInCell.Centre, "All sections (M<0)")
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(bEff, Enu_TypeVariable.Dimension, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(Inertie, Enu_TypeVariable.InertieCM4, 4, 4, False))
-        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, ChaineConsole)
+    '    AddCellule(LargCol(0), myBord, PositionTexteInCell.Centre, "All sections (M<0)")
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(bEff, Enu_TypeVariable.Dimension, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(Inertie, Enu_TypeVariable.InertieCM4, 4, 4, False))
+    '    AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
 
-        ''--> Fin du tableau
+    '    ''--> Fin du tableau
 
-        'FinTableau()
+    '    'FinTableau()
 
-    End Sub
+    'End Sub
 
-    Private Sub InitialiseTableauPropSectionMixte(NCOL As Integer, LargCol() As Integer, PosTab As Integer)
-        '-------------------------------------------------------------------------------------------
-        '   16/08/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------
-        '   Entete du tableau pour les propriétés de sections pour la console d'un poutre mixte
-        '-------------------------------------------------------------------------------------------
+    'Private Sub InitialiseTableauPropSectionMixte(NCOL As Integer, LargCol() As Integer, PosTab As Integer)
+    '    '-------------------------------------------------------------------------------------------
+    '    '   16/08/23 :  Création - POM
+    '    '-------------------------------------------------------------------------------------------
+    '    '   Entete du tableau pour les propriétés de sections pour la console d'un poutre mixte
+    '    '-------------------------------------------------------------------------------------------
 
-        Dim myBord As Integer
+    '    Dim myBord As Integer
 
-        AddLigneNDC("\TABLEAU " & PosTab)
-        InitialiseLigne(NCOL, HLIGNEENTETE, True)
+    '    AddLigneNDC("\TABLEAU " & PosTab)
+    '    InitialiseLigne(NCOL, HLIGNEENTETE, True)
 
-        myBord = Bordures.Gauche + Bordures.Droite + Bordures.Haut
+    '    myBord = Bordures.Gauche + Bordures.Droite + Bordures.Haut
 
-        AddCellule(LargCol(1), Bordures.Aucun, PositionTexteInCell.Centre, "")
-        AddCellule(LargCol(0), Bordures.Aucun, PositionTexteInCell.Centre, "")
-        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "b\-eff\=")
-        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "z\-pl\=")
-        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "M\-pl,Rd\=")
-        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "z\-el\=")
-        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "I\-yy\=")
-        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "M\-el,Rd\=")
+    '    AddCellule(LargCol(1), Bordures.Aucun, PositionTexteInCell.Centre, "")
+    '    AddCellule(LargCol(0), Bordures.Aucun, PositionTexteInCell.Centre, "")
+    '    AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "b\-eff\=")
+    '    AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "z\-pl\=")
+    '    AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "M\-pl,Rd\=")
+    '    AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "z\-el\=")
+    '    AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "I\-yy\=")
+    '    AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "M\-el,Rd\=")
 
-        myBord = Bordures.Gauche + Bordures.Droite + Bordures.Bas
+    '    myBord = Bordures.Gauche + Bordures.Droite + Bordures.Bas
 
-        AddCellule(LargCol(1), Bordures.Aucun, PositionTexteInCell.Centre, "")
-        AddCellule(LargCol(0), Bordures.Aucun, PositionTexteInCell.Centre, "")
-        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
-        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
-        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment) & ")")
-        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
-        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties) & ")")
-        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment) & ")")
+    '    AddCellule(LargCol(1), Bordures.Aucun, PositionTexteInCell.Centre, "")
+    '    AddCellule(LargCol(0), Bordures.Aucun, PositionTexteInCell.Centre, "")
+    '    AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+    '    AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+    '    AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment) & ")")
+    '    AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+    '    AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties) & ")")
+    '    AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment) & ")")
 
-    End Sub
+    'End Sub
 
 #End Region
 

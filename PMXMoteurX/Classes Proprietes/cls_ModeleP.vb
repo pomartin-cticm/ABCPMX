@@ -476,7 +476,39 @@ Public Class cls_ModeleP
                 MaillageProfileASlimfloorsIFB_B_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
                 MaillageProfileASlimfloorsSAB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi)
+        End Select
 
+    End Sub
+
+    Public Sub MaillageProfileASlim_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
+                                       FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
+                                       Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
+                                       Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du profilé acier pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Gammas      [E] :   Coefficients partiels
+        '   RhoV        [E] :   Coefficient pour l'interaction MV
+        '   MyProfil    [E] :   Profilé à mailler
+        '   FySup       [E] :   Limite d'élasticité semelle sup
+        '   FyInf       [E] :   Limite d'élasticité semelle inf
+        '   Fyw         [E] :   Limite d'élasticité âme
+        '   FySpd       [E] :   Limite d'élasticité plat
+        '-------------------------------------------------------------------------------------------------------------------
+
+
+        Select Case MyProfil.typeProfileAcier
+
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                MaillageProfileASlimfloorsSFB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                MaillageProfileASlimfloorsIFB_A_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_spd, rho_t_spd, Psi_y_spd)
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                MaillageProfileASlimfloorsIFB_B_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi)
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                MaillageProfileASlimfloorsSAB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi)
         End Select
 
     End Sub
@@ -794,7 +826,6 @@ Public Class cls_ModeleP
         '   RhoV        [E] :   Coefficient pour l'interaction MV
         '   MyModele    [E/S]:  Modèle
         '-------------------------------------------------------------------------------------------------------------------
-
 
         Select Case MyProfil.typeProfileAcier
 
@@ -1339,7 +1370,7 @@ Public Class cls_ModeleP
         '-------------------------------------------------------------------------------------------------------------------
         '   25/04/24 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
-        '   Maillage du profilé acier pour le calcul des propriétés / axe YY
+        '   Maillage de l'enrobage partiel pour le calcul des propriétés / axe YY
         '-------------------------------------------------------------------------------------------------------------------
         '   GammaC      [E] :   Coefficient partiel béton
         '   nEq         [E] :   Coefficient d'équivalence acier béton pour le béton d'enrobage

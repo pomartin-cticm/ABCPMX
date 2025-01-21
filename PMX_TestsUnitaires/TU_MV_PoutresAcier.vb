@@ -95,6 +95,7 @@ Imports PMXMoteur2
         End With
 
         myPoutre.Param.EtaW = 1
+        myPoutre.Param.lEnrobProp = True
 #End Region
 
 #Region " Lancement des calculs "
@@ -197,19 +198,19 @@ Imports PMXMoteur2
         'Propsection: Wpl = 2 197.652 cm3 
 
         Dim zANE, MRk As Decimal
-        myPoutre.Section.ProprietesPlastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, MRk)
+        myPoutre.Section.ProprietesPlastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, 0, zANE, MRk, myPoutre.Param.lEnrobProp)
 
         Valeur = MRk
         ValRef = 604.3543 * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé 
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))                   'Vérification du calcul de la résistance à la flexion simple du profilé 
 
         Valeur = myPoutre.VerifAcier(0).CritereM.Resistance(iNodeMMax1)
         ValRef = 604.3543 * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx))               'Vérification du calcul de la résistance à la flexion simple de la section mixte 
 
         Valeur = myPoutre.VerifAcier(0).CritereM.CritereMax
         ValRef = 0.876 '529.497 / 604.354 = 0.876
-        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
+        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx)               'Vérification du critère de la résistance à la flexion
 
 #End Region
 
@@ -270,7 +271,7 @@ Imports PMXMoteur2
 
         '--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
 
-        myPoutre.Section.ProprietesPlastiquesMyy(1, False, myPoutre.Param.Gamma, rhoVELU, zANE, MRk)
+        myPoutre.Section.ProprietesPlastiquesMyy_Usuel(1, False, myPoutre.Param.Gamma, rhoVELU, zANE, MRk, True)
 
         Valeur = MRk
         ValRef = 604.3543 * 1000
@@ -301,7 +302,7 @@ Imports PMXMoteur2
         'ValRef = InertieY * 10 ^ 8
         'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel)
+        myPoutre.Section.ProprietesElastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel, True, False)
         ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
@@ -520,7 +521,7 @@ Imports PMXMoteur2
 #Region " VALIDATION : Résistance à la flexion (ELU)"
 
         Dim zANE, MRd As Decimal
-        myPoutre.Section.ProprietesPlastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, MRd)
+        myPoutre.Section.ProprietesPlastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, 0, zANE, MRd, True)
 
         Valeur = MRd
         ValRef = 2266 * 1000
@@ -794,7 +795,7 @@ Imports PMXMoteur2
 #Region " VALIDATION : Résistance à la flexion (ELU)"
 
         Dim zANE, MRd As Decimal
-        myPoutre.Section.ProprietesPlastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, MRd)
+        myPoutre.Section.ProprietesPlastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, 0, zANE, MRd, True)
 
         Valeur = MRd
         ValRef = 2903 * 1000
@@ -1049,7 +1050,7 @@ Imports PMXMoteur2
 #Region " VALIDATION : Résistance à la flexion (ELU)"
 
         Dim zANE, MRd As Decimal
-        myPoutre.Section.ProprietesPlastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, MRd)
+        myPoutre.Section.ProprietesPlastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, 0, zANE, MRd, True)
 
         Valeur = MRd
         ValRef = 275.9 * 1000
@@ -1282,7 +1283,7 @@ Imports PMXMoteur2
 #Region " VALIDATION : Résistance à la flexion (ELU)"
 
         Dim zANE, MRd As Decimal
-        myPoutre.Section.ProprietesPlastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, MRd)
+        myPoutre.Section.ProprietesPlastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, 0, zANE, MRd, True)
 
         Valeur = MRd
         ValRef = 275.9 * 1000
@@ -1515,7 +1516,7 @@ Imports PMXMoteur2
 #Region " VALIDATION : Résistance à la flexion (ELU)"
 
         Dim zANE, MRd As Decimal
-        myPoutre.Section.ProprietesPlastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, MRd)
+        myPoutre.Section.ProprietesPlastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, 0, zANE, MRd, True)
 
         Valeur = MRd
         ValRef = 451.1 * 1000
@@ -1758,7 +1759,7 @@ Imports PMXMoteur2
 #Region " VALIDATION : Résistance à la flexion (ELU)"
 
         Dim zANE, MRd As Decimal
-        myPoutre.Section.ProprietesPlastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, MRd)
+        myPoutre.Section.ProprietesPlastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, 0, zANE, MRd, True)
 
         Valeur = MRd
         ValRef = 451.1 * 1000

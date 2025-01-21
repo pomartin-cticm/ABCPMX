@@ -165,7 +165,7 @@
         NeqDalle = myBeam.Dalle.beton.CoefficientEquivalenceCT
 
         Hc = myBeam.Dalle.EpaisseurActive
-        InertieY = myBeam.Section.InertieYY(1, True, myBeam.Param.Gamma, NeqEnrob, NeqDalle, True, bEff, myBeam.Dalle, zANE)
+        InertieY = myBeam.Section.InertieYY(1, True, myBeam.Param.Gamma, NeqEnrob, NeqDalle, True, bEff, myBeam.Dalle, myBeam.Param.lEnrobProp, zANE)
 
         z0 = myBeam.Dalle.zTop - Hc / 2 - zANE
 

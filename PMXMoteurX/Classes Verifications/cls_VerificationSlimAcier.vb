@@ -172,11 +172,11 @@
 
         '# Propriétés élastiques section brutes
 
-        myBeam.Section.ProprietesElastiquesMyy(1, True, myBeam.Param.Gamma, 0, zANE_SectionBrute, InertieY_SectionBrute, MelRd_SectionBrute, True)
+        myBeam.Section.ProprietesElastiquesMyy_Slim(1, True, myBeam.Param.Gamma, 0, zANE_SectionBrute, InertieY_SectionBrute, MelRd_SectionBrute, True)
 
         '# Propriétés plastiques section brutes
 
-        myBeam.Section.ProprietesPlastiquesMyy(1, True, myBeam.Param.Gamma, 0, zANP_SectionBrute, MplRd_SectionBrute, True)
+        myBeam.Section.ProprietesPlastiquesMyy_Slim(1, True, myBeam.Param.Gamma, 0, zANP_SectionBrute, MplRd_SectionBrute, True)
 
         '# Classes de la section
 
@@ -312,7 +312,7 @@
 
                 '# Propriétés avec prise en compte de l'interaction MV
 
-                myBeam.ProprietesVerifMVAcier(iCombi, myBeam, True, MVRd, zANPMV, Me.RhoV)
+                myBeam.ProprietesVerifMVAcier(iCombi, True, MVRd, zANPMV, Me.RhoV)
 
                 '# Vérification sous interaction MV
 

@@ -32,6 +32,7 @@ Public Class cls_OptionsCalcul
 
     Public lLargeurEfficaceSimplifiee As Boolean    ' Largeur efficace de la dalle béton selon modèle simplifié
     Public lCompressionArma As Boolean              ' Indique si l'on prend en compte les armatures comprimées dans le calcul des propriétés de section
+    Public lEnrobProp As Boolean                    ' Indique si on prend en compte l'enrobage partiel dans le calcul des propriétés de section à froid
     Public dMaxNodes As Decimal                     ' Distance maximale entre deux noeuds
     Public nbMinNodesTravee As Integer              ' Nombre mini de noeuds par travée normale
     Public nbMinNodesConsole As Integer             ' Nombre mini de noeuds par travée console
@@ -116,6 +117,8 @@ Public Class cls_OptionsCalcul
         '-- Maitrise de la fissuration
         Me.lMaitriseFissuration = False
         Me.FissureWk = cls_OptionsCalcul.tabWk(0)
+
+        Me.lEnrobProp = True
 
     End Sub
 

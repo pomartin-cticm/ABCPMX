@@ -89,6 +89,7 @@ Public Class Frm_OptionsCalculPoutre
                 Me.lbl_CadreSections.Text = Bloc("SECTIONSPROP")
                 Me.chk_ArmaComprimees.Text = Bloc("REBARSINCOMPRESSION")
                 Me.chk_LargeursPartipantesSimples.Text = Bloc("SIMPLIFIEDBEFF")
+                Me.chk_EnrobagePropSection.Text = Bloc("ENCASEMENTINPROPER")
 
                 Me.lbl_CadreParametres.Text = Bloc("TPARAMETERS")
                 Me.lbl_GraviteG.Text = Bloc("GFORCE")
@@ -147,6 +148,7 @@ Public Class Frm_OptionsCalculPoutre
     End Sub
 
     Private Sub GestionUnites()
+
         Me.etq_UnitJour1.Text = SymbolJour
         Me.etq_UnitJour2.Text = SymbolJour
         Me.etq_UnitJour3.Text = SymbolJour
@@ -163,6 +165,7 @@ Public Class Frm_OptionsCalculPoutre
     End Sub
 
     Private Sub GestionStyle()
+
         Me.Icon = Frm_PMX.Icon
 
         Me.lbl_CadreELU.BackColor = CouleurBackBandeaux
@@ -239,6 +242,7 @@ Public Class Frm_OptionsCalculPoutre
 
         Me.chk_LargeursPartipantesSimples.Checked = MyParam.lLargeurEfficaceSimplifiee
         Me.chk_ArmaComprimees.Checked = MyParam.lCompressionArma
+        Me.chk_EnrobagePropSection.Checked = MyParam.lEnrobProp
 
         '==> Paramètres
 
@@ -288,6 +292,7 @@ Public Class Frm_OptionsCalculPoutre
 
         GereTransfertValeur(MyParam.lLargeurEfficaceSimplifiee, MyProjet.Poutres(MyProjet.IndEnCours).Param.lLargeurEfficaceSimplifiee, lModif)
         GereTransfertValeur(MyParam.lCompressionArma, MyProjet.Poutres(MyProjet.IndEnCours).Param.lCompressionArma, lModif)
+        GereTransfertValeur(MyParam.lEnrobProp, MyProjet.Poutres(MyProjet.IndEnCours).Param.lEnrobProp, lModif)
 
         GereTransfertValeur(MyParam.GraviteG, MyProjet.Poutres(MyProjet.IndEnCours).Param.GraviteG, lModif)
 
@@ -332,6 +337,10 @@ Public Class Frm_OptionsCalculPoutre
 
     Private Sub chk_ArmaComprimees_CheckedChanged(sender As Object, e As EventArgs) Handles chk_ArmaComprimees.CheckedChanged
         MyParam.lCompressionArma = Me.chk_ArmaComprimees.Checked
+    End Sub
+
+    Private Sub chk_EnrobagePropSection_CheckedChanged(sender As Object, e As EventArgs) Handles chk_EnrobagePropSection.CheckedChanged
+        MyParam.lEnrobProp = Me.chk_EnrobagePropSection.Checked
     End Sub
 
     Private Sub txt_EpsilonSh_TextChanged(sender As Object, e As EventArgs) Handles txt_EpsilonSh.TextChanged, txt_Es.TextChanged, txt_eta.TextChanged

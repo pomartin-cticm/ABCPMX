@@ -60,7 +60,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés plastiques
 
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
+        MySection.ProprietesPlastiquesMyy_Usuel(1, True, MyGamma, 0, zANP, MplRd, True)
 
         '# Position ANP
 
@@ -76,7 +76,7 @@ Imports PMXMoteur2
 
         '# Moment plastique des semelles seules
 
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 1, zANP, MplRd)
+        MySection.ProprietesPlastiquesMyy_Usuel(1, True, MyGamma, 1, zANP, MplRd, True)
 
         ValRef = 355 * (15 * 1.07) * (30 - 1.07)
         DeltaV = (MplRd - ValRef) / ValRef
@@ -90,7 +90,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés élastiques / axe YY
 
-        MySection.ProprietesElastiquesMyy(1, True, MyGamma, 1, zANE, InertieY, MelRd)
+        MySection.ProprietesElastiquesMyy_Usuel(1, True, MyGamma, 1, zANE, InertieY, MelRd, True, False)
 
         '# Position ANE
 
@@ -172,7 +172,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés plastiques
 
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
+        MySection.ProprietesPlastiquesMyy_Usuel(1, True, MyGamma, 0, zANP, MplRd, True)
 
         '# Position ANP
 
@@ -188,7 +188,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés élastiques / axe YY
 
-        MySection.ProprietesElastiquesMyy(1, True, MyGamma, 1, zANE, InertieY, MelRd)
+        MySection.ProprietesElastiquesMyy_Usuel(1, True, MyGamma, 1, zANE, InertieY, MelRd, True, False)
 
         '# Position ANE
 
@@ -272,7 +272,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés plastiques du profilés acier seul
 
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
+        MySection.ProprietesPlastiquesMyy_Usuel(1, True, MyGamma, 0, zANP, MplRd, True)
 
         '# Position ANP
 
@@ -288,7 +288,7 @@ Imports PMXMoteur2
 
         '# Moment plastique des semelles seules
 
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 1, zANP, MplRd)
+        MySection.ProprietesPlastiquesMyy_Usuel(1, True, MyGamma, 1, zANP, MplRd, True)
 
         ValRef = 355 * (20 * 1.45) * (49.7 - 1.45)
         DeltaV = (MplRd - ValRef) / ValRef
@@ -296,7 +296,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés élastiques / axe YY du profilé acier seul
 
-        MySection.ProprietesElastiquesMyy(1, False, MyGamma, 1, zANE, InertieY, MelRd)
+        MySection.ProprietesElastiquesMyy_Usuel(1, False, MyGamma, 1, zANE, InertieY, MelRd, True, False)
 
         '# Position ANE
 
@@ -375,7 +375,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés élastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
 
-        MySection.ProprietesElastiquesMyy(1, True, MyGamma, nEqEc, zANE, InertieY, MelRd)
+        MySection.ProprietesElastiquesMyy_Usuel(1, True, MyGamma, nEqEc, zANE, InertieY, MelRd, True, False)
 
         '# Position ANE
 
@@ -397,7 +397,7 @@ Imports PMXMoteur2
 
         '# Moment élastique Rk
 
-        MySection.ProprietesElastiquesMyy(1, False, MyGamma, nEqEc, zANE, InertieY, MelRd)
+        MySection.ProprietesElastiquesMyy_Usuel(1, False, MyGamma, nEqEc, zANE, InertieY, MelRd, True, False)
         ValRef = 461936
         DeltaV = (MelRd - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 10)       '1%
@@ -419,7 +419,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés plastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
 
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
+        MySection.ProprietesPlastiquesMyy_Usuel(1, True, MyGamma, 0, zANP, MplRd, True)
 
         '# Position ANP
 
@@ -435,7 +435,7 @@ Imports PMXMoteur2
 
         '--> Mêmes calculs en valeurs caractéristiques
 
-        MySection.ProprietesPlastiquesMyy(1, False, MyGamma, 0, zANP, MplRd)
+        MySection.ProprietesPlastiquesMyy_Usuel(1, False, MyGamma, 0, zANP, MplRd, True)
 
         '# Position ANP
 
@@ -476,7 +476,7 @@ Imports PMXMoteur2
         MySection.Enrobage.LitArma(0).PhiInt = 0.012
         MySection.Enrobage.LitArma(0).PhiMil = 0.00
 
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
+        MySection.ProprietesPlastiquesMyy_Usuel(1, True, MyGamma, 0, zANP, MplRd, True)
 
         '# Position ANP
 
@@ -590,7 +590,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés plastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
 
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
+        MySection.ProprietesPlastiquesMyy_Usuel(1, True, MyGamma, 0, zANP, MplRd, True)
 
         '# Position ANP
 
@@ -612,7 +612,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés plastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
 
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
+        MySection.ProprietesPlastiquesMyy_Usuel(1, True, MyGamma, 0, zANP, MplRd, True)
 
         '# Position ANP
 
@@ -641,7 +641,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés plastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
 
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
+        MySection.ProprietesPlastiquesMyy_Usuel(1, True, MyGamma, 0, zANP, MplRd, True)
 
         '# Position ANP
 

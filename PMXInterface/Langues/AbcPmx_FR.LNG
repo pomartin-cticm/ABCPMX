@@ -107,6 +107,7 @@ YOUNGSMODULUSREBAR		= Module d'Young des armatures
 SECTIONSPROP			= Propriétés des sections transversales
 SIMPLIFIEDBEFF			= Distribution simplifiée pour les largeurs efficaces de la dalle béton
 REBARSINCOMPRESSION		= Armatures en compression prises en compte
+ENCASEMENTINPROPER		= Prise en compte de l'enrobage dans le calcul des propriétés à froid
 AGET					= Age du béton
 AGET0					= Age du béton au moment du chargement
 SYMBOLFORDAY			= j

@@ -74,7 +74,7 @@
 
         pAire = myPoutre.Section.ProfilA.Aire
         If lEnrob Then nEqEc = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT
-        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, nEqEc, zAne, pInertieY, mElRd, False, True)
+        myPoutre.Section.ProprietesElastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, nEqEc, zAne, pInertieY, mElRd, myPoutre.Param.lEnrobProp, False, True)
         myPoutre.Section.ProprietesElastiquesMzz(1, True, myPoutre.Param.Gamma, nEqEc, zAneZ, pInertieZ, mElRd, True)
         pInertieT = myPoutre.Section.InertieT
         pInertieW = myPoutre.Section.ProfilA.InertieW

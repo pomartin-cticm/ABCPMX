@@ -294,16 +294,16 @@ Imports PMXMoteur2
         'A L'ELU
 
         Dim zANE, MRk As Decimal
-        myPoutre.Section.ProprietesPlastiquesMyy(1, False, myPoutre.Param.Gamma, 0, zANE, MRk)
+        myPoutre.Section.ProprietesPlastiquesMyy_Usuel(1, False, myPoutre.Param.Gamma, 0, zANE, MRk, True)
 
         Valeur = MRk
         ValRef = 468.1 * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé 
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))                   'Vérification du calcul de la résistance à la flexion simple du profilé 
 
         Valeur = myPoutre.VerifMixte(0).CritereM.Resistance(iNodeMMax)
-        ValRef = 779.4 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (779.4 kN.m) du fait que le NConnexion n'est pas identique
+        ValRef = 779.4 * 1000                                               'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (779.4 kN.m) du fait que le NConnexion n'est pas identique
         ValRef = 783 * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, 3 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 3 * DeltaVMAx))               'Vérification du calcul de la résistance à la flexion simple de la section mixte 
 
         Valeur = myPoutre.VerifMixte(0).CritereM.CritereMax
         ValRef = 0.836 'GUD: valeur recalculée pour les mêmes raisons que ci-dessu. Dans l'article, le critère est égal à 0.84 
@@ -369,7 +369,7 @@ Imports PMXMoteur2
         '--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
 
 
-        myPoutre.Section.ProprietesPlastiquesMyy(1, False, myPoutre.Param.Gamma, rhoVELU, zANE, MRk)
+        myPoutre.Section.ProprietesPlastiquesMyy_Usuel(1, False, myPoutre.Param.Gamma, rhoVELU, zANE, MRk, True)
 
         Valeur = MRk
         ValRef = 468.1 * 1000
@@ -514,7 +514,7 @@ Imports PMXMoteur2
         'ValRef = InertieY * 10 ^ 8
         'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel)
+        myPoutre.Section.ProprietesElastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel, True, False)
         ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
@@ -1134,7 +1134,7 @@ Imports PMXMoteur2
         'ValRef = InertieY * 10 ^ 8
         'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel, True)
+        myPoutre.Section.ProprietesElastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel, True, True)
         ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
@@ -1142,7 +1142,7 @@ Imports PMXMoteur2
 
         Valeur = 52814  '52 814 cm4
 
-        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 6.77, zANE, InertieY, Mel)
+        myPoutre.Section.ProprietesElastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, 6.77, zANE, InertieY, Mel, True, False)
         ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
@@ -1795,7 +1795,7 @@ Imports PMXMoteur2
 
         '--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
 
-        myBeam.Section.ProprietesPlastiquesMyy(1, False, myBeam.Param.Gamma, rhoVELU, zANE, MRd)
+        ' myBeam.Section.ProprietesPlastiquesMyy(1, False, myBeam.Param.Gamma, rhoVELU, zANE, MRd)
 
         Valeur = myBeam.VerifMixte(0).CritereMV.Resistance(iNodeMMax)
         ValRef = 1186 * 1000
@@ -2027,7 +2027,7 @@ Imports PMXMoteur2
         'ValRef = InertieY * 10 ^ 8
         'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        myBeam.Section.ProprietesElastiquesMyy(1, True, myBeam.Param.Gamma, 0, zANE, InertieY, Mel, True)
+        myBeam.Section.ProprietesElastiquesMyy_Usuel(1, True, myBeam.Param.Gamma, 0, zANE, InertieY, Mel, True, True)
         ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 

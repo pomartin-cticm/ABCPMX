@@ -314,7 +314,7 @@ Public Class cls_VerificationsAcier
 
                     '# Propriétés avec prise en compte de l'interaction MV
 
-                    myBeam.ProprietesVerifMVAcier(iCombi, myBeam, True, MVRd, zANPMV, Me.RhoV)
+                    myBeam.ProprietesVerifMVAcier(iCombi, True, MVRd, zANPMV, Me.RhoV)
 
                     '# Vérification sous interaction MV
 
@@ -451,9 +451,9 @@ Public Class cls_VerificationsAcier
         If lSigma Then
             '=== ZZZ
             nEqEc = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT
-            myPoutre.Section.ProprietesElastiquesMyy(1, False, myPoutre.Param.Gamma, nEqEc, zANE, InertieY, MRk)
+            myPoutre.Section.ProprietesElastiquesMyy_Usuel(1, False, myPoutre.Param.Gamma, nEqEc, zANE, InertieY, MRk, myPoutre.Param.lEnrobProp, False)
         Else
-            myPoutre.Section.ProprietesPlastiquesMyy(1, False, myPoutre.Param.Gamma, 0, zANE, MRk)
+            myPoutre.Section.ProprietesPlastiquesMyy_Usuel(1, False, myPoutre.Param.Gamma, 0, zANE, MRk, myPoutre.Param.lEnrobProp)
         End If
 
         '--> Vérification par travée

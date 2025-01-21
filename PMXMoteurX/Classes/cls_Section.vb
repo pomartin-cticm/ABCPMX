@@ -180,10 +180,64 @@ Public Class cls_Section
 
 #Region " Propriétés plastiques de la section "
 
-    Public Sub ProprietesPlastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
-                                       ByRef zANP As Decimal, ByRef MplRd As Decimal, Optional ByVal lProfileAcierUniquement As Boolean = False,
-                                       Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
-                                       Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
+    Public Sub ProprietesPlastiquesMyy_Usuel(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
+                                             ByRef zANP As Decimal, ByRef MplRd As Decimal, lEnrobProp As Boolean, Optional ByVal lProASeul As Boolean = False)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   21/01/25 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés plastiques en flexion simple de la section / axe fort - Pour les sections usuelles acier
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   RhoV        [E] :   Coefficient pour l'interaction MV
+        '   zANP        [S] :   Position axe neutre plastique
+        '   MplRd       [S] :   Moment plastique
+        '   lEnrobProp  [E] :   Indique si prise en compte de l'enrobage dans le calcul des propriétés
+        '   lProASeul   [E] :   Indique si profile acier seul
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim lLamine As Boolean = Me.lLamine
+        Dim nEqEc As Decimal = 1 'on applique 1 car calcul plastique 
+
+        '--> Initialisation
+
+        Hw = Me.ProfilA.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        MyModele.MaillageProfileUsuels_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd)
+
+        If Me.lEnrobage And (Not lProASeul) And lEnrobProp Then
+
+            '# Béton d'enrobage
+
+            MyModele.MaillageEnrobage_YY(Gammas.GammaC, nEqEc, Me)
+
+            '# Armatures de l'enrobage
+
+            MyModele.MaillageArmaturesEnrobage_YY(Gammas.GammaS, Me)
+
+        End If
+
+        '--> Recherche de l'axe neutre plastique
+
+        MyModele.RechercheANP(Signe, zANP, lValeurRd)
+
+        '--> Moment plastique
+
+        MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+    End Sub
+
+    Public Sub ProprietesPlastiquesMyy_Slim(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
+                                            ByRef zANP As Decimal, ByRef MplRd As Decimal, Optional ByVal lProfileAcierUniquement As Boolean = False,
+                                            Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
+                                            Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -212,9 +266,9 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        MyModele.MaillageProfileA_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
+        MyModele.MaillageProfileASlim_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
 
-        If Me.lEnrobage And Not lProfileAcierUniquement Then
+        If Me.lEnrobage And (Not lProfileAcierUniquement) Then
 
             '# Béton d'enrobage
 
@@ -431,7 +485,7 @@ Public Class cls_Section
 
     Public Function InertieYYMixteSlip(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
                                        nEqDal As Decimal, Beff As Decimal, MyDalle As cls_Dalle,
-                                       Le As Decimal, EYoung As Decimal, cStiff As Decimal, ByRef zANE As Decimal) As Decimal
+                                       Le As Decimal, EYoung As Decimal, cStiff As Decimal, lEnrobProp As Boolean, ByRef zANE As Decimal) As Decimal
         '-------------------------------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -450,6 +504,7 @@ Public Class cls_Section
         '   Le          [E] :   Longueur entre points de moments nuls
         '   EYoung      [E] :   Module d'Young de l'acier
         '   cStiff      [E] :   Raideur de la connexion
+        '   lEnrobProp  [E] :   Indique si prise en compte de l'enrobage pour le calcul des propriétés de section
         '-------------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -467,7 +522,7 @@ Public Class cls_Section
 
         '--( Application
 
-        Me.ProprietesElastiquesMyy(Signe, lValeurRd, Gammas, nEqEc, zANE, Iya, MelRd)
+        Me.ProprietesElastiquesMyy_Usuel(Signe, lValeurRd, Gammas, nEqEc, zANE, Iya, MelRd, lEnrobProp, False)
         IycH = Beff * Tc ^ 3 / 12 / nEqDal
         zcH = MyDalle.zTop - Tc / 2 - zANE
         Ac = Beff * Tc
@@ -486,7 +541,7 @@ Public Class cls_Section
     End Function
 
     Public Function InertieYY(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
-                              lDalle As Boolean, nEqDal As Decimal, Beff As Decimal, MyDalle As cls_Dalle, ByRef zANE As Decimal) As Decimal
+                              lDalle As Boolean, nEqDal As Decimal, Beff As Decimal, MyDalle As cls_Dalle, lEnrobProp As Boolean, ByRef zANE As Decimal) As Decimal
         '-------------------------------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -500,6 +555,7 @@ Public Class cls_Section
         '   nEqDal      [E] :   Coefficient d'équivalence acier béton pour la dalle
         '   Beff        [E] :   Largeur efficace de la dalle
         '   MyDalle     [E] :   Elément dalle
+        '   lEnrobProp  [E] :   Indique si prise en compte de l'enrobage, le cas échéant
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -511,68 +567,84 @@ Public Class cls_Section
         If lDalle Then
             Me.ProprietesElastiquesMixteMyy(Signe, lValeurRd, Gammas, nEqEc, nEqDal, Beff, MyDalle, zANE, InertieY, MelRd)
         Else
-            Me.ProprietesElastiquesMyy(Signe, lValeurRd, Gammas, nEqEc, zANE, InertieY, MelRd)
+            Me.ProprietesElastiquesMyy_Usuel(Signe, lValeurRd, Gammas, nEqEc, zANE, InertieY, MelRd, lEnrobProp, False)
         End If
 
         Return InertieY
 
     End Function
 
-    'Public Sub ProprietesElastiquesAcierMyy(lValeurRd As Boolean, Gammas As cls_Gamma,
-    '                                        ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal,
-    '                                Optional methodeReduc As cls_VerificationSlimAcier.MethodeReductionPlatSlimFloor = cls_VerificationSlimAcier.MethodeReductionPlatSlimFloor.methode1_ReducAire,
-    '                                Optional coefReduc1 As Decimal = 1, Optional coefReduc2 As Decimal = 1)
-    '    '-------------------------------------------------------------------------------------------------------------------
-    '    '   20/10/23 :  Création - POM
-    '    '-------------------------------------------------------------------------------------------------------------------
-    '    '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
-    '    '   Pour une section acier, sans enrobage partiel
-    '    '-------------------------------------------------------------------------------------------------------------------
-    '    '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
-    '    '   Gammas      [E] :   Coefficients partiels
-    '    '   zANE        [S] :   Position axe neutre élastique
-    '    '   InertieY    [S] :   Inertie de flexion / axe fort
-    '    '   MelRd       [S] :   Moment élastique
-    '    '   coefReduc1  [E] :   Coefficient de réduction qui s'applique au plat le plus bas
-    '    '   coefReduc2  [E] :   Coefficient de réduction qui s'applique au 2eme plat le plus bas, le cas échéant (sert pour SFB -> correspond à la semelle inférieure du profilé)
-    '    '-------------------------------------------------------------------------------------------------------------------
+    Public Sub ProprietesElastiquesMyy_Usuel(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
+                                             ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal, lEnrobProp As Boolean, lProASeul As Boolean, Optional ByVal lCalculAlphaCr As Boolean = False)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '   ON NE PREND PAS EN COMPTE LA DALLE DANS LE CAS D'UNE SECTION MIXTE
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe                   [E] :   Signe du moment
+        '   lValeurRd               [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas                  [E] :   Coefficients partiels
+        '   nEqEc                   [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
+        '   zANE                    [S] :   Position axe neutre élastique
+        '   InertieY                [S] :   Inertie de flexion / axe fort
+        '   MelRd                   [S] :   Moment élastique
+        '   lEnrobProp              [E] :   Inidique si on prend en compte l'enrobage dans le calcul des propriétés
+        '   lProASeul               [E] :   Indique si on calcul les propriétés élastiques en ne tenant compte que du profilé acier (True) ou si on prend en compte également le béton d'enrobage (False)
+        '   lCalculAlphaCr          [E] :   Indique si les propriétés élastiques selon l'axe ZZ sont utilisées pour le calcul de alpha critique (True) ou non (False)  
+        '-------------------------------------------------------------------------------------------------------------------
 
-    '    '--> Déclarations
+        '--> Déclarations
 
-    '    '--> Déclarations
+        '--> Déclarations
 
-    '    Dim MyModele As New cls_ModeleP
-    '    Dim Hw As Decimal
-    '    Dim lLamine As Boolean = Me.lLamine
-    '    Const RhoV As Decimal = 0
-    '    Const Signe As Decimal = 1
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim lLamine As Boolean = Me.lLamine
+        Const RhoV As Decimal = 0
+        ' Dim LargeurC, EpaisseurC, FdC As Decimal
 
-    '    '--> Initialisation
+        '--> Initialisation
 
-    '    Hw = Me.ProfilA.HauteurAmeHw
+        Hw = Me.ProfilA.HauteurAmeHw
 
-    '    '--> Modélisation du profilé acier
+        '--> Modélisation du profilé acier
 
-    '    MyModele.MaillageProfileA_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, methodeReduc, coefReduc1, coefReduc2)
+        MyModele.MaillageProfileUsuels_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd)
 
-    '    '--> Recherche de l'axe neutre élastique
+        '# Béton d'enrobage
 
-    '    MyModele.RechercheANE(Signe, zANE)
+        If Me.lEnrobage And (Not lProASeul) And lEnrobProp Then
 
-    '    '--> Calcul de l'inertie
+            MyModele.MaillageEnrobage_YY(Gammas.GammaC, nEqEc, Me, lCalculAlphaCr)
 
-    '    InertieY = MyModele.InertieFlexion(Signe, zANE)
+        End If
 
-    '    '--> Moment élastique
+        '# Armatures de l'enrobage
 
-    '    MelRd = MyModele.MomentElastique(Signe, zANE, InertieY, lValeurRd)
+        If Me.lEnrobage And (Not lProASeul) And (Not lCalculAlphaCr) And lEnrobProp Then
 
-    'End Sub
+            MyModele.MaillageArmaturesEnrobage_YY(Gammas.GammaS, Me)
 
-    Public Sub ProprietesElastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
-                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal, Optional ByVal lProfileAcierUniquement As Boolean = False, Optional ByVal lCalculAlphaCr As Boolean = False,
-                                       Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
-                                        Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
+        End If
+
+        '--> Recherche de l'axe neutre élastique
+
+        MyModele.RechercheANE(Signe, zANE)
+
+        '--> Calcul de l'inertie
+
+        InertieY = MyModele.InertieFlexion(Signe, zANE)
+
+        '--> Moment élastique
+
+        MelRd = MyModele.MomentElastique(Signe, zANE, InertieY, lValeurRd)
+    End Sub
+
+    Public Sub ProprietesElastiquesMyy_Slim(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
+                                            ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal, Optional ByVal lProfileAcierUniquement As Boolean = False, Optional ByVal lCalculAlphaCr As Boolean = False,
+                                            Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
+                                            Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -604,23 +676,7 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        MyModele.MaillageProfileA_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
-
-        '# Béton d'enrobage
-
-        If Me.lEnrobage And Not lProfileAcierUniquement Then
-
-            MyModele.MaillageEnrobage_YY(Gammas.GammaC, nEqEc, Me, lCalculAlphaCr)
-
-        End If
-
-        '# Armatures de l'enrobage
-
-        If Me.lEnrobage And Not lProfileAcierUniquement And Not lCalculAlphaCr Then
-
-            MyModele.MaillageArmaturesEnrobage_YY(Gammas.GammaS, Me)
-
-        End If
+        MyModele.MaillageProfileASlim_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
 
         '--> Recherche de l'axe neutre élastique
 

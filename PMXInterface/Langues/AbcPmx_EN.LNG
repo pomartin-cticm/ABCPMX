@@ -107,6 +107,7 @@ YOUNGSMODULUSREBAR		= Young's modulus of rebars
 SECTIONSPROP			= Properties of cross-sections
 SIMPLIFIEDBEFF			= Simplified distribution of slab effective width
 REBARSINCOMPRESSION		= Rebars in compression taken into account
+ENCASEMENTINPROPER		= Encasement considered for the properties at room temperatures
 AGET					= Age of concrete
 AGET0					= Age of concrete at loading
 SYMBOLFORDAY			= d
@@ -120,6 +121,7 @@ GFORCE					= G-force
 ETAW					= Shear buckling
 CONTROLCRACKW			= Control of concrete cracking
 CRACKWIDTH				= Limit of crack width
+
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report

@@ -2993,7 +2993,7 @@ Public Class cls_Poutre
 
                 If lCalcul Then
                     If pSigneM(iElt) < 0 Then
-                        InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle, zANe)
+                        InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle, Me.Param.lEnrobProp, zANe)
                     Else
                         '# Raideur de la connexion
                         DeltaD = Me.Param.DeltaD
@@ -3006,7 +3006,7 @@ Public Class cls_Poutre
                         cStiff = nR * kSc / sX
 
                         '# Calcul
-                        InertieY = Me.Section.InertieYYMixteSlip(1, False, Me.Param.Gamma, nEqEc, nEqDal, Beff, Me.Dalle, Le(iTravee), cls_Acier.EYACIER, cStiff, zANe)
+                        InertieY = Me.Section.InertieYYMixteSlip(1, False, Me.Param.Gamma, nEqEc, nEqDal, Beff, Me.Dalle, Le(iTravee), cls_Acier.EYACIER, cStiff, Me.Param.lEnrobProp, zANe)
                     End If
 
                     Aire = Me.Section.ProfilA.Aire      ' A changer pour aire homgonénéisée
@@ -3066,7 +3066,7 @@ Public Class cls_Poutre
                 End If
 
                 If lCalcul Then
-                    InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle, zANe)
+                    InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle, Me.Param.lEnrobProp, zANe)
 
                     If lMixte Then
                         Aire = Me.Section.ProfilA.Aire + Beff * Me.Dalle.EpaisseurActive / nEqDal
@@ -3245,7 +3245,7 @@ Public Class cls_Poutre
         ReDim zANE(Me.Nodes.nbNodes - 1, 1)
         If lNonMixte Then
             'Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.myGamma, p_zANE, pInertieY, pMelRd)
-            Me.Section.ProprietesElastiquesMyy(1, lValRd, Me.Param.Gamma, 0, p_zANE, pInertieY, pMelRd, True)
+            Me.Section.ProprietesElastiquesMyy_Usuel(1, lValRd, Me.Param.Gamma, 0, p_zANE, pInertieY, pMelRd, False, True)
         End If
 
         '--> Boucle sur les noeuds
@@ -3403,15 +3403,15 @@ Public Class cls_Poutre
         '# Elastiques
 
         'Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.myGamma, zANE, InertieY, MelRd)
-        Me.Section.ProprietesElastiquesMyy(1, lValRd, Me.Param.Gamma, 0, zANE, InertieY, MelRd, True)
+        Me.Section.ProprietesElastiquesMyy_Usuel(1, lValRd, Me.Param.Gamma, 0, zANE, InertieY, MelRd, Me.Param.lEnrobProp, True)
 
         '# Plastiques
 
-        Me.Section.ProprietesPlastiquesMyy(1, lValRd, Me.Param.Gamma, 0, zANP, MplRd, False)
+        Me.Section.ProprietesPlastiquesMyy_Usuel(1, lValRd, Me.Param.Gamma, 0, zANP, MplRd, Me.Param.lEnrobProp, False)
 
     End Sub
 
-    Public Sub ProprietesVerifMVAcier(iCombi As Integer, MyPoutre As cls_Poutre, lValRd As Boolean, ByRef MVRD(,) As Decimal, ByRef zANPMV(,) As Decimal, ByVal rhoV(,) As Decimal)
+    Public Sub ProprietesVerifMVAcier(iCombi As Integer, lValRd As Boolean, ByRef MVRD(,) As Decimal, ByRef zANPMV(,) As Decimal, ByVal rhoV(,) As Decimal)
         '------------------------------------------------------------------------------
         '   08/02/2024 :  Création - GUD
         '------------------------------------------------------------------------------
@@ -3428,18 +3428,19 @@ Public Class cls_Poutre
 
         '--> Déclaration
 
-        Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim NbNodes As Integer = Me.Nodes.nbNodes
         Dim iTravee As Integer
         Dim iTravDeb, iTravFin As Integer
         Dim iNode As Integer
         Dim iNodeDeb, iNodeFin As Integer
         Dim kDeb, kfin As Integer
         Dim rhoVLoc As Decimal
+        Dim lSlim As Boolean = Me.lSlimFloor
 
         '--> Initialisation
 
-        iTravDeb = MyPoutre.IndicePremiereTravee
-        iTravFin = MyPoutre.IndiceDerniereTravee
+        iTravDeb = Me.IndicePremiereTravee
+        iTravFin = Me.IndiceDerniereTravee
         ReDim zANPMV(NbNodes - 1, 1)
         ReDim MVRD(NbNodes - 1, 1)
 
@@ -3447,8 +3448,8 @@ Public Class cls_Poutre
 
         For iTravee = iTravDeb To iTravFin
 
-            iNodeDeb = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
-            iNodeFin = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+            iNodeDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
 
             For iNode = iNodeDeb To iNodeFin
                 If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
@@ -3456,7 +3457,11 @@ Public Class cls_Poutre
 
                 rhoVLoc = rhoV(iCombi, iNode)
 
-                Me.Section.ProprietesPlastiquesMyy(1, lValRd, Me.Param.Gamma, rhoVLoc, zANPMV(iNode, kDeb), MVRD(iNode, kDeb))
+                If lSlim Then
+                    Me.Section.ProprietesPlastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, rhoVLoc, zANPMV(iNode, kDeb), MVRD(iNode, kDeb))
+                Else
+                    Me.Section.ProprietesPlastiquesMyy_Usuel(1, lValRd, Me.Param.Gamma, rhoVLoc, zANPMV(iNode, kDeb), MVRD(iNode, kDeb), Me.Param.lEnrobProp)
+                End If
 
                 If kfin > kDeb Then
                     zANPMV(iNode, kfin) = zANPMV(iNode, kDeb)
@@ -3519,13 +3524,13 @@ Public Class cls_Poutre
                 If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
                 If iNode = iNodeFin Then kfin = 0 Else kfin = 1
 
-                Me.Section.ProprietesElastiquesMyy(1, lValRd, Me.Param.Gamma, 0, zANE(iNode, kDeb), InertieY, MelRd(iNode, iCombi), True, False,
-                                                   Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
-                                                    Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
+                Me.Section.ProprietesElastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, 0, zANE(iNode, kDeb), InertieY, MelRd(iNode, iCombi), True, False,
+                                                        Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
+                                                        Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
 
-                Me.Section.ProprietesPlastiquesMyy(1, lValRd, Me.Param.Gamma, 1, zANP(iNode, kDeb), MplRd(iNode, kDeb), False,
-                                                   Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
-                                                    Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
+                Me.Section.ProprietesPlastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, 1, zANP(iNode, kDeb), MplRd(iNode, kDeb), False,
+                                                        Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
+                                                        Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
 
                 If kfin > kDeb Then
                     zANE(iNode, kfin) = zANE(iNode, kDeb)
