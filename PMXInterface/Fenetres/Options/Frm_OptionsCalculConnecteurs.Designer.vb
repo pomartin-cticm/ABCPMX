@@ -26,6 +26,8 @@ Partial Class Frm_OptionsCalculConnecteurs
         Me.TLpan_Conteneur = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Conteneur = New System.Windows.Forms.Panel()
         Me.pan_Espacements = New System.Windows.Forms.Panel()
+        Me.lbl_DalleMixte = New System.Windows.Forms.Label()
+        Me.lbl_DallePleine = New System.Windows.Forms.Label()
         Me.img_xd2 = New System.Windows.Forms.PictureBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.txt_syMin2 = New System.Windows.Forms.TextBox()
@@ -46,6 +48,17 @@ Partial Class Frm_OptionsCalculConnecteurs
         Me.lbl_LongitudinalSX = New System.Windows.Forms.Label()
         Me.lbl_Espacements = New System.Windows.Forms.Label()
         Me.pan_Dispositions = New System.Windows.Forms.Panel()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.lbl_EN_G1 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.etq_UnitD8 = New System.Windows.Forms.Label()
+        Me.txt_EnrobageG2 = New System.Windows.Forms.TextBox()
+        Me.img_c2 = New System.Windows.Forms.PictureBox()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.etq_UnitD7 = New System.Windows.Forms.Label()
+        Me.txt_EnrobageG1 = New System.Windows.Forms.TextBox()
+        Me.img_c1 = New System.Windows.Forms.PictureBox()
+        Me.lbl_Enrobage = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.etq_UnitD5 = New System.Windows.Forms.Label()
         Me.lbl_DistanceAuBord = New System.Windows.Forms.Label()
@@ -89,8 +102,6 @@ Partial Class Frm_OptionsCalculConnecteurs
         Me.txt_DMin = New System.Windows.Forms.TextBox()
         Me.img_Dmin = New System.Windows.Forms.PictureBox()
         Me.lbl_Connecteurs = New System.Windows.Forms.Label()
-        Me.lbl_DallePleine = New System.Windows.Forms.Label()
-        Me.lbl_DalleMixte = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Conteneur.SuspendLayout()
         Me.pan_Conteneur.SuspendLayout()
@@ -103,6 +114,8 @@ Partial Class Frm_OptionsCalculConnecteurs
         CType(Me.img_sx2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_sx1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Dispositions.SuspendLayout()
+        CType(Me.img_c2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_c1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_eD, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_HsurD, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Dimensions.SuspendLayout()
@@ -136,7 +149,7 @@ Partial Class Frm_OptionsCalculConnecteurs
         Me.TLpan_Conteneur.Name = "TLpan_Conteneur"
         Me.TLpan_Conteneur.RowCount = 1
         Me.TLpan_Conteneur.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_Conteneur.Size = New System.Drawing.Size(739, 454)
+        Me.TLpan_Conteneur.Size = New System.Drawing.Size(739, 508)
         Me.TLpan_Conteneur.TabIndex = 0
         '
         'pan_Conteneur
@@ -148,7 +161,7 @@ Partial Class Frm_OptionsCalculConnecteurs
         Me.pan_Conteneur.Location = New System.Drawing.Point(0, 0)
         Me.pan_Conteneur.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Conteneur.Name = "pan_Conteneur"
-        Me.pan_Conteneur.Size = New System.Drawing.Size(739, 449)
+        Me.pan_Conteneur.Size = New System.Drawing.Size(739, 504)
         Me.pan_Conteneur.TabIndex = 0
         '
         'pan_Espacements
@@ -176,10 +189,30 @@ Partial Class Frm_OptionsCalculConnecteurs
         Me.pan_Espacements.Controls.Add(Me.img_sx1)
         Me.pan_Espacements.Controls.Add(Me.lbl_LongitudinalSX)
         Me.pan_Espacements.Controls.Add(Me.lbl_Espacements)
-        Me.pan_Espacements.Location = New System.Drawing.Point(3, 304)
+        Me.pan_Espacements.Location = New System.Drawing.Point(3, 361)
         Me.pan_Espacements.Name = "pan_Espacements"
         Me.pan_Espacements.Size = New System.Drawing.Size(732, 139)
         Me.pan_Espacements.TabIndex = 107
+        '
+        'lbl_DalleMixte
+        '
+        Me.lbl_DalleMixte.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_DalleMixte.Location = New System.Drawing.Point(316, 111)
+        Me.lbl_DalleMixte.Name = "lbl_DalleMixte"
+        Me.lbl_DalleMixte.Size = New System.Drawing.Size(229, 13)
+        Me.lbl_DalleMixte.TabIndex = 161
+        Me.lbl_DalleMixte.Text = "lbl_DalleMixte"
+        Me.lbl_DalleMixte.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'lbl_DallePleine
+        '
+        Me.lbl_DallePleine.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_DallePleine.Location = New System.Drawing.Point(316, 85)
+        Me.lbl_DallePleine.Name = "lbl_DallePleine"
+        Me.lbl_DallePleine.Size = New System.Drawing.Size(229, 13)
+        Me.lbl_DallePleine.TabIndex = 160
+        Me.lbl_DallePleine.Text = "lbl_DallePleine"
+        Me.lbl_DallePleine.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'img_xd2
         '
@@ -372,6 +405,17 @@ Partial Class Frm_OptionsCalculConnecteurs
         '
         Me.pan_Dispositions.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Dispositions.Controls.Add(Me.Label14)
+        Me.pan_Dispositions.Controls.Add(Me.lbl_EN_G1)
+        Me.pan_Dispositions.Controls.Add(Me.Label15)
+        Me.pan_Dispositions.Controls.Add(Me.etq_UnitD8)
+        Me.pan_Dispositions.Controls.Add(Me.txt_EnrobageG2)
+        Me.pan_Dispositions.Controls.Add(Me.img_c2)
+        Me.pan_Dispositions.Controls.Add(Me.Label13)
+        Me.pan_Dispositions.Controls.Add(Me.etq_UnitD7)
+        Me.pan_Dispositions.Controls.Add(Me.txt_EnrobageG1)
+        Me.pan_Dispositions.Controls.Add(Me.img_c1)
+        Me.pan_Dispositions.Controls.Add(Me.lbl_Enrobage)
         Me.pan_Dispositions.Controls.Add(Me.Label8)
         Me.pan_Dispositions.Controls.Add(Me.etq_UnitD5)
         Me.pan_Dispositions.Controls.Add(Me.lbl_DistanceAuBord)
@@ -384,8 +428,117 @@ Partial Class Frm_OptionsCalculConnecteurs
         Me.pan_Dispositions.Controls.Add(Me.img_HsurD)
         Me.pan_Dispositions.Location = New System.Drawing.Point(3, 214)
         Me.pan_Dispositions.Name = "pan_Dispositions"
-        Me.pan_Dispositions.Size = New System.Drawing.Size(732, 89)
+        Me.pan_Dispositions.Size = New System.Drawing.Size(732, 146)
         Me.pan_Dispositions.TabIndex = 106
+        '
+        'Label14
+        '
+        Me.Label14.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label14.Location = New System.Drawing.Point(316, 117)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(229, 13)
+        Me.Label14.TabIndex = 156
+        Me.Label14.Text = "EN 1994-1-1: 2024, 8.6.10.2 (2)"
+        Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'lbl_EN_G1
+        '
+        Me.lbl_EN_G1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_EN_G1.Location = New System.Drawing.Point(316, 91)
+        Me.lbl_EN_G1.Name = "lbl_EN_G1"
+        Me.lbl_EN_G1.Size = New System.Drawing.Size(229, 13)
+        Me.lbl_EN_G1.TabIndex = 155
+        Me.lbl_EN_G1.Text = "EN 1994-1-1: 2005, 6.6.5.2 (2)"
+        Me.lbl_EN_G1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Label15
+        '
+        Me.Label15.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label15.AutoSize = True
+        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Location = New System.Drawing.Point(597, 117)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(13, 13)
+        Me.Label15.TabIndex = 154
+        Me.Label15.Text = "≤"
+        Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'etq_UnitD8
+        '
+        Me.etq_UnitD8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitD8.AutoSize = True
+        Me.etq_UnitD8.Location = New System.Drawing.Point(674, 117)
+        Me.etq_UnitD8.Name = "etq_UnitD8"
+        Me.etq_UnitD8.Size = New System.Drawing.Size(39, 13)
+        Me.etq_UnitD8.TabIndex = 153
+        Me.etq_UnitD8.Text = "Label1"
+        '
+        'txt_EnrobageG2
+        '
+        Me.txt_EnrobageG2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_EnrobageG2.Location = New System.Drawing.Point(610, 114)
+        Me.txt_EnrobageG2.Name = "txt_EnrobageG2"
+        Me.txt_EnrobageG2.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EnrobageG2.TabIndex = 151
+        Me.txt_EnrobageG2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'img_c2
+        '
+        Me.img_c2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_c2.Location = New System.Drawing.Point(551, 114)
+        Me.img_c2.Name = "img_c2"
+        Me.img_c2.Size = New System.Drawing.Size(46, 20)
+        Me.img_c2.TabIndex = 152
+        Me.img_c2.TabStop = False
+        '
+        'Label13
+        '
+        Me.Label13.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label13.AutoSize = True
+        Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label13.Location = New System.Drawing.Point(597, 91)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(13, 13)
+        Me.Label13.TabIndex = 150
+        Me.Label13.Text = "≤"
+        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'etq_UnitD7
+        '
+        Me.etq_UnitD7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitD7.AutoSize = True
+        Me.etq_UnitD7.Location = New System.Drawing.Point(674, 91)
+        Me.etq_UnitD7.Name = "etq_UnitD7"
+        Me.etq_UnitD7.Size = New System.Drawing.Size(39, 13)
+        Me.etq_UnitD7.TabIndex = 149
+        Me.etq_UnitD7.Text = "Label1"
+        '
+        'txt_EnrobageG1
+        '
+        Me.txt_EnrobageG1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_EnrobageG1.Location = New System.Drawing.Point(610, 88)
+        Me.txt_EnrobageG1.Name = "txt_EnrobageG1"
+        Me.txt_EnrobageG1.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EnrobageG1.TabIndex = 147
+        Me.txt_EnrobageG1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'img_c1
+        '
+        Me.img_c1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_c1.Location = New System.Drawing.Point(551, 88)
+        Me.img_c1.Name = "img_c1"
+        Me.img_c1.Size = New System.Drawing.Size(46, 20)
+        Me.img_c1.TabIndex = 148
+        Me.img_c1.TabStop = False
+        '
+        'lbl_Enrobage
+        '
+        Me.lbl_Enrobage.AutoSize = True
+        Me.lbl_Enrobage.Location = New System.Drawing.Point(39, 88)
+        Me.lbl_Enrobage.Name = "lbl_Enrobage"
+        Me.lbl_Enrobage.Size = New System.Drawing.Size(69, 13)
+        Me.lbl_Enrobage.TabIndex = 146
+        Me.lbl_Enrobage.Text = "lbl_Enrobage"
         '
         'Label8
         '
@@ -610,7 +763,7 @@ Partial Class Frm_OptionsCalculConnecteurs
         'lbl_RatioHsurDMax
         '
         Me.lbl_RatioHsurDMax.AutoSize = True
-        Me.lbl_RatioHsurDMax.Location = New System.Drawing.Point(39, 129)
+        Me.lbl_RatioHsurDMax.Location = New System.Drawing.Point(39, 132)
         Me.lbl_RatioHsurDMax.Name = "lbl_RatioHsurDMax"
         Me.lbl_RatioHsurDMax.Size = New System.Drawing.Size(98, 13)
         Me.lbl_RatioHsurDMax.TabIndex = 145
@@ -848,26 +1001,6 @@ Partial Class Frm_OptionsCalculConnecteurs
         Me.lbl_Connecteurs.Text = "lbl_Connecteurs"
         Me.lbl_Connecteurs.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lbl_DallePleine
-        '
-        Me.lbl_DallePleine.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_DallePleine.Location = New System.Drawing.Point(316, 85)
-        Me.lbl_DallePleine.Name = "lbl_DallePleine"
-        Me.lbl_DallePleine.Size = New System.Drawing.Size(229, 13)
-        Me.lbl_DallePleine.TabIndex = 160
-        Me.lbl_DallePleine.Text = "lbl_DallePleine"
-        Me.lbl_DallePleine.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'lbl_DalleMixte
-        '
-        Me.lbl_DalleMixte.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_DalleMixte.Location = New System.Drawing.Point(316, 111)
-        Me.lbl_DalleMixte.Name = "lbl_DalleMixte"
-        Me.lbl_DalleMixte.Size = New System.Drawing.Size(229, 13)
-        Me.lbl_DalleMixte.TabIndex = 161
-        Me.lbl_DalleMixte.Text = "lbl_DalleMixte"
-        Me.lbl_DalleMixte.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
         'Frm_OptionsCalculConnecteurs
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -891,6 +1024,8 @@ Partial Class Frm_OptionsCalculConnecteurs
         CType(Me.img_sx1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Dispositions.ResumeLayout(False)
         Me.pan_Dispositions.PerformLayout()
+        CType(Me.img_c2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_c1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_eD, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_HsurD, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Dimensions.ResumeLayout(False)
@@ -974,4 +1109,15 @@ Partial Class Frm_OptionsCalculConnecteurs
     Friend WithEvents lbl_LongitudinalSY As Label
     Friend WithEvents lbl_DalleMixte As Label
     Friend WithEvents lbl_DallePleine As Label
+    Friend WithEvents Label15 As Label
+    Friend WithEvents etq_UnitD8 As Label
+    Friend WithEvents txt_EnrobageG2 As TextBox
+    Friend WithEvents img_c2 As PictureBox
+    Friend WithEvents Label13 As Label
+    Friend WithEvents etq_UnitD7 As Label
+    Friend WithEvents txt_EnrobageG1 As TextBox
+    Friend WithEvents img_c1 As PictureBox
+    Friend WithEvents lbl_Enrobage As Label
+    Friend WithEvents lbl_EN_G1 As Label
+    Friend WithEvents Label14 As Label
 End Class

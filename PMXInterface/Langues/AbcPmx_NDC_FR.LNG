@@ -405,6 +405,9 @@ ETAW					= Voilement par cisaillement
 CONTROLCRACKW			= Maîtrise de la fissuration
 CRACKWIDTH				= Limite d'ouverture des fissures
 CALCULATIONTYPE			= Type de calcul
+STUDCONCRETECOVER		= Epaisseur d'enrobage
+WARNING					= Attention:
+WARNINGCONCRETECOVERAGE = L'épaisseur d'enrobage est inférieure à la valeur minimale ($) requise par l'$
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Propriétés de la section

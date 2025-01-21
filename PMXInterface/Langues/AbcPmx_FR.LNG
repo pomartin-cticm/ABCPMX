@@ -263,6 +263,8 @@ WEB_STUD				= Goujon soudé sur l'âme
 WEB_REINF				= Armature traversant l'âme
 CLASS					= Classe
 REINFORCEMENTS			= Armatures
+STUDCONCRETECOVER		= L'épaisseur d'enrobage des goujons ($) est inférieure à la valeur minimale imposée par $.
+
 
 #FRM_DECKRESTRAINT
 TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)
@@ -1003,6 +1005,7 @@ SPACINGLONGI			= Espacement longitudinal
 SPACINGTRANS			= Espacement transversal
 COMPOSITESLAB			= Dalle mixte
 SOLIDSLAB				= Dalle pleine
+STUDCONCRETECOVER		= Épaisseur d'enrobage
 
 #OPTCALGAMMA
 TITLE					= Coefficients nationaux

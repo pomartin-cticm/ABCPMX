@@ -129,6 +129,9 @@ Public Class Frm_Connection
     Dim tabDiam() As Decimal
     Dim tabHsc() As Decimal
 
+
+    Dim strWarningGoujons As String
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -290,6 +293,7 @@ Public Class Frm_Connection
 
                 WarningMessage_CmbTravee = Bloc("WARNING_CMBTRAVEE")
 
+                strWarningGoujons = Bloc("STUDCONCRETECOVER")
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -560,6 +564,7 @@ Public Class Frm_Connection
     Private Function ValideSaisieFenetre() As Boolean
         Dim lFrm_Valide As Boolean = True
 
+        '== Vérification des textbox pour la définition des zones de saisie
         'Vérification des textbox au cas où
         Dim list_txtbox As New List(Of TextBox)
         list_txtbox.Add(Me.txt_hsc)
@@ -586,6 +591,30 @@ Public Class Frm_Connection
                 Exit For
             End If
         Next
+
+        '== Vérification de l'enrobage de béton
+
+        Dim Cc, CcMin As Decimal
+        Dim Chaine As String = ""
+        Dim Reference As String
+
+        Cc = MyPoutreLoc.Dalle.zTop - MyPoutreLoc.Dalle.Goujons.hsc
+
+        CcMin = Goujons_EnrobageMini()
+
+        If IsSmaller(Cc, CcMin) And IsGreaterOrEqual(Cc, 0) Then
+
+            Reference = Goujons_ReferenceEnrobageMini() & " (" & GetStringInUnitN(CcMin, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True) & ")"
+            Chaine = RemplaceDollar(strWarningGoujons, GetStringInUnitN(Cc, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True))
+            Chaine = RemplaceDollar(Chaine, Reference)
+
+            Dim Rep As MsgBoxResult
+
+            Rep = MsgBox(Chaine, MsgBoxStyle.OkCancel, LogicielInfo.Racine)
+
+            lFrm_Valide = (Rep = MsgBoxResult.Ok)
+
+        End If
 
         Return lFrm_Valide
     End Function

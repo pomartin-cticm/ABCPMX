@@ -263,6 +263,7 @@ WEB_STUD				= Stud welded on the web
 WEB_REINF				= Dowels
 CLASS					= Class
 REINFORCEMENTS			= Reinforcements
+STUDCONCRETECOVER		= The concrete converage of studs ($) is lower than the minimum requirement of $.
 
 #FRM_DECKRESTRAINT
 TITLE					= Restraint of the beam by the steel deck (construction phase only)
@@ -1038,6 +1039,7 @@ SPACINGLONGI			= Longitudinal spacing
 SPACINGTRANS			= Transverse spacing
 COMPOSITESLAB			= Composite slab
 SOLIDSLAB				= Solid slab
+STUDCONCRETECOVER		= Concrete converage
 
 #OPTCALGAMMA
 TITLE					= Default national factors

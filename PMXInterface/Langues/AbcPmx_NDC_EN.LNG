@@ -406,6 +406,9 @@ ETAW					= Shear buckling
 CONTROLCRACKW			= Control of concrete cracking
 CRACKWIDTH				= Limit of crack width.
 CALCULATIONTYPE			= Calculation type
+STUDCONCRETECOVER		= Concrete coverage
+WARNING 				= Warning:
+WARNINGCONCRETECOVERAGE = The concrete coverage is lower than the minimal value ($) required by $
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties

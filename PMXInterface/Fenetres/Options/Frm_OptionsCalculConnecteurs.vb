@@ -34,13 +34,18 @@
         PrepareTextBoxDipo(Me.txt_DMax2, False)
         PrepareTextBoxDipo(Me.txt_DMax3, False)
         PrepareTextBoxDipo(Me.txt_eD, False)
+
         PrepareTextBoxDipo(Me.txt_HsurD_Bac, False)
         PrepareTextBoxDipo(Me.txt_RatioHsurD1, False)
         PrepareTextBoxDipo(Me.txt_RatioHsurD2, False)
+
         PrepareTextBoxDipo(Me.txt_SxMax1, False)
         PrepareTextBoxDipo(Me.txt_SxMax2, False)
         PrepareTextBoxDipo(Me.txt_syMin1, False)
         PrepareTextBoxDipo(Me.txt_syMin2, False)
+
+        PrepareTextBoxDipo(Me.txt_EnrobageG1, False)
+        PrepareTextBoxDipo(Me.txt_EnrobageG2, False)
 
     End Sub
 
@@ -71,6 +76,8 @@
             Me.lbl_DalleMixte.Text = MyBloc("COMPOSITESLAB")
             Me.lbl_DallePleine.Text = MyBloc("SOLIDSLAB")
 
+            Me.lbl_Enrobage.Text = MyBloc("STUDCONCRETECOVER")
+
         Catch ex As Exception
 
         End Try
@@ -84,6 +91,8 @@
         Me.etq_UnitD4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitD5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitD6.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD7.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD8.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
     End Sub
 
@@ -106,6 +115,9 @@
         Me.txt_syMin1.Text = GetStringInUnitN(GOUJ_RAPESPYsurD_PLEINE_MIN, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
         Me.txt_syMin2.Text = GetStringInUnitN(GOUJ_RAPESPYsurD_MIXTE_MIN, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
 
+        Me.txt_EnrobageG1.Text = GetStringInUnitN(GOUJ_EnrobMInG1, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_EnrobageG2.Text = GetStringInUnitN(GOUJ_EnrobMInG2, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+
     End Sub
 
 #End Region
@@ -114,7 +126,7 @@
 
     Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Dmin.Paint,
         img_DMax1.Paint, img_DMax3.Paint, img_DMax2.Paint, img_RatioHsurD2.Paint, img_RatioHsurD1.Paint, img_HsurD.Paint,
-        img_eD.Paint, img_Td.Paint, img_sx2.Paint, img_sx1.Paint, img_xd2.Paint, img_xd1.Paint, img_sy2.Paint, img_sy1.Paint
+        img_eD.Paint, img_Td.Paint, img_sx2.Paint, img_sx1.Paint, img_xd2.Paint, img_xd1.Paint, img_sy2.Paint, img_sy1.Paint, img_c2.Paint, img_c1.Paint
 
         '--> Déclarations
 
@@ -134,6 +146,10 @@
         AlignH = Enu_AlignementH.Droite
 
         Select Case sender.name
+            Case Me.img_c1.Name, Me.img_c2.Name
+                strSymbol = "c"
+                strIndice = ""
+                lEgal = False
             Case Me.img_DMax1.Name, Me.img_DMax2.Name, Me.img_DMax3.Name, Me.img_Dmin.Name
                 strSymbol = "d"
                 strIndice = ""
@@ -176,6 +192,7 @@
                     FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
+
 
 #End Region
 

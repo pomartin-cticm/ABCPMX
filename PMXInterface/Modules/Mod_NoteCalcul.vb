@@ -2275,6 +2275,34 @@ Module Mod_NoteCalcul
                     End If
                 End If
 
+                SauteLigne()
+
+                '--( épaisseur d'enrobage
+
+                Dim Cc, CcMin As Decimal
+
+                Dim Chaine As String = ""
+                Dim Reference As String
+
+                Cc = MyBeam.Dalle.zTop - MyBeam.Dalle.Goujons.hsc
+
+                AddLigneNDC(TABW2 & BlocG("STUDCONCRETECOVER") & TABAFF & "c\-c\=" & TABEGAL & GetStringInUnitN(Cc, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
+
+                CcMin = Goujons_EnrobageMini()
+
+                If IsSmaller(Cc, CcMin) And IsGreaterOrEqual(Cc, 0) Then
+
+                    Dim strWarningGoujons As String = BlocG("WARNINGCONCRETECOVERAGE")
+
+                    Reference = Goujons_ReferenceEnrobageMini()
+                    Chaine = RemplaceDollar(strWarningGoujons, GetStringInUnitN(CcMin, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
+                    Chaine = RemplaceDollar(Chaine, Reference)
+
+                    AddLigneNDC(TABW2 & "\G" & BlocG("WARNING") & "\g")
+                    AddLigneNDC(TABW2 & "\G" & Chaine & "\g")
+
+                End If
+
             End With
 
         Else

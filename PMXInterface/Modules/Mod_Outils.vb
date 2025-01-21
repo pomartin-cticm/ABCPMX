@@ -2077,4 +2077,35 @@ Module Mod_Outils
 
 #End Region
 
+#Region " Enrobage des connecteurs goujons soudés "
+
+    Public Function Goujons_ReferenceEnrobageMini() As String
+
+        Dim Chaine As String = ""
+        Select Case OptionsCalcul.Norme
+            Case cls_OptionsCalcul.Enu_Normes.EurocodesG1
+                Chaine = "EN 1994-1-1: 2005, 6.6.5.2 (2)"
+            Case cls_OptionsCalcul.Enu_Normes.EurocodesG2
+                Chaine = "EN 1994-1-1: 2024, 8.6.10.2 (2)"
+        End Select
+
+        Return Chaine
+
+    End Function
+
+    Public Function Goujons_EnrobageMini() As Decimal
+
+        Dim CcMin As Decimal
+        Select Case OptionsCalcul.Norme
+            Case cls_OptionsCalcul.Enu_Normes.EurocodesG1
+                CcMin = GOUJ_EnrobMInG1
+            Case cls_OptionsCalcul.Enu_Normes.EurocodesG2
+                CcMin = GOUJ_EnrobMInG2
+        End Select
+
+        Return CcMin
+    End Function
+
+#End Region
+
 End Module

@@ -525,6 +525,9 @@ Public Module Mod_Declarations
 
     Public Const BAC_LARGAPP_MIN As Decimal = 50 / 1000         ' Largeur minimale de l'appui d'un bac sur semelle
 
+    Public Const GOUJ_EnrobMInG1 As Decimal = 20 / 1000         ' Enrobage miniaml d'un goujon dans EN 1994-1-1:2005
+    Public Const GOUJ_EnrobMInG2 As Decimal = 15 / 1000         ' Enrobage miniaml d'un goujon dans EN 1994-1-1:2024
+
 #End Region
 
 #Region " Paramétrage Logiciel "
