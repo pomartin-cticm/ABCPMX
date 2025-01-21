@@ -266,14 +266,13 @@ CLASS					= Classe
 REINFORCEMENTS			= Armatures
 STUDCONCRETECOVER		= L'épaisseur d'enrobage des goujons ($) est inférieure à la valeur minimale imposée par $.
 
-
 #FRM_DECKRESTRAINT
 TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)
 OK						= Ok
 CANCEL					= Annuler
 RESTRAINTBYTHEDECK		= Poutre est maintenue latéralement par le bac 
 INDIVIDUALSHEET			= Tôle individuelle
-NUMBERSPANS				= Nombre de travée traversée par les tôles
+NUMBERSPANS				= Nombre de travées traversées par les tôles
 SHEETLENGTH				= Longueur
 SHEETWIDTH				= Largeur
 DIMENSIONS				= Dimensions

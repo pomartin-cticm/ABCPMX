@@ -156,6 +156,24 @@
     <Compile Include="Fenetres\Filles\Frm_DalleSlimFloor.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_GammaM_Beton.Designer.vb">
+      <DependentUpon>Frm_GammaM_Beton.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_GammaM_Beton.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_GammaM_Acier.Designer.vb">
+      <DependentUpon>Frm_GammaM_Acier.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_GammaM_Acier.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_GammaN.Designer.vb">
+      <DependentUpon>Frm_GammaN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_GammaN.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_MaintienBac.Designer.vb">
       <DependentUpon>Frm_MaintienBac.vb</DependentUpon>
     </Compile>
@@ -563,6 +581,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_DalleSlimFloor.resx">
       <DependentUpon>Frm_DalleSlimFloor.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_GammaM_Acier.resx">
+      <DependentUpon>Frm_GammaM_Acier.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_GammaM_Beton.resx">
+      <DependentUpon>Frm_GammaM_Beton.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_GammaN.resx">
+      <DependentUpon>Frm_GammaN.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienBac.resx">
       <DependentUpon>Frm_MaintienBac.vb</DependentUpon>

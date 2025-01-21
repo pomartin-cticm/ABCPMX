@@ -949,7 +949,8 @@ Public Class Frm_PMX
 
             Case EnuFenetres.Gamma
 
-                Frm_Gamma.ShowDialog()
+                'Frm_Gamma.ShowDialog()
+                Frm_GammaN.ShowDialog()
 
 
             Case EnuFenetres.Combinaisons

@@ -122,7 +122,6 @@ ETAW					= Shear buckling
 CONTROLCRACKW			= Control of concrete cracking
 CRACKWIDTH				= Limit of crack width
 
-
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
 CLOSE					= Close
@@ -273,7 +272,7 @@ OK						= Ok
 CANCEL					= Cancel
 RESTRAINTBYTHEDECK		= The beam is laterally restrained by the deck
 INDIVIDUALSHEET			= Individual sheet
-NUMBERSPANS				= Number of crossed spans by sheets
+NUMBERSPANS				= Number of spans crossed by the sheets
 SHEETLENGTH				= Length
 SHEETWIDTH				= Width
 DIMENSIONS				= Dimensions
