@@ -435,6 +435,7 @@ Public Module Mod_Declarations
         Incendie
         Main
         Maintiens
+        MaintiensBac
         Options
         OptionsCalculPoutre
         OptionsIncendie

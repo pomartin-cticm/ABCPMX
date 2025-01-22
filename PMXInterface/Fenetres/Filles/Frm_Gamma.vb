@@ -455,6 +455,7 @@ Public Class Frm_Gamma
 #Region " Evènements "
 
     Private Sub MAJI_GammaV_Unique()
+
         If Me.chk_GammaV_Unique.Checked Then
             y_txt_GammaVs = y_txt_GammaC + y_decal
             y_txt_GammaS = y_txt_GammaVs + y_decal

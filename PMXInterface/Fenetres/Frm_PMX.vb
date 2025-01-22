@@ -800,6 +800,8 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.Maintiens
             Case Me.TSbtn_Etaiement.Name
                 FilleEnCours = EnuFenetres.Etaiement
+            Case Me.TSbtn_MaintienBac.Name
+                FilleEnCours = EnuFenetres.MaintiensBac
 
                 '--> Chargements, combinaisons, Coefficients
 
@@ -840,22 +842,6 @@ Public Class Frm_PMX
             Case Me.TSbtn_PPVerifications.Name
                 FilleEnCours = EnuFenetres.PPVerifications
 
-            'Case Me.TSbtn_OptionsIncendie.Name
-
-            '    If lFIRE Then
-
-            '        FilleEnCours = EnuFenetres.OptionsIncendie
-
-            '    Else
-
-            '        GestionErrorsPMX("", "", strFeuNonDispo, False)
-            '        lAffiche = False
-
-            '    End If
-
-
-            Case Me.TSbtn_MaintienBac.Name
-                FilleEnCours = EnuFenetres.Test
 
         End Select
         If lAffiche Then AfficheFenetreEnCours()
@@ -865,6 +851,7 @@ Public Class Frm_PMX
     Private Sub AfficheFenetreEnCours()
 
         Select Case FilleEnCours
+
             Case EnuFenetres.Identification
                 Frm_Identification.ShowDialog()
                 AffichageTViewChk() 'Ajout GuD: MAJ du volet gauche. A voir si c'est pertinent
@@ -928,6 +915,10 @@ Public Class Frm_PMX
             Case EnuFenetres.Maintiens
 
                 Frm_Maintiens.ShowDialog()
+
+            Case EnuFenetres.MaintiensBac
+
+                Frm_MaintienBacN.ShowDialog()
 
 
             Case EnuFenetres.Etaiement
@@ -1022,8 +1013,6 @@ Public Class Frm_PMX
                     Frm_About.Dispose()
                 End If
 
-            Case EnuFenetres.Test
-                Frm_MaintienBac.ShowDialog()
 
         End Select
 

@@ -114,6 +114,12 @@
     <Compile Include="Fenetres\EditionBases\Frm_EditGoujons.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienBacN.Designer.vb">
+      <DependentUpon>Frm_MaintienBacN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienBacN.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_About.Designer.vb">
       <DependentUpon>Frm_About.vb</DependentUpon>
     </Compile>
@@ -184,6 +190,18 @@
       <DependentUpon>Frm_MaintienBac.vb</DependentUpon>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_MaintienBac.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienBacN_Calculs.Designer.vb">
+      <DependentUpon>Frm_MaintienBacN_Calculs.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienBacN_Calculs.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienBacN_Plancher.Designer.vb">
+      <DependentUpon>Frm_MaintienBacN_Plancher.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienBacN_Plancher.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_MaintienN.Designer.vb">
@@ -602,6 +620,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienBac.resx">
       <DependentUpon>Frm_MaintienBac.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienBacN.resx">
+      <DependentUpon>Frm_MaintienBacN.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienBacN_Calculs.resx">
+      <DependentUpon>Frm_MaintienBacN_Calculs.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienBacN_Plancher.resx">
+      <DependentUpon>Frm_MaintienBacN_Plancher.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienN.resx">
       <DependentUpon>Frm_MaintienN.vb</DependentUpon>

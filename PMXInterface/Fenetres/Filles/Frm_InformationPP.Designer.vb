@@ -803,7 +803,7 @@ Partial Class Frm_InformationPP
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_InformationPP"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Frm_InformationPP"
         Me.TLPan_PartieHaute.ResumeLayout(False)
         Me.TLPan_PartieHaute.PerformLayout()

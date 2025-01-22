@@ -39,6 +39,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_GraviteG = New System.Windows.Forms.Label()
         Me.lbl_CadreParametres = New System.Windows.Forms.Label()
         Me.pan_Sections = New System.Windows.Forms.Panel()
+        Me.chk_EnrobagePropSection = New System.Windows.Forms.CheckBox()
         Me.chk_ArmaComprimees = New System.Windows.Forms.CheckBox()
         Me.chk_LargeursPartipantesSimples = New System.Windows.Forms.CheckBox()
         Me.lbl_CadreSections = New System.Windows.Forms.Label()
@@ -109,7 +110,6 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_RH = New System.Windows.Forms.Label()
         Me.lbl_BetonMessage = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.chk_EnrobagePropSection = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -356,6 +356,16 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_Sections.Name = "pan_Sections"
         Me.pan_Sections.Size = New System.Drawing.Size(442, 89)
         Me.pan_Sections.TabIndex = 8
+        '
+        'chk_EnrobagePropSection
+        '
+        Me.chk_EnrobagePropSection.AutoSize = True
+        Me.chk_EnrobagePropSection.Location = New System.Drawing.Point(11, 58)
+        Me.chk_EnrobagePropSection.Name = "chk_EnrobagePropSection"
+        Me.chk_EnrobagePropSection.Size = New System.Drawing.Size(154, 17)
+        Me.chk_EnrobagePropSection.TabIndex = 117
+        Me.chk_EnrobagePropSection.Text = "chk_EnrobagePropSection"
+        Me.chk_EnrobagePropSection.UseVisualStyleBackColor = True
         '
         'chk_ArmaComprimees
         '
@@ -1101,16 +1111,6 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'chk_EnrobagePropSection
-        '
-        Me.chk_EnrobagePropSection.AutoSize = True
-        Me.chk_EnrobagePropSection.Location = New System.Drawing.Point(11, 58)
-        Me.chk_EnrobagePropSection.Name = "chk_EnrobagePropSection"
-        Me.chk_EnrobagePropSection.Size = New System.Drawing.Size(154, 17)
-        Me.chk_EnrobagePropSection.TabIndex = 117
-        Me.chk_EnrobagePropSection.Text = "chk_EnrobagePropSection"
-        Me.chk_EnrobagePropSection.UseVisualStyleBackColor = True
-        '
         'Frm_OptionsCalculPoutre
         '
         Me.AcceptButton = Me.btn_OK
@@ -1123,7 +1123,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_OptionsCalculPoutre"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Frm_OptionsCalcuPoutre"
         Me.pan_General.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)

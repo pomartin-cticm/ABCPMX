@@ -308,6 +308,9 @@ BENDINGSTIFF			= Bending stiffness
 SHEARSTIFF				= Shear stiffness
 DRAWING					= Drawing
 THETA					= Flexural bending of deck accounted for in the calculation
+FLOOR					= Floor
+FASTENINGRDB			= Fastening
+RESULTS					= Results
 
 #FRMEDITSTUDS	
 TITLE					= Studs data base

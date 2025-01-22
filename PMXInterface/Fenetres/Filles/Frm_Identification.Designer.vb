@@ -279,7 +279,7 @@ Partial Class Frm_Identification
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_Identification"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Frm_Identification"
         Me.pan_General.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)

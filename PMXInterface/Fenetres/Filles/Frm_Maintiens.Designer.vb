@@ -33,15 +33,15 @@ Partial Class Frm_Maintiens
         Me.TLPan_Maintiens = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
-        Me.btn_Delete = New System.Windows.Forms.Button()
-        Me.btn_Add = New System.Windows.Forms.Button()
         Me.lbl_Maintiens = New System.Windows.Forms.Label()
         Me.pan_Maintiens = New System.Windows.Forms.Panel()
+        Me.btn_Delete = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btn_Precedent = New System.Windows.Forms.Button()
         Me.btn_Suivant = New System.Windows.Forms.Button()
         Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
         Me.cmb_Travee = New System.Windows.Forms.ComboBox()
+        Me.btn_Add = New System.Windows.Forms.Button()
         Me.rad_NonRestrain = New System.Windows.Forms.RadioButton()
         Me.lbl_Travee = New System.Windows.Forms.Label()
         Me.rad_PointRestrain = New System.Windows.Forms.RadioButton()
@@ -183,24 +183,6 @@ Partial Class Frm_Maintiens
         Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 303)
         Me.TLPan_Gauche.TabIndex = 0
         '
-        'btn_Delete
-        '
-        Me.btn_Delete.Location = New System.Drawing.Point(33, 200)
-        Me.btn_Delete.Name = "btn_Delete"
-        Me.btn_Delete.Size = New System.Drawing.Size(191, 28)
-        Me.btn_Delete.TabIndex = 3
-        Me.btn_Delete.Text = "btn_Delete"
-        Me.btn_Delete.UseVisualStyleBackColor = True
-        '
-        'btn_Add
-        '
-        Me.btn_Add.Location = New System.Drawing.Point(33, 166)
-        Me.btn_Add.Name = "btn_Add"
-        Me.btn_Add.Size = New System.Drawing.Size(191, 28)
-        Me.btn_Add.TabIndex = 2
-        Me.btn_Add.Text = "btn_Add"
-        Me.btn_Add.UseVisualStyleBackColor = True
-        '
         'lbl_Maintiens
         '
         Me.lbl_Maintiens.AutoSize = True
@@ -232,6 +214,15 @@ Partial Class Frm_Maintiens
         Me.pan_Maintiens.Name = "pan_Maintiens"
         Me.pan_Maintiens.Size = New System.Drawing.Size(250, 272)
         Me.pan_Maintiens.TabIndex = 1
+        '
+        'btn_Delete
+        '
+        Me.btn_Delete.Location = New System.Drawing.Point(33, 200)
+        Me.btn_Delete.Name = "btn_Delete"
+        Me.btn_Delete.Size = New System.Drawing.Size(191, 28)
+        Me.btn_Delete.TabIndex = 3
+        Me.btn_Delete.Text = "btn_Delete"
+        Me.btn_Delete.UseVisualStyleBackColor = True
         '
         'Panel1
         '
@@ -285,6 +276,15 @@ Partial Class Frm_Maintiens
         Me.cmb_Travee.Name = "cmb_Travee"
         Me.cmb_Travee.Size = New System.Drawing.Size(184, 21)
         Me.cmb_Travee.TabIndex = 4
+        '
+        'btn_Add
+        '
+        Me.btn_Add.Location = New System.Drawing.Point(33, 166)
+        Me.btn_Add.Name = "btn_Add"
+        Me.btn_Add.Size = New System.Drawing.Size(191, 28)
+        Me.btn_Add.TabIndex = 2
+        Me.btn_Add.Text = "btn_Add"
+        Me.btn_Add.UseVisualStyleBackColor = True
         '
         'rad_NonRestrain
         '
@@ -372,7 +372,7 @@ Partial Class Frm_Maintiens
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_Maintiens"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Frm_Maintiens"
         Me.pan_General.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)
