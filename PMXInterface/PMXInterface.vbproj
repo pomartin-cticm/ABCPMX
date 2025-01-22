@@ -168,6 +168,12 @@
     <Compile Include="Fenetres\Filles\Frm_GammaM_Acier.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_GammaM_Feu.Designer.vb">
+      <DependentUpon>Frm_GammaM_Feu.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_GammaM_Feu.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_GammaN.Designer.vb">
       <DependentUpon>Frm_GammaN.vb</DependentUpon>
     </Compile>
@@ -587,6 +593,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_GammaM_Beton.resx">
       <DependentUpon>Frm_GammaM_Beton.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_GammaM_Feu.resx">
+      <DependentUpon>Frm_GammaM_Feu.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_GammaN.resx">
       <DependentUpon>Frm_GammaN.vb</DependentUpon>

@@ -407,8 +407,8 @@ Public Class Frm_GammaN
                 Me.pan_SaisieResistance.Controls.Add(Frm_GammaM_Beton.pan_GammaM)
                 Frm_GammaM_Beton.InitialiseFenetre(msgchoixgammav)
             Case Enu_Resistance.Feu
-                'Me.pan_SaisieResistance.Controls.Add(Frm_GammaM_Beton.pan_GammaM)
-                'Frm_GammaM_Beton.InitialiseFenetre()
+                Me.pan_SaisieResistance.Controls.Add(Frm_GammaM_Feu.pan_GammaM)
+                Frm_GammaM_Feu.InitialiseFenetre()
         End Select
 
     End Sub
@@ -516,10 +516,15 @@ Public Class Frm_GammaN
         locGammaM.GammaP = LogicielOptions.Gamma.GammaP
         locGammaM.lGammaV_unique = LogicielOptions.Gamma.lGammaV_unique
 
+        locGammaM.GammaM_fi = LogicielOptions.Gamma.GammaM_fi
+        locGammaM.GammaC_fi = LogicielOptions.Gamma.GammaC_fi
+        locGammaM.GammaS_fi = LogicielOptions.Gamma.GammaS_fi
+        locGammaM.GammaV_fi = LogicielOptions.Gamma.GammaV_fi
+
         Select Case AffGammaM
             Case Enu_Resistance.Acier : Frm_GammaM_Acier.ReInit()
             Case Enu_Resistance.Beton : Frm_GammaM_Beton.ReInit()
-            Case Enu_Resistance.Feu
+            Case Enu_Resistance.Feu : Frm_GammaM_Feu.ReInit()
         End Select
 
     End Sub
