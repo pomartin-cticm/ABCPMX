@@ -184,9 +184,9 @@ Partial Class Frm_MaintienBacN_Calculs
         'img_Sact
         '
         Me.img_Sact.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Sact.Location = New System.Drawing.Point(99, 170)
+        Me.img_Sact.Location = New System.Drawing.Point(75, 170)
         Me.img_Sact.Name = "img_Sact"
-        Me.img_Sact.Size = New System.Drawing.Size(37, 20)
+        Me.img_Sact.Size = New System.Drawing.Size(61, 20)
         Me.img_Sact.TabIndex = 109
         Me.img_Sact.TabStop = False
         '

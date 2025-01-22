@@ -329,7 +329,6 @@ Public Class Frm_MaintienBac
 
 #End Region
 
-
 #Region " Fermeture "
 
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
@@ -685,10 +684,6 @@ Public Class Frm_MaintienBac
                     FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
-
-
-
-
 
 #End Region
 

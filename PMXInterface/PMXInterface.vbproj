@@ -198,6 +198,12 @@
     <Compile Include="Fenetres\Filles\Frm_MaintienBacN_Calculs.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienBacN_Fixation.Designer.vb">
+      <DependentUpon>Frm_MaintienBacN_Fixation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienBacN_Fixation.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_MaintienBacN_Plancher.Designer.vb">
       <DependentUpon>Frm_MaintienBacN_Plancher.vb</DependentUpon>
     </Compile>
@@ -626,6 +632,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienBacN_Calculs.resx">
       <DependentUpon>Frm_MaintienBacN_Calculs.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienBacN_Fixation.resx">
+      <DependentUpon>Frm_MaintienBacN_Fixation.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienBacN_Plancher.resx">
       <DependentUpon>Frm_MaintienBacN_Plancher.vb</DependentUpon>

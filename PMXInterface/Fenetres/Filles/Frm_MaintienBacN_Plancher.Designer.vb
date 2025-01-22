@@ -45,6 +45,8 @@ Partial Class Frm_MaintienBacN_Plancher
         Me.cmb_NbSpan = New System.Windows.Forms.ComboBox()
         Me.lbl_NbSpans = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.img_bp = New System.Windows.Forms.PictureBox()
+        Me.img_ap = New System.Windows.Forms.PictureBox()
         Me.lbl_SheetWidth = New System.Windows.Forms.Label()
         Me.lbl_SheetLength = New System.Windows.Forms.Label()
         Me.etq_UnitL4 = New System.Windows.Forms.Label()
@@ -59,6 +61,8 @@ Partial Class Frm_MaintienBacN_Plancher
         Me.Panel1.SuspendLayout()
         Me.pan_Panneau.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        CType(Me.img_bp, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_ap, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -298,6 +302,8 @@ Partial Class Frm_MaintienBacN_Plancher
         '
         'Panel2
         '
+        Me.Panel2.Controls.Add(Me.img_bp)
+        Me.Panel2.Controls.Add(Me.img_ap)
         Me.Panel2.Controls.Add(Me.lbl_SheetWidth)
         Me.Panel2.Controls.Add(Me.lbl_SheetLength)
         Me.Panel2.Controls.Add(Me.etq_UnitL4)
@@ -311,20 +317,38 @@ Partial Class Frm_MaintienBacN_Plancher
         Me.Panel2.Size = New System.Drawing.Size(244, 71)
         Me.Panel2.TabIndex = 5
         '
+        'img_bp
+        '
+        Me.img_bp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_bp.Location = New System.Drawing.Point(111, 44)
+        Me.img_bp.Name = "img_bp"
+        Me.img_bp.Size = New System.Drawing.Size(37, 20)
+        Me.img_bp.TabIndex = 89
+        Me.img_bp.TabStop = False
+        '
+        'img_ap
+        '
+        Me.img_ap.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_ap.Location = New System.Drawing.Point(111, 22)
+        Me.img_ap.Name = "img_ap"
+        Me.img_ap.Size = New System.Drawing.Size(37, 20)
+        Me.img_ap.TabIndex = 94
+        Me.img_ap.TabStop = False
+        '
         'lbl_SheetWidth
         '
-        Me.lbl_SheetWidth.Location = New System.Drawing.Point(24, 48)
+        Me.lbl_SheetWidth.Location = New System.Drawing.Point(6, 48)
         Me.lbl_SheetWidth.Name = "lbl_SheetWidth"
-        Me.lbl_SheetWidth.Size = New System.Drawing.Size(118, 13)
+        Me.lbl_SheetWidth.Size = New System.Drawing.Size(100, 13)
         Me.lbl_SheetWidth.TabIndex = 93
         Me.lbl_SheetWidth.Text = "lbl_SheetWidth"
         Me.lbl_SheetWidth.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'lbl_SheetLength
         '
-        Me.lbl_SheetLength.Location = New System.Drawing.Point(24, 26)
+        Me.lbl_SheetLength.Location = New System.Drawing.Point(6, 26)
         Me.lbl_SheetLength.Name = "lbl_SheetLength"
-        Me.lbl_SheetLength.Size = New System.Drawing.Size(118, 13)
+        Me.lbl_SheetLength.Size = New System.Drawing.Size(100, 13)
         Me.lbl_SheetLength.TabIndex = 92
         Me.lbl_SheetLength.Text = "lbl_SheetLength"
         Me.lbl_SheetLength.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -398,6 +422,8 @@ Partial Class Frm_MaintienBacN_Plancher
         Me.pan_Panneau.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
+        CType(Me.img_bp, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_ap, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -433,4 +459,6 @@ Partial Class Frm_MaintienBacN_Plancher
     Friend WithEvents txt_SheetLength As TextBox
     Friend WithEvents lbl_IndSheetDimensions As Label
     Friend WithEvents ErrorProvider As ErrorProvider
+    Friend WithEvents img_bp As PictureBox
+    Friend WithEvents img_ap As PictureBox
 End Class

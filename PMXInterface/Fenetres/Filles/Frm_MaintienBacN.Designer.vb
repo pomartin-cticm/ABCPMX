@@ -35,8 +35,8 @@ Partial Class Frm_MaintienBacN
         Me.TLpan_Choix = New System.Windows.Forms.TableLayoutPanel()
         Me.rdb_Fixations = New System.Windows.Forms.RadioButton()
         Me.rdb_Plancher = New System.Windows.Forms.RadioButton()
-        Me.pan_ContenuG = New System.Windows.Forms.Panel()
         Me.chk_Calculs = New System.Windows.Forms.CheckBox()
+        Me.pan_ContenuG = New System.Windows.Forms.Panel()
         Me.pan_Calculs = New System.Windows.Forms.Panel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
@@ -227,15 +227,6 @@ Partial Class Frm_MaintienBacN
         Me.rdb_Plancher.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.rdb_Plancher.UseVisualStyleBackColor = True
         '
-        'pan_ContenuG
-        '
-        Me.pan_ContenuG.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_ContenuG.Location = New System.Drawing.Point(0, 30)
-        Me.pan_ContenuG.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_ContenuG.Name = "pan_ContenuG"
-        Me.pan_ContenuG.Size = New System.Drawing.Size(250, 405)
-        Me.pan_ContenuG.TabIndex = 2
-        '
         'chk_Calculs
         '
         Me.chk_Calculs.Appearance = System.Windows.Forms.Appearance.Button
@@ -249,6 +240,15 @@ Partial Class Frm_MaintienBacN
         Me.chk_Calculs.Text = "chk_Calculs"
         Me.chk_Calculs.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.chk_Calculs.UseVisualStyleBackColor = True
+        '
+        'pan_ContenuG
+        '
+        Me.pan_ContenuG.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_ContenuG.Location = New System.Drawing.Point(0, 30)
+        Me.pan_ContenuG.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_ContenuG.Name = "pan_ContenuG"
+        Me.pan_ContenuG.Size = New System.Drawing.Size(250, 405)
+        Me.pan_ContenuG.TabIndex = 2
         '
         'pan_Calculs
         '

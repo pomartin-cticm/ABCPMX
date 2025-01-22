@@ -263,4 +263,61 @@ Public Class Frm_MaintienBacN_Plancher
 
 #End Region
 
+#Region " Symboles "
+
+    Private Sub PaintSymbols(sender As Object, e As PaintEventArgs) Handles img_ap.Paint, img_bp.Paint
+
+        '--> Déclarations
+
+        Dim sWI As Single = sender.Width
+        Dim sHI As Single = sender.Height
+        Dim xStart As Single = sWI * 0.95
+
+        Dim strIndice As String = Nothing
+        Dim strSymbol As String = Nothing
+        Dim lGrec, lIndice, lEgal As Boolean
+        Dim xPen As Single = xStart
+        Dim hCar As Single = e.Graphics.MeasureString("X", FontSymbolNormal).Height
+        Dim hIndice As Single = hCar / 2
+        Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
+        Dim AlignH As Enu_AlignementH = Enu_AlignementH.Droite
+
+        '--> Initialisation
+
+        lIndice = False
+        lGrec = False
+        lEgal = True
+        Select Case sender.name
+
+            Case Me.img_ap.Name
+                strSymbol = "a"
+                strIndice = "p"
+
+            Case Me.img_bp.Name
+                strSymbol = "b"
+                strIndice = "p"
+
+        End Select
+
+        '--> Dessin
+
+        DrawSymbolN(e.Graphics, Brushes.Black, strSymbol, strIndice, sWI, sHI, lGrec, lIndice, AlignH,
+                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
+
+    End Sub
+
+#End Region
+
+#Region " Evènements select "
+
+    Private Sub cmb_NbSpan_Leave(sender As Object, e As EventArgs) Handles cmb_NbSpan.Leave
+        Frm_MaintienBacN.ChangeSelect(-1)
+    End Sub
+
+    Private Sub cmb_NbSpan_Enter(sender As Object, e As EventArgs) Handles cmb_NbSpan.Enter
+        Frm_MaintienBacN.ChangeSelect(1)
+    End Sub
+
+#End Region
+
 End Class
