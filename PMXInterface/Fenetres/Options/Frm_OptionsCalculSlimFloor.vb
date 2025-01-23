@@ -30,7 +30,7 @@ Public Class Frm_OptionsCalculSlimFloor
             Me.lbl_Slimfloors.Text = MyBloc("TITLE")
             Me.lbl_Dalles.Text = MyBloc("SLABS")
 
-            '#-------------------- GEOMETRIE POUTRE
+            '#-------------------- GEOMETRIE SELPOUTRE
 
             Me.lbl_SlimFloor.Text = MyBloc("SLIMFLOORDIM")
             Me.lbl_hslimmax.Text = MyBloc("DEPTHMAX")

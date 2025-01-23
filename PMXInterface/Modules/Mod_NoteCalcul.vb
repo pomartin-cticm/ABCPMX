@@ -230,7 +230,7 @@ Module Mod_NoteCalcul
         EditionProprietesSection(myPro.Poutres(myPro.IndEnCours))
 
         '--|=========================================
-        '--| ANALYSE DE LA POUTRE
+        '--| ANALYSE DE LA SELPOUTRE
         '--|=========================================
 
         EditionAnalysePoutre(myPro.Poutres(myPro.IndEnCours))

@@ -60,6 +60,7 @@ Partial Class Frm_MaintienBacN_Fixation
         '
         'pan_Main
         '
+        Me.pan_Main.AutoScroll = True
         Me.pan_Main.Controls.Add(Me.TLpan_Centre)
         Me.pan_Main.Location = New System.Drawing.Point(171, 49)
         Me.pan_Main.Name = "pan_Main"
@@ -74,17 +75,17 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.TLpan_Centre.Controls.Add(Me.lbl_Couturage, 0, 2)
         Me.TLpan_Centre.Controls.Add(Me.lbl_FixationSolive, 0, 0)
         Me.TLpan_Centre.Controls.Add(Me.pan_FixationSolive, 0, 1)
-        Me.TLpan_Centre.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLpan_Centre.Dock = System.Windows.Forms.DockStyle.Top
         Me.TLpan_Centre.Location = New System.Drawing.Point(0, 0)
         Me.TLpan_Centre.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.TLpan_Centre.Name = "TLpan_Centre"
         Me.TLpan_Centre.RowCount = 5
         Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 180.0!))
+        Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 130.0!))
         Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 140.0!))
+        Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 130.0!))
         Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Centre.Size = New System.Drawing.Size(336, 535)
+        Me.TLpan_Centre.Size = New System.Drawing.Size(336, 322)
         Me.TLpan_Centre.TabIndex = 3
         '
         'pan_Couturage
@@ -96,10 +97,10 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.pan_Couturage.Controls.Add(Me.lbl_EspCouturage)
         Me.pan_Couturage.Controls.Add(Me.Panel4)
         Me.pan_Couturage.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Couturage.Location = New System.Drawing.Point(1, 240)
+        Me.pan_Couturage.Location = New System.Drawing.Point(1, 190)
         Me.pan_Couturage.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.pan_Couturage.Name = "pan_Couturage"
-        Me.pan_Couturage.Size = New System.Drawing.Size(335, 140)
+        Me.pan_Couturage.Size = New System.Drawing.Size(335, 130)
         Me.pan_Couturage.TabIndex = 4
         '
         'etq_UnitL5
@@ -130,6 +131,8 @@ Partial Class Frm_MaintienBacN_Fixation
         '
         'Panel4
         '
+        Me.Panel4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel4.Controls.Add(Me.lbl_GlisseS_Info)
         Me.Panel4.Controls.Add(Me.lbl_DiaS_Info)
         Me.Panel4.Controls.Add(Me.lbl_GlisseS)
@@ -139,7 +142,7 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.Panel4.Location = New System.Drawing.Point(2, 4)
         Me.Panel4.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(244, 92)
+        Me.Panel4.Size = New System.Drawing.Size(331, 92)
         Me.Panel4.TabIndex = 11
         '
         'lbl_GlisseS_Info
@@ -203,7 +206,7 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.cmb_TypSeamFastener.FormattingEnabled = True
         Me.cmb_TypSeamFastener.Location = New System.Drawing.Point(37, 24)
         Me.cmb_TypSeamFastener.Name = "cmb_TypSeamFastener"
-        Me.cmb_TypSeamFastener.Size = New System.Drawing.Size(196, 21)
+        Me.cmb_TypSeamFastener.Size = New System.Drawing.Size(283, 21)
         Me.cmb_TypSeamFastener.TabIndex = 9
         '
         'lbl_Couturage
@@ -212,7 +215,7 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.lbl_Couturage.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_Couturage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Couturage.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Couturage.Location = New System.Drawing.Point(1, 210)
+        Me.lbl_Couturage.Location = New System.Drawing.Point(1, 160)
         Me.lbl_Couturage.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.lbl_Couturage.Name = "lbl_Couturage"
         Me.lbl_Couturage.Size = New System.Drawing.Size(335, 30)
@@ -245,11 +248,13 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.pan_FixationSolive.Location = New System.Drawing.Point(1, 30)
         Me.pan_FixationSolive.Margin = New System.Windows.Forms.Padding(1, 0, 0, 1)
         Me.pan_FixationSolive.Name = "pan_FixationSolive"
-        Me.pan_FixationSolive.Size = New System.Drawing.Size(335, 179)
+        Me.pan_FixationSolive.Size = New System.Drawing.Size(335, 129)
         Me.pan_FixationSolive.TabIndex = 3
         '
         'Panel3
         '
+        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel3.Controls.Add(Me.lbl_SlipInfo)
         Me.Panel3.Controls.Add(Me.lbl_DiametreInfo)
         Me.Panel3.Controls.Add(Me.lbl_Glissement)
@@ -259,7 +264,7 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.Panel3.Location = New System.Drawing.Point(2, 29)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(244, 92)
+        Me.Panel3.Size = New System.Drawing.Size(331, 92)
         Me.Panel3.TabIndex = 10
         '
         'lbl_SlipInfo
@@ -323,7 +328,7 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.cmb_TypeFixation.FormattingEnabled = True
         Me.cmb_TypeFixation.Location = New System.Drawing.Point(24, 24)
         Me.cmb_TypeFixation.Name = "cmb_TypeFixation"
-        Me.cmb_TypeFixation.Size = New System.Drawing.Size(209, 21)
+        Me.cmb_TypeFixation.Size = New System.Drawing.Size(296, 21)
         Me.cmb_TypeFixation.TabIndex = 9
         '
         'cmb_FixationPoutre

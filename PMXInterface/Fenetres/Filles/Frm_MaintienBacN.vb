@@ -1,5 +1,6 @@
 ﻿Imports PMXMoteur2
 Imports System.IO
+Imports System.Runtime.CompilerServices
 
 Public Class Frm_MaintienBacN
 
@@ -10,7 +11,13 @@ Public Class Frm_MaintienBacN
         Fixation
     End Enum
 
-    Const BACINDI As Integer = 1
+    Const SELBACINDI As Integer = 1
+    Const SELPOUTRE As Integer = 2
+    Const SELLARGEURP As Integer = 3
+    Const SELPORTEE As Integer = 4
+    Const SELENTRAXE As Integer = 5
+    Const SELAP As Integer = 6
+    Const SELBP As Integer = 7
 #End Region
 
 #Region " Variables "
@@ -60,7 +67,7 @@ Public Class Frm_MaintienBacN
         Select Case AffParam
             Case enu_AffParametres.Plancher
                 Me.pan_ContenuG.Controls.Add(Frm_MaintienBacN_Plancher.pan_Main)
-                Frm_MaintienBacN_Plancher.InitialiseFenetre(bloc)
+                Frm_MaintienBacN_Plancher.InitialiseFenetre(Bloc)
             Case enu_AffParametres.Fixation
                 Me.pan_ContenuG.Controls.Add(Frm_MaintienBacN_Fixation.pan_Main)
                 Frm_MaintienBacN_Fixation.InitialiseFenetre(Bloc)
@@ -169,6 +176,10 @@ Public Class Frm_MaintienBacN
         AffichageParametres()
     End Sub
 
+    Private Sub Frm_MaintienBacN_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        MAJI_Dessin()
+    End Sub
+
 #End Region
 
 #Region "===FERMETURE==="
@@ -254,17 +265,38 @@ Public Class Frm_MaintienBacN
         Dim NbPoutres As Integer
         Dim PorteeL As Decimal
         Dim MyPen As Pen
+        Dim CouleurSN As Color = Color.DarkBlue
         Dim MyPenNormal As New Pen(Color.Black, 1.0)
-        Dim MyPenSelect As New Pen(Color.DarkBlue, 1.5)
+        Dim MyPenSelect As New Pen(CouleurSN, 2.5)
         Dim iPoutreRef As Integer
         Dim nbLongi As Integer
         Dim xC, yC As Decimal
         Dim LongBac As Decimal
+        Dim ap As Decimal = (EntraxeD * myDeck.m)
+        Dim bp As Decimal = myBeam.Dalle.Bac.LargeurModule
+        Dim xPoutre, xPoutreRef As Decimal
+        Dim CouleurNormal As Color = Color.Black
+        'Dim CouleurSelect As Color = Color.DarkRed
+        Dim CouleurSelect As Color = Color.Red
+        Dim xe, ye As Decimal
+        Dim xo, yo As Decimal
+        Dim xm, ym As Decimal
+        Dim iBacRef As Integer
 
         '--> Initialisation
 
         PorteeL = myBeam.LongueurTravee(1)
         If myBeam.lIntermediaire Then iPoutreRef = 2 Else iPoutreRef = 1
+        ap = (EntraxeD * myDeck.m)
+        bp = myBeam.Dalle.Bac.LargeurModule
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+            xPoutreRef = EntraxeD
+        Else
+            xPoutreRef = 0
+        End If
+
+        iBacRef = 2
 
         '--> Initialisation des paramètres d'affichage
 
@@ -276,22 +308,6 @@ Public Class Frm_MaintienBacN
         yMax = PorteeL + dCarC
 
         ParametresAffichage(MyParAffD, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
-
-        '--> Représentation des poutres
-
-        Dim ap As Decimal = (EntraxeD * myDeck.m)
-        Dim bp As Decimal = myBeam.Dalle.Bac.LargeurModule
-
-        Dim xPoutre As Decimal
-        NbPoutres = myDeck.m * myDeck.nt + 1
-
-        For iPoutre As Integer = 1 To NbPoutres
-
-            xPoutre = (iPoutre - 1) * EntraxeD
-            If iPoutreRef = iPoutre Then MyPen = MyPenSelect Else MyPen = MyPenNormal
-            AddLigne(MyGr, MyPen, xPoutre, 0, xPoutre, PorteeL, MyParAffD)
-
-        Next
 
         '--> Représentation des bacs (individuels)
 
@@ -311,10 +327,10 @@ Public Class Frm_MaintienBacN
 
             For iLongi As Integer = 1 To nbLongi
 
-                xC = (iTrans - 1 / 2) * (EntraxeD * myDeck.m)
+                xC = (iTrans - 1 / 2) * ap
                 yC = (iLongi - 1 / 2) * bp
 
-                DrawBacInd(MyGr, MyParAffD, xC, yC, LongBac, bp, myBeam.Dalle.Bac, False)
+                DrawBacInd(MyGr, MyParAffD, xC, yC, LongBac, bp, myBeam.Dalle.Bac, False, MyPenNormal)
 
             Next
 
@@ -330,26 +346,116 @@ Public Class Frm_MaintienBacN
 
                 xC = (iTrans - 1 / 2) * (ap)
 
-                DrawBacInd(MyGr, MyParAffD, xC, yC, LongBac, DeltaL, myBeam.Dalle.Bac, False)
+                DrawBacInd(MyGr, MyParAffD, xC, yC, LongBac, DeltaL, myBeam.Dalle.Bac, False, MyPenNormal)
 
             Next
 
         End If
 
+        '# représentation du bac sélectionné
+
+        If (iSelect = SELBACINDI) Or (iSelect = SELAP) Or (iSelect = SELBP) Then
+
+            xC = ap / 2
+            yC = (iBacRef - 1 / 2) * bp
+            MyPenSelect.Color = CouleurSelect
+            DrawBacInd(MyGr, MyParAffD, xC, yC, LongBac, bp, myBeam.Dalle.Bac, False, MyPenSelect)
+
+        End If
+
+        '--> Représentation des poutres
+
+        NbPoutres = myDeck.m * myDeck.nt + 1
+        MyPenSelect.Color = CouleurSN
+
+        For iPoutre As Integer = 1 To NbPoutres
+
+            xPoutre = (iPoutre - 1) * EntraxeD
+            If iPoutreRef = iPoutre Then MyPen = MyPenSelect Else MyPen = MyPenNormal
+            AddLigne(MyGr, MyPen, xPoutre, 0, xPoutre, PorteeL, MyParAffD)
+
+        Next
+
+        If iSelect = SELPOUTRE Then
+
+            MyPenSelect.Color = CouleurSelect
+            AddLigne(MyGr, MyPenSelect, xPoutreRef, 0, xPoutreRef, PorteeL, MyParAffD)
+
+        End If
+
+        '--> Représentation du maintien par le bac
+
+        Dim dCarM As Decimal = EntraxeD / 10
+        If myDeck.lMaintienBac Then
+
+            If iSelect = SELPOUTRE Then
+                MyPen = MyPenSelect
+            Else
+                MyPen = MyPenNormal
+            End If
+
+            Dim nbOndes As Integer = CInt(PorteeL / 2 / dCarM)
+
+            dCarM = PorteeL / 2 / nbOndes
+
+            For i As Integer = 1 To nbOndes
+
+                xo = xPoutreRef
+                xe = xPoutreRef + dCarM
+                yo = (i - 1) * 2 * dCarM
+                ye = yo + dCarM
+
+                AddLigne(MyGr, MyPen, xo, yo, xe, ye, MyParAffD)
+
+                yo = i * 2 * dCarM
+                'ye = yo + dCarM
+
+                AddLigne(MyGr, MyPen, xo, yo, xe, ye, MyParAffD)
+
+            Next
+
+        End If
+
+        '--( Symbole pour le maintien
+
+        Dim iBacS As Integer = nbLongi - 1
+
+        If myDeck.lMaintienBac Then
+
+            If iSelect = SELPOUTRE Then
+                MyPen = MyPenSelect
+            Else
+                MyPen = MyPenNormal
+            End If
+
+            xC = xPoutreRef + 3 * dCarM
+            yC = (iBacS - 1 / 2) * bp + dCarM
+
+            DessineSymbolShear(MyGr, MyParAffD, xC, yC, 0.9 * dCarM, MyPen)
+
+            yC = (iBacS - 1 / 2) * bp - dCarM
+
+            DessineSymbolBending(MyGr, MyParAffD, xC, yC, 0.9 * dCarM, MyPen)
+
+        End If
+
+
         '--( Cotation
 
-        Dim xe, ye As Decimal
-        Dim xo, yo As Decimal
-        Dim xm, ym As Decimal
         Dim myPenC As New Pen(Color.Black, 1)
         Dim myPenBrusch As New SolidBrush(Color.Black)
         Dim myBrushFond As New SolidBrush(SystemColors.ControlLightLight)
         Dim chaine As String
         Dim CouleurF As Color
-        Dim iBac As Integer
         Dim myFont As New Font(FontBase.Name, SizeFontFrm)
 
         '# Largeur du plancher
+
+        If iSelect = SELLARGEURP Then
+            CouleurF = CouleurSelect
+        Else
+            CouleurF = CouleurNormal
+        End If
 
         yo = -2 * dCarC
         ye = yo
@@ -358,7 +464,6 @@ Public Class Frm_MaintienBacN
         xm = (xo + xe) / 2
         ym = yo
 
-        CouleurF = Color.Black
         myPenC.Color = CouleurF
         myPenBrusch.Color = CouleurF
 
@@ -368,6 +473,12 @@ Public Class Frm_MaintienBacN
 
         '# Longueur du plancher
 
+        If iSelect = SELPORTEE Then
+            CouleurF = CouleurSelect
+        Else
+            CouleurF = CouleurNormal
+        End If
+
         yo = 0
         ye = PorteeL
         xo = -dCarC
@@ -375,7 +486,6 @@ Public Class Frm_MaintienBacN
         ym = (yo + ye) / 2
         xm = -dCarC
 
-        CouleurF = Color.Black
         myPenC.Color = CouleurF
         myPenBrusch.Color = CouleurF
 
@@ -385,10 +495,10 @@ Public Class Frm_MaintienBacN
 
         '# Longueur Panneau individuel
 
-        If iSelect = BACINDI Then
-            CouleurF = Color.DarkRed
+        If (iSelect = SELBACINDI) Or (iSelect = SELAP) Then
+            CouleurF = CouleurSelect
         Else
-            CouleurF = Color.Black
+            CouleurF = CouleurNormal
         End If
 
         yo = -1 * dCarC
@@ -407,9 +517,14 @@ Public Class Frm_MaintienBacN
 
         '# Largeur panneau individuel
 
-        iBac = 2
-        yo = bp * (iBac - 1)
-        ye = bp * iBac
+        If (iSelect = SELBACINDI) Or (iSelect = SELBP) Then
+            CouleurF = CouleurSelect
+        Else
+            CouleurF = CouleurNormal
+        End If
+
+        yo = bp * (iBacRef - 1)
+        ye = bp * iBacRef
         xo = dCarC
         xe = xo
         ym = (yo + ye) / 2
@@ -424,6 +539,12 @@ Public Class Frm_MaintienBacN
 
         '# Entraxe des solives
 
+        If iSelect = SELENTRAXE Then
+            CouleurF = CouleurSelect
+        Else
+            CouleurF = CouleurNormal
+        End If
+
         yo = PorteeL + dCarC
         ye = yo
         xo = 0
@@ -431,7 +552,7 @@ Public Class Frm_MaintienBacN
         xm = (xo + xe) / 2
         ym = yo
 
-        CouleurF = Color.Black
+        ' CouleurF = Color.Black
         myPenC.Color = CouleurF
         myPenBrusch.Color = CouleurF
 
@@ -441,8 +562,97 @@ Public Class Frm_MaintienBacN
 
     End Sub
 
+    Private Sub DessineSymbolShear(MyGr As Graphics, myParAff As Struc_Affichage, xC As Decimal, yC As Decimal, dCar As Decimal, myPen As Pen)
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '   23/01/25:   Création - POM - ACBPMX V1
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '   Représentation du symbole maintien en cisaillement
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   xC, yC      [E] :   Centre du symbole
+        '   dCar        [E] :   Dimension du symbole
+        '   myPen       [E] :   Pen
+        '-----------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Const THETA As Decimal = 30 * Math.PI / 180
+
+        Dim xPoints As New List(Of Decimal)
+        Dim yPoints As New List(Of Decimal)
+
+        Dim dSin As Decimal = dCar / 2 * Math.Sin(THETA)
+        Dim dCos As Decimal = dCar / 2 * Math.Cos(THETA)
+
+        '--( Préparation des points
+
+        xPoints.Add(xC - 0.75 * dCar + dSin)
+        yPoints.Add(yC + dCos)
+
+        xPoints.Add(xC + 0.75 * dCar + dSin)
+        yPoints.Add(yC + dCos)
+
+        xPoints.Add(xC + 0.75 * dCar - dSin)
+        yPoints.Add(yC - dCos)
+
+        xPoints.Add(xC - 0.75 * dCar - dSin)
+        yPoints.Add(yC - dCos)
+
+        xPoints.Add(xPoints(0))
+        yPoints.Add(yPoints(0))
+
+        '--( Affichage du symbole
+
+        For i As Integer = 0 To xPoints.Count - 2
+
+            AddLigne(MyGr, myPen, xPoints(i), yPoints(i), xPoints(i + 1), yPoints(i + 1), myParAff)
+
+        Next
+
+    End Sub
+
+    Private Sub DessineSymbolBending(MyGr As Graphics, myParAff As Struc_Affichage, xC As Decimal, yC As Decimal, dCar As Decimal, myPen As Pen)
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '   23/01/25:   Création - POM - ACBPMX V1
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '   Représentation du symbole maintien en flexion
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   xC, yC      [E] :   Centre du symbole
+        '   dCar        [E] :   Dimension du symbole
+        '   myPen       [E] :   Pen
+        '-----------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim xPoints As New List(Of Decimal)
+        Dim yPoints As New List(Of Decimal)
+        Const NbPts As Integer = 20
+        Dim i As Integer
+        Dim PI As Decimal = Math.PI
+        Dim DeltaA As Decimal = 2 * PI / (NbPts - 1)
+
+        '--( Préparation des points
+
+        For i = 0 To NbPts
+            xPoints.Add(xC + 0.75 * dCar * (Math.Cos(i * DeltaA / 2) - 1))
+            yPoints.Add(yC + 0.5 * dCar * (Math.Sin(i * DeltaA)))
+        Next
+
+        '--( Affichage du symbole
+
+        For i = 0 To xPoints.Count - 2
+
+            AddLigne(MyGr, myPen, xPoints(i), yPoints(i), xPoints(i + 1), yPoints(i + 1), myParAff)
+
+        Next
+
+    End Sub
+
     Private Sub DrawBacInd(MyGr As Graphics, myParAff As Struc_Affichage, xC As Decimal, yC As Decimal, LongueurB As Decimal, LargeurB As Decimal,
-                           MyBac As cls_Bac, lNervures As Boolean)
+                           MyBac As cls_Bac, lNervures As Boolean, myPen As Pen)
         '-----------------------------------------------------------------------------------------------------------------------------------
         '   06/01/24:   Création - POM - ACBPMX V1
         '-----------------------------------------------------------------------------------------------------------------------------------
@@ -466,7 +676,7 @@ Public Class Frm_MaintienBacN
         xe = xC + LongueurB / 2
         ye = yC + LargeurB / 2        ' MyBac.LargeurModule / 2
 
-        AddRectanglePlein(MyGr, New SolidBrush(Color.White), New Pen(BleuCTICM), xo, yo, xe, ye, myParAff, False, True)
+        AddRectanglePlein(MyGr, New SolidBrush(Color.White), myPen, xo, yo, xe, ye, myParAff, False, True)
 
     End Sub
 
@@ -478,7 +688,25 @@ Public Class Frm_MaintienBacN
     End Sub
 
     Public Sub ChangeSelectBacIndi()
-        ChangeSelect(BACINDI)
+        ChangeSelect(SELBACINDI)
+    End Sub
+    Public Sub ChangeSelectPoutre()
+        ChangeSelect(SELPOUTRE)
+    End Sub
+    Public Sub ChangeSelectLargeurP()
+        ChangeSelect(SELLARGEURP)
+    End Sub
+    Public Sub ChangeSelectPortee()
+        ChangeSelect(SELPORTEE)
+    End Sub
+    Public Sub ChangeSelectEntraxe()
+        ChangeSelect(SELENTRAXE)
+    End Sub
+    Public Sub ChangeSelectAP()
+        ChangeSelect(SELAP)
+    End Sub
+    Public Sub ChangeSelectBP()
+        ChangeSelect(SELBP)
     End Sub
 
 #End Region

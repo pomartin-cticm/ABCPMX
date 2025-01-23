@@ -32,6 +32,9 @@ Public Class Frm_MaintienBacN_Plancher
 
         Me.pan_Main.Dock = DockStyle.Fill
 
+        Me.lbl_Options.BackColor = CouleurBackBandeaux
+        Me.lbl_Options.ForeColor = CouleurForeBandeaux
+
         Me.lbl_Floor.BackColor = CouleurBackBandeaux
         Me.lbl_Floor.ForeColor = CouleurForeBandeaux
 
@@ -42,6 +45,7 @@ Public Class Frm_MaintienBacN_Plancher
         PrepareTextBoxDipo(Me.txt_LongueurP, False)
         PrepareTextBoxDipo(Me.txt_SheetLength, False)
         PrepareTextBoxDipo(Me.txt_SheetWidth, False)
+        PrepareTextBoxDipo(Me.txt_EntraxeD, False)
 
     End Sub
 
@@ -51,6 +55,7 @@ Public Class Frm_MaintienBacN_Plancher
         Me.etq_UnitL2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+        Me.etq_UnitL5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
 
     End Sub
 
@@ -58,10 +63,16 @@ Public Class Frm_MaintienBacN_Plancher
 
         Try
 
+            '=== OPTIONS ===============================================================
+
+            Me.lbl_Options.Text = Bloc("OPTIONS")
+            Me.chk_PriseEnCompteBac.Text = Bloc("RESTRAINTBYTHEDECK")
+            Me.chk_Theta.Text = Bloc("THETA")
+
             '=== PLANCHER ===============================================================
 
-            Me.chk_PriseEnCompteBac.Text = Bloc("RESTRAINTBYTHEDECK")
             Me.lbl_Floor.Text = Bloc("FLOORDEF")
+            Me.lbl_EntraxeD.Text = Bloc("BEAMSPACING")
             Me.lbl_NbSheetsTransverse.Text = Bloc("NBSHEETSTRANSVERSE")
 
             Me.lbl_DimensionsGlobales.Text = Bloc("FLOORDIMENSIONS")
@@ -72,7 +83,6 @@ Public Class Frm_MaintienBacN_Plancher
             strTransitionOptions(0) = Bloc("OVERLAPPING")
             strTransitionOptions(1) = Bloc("ADJACENTNOGAP")
             strTransitionOptions(2) = Bloc("FLANGEEDGES")
-
 
             '=== PANNEAU ELEMENTAIRE ==========================================================
 
@@ -116,7 +126,7 @@ Public Class Frm_MaintienBacN_Plancher
     Private Sub AffichePoutreEnCours()
 
         Me.chk_PriseEnCompteBac.Checked = Frm_MaintienBacN.localMaitienBac.lMaintienBac
-        ' Me.chk_Theta.Checked = localMaitienBac.lTheta
+        Me.chk_Theta.Checked = Frm_MaintienBacN.localMaitienBac.lTheta
 
         Me.cmb_NbSpan.SelectedIndex = Frm_MaintienBacN.localMaitienBac.m - 1
         Select Case Frm_MaintienBacN.localMaitienBac.Transition
@@ -126,6 +136,7 @@ Public Class Frm_MaintienBacN_Plancher
         End Select
 
         Me.txt_NbSheetsTransverse.Text = GetStringInUnitN(Frm_MaintienBacN.localMaitienBac.nt, Enu_TypeVariable.SansType, 2, 0, NON_U, False)
+        Me.txt_EntraxeD.Text = GetStringInUnitN(EntraxeD, Enu_TypeVariable.Longueur, 4, 3, NON_U, True)
 
         MAJI_DimensionsPlancher()
         MAJI_DimensionsPanneau()
@@ -202,6 +213,11 @@ Public Class Frm_MaintienBacN_Plancher
         MAJI_Dessin()
     End Sub
 
+    Private Sub chk_Theta_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Theta.CheckedChanged
+        Frm_MaintienBacN.localMaitienBac.lTheta = Me.chk_Theta.Checked
+        MAJI_Dessin()
+    End Sub
+
     Private Sub cmb_Transition_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Transition.SelectedIndexChanged
         If lBuild Then Exit Sub
 
@@ -265,7 +281,7 @@ Public Class Frm_MaintienBacN_Plancher
 
 #Region " Symboles "
 
-    Private Sub PaintSymbols(sender As Object, e As PaintEventArgs) Handles img_ap.Paint, img_bp.Paint
+    Private Sub PaintSymbols(sender As Object, e As PaintEventArgs) Handles img_ap.Paint, img_bp.Paint, img_m.Paint, img_nt.Paint
 
         '--> Déclarations
 
@@ -297,6 +313,14 @@ Public Class Frm_MaintienBacN_Plancher
                 strSymbol = "b"
                 strIndice = "p"
 
+            Case Me.img_m.Name
+                strSymbol = "m"
+                strIndice = ""
+
+            Case Me.img_nt.Name
+                strSymbol = "n"
+                strIndice = "t"
+
         End Select
 
         '--> Dessin
@@ -310,13 +334,86 @@ Public Class Frm_MaintienBacN_Plancher
 
 #Region " Evènements select "
 
-    Private Sub cmb_NbSpan_Leave(sender As Object, e As EventArgs) Handles cmb_NbSpan.Leave
+    'Private Sub cmb_NbSpan_Leave(sender As Object, e As EventArgs) Handles cmb_NbSpan.Leave
+    '    Frm_MaintienBacN.ChangeSelect(-1)
+    'End Sub
+
+    'Private Sub cmb_NbSpan_Enter(sender As Object, e As EventArgs) Handles cmb_NbSpan.Enter
+    '    Frm_MaintienBacN.ChangeSelectBacIndi()
+    'End Sub
+
+    Private Sub chk_PriseEnCompteBac_MouseEnter(sender As Object, e As EventArgs) Handles chk_Theta.MouseEnter, chk_PriseEnCompteBac.MouseEnter
+        Frm_MaintienBacN.ChangeSelectPoutre()
+    End Sub
+
+    Private Sub chk_PriseEnCompteBac_MouseLeave(sender As Object, e As EventArgs) Handles chk_Theta.MouseLeave, chk_PriseEnCompteBac.MouseLeave
         Frm_MaintienBacN.ChangeSelect(-1)
     End Sub
 
-    Private Sub cmb_NbSpan_Enter(sender As Object, e As EventArgs) Handles cmb_NbSpan.Enter
-        Frm_MaintienBacN.ChangeSelect(1)
+    Private Sub txt_NbSheetsTransverse_Leave(sender As Object, e As EventArgs) Handles txt_NbSheetsTransverse.Leave
+        Frm_MaintienBacN.ChangeSelect(-1)
     End Sub
+
+    'Private Sub txt_NbSheetsTransverse_Enter(sender As Object, e As EventArgs) Handles txt_NbSheetsTransverse.Enter
+    '    Frm_MaintienBacN.ChangeSelectLargeurP()
+    'End Sub
+
+    'Private Sub cmb_NbSpan_MouseLeave(sender As Object, e As EventArgs) Handles cmb_NbSpan.MouseLeave
+    '    Frm_MaintienBacN.ChangeSelect(-1)
+    'End Sub
+
+    Private Sub cmb_NbSpan_MouseEnter(sender As Object, e As EventArgs) Handles cmb_NbSpan.MouseEnter
+        Frm_MaintienBacN.ChangeSelectBacIndi()
+    End Sub
+
+    Private Sub txt_NbSheetsTransverse_MouseEnter(sender As Object, e As EventArgs) Handles txt_NbSheetsTransverse.MouseEnter
+        Frm_MaintienBacN.ChangeSelectLargeurP()
+    End Sub
+
+    Private Sub txt_NbSheetsTransverse_MouseLeave(sender As Object, e As EventArgs) Handles txt_NbSheetsTransverse.MouseLeave
+        Frm_MaintienBacN.ChangeSelect(-1)
+    End Sub
+
+    Private Sub txt_LongueurP_MouseEnter(sender As Object, e As EventArgs) Handles txt_LongueurP.MouseEnter
+        Frm_MaintienBacN.ChangeSelectPortee()
+    End Sub
+
+    Private Sub txt_LongueurP_MouseLeave(sender As Object, e As EventArgs) Handles txt_LongueurP.MouseLeave
+        Frm_MaintienBacN.ChangeSelect(-1)
+    End Sub
+
+    Private Sub txt_EntraxeD_MouseLeave(sender As Object, e As EventArgs) Handles txt_EntraxeD.MouseLeave
+        Frm_MaintienBacN.ChangeSelect(-1)
+    End Sub
+
+    Private Sub txt_EntraxeD_MouseEnter(sender As Object, e As EventArgs) Handles txt_EntraxeD.MouseEnter
+        Frm_MaintienBacN.ChangeSelectEntraxe()
+    End Sub
+
+    Private Sub txt_LargeurP_MouseEnter(sender As Object, e As EventArgs) Handles txt_LargeurP.MouseEnter
+        Frm_MaintienBacN.ChangeSelectLargeurP()
+    End Sub
+
+    Private Sub txt_LargeurP_MouseLeave(sender As Object, e As EventArgs) Handles txt_LargeurP.MouseLeave
+        Frm_MaintienBacN.ChangeSelect(-1)
+    End Sub
+
+    Private Sub txt_SheetLength_MouseEnter(sender As Object, e As EventArgs) Handles txt_SheetLength.MouseEnter
+        Frm_MaintienBacN.ChangeSelectAP()
+    End Sub
+
+    Private Sub txt_SheetLength_MouseLeave(sender As Object, e As EventArgs) Handles txt_SheetLength.MouseLeave
+        Frm_MaintienBacN.ChangeSelect(-1)
+    End Sub
+
+    Private Sub txt_SheetWidth_MouseEnter(sender As Object, e As EventArgs) Handles txt_SheetWidth.MouseEnter
+        Frm_MaintienBacN.ChangeSelectBP()
+    End Sub
+
+    Private Sub txt_SheetWidth_MouseLeave(sender As Object, e As EventArgs) Handles txt_SheetWidth.MouseLeave
+        Frm_MaintienBacN.ChangeSelect(-1)
+    End Sub
+
 
 #End Region
 

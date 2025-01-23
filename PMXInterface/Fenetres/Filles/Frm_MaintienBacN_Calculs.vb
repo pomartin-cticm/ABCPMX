@@ -30,6 +30,10 @@ Public Class Frm_MaintienBacN_Calculs
 
         Me.lbl_Calculs.BackColor = CouleurBackBandeaux
         Me.lbl_Calculs.ForeColor = CouleurForeBandeaux
+        Me.lbl_BendingRigidityTitre.BackColor = CouleurBackBandeaux
+        Me.lbl_BendingRigidityTitre.ForeColor = CouleurForeBandeaux
+        Me.lbl_ShearRigidityTitre.BackColor = CouleurBackBandeaux
+        Me.lbl_ShearRigidityTitre.ForeColor = CouleurForeBandeaux
 
         PrepareTextBoxDipo(Me.txt_Alpha5, False)
         PrepareTextBoxDipo(Me.txt_c, False)
@@ -71,15 +75,15 @@ Public Class Frm_MaintienBacN_Calculs
 
             Me.lbl_Calculs.Text = Bloc("PARAMETERS")
             Me.lbl_BendingRigidity.Text = Bloc("BENDINGSTIFF")
-            Me.chk_Theta.Text = Bloc("THETA")
             Me.lbl_ShearRigidity.Text = Bloc("SHEARSTIFF")
+            Me.lbl_BendingRigidityTitre.Text = Bloc("BENDINGSTIFF")
+            Me.lbl_ShearRigidityTitre.Text = Bloc("SHEARSTIFF")
 
             'strResultats = Bloc("PARAMETERS")
             'strDessin = Bloc("DRAWING")
 
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues")
-            'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
         Finally
 
         End Try
@@ -211,6 +215,7 @@ Public Class Frm_MaintienBacN_Calculs
                     FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
+
 
 #End Region
 

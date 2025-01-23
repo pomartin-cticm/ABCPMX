@@ -311,6 +311,8 @@ THETA					= Flexural bending of deck accounted for in the calculation
 FLOOR					= Floor
 FASTENINGRDB			= Fastening
 RESULTS					= Results
+OPTIONS					= Options
+BEAMSPACING				= Spacing of beams
 
 #FRMEDITSTUDS	
 TITLE					= Studs data base

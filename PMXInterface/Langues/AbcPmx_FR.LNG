@@ -311,6 +311,8 @@ THETA					= Prise en compte de la rigidité flexionnelle du bac
 FLOOR					= Plancher
 FASTENINGRDB			= Fixation
 RESULTS					= Résultats
+OPTIONS					= Options
+BEAMSPACING				= Entraxe des solives
 
 #FRMEDITSTUDS	
 TITLE					= Base de données des goujons

@@ -117,7 +117,10 @@ Module Mod_Internet
                         End If
                         If lDebug Then
                             '# en mode débug, lecture sur l'ordinateur
-                            FichierSource = My.Application.Info.DirectoryPath & "\..\..\FICHIERS NEW\" & FichierUpDate()
+                            FichierSource = My.Application.Info.DirectoryPath & "\..\..\..\UPDATES\" & FichierUpDate()
+                            If Not My.Computer.FileSystem.FileExists(FichierSource) Then
+                                MsgBox("Impossible de trouver " & FichierSource)
+                            End If
                             File.Copy(FichierSource, FichierCible)
                         Else
                             '# Lecture et acces par internet

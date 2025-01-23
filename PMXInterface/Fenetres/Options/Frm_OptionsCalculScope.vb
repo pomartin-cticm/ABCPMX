@@ -27,7 +27,7 @@
 
             Me.lbl_Scope.Text = MyBloc("TITLE")
 
-            '#-------------------- GEOMETRIE POUTRE
+            '#-------------------- GEOMETRIE SELPOUTRE
 
             Me.lbl_DefinitionPoutre.Text = MyBloc("BEAMDEF")
 
