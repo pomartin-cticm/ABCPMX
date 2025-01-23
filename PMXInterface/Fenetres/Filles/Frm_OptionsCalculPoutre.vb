@@ -189,6 +189,13 @@ Public Class Frm_OptionsCalculPoutre
         PrepareTextBoxDipo(Me.txt_t0SHDalle, False)
         PrepareTextBoxDipo(Me.txt_t0SHEnrob, False)
 
+        PrepareTextBoxDipo(Me.txt_t0G1Dalle, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_t0G1Enrob, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_t0G2Dalle, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_t0G2Enrob, LogicielOptions.lExpert)
+
+        PrepareTextBoxDipo(Me.txt_AgeT, LogicielOptions.lExpert)
+
     End Sub
 
     Private Sub AfficherPoutreEnCours()
