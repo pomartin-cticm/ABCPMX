@@ -820,6 +820,8 @@ CONTINUOUSRIBANDDECK	= Nervure et bac continus
 CONTINUOUSRIB			= Nervure béton continue
 DISCONTINUOUSDECK		= Bac discontinu
 DISCONTINUOUSRIBDECK	= Nervure et bac discontinus
+ERRORLWC				= La masse volumique du béton léger doit être comprise entre $ et $
+ERRORNWC				= La masse volumique du béton normal ne doit pas être inférieure à $
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre

@@ -529,6 +529,10 @@ Public Module Mod_Declarations
     Public Const GOUJ_EnrobMInG1 As Decimal = 20 / 1000         ' Enrobage miniaml d'un goujon dans EN 1994-1-1:2005
     Public Const GOUJ_EnrobMInG2 As Decimal = 15 / 1000         ' Enrobage miniaml d'un goujon dans EN 1994-1-1:2024
 
+    Public Const RHOCLEGERMIN As Decimal = 1500                 ' Masse volumique min du béton léger
+    Public Const RHOCLEGERMAX As Decimal = 2200                 ' Masse volumique max du béton léger
+    Public Const RHOCNORMALMIN As Decimal = 2000                ' Masse volumique min du béton normal
+
 #End Region
 
 #Region " Paramétrage Logiciel "

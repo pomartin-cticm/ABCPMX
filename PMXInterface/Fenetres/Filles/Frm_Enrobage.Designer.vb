@@ -71,6 +71,9 @@ Partial Class Frm_Enrobage
         Me.lbl_Acier = New System.Windows.Forms.Label()
         Me.lbl_Beton = New System.Windows.Forms.Label()
         Me.pan_Beton = New System.Windows.Forms.Panel()
+        Me.txt_RhoCe = New System.Windows.Forms.TextBox()
+        Me.img_RhocCe = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitMasseVol = New System.Windows.Forms.Label()
         Me.txt_Ecm = New System.Windows.Forms.TextBox()
         Me.img_Ecm = New System.Windows.Forms.PictureBox()
         Me.etq_UnitModule1 = New System.Windows.Forms.Label()
@@ -141,6 +144,7 @@ Partial Class Frm_Enrobage
         Me.Panel1.SuspendLayout()
         CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Beton.SuspendLayout()
+        CType(Me.img_RhocCe, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Ecm, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Fck, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -616,9 +620,9 @@ Partial Class Frm_Enrobage
         Me.TLpan_SupDroite.Name = "TLpan_SupDroite"
         Me.TLpan_SupDroite.RowCount = 4
         Me.TLpan_SupDroite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_SupDroite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90.0!))
-        Me.TLpan_SupDroite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_SupDroite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_SupDroite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_SupDroite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65.0!))
         Me.TLpan_SupDroite.Size = New System.Drawing.Size(250, 235)
         Me.TLpan_SupDroite.TabIndex = 1
         '
@@ -632,10 +636,10 @@ Partial Class Frm_Enrobage
         Me.Panel1.Controls.Add(Me.cmb_Acier)
         Me.Panel1.Controls.Add(Me.lbl_ClasseA)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(0, 150)
+        Me.Panel1.Location = New System.Drawing.Point(0, 170)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(250, 85)
+        Me.Panel1.Size = New System.Drawing.Size(250, 65)
         Me.Panel1.TabIndex = 13
         '
         'txt_Fsk
@@ -693,7 +697,7 @@ Partial Class Frm_Enrobage
         Me.lbl_Acier.BackColor = System.Drawing.SystemColors.ControlDark
         Me.lbl_Acier.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Acier.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Acier.Location = New System.Drawing.Point(0, 120)
+        Me.lbl_Acier.Location = New System.Drawing.Point(0, 140)
         Me.lbl_Acier.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Acier.Name = "lbl_Acier"
         Me.lbl_Acier.Size = New System.Drawing.Size(250, 30)
@@ -719,6 +723,9 @@ Partial Class Frm_Enrobage
         '
         Me.pan_Beton.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Beton.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Beton.Controls.Add(Me.txt_RhoCe)
+        Me.pan_Beton.Controls.Add(Me.img_RhocCe)
+        Me.pan_Beton.Controls.Add(Me.etq_UnitMasseVol)
         Me.pan_Beton.Controls.Add(Me.txt_Ecm)
         Me.pan_Beton.Controls.Add(Me.img_Ecm)
         Me.pan_Beton.Controls.Add(Me.etq_UnitModule1)
@@ -731,8 +738,35 @@ Partial Class Frm_Enrobage
         Me.pan_Beton.Location = New System.Drawing.Point(0, 30)
         Me.pan_Beton.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Beton.Name = "pan_Beton"
-        Me.pan_Beton.Size = New System.Drawing.Size(250, 89)
+        Me.pan_Beton.Size = New System.Drawing.Size(250, 109)
         Me.pan_Beton.TabIndex = 3
+        '
+        'txt_RhoCe
+        '
+        Me.txt_RhoCe.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_RhoCe.Location = New System.Drawing.Point(126, 83)
+        Me.txt_RhoCe.Name = "txt_RhoCe"
+        Me.txt_RhoCe.Size = New System.Drawing.Size(58, 20)
+        Me.txt_RhoCe.TabIndex = 65
+        '
+        'img_RhocCe
+        '
+        Me.img_RhocCe.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_RhocCe.Location = New System.Drawing.Point(81, 83)
+        Me.img_RhocCe.Name = "img_RhocCe"
+        Me.img_RhocCe.Size = New System.Drawing.Size(46, 20)
+        Me.img_RhocCe.TabIndex = 66
+        Me.img_RhocCe.TabStop = False
+        '
+        'etq_UnitMasseVol
+        '
+        Me.etq_UnitMasseVol.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitMasseVol.AutoSize = True
+        Me.etq_UnitMasseVol.Location = New System.Drawing.Point(190, 86)
+        Me.etq_UnitMasseVol.Name = "etq_UnitMasseVol"
+        Me.etq_UnitMasseVol.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitMasseVol.TabIndex = 64
+        Me.etq_UnitMasseVol.Text = "mm"
         '
         'txt_Ecm
         '
@@ -1284,6 +1318,7 @@ Partial Class Frm_Enrobage
         CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Beton.ResumeLayout(False)
         Me.pan_Beton.PerformLayout()
+        CType(Me.img_RhocCe, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Ecm, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Fck, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel2.ResumeLayout(False)
@@ -1403,4 +1438,7 @@ Partial Class Frm_Enrobage
     Friend WithEvents chk_ActiveInt As CheckBox
     Friend WithEvents chk_ActiveMil As CheckBox
     Friend WithEvents chk_ActiveExt As CheckBox
+    Friend WithEvents txt_RhoCe As TextBox
+    Friend WithEvents img_RhocCe As PictureBox
+    Friend WithEvents etq_UnitMasseVol As Label
 End Class

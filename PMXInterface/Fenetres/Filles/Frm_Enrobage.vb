@@ -174,6 +174,8 @@ Public Class Frm_Enrobage
         Me.etq_UnitSigma2.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
         Me.etq_UnitModule1.Text = LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
 
+        Me.etq_UnitMasseVol.Text = "kg/m3"
+
     End Sub
 
     Private Sub InitialiseVariable()
@@ -251,6 +253,7 @@ Public Class Frm_Enrobage
                 Me.cmb_ClasseBetonEnrobage.SelectedIndex = 0
             End If
             MAJI_ProprietesBeton()
+            Me.txt_RhoCe.Text = GetStringInUnitN(.Beton.RhoC, Enu_TypeVariable.MasseVolumique, 4, 1, NON_U, True)
 
             '--> Acier
 
@@ -512,7 +515,12 @@ Public Class Frm_Enrobage
     End Sub
 
     Private Function ValideSaisieFenetre() As Boolean
-        Return True
+
+        '--( Déclaration
+
+        Dim lOK As Boolean = True
+
+        Return lOK
     End Function
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
@@ -538,6 +546,7 @@ Public Class Frm_Enrobage
 
         GereTransfertValeur(MySection.Enrobage.Beton.Classe, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Beton.Classe, lModif)
         MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Beton.Calcul_Proprietes()
+        GereTransfertValeur(MySection.Enrobage.Beton.RhoC, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Beton.RhoC, lModif)
 
         '-- Acier ---------------------------------------------------------------------------------------------------------------------
 
@@ -834,6 +843,17 @@ Public Class Frm_Enrobage
 
 #Region " Evènements saisie "
 
+    Private Sub txt_RhoCe_TextChanged(sender As Object, e As EventArgs) Handles txt_RhoCe.TextChanged
+        If lBuild Then Exit Sub
+        Dim Valeur As Decimal
+        If VerificationSaisie(sender, Valeur) Then
+
+            MySection.Enrobage.Beton.RhoC = Valeur
+
+            'Me.img_Enrobage.Invalidate()
+        End If
+    End Sub
+
     Private Sub txt_zArma_TextChanged(sender As Object, e As EventArgs) Handles txt_zArma.TextChanged
         If lBuild Then Exit Sub
         If LitArmaEnCours <> Enu_LitArmaEnCours.Intermediaire Then Exit Sub
@@ -990,6 +1010,12 @@ Public Class Frm_Enrobage
         Const ENROBATRIERMAX As Decimal = 0.05
 
         Select Case MyTxt.Name
+            Case Me.txt_RhoCe.Name
+
+                ValMin = RHOCNORMALMIN
+                lValMax = False
+                kUnit = 1
+
             Case Me.txt_EtrierUy.Name
 
                 ValMin = ENROBATRIERMIN / kUnit
@@ -1074,12 +1100,11 @@ Public Class Frm_Enrobage
     End Sub
 
 
-
 #End Region
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Fck.Paint, img_Ecm.Paint, img_Fy.Paint, img_zArma.Paint, img_As.Paint, img_uz.Paint, img_ux.Paint, img_PhiEtrier.Paint, img_Bf.Paint, img_BcX.Paint, img_Bc.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Fck.Paint, img_Ecm.Paint, img_Fy.Paint, img_zArma.Paint, img_As.Paint, img_uz.Paint, img_ux.Paint, img_PhiEtrier.Paint, img_Bf.Paint, img_BcX.Paint, img_Bc.Paint, img_RhocCe.Paint
 
         '--> Déclarations
 
@@ -1101,6 +1126,10 @@ Public Class Frm_Enrobage
         lGrec = False
         lEgal = True
         Select Case sender.name
+            Case Me.img_RhocCe.Name
+                strSymbol = "r"
+                strIndice = "ce"
+                lGrec = True
             Case Me.img_zArma.Name
                 strSymbol = "z"
                 Select Case LitArmaEnCours

@@ -820,7 +820,8 @@ CONTINUOUSRIBANDDECK	= Continuous concrete rib and steel deck
 CONTINUOUSRIB			= Continuous concrete rib
 DISCONTINUOUSDECK		= Discontinuous steel deck
 DISCONTINUOUSRIBDECK	= Discontinuous concrete rib and steel deck
-
+ERRORLWC				= Density of light weight concrete should be between $ and $
+ERRORNWC				= Density of normal weight concrete should be greater or equal than $
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam

@@ -1,6 +1,7 @@
 ﻿Imports PMXMoteur2
 Imports System.IO
 Imports System.Drawing.Drawing2D
+Imports System.Collections.Specialized.BitVector32
 
 
 Public Class Frm_Dalle
@@ -55,6 +56,9 @@ Public Class Frm_Dalle
     Dim DefEpMixte As Enu_DefEpMixte = Enu_DefEpMixte.Totale
 
     Dim FontFrm As Font
+
+    Dim strErreurLeger As String = ""
+    Dim strErreurNormal As String = ""
 
 #End Region
 
@@ -167,6 +171,9 @@ Public Class Frm_Dalle
 
                 msgDessin(0) = Bloc("CONCRETE")
                 msgDessin(1) = Bloc("REBARSTEEL")
+
+                strErreurLeger = Bloc("ERRORLWC")
+                strErreurNormal = Bloc("ERRORNWC")
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -523,8 +530,57 @@ Public Class Frm_Dalle
 
 
     Private Function ValideSaisieFenetre() As Boolean
-        Return True
+
+        '--( Déclaration
+
+        Dim lOK As Boolean = True
+
+        '--( Propriétés du béton
+
+        ValideSaisieBeton(lOK, True)
+
+        Return lOK
     End Function
+
+    Private Sub ValideSaisieBeton(ByRef lOK As Boolean, lAffMesg As Boolean)
+
+        '--( Déclarations
+        Dim valMax, valMin As Decimal
+        Dim iErreur As Integer
+        Const lValMin As Boolean = True
+        Dim lValMax As Boolean = False
+        Dim MessageErreur As String = ""
+        Dim strValMin As String = ""
+        Dim strValMax As String = ""
+
+        '--( Traitement
+
+        If MyDalleLoc.beton.lLeger Then
+            lValMax = True
+            valMax = RHOCLEGERMAX
+            valMin = RHOCLEGERMIN
+        Else
+            valMin = RHOCNORMALMIN
+        End If
+
+        iErreur = ValideSaisieNombre(Me.txt_RhoC.Text, lValMin, valMin, lValMax, valMax)
+
+        If iErreur = -3 Then
+            lOK = False
+            If MyDalleLoc.beton.lLeger Then
+                strValMin = GetStringInUnitN(RHOCLEGERMIN, Enu_TypeVariable.MasseVolumique, 4, 1, Enu_AfficheUnite.OuiInterface, True)
+                strValMax = GetStringInUnitN(RHOCLEGERMAX, Enu_TypeVariable.MasseVolumique, 4, 1, Enu_AfficheUnite.OuiInterface, True)
+                MessageErreur = RemplaceDollar(RemplaceDollar(strErreurLeger, strValMin), strValMax)
+            Else
+                strValMin = GetStringInUnitN(RHOCNORMALMIN, Enu_TypeVariable.MasseVolumique, 4, 1, Enu_AfficheUnite.OuiInterface, True)
+                MessageErreur = RemplaceDollar(strErreurNormal, strValMin)
+            End If
+            ErrorProvider.SetError(Me.txt_RhoC, MessageErreur)
+        ElseIf iErreur = 0 Then
+            ErrorProvider.Clear()
+        End If
+
+    End Sub
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
@@ -1041,6 +1097,7 @@ Public Class Frm_Dalle
             Case Me.txt_RhoC.Name
 
                 ValMin = 1500
+                ValMin = Math.Min(RHOCLEGERMIN, RHOCNORMALMIN)
                 ValMax = 0
                 lValMax = False
                 kUnit = 1
@@ -1135,6 +1192,8 @@ Public Class Frm_Dalle
 
         Me.img_Dalle.Invalidate()
 
+        Dim lOK As Boolean
+        ValideSaisieBeton(lOK, True)
     End Sub
 
     Private Sub SaisieRdBDefEpMixte(sender As Object, e As EventArgs) Handles rdb_EpTotale.CheckedChanged, rdb_EpPleine.CheckedChanged
