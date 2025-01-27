@@ -59,7 +59,7 @@ Public Class Frm_Dalle
 
     Dim strErreurLeger As String = ""
     Dim strErreurNormal As String = ""
-
+    Dim strErreurEnrob(1) As String
 #End Region
 
 #Region "===OUVERTURE==="
@@ -174,6 +174,9 @@ Public Class Frm_Dalle
 
                 strErreurLeger = Bloc("ERRORLWC")
                 strErreurNormal = Bloc("ERRORNWC")
+
+                strErreurEnrob(0) = Bloc("ERRORCCOVER1")
+                strErreurEnrob(1) = Bloc("ERRORCCOVER2")
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -389,7 +392,6 @@ Public Class Frm_Dalle
         Else
             iLitSelect = 0
             iSelect = 100
-
         End If
 
         MAJI_BOArmatures()
@@ -539,10 +541,88 @@ Public Class Frm_Dalle
 
         ValideSaisieBeton(lOK, True)
 
+        '--( Enrobage des armatures
+
+        ValideSaisieEnrobageArma(lOK)
+
         Return lOK
     End Function
 
+    Private Sub ValideSaisieEnrobageArma(ByRef lOK As Boolean)
+        '----------------------------------------------------------------------------------------------------------------------------
+        '   24/01/25 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------------
+        '   Vérifie les valeurs d'enrobage des armatures
+        '----------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim iArma As Integer
+        Dim zArma As Decimal
+        Dim zTop As Decimal = MyProjet.Poutres(MyProjet.IndEnCours).Dalle.zTop
+        Dim cTop, cBot As Decimal
+        Dim PhiS As Decimal
+        Dim Tc As Decimal = MyDalleLoc.EpaisseurActive
+        Dim ZBot As Decimal = zTop - Tc
+        Dim cMin As Decimal
+        Dim EnrobMin As Decimal
+        Dim Chaine As New List(Of String)
+        Dim ChaineArma As String = ""
+        Dim strEnrob As String
+        Dim strEnrobMin As String
+
+        '--( Traitement des armatures
+
+        For iArma = 0 To MyDalleLoc.LitArma.Count - 1
+            If MyDalleLoc.LitArma(iArma).lActive Then
+
+                '# position et diamètre
+                zArma = zTop - MyDalleLoc.LitArma(iArma).z_s
+                PhiS = MyDalleLoc.LitArma(iArma).PhiS
+
+                '# valeurs d'enrobage en dessous et au dessus
+                cTop = zTop - zArma - PhiS / 2
+                cBot = zArma - ZBot - PhiS / 2
+
+                '# enrobage min
+                cMin = Math.Max(10 / 1000, PhiS)
+                EnrobMin = cMin + OptionsCalcul.DeltaCDev
+
+                If IsSmaller(cTop, EnrobMin) Or IsSmaller(cBot, EnrobMin) Then
+
+                    strEnrob = GetStringInUnitN(Math.Min(cTop, cBot), Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiInterface, True)
+                    strEnrobMin = GetStringInUnitN(EnrobMin, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiInterface, True)
+
+                    ChaineArma = RemplaceDollar(strErreurEnrob(0), CStr(iArma + 1)) & " : "
+
+                    ChaineArma += RemplaceDollar(RemplaceDollar(strErreurEnrob(1), strEnrob), strEnrobMin)
+                    Chaine.Add(ChaineArma)
+                End If
+
+            End If
+        Next
+
+        If Chaine.Count > 0 Then
+            lOK = False
+            Dim Rep As MsgBoxResult
+            Dim ChaineMsgBox As String = Chaine(0)
+            For iArma = 1 To Chaine.Count - 1
+                ChaineMsgBox += Chr(13) & Chaine(iArma)
+            Next
+            Rep = MsgBox(ChaineMsgBox, MsgBoxStyle.OkCancel, LogicielInfo.Racine)
+            lOK = (Rep = MsgBoxResult.Ok)
+        End If
+
+    End Sub
+
     Private Sub ValideSaisieBeton(ByRef lOK As Boolean, lAffMesg As Boolean)
+        '----------------------------------------------------------------------------------------------------------------------------
+        '   24/01/25 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------------
+        '   Vérifie les valeurs de Rho béton
+        '----------------------------------------------------------------------------------------------------------------------------
+
+
 
         '--( Déclarations
         Dim valMax, valMin As Decimal
@@ -557,10 +637,10 @@ Public Class Frm_Dalle
 
         If MyDalleLoc.beton.lLeger Then
             lValMax = True
-            valMax = RHOCLEGERMAX
-            valMin = RHOCLEGERMIN
+            valMax = OptionsScope.RhoCBetonLegerMax
+            valMin = OptionsScope.RhoCBetonLegerMin
         Else
-            valMin = RHOCNORMALMIN
+            valMin = OptionsScope.RhoCBetonNormalMin
         End If
 
         iErreur = ValideSaisieNombre(Me.txt_RhoC.Text, lValMin, valMin, lValMax, valMax)
@@ -568,11 +648,11 @@ Public Class Frm_Dalle
         If iErreur = -3 Then
             lOK = False
             If MyDalleLoc.beton.lLeger Then
-                strValMin = GetStringInUnitN(RHOCLEGERMIN, Enu_TypeVariable.MasseVolumique, 4, 1, Enu_AfficheUnite.OuiInterface, True)
-                strValMax = GetStringInUnitN(RHOCLEGERMAX, Enu_TypeVariable.MasseVolumique, 4, 1, Enu_AfficheUnite.OuiInterface, True)
+                strValMin = GetStringInUnitN(OptionsScope.RhoCBetonLegerMin, Enu_TypeVariable.MasseVolumique, 4, 1, Enu_AfficheUnite.OuiInterface, True)
+                strValMax = GetStringInUnitN(OptionsScope.RhoCBetonLegerMax, Enu_TypeVariable.MasseVolumique, 4, 1, Enu_AfficheUnite.OuiInterface, True)
                 MessageErreur = RemplaceDollar(RemplaceDollar(strErreurLeger, strValMin), strValMax)
             Else
-                strValMin = GetStringInUnitN(RHOCNORMALMIN, Enu_TypeVariable.MasseVolumique, 4, 1, Enu_AfficheUnite.OuiInterface, True)
+                strValMin = GetStringInUnitN(OptionsScope.RhoCBetonNormalMin, Enu_TypeVariable.MasseVolumique, 4, 1, Enu_AfficheUnite.OuiInterface, True)
                 MessageErreur = RemplaceDollar(strErreurNormal, strValMin)
             End If
             ErrorProvider.SetError(Me.txt_RhoC, MessageErreur)
@@ -1094,10 +1174,11 @@ Public Class Frm_Dalle
             Case Me.txt_EpJoint.Name
                 ValMin = 0
                 ValMax = MyDalleLoc.preDalle_ep / kUnit
+
             Case Me.txt_RhoC.Name
 
                 ValMin = 1500
-                ValMin = Math.Min(RHOCLEGERMIN, RHOCNORMALMIN)
+                ValMin = Math.Min(OptionsScope.RhoCBetonLegerMin, OptionsScope.RhoCBetonNormalMin)
                 ValMax = 0
                 lValMax = False
                 kUnit = 1

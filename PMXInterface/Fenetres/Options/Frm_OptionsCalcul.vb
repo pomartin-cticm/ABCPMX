@@ -347,6 +347,7 @@ Public Class Frm_OptionsCalcul
             GereTransfertValeur(LocalOptionsScope.EpDallePleineMin, OptionsScope.EpDallePleineMin, lModif)
             GereTransfertValeur(LocalOptionsScope.RhoCBetonLegerMax, OptionsScope.RhoCBetonLegerMax, lModif)
             GereTransfertValeur(LocalOptionsScope.RhoCBetonLegerMin, OptionsScope.RhoCBetonLegerMin, lModif)
+            GereTransfertValeur(LocalOptionsScope.RhoCBetonNormalMin, OptionsScope.RhoCBetonNormalMin, lModif)
         End If
         GereTransfertValeur(LocalOptionsScope.ThetaH, OptionsScope.ThetaH, lModif)
 

@@ -3,7 +3,6 @@ Imports System.IO
 
 Public Class Frm_OptionsCalculPoutre
 
-
 #Region " Variables "
 
     Dim lBuild As Boolean
@@ -14,6 +13,9 @@ Public Class Frm_OptionsCalculPoutre
     Dim SymbolJour As String
 
     Const kUnitEpsilon As Decimal = 10 ^ -6
+
+    Dim strNoArmaCompAvecUnLit As String
+    Dim strWarningArmaComp As String
 
 #End Region
 
@@ -93,6 +95,12 @@ Public Class Frm_OptionsCalculPoutre
 
                 Me.lbl_CadreParametres.Text = Bloc("TPARAMETERS")
                 Me.lbl_GraviteG.Text = Bloc("GFORCE")
+
+
+                '--( Messages
+
+                strNoArmaCompAvecUnLit = Bloc("WARNINGCOMPREINF1")
+                strWarningArmaComp = Bloc("WARNINGCOMPREINF2")
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -278,8 +286,34 @@ Public Class Frm_OptionsCalculPoutre
 
 
     Private Function ValideSaisieFenetre() As Boolean
-        Return True
+
+        Dim lOK As Boolean
+
+        AnalyseArmaComp(lOK)
+
+        Return lOK
     End Function
+
+    Private Sub AnalyseArmaComp(ByRef lOK As Boolean)
+
+        If MyParam.lCompressionArma Then
+
+            If MyProjet.Poutres(MyProjet.IndEnCours).Dalle.NbLitsArmaActifs < 2 Then
+
+                MsgBox(strNoArmaCompAvecUnLit, MsgBoxStyle.OkOnly, LogicielInfo.Racine)
+                lOK = False
+
+            Else
+
+                Dim Rep As MsgBoxResult
+
+                Rep = MsgBox(strWarningArmaComp, MsgBoxStyle.OkOnly, LogicielInfo.Racine)
+
+            End If
+
+        End If
+
+    End Sub
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 

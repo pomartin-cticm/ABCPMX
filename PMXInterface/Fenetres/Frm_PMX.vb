@@ -1355,6 +1355,7 @@ Public Class Frm_PMX
         My.Settings.RatioEpRenformisMax = OptionsScope.RatioEpRenformisMax
         My.Settings.RatioEpPredalleMax = OptionsScope.RatioEpPredalleMax
         My.Settings.EpDalleMixteMin = OptionsScope.EpDalleMixteMin
+        My.Settings.RhoCBetonNormalMin = OptionsScope.RhoCBetonNormalMin
         My.Settings.RhoCBetonLegerMin = OptionsScope.RhoCBetonLegerMin
         My.Settings.RhoCBetonLegerMax = OptionsScope.RhoCBetonLegerMax
 

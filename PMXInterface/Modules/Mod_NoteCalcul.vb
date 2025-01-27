@@ -1223,6 +1223,8 @@ Module Mod_NoteCalcul
         End If
         If MyBeam.Param.lCompressionArma Then
             AddLigneNDC(TABW2 & BlocG("REBARSINCOMPRESSION") & TABAFF & BlocG("YES"))
+            AddLigneNDC(TABW2 & "\G" & BlocG("WARNINGREBARSINCOMP1") & "\g")
+            AddLigneNDC(TABW2 & "\G" & BlocG("WARNINGREBARSINCOMP2") & "\g")
         Else
             AddLigneNDC(TABW2 & BlocG("REBARSINCOMPRESSION") & TABAFF & BlocG("NO"))
         End If

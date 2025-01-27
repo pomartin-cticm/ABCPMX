@@ -46,6 +46,7 @@
 
             Me.lbl_Materiau.Text = MyBloc("CONCRETEPROP")
             Me.lbl_RhoBetonLeger.Text = MyBloc("RHOLWC")
+            Me.lbl_RhoBetonNormal.Text = MyBloc("RHONWC")
 
             '#-------------------- DIMENSIONS D'UN PRS
 
@@ -82,6 +83,7 @@
         PrepareTextBoxDipo(Me.txt_EpDalleMixteMin, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_RatioEpReformis, LogicielOptions.lExpert)
 
+        PrepareTextBoxDipo(Me.txt_RhoC_NWC_Min, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_RhoC_LWC_Min, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_RhoC_LWC_Max, LogicielOptions.lExpert)
 
@@ -119,6 +121,7 @@
         Me.etq_UnitA1.Text = "°"
         Me.etq_UnitMassV1.Text = "kg/m3"
         Me.etq_UnitMassV2.Text = "kg/m3"
+        Me.etq_UnitMassV3.Text = "kg/m3"
 
     End Sub
 
@@ -126,26 +129,27 @@
 
         '--> Portées
 
-        Me.txt_PorteeMini.Text = GetStringInUnit(LocalOptionsScope.PorteeMin, Enu_TypeVariable.Longueur, 4, 2, False)
-        Me.txt_PorteeMaxi.Text = GetStringInUnit(LocalOptionsScope.PorteeMax, Enu_TypeVariable.Longueur, 4, 2, False)
+        Me.txt_PorteeMini.Text = GetStringInUnitN(LocalOptionsScope.PorteeMin, Enu_TypeVariable.Longueur, 4, 2, NON_U, False)
+        Me.txt_PorteeMaxi.Text = GetStringInUnitN(LocalOptionsScope.PorteeMax, Enu_TypeVariable.Longueur, 4, 2, NON_U, False)
 
-        Me.txt_PorteeConsoleMin.Text = GetStringInUnit(LocalOptionsScope.PorteeConsoleMin, Enu_TypeVariable.Longueur, 4, 2, False)
-        Me.txt_RatioConsoleMax.Text = GetStringInUnit(LocalOptionsScope.RatioPorteeConsoleMax, Enu_TypeVariable.SansType, 4, 2, False)
+        Me.txt_PorteeConsoleMin.Text = GetStringInUnitN(LocalOptionsScope.PorteeConsoleMin, Enu_TypeVariable.Longueur, 4, 2, NON_U, False)
+        Me.txt_RatioConsoleMax.Text = GetStringInUnitN(LocalOptionsScope.RatioPorteeConsoleMax, Enu_TypeVariable.SansType, 4, 2, NON_U, False)
 
         '--> Angle inclinaison des renformis
 
-        Me.txt_ThetaH.Text = GetStringInUnit(LocalOptionsScope.ThetaH, Enu_TypeVariable.SansType, 4, 2, False)
+        Me.txt_ThetaH.Text = GetStringInUnitN(LocalOptionsScope.ThetaH, Enu_TypeVariable.SansType, 4, 2, NON_U, False)
 
         '--> Epaisseurs de dalle
 
-        Me.txt_EpDalleMin.Text = GetStringInUnit(LocalOptionsScope.EpDallePleineMin, Enu_TypeVariable.Dimension, 4, 2, False)
-        Me.txt_EpDalleMixteMin.Text = GetStringInUnit(LocalOptionsScope.EpDalleMixteMin, Enu_TypeVariable.Dimension, 4, 2, False)
-        Me.txt_RatioEpReformis.Text = GetStringInUnit(LocalOptionsScope.RatioEpRenformisMax, Enu_TypeVariable.SansType, 4, 2, False)
+        Me.txt_EpDalleMin.Text = GetStringInUnitN(LocalOptionsScope.EpDallePleineMin, Enu_TypeVariable.Dimension, 4, 2, NON_U, False)
+        Me.txt_EpDalleMixteMin.Text = GetStringInUnitN(LocalOptionsScope.EpDalleMixteMin, Enu_TypeVariable.Dimension, 4, 2, NON_U, False)
+        Me.txt_RatioEpReformis.Text = GetStringInUnitN(LocalOptionsScope.RatioEpRenformisMax, Enu_TypeVariable.Dimension, 4, 2, NON_U, False)
 
         '--> Matériau
 
-        Me.txt_RhoC_LWC_Max.Text = GetStringInUnit(LocalOptionsScope.RhoCBetonLegerMax, Enu_TypeVariable.SansType, 4, 2, False)
-        Me.txt_RhoC_LWC_Min.Text = GetStringInUnit(LocalOptionsScope.RhoCBetonLegerMin, Enu_TypeVariable.SansType, 4, 2, False)
+        Me.txt_RhoC_LWC_Max.Text = GetStringInUnitN(LocalOptionsScope.RhoCBetonLegerMax, Enu_TypeVariable.SansType, 4, 2, NON_U, False)
+        Me.txt_RhoC_LWC_Min.Text = GetStringInUnitN(LocalOptionsScope.RhoCBetonLegerMin, Enu_TypeVariable.SansType, 4, 2, NON_U, False)
+        Me.txt_RhoC_NWC_Min.Text = GetStringInUnitN(LocalOptionsScope.RhoCBetonNormalMin, Enu_TypeVariable.SansType, 4, 2, NON_U, False)
 
         '--( Dimensions d'un PRS
 
@@ -177,7 +181,9 @@
 #Region " Evènements saisie "
 
     Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_PorteeMini.TextChanged, txt_ThetaH.TextChanged,
-        txt_PorteeMaxi.TextChanged, txt_PorteeConsoleMin.TextChanged, txt_RatioConsoleMax.TextChanged, txt_EpDalleMin.TextChanged, txt_RatioEpReformis.TextChanged, txt_EpDalleMixteMin.TextChanged, txt_RhoC_LWC_Min.TextChanged, txt_RhoC_LWC_Max.TextChanged
+        txt_PorteeMaxi.TextChanged, txt_PorteeConsoleMin.TextChanged, txt_RatioConsoleMax.TextChanged, txt_EpDalleMin.TextChanged,
+        txt_RatioEpReformis.TextChanged, txt_EpDalleMixteMin.TextChanged,
+        txt_RhoC_LWC_Min.TextChanged, txt_RhoC_LWC_Max.TextChanged, txt_RhoC_NWC_Min.TextChanged
 
         If lBuild Then Exit Sub
         Dim lPortees As Boolean = False
@@ -188,6 +194,8 @@
         If VerificationSaisie(sender, ValeurUI) Then
 
             Select Case sender.name
+                Case Me.txt_RhoC_NWC_Min.Name
+                    LocalOptionsScope.RhoCBetonNormalMin = ValeurUI
                 Case Me.txt_RhoC_LWC_Min.Name
                     LocalOptionsScope.RhoCBetonLegerMin = ValeurUI
                 Case Me.txt_RhoC_LWC_Max.Name
@@ -247,7 +255,7 @@
                 ValMin = PORTEEMINMIN / kUnit
                 ValMax = PORTEEMINMAX / kUnit
 
-            Case Me.txt_RhoC_LWC_Max.Name, Me.txt_RhoC_LWC_Min.Name
+            Case Me.txt_RhoC_LWC_Max.Name, Me.txt_RhoC_LWC_Min.Name, Me.txt_RhoC_NWC_Min.Name
 
                 ValMin = 0
                 ValMax = 3000
@@ -299,7 +307,7 @@
 
     Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_ThetaRd.Paint, img_PorteeMini.Paint, img_PorteeConsoleMin.Paint,
         img_PorteeL2.Paint, img_Td1.Paint, img_xTd.Paint, img_Th.Paint, img_EpDalleMixte.Paint, img_RhoC.Paint,
-        img_Tw.Paint, img_Tf.Paint, img_hw.Paint, img_Bf.Paint, img_Aft.Paint, img_Afb.Paint
+        img_Tw.Paint, img_Tf.Paint, img_hw.Paint, img_Bf.Paint, img_Aft.Paint, img_Afb.Paint, img_RhoC_NWC.Paint
 
         '--> Déclarations
 
@@ -380,7 +388,7 @@
                 strSymbol = "t"
                 strIndice = "h"
 
-            Case Me.img_RhoC.Name
+            Case Me.img_RhoC.Name, Me.img_RhoC_NWC.Name
                 strSymbol = "r"
                 strIndice = "c"
                 lGrec = True

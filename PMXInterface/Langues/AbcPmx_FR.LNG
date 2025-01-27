@@ -121,6 +121,8 @@ GFORCE					= Accélération de pesanteurs
 ETAW					= Voilement par cisaillement
 CONTROLCRACKW			= Maîtrise de la fissuration
 CRACKWIDTH				= Limite d'ouverture des fissures
+WARNINGCOMPREINF1		= Les armatures en compression ne peuventpas être prises en compte pour une dalle avec un seul lit d'armatures
+WARNINGCOMPREINF2		= Quand les armatures en compression sont prises en compte dans les calculs de la poutre, les exigences de l'EN 1992-1-1:2005, clause 9.2.1.2 (3) doivent être satisfaites, pour éviter un flambement prématuré des barres.
 
 #FRM_CALCULATIONSHEET
 TITLE					= Note de calculs
@@ -822,6 +824,8 @@ DISCONTINUOUSDECK		= Bac discontinu
 DISCONTINUOUSRIBDECK	= Nervure et bac discontinus
 ERRORLWC				= La masse volumique du béton léger doit être comprise entre $ et $
 ERRORNWC				= La masse volumique du béton normal ne doit pas être inférieure à $
+ERRORCCOVER1			= Lit d'armature n°$
+ERRORCCOVER2			= L'épaisseur d'enrobage ($) devrait être supérieure à la valeur minimale requise pour l'adhérence ($)
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre
@@ -1052,6 +1056,7 @@ SOLIDSLABTH				= Epaisseur de la dalle béton
 COMPOSITESLABTH			= Epaisseur de la dalle mixte (au-dessus du bac)
 CONCRETEPROP			= Propriétés du béton
 RHOLWC					= Masse volumique du béton léger
+RHONWC					= Masse volumique du béton normal
 WELDEDSECTION			= Dimensions des sections soudées
 WEBTHICKNESS			= Épaisseur de l'âme
 WEBHEIGHT				= Hauteur de l'âme
@@ -1066,6 +1071,8 @@ SLIMFLOORDIM			= Dimensions des slimfloors
 DEPTHMAX				= Hauteur maximale d'un profil laminé intégré
 SLABSUPPORTMIN			= Largeur minimale d'un support de dalle
 THICKNESSMIN			= Épaisseur minimale du plat
+RESTRAINTBYSHEETS		= Maintien au déversement par le bac
+ECSEAMMAX				= Espacement max des fixations de couture
 
 #OPTSOFTMAIN
 TITLE					= Options logiciel

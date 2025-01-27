@@ -1012,7 +1012,7 @@ Public Class Frm_Enrobage
         Select Case MyTxt.Name
             Case Me.txt_RhoCe.Name
 
-                ValMin = RHOCNORMALMIN
+                ValMin = OptionsScope.RhoCBetonNormalMin
                 lValMax = False
                 kUnit = 1
 

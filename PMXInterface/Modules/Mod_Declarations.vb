@@ -243,6 +243,7 @@ Public Module Mod_Declarations
         Public EpDalleMixteMin As Decimal       ' Epaisseur de dalle mixte mini (au dessus du bac)
         Public RhoCBetonLegerMax As Decimal     ' Masse volumique maximale d'un béton léger
         Public RhoCBetonLegerMin As Decimal     ' Masse volumique minimale d'un béton léger
+        Public RhoCBetonNormalMin As Decimal    ' Masse volumique minimale d'un béton normal
 
         Public HwMin As Decimal                 ' Hauteur mini d'un panneau d'âme PRS
         Public HwMax As Decimal                 ' Hauteur maxi d'un panneau d'âme PRS
@@ -257,6 +258,7 @@ Public Module Mod_Declarations
         Public RapportAfMin As Decimal          ' Valeur minimal du rapport des aires de semelles PRS 
         Public RapportAfMax As Decimal          ' Valeur maximal du rapport des aires de semelles PRS 
 
+        Public MB_spCoutureMax As Decimal       ' Espacement maxi des vis de couturage, pour le maintien par le bac
     End Structure
 
     Public Structure struc_ReglagesLogiciel
@@ -294,6 +296,7 @@ Public Module Mod_Declarations
 
         OptionsScope.RhoCBetonLegerMax = My.Settings.RhoCBetonLegerMax
         OptionsScope.RhoCBetonLegerMin = My.Settings.RhoCBetonLegerMin
+        OptionsScope.RhoCBetonNormalMin = My.Settings.RhoCBetonNormalMin
 
         OptionsScope.RatioEpPredalleMax = My.Settings.RatioEpPredalleMax
 
@@ -309,6 +312,8 @@ Public Module Mod_Declarations
 
         OptionsScope.RapportAfMax = 3
         OptionsScope.RapportAfMin = 1
+
+        OptionsScope.MB_spCoutureMax = 500 / 1000
 
     End Sub
 
@@ -529,9 +534,9 @@ Public Module Mod_Declarations
     Public Const GOUJ_EnrobMInG1 As Decimal = 20 / 1000         ' Enrobage miniaml d'un goujon dans EN 1994-1-1:2005
     Public Const GOUJ_EnrobMInG2 As Decimal = 15 / 1000         ' Enrobage miniaml d'un goujon dans EN 1994-1-1:2024
 
-    Public Const RHOCLEGERMIN As Decimal = 1500                 ' Masse volumique min du béton léger
-    Public Const RHOCLEGERMAX As Decimal = 2200                 ' Masse volumique max du béton léger
-    Public Const RHOCNORMALMIN As Decimal = 2000                ' Masse volumique min du béton normal
+    'Public Const RHOCLEGERMIN As Decimal = 1500                 ' Masse volumique min du béton léger
+    'Public Const RHOCLEGERMAX As Decimal = 2200                 ' Masse volumique max du béton léger
+    'Public Const RHOCNORMALMIN As Decimal = 2000                ' Masse volumique min du béton normal
 
 #End Region
 

@@ -303,7 +303,7 @@ Module Mod_Internet
 
         FichierCible = LogicielRep.Config & "\" & FichierUpDate()
 
-        FichierCible = LogicielRep.Install & "\..\..\FICHIERS NEW\" & FichierUpDate()
+        FichierCible = LogicielRep.Install & "\..\..\..\UPDATES\" & FichierUpDate()
 
         If My.Computer.FileSystem.FileExists(FichierCible) Then
             RecupereBlocUpdate(FichierCible, BlocMAJ)

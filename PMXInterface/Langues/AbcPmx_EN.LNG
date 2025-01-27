@@ -121,6 +121,8 @@ GFORCE					= G-force
 ETAW					= Shear buckling
 CONTROLCRACKW			= Control of concrete cracking
 CRACKWIDTH				= Limit of crack width
+WARNINGCOMPREINF1		= Rebars in compression can not be considered with only one layer of reinforcement in the slab
+WARNINGCOMPREINF2		= When rebars in compression are considered in the design of the beam, requirements of EN 1992-1-1:2005, 9.2.1.2 (3) should be fulfiled to avoid premature buckling
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
@@ -822,6 +824,9 @@ DISCONTINUOUSDECK		= Discontinuous steel deck
 DISCONTINUOUSRIBDECK	= Discontinuous concrete rib and steel deck
 ERRORLWC				= Density of light weight concrete should be between $ and $
 ERRORNWC				= Density of normal weight concrete should be greater or equal than $
+ERRORCCOVER1			= Reinforcement layer n°$
+ERRORCCOVER2			= The concrete coverage ($) should not be less than the minimal value required for bond ($)
+
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam
@@ -1086,6 +1091,7 @@ SOLIDSLABTH				= Thickness of solid slab
 COMPOSITESLABTH			= Thickness of composite slab (above ribs)
 CONCRETEPROP			= Properties of concrete
 RHOLWC					= Density of light weight concrete
+RHONWC					= Density of normal weight concrete
 WELDEDSECTION			= Dimensions of welded sections
 WEBTHICKNESS			= Thickness of the web
 WEBHEIGHT				= Height of the web
@@ -1100,6 +1106,8 @@ SLIMFLOORDIM			= Slimfloor dimensions
 DEPTHMAX				= Maximal depth of a slim floor hot rolled profile
 SLABSUPPORTMIN			= Minimum width of a slab support
 THICKNESSMIN			= Minimum thickness of the plate
+RESTRAINTBYSHEETS		= Lateral restraint by the steel sheeting
+ECSEAMMAX				= Max spacing of seam fastening
 
 #OPTSOFTMAIN
 TITLE					= Software options

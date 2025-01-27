@@ -120,7 +120,15 @@ Public Class Frm_Update
 
 #End Region
 
-#Region "   Gestion des recherches de mises à jour "
+#Region "===FERMETURE==="
+
+    Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
+        Me.Close()
+    End Sub
+
+#End Region
+
+#Region " Gestion des recherches de mises à jour "
 
     Private Sub TraiterFichierMAJ()
         '---------------------------------------------------------------------------------
@@ -170,7 +178,6 @@ Public Class Frm_Update
 #End Region
 
 #Region " Affichage des mises à jour "
-
 
     Private Sub AfficherMAJ(ByVal BlocMAJ As Dictionary(Of String, String), ByVal lAccesOK As Boolean)
         '---------------------------------------------------------------------------------

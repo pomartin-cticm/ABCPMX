@@ -251,7 +251,7 @@ Public Class Frm_MaintienBacN_Fixation
             Case Me.txt_EspCouturage.Name
 
                 ValMin = 0.02 / kUnit
-                ValMax = 0.5 / kUnit
+                ValMax = OptionsScope.MB_spCoutureMax / kUnit
 
                 lValMax = True
 

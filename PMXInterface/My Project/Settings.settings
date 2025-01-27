@@ -60,7 +60,7 @@
       <Value Profile="(Default)">1.0</Value>
     </Setting>
     <Setting Name="GammaV_fi" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">1.0</Value>
+      <Value Profile="(Default)">1.5</Value>
     </Setting>
     <Setting Name="GammaG_sup" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1.35</Value>
@@ -156,7 +156,7 @@
       <Value Profile="(Default)">0.05</Value>
     </Setting>
     <Setting Name="RhoCBetonLegerMin" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">80</Value>
+      <Value Profile="(Default)">1500</Value>
     </Setting>
     <Setting Name="RhoCBetonLegerMax" Type="System.String" Scope="User">
       <Value Profile="(Default)">2200</Value>
@@ -328,6 +328,9 @@
     </Setting>
     <Setting Name="lControlWebFichier" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="RhoCBetonNormalMin" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">2000</Value>
     </Setting>
   </Settings>
 </SettingsFile>

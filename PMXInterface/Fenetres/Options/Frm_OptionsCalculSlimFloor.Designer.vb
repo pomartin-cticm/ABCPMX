@@ -27,6 +27,12 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.pan_Slimfloor = New System.Windows.Forms.Panel()
         Me.TLpan_Conteneur = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Conteneur = New System.Windows.Forms.Panel()
+        Me.pan_Dalles = New System.Windows.Forms.Panel()
+        Me.img_bappmin = New System.Windows.Forms.PictureBox()
+        Me.txt_bappmin = New System.Windows.Forms.TextBox()
+        Me.lbl_UnitDim2 = New System.Windows.Forms.Label()
+        Me.lbl_bappmin = New System.Windows.Forms.Label()
+        Me.lbl_Dalles = New System.Windows.Forms.Label()
         Me.pan_SlimFloors = New System.Windows.Forms.Panel()
         Me.lbl_SlimFloor = New System.Windows.Forms.Label()
         Me.img_hslimmax = New System.Windows.Forms.PictureBox()
@@ -38,21 +44,24 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.lbl_hslimmax = New System.Windows.Forms.Label()
         Me.lbl_tpinfmin = New System.Windows.Forms.Label()
         Me.lbl_Slimfloors = New System.Windows.Forms.Label()
-        Me.lbl_Dalles = New System.Windows.Forms.Label()
-        Me.pan_Dalles = New System.Windows.Forms.Panel()
-        Me.img_bappmin = New System.Windows.Forms.PictureBox()
-        Me.txt_bappmin = New System.Windows.Forms.TextBox()
-        Me.lbl_UnitDim2 = New System.Windows.Forms.Label()
-        Me.lbl_bappmin = New System.Windows.Forms.Label()
+        Me.lbl_MaintienBac = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.img_ecMax = New System.Windows.Forms.PictureBox()
+        Me.txt_ecMax = New System.Windows.Forms.TextBox()
+        Me.etq_UnitDim4 = New System.Windows.Forms.Label()
+        Me.lbl_EntraxeCoutureMax = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Slimfloor.SuspendLayout()
         Me.TLpan_Conteneur.SuspendLayout()
         Me.pan_Conteneur.SuspendLayout()
+        Me.pan_Dalles.SuspendLayout()
+        CType(Me.img_bappmin, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_SlimFloors.SuspendLayout()
         CType(Me.img_hslimmax, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_tpinfmin, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_Dalles.SuspendLayout()
-        CType(Me.img_bappmin, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel1.SuspendLayout()
+        CType(Me.img_ecMax, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'ErrorProvider
@@ -86,6 +95,8 @@ Partial Class Frm_OptionsCalculSlimFloor
         '
         'pan_Conteneur
         '
+        Me.pan_Conteneur.Controls.Add(Me.Panel1)
+        Me.pan_Conteneur.Controls.Add(Me.lbl_MaintienBac)
         Me.pan_Conteneur.Controls.Add(Me.pan_Dalles)
         Me.pan_Conteneur.Controls.Add(Me.lbl_Dalles)
         Me.pan_Conteneur.Controls.Add(Me.pan_SlimFloors)
@@ -96,6 +107,67 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.pan_Conteneur.Name = "pan_Conteneur"
         Me.pan_Conteneur.Size = New System.Drawing.Size(739, 436)
         Me.pan_Conteneur.TabIndex = 0
+        '
+        'pan_Dalles
+        '
+        Me.pan_Dalles.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Dalles.Controls.Add(Me.img_bappmin)
+        Me.pan_Dalles.Controls.Add(Me.txt_bappmin)
+        Me.pan_Dalles.Controls.Add(Me.lbl_UnitDim2)
+        Me.pan_Dalles.Controls.Add(Me.lbl_bappmin)
+        Me.pan_Dalles.Location = New System.Drawing.Point(4, 30)
+        Me.pan_Dalles.Name = "pan_Dalles"
+        Me.pan_Dalles.Size = New System.Drawing.Size(731, 35)
+        Me.pan_Dalles.TabIndex = 148
+        '
+        'img_bappmin
+        '
+        Me.img_bappmin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_bappmin.Location = New System.Drawing.Point(556, 7)
+        Me.img_bappmin.Name = "img_bappmin"
+        Me.img_bappmin.Size = New System.Drawing.Size(63, 20)
+        Me.img_bappmin.TabIndex = 109
+        Me.img_bappmin.TabStop = False
+        '
+        'txt_bappmin
+        '
+        Me.txt_bappmin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_bappmin.Location = New System.Drawing.Point(619, 7)
+        Me.txt_bappmin.Name = "txt_bappmin"
+        Me.txt_bappmin.Size = New System.Drawing.Size(58, 20)
+        Me.txt_bappmin.TabIndex = 108
+        '
+        'lbl_UnitDim2
+        '
+        Me.lbl_UnitDim2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_UnitDim2.AutoSize = True
+        Me.lbl_UnitDim2.Location = New System.Drawing.Point(683, 10)
+        Me.lbl_UnitDim2.Name = "lbl_UnitDim2"
+        Me.lbl_UnitDim2.Size = New System.Drawing.Size(23, 13)
+        Me.lbl_UnitDim2.TabIndex = 110
+        Me.lbl_UnitDim2.Text = "mm"
+        '
+        'lbl_bappmin
+        '
+        Me.lbl_bappmin.AutoSize = True
+        Me.lbl_bappmin.Location = New System.Drawing.Point(39, 10)
+        Me.lbl_bappmin.Name = "lbl_bappmin"
+        Me.lbl_bappmin.Size = New System.Drawing.Size(63, 13)
+        Me.lbl_bappmin.TabIndex = 111
+        Me.lbl_bappmin.Text = "lbl_bappmin"
+        '
+        'lbl_Dalles
+        '
+        Me.lbl_Dalles.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Dalles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Dalles.Location = New System.Drawing.Point(4, 4)
+        Me.lbl_Dalles.Name = "lbl_Dalles"
+        Me.lbl_Dalles.Size = New System.Drawing.Size(733, 23)
+        Me.lbl_Dalles.TabIndex = 147
+        Me.lbl_Dalles.Text = "lbl_Dalles"
+        Me.lbl_Dalles.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_SlimFloors
         '
@@ -110,7 +182,7 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.pan_SlimFloors.Controls.Add(Me.lbl_UnitDim3)
         Me.pan_SlimFloors.Controls.Add(Me.lbl_hslimmax)
         Me.pan_SlimFloors.Controls.Add(Me.lbl_tpinfmin)
-        Me.pan_SlimFloors.Location = New System.Drawing.Point(4, 113)
+        Me.pan_SlimFloors.Location = New System.Drawing.Point(4, 160)
         Me.pan_SlimFloors.Name = "pan_SlimFloors"
         Me.pan_SlimFloors.Size = New System.Drawing.Size(731, 87)
         Me.pan_SlimFloors.TabIndex = 146
@@ -204,73 +276,86 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.lbl_Slimfloors.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_Slimfloors.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Slimfloors.Location = New System.Drawing.Point(3, 87)
+        Me.lbl_Slimfloors.Location = New System.Drawing.Point(3, 134)
         Me.lbl_Slimfloors.Name = "lbl_Slimfloors"
         Me.lbl_Slimfloors.Size = New System.Drawing.Size(733, 23)
         Me.lbl_Slimfloors.TabIndex = 98
         Me.lbl_Slimfloors.Text = "lbl_Slimfloors"
         Me.lbl_Slimfloors.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lbl_Dalles
+        'lbl_MaintienBac
         '
-        Me.lbl_Dalles.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.lbl_MaintienBac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_Dalles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Dalles.Location = New System.Drawing.Point(4, 4)
-        Me.lbl_Dalles.Name = "lbl_Dalles"
-        Me.lbl_Dalles.Size = New System.Drawing.Size(733, 23)
-        Me.lbl_Dalles.TabIndex = 147
-        Me.lbl_Dalles.Text = "lbl_Dalles"
-        Me.lbl_Dalles.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lbl_MaintienBac.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_MaintienBac.Location = New System.Drawing.Point(4, 68)
+        Me.lbl_MaintienBac.Name = "lbl_MaintienBac"
+        Me.lbl_MaintienBac.Size = New System.Drawing.Size(733, 23)
+        Me.lbl_MaintienBac.TabIndex = 149
+        Me.lbl_MaintienBac.Text = "lbl_MaintienBac"
+        Me.lbl_MaintienBac.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'pan_Dalles
+        'Panel1
         '
-        Me.pan_Dalles.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pan_Dalles.Controls.Add(Me.img_bappmin)
-        Me.pan_Dalles.Controls.Add(Me.txt_bappmin)
-        Me.pan_Dalles.Controls.Add(Me.lbl_UnitDim2)
-        Me.pan_Dalles.Controls.Add(Me.lbl_bappmin)
-        Me.pan_Dalles.Location = New System.Drawing.Point(4, 30)
-        Me.pan_Dalles.Name = "pan_Dalles"
-        Me.pan_Dalles.Size = New System.Drawing.Size(731, 53)
-        Me.pan_Dalles.TabIndex = 148
+        Me.Panel1.Controls.Add(Me.Label4)
+        Me.Panel1.Controls.Add(Me.img_ecMax)
+        Me.Panel1.Controls.Add(Me.txt_ecMax)
+        Me.Panel1.Controls.Add(Me.etq_UnitDim4)
+        Me.Panel1.Controls.Add(Me.lbl_EntraxeCoutureMax)
+        Me.Panel1.Location = New System.Drawing.Point(4, 94)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(731, 35)
+        Me.Panel1.TabIndex = 150
         '
-        'img_bappmin
+        'img_ecMax
         '
-        Me.img_bappmin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_bappmin.Location = New System.Drawing.Point(556, 15)
-        Me.img_bappmin.Name = "img_bappmin"
-        Me.img_bappmin.Size = New System.Drawing.Size(63, 20)
-        Me.img_bappmin.TabIndex = 109
-        Me.img_bappmin.TabStop = False
+        Me.img_ecMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_ecMax.Location = New System.Drawing.Point(556, 7)
+        Me.img_ecMax.Name = "img_ecMax"
+        Me.img_ecMax.Size = New System.Drawing.Size(46, 20)
+        Me.img_ecMax.TabIndex = 109
+        Me.img_ecMax.TabStop = False
         '
-        'txt_bappmin
+        'txt_ecMax
         '
-        Me.txt_bappmin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_bappmin.Location = New System.Drawing.Point(619, 15)
-        Me.txt_bappmin.Name = "txt_bappmin"
-        Me.txt_bappmin.Size = New System.Drawing.Size(58, 20)
-        Me.txt_bappmin.TabIndex = 108
+        Me.txt_ecMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_ecMax.Location = New System.Drawing.Point(619, 7)
+        Me.txt_ecMax.Name = "txt_ecMax"
+        Me.txt_ecMax.Size = New System.Drawing.Size(58, 20)
+        Me.txt_ecMax.TabIndex = 108
         '
-        'lbl_UnitDim2
+        'etq_UnitDim4
         '
-        Me.lbl_UnitDim2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_UnitDim2.AutoSize = True
-        Me.lbl_UnitDim2.Location = New System.Drawing.Point(683, 18)
-        Me.lbl_UnitDim2.Name = "lbl_UnitDim2"
-        Me.lbl_UnitDim2.Size = New System.Drawing.Size(23, 13)
-        Me.lbl_UnitDim2.TabIndex = 110
-        Me.lbl_UnitDim2.Text = "mm"
+        Me.etq_UnitDim4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim4.AutoSize = True
+        Me.etq_UnitDim4.Location = New System.Drawing.Point(683, 10)
+        Me.etq_UnitDim4.Name = "etq_UnitDim4"
+        Me.etq_UnitDim4.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim4.TabIndex = 110
+        Me.etq_UnitDim4.Text = "mm"
         '
-        'lbl_bappmin
+        'lbl_EntraxeCoutureMax
         '
-        Me.lbl_bappmin.AutoSize = True
-        Me.lbl_bappmin.Location = New System.Drawing.Point(39, 22)
-        Me.lbl_bappmin.Name = "lbl_bappmin"
-        Me.lbl_bappmin.Size = New System.Drawing.Size(63, 13)
-        Me.lbl_bappmin.TabIndex = 111
-        Me.lbl_bappmin.Text = "lbl_bappmin"
+        Me.lbl_EntraxeCoutureMax.AutoSize = True
+        Me.lbl_EntraxeCoutureMax.Location = New System.Drawing.Point(39, 10)
+        Me.lbl_EntraxeCoutureMax.Name = "lbl_EntraxeCoutureMax"
+        Me.lbl_EntraxeCoutureMax.Size = New System.Drawing.Size(116, 13)
+        Me.lbl_EntraxeCoutureMax.TabIndex = 111
+        Me.lbl_EntraxeCoutureMax.Text = "lbl_EntraxeCoutureMax"
+        '
+        'Label4
+        '
+        Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(603, 11)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(13, 13)
+        Me.Label4.TabIndex = 154
+        Me.Label4.Text = "≥"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Frm_OptionsCalculSlimFloor
         '
@@ -285,13 +370,16 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.pan_Slimfloor.ResumeLayout(False)
         Me.TLpan_Conteneur.ResumeLayout(False)
         Me.pan_Conteneur.ResumeLayout(False)
+        Me.pan_Dalles.ResumeLayout(False)
+        Me.pan_Dalles.PerformLayout()
+        CType(Me.img_bappmin, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_SlimFloors.ResumeLayout(False)
         Me.pan_SlimFloors.PerformLayout()
         CType(Me.img_hslimmax, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_tpinfmin, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_Dalles.ResumeLayout(False)
-        Me.pan_Dalles.PerformLayout()
-        CType(Me.img_bappmin, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        CType(Me.img_ecMax, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -316,4 +404,11 @@ Partial Class Frm_OptionsCalculSlimFloor
     Friend WithEvents txt_bappmin As TextBox
     Friend WithEvents lbl_UnitDim2 As Label
     Friend WithEvents lbl_bappmin As Label
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents img_ecMax As PictureBox
+    Friend WithEvents txt_ecMax As TextBox
+    Friend WithEvents etq_UnitDim4 As Label
+    Friend WithEvents lbl_EntraxeCoutureMax As Label
+    Friend WithEvents lbl_MaintienBac As Label
+    Friend WithEvents Label4 As Label
 End Class

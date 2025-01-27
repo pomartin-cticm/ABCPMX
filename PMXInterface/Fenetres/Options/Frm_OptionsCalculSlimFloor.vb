@@ -37,6 +37,10 @@ Public Class Frm_OptionsCalculSlimFloor
             Me.lbl_bappmin.Text = MyBloc("SLABSUPPORTMIN")
             Me.lbl_tpinfmin.Text = MyBloc("THICKNESSMIN")
 
+
+            Me.lbl_MaintienBac.Text = MyBloc("RESTRAINTBYSHEETS")
+            Me.lbl_EntraxeCoutureMax.Text = MyBloc("ECSEAMMAX")
+
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues")
             'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -52,17 +56,22 @@ Public Class Frm_OptionsCalculSlimFloor
         Me.lbl_Slimfloors.ForeColor = CouleurForeBandeaux
         Me.lbl_Dalles.BackColor = CouleurBackBandeaux
         Me.lbl_Dalles.ForeColor = CouleurForeBandeaux
+        Me.lbl_MaintienBac.BackColor = CouleurBackBandeaux
+        Me.lbl_MaintienBac.ForeColor = CouleurForeBandeaux
 
         PrepareTextBoxDipo(Me.txt_hslimmax, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_bappmin, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_tpinfmin, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_ecMax, False)
 
     End Sub
 
     Private Sub GestionUnites()
+
         Me.lbl_UnitDim.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.lbl_UnitDim2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.lbl_UnitDim3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
     End Sub
 
@@ -70,9 +79,10 @@ Public Class Frm_OptionsCalculSlimFloor
 
         '--> Portées
 
-        Me.txt_hslimmax.Text = GetStringInUnit(LocalOptionsSlimFloor.hslimmax, Enu_TypeVariable.Dimension, 4, 2, False)
-        Me.txt_bappmin.Text = GetStringInUnit(LocalOptionsSlimFloor.bappmin, Enu_TypeVariable.Dimension, 4, 2, False)
-        Me.txt_tpinfmin.Text = GetStringInUnit(LocalOptionsSlimFloor.tpinfmin, Enu_TypeVariable.Dimension, 4, 2, False)
+        Me.txt_hslimmax.Text = GetStringInUnitN(LocalOptionsSlimFloor.hslimmax, Enu_TypeVariable.Dimension, 4, 2, NON_U, False)
+        Me.txt_bappmin.Text = GetStringInUnitN(LocalOptionsSlimFloor.bappmin, Enu_TypeVariable.Dimension, 4, 2, NON_U, False)
+        Me.txt_tpinfmin.Text = GetStringInUnitN(LocalOptionsSlimFloor.tpinfmin, Enu_TypeVariable.Dimension, 4, 2, NON_U, False)
+        Me.txt_ecMax.Text = GetStringInUnitN(LocalOptionsSlimFloor.tpinfmin, Enu_TypeVariable.Dimension, 4, 2, NON_U, False)
 
 
     End Sub
@@ -161,7 +171,7 @@ Public Class Frm_OptionsCalculSlimFloor
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_hslimmax.Paint, img_tpinfmin.Paint, img_bappmin.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_hslimmax.Paint, img_tpinfmin.Paint, img_bappmin.Paint, img_ecMax.Paint
 
         '--> Déclarations
 
@@ -192,6 +202,10 @@ Public Class Frm_OptionsCalculSlimFloor
             Case Me.img_tpinfmin.Name
                 strSymbol = "t"
                 strIndice = "p,inf,min"
+
+            Case Me.img_ecMax.Name
+                strSymbol = "e"
+                strIndice = "c"
 
         End Select
 

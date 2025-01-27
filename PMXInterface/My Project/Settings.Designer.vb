@@ -283,7 +283,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("1.0")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.5")>  _
         Public Property GammaV_fi() As Decimal
             Get
                 Return CType(Me("GammaV_fi"),Decimal)
@@ -667,7 +667,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("80")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1500")>  _
         Public Property RhoCBetonLegerMin() As Decimal
             Get
                 Return CType(Me("RhoCBetonLegerMin"),Decimal)
@@ -1358,6 +1358,18 @@ Namespace My
             End Get
             Set
                 Me("lControlWebFichier") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("2000")>  _
+        Public Property RhoCBetonNormalMin() As Decimal
+            Get
+                Return CType(Me("RhoCBetonNormalMin"),Decimal)
+            End Get
+            Set
+                Me("RhoCBetonNormalMin") = value
             End Set
         End Property
     End Class
