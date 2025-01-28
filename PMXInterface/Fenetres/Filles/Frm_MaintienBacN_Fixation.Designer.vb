@@ -26,10 +26,13 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.TLpan_Centre = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Couturage = New System.Windows.Forms.Panel()
-        Me.etq_UnitL5 = New System.Windows.Forms.Label()
+        Me.etq_UnitD3 = New System.Windows.Forms.Label()
         Me.txt_EspCouturage = New System.Windows.Forms.TextBox()
         Me.lbl_EspCouturage = New System.Windows.Forms.Label()
         Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.etq_UnitD2 = New System.Windows.Forms.Label()
+        Me.txt_DiametreCouture = New System.Windows.Forms.TextBox()
+        Me.lbl_Diametre2 = New System.Windows.Forms.Label()
         Me.lbl_GlisseS_Info = New System.Windows.Forms.Label()
         Me.lbl_DiaS_Info = New System.Windows.Forms.Label()
         Me.lbl_GlisseS = New System.Windows.Forms.Label()
@@ -39,7 +42,10 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.lbl_Couturage = New System.Windows.Forms.Label()
         Me.lbl_FixationSolive = New System.Windows.Forms.Label()
         Me.pan_FixationSolive = New System.Windows.Forms.Panel()
-        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.pan_FixationNervure = New System.Windows.Forms.Panel()
+        Me.etq_UnitD1 = New System.Windows.Forms.Label()
+        Me.txt_DiametreFixNerv = New System.Windows.Forms.TextBox()
+        Me.lbl_Diametre1 = New System.Windows.Forms.Label()
         Me.lbl_SlipInfo = New System.Windows.Forms.Label()
         Me.lbl_DiametreInfo = New System.Windows.Forms.Label()
         Me.lbl_Glissement = New System.Windows.Forms.Label()
@@ -54,7 +60,7 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.pan_Couturage.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.pan_FixationSolive.SuspendLayout()
-        Me.Panel3.SuspendLayout()
+        Me.pan_FixationNervure.SuspendLayout()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -81,40 +87,40 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.TLpan_Centre.Name = "TLpan_Centre"
         Me.TLpan_Centre.RowCount = 5
         Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 130.0!))
+        Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
         Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 130.0!))
+        Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
         Me.TLpan_Centre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Centre.Size = New System.Drawing.Size(336, 322)
+        Me.TLpan_Centre.Size = New System.Drawing.Size(336, 383)
         Me.TLpan_Centre.TabIndex = 3
         '
         'pan_Couturage
         '
         Me.pan_Couturage.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Couturage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Couturage.Controls.Add(Me.etq_UnitL5)
+        Me.pan_Couturage.Controls.Add(Me.etq_UnitD3)
         Me.pan_Couturage.Controls.Add(Me.txt_EspCouturage)
         Me.pan_Couturage.Controls.Add(Me.lbl_EspCouturage)
         Me.pan_Couturage.Controls.Add(Me.Panel4)
         Me.pan_Couturage.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Couturage.Location = New System.Drawing.Point(1, 190)
+        Me.pan_Couturage.Location = New System.Drawing.Point(1, 210)
         Me.pan_Couturage.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.pan_Couturage.Name = "pan_Couturage"
-        Me.pan_Couturage.Size = New System.Drawing.Size(335, 130)
+        Me.pan_Couturage.Size = New System.Drawing.Size(335, 150)
         Me.pan_Couturage.TabIndex = 4
         '
-        'etq_UnitL5
+        'etq_UnitD3
         '
-        Me.etq_UnitL5.AutoSize = True
-        Me.etq_UnitL5.Location = New System.Drawing.Point(214, 102)
-        Me.etq_UnitL5.Name = "etq_UnitL5"
-        Me.etq_UnitL5.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitL5.TabIndex = 91
-        Me.etq_UnitL5.Text = "kN"
+        Me.etq_UnitD3.AutoSize = True
+        Me.etq_UnitD3.Location = New System.Drawing.Point(214, 126)
+        Me.etq_UnitD3.Name = "etq_UnitD3"
+        Me.etq_UnitD3.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitD3.TabIndex = 91
+        Me.etq_UnitD3.Text = "kN"
         '
         'txt_EspCouturage
         '
-        Me.txt_EspCouturage.Location = New System.Drawing.Point(150, 99)
+        Me.txt_EspCouturage.Location = New System.Drawing.Point(150, 123)
         Me.txt_EspCouturage.Name = "txt_EspCouturage"
         Me.txt_EspCouturage.Size = New System.Drawing.Size(58, 20)
         Me.txt_EspCouturage.TabIndex = 90
@@ -123,7 +129,7 @@ Partial Class Frm_MaintienBacN_Fixation
         'lbl_EspCouturage
         '
         Me.lbl_EspCouturage.AutoSize = True
-        Me.lbl_EspCouturage.Location = New System.Drawing.Point(8, 102)
+        Me.lbl_EspCouturage.Location = New System.Drawing.Point(8, 126)
         Me.lbl_EspCouturage.Name = "lbl_EspCouturage"
         Me.lbl_EspCouturage.Size = New System.Drawing.Size(90, 13)
         Me.lbl_EspCouturage.TabIndex = 12
@@ -133,6 +139,9 @@ Partial Class Frm_MaintienBacN_Fixation
         '
         Me.Panel4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel4.Controls.Add(Me.etq_UnitD2)
+        Me.Panel4.Controls.Add(Me.txt_DiametreCouture)
+        Me.Panel4.Controls.Add(Me.lbl_Diametre2)
         Me.Panel4.Controls.Add(Me.lbl_GlisseS_Info)
         Me.Panel4.Controls.Add(Me.lbl_DiaS_Info)
         Me.Panel4.Controls.Add(Me.lbl_GlisseS)
@@ -142,13 +151,39 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.Panel4.Location = New System.Drawing.Point(2, 4)
         Me.Panel4.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(331, 92)
+        Me.Panel4.Size = New System.Drawing.Size(331, 116)
         Me.Panel4.TabIndex = 11
+        '
+        'etq_UnitD2
+        '
+        Me.etq_UnitD2.AutoSize = True
+        Me.etq_UnitD2.Location = New System.Drawing.Point(212, 96)
+        Me.etq_UnitD2.Name = "etq_UnitD2"
+        Me.etq_UnitD2.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitD2.TabIndex = 94
+        Me.etq_UnitD2.Text = "kN"
+        '
+        'txt_DiametreCouture
+        '
+        Me.txt_DiametreCouture.Location = New System.Drawing.Point(148, 93)
+        Me.txt_DiametreCouture.Name = "txt_DiametreCouture"
+        Me.txt_DiametreCouture.Size = New System.Drawing.Size(58, 20)
+        Me.txt_DiametreCouture.TabIndex = 93
+        Me.txt_DiametreCouture.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbl_Diametre2
+        '
+        Me.lbl_Diametre2.AutoSize = True
+        Me.lbl_Diametre2.Location = New System.Drawing.Point(6, 96)
+        Me.lbl_Diametre2.Name = "lbl_Diametre2"
+        Me.lbl_Diametre2.Size = New System.Drawing.Size(71, 13)
+        Me.lbl_Diametre2.TabIndex = 92
+        Me.lbl_Diametre2.Text = "lbl_Diametre2"
         '
         'lbl_GlisseS_Info
         '
         Me.lbl_GlisseS_Info.AutoSize = True
-        Me.lbl_GlisseS_Info.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_GlisseS_Info.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_GlisseS_Info.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.lbl_GlisseS_Info.Location = New System.Drawing.Point(114, 72)
         Me.lbl_GlisseS_Info.Name = "lbl_GlisseS_Info"
@@ -159,7 +194,7 @@ Partial Class Frm_MaintienBacN_Fixation
         'lbl_DiaS_Info
         '
         Me.lbl_DiaS_Info.AutoSize = True
-        Me.lbl_DiaS_Info.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_DiaS_Info.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_DiaS_Info.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.lbl_DiaS_Info.Location = New System.Drawing.Point(114, 53)
         Me.lbl_DiaS_Info.Name = "lbl_DiaS_Info"
@@ -170,7 +205,7 @@ Partial Class Frm_MaintienBacN_Fixation
         'lbl_GlisseS
         '
         Me.lbl_GlisseS.AutoSize = True
-        Me.lbl_GlisseS.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Italic Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_GlisseS.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_GlisseS.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.lbl_GlisseS.Location = New System.Drawing.Point(34, 72)
         Me.lbl_GlisseS.Name = "lbl_GlisseS"
@@ -181,7 +216,7 @@ Partial Class Frm_MaintienBacN_Fixation
         'lbl_DiaS
         '
         Me.lbl_DiaS.AutoSize = True
-        Me.lbl_DiaS.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Italic Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_DiaS.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_DiaS.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.lbl_DiaS.Location = New System.Drawing.Point(34, 53)
         Me.lbl_DiaS.Name = "lbl_DiaS"
@@ -215,7 +250,7 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.lbl_Couturage.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_Couturage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Couturage.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Couturage.Location = New System.Drawing.Point(1, 160)
+        Me.lbl_Couturage.Location = New System.Drawing.Point(1, 180)
         Me.lbl_Couturage.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.lbl_Couturage.Name = "lbl_Couturage"
         Me.lbl_Couturage.Size = New System.Drawing.Size(335, 30)
@@ -241,36 +276,65 @@ Partial Class Frm_MaintienBacN_Fixation
         '
         Me.pan_FixationSolive.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_FixationSolive.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_FixationSolive.Controls.Add(Me.Panel3)
+        Me.pan_FixationSolive.Controls.Add(Me.pan_FixationNervure)
         Me.pan_FixationSolive.Controls.Add(Me.cmb_FixationPoutre)
         Me.pan_FixationSolive.Controls.Add(Me.lbl_Fixation)
         Me.pan_FixationSolive.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_FixationSolive.Location = New System.Drawing.Point(1, 30)
         Me.pan_FixationSolive.Margin = New System.Windows.Forms.Padding(1, 0, 0, 1)
         Me.pan_FixationSolive.Name = "pan_FixationSolive"
-        Me.pan_FixationSolive.Size = New System.Drawing.Size(335, 129)
+        Me.pan_FixationSolive.Size = New System.Drawing.Size(335, 149)
         Me.pan_FixationSolive.TabIndex = 3
         '
-        'Panel3
+        'pan_FixationNervure
         '
-        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.pan_FixationNervure.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel3.Controls.Add(Me.lbl_SlipInfo)
-        Me.Panel3.Controls.Add(Me.lbl_DiametreInfo)
-        Me.Panel3.Controls.Add(Me.lbl_Glissement)
-        Me.Panel3.Controls.Add(Me.lbl_Diametre)
-        Me.Panel3.Controls.Add(Me.lbl_TypeFixation)
-        Me.Panel3.Controls.Add(Me.cmb_TypeFixation)
-        Me.Panel3.Location = New System.Drawing.Point(2, 29)
-        Me.Panel3.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(331, 92)
-        Me.Panel3.TabIndex = 10
+        Me.pan_FixationNervure.Controls.Add(Me.etq_UnitD1)
+        Me.pan_FixationNervure.Controls.Add(Me.txt_DiametreFixNerv)
+        Me.pan_FixationNervure.Controls.Add(Me.lbl_Diametre1)
+        Me.pan_FixationNervure.Controls.Add(Me.lbl_SlipInfo)
+        Me.pan_FixationNervure.Controls.Add(Me.lbl_DiametreInfo)
+        Me.pan_FixationNervure.Controls.Add(Me.lbl_Glissement)
+        Me.pan_FixationNervure.Controls.Add(Me.lbl_Diametre)
+        Me.pan_FixationNervure.Controls.Add(Me.lbl_TypeFixation)
+        Me.pan_FixationNervure.Controls.Add(Me.cmb_TypeFixation)
+        Me.pan_FixationNervure.Location = New System.Drawing.Point(2, 29)
+        Me.pan_FixationNervure.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_FixationNervure.Name = "pan_FixationNervure"
+        Me.pan_FixationNervure.Size = New System.Drawing.Size(331, 115)
+        Me.pan_FixationNervure.TabIndex = 10
+        '
+        'etq_UnitD1
+        '
+        Me.etq_UnitD1.AutoSize = True
+        Me.etq_UnitD1.Location = New System.Drawing.Point(212, 95)
+        Me.etq_UnitD1.Name = "etq_UnitD1"
+        Me.etq_UnitD1.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitD1.TabIndex = 94
+        Me.etq_UnitD1.Text = "kN"
+        '
+        'txt_DiametreFixNerv
+        '
+        Me.txt_DiametreFixNerv.Location = New System.Drawing.Point(148, 92)
+        Me.txt_DiametreFixNerv.Name = "txt_DiametreFixNerv"
+        Me.txt_DiametreFixNerv.Size = New System.Drawing.Size(58, 20)
+        Me.txt_DiametreFixNerv.TabIndex = 93
+        Me.txt_DiametreFixNerv.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbl_Diametre1
+        '
+        Me.lbl_Diametre1.AutoSize = True
+        Me.lbl_Diametre1.Location = New System.Drawing.Point(6, 95)
+        Me.lbl_Diametre1.Name = "lbl_Diametre1"
+        Me.lbl_Diametre1.Size = New System.Drawing.Size(71, 13)
+        Me.lbl_Diametre1.TabIndex = 92
+        Me.lbl_Diametre1.Text = "lbl_Diametre1"
         '
         'lbl_SlipInfo
         '
         Me.lbl_SlipInfo.AutoSize = True
-        Me.lbl_SlipInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_SlipInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_SlipInfo.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.lbl_SlipInfo.Location = New System.Drawing.Point(114, 72)
         Me.lbl_SlipInfo.Name = "lbl_SlipInfo"
@@ -281,7 +345,7 @@ Partial Class Frm_MaintienBacN_Fixation
         'lbl_DiametreInfo
         '
         Me.lbl_DiametreInfo.AutoSize = True
-        Me.lbl_DiametreInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_DiametreInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_DiametreInfo.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.lbl_DiametreInfo.Location = New System.Drawing.Point(114, 53)
         Me.lbl_DiametreInfo.Name = "lbl_DiametreInfo"
@@ -292,7 +356,7 @@ Partial Class Frm_MaintienBacN_Fixation
         'lbl_Glissement
         '
         Me.lbl_Glissement.AutoSize = True
-        Me.lbl_Glissement.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Italic Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Glissement.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Glissement.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.lbl_Glissement.Location = New System.Drawing.Point(34, 72)
         Me.lbl_Glissement.Name = "lbl_Glissement"
@@ -303,7 +367,7 @@ Partial Class Frm_MaintienBacN_Fixation
         'lbl_Diametre
         '
         Me.lbl_Diametre.AutoSize = True
-        Me.lbl_Diametre.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Italic Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Diametre.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Diametre.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.lbl_Diametre.Location = New System.Drawing.Point(34, 53)
         Me.lbl_Diametre.Name = "lbl_Diametre"
@@ -373,8 +437,8 @@ Partial Class Frm_MaintienBacN_Fixation
         Me.Panel4.PerformLayout()
         Me.pan_FixationSolive.ResumeLayout(False)
         Me.pan_FixationSolive.PerformLayout()
-        Me.Panel3.ResumeLayout(False)
-        Me.Panel3.PerformLayout()
+        Me.pan_FixationNervure.ResumeLayout(False)
+        Me.pan_FixationNervure.PerformLayout()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -383,7 +447,7 @@ Partial Class Frm_MaintienBacN_Fixation
     Friend WithEvents pan_Main As Panel
     Friend WithEvents TLpan_Centre As TableLayoutPanel
     Friend WithEvents pan_Couturage As Panel
-    Friend WithEvents etq_UnitL5 As Label
+    Friend WithEvents etq_UnitD3 As Label
     Friend WithEvents txt_EspCouturage As TextBox
     Friend WithEvents lbl_EspCouturage As Label
     Friend WithEvents Panel4 As Panel
@@ -396,7 +460,7 @@ Partial Class Frm_MaintienBacN_Fixation
     Friend WithEvents lbl_Couturage As Label
     Friend WithEvents lbl_FixationSolive As Label
     Friend WithEvents pan_FixationSolive As Panel
-    Friend WithEvents Panel3 As Panel
+    Friend WithEvents pan_FixationNervure As Panel
     Friend WithEvents lbl_SlipInfo As Label
     Friend WithEvents lbl_DiametreInfo As Label
     Friend WithEvents lbl_Glissement As Label
@@ -406,4 +470,10 @@ Partial Class Frm_MaintienBacN_Fixation
     Friend WithEvents cmb_FixationPoutre As ComboBox
     Friend WithEvents lbl_Fixation As Label
     Friend WithEvents ErrorProvider As ErrorProvider
+    Friend WithEvents etq_UnitD2 As Label
+    Friend WithEvents txt_DiametreCouture As TextBox
+    Friend WithEvents lbl_Diametre2 As Label
+    Friend WithEvents etq_UnitD1 As Label
+    Friend WithEvents txt_DiametreFixNerv As TextBox
+    Friend WithEvents lbl_Diametre1 As Label
 End Class

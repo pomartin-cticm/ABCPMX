@@ -52,7 +52,9 @@ Public Class Frm_MaintienBacN_Fixation
     End Sub
 
     Private Sub GestionUnites()
-        Me.etq_UnitL5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
     End Sub
 
     Private Sub GestionLangues(Bloc As Dictionary(Of String, String))
@@ -75,7 +77,9 @@ Public Class Frm_MaintienBacN_Fixation
             strDiametreFixation(2) = Bloc("DIAPINS")
 
             Me.lbl_Diametre.Text = Bloc("DIAMETER") & ": "
-            Me.lbl_Glissement.Text = Bloc("SLIP")
+            Me.lbl_Glissement.Text = Bloc("SLIP") & ": "
+
+            Me.lbl_Diametre1.Text = Bloc("DIAMETER")
 
             strSlipFixation(0) = GetStringInUnitN(Frm_MaintienBacN.localMaitienBac.FixNervuresSlip(cls_MaintienBac.Enu_FixNervuresType.VisNormale) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, NON_U, False) & " mm/kN"
             strSlipFixation(1) = GetStringInUnitN(Frm_MaintienBacN.localMaitienBac.FixNervuresSlip(cls_MaintienBac.Enu_FixNervuresType.VisNeoprene) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, NON_U, False) & " mm/kN"
@@ -100,6 +104,7 @@ Public Class Frm_MaintienBacN_Fixation
             strSlipCouturage(1) = GetStringInUnitN(Frm_MaintienBacN.localMaitienBac.FixCoutureSlip(cls_MaintienBac.Enu_CoutureType.Rivet) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, NON_U, False) & " mm/kN"
 
             Me.lbl_EspCouturage.Text = Bloc("SPACING")
+            Me.lbl_Diametre2.Text = Bloc("DIAMETER")
 
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -149,6 +154,8 @@ Public Class Frm_MaintienBacN_Fixation
         End Select
 
         Me.txt_EspCouturage.Text = GetStringInUnitN(Frm_MaintienBacN.localMaitienBac.ec, Enu_TypeVariable.Dimension, 3, 1, NON_U, False)
+        Me.txt_DiametreFixNerv.Text = GetStringInUnitN(Frm_MaintienBacN.localMaitienBac.dFpNerv, Enu_TypeVariable.Dimension, 3, 1, NON_U, False)
+        Me.txt_DiametreCouture.Text = GetStringInUnitN(Frm_MaintienBacN.localMaitienBac.dFsCouture, Enu_TypeVariable.Dimension, 3, 1, NON_U, False)
 
         MAJI_InfoFixations()
         MAJI_InfoCouturage()
@@ -184,6 +191,7 @@ Public Class Frm_MaintienBacN_Fixation
         End Select
 
         MAJI_InfoFixations()
+        MAJI_CheckDiametreFixNervures()
         Frm_MaintienBacN.MAJI_Calculs()
     End Sub
 
@@ -196,6 +204,7 @@ Public Class Frm_MaintienBacN_Fixation
         End Select
 
         MAJI_InfoCouturage()
+        MAJI_CheckDiametreCouture()
         Frm_MaintienBacN.MAJI_Calculs()
 
     End Sub
@@ -269,6 +278,123 @@ Public Class Frm_MaintienBacN_Fixation
         Return lOk
 
     End Function
+
+    Private Sub txt_DiametreCouture_TextChanged(sender As Object, e As EventArgs) Handles txt_DiametreCouture.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim Valeur As Decimal
+
+        If VerificationSaisieFixation(sender, Valeur) Then
+            Frm_MaintienBacN.localMaitienBac.dFsCouture = (Valeur)
+            Frm_MaintienBacN.MAJI_Calculs()
+        End If
+    End Sub
+
+    Private Sub MAJI_CheckDiametreCouture()
+
+        Dim dVal As Decimal
+        Dim lOk As Boolean = VerificationSaisieFixation(Me.txt_DiametreCouture, dval)
+
+    End Sub
+
+    Private Sub MAJI_CheckDiametreFixNervures()
+
+        Dim dVal As Decimal
+        Dim lOk As Boolean = VerificationSaisieFixation(Me.txt_DiametreFixNerv, dVal)
+
+    End Sub
+
+
+    Private Function VerificationSaisieFixation(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+        '----------------------------------------------------------------------------------------------------
+        '   18/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------
+        '   Vérification de la saisie des textbox
+        '----------------------------------------------------------------------------------------------------
+        '----------------------------------------------------------------------------------------------------
+
+        '-- Déclaration - Initialisation
+
+        Dim lOk As Boolean = True
+        ErrorProvider.Clear()
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMin As Boolean = True
+        Dim lValMax As Boolean = True
+        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+
+        Select Case MyTxt.Name
+
+            Case Me.txt_DiametreFixNerv.Name
+
+                DiametresEnveloppesFixation(True, ValMin, ValMax)
+
+            Case Me.txt_DiametreCouture.Name
+
+                DiametresEnveloppesFixation(False, ValMin, ValMax)
+
+        End Select
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin / kUnit, lValMax, ValMax / kUnit)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin / kUnit, lValMin, ValMax / kUnit, lValMax)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            ErrorProvider.Clear()
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+
+    End Function
+
+    Private Sub DiametresEnveloppesFixation(lNervures As Boolean, ByRef dValMin As Decimal, ByRef dValMax As Decimal)
+        '----------------------------------------------------------------------------------------------------
+        '   18/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------
+        '   Donne la valeur des diamètres enveloppes des fixations du bac
+        '----------------------------------------------------------------------------------------------------
+        '   lNervures   [E] :   Indique si fixation de nervures
+        '----------------------------------------------------------------------------------------------------
+
+        If lNervures Then
+            '# Fixation des nervures sur les solives
+            Select Case Frm_MaintienBacN.localMaitienBac.FixNervuresTyp
+                Case cls_MaintienBac.Enu_FixNervuresType.Pistolet
+                    dValMin = 3.7 / 1000
+                    dValMax = 4.8 / 1000
+                Case Else
+                    dValMin = 5.5 / 1000
+                    dValMax = 6.3 / 1000
+            End Select
+
+        Else
+            '# Fixation des bacs entre eux (coutures)
+
+            Select Case Frm_MaintienBacN.localMaitienBac.FixCoutureType
+                Case cls_MaintienBac.Enu_CoutureType.Rivet
+                    dValMin = 4.8 / 1000
+                Case cls_MaintienBac.Enu_CoutureType.Vis
+                    dValMin = 4.1 / 1000
+            End Select
+            dValMax = 4.8 / 1000
+
+        End If
+
+
+    End Sub
+
+    Private Sub txt_DiametreFixNerv_TextChanged(sender As Object, e As EventArgs) Handles txt_DiametreFixNerv.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim Valeur As Decimal
+
+        If VerificationSaisieFixation(sender, Valeur) Then
+            Frm_MaintienBacN.localMaitienBac.dFsCouture = (Valeur)
+            Frm_MaintienBacN.MAJI_Calculs()
+        End If
+    End Sub
 
 #End Region
 

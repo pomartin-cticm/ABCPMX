@@ -47,13 +47,17 @@ Public Class cls_MaintienBac
     Public Transition As Enu_Transition             ' Définit le type de transition entre panneaux voisins (dans la direction perp)
 
     Public FixNervuresMod As Enu_FixationNervures   ' Définit les modalités de fixations des nervures
-    Public FixnervuresTyp As Enu_FixNervuresType    ' Définitit le type des fixations de nervures
+    Public FixNervuresTyp As Enu_FixNervuresType    ' Définitit le type des fixations de nervures
+    Public dFpNerv As Decimal                       ' Diamètre de la fixation nervure / solive
 
     Public ec As Decimal                            ' Espacement des vis de coutures
     Public FixCoutureType As Enu_CoutureType        ' Définit le type des vis de couture
+    Public dFsCouture As Decimal                    ' Diamètre des vis de couture
 
     Public lMaintienBac As Boolean                  ' Indique si on active le maintien par le bac
     Public lTheta As Boolean                        ' Indique si on prend en compte la rigidité de flexion du bac pour le calcul au déversement
+
+    Public Tpr As Decimal                           ' Epaisseur de revêtement du bac
 
 #End Region
 
@@ -65,10 +69,13 @@ Public Class cls_MaintienBac
         Transition = Enu_Transition.Aboutage
         FixNervuresMod = Enu_FixationNervures.Toutes
         FixnervuresTyp = Enu_FixNervuresType.Pistolet
+        dFpNerv = 4 / 1000
+        dFsCouture = 4.8 / 1000
         Me.ec = 0.5
         FixCoutureType = Enu_CoutureType.Vis
         lMaintienBac = False
         lTheta = False
+        Me.Tpr = 0
     End Sub
 
 #End Region
@@ -403,6 +410,305 @@ Public Class cls_MaintienBac
         Return TabBeta1(Indice)
     End Function
 
+
+#End Region
+
+#Region " Résistances du bac pour le maintien au déversement (CECM 88) "
+
+    Public Function ResistanceVbRd(PorteeL As Decimal, EntraxeD As Decimal, myBac As cls_Bac, GammaP As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------
+        '   287/01/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Résistance du panneau due aux fixations
+        '---------------------------------------------------------------------------------------------------
+        '   EntraxeD    [E] :   Entraxe des solives (= portée du bac)
+        '   myBac       [E] :   Bac procurant le maintien latéral
+        '   GammaP      [E] :   Coefficient partiel du bac
+        '---------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim VbRd As Decimal
+        Dim VbRdG As Decimal
+        Dim VbRdL As Decimal
+        Dim TpRed As Decimal
+        Dim Br As Decimal
+        Dim EpsilonP As Decimal
+
+        '--( Intialisations
+
+        TpRed = myBac.Tp - Me.Tpr
+        Br = myBac.Ep - myBac.Bt
+        EpsilonP = Math.Sqrt(235 / myBac.Fyp)
+        VbRdG = Me.ResistanceVbRdGlobal(PorteeL, EntraxeD, myBac, GammaP)
+
+        '--( Calculs
+
+        If IsSmallerOrEqual(Br / TpRed, 86.7 * EpsilonP) Then
+            VbRd = VbRdG
+        Else
+            VbRdL = Me.ResistanceVbRdLocal(PorteeL, myBac, GammaP)
+
+            VbRd = VbRdG * VbRdL / (VbRdG + VbRdL)
+        End If
+
+        Return VbRd
+    End Function
+
+    Public Function ResistanceVbRdGlobal(PorteeL As Decimal, EntraxeD As Decimal, myBac As cls_Bac, GammaP As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------
+        '   287/01/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Résistance du panneau due aux fixations
+        '---------------------------------------------------------------------------------------------------
+        '   PorteeL     [E] :   Portée de la solive maitenue
+        '   EntraxeD    [E] :   Entraxe des solives (= portée du bac)
+        '   myBac       [E] :   Bac procurant le maintien latéral
+        '   GammaP      [E] :   Coefficient partiel du bac
+        '---------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim VbRdG As Decimal
+        Dim Dx, Dy As Decimal
+        Dim PerimU As Decimal
+        Dim TpRed As Decimal
+        Dim Ip As Decimal
+
+        '--( Intialisations
+
+        TpRed = myBac.Tp - Me.Tpr
+        PerimU = myBac.Bb + myBac.Ep - myBac.Bt + Math.Sqrt(4 * myBac.Hp ^ 2 + (myBac.Bt - myBac.Bb) ^ 2)
+        Ip = myBac.Ieff * myBac.Ep
+
+        Dx = cls_Acier.EYACIER * TpRed ^ 3 * myBac.Ep / (12 * (1 - cls_Acier.NU) * PerimU)
+        Dy = cls_Acier.EYACIER * Ip / myBac.Ep
+
+        '--( Calculs
+
+        VbRdG = Me.FonctionKnG * PorteeL / EntraxeD ^ 2 * Dx ^ 0.25 * Dy ^ 0.75 * kConvMPaPa / GammaP
+
+        Return VbRdG
+
+    End Function
+
+    Public Function ResistanceVbRdLocal(PorteeL As Decimal, myBac As cls_Bac, GammaP As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------
+        '   287/01/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Résistance du panneau due aux fixations
+        '---------------------------------------------------------------------------------------------------
+        '   PorteeL     [E] :   Portée de la solive maitenue
+        '   EntraxeD    [E] :   Entraxe des solives (= portée du bac)
+        '   myBac       [E] :   Bac procurant le maintien latéral
+        '   GammaP      [E] :   Coefficient partiel du bac
+        '---------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim VbRdL As Decimal
+        Dim TpRed As Decimal
+
+        '--( Intialisations
+
+        TpRed = myBac.Tp - Me.Tpr
+
+
+        '--( Calculs
+
+        VbRdL = 4.83 * cls_Acier.EYACIER * (TpRed / (myBac.Ep - myBac.Bt)) ^ 2 * PorteeL * TpRed * kConvMPaPa / GammaP
+
+        Return VbRdL
+
+    End Function
+
+    Public Function ResistanceFpEnRd(EntraxeD As Decimal, myBac As cls_Bac, GammaP As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------
+        '   27/01/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Résistance du panneau due aux fixations
+        '---------------------------------------------------------------------------------------------------
+        '   EntraxeD    [E] :   Entraxe des solives (= portée du bac)
+        '   myBac       [E] :   Bac procurant le maintien latéral
+        '   GammaP      [E] :   Coefficient partiel du bac
+        '---------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim FpEndRd As Decimal
+        Dim locTp As Decimal
+
+        '--( Initialisation
+
+        locTp = myBac.Tp - Me.Tpr
+
+        '--( Calculs
+
+        FpEndRd = Me.FonctionKn * EntraxeD * (locTp ^ 1.5) / (myBac.Ep ^ 0.5) * myBac.Fyp / GammaP
+
+        Return FpEndRd * kConvMPaPa
+
+    End Function
+
+    Private Function FonctionKn() As Decimal
+        '---------------------------------------------------------------------------------------------------
+        '   28/01/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient kn pour la résistance à l'extrémité du bac
+        '---------------------------------------------------------------------------------------------------
+        '---------------------------------------------------------------------------------------------------
+
+        Dim kn As Decimal
+
+        Select Case Me.FixNervuresMod
+            Case Enu_FixationNervures.Toutes
+                kn = 0.9
+            Case Enu_FixationNervures.UneSurDeux
+                kn = 0.3
+        End Select
+
+        Return kn
+
+    End Function
+    Private Function FonctionKnG() As Decimal
+        '---------------------------------------------------------------------------------------------------
+        '   28/01/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient kn pour la résistance à l'extrémité du bac
+        '---------------------------------------------------------------------------------------------------
+        '---------------------------------------------------------------------------------------------------
+
+        Dim knG As Decimal
+
+        Select Case Me.FixNervuresMod
+            Case Enu_FixationNervures.Toutes
+                knG = 28.8
+            Case Enu_FixationNervures.UneSurDeux
+                knG = 14.4
+        End Select
+
+        Return knG
+
+    End Function
+
+    Public Function ResistanceFpRd(Tnom As Decimal, Fup As Decimal, GammaM2 As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------
+        '   27/01/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Résistance individuelle d'une fixation bac-solive
+        '---------------------------------------------------------------------------------------------------
+        '   Tnom        [E]:    Epaisseur nominale du bac
+        '   Fup         [E] :   Résistance ultime à la traction du bac
+        '   GammaM2     [E] :   Coefficient partiel
+        '---------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim FpRd As Decimal
+        Dim Alpha As Decimal
+        Dim diametre As Decimal = Me.dFpNerv
+        Dim Tp As Decimal
+        Const UnMM As Decimal = 1 / 1000
+
+        '--( Initialisation
+
+        Tp = Tnom - Me.Tpr
+
+        '--( Calcul
+
+        Select Case Me.FixNervuresTyp
+            Case Enu_FixNervuresType.Pistolet
+
+                '*** d'après tableau 8.3 de l'EN 1993-1-13
+
+                FpRd = 3.2 * diametre * Tp * Fup / GammaM2
+
+            Case Enu_FixNervuresType.VisNeoprene, Enu_FixNervuresType.VisNormale
+
+                '*** d'après tableau 8.2 de l'EN 1993-1-13
+                '=== On suppose que l'épaisseur de la semelle est toujours supérieure à 2.5 fois l'épaisseur du bac
+
+                If IsSmaller(Tp, UnMM) Then
+                    Alpha = Math.Min(2.1, 3.2 * Math.Sqrt(Tp / Me.dFpNerv))
+                Else
+                    Alpha = 2.1
+                End If
+
+                FpRd = Alpha * diametre * Tp * Fup / GammaM2
+
+        End Select
+
+        Return FpRd * kConvMPaPa
+
+    End Function
+
+    Public Function ResistanceFsRd(Tnom As Decimal, Fup As Decimal, GammaM2 As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------
+        '   27/01/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Résistance individuelle d'une fixation de couture
+        '---------------------------------------------------------------------------------------------------
+        '   Tnom        [E]:    Epaisseur nominale du bac
+        '   Fup         [E] :   Résistance ultime à la traction du bac
+        '   GammaM2     [E] :   Coefficient partiel
+        '---------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim FsRd As Decimal
+        Dim Alpha As Decimal = Math.Min(2.1, 3.2 * Math.Sqrt(Tpr / Me.dFsCouture))
+        Dim Tp As Decimal
+
+        '--( Initialisation
+
+        Tp = Tnom - Me.Tpr
+        Alpha = Math.Min(2.1, 3.2 * Math.Sqrt(Tp / Me.dFsCouture))
+
+        '--( Calcul
+
+        '*** d'après tableau 8.1 ou 8.2 de l'EN 1993-1-13
+
+        FsRd = Alpha * Me.dFsCouture * Tp * Fup / GammaM2
+
+        Return FsRd * kConvMPaPa
+
+    End Function
+
+    Public Function ResistanceVmRd(EntraxeD As Decimal, myBac As cls_Bac, GammaM2 As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------
+        '   27/01/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Résistance du panneau due aux fixations
+        '---------------------------------------------------------------------------------------------------
+        '   EntraxeD    [E] :   Entraxe des solives (= portée du bac)
+        '   myBac       [E] :   Bac procurant le maintien latéral
+        '   GammaM2     [E] :   Coefficient partiel
+        '---------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim VmRd, FsRd, FpRd As Decimal
+        Dim pNc, pNf As Integer
+        Dim pBeta1, pBeta3 As Decimal
+        Dim Tnom As Decimal = myBac.Tp
+
+        '--( Initialisations
+
+        FsRd = Me.ResistanceFsRd(Tnom, myBac.Fup, GammaM2)
+        FpRd = Me.ResistanceFpRd(Tnom, myBac.Fup, GammaM2)
+        pNf = NbFixationNf(myBac)
+        pBeta1 = Me.Beta1(pNf)
+        pBeta3 = (pNf - 1) / pNf
+
+        pNc = Math.Floor(EntraxeD / Me.ec) - 1
+
+        '--( Calcul
+
+        VmRd = pNc * FsRd + pBeta1 / pBeta3 * FpRd
+
+        Return VmRd
+
+    End Function
 
 #End Region
 

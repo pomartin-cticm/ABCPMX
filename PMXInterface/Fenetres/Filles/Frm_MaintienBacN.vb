@@ -24,6 +24,7 @@ Public Class Frm_MaintienBacN
 
     Dim lBuild As Boolean = True
     Public localMaitienBac As New cls_MaintienBac
+    Public localFup As Decimal
 
     Dim AffParam As enu_AffParametres
 
@@ -77,6 +78,7 @@ Public Class Frm_MaintienBacN
 
     Private Sub InitialiseVariables()
         localMaitienBac = MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.Clone
+        localFup = MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Fup
         AffParam = enu_AffParametres.Plancher
     End Sub
 
@@ -209,6 +211,9 @@ Public Class Frm_MaintienBacN
         GereTransfertValeur(localMaitienBac.m, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.m, lModif)
         GereTransfertValeur(localMaitienBac.nt, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.nt, lModif)
         GereTransfertValeur(localMaitienBac.ec, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.ec, lModif)
+        GereTransfertValeur(localMaitienBac.Tpr, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.Tpr, lModif)
+        GereTransfertValeur(localFup, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Fup, lModif)
+
         GereTransfertValeur(localMaitienBac.lMaintienBac, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.lMaintienBac, lModif)
         GereTransfertValeur(localMaitienBac.lTheta, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.lTheta, lModif)
 
@@ -386,6 +391,7 @@ Public Class Frm_MaintienBacN
         '--> Représentation du maintien par le bac
 
         Dim dCarM As Decimal = EntraxeD / 10
+
         If myDeck.lMaintienBac Then
 
             If iSelect = SELPOUTRE Then
@@ -422,6 +428,8 @@ Public Class Frm_MaintienBacN
 
         If myDeck.lMaintienBac Then
 
+            Const kECH As Decimal = 0.95
+
             If iSelect = SELPOUTRE Then
                 MyPen = MyPenSelect
             Else
@@ -431,14 +439,17 @@ Public Class Frm_MaintienBacN
             xC = xPoutreRef + 3 * dCarM
             yC = (iBacS - 1 / 2) * bp + dCarM
 
-            DessineSymbolShear(MyGr, MyParAffD, xC, yC, 0.9 * dCarM, MyPen)
+            DessineSymbolShear(MyGr, MyParAffD, xC, yC, kECH * dCarM, MyPen)
 
-            yC = (iBacS - 1 / 2) * bp - dCarM
+            If myDeck.lTheta Then
 
-            DessineSymbolBending(MyGr, MyParAffD, xC, yC, 0.9 * dCarM, MyPen)
+                yC = (iBacS - 1 / 2) * bp - dCarM
+
+                DessineSymbolBending(MyGr, MyParAffD, xC, yC, kECH * dCarM, MyPen)
+
+            End If
 
         End If
-
 
         '--( Cotation
 
@@ -637,7 +648,7 @@ Public Class Frm_MaintienBacN
         '--( Préparation des points
 
         For i = 0 To NbPts
-            xPoints.Add(xC + 0.75 * dCar * (Math.Cos(i * DeltaA / 2) - 1))
+            xPoints.Add(xC + 0.75 * dCar * ((i * DeltaA / 2) - 1))
             yPoints.Add(yC + 0.5 * dCar * (Math.Sin(i * DeltaA)))
         Next
 

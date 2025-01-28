@@ -584,6 +584,7 @@ Public Class Frm_PMX
 
         Dim iPoutre As Integer
         Dim lOK As Boolean
+        Dim iErr As New List(Of Integer)
 
         '--( Boucle sur les poutres du projet : calculs
 
@@ -635,18 +636,45 @@ Public Class Frm_PMX
 
     End Sub
 
-    Private Function MaPoutreOKpourleCalcul(myPoutre As cls_Poutre) As Boolean
+    Private Function MaPoutreOKpourleCalcul(myBeam As cls_Poutre) As Boolean
         '--------------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '--------------------------------------------------------------------------------------------------
         '   Indique si le calcul de la poutre peut être effectué
         '--------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :
+        '   iErr        [S] :   Liste d'erreurs empechant le calcul
+        '--------------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
         Dim lOK As Boolean = True
+        Dim lEnrob As Boolean = myBeam.lEnrobage
+        Dim Hw As Decimal
+        Dim LambdaW As Decimal
+        Dim FyW, Epsilon As Decimal
+
+        '--> Initialisation
+
+        myBeam.iErrScope.Clear()
 
         '--> Traitement
+
+        '# Pour les poutres enrobées, elancement de l'âme limite à 124 epsilon
+
+        If lEnrob Then
+            Hw = myBeam.Section.ProfilA.HauteurAmeHw
+            LambdaW = Hw / myBeam.Section.ProfilA.Tw
+            FyW = myBeam.Section.FyW
+            Epsilon = myBeam.Section.Acier.get_epsilon(FyW)
+
+            If IsGreater(LambdaW, 124 * Epsilon) Then
+                myBeam.iErrScope.Add(1)
+            End If
+
+        End If
+
+        lOK = (myBeam.iErrScope.Count = 0)
 
         Return lOK
 

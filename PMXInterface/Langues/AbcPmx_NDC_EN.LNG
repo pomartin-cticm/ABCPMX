@@ -293,6 +293,15 @@ SECONDBEAMSNB			= Number of beams stabilised by the sheeting
 SECONDBEAMSPACING		= Spacing of beams
 FLOORWIDTH				= Width of the floor
 SHEETDIMENSIONS			= Dimensions of a sheet panel
+SHEETCOATING			= Thickness of coating
+SHEETRESISTANCES		= Resistances
+RESFIX					= Sheet-to-beam fastening
+RESSEAM					= Seam fastening
+RESPANEL				= Shear resistance of the deck
+SHEETNONPERMIISBLEM		= Non permissible modes of failure
+SHEETRESFIX				= Failure of sheet-to-beam fasteners
+SHEETENDFAILURE			= Failure of the end sheeting
+SHEETSHEARBUCKLING		= Failure to shear buckling
 ADJACENTSHEETOVERLAP	= At beam crossing, adjacent sheets are overlapping
 ADJACENTSHEETGAP		= At beam crossing, adjacent sheets are placed with a gap (discontinuous ribs)
 ADJACENTSHEETNOGAP		= At beam crossing, adjacent sheets are placed without gap (continuous ribs)
@@ -411,6 +420,11 @@ CALCULATIONTYPE			= Calculation type
 STUDCONCRETECOVER		= Concrete coverage
 WARNING 				= Warning:
 WARNINGCONCRETECOVERAGE = The concrete coverage is lower than the minimal value ($) required by $
+OUTOFSCOPE				= Scope of application
+THEBEAMOUTOFSCOPE		= The beam is out of the scope of $
+WEBSLENDERNESS			= Web slenderness
+WEBSLENDERNESSENCASED   = Web slenderness of partially encased profiles
+LIMITWEBSLENDERENCASED	= For partially encase profiles, the web slenderness should be less than $
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties
@@ -567,6 +581,7 @@ LOWERF					= Lower flange
 DESIGNVALUE				= Design value
 MINVALUE				= Minimum value
 MINIACCTOREF			= Minimum values according to the French Recommendations BNCM / CNC2M N0175
+MCRWITHSHEETRIGIDITIES	= Note: Critical values have been obtained considering the rigidities of the steel sheeting (see § $)
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Serviceability Limit States

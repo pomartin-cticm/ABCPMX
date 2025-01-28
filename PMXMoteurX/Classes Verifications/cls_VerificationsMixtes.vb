@@ -214,6 +214,7 @@
         Dim FluxRd(,) As Decimal = Nothing              ' Résistance de la connexion / u longueur le long de la barre
         Dim lPlastOK() As Boolean = {True, True}
         Dim iNodeZero(,) As Integer = Nothing
+        'Dim lMulti As Boolean
 
         '--> Initialisations
 

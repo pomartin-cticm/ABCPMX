@@ -56,6 +56,8 @@ Public Class Frm_MaintienBacN_Plancher
         Me.etq_UnitL3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+        Me.etq_UnitD1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitF1.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
 
     End Sub
 
@@ -91,6 +93,9 @@ Public Class Frm_MaintienBacN_Plancher
             Me.lbl_IndSheetDimensions.Text = Bloc("DIMENSIONS")
             Me.lbl_SheetLength.Text = Bloc("SHEETLENGTH")
             Me.lbl_SheetWidth.Text = Bloc("SHEETWIDTH")
+
+            Me.lbl_Tpr.Text = Bloc("THCOATING")
+            Me.lbl_Fu.Text = Bloc("FUP")
 
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -137,6 +142,8 @@ Public Class Frm_MaintienBacN_Plancher
 
         Me.txt_NbSheetsTransverse.Text = GetStringInUnitN(Frm_MaintienBacN.localMaitienBac.nt, Enu_TypeVariable.SansType, 2, 0, NON_U, False)
         Me.txt_EntraxeD.Text = GetStringInUnitN(EntraxeD, Enu_TypeVariable.Longueur, 4, 3, NON_U, True)
+        Me.txt_Tpr.Text = GetStringInUnitN(Frm_MaintienBacN.localMaitienBac.Tpr, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_Fup.Text = GetStringInUnitN(Frm_MaintienBacN.localFup, Enu_TypeVariable.Contrainte, 4, 3, NON_U, True)
 
         MAJI_DimensionsPlancher()
         MAJI_DimensionsPanneau()
@@ -148,6 +155,36 @@ Public Class Frm_MaintienBacN_Plancher
 #End Region
 
 #Region " Evènements "
+
+    Private Sub txt_Fup_TextChanged(sender As Object, e As EventArgs) Handles txt_Fup.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim Valeur As Decimal
+
+        If VerificationSaisie(sender, Valeur) Then
+            Frm_MaintienBacN.localFup = Valeur
+            'MAJI_DimensionsPlancher()
+            'MAJI_Transition()
+            'MAJI_Calculs()
+
+            'MAJI_Dessin()
+        End If
+    End Sub
+
+    Private Sub txt_Tpr_TextChanged(sender As Object, e As EventArgs) Handles txt_Tpr.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim Valeur As Decimal
+
+        If VerificationSaisie(sender, Valeur) Then
+            Frm_MaintienBacN.localMaitienBac.Tpr = Valeur
+            'MAJI_DimensionsPlancher()
+            'MAJI_Transition()
+            'MAJI_Calculs()
+
+            'MAJI_Dessin()
+        End If
+    End Sub
 
     Private Sub txt_NbSheetsTransverse_TextChanged(sender As Object, e As EventArgs) Handles txt_NbSheetsTransverse.TextChanged
         If lBuild Then Exit Sub
@@ -192,6 +229,20 @@ Public Class Frm_MaintienBacN_Plancher
                 ValMax = 10
                 lValMax = True
                 kUnit = 1
+
+            Case Me.txt_Tpr.Name
+
+                ValMin = 0
+                ValMax = (MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Tp / 10) / kUnit
+                lValMax = True
+
+            Case Me.txt_Fup.Name
+
+                kUnit = LogicielInfo.Transfert_Contraintes(LogicielOptions.IndUnitContraintes)
+
+                ValMin = 1
+                ValMax = 1000 / kUnit
+                lValMax = True
 
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
@@ -281,7 +332,7 @@ Public Class Frm_MaintienBacN_Plancher
 
 #Region " Symboles "
 
-    Private Sub PaintSymbols(sender As Object, e As PaintEventArgs) Handles img_ap.Paint, img_bp.Paint, img_m.Paint, img_nt.Paint
+    Private Sub PaintSymbols(sender As Object, e As PaintEventArgs) Handles img_ap.Paint, img_bp.Paint, img_m.Paint, img_nt.Paint, img_Tpr.Paint, img_Fup.Paint
 
         '--> Déclarations
 
@@ -303,6 +354,7 @@ Public Class Frm_MaintienBacN_Plancher
         lIndice = False
         lGrec = False
         lEgal = True
+
         Select Case sender.name
 
             Case Me.img_ap.Name
@@ -320,6 +372,14 @@ Public Class Frm_MaintienBacN_Plancher
             Case Me.img_nt.Name
                 strSymbol = "n"
                 strIndice = "t"
+
+            Case Me.img_Tpr.Name
+                strSymbol = "t"
+                strIndice = "pr"
+
+            Case Me.img_Fup.Name
+                strSymbol = "f"
+                strIndice = "up"
 
         End Select
 
@@ -411,6 +471,10 @@ Public Class Frm_MaintienBacN_Plancher
     End Sub
 
     Private Sub txt_SheetWidth_MouseLeave(sender As Object, e As EventArgs) Handles txt_SheetWidth.MouseLeave
+        Frm_MaintienBacN.ChangeSelect(-1)
+    End Sub
+
+    Private Sub cmb_NbSpan_MouseLeave(sender As Object, e As EventArgs) Handles cmb_NbSpan.MouseLeave
         Frm_MaintienBacN.ChangeSelect(-1)
     End Sub
 

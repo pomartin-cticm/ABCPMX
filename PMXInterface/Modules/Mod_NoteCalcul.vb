@@ -55,6 +55,7 @@ Module Mod_NoteCalcul
     'Nom de l'imprimante virtuelle pour créer un PDF
     Public Const PrintPDFName As String = "Microsoft Print to PDF"
 
+    Private NumTitreMaintienBac As String = ""
 
     Const NBSIGN_ANALYSE As Integer = 4
     Const NBDIGI_ANALYSE As Integer = 3
@@ -124,6 +125,7 @@ Module Mod_NoteCalcul
         '----------------------------------------------------------------------------------------------
         '   lEdite      [E] :   Indique si on ouvre la fenetre ou pas
         '   lProjet     [E] :   Indique si note globale projet ou note particulière d'une poutre
+        '   iErr        [E] :   Liste de conditions plaçcant la poutre hors du domaine d'application
         '----------------------------------------------------------------------------------------------
 
         '--[ Initialisations
@@ -194,7 +196,7 @@ Module Mod_NoteCalcul
         '   myPro      [E] :   Projet traité
         '----------------------------------------------------------------------------------------------
 
-        'Dim lControleOK As Boolean
+        Dim lControleOK As Boolean = (myPro.Poutres(myPro.IndEnCours).iErrScope.Count = 0)
 
         lChapitreOutOfScope = False
 
@@ -229,30 +231,35 @@ Module Mod_NoteCalcul
 
         EditionProprietesSection(myPro.Poutres(myPro.IndEnCours))
 
-        '--|=========================================
-        '--| ANALYSE DE LA SELPOUTRE
-        '--|=========================================
+        If lControleOK Then
 
-        EditionAnalysePoutre(myPro.Poutres(myPro.IndEnCours))
-        EditionAnalysePoutreSigma(myPro.Poutres(myPro.IndEnCours))
+            '--|=========================================
+            '--| ANALYSE DE LA POUTRE
+            '--|=========================================
 
-        '--|=========================================
-        '--| VERIFICATION DES CRITERES ELU
-        '--|=========================================
+            EditionAnalysePoutre(myPro.Poutres(myPro.IndEnCours))
+            EditionAnalysePoutreSigma(myPro.Poutres(myPro.IndEnCours))
 
-        ACC_EditionVerificationsELU(myPro.Poutres(myPro.IndEnCours))
+            '--|=========================================
+            '--| VERIFICATION DES CRITERES ELU
+            '--|=========================================
 
-        '--|=========================================
-        '--| VERIFICATION DES CRITERES ELS
-        '--|=========================================
+            ACC_EditionVerificationsELU(myPro.Poutres(myPro.IndEnCours))
 
-        ACC_EditionVerificationsELS(myPro.Poutres(myPro.IndEnCours))
+            '--|=========================================
+            '--| VERIFICATION DES CRITERES ELS
+            '--|=========================================
 
-        '--|=========================================
-        '--| VERIFICATION DES CRITERES AU FEU
-        '--|=========================================
+            ACC_EditionVerificationsELS(myPro.Poutres(myPro.IndEnCours))
 
-        ACC_EditionVerificationsFEU(myPro.Poutres(myPro.IndEnCours))
+            '--|=========================================
+            '--| VERIFICATION DES CRITERES AU FEU
+            '--|=========================================
+
+            ACC_EditionVerificationsFEU(myPro.Poutres(myPro.IndEnCours))
+
+        End If
+
 
     End Sub
 
@@ -339,6 +346,56 @@ Module Mod_NoteCalcul
     End Sub
 
 #End Region
+
+#Region " Gestion hors domaine d'application "
+
+    Private Sub EditionHorsDomaine(myBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   12/08/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des paramètres d'une poutre
+        '----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim WebSlender As Decimal
+        Dim Limit As Decimal
+
+        '--( Traitement des cas hors domaine d'applicaiton
+
+        If myBeam.iErrScope.Count > 0 Then
+
+            AddTitreNdC(2, BlocG("OUTOFSCOPE"))
+
+            AddLigneNDC(TABW2 & RemplaceDollar(BlocG("THEBEAMOUTOFSCOPE"), LogicielInfo.Racine))
+
+            For iErr As Integer = 0 To myBeam.iErrScope.Count - 1
+
+                Select Case myBeam.iErrScope(iErr)
+                    Case 1
+                        '# Elancement des âmes de profilés partiellement enrobé
+
+                        AddLigneNDC(TABW2 & "\U" & BlocG("WEBSLENDERNESSENCASED") & "\u")
+
+                        WebSlender = myBeam.Section.ProfilA.HauteurAmeHw / myBeam.Section.ProfilA.Tw
+                        Limit = 124 * myBeam.Section.Acier.get_epsilon(myBeam.Section.FyW)
+
+                        AddLigneNDC(TABW2 & BlocG("WEBSLENDERNESS") & TABAFF2 & "h\-w\= / t\-w\= = " & GetStringInUnitN(WebSlender, Enu_TypeVariable.SansType, 4, 2, NON, True))
+                        AddLigneNDC(TABAFF2 & "124 \Se\s = " & GetStringInUnitN(Limit, Enu_TypeVariable.SansType, 4, 2, NON, True))
+
+                        AddLigneNDC(TABW2 & RemplaceDollar(BlocG("LIMITWEBSLENDERENCASED"), "124 \Se\s"))
+
+                End Select
+
+            Next
+
+        End If
+
+    End Sub
+
+
+#End Region
+
 
 #Region "***Synthèse des poutres du projet***"
 
@@ -1011,7 +1068,7 @@ Module Mod_NoteCalcul
 
         '--[ Déclarations
 
-        Dim lOut As Boolean = False
+        Dim lOut As Boolean = Not (MyBeam.iErrScope.Count = 0)
 
         '--[ Paramètres de base
 
@@ -1019,7 +1076,6 @@ Module Mod_NoteCalcul
 
         '--[ Poutre hors domaine d'application
 
-        'lOut = MyBeam.EstDansDomaineApplication
         If lOut Then EditionHorsDomaine(MyBeam)
 
         '--[ Section
@@ -1316,8 +1372,8 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("COMPOSAB") & "\g")
         End Select
 
-        AddLigneNDC(TABW2 & BlocG("LENGTHBEAM") & TABAFF2 & "L\-tot\= = " & GetStringInUnit(MyBeam.LongueurTotale, Enu_TypeVariable.Longueur, 4, 2, True))
-        AddLigneNDC(TABW2 & BlocG("NBTOTSPAN") & TABAFF2 & GetStringInUnit(MyBeam.NbTravees, Enu_TypeVariable.SansType, 2, 0, True))
+        AddLigneNDC(TABW2 & BlocG("LENGTHBEAM") & TABAFF2 & "L\-tot\= = " & GetStringInUnitN(MyBeam.LongueurTotale, Enu_TypeVariable.Longueur, 4, 2, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("NBTOTSPAN") & TABAFF2 & GetStringInUnitN(MyBeam.NbTravees, Enu_TypeVariable.SansType, 2, 0, NON, False))
 
 
         ' -->Tableau récapitulatif de la poutre 
@@ -1404,19 +1460,19 @@ Module Mod_NoteCalcul
 
         If MyBeam.lMixte And (MyBeam.lTremieGauche Or MyBeam.lTremieDroite) Then SauteLigne()
 
-        AddLigneNDC(TABW2 & BlocG("LEFTSPACING") & TABAFF2 & "d\-1\= = " & GetStringInUnit(MyBeam.EntraxeD1, Enu_TypeVariable.Longueur, 4, 2, True))
-        AddLigneNDC(TABW2 & BlocG("RIGHTSPACING") & TABAFF2 & "d\-2\= = " & GetStringInUnit(MyBeam.EntraxeD2, Enu_TypeVariable.Longueur, 4, 2, True))
+        AddLigneNDC(TABW2 & BlocG("LEFTSPACING") & TABAFF2 & "d\-1\= = " & GetStringInUnitN(MyBeam.EntraxeD1, Enu_TypeVariable.Longueur, 4, 2, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("RIGHTSPACING") & TABAFF2 & "d\-2\= = " & GetStringInUnitN(MyBeam.EntraxeD2, Enu_TypeVariable.Longueur, 4, 2, OUI, True))
 
         '==> POM
 
         If MyBeam.lMixte Then
 
             If MyBeam.lTremieGauche Then
-                AddLigneNDC(TABW2 & BlocG("LEFTOPENING") & TABAFF2 & "d\-sl,1\= = " & GetStringInUnit(MyBeam.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, True))
+                AddLigneNDC(TABW2 & BlocG("LEFTOPENING") & TABAFF2 & "d\-sl,1\= = " & GetStringInUnitN(MyBeam.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, OUI, True))
             End If
 
             If MyBeam.lTremieDroite Then
-                AddLigneNDC(TABW2 & BlocG("RIGHTOPENING") & TABAFF2 & "d\-sl,2\= = " & GetStringInUnit(MyBeam.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, True))
+                AddLigneNDC(TABW2 & BlocG("RIGHTOPENING") & TABAFF2 & "d\-sl,2\= = " & GetStringInUnitN(MyBeam.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, OUI, True))
             End If
 
             If ((Not MyBeam.lTremieDroite) And (Not MyBeam.lTremieGauche)) Then
@@ -1458,16 +1514,6 @@ Module Mod_NoteCalcul
         Else
             AddLigneNDC("\IMG PORTEE_COUPE 20 60 10 NoCadre")
         End If
-    End Sub
-
-    Private Sub EditionHorsDomaine(ByVal MyBeam As cls_Poutre)
-        '----------------------------------------------------------------------------------------------
-        '   10/07/23 :  Création - Version 1.00 - POM
-        '----------------------------------------------------------------------------------------------
-        '   Traitement d'une poutre hors du domaine d'application
-        '----------------------------------------------------------------------------------------------
-
-        ' A COMPLETER PLUS TARD
     End Sub
 
     Private Sub EditionParametresSection(ByVal MyBeam As cls_Poutre)
@@ -2567,17 +2613,18 @@ Module Mod_NoteCalcul
 
         If myBeam.lMaintienBacPossible And myBeam.MaintienBac.lMaintienBac Then
 
-            AddTitreNdC(2, BlocG("SHEETRESTRAINT"))
+            AddTitreNdC(2, BlocG("SHEETRESTRAINT"), NumTitreMaintienBac)
 
             '--( Général
 
             AddLigneNDC(TABW2 & BlocG("SHEETNBTDIR") & TABAFF & "nt" & TABEGAL & CStr(myBeam.MaintienBac.nt))
             AddLigneNDC(TABW2 & BlocG("SHEETSPANNUMBER") & TABAFF & "m" & TABEGAL & CStr(myBeam.MaintienBac.m))
             AddLigneNDC(TABW2 & BlocG("SECONDBEAMSNB") & TABAFF & "ns" & TABEGAL & CStr(ns))
-            AddLigneNDC(TABW2 & BlocG("SECONDBEAMSPACING") & TABAFF & "d" & TABEGAL & GetStringInUnit(EntraxeD, Enu_TypeVariable.Longueur, 3, 2, True))
-            AddLigneNDC(TABW2 & BlocG("FLOORWIDTH") & TABAFF & "" & TABEGAL & GetStringInUnit((ns - 1) * EntraxeD, Enu_TypeVariable.Longueur, 3, 2, True))
-            AddLigneNDC(TABW2 & BlocG("SHEETDIMENSIONS") & TABAFF & "ap" & TABEGAL & GetStringInUnit((myBeam.MaintienBac.m) * EntraxeD, Enu_TypeVariable.Longueur, 3, 2, True))
-            AddLigneNDC(TABAFF & "bp" & TABEGAL & GetStringInUnit(myBeam.Dalle.Bac.LargeurModule, Enu_TypeVariable.Longueur, 3, 2, True))
+            AddLigneNDC(TABW2 & BlocG("SECONDBEAMSPACING") & TABAFF & "d" & TABEGAL & GetStringInUnitN(EntraxeD, Enu_TypeVariable.Longueur, 3, 2, OUI, True))
+            AddLigneNDC(TABW2 & BlocG("FLOORWIDTH") & TABAFF & "" & TABEGAL & GetStringInUnitN((ns - 1) * EntraxeD, Enu_TypeVariable.Longueur, 3, 2, OUI, True))
+            AddLigneNDC(TABW2 & BlocG("SHEETDIMENSIONS") & TABAFF & "ap" & TABEGAL & GetStringInUnitN((myBeam.MaintienBac.m) * EntraxeD, Enu_TypeVariable.Longueur, 3, 2, OUI, True))
+            AddLigneNDC(TABAFF & "bp" & TABEGAL & GetStringInUnitN(myBeam.Dalle.Bac.LargeurModule, Enu_TypeVariable.Longueur, 3, 2, OUI, True))
+            AddLigneNDC(TABW2 & BlocG("SHEETCOATING") & TABAFF & "t\-pr\=" & TABEGAL & GetStringInUnitN(myBeam.MaintienBac.Tpr, Enu_TypeVariable.Dimension, 4, 4, OUI, True))
 
             '--( Panneaux adjacent au support des poutres
 
@@ -2605,8 +2652,9 @@ Module Mod_NoteCalcul
                 Case cls_MaintienBac.Enu_FixNervuresType.VisNormale : Chaine = BlocG("SELFDSCREWSNEOPRENW") : ChaineD = BlocG("FIXDIASCREWS")
             End Select
             AddLigneNDC(TABW2 & BlocG("FASTENERTYPE") & TABAFF & Chaine)
-            AddLigneNDC(TABW2 & BlocG("FIXDIAMETER") & TABAFF & ChaineD)
-            AddLigneNDC(TABW2 & BlocG("FIXSLIP") & TABAFF & GetStringInUnit(myBeam.MaintienBac.FixNervuresSlip * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & UNITFlex)
+            'AddLigneNDC(TABW2 & BlocG("FIXDIAMETER") & TABAFF & ChaineD)
+            AddLigneNDC(TABW2 & BlocG("FIXDIAMETER") & TABAFF & GetStringInUnitN(myBeam.MaintienBac.dFpNerv, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
+            AddLigneNDC(TABW2 & BlocG("FIXSLIP") & TABAFF & GetStringInUnitN(myBeam.MaintienBac.FixNervuresSlip * kUnitSlip, Enu_TypeVariable.SansType, 4, 3, NON, True) & UNITFlex)
 
             '--( Fixations de couture
 
@@ -2616,8 +2664,9 @@ Module Mod_NoteCalcul
                 Case cls_MaintienBac.Enu_CoutureType.Vis : Chaine = BlocG("SEAMSCREW") : ChaineD = BlocG("SEAMDIASCREW")
             End Select
             AddLigneNDC(TABW2 & BlocG("FASTENERTYPE") & TABAFF & Chaine)
-            AddLigneNDC(TABW2 & BlocG("FIXDIAMETER") & TABAFF & ChaineD)
-            AddLigneNDC(TABW2 & BlocG("FIXSLIP") & TABAFF & GetStringInUnit(myBeam.MaintienBac.FixCoutureSlip * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & UNITFlex)
+            'AddLigneNDC(TABW2 & BlocG("FIXDIAMETER") & TABAFF & ChaineD)
+            AddLigneNDC(TABW2 & BlocG("FIXDIAMETER") & TABAFF & GetStringInUnitN(myBeam.MaintienBac.dFsCouture, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
+            AddLigneNDC(TABW2 & BlocG("FIXSLIP") & TABAFF & GetStringInUnitN(myBeam.MaintienBac.FixCoutureSlip * kUnitSlip, Enu_TypeVariable.SansType, 4, 3, NON, True) & UNITFlex)
 
             '--( Flexibilité et raideur en cisaillement
 
@@ -2630,18 +2679,19 @@ Module Mod_NoteCalcul
             Dim c22 As Decimal = myBeam.MaintienBac.Flexibilite_C21_BeamFasteners(PorteeL, EntraxeD, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Ep)
 
             Dim Sact, cCumul As Decimal
+            Const locTabAFF As String = "\T50"
 
             SauteLigne()
             AddLigneNDC(TABW2 & BlocG("SHEARFLEXIBILITIES"))
-            AddLigneNDC(TABAFF & "c11" & TABEGAL & GetStringInUnit(c11 * kUnitFlex, Enu_TypeVariable.SansType, 4, 3, False) & UNITFlex)
-            AddLigneNDC(TABAFF & "c12" & TABEGAL & GetStringInUnit(c12 * kUnitFlex, Enu_TypeVariable.SansType, 4, 3, False) & UNITFlex)
-            AddLigneNDC(TABAFF & "c21" & TABEGAL & GetStringInUnit(c21 * kUnitFlex, Enu_TypeVariable.SansType, 4, 3, False) & UNITFlex)
-            AddLigneNDC(TABAFF & "c22" & TABEGAL & GetStringInUnit(c22 * kUnitFlex, Enu_TypeVariable.SansType, 4, 3, False) & UNITFlex)
+            AddLigneNDC(locTabAFF & "c\-11\=" & TABEGAL & GetStringInUnitN(c11 * kUnitFlex, Enu_TypeVariable.SansType, 4, 3, NON, False) & UNITFlex)
+            AddLigneNDC(locTabAFF & "c\-12\=" & TABEGAL & GetStringInUnitN(c12 * kUnitFlex, Enu_TypeVariable.SansType, 4, 3, NON, False) & UNITFlex)
+            AddLigneNDC(locTabAFF & "c\-21\=" & TABEGAL & GetStringInUnitN(c21 * kUnitFlex, Enu_TypeVariable.SansType, 4, 3, NON, False) & UNITFlex)
+            AddLigneNDC(locTabAFF & "c\-22\=" & TABEGAL & GetStringInUnitN(c22 * kUnitFlex, Enu_TypeVariable.SansType, 4, 3, NON, False) & UNITFlex)
 
             cCumul = c11 + c12 + c21 + c22
             Sact = PorteeL / cCumul
 
-            AddLigneNDC(TABAFF & "Sact" & TABEGAL & GetStringInUnit(Sact, Enu_TypeVariable.Rigidite, 4, 3, True))
+            AddLigneNDC(locTabAFF & "S\-act\=" & TABEGAL & GetStringInUnitN(Sact, Enu_TypeVariable.Rigidite, 4, 3, OUI, True))
 
             SauteLigne()
 
@@ -2655,13 +2705,98 @@ Module Mod_NoteCalcul
                 kThetaC = MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.RigiditeFlexionnelleC(EntraxeD, myBeam.lIntermediaire)
                 kTheta = 1 / (1 / kThetaA + 1 / kThetaC)
 
-                AddLigneNDC(TABAFF & "k\-\Sq\sA\=" & TABEGAL & GetStringInUnit(kThetaA, Enu_TypeVariable.Effort, 4, 3, True) & "m/m")
-                AddLigneNDC(TABAFF & "k\-\Sq\sC\=" & TABEGAL & GetStringInUnit(kThetaC, Enu_TypeVariable.Effort, 4, 3, True) & "m/m")
-                AddLigneNDC(TABAFF & "k\-\Sq\s\=" & TABEGAL & GetStringInUnit(kTheta, Enu_TypeVariable.Effort, 4, 3, True) & "m/m")
+                AddLigneNDC(locTabAFF & "k\-\Sq\sA\=" & TABEGAL & GetStringInUnitN(kThetaA, Enu_TypeVariable.Effort, 4, 3, OUI, True) & "m/m")
+                AddLigneNDC(locTabAFF & "k\-\Sq\sC\=" & TABEGAL & GetStringInUnitN(kThetaC, Enu_TypeVariable.Effort, 4, 3, OUI, True) & "m/m")
+                AddLigneNDC(locTabAFF & "k\-\Sq\s\=" & TABEGAL & GetStringInUnitN(kTheta, Enu_TypeVariable.Effort, 4, 3, OUI, True) & "m/m")
 
             Else
                 AddLigneNDC(TABW2 & BlocG("NOBENDINGSTIFFNESS") & TABAFF & Chaine)
             End If
+
+            '--( Résistances
+
+            Dim FpRd, FsRd, VmRd As Decimal
+            'Dim Fup As Decimal = 450
+
+            SauteLigne()
+            AddLigneNDC(TABW2 & BlocG("SHEETRESISTANCES"))
+
+            FpRd = myBeam.MaintienBac.ResistanceFpRd(myBeam.Dalle.Bac.Tp, myBeam.Dalle.Bac.Fup, myBeam.Param.Gamma.GammaM2)
+            AddLigneNDC(TABW3 & BlocG("RESFIX") & TABAFF & "F\-p,Rd\=" & TABEGAL & GetStringInUnitN(FpRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
+
+            FsRd = myBeam.MaintienBac.ResistanceFsRd(myBeam.Dalle.Bac.Tp, myBeam.Dalle.Bac.Fup, myBeam.Param.Gamma.GammaM2)
+            AddLigneNDC(TABW3 & BlocG("RESSEAM") & TABAFF & "F\-s,Rd\=" & TABEGAL & GetStringInUnitN(FsRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
+
+            VmRd = myBeam.MaintienBac.ResistanceVmRd(myBeam.EntraxeSolive, myBeam.Dalle.Bac, myBeam.Param.Gamma.GammaM2)
+            AddLigneNDC(TABW3 & BlocG("RESPANEL") & TABAFF & "V\-m,Rd\=" & TABEGAL & GetStringInUnitN(VmRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
+
+            SauteLigne()
+            AddLigneNDC(TABW2 & BlocG("SHEETNONPERMIISBLEM"))
+            AddLigneNDC(TABW3 & BlocG("SHEETRESFIX"))
+
+            Dim eL As Decimal = myBeam.MaintienBac.EntraxeLongi(myBeam.Dalle.Bac.Ep)
+            Dim V06 As Decimal = 0.6 * EntraxeD / eL * FpRd
+            Dim ChaineV06 As String = "0,6 e\-L\= F\-p,Rd\= / e\-L\="
+
+            Const TABBAL As String = "\T85\BAL"
+            Const SP As String = " "
+
+            AddLigneNDC(locTabAFF & "d" & TABEGAL & GetStringInUnitN(EntraxeD, Enu_TypeVariable.Longueur, 4, 3, OUI, False))
+            AddLigneNDC(locTabAFF & "e\-L\=" & TABEGAL & GetStringInUnitN(eL, Enu_TypeVariable.Longueur, 4, 3, OUI, False))
+            AddLigneNDC(locTabAFF & ChaineV06 & TABEGAL & GetStringInUnitN(V06, Enu_TypeVariable.Effort, 4, 3, OUI, False))
+
+            If IsGreaterOrEqual(V06, VmRd) Then
+
+                AddLigneNDC(locTabAFF & ChaineV06 & SP & SUPEGAL & " V\-m,Rd\=" & TABBAL)
+                AfficheBalise(True)
+
+            Else
+
+                AddLigneNDC(locTabAFF & ChaineV06 & SP & "< V\-m,Rd\=" & TABBAL)
+                AfficheBalise(False)
+
+            End If
+
+            Dim FpEndRd As Decimal = myBeam.MaintienBac.ResistanceFpEnRd(EntraxeD, myBeam.Dalle.Bac, myBeam.Param.Gamma.GammaP)
+            Dim ChaineFpend As String = "F\-p,end,Rd\="
+
+            SauteLigne()
+            AddLigneNDC(TABW3 & BlocG("SHEETENDFAILURE") & TABAFF & ChaineFpend & TABEGAL & GetStringInUnitN(FpEndRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
+            If IsGreaterOrEqual(FpEndRd, VmRd) Then
+
+                AddLigneNDC(locTabAFF & ChaineFpend & SP & SUPEGAL & " V\-m,Rd\=" & TABBAL)
+                AfficheBalise(True)
+
+            Else
+
+                AddLigneNDC(locTabAFF & ChaineFpend & SP & "< V\-m,Rd\=" & TABBAL)
+                AfficheBalise(False)
+
+            End If
+
+            Dim VbRd As Decimal = myBeam.MaintienBac.ResistanceVbRd(myBeam.LongueurTravee(1), EntraxeD, myBeam.Dalle.Bac, myBeam.Param.Gamma.GammaP)
+            Dim ChaineVbRd As String = "V\-b,Rd\="
+            Dim ChaineVbRdDsurL As String = "V\-b,Rd\= d / L"
+            Dim VbRddSurL As Decimal = VbRd * EntraxeD / myBeam.LongueurTravee(1)
+
+            SauteLigne()
+            AddLigneNDC(TABW3 & BlocG("SHEETSHEARBUCKLING") & TABAFF & ChaineVbRd & TABEGAL & GetStringInUnitN(VbRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
+            AddLigneNDC(locTabAFF & ChaineVbRdDsurL & TABEGAL & GetStringInUnitN(VbRddSurL, Enu_TypeVariable.Effort, 4, 3, OUI, False))
+
+            If IsGreaterOrEqual(VbRddSurL, VmRd) Then
+
+                AddLigneNDC(locTabAFF & ChaineVbRdDsurL & SP & SUPEGAL & " V\-m,Rd\=" & TABBAL)
+                AfficheBalise(True)
+
+            Else
+
+                AddLigneNDC(locTabAFF & ChaineVbRdDsurL & SP & "< V\-m,Rd\=" & TABBAL)
+                AfficheBalise(False)
+
+            End If
+
+
+
         End If
 
     End Sub
@@ -8323,6 +8458,13 @@ Module Mod_NoteCalcul
             Next
 
             FinTableau()
+
+            If (lConstructionP) And MyBeam.MaintienBac.lMaintienBac Then
+
+                AddLigneNDC(TABW2 & RemplaceDollar(BlocELU("MCRWITHSHEETRIGIDITIES"), NumTitreMaintienBac))
+
+            End If
+
         End If
 
 
@@ -9891,11 +10033,27 @@ Module Mod_NoteCalcul
     End Sub
 
     Public Sub AddTitreNdC(ByVal Niveau As Integer, ByVal Titre As String)
+
+        Dim Numerotation As String = ""
+        AddTitreNdC(Niveau, Titre, Numerotation)
+
+    End Sub
+
+    Public Sub AddTitreNdC(ByVal Niveau As Integer, ByVal Titre As String, ByRef NumTitre As String)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   27/01/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Ajout d'un titre dans le rapport
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Niveau      [E] :   Niveau du titre (1 à 3)
+        '   Titre       [E] :   
+        '   NumTitre    [S] :   Numéro du titre utilisé
+        '-----------------------------------------------------------------------------------------------------------------
+
         MyNote.SauteLigne()
         nbLignes += 2 + CSng(1 / Niveau)
         If nbLignes > MAXLIGNEPPAG Then SautePage()
-
-        Dim Numerotation As String
+        'Dim pNum As String = ""
 
         MyNote.IndTitre(Niveau - 1) += 1
 
@@ -9903,8 +10061,8 @@ Module Mod_NoteCalcul
             MyNote.IndTitre(I) = 0
         Next
 
-        Numerotation = MyNote.GetNumerotationTitre(Niveau) & " - "
-        MyNote.AddLigneInRapport("\W0" & CStr(Niveau) & Numerotation & Titre)
+        NumTitre = MyNote.GetNumerotationTitre(Niveau)
+        MyNote.AddLigneInRapport("\W0" & CStr(Niveau) & NumTitre & " - " & Titre)
 
     End Sub
 

@@ -27,6 +27,13 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.pan_Slimfloor = New System.Windows.Forms.Panel()
         Me.TLpan_Conteneur = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Conteneur = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.img_ecMax = New System.Windows.Forms.PictureBox()
+        Me.txt_ecMax = New System.Windows.Forms.TextBox()
+        Me.etq_UnitDim4 = New System.Windows.Forms.Label()
+        Me.lbl_EntraxeCoutureMax = New System.Windows.Forms.Label()
+        Me.lbl_MaintienBac = New System.Windows.Forms.Label()
         Me.pan_Dalles = New System.Windows.Forms.Panel()
         Me.img_bappmin = New System.Windows.Forms.PictureBox()
         Me.txt_bappmin = New System.Windows.Forms.TextBox()
@@ -44,24 +51,17 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.lbl_hslimmax = New System.Windows.Forms.Label()
         Me.lbl_tpinfmin = New System.Windows.Forms.Label()
         Me.lbl_Slimfloors = New System.Windows.Forms.Label()
-        Me.lbl_MaintienBac = New System.Windows.Forms.Label()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.img_ecMax = New System.Windows.Forms.PictureBox()
-        Me.txt_ecMax = New System.Windows.Forms.TextBox()
-        Me.etq_UnitDim4 = New System.Windows.Forms.Label()
-        Me.lbl_EntraxeCoutureMax = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Slimfloor.SuspendLayout()
         Me.TLpan_Conteneur.SuspendLayout()
         Me.pan_Conteneur.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        CType(Me.img_ecMax, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Dalles.SuspendLayout()
         CType(Me.img_bappmin, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_SlimFloors.SuspendLayout()
         CType(Me.img_hslimmax, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_tpinfmin, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel1.SuspendLayout()
-        CType(Me.img_ecMax, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'ErrorProvider
@@ -108,6 +108,80 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.pan_Conteneur.Size = New System.Drawing.Size(739, 436)
         Me.pan_Conteneur.TabIndex = 0
         '
+        'Panel1
+        '
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.Controls.Add(Me.Label4)
+        Me.Panel1.Controls.Add(Me.img_ecMax)
+        Me.Panel1.Controls.Add(Me.txt_ecMax)
+        Me.Panel1.Controls.Add(Me.etq_UnitDim4)
+        Me.Panel1.Controls.Add(Me.lbl_EntraxeCoutureMax)
+        Me.Panel1.Location = New System.Drawing.Point(4, 94)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(731, 35)
+        Me.Panel1.TabIndex = 150
+        '
+        'Label4
+        '
+        Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(603, 11)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(13, 13)
+        Me.Label4.TabIndex = 154
+        Me.Label4.Text = "≥"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'img_ecMax
+        '
+        Me.img_ecMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_ecMax.Location = New System.Drawing.Point(556, 7)
+        Me.img_ecMax.Name = "img_ecMax"
+        Me.img_ecMax.Size = New System.Drawing.Size(46, 20)
+        Me.img_ecMax.TabIndex = 109
+        Me.img_ecMax.TabStop = False
+        '
+        'txt_ecMax
+        '
+        Me.txt_ecMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_ecMax.Location = New System.Drawing.Point(619, 7)
+        Me.txt_ecMax.Name = "txt_ecMax"
+        Me.txt_ecMax.Size = New System.Drawing.Size(58, 20)
+        Me.txt_ecMax.TabIndex = 108
+        '
+        'etq_UnitDim4
+        '
+        Me.etq_UnitDim4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim4.AutoSize = True
+        Me.etq_UnitDim4.Location = New System.Drawing.Point(683, 10)
+        Me.etq_UnitDim4.Name = "etq_UnitDim4"
+        Me.etq_UnitDim4.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim4.TabIndex = 110
+        Me.etq_UnitDim4.Text = "mm"
+        '
+        'lbl_EntraxeCoutureMax
+        '
+        Me.lbl_EntraxeCoutureMax.AutoSize = True
+        Me.lbl_EntraxeCoutureMax.Location = New System.Drawing.Point(39, 10)
+        Me.lbl_EntraxeCoutureMax.Name = "lbl_EntraxeCoutureMax"
+        Me.lbl_EntraxeCoutureMax.Size = New System.Drawing.Size(116, 13)
+        Me.lbl_EntraxeCoutureMax.TabIndex = 111
+        Me.lbl_EntraxeCoutureMax.Text = "lbl_EntraxeCoutureMax"
+        '
+        'lbl_MaintienBac
+        '
+        Me.lbl_MaintienBac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_MaintienBac.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_MaintienBac.Location = New System.Drawing.Point(4, 68)
+        Me.lbl_MaintienBac.Name = "lbl_MaintienBac"
+        Me.lbl_MaintienBac.Size = New System.Drawing.Size(733, 23)
+        Me.lbl_MaintienBac.TabIndex = 149
+        Me.lbl_MaintienBac.Text = "lbl_MaintienBac"
+        Me.lbl_MaintienBac.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'pan_Dalles
         '
         Me.pan_Dalles.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -124,9 +198,9 @@ Partial Class Frm_OptionsCalculSlimFloor
         'img_bappmin
         '
         Me.img_bappmin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_bappmin.Location = New System.Drawing.Point(556, 7)
+        Me.img_bappmin.Location = New System.Drawing.Point(541, 7)
         Me.img_bappmin.Name = "img_bappmin"
-        Me.img_bappmin.Size = New System.Drawing.Size(63, 20)
+        Me.img_bappmin.Size = New System.Drawing.Size(78, 20)
         Me.img_bappmin.TabIndex = 109
         Me.img_bappmin.TabStop = False
         '
@@ -283,80 +357,6 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.lbl_Slimfloors.Text = "lbl_Slimfloors"
         Me.lbl_Slimfloors.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lbl_MaintienBac
-        '
-        Me.lbl_MaintienBac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_MaintienBac.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_MaintienBac.Location = New System.Drawing.Point(4, 68)
-        Me.lbl_MaintienBac.Name = "lbl_MaintienBac"
-        Me.lbl_MaintienBac.Size = New System.Drawing.Size(733, 23)
-        Me.lbl_MaintienBac.TabIndex = 149
-        Me.lbl_MaintienBac.Text = "lbl_MaintienBac"
-        Me.lbl_MaintienBac.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Panel1
-        '
-        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.Controls.Add(Me.Label4)
-        Me.Panel1.Controls.Add(Me.img_ecMax)
-        Me.Panel1.Controls.Add(Me.txt_ecMax)
-        Me.Panel1.Controls.Add(Me.etq_UnitDim4)
-        Me.Panel1.Controls.Add(Me.lbl_EntraxeCoutureMax)
-        Me.Panel1.Location = New System.Drawing.Point(4, 94)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(731, 35)
-        Me.Panel1.TabIndex = 150
-        '
-        'img_ecMax
-        '
-        Me.img_ecMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_ecMax.Location = New System.Drawing.Point(556, 7)
-        Me.img_ecMax.Name = "img_ecMax"
-        Me.img_ecMax.Size = New System.Drawing.Size(46, 20)
-        Me.img_ecMax.TabIndex = 109
-        Me.img_ecMax.TabStop = False
-        '
-        'txt_ecMax
-        '
-        Me.txt_ecMax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_ecMax.Location = New System.Drawing.Point(619, 7)
-        Me.txt_ecMax.Name = "txt_ecMax"
-        Me.txt_ecMax.Size = New System.Drawing.Size(58, 20)
-        Me.txt_ecMax.TabIndex = 108
-        '
-        'etq_UnitDim4
-        '
-        Me.etq_UnitDim4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitDim4.AutoSize = True
-        Me.etq_UnitDim4.Location = New System.Drawing.Point(683, 10)
-        Me.etq_UnitDim4.Name = "etq_UnitDim4"
-        Me.etq_UnitDim4.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitDim4.TabIndex = 110
-        Me.etq_UnitDim4.Text = "mm"
-        '
-        'lbl_EntraxeCoutureMax
-        '
-        Me.lbl_EntraxeCoutureMax.AutoSize = True
-        Me.lbl_EntraxeCoutureMax.Location = New System.Drawing.Point(39, 10)
-        Me.lbl_EntraxeCoutureMax.Name = "lbl_EntraxeCoutureMax"
-        Me.lbl_EntraxeCoutureMax.Size = New System.Drawing.Size(116, 13)
-        Me.lbl_EntraxeCoutureMax.TabIndex = 111
-        Me.lbl_EntraxeCoutureMax.Text = "lbl_EntraxeCoutureMax"
-        '
-        'Label4
-        '
-        Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(603, 11)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(13, 13)
-        Me.Label4.TabIndex = 154
-        Me.Label4.Text = "≥"
-        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'Frm_OptionsCalculSlimFloor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -370,6 +370,9 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.pan_Slimfloor.ResumeLayout(False)
         Me.TLpan_Conteneur.ResumeLayout(False)
         Me.pan_Conteneur.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        CType(Me.img_ecMax, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Dalles.ResumeLayout(False)
         Me.pan_Dalles.PerformLayout()
         CType(Me.img_bappmin, System.ComponentModel.ISupportInitialize).EndInit()
@@ -377,9 +380,6 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.pan_SlimFloors.PerformLayout()
         CType(Me.img_hslimmax, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_tpinfmin, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
-        CType(Me.img_ecMax, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

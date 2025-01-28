@@ -89,7 +89,9 @@ Public Class cls_Bac
     ''' <summary>
     ''' Limite d'élasticité du bac
     ''' </summary>
-    Public fyp As Decimal
+    Public Fyp As Decimal
+
+    Public Fup As Decimal                               ' Résistance ultime à la traction
 
     ''' <summary>
     ''' Largeur d'un bac livré par le fabricant
@@ -144,6 +146,8 @@ Public Class cls_Bac
         Me.lPreperce = True
         AppuiT = EnuConfigTAppui.BetonSeulContinu
         AppuiL = EnuConfigLAppui.BacNonCoupe
+
+        Me.Fup = 420
     End Sub
 
     Sub New(MyFab As String, ByVal My_etiquette As String, ByVal Mybb As Decimal, ByVal Mybt As Decimal, ByVal Myhp As Decimal, ByVal Myhrs As Decimal,
@@ -165,6 +169,8 @@ Public Class cls_Bac
         Me.lPreperce = True
         AppuiT = EnuConfigTAppui.BetonSeulContinu
         AppuiL = EnuConfigLAppui.BacNonCoupe
+        Me.Fup = 420
+
     End Sub
 
 
@@ -190,6 +196,8 @@ Public Class cls_Bac
         Me.lPreperce = True
         AppuiT = EnuConfigTAppui.BetonSeulContinu
         AppuiL = EnuConfigLAppui.BacNonCoupe
+        Me.Fup = 420
+
     End Sub
 
 

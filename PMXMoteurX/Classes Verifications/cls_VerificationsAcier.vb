@@ -24,6 +24,7 @@ Public Class cls_VerificationsAcier
     Public CritereTauA As cls_Critere               ' Critère de contrainte de cisaillement élastique
     Public CritereSigmaVM As cls_Critere            ' Critère de contrainte élastique équivalente de Von Mises
     Public CritereLTB As cls_Critere                ' Critère pour le déversement
+    Public CritereBacLTB As cls_Critere             ' Critère pour la résistance du bac pour sa contribution au maintien latéral contre le déversement
 
     Public RhoV As Decimal(,)                       ' Coefficient d'interaction : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
 
@@ -53,7 +54,8 @@ Public Class cls_VerificationsAcier
         lCalculPlastic = True
     End Sub
 
-    Private Sub InitialiseCriteres(NbNodes As Integer, NbCombi As Integer, IndDerniereT As Integer, lElastic As Boolean, lElastiTau As Boolean)
+    Private Sub InitialiseCriteres(NbNodes As Integer, NbCombi As Integer, IndDerniereT As Integer, lElastic As Boolean, lElastiTau As Boolean,
+                                   lMaintienBac As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   30/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -64,6 +66,7 @@ Public Class cls_VerificationsAcier
         '   IndDerniereT[E] :   Indice de la dernière travée
         '   lElastic    [E] :   Cas d'un dimensionnement élastique VM en flexion
         '   lElasticTau [E] :   Cas d'un dimensionnement élastique VM en cisaillement
+        '   lMaintienBac[E] :   Indique si maintien par le bac
         '----------------------------------------------------------------------------------------------------------
 
         Me.CritereM = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
@@ -86,6 +89,10 @@ Public Class cls_VerificationsAcier
         If lElastiTau Then
             Me.CritereTauA = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
             Me.CritereSigmaVM = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+        End If
+
+        If lMaintienBac Then
+            Me.CritereBacLTB = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         End If
 
     End Sub
@@ -149,6 +156,9 @@ Public Class cls_VerificationsAcier
         Dim EpsilonW As Decimal
         Dim lEnrob As Boolean = myBeam.lEnrobage
         Dim lproPRS As Boolean = Not myBeam.Section.lLamine
+        Dim lMaintienBac As Boolean = myBeam.MaintienBac.lMaintienBac
+        Dim LambdaBLT, AlphaLT As Decimal
+        Dim VmRd As Decimal
 
         '--> Initialisations
 
@@ -164,6 +174,11 @@ Public Class cls_VerificationsAcier
 
         Me.InitialiseRhoV(nbCombiELU, myBeam.Nodes.nbNodes)
         Me.InitialiseCriteresVM(myBeam.Nodes.nbNodes, myBeam.lEnrobage, nbCombiELU, myBeam.IndiceDerniereTravee)
+
+        '# Résistance du bac pour le maintien latéral
+        If lConstructionPhase And lMaintienBac Then
+            VmRd = myBeam.MaintienBac.ResistanceVmRd(myBeam.EntraxeSolive, myBeam.Dalle.Bac, myBeam.Param.Gamma.GammaM2)
+        End If
 
         '# Tranchant résistant
 
@@ -218,7 +233,7 @@ Public Class cls_VerificationsAcier
 
         '# Initialisation des critères dépendant du type de vérification
 
-        Me.InitialiseCriteres(myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee, lVerifElastic, myBeam.Param.lElasticDesignVM)
+        Me.InitialiseCriteres(myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee, lVerifElastic, myBeam.Param.lElasticDesignVM, lMaintienBac And lConstructionPhase)
 
         '# Contraintes normales
 
@@ -326,7 +341,13 @@ Public Class cls_VerificationsAcier
 
             '# Vérification au déversement
 
-            Me.RunCritereDeversement(myBeam, iCombi, MEd, lVerifElastic, lConstructionPhase)
+            Me.RunCritereDeversement(myBeam, iCombi, MEd, lVerifElastic, lConstructionPhase, LambdaBLT, AlphaLT)
+
+            '# Vérification du bac acier en cas de maintien par le bac
+
+            If lConstructionPhase And lmaintienbac Then
+                RunCritereBac(myBeam, vmrd, iCombi, LambdaBLT, AlphaLT)
+            End If
 
             '# Dimensionnement des soudures de PRS
 
@@ -334,6 +355,55 @@ Public Class cls_VerificationsAcier
                 Me.RunDimensionSouduresAmeSemelle(myBeam, iCombi, FluxELU, Me.GorgesSoudures)
             End If
         Next
+
+    End Sub
+
+#End Region
+
+#Region " Vérification du bac utilisé comme maintien au déversement "
+
+    Private Sub RunCritereBac(myBeam As cls_Poutre, VmRd As Decimal, iCombi As Integer, LambdaBLT As Decimal, AlphaLT As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   07/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance au déversement
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam              [E] :   Poutre traitée
+        '   iCombi              [E] :   Indice de la combinaison
+        '   LambdaBLT           [E] :   Valeur de l'élancement réduit utilisé pour la vérification de la résistance au déversement
+        '   AlphaLT             [E] :   Valeur du coefficient d'imperfection
+        '----------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim AlphaCr As Decimal
+        Dim VmEd As Decimal
+        Dim Sact As Decimal
+        Dim PorteeL As Decimal
+        Dim e0 As Decimal
+        Dim EntraxeD As Decimal
+        Dim Wel, Aire As Decimal
+
+        '--( Initialisation
+
+        PorteeL = myBeam.LongueurTravee(1)
+        EntraxeD = myBeam.EntraxeSolive
+        AlphaCr = Me.AlphaCrLTB(iCombi)
+        Sact = myBeam.MaintienBac.RigiditeShear(PorteeL, EntraxeD, myBeam.Dalle.Bac, myBeam.Section.Acier.EYoung)
+        Aire = myBeam.Section.ProfilA.Aire
+        Wel = myBeam.Section.ProfilA.ModuleWelY
+
+        '--( Effort destabilisant
+
+        If Not IsSmallerOrEqual(AlphaCr, 1) Then
+
+            e0 = AlphaLT * (LambdaBLT - 0.2) * Wel / Aire
+            VmEd = Math.PI / (AlphaCr - 1) * Sact * e0 / PorteeL
+
+
+
+        End If
+
 
     End Sub
 
@@ -411,17 +481,19 @@ Public Class cls_VerificationsAcier
 #Region " Vérifications de la résistance au déversement "
 
     Private Sub RunCritereDeversement(myPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, lSigma As Boolean,
-                                      lConstructionPhase As Boolean)
+                                      lConstructionPhase As Boolean, ByRef LambdaBLT As Decimal, ByRef AlphaLT As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   07/12/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance au déversement
         '----------------------------------------------------------------------------------------------------------
-        '   myBeam            [E] :   Poutre traitée
+        '   myBeam              [E] :   Poutre traitée
         '   iCombi              [E] :   Indice de la combinaison
         '   MEd                 [E] :   Table des moments fléchissants le long de la poutre
         '   lSigma              [E] :   Indique si calcul élastique
         '   lConstructionPhase  [E] :   Indique si vérification d'une poutre mixte en phase de construction
+        '   LambdaBLT           [S] :   Valeur de l'élancement réduit
+        '   AlphaLT             [S] :   Valeur du coefficient d'imperfection
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -433,7 +505,7 @@ Public Class cls_VerificationsAcier
         Dim iTrav, iNode As Integer
         Dim iDebNod, iFinNod As Integer
         Dim MEdmax, Mcr, MRk As Decimal
-        Dim MbRd, KhiLT, LambdaBLT, AlphaLT As Decimal
+        Dim MbRd, KhiLT As Decimal
         Dim EN1993 As New cls_Eurocodes
         Dim zANE, InertieY As Decimal
         Dim nEqEc As Decimal

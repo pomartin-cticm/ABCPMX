@@ -145,6 +145,11 @@ Public Class cls_Poutre
     Public Param As New cls_OptionsCalcul
     Public ParamFeu As New cls_OptionsFeu
 
+    '#####################################################################################
+    '# Paramètres pour la compatibilité avec le domaine d'application
+    '#####################################################################################
+
+    Public iErrScope As New List(Of Integer)
 #End Region
 
 #Region " Attributs pour la connection "

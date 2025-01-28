@@ -292,6 +292,15 @@ SECONDBEAMSNB			= Nombre de solives maintenues
 SECONDBEAMSPACING		= Entraxe des solives
 FLOORWIDTH				= Width of the floor
 SHEETDIMENSIONS			= Dimensions d'un panneau
+SHEETCOATING			= Épaisseur du revêtement
+SHEETRESISTANCES		= Résistances
+RESFIX					= Fixations bac-solive
+RESSEAM					= Fixations de couture
+RESPANEL				= Résistance au cisaillement du bac
+SHEETNONPERMIISBLEM		= Modes de ruine non admissibles
+SHEETRESFIX				= Ruine des fixations bac sur solive
+SHEETENDFAILURE			= Ruine de l'extrêmité du bac
+SHEETSHEARBUCKLING		= Ruine en voilement par cisaillement
 ADJACENTSHEETOVERLAP	= Au support des poutres, les panneaux adjacents sont emboités
 ADJACENTSHEETGAP		= Au support des poutres, les panneaux adjacents sont distants (nervures non continues)
 ADJACENTSHEETNOGAP		= Au support des poutres, les panneaux adjacents sont aboutés (nervures continues)
@@ -344,19 +353,19 @@ DATAPROPPING			= Etaiement
 TYPE_PROPPING			= Type d'étaiement
 UNPROPPED				= Non étayé
 FULLYPROPPED			= Continument étayé
-POINTPROPPED			= Etais ponctuels
-ENDPROPPEDLEFTCANT		= Etaiement de l'extrémité de la console de gauche
-ENDPROPPEDRIGHTCANT		= Etaiement de l'extrémité de la console de droite
+POINTPROPPED			= Étais ponctuels 
+ENDPROPPEDLEFTCANT		= Étaiement de l'extrémité de la console de gauche
+ENDPROPPEDRIGHTCANT		= Étaiement de l'extrémité de la console de droite
 NBPROPPINGWITHCANT		= Nombre d'étais intermédiaires sur la travée centrale
 NBPROPPINGWITHOUTCANT	= Nombre d'étais intermédiaires
 PROPPINGLOCATION		= Position des étais
 UNDERSTEEL				= Sous le profilé métallique
 UNDERSLAB				= Sous la dalle béton
-ULSTATES		 		= Etat limite ultime 
-SLSTATES				= Etat limite de service
-FLSTATES				= Etat limite d'incendie
-ELCUSTATES				= Etat limite ultime durant la phase de construction
-ELCSSTATES				= Etat limite de service durant la phase de construction
+ULSTATES		 		= État limite ultime 
+SLSTATES				= État limite de service
+FLSTATES				= État limite d'incendie
+ELCUSTATES				= État limite ultime durant la phase de construction
+ELCSSTATES				= État limite de service durant la phase de construction
 LISTULOADS				= Liste des cas de charge définie par l'utilisateur
 QSURF					= Charge surfacique
 FREP					= Charge linéique
@@ -394,8 +403,8 @@ SIMPLIFIEDBEFF			= Distribution simplifiée pour les largeurs efficaces de la da
 REBARSINCOMPRESSION		= Armatures en compression prises en compte
 WARNINGREBARSINCOMP1	= Quand les armatures en compression sont prises en compte dans les calculs de la poutre, 
 WARNINGREBARSINCOMP2	= les exigences de l'EN 1992-1-1:2005, clause 9.2.1.2 (3) doivent être satisfaites, pour éviter un flambement prématuré des barres.
-AGET					= Age du béton
-AGET0					= Age du béton durant le chargement
+AGET					= Âge du béton
+AGET0					= Âge du béton durant le chargement
 SYMBOLFORDAY			= j
 ENCASEMENT				= Enrobage
 SELFWEIGHT				= Poids propre
@@ -410,6 +419,12 @@ CALCULATIONTYPE			= Type de calcul
 STUDCONCRETECOVER		= Epaisseur d'enrobage
 WARNING					= Attention:
 WARNINGCONCRETECOVERAGE = L'épaisseur d'enrobage est inférieure à la valeur minimale ($) requise par l'$
+OUTOFSCOPE				= Domaine d'application
+THEBEAMOUTOFSCOPE		= La poutre est hors du domaine d'application du logiciel $
+WEBSLENDERNESSENCASED   = Élancement de l'âme des profilés partiellement enrobés
+WEBSLENDERNESS			= Élancement de l'âme
+LIMITWEBSLENDERENCASED	= L'élancement de l'âme des profilés partiellement enrobés doit être inférieur à $
+
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Propriétés de la section
@@ -498,9 +513,9 @@ ASSMPOS					= Avec les propriétés sous moment positif
 ASSMNEG					= Avec les propriétés sous moment négatif
 
 #NDC_VERIFICATIONSULS
-ULS_CHECKS				= Etats Limites Ultimes
-ULS_CHECKS_FINAL		= Etats Limites Ultimes en phase finale
-ULS_CHECKS_CONSTRUCTION	= Etats Limites Ultimes en phase de construction
+ULS_CHECKS				= États Limites Ultimes
+ULS_CHECKS_FINAL		= États Limites Ultimes en phase finale
+ULS_CHECKS_CONSTRUCTION	= États Limites Ultimes en phase de construction
 CRITERIA_SUM			= Synthèse des résultats
 INFO_S					= S = Satisfaisant
 INFO_NS					= NS = NON Satisfaisant
@@ -566,6 +581,7 @@ LOWERF					= Semelle inférieure
 DESIGNVALUE				= Valeur de calcul
 MINVALUE				= Valeur minimum
 MINIACCTOREF			= Valeurs minimum d'après les Recommendations BNCM / CNC2M N0175
+MCRWITHSHEETRIGIDITIES	= Note: les valeurs critiques ont été calculées en prenant en compte les rigidités du bac (see § $)
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Etats limites de service
@@ -604,7 +620,7 @@ COMBIREBAR				= Pour la combinaison
 FREQG					= Fréquence propre pour la combinaison 
 
 #NDC_VERIFICATIONSFIRE
-FIRE_CHECKS				= Etats limites ultime en situation d'incendie
+FIRE_CHECKS				= États limites ultime en situation d'incendie
 FIRE_CHECKS_SYMMARY		= Synthèse des résultats
 FIRE_CHECKS_DETAIL		= Résultats détaillés
 FIRE_CHECKS_PARAM		= Paramètres du calcul
@@ -656,7 +672,7 @@ TABCONNECTOR			= Goujons soudés
 PRD_STUDS				= Résistance des goujons soudés
 
 #NDC_HIVOSS
-HIVOSSTITLE				= Evaluation des vibrations du plancher
+HIVOSSTITLE				= Évaluation des vibrations du plancher
 DSTRUC					= Amortissement de structure
 DFURNITURE				= Amortissement de mobilier
 DFINISHING				= Amortissement de finition
@@ -669,14 +685,14 @@ EIGENFC					= Fréquence propre pour les calculs
 MODALMASS				= Masse modale
 OSRMS					= Valeur effective de la vélocité
 CPERCEPTION				= Classe de perception
-COMFORTASS				= Evaluation du confort
+COMFORTASS				= Évaluation du confort
 CRECOMMENDED			= Recommandé
 CCRITICAL				= Critique
 CNOTRECOMMENDED			= Non recommandé
 USAGE					= Utilisation du plancher structurel
 UCRITICAL				= Surface critique
 UHOSPITAL 				= Santé
-USCHOOL					= Education
+USCHOOL					= Éducation
 URESIDENTIAL			= Résidentiel
 UOFFICE					= Bureau
 UMEETING				= Réunion

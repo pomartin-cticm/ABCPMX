@@ -315,6 +315,8 @@ FASTENINGRDB			= Fastening
 RESULTS					= Results
 OPTIONS					= Options
 BEAMSPACING				= Spacing of beams
+THCOATING				= Thickness of coating
+FUP						= Ultimate resistance
 
 #FRMEDITSTUDS	
 TITLE					= Studs data base
