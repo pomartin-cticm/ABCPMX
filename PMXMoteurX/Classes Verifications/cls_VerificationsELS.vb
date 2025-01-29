@@ -230,7 +230,6 @@ Public Class cls_VerificationsELS
 
 #End Region
 
-
 #Region " Calcul des armatures anti fissuration "
 
     Private Sub MaitriseFissurationDirecte(myBeam As cls_Poutre, SigmaAG As Decimal, DeltaSG As Decimal, SigmaAD As Decimal, DeltaSD As Decimal, iCombi As Integer)

@@ -71,7 +71,7 @@
         y_decal = 26
 
         x_img_GammaCVSP = 2
-        x_txt_GammaCVSP = 48
+        x_txt_GammaCVSP = 66
 
     End Sub
 

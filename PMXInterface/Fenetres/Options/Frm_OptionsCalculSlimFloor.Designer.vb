@@ -175,9 +175,9 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.lbl_MaintienBac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_MaintienBac.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_MaintienBac.Location = New System.Drawing.Point(4, 68)
+        Me.lbl_MaintienBac.Location = New System.Drawing.Point(3, 68)
         Me.lbl_MaintienBac.Name = "lbl_MaintienBac"
-        Me.lbl_MaintienBac.Size = New System.Drawing.Size(733, 23)
+        Me.lbl_MaintienBac.Size = New System.Drawing.Size(734, 23)
         Me.lbl_MaintienBac.TabIndex = 149
         Me.lbl_MaintienBac.Text = "lbl_MaintienBac"
         Me.lbl_MaintienBac.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -236,9 +236,9 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.lbl_Dalles.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_Dalles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Dalles.Location = New System.Drawing.Point(4, 4)
+        Me.lbl_Dalles.Location = New System.Drawing.Point(3, 4)
         Me.lbl_Dalles.Name = "lbl_Dalles"
-        Me.lbl_Dalles.Size = New System.Drawing.Size(733, 23)
+        Me.lbl_Dalles.Size = New System.Drawing.Size(734, 23)
         Me.lbl_Dalles.TabIndex = 147
         Me.lbl_Dalles.Text = "lbl_Dalles"
         Me.lbl_Dalles.TextAlign = System.Drawing.ContentAlignment.MiddleCenter

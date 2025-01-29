@@ -133,6 +133,54 @@
 
 #End Region
 
+
+#Region " Calcul taux armature minimal pour les poutres continues "
+
+    Public Function TauxArmaMin551(myBeam As cls_Poutre) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   22/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul du taux d'armature mini d'une poutre mixte continue, selon § 5.5.1 de l'EN 1994-1:2005
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '----------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myKc(1) As Decimal
+        Dim KcMax As Decimal = 0
+        Dim RhoSMin As Decimal
+
+        Dim Delta As Decimal = 1.1
+
+        Dim Fy, Fctm, Fsk As Decimal
+
+        '--( Initialisation
+
+        If myBeam.Section.lLamine Then
+            Fy = myBeam.Section.FySup
+        Else
+            Fy = Math.Min(myBeam.Section.FySup, myBeam.Section.FyInf)
+            Fy = Math.Min(Fy, myBeam.Section.FyW)
+        End If
+        Fctm = myBeam.Dalle.beton.Fctm
+        Fsk = myBeam.Dalle.AcierArmatures.FsK
+
+        myKc(0) = Me.CoefficientKc(myBeam, True)
+        myKc(1) = Me.CoefficientKc(myBeam, True)
+
+        If myBeam.lTraveeConsoleGauche Then KcMax = myKc(0)
+        If myBeam.lTraveeConsoleDroite Then KcMax = Math.Max(KcMax, myKc(1))
+
+        '--( Calcul
+
+        RhoSMin = Delta * Fy / 235 * Fctm / Fsk * Math.Sqrt(KcMax)
+
+        Return RhoSMin
+    End Function
+
+#End Region
+
 #Region " Calcul des armatures anti-fissuration "
 
     Public Function CoefficientKc(myBeam As cls_Poutre, lAppGauche As Boolean) As Decimal
