@@ -751,7 +751,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("50")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("5")>  _
         Public Property nbMinNodesConsole() As Integer
             Get
                 Return CType(Me("nbMinNodesConsole"),Integer)
@@ -763,7 +763,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("100")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("20")>  _
         Public Property nbMinNodesTravee() As Integer
             Get
                 Return CType(Me("nbMinNodesTravee"),Integer)

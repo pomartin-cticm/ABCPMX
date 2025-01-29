@@ -289,31 +289,6 @@ Public Class cls_ProfilA
         End Get
     End Property
 
-    '''' <summary>
-    '''' Aire de cisaillement
-    '''' </summary>
-    '''' <returns></returns>
-    'Public ReadOnly Property AireAv As Decimal
-    '    Get
-    '        Dim Av As Decimal = 0
-    '        Select Case Me.typeProfileAcier
-    '            Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.LamineSlimSAB, Enum_TypeSectionAcier.LamineSlimSFB
-    '                Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rcs ^ 2 + Me.Rci ^ 2) / 2 _
-    '                   + Me.Tfs * (2 * Me.Rcs + Me.Tw) / 2 _
-    '                   + Me.Tfi * (2 * Me.Rci + Me.Tw) / 2
-    '            Case Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.PRS_Bi_Sym
-    '                Av = Me.HauteurAmeHw * Me.Tw
-    '            Case Enum_TypeSectionAcier.LamineSlimIFBA
-    '                Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rcs ^ 2) / 2 _
-    '                   + Me.Tfs * (2 * Me.Rcs + Me.Tw) / 2
-    '            Case Enum_TypeSectionAcier.LamineSlimIFBB
-    '                Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rci ^ 2) / 2 _
-    '                   + Me.Tfi * (2 * Me.Rci + Me.Tw) / 2
-    '        End Select
-    '        Return Av
-    '    End Get
-    'End Property
-
     Public Function AireAv(Eta As Double) As Decimal
         '-----------------------------------------------------------------------------------------
         '   08/08/24 :  Création - POM

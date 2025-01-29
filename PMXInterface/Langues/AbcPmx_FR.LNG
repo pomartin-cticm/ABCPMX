@@ -828,6 +828,7 @@ ERRORLWC				= La masse volumique du béton léger doit être comprise entre $ et
 ERRORNWC				= La masse volumique du béton normal ne doit pas être inférieure à $
 ERRORCCOVER1			= Lit d'armature n°$
 ERRORCCOVER2			= L'épaisseur d'enrobage ($) devrait être supérieure à la valeur minimale requise pour l'adhérence ($)
+REINFRATIO				= Taux d'armature
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre

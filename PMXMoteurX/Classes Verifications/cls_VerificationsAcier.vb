@@ -1,4 +1,5 @@
-﻿Imports System.Security.Cryptography
+﻿Imports System.IO.Ports
+Imports System.Security.Cryptography
 
 Public Class cls_VerificationsAcier
 
@@ -92,7 +93,7 @@ Public Class cls_VerificationsAcier
         End If
 
         If lMaintienBac Then
-            Me.CritereBacLTB = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+            Me.CritereBacLTB = New cls_Critere()
         End If
 
     End Sub
@@ -345,8 +346,8 @@ Public Class cls_VerificationsAcier
 
             '# Vérification du bac acier en cas de maintien par le bac
 
-            If lConstructionPhase And lmaintienbac Then
-                RunCritereBac(myBeam, vmrd, iCombi, LambdaBLT, AlphaLT)
+            If lConstructionPhase And lMaintienBac Then
+                RunCritereBac(myBeam, VmRd, iCombi, LambdaBLT, AlphaLT)
             End If
 
             '# Dimensionnement des soudures de PRS
@@ -382,7 +383,8 @@ Public Class cls_VerificationsAcier
         Dim PorteeL As Decimal
         Dim e0 As Decimal
         Dim EntraxeD As Decimal
-        Dim Wel, Aire As Decimal
+        Dim Wel, Wpl, Aire As Decimal
+        Dim critGammaP As Decimal
 
         '--( Initialisation
 
@@ -392,6 +394,7 @@ Public Class cls_VerificationsAcier
         Sact = myBeam.MaintienBac.RigiditeShear(PorteeL, EntraxeD, myBeam.Dalle.Bac, myBeam.Section.Acier.EYoung)
         Aire = myBeam.Section.ProfilA.Aire
         Wel = myBeam.Section.ProfilA.ModuleWelY
+        myBeam.Section.ProfilA.ModuleFlexionYY(Wel, wpl)
 
         '--( Effort destabilisant
 
@@ -400,7 +403,13 @@ Public Class cls_VerificationsAcier
             e0 = AlphaLT * (LambdaBLT - 0.2) * Wel / Aire
             VmEd = Math.PI / (AlphaCr - 1) * Sact * e0 / PorteeL
 
+            critGammaP = VmEd / VmRd
 
+            If IsGreater(critGammaP, Me.CritereBacLTB.CritereMax) Then
+                Me.CritereBacLTB.CritereMax = critGammaP
+                Me.CritereBacLTB.iCombiM = iCombi
+                Me.CritereBacLTB.lDefini = True
+            End If
 
         End If
 

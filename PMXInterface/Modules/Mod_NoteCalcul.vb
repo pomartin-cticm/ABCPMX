@@ -4640,6 +4640,9 @@ Module Mod_NoteCalcul
             Case "Q2#1", "Q2#2", "Q2#3"
                 Config = Symbol.Substring(3, 1)
                 pTitre = BlocAnalyse("LIVEL") & " Q2 - " & BlocAnalyse("CONFIGURATION") & Config
+            Case "QC#1", "QC#2", "QC#3"
+                Config = Symbol.Substring(3, 1)
+                pTitre = BlocAnalyse("CONSTRUCTIONL") & " QC - " & BlocAnalyse("CONFIGURATION") & Config
 
         End Select
 
@@ -6988,7 +6991,6 @@ Module Mod_NoteCalcul
             End If
         End If
 
-
         AfficheSyntheseCritere(Critere.CritereMax, Symbol, Titre, Critere.iNodeM, ChaineU, lFeu)
 
     End Sub
@@ -7017,6 +7019,7 @@ Module Mod_NoteCalcul
         Dim lOK As Boolean
         Dim RacineEL As String
         Dim myTabul As String
+        Dim ChaineNode As String = ""
 
         '--> Initialisation
 
@@ -7027,12 +7030,13 @@ Module Mod_NoteCalcul
 
         If lFeu Then myTabul = TABW2 Else myTabul = TABW3
 
-        'AddLigneNDC(myTabul & Titre & TABAFF & strGras &
-        '            Symbol & TABEGAL & GetStringInUnit(CritereMax, Enu_TypeVariable.SansType, 4, 3, False) &
-        '            strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & cls_Poutre.SymboleCombi(RacineEL, iCombiM) & ")" & strGras & TABOK & strFinGras & "\BAL")
+        If iNodeM > -1 Then
+            ChaineNode = "N" & CStr(iNodeM + 1) & "/"
+        End If
+
         AddLigneNDC(myTabul & Titre & TABAFF & strGras &
                     Symbol & TABEGAL & GetStringInUnit(CritereMax, Enu_TypeVariable.SansType, 4, 3, False) &
-                    strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & ChCombi & ")" & strGras & TABOK & strFinGras & "\BAL")
+                    strFinGras & TABInfo & "(" & ChaineNode & ChCombi & ")" & strGras & TABOK & strFinGras & "\BAL")
 
         AfficheBalise(lOK)
 
@@ -7971,6 +7975,9 @@ Module Mod_NoteCalcul
             Else
                 AddLigneNDC(TABW2 & "(1): " & BlocELU("ELASTICDESIGNCLASS3"))
             End If
+            If MyBeam.lCalculClass3HSS Then
+                AddLigneNDC(TABW2 & "     " & BlocELU("PLASTICDESIGNHSS"))
+            End If
 
             AddLigneNDC(TABW2 & "(2): " & BlocELU("MVBINTERACTION"))
 
@@ -8359,6 +8366,14 @@ Module Mod_NoteCalcul
         AddTitreNdC(3, BlocELU("BEAMR"))
 
         AfficheSyntheseCritereLT(MyBeam.VerifAcier(iVerif).CritereLTB, "\SG\s\-LT\=", BlocELU("LTB_CRITERIA"))
+
+        '==( Maitien par le bac en phase de construction
+
+        If lConstructionP And MyBeam.MaintienBac.lMaintienBac Then
+            If MyBeam.VerifAcier(iVerif).CritereBacLTB.lDefini Then _
+            AfficheSyntheseCritere(MyBeam, MyBeam.VerifAcier(iVerif).CritereBacLTB, "\SG\s\-pm\=", BlocELU("SHEET_CRITERIA"), lConstructionP)
+            AddLigneNDC(TABW3 & RemplaceDollar(BlocELU("REFSHEETCRITERIA"), "§ " & NumTitreMaintienBac))
+        End If
 
         '==( Calcul des soudures pour les PRS
 

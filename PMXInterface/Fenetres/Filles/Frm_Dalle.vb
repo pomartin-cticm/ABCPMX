@@ -60,6 +60,9 @@ Public Class Frm_Dalle
     Dim strErreurLeger As String = ""
     Dim strErreurNormal As String = ""
     Dim strErreurEnrob(1) As String
+
+    Dim strTauxArma As String
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -147,6 +150,8 @@ Public Class Frm_Dalle
                 strLitNo(0) = Bloc("FIRSTLAYER")
                 strLitNo(1) = Bloc("SECONDLAYER")
 
+                strTauxArma = Bloc("REINFRATIO")
+
                 '=== ACIER DES ARMATURES ==========================================================
 
                 Me.lbl_Acier.Text = Bloc("REBARSTEEL")        '"Reinforcement steel"
@@ -232,7 +237,6 @@ Public Class Frm_Dalle
 
         MAJ_ValeursLimites()
 
-
     End Sub
 
     Private Sub GestionStyle()
@@ -279,7 +283,14 @@ Public Class Frm_Dalle
 
         ErrorProvider.Clear()
 
+        Me.TLpan_Images.Dock = DockStyle.Fill
         Me.img_Dalle.Dock = DockStyle.Fill
+
+        If MyPoutreLoc.lMultiSpan Then
+            Me.TLpan_Images.RowStyles(1).Height = 32
+        Else
+            Me.TLpan_Images.RowStyles(1).Height = 0
+        End If
 
         Const MARGEPAN As Integer = 0
 
@@ -340,6 +351,7 @@ Public Class Frm_Dalle
                 Me.cmb_TypeDalle.SelectedIndex = 2
         End Select
         MAJI_TypeDalle()
+        MAJI_TauxArma()
 
         '--> Epaisseur
 
@@ -407,6 +419,13 @@ Public Class Frm_Dalle
 
     End Sub
 
+    Private Sub MAJI_TauxArma()
+
+        Dim Taux As Decimal = MyDalleLoc.TauxArma * 100
+
+        Me.lbl_TauxArma.Text = strTauxArma & " : " & GetStringInUnitN(Taux, Enu_TypeVariable.SansType, 3, 2, NON_U, True) & " %"
+
+    End Sub
 
     Private Sub AfficheNomBacEnCours()
         Me.txt_BacNom.Text = MyDalleLoc.Bac.Etiquette
@@ -788,6 +807,7 @@ Public Class Frm_Dalle
             End Select
 
             MAJ_ValeursLimites()
+            MAJI_TauxArma()
             Me.img_Dalle.Invalidate()
         End If
 
@@ -813,6 +833,7 @@ Public Class Frm_Dalle
         MAJI_BOArmatures()
         MAJI_StatutBOArma()
         MAJ_ValeursLimites()
+        MAJI_TauxArma()
         AfficherLitEncours()
 
     End Sub

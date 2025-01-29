@@ -215,6 +215,7 @@
         Dim lPlastOK() As Boolean = {True, True}
         Dim iNodeZero(,) As Integer = Nothing
         'Dim lMulti As Boolean
+        Dim lCalculClass3HSS As Boolean                 ' Calcul élastique imposé en présence d'acier HSS
 
         '--> Initialisations
 
@@ -222,6 +223,7 @@
         lCombiClass4 = False
         lEnrob = myBeam.lEnrobage
         nbCombi = myBeam.CombiA_ELU.nbCombi
+        lCalculClass3HSS = myBeam.lCalculClass3HSS
 
         '# Degré de connexion
 
@@ -298,7 +300,7 @@
         '--> Boucle sur les combinaisons
 
         lCont = True
-        Me.lCalculPlastic = (Not myBeam.Param.lElasticDesignVM) And (Not myBeam.Param.lElasticDesignCl3)
+        Me.lCalculPlastic = (Not myBeam.Param.lElasticDesignVM) And (Not myBeam.Param.lElasticDesignCl3) And (Not lCalculClass3HSS)
 
         Do While lCont
 

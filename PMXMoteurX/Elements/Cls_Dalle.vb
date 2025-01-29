@@ -110,6 +110,33 @@
 
 #Region " Propriétés "
 
+    Public ReadOnly Property TauxArma
+        '---------------------------------------------------------------------------------------------
+        '   29/01/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------
+        '   Renvoie le taux d'armature de la dalle
+        '---------------------------------------------------------------------------------------------
+        Get
+            Dim Taux, A_Arma As Decimal
+
+            A_Arma = 0
+            For i As Integer = 0 To Me.LitArma.Count - 1
+
+                If Me.LitArma(i).lActive Then
+
+                    A_Arma += Math.PI * Me.LitArma(i).PhiS ^ 2 / 4 / Me.LitArma(i).EspBar
+
+                End If
+
+            Next
+
+            Taux = A_Arma / Me.EpaisseurActive
+
+            Return Taux
+        End Get
+    End Property
+
+
     ''' <summary>
     ''' Indique si la dalle est connectée par des goujons
     ''' </summary>

@@ -5673,6 +5673,51 @@ Public Class cls_Poutre
 
     End Function
 
+    Public Function lCalculClass3HSS() As Boolean
+        '-----------------------------------------------------------------------------------------------------
+        '   29/01/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------
+        '   Indique un calcul élastique imposé en raison d'une utilisation d'acier HLE
+        '-----------------------------------------------------------------------------------------------------
+        '   
+        '-----------------------------------------------------------------------------------------------------
+
+        '--( Déclarations 
+
+        Dim lHSS As Boolean = False
+        Dim Nuance As String
+        Dim iNuance As Integer = -1
+        Dim lTrouve As Boolean = False
+        Dim nbCar As Integer
+        Dim NumNuance As String
+        Dim ValNuance As Integer
+
+        '--( Traitement
+
+        '# Recherche de la nuance
+
+        Nuance = Me.Section.Acier.Nuance
+
+        nbCar = Nuance.Length
+
+        Do While (Not lTrouve) And (iNuance < nbCar - 2)
+            iNuance += 1
+            lTrouve = IsNumeric(Nuance.Chars(iNuance))
+        Loop
+
+        If lTrouve Then
+
+            NumNuance = Nuance.Substring(iNuance).Trim
+            ValNuance = CInt(NumNuance)
+
+            If NumNuance > 460 Then lHSS = True
+
+        End If
+
+
+        Return lHSS
+
+    End Function
 
 #End Region
 

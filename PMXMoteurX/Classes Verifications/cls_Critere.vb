@@ -37,6 +37,13 @@
 
     End Sub
 
+    Public Sub New()
+        iCombiM = -1
+        iNodeM = -1
+        CritereMax = 0
+        lDefini = False
+    End Sub
+
 #End Region
 
 #Region " Outils "
