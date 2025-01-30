@@ -79,8 +79,8 @@ SLIMFLOORIFB_A			= Section dalle mince IFB-A non mixte
 SLIMFLOORIFB_ACOMPO		= Section dalle mince IFB-A mixte
 SLIMFLOORIFB_B			= Section dalle mince IFB-B non mixte
 SLIMFLOORIFB_BCOMPO		= Section dalle mince IFB-B mixte
-SLIMFLOORSAB			= Section dalle mince SAB non mixte
-SLIMFLOORSABCOMPO		= Section dalle mince SAB mixte
+SLIMFLOORSAB			= Section dalle mince AFB non mixte
+SLIMFLOORSABCOMPO		= Section dalle mince AFB mixte
 NOTAVAILABLE			= non disponible dans cette version
 
 #FRM_BEAMOPTIONS
@@ -107,6 +107,7 @@ YOUNGSMODULUSREBAR		= Module d'Young des armatures
 SECTIONSPROP			= Propriétés des sections transversales
 SIMPLIFIEDBEFF			= Distribution simplifiée pour les largeurs efficaces de la dalle béton
 REBARSINCOMPRESSION		= Armatures en compression prises en compte
+ENCASEMENTINPROPER		= Prise en compte de l'enrobage dans le calcul des propriétés à froid
 AGET					= Age du béton
 AGET0					= Age du béton au moment du chargement
 SYMBOLFORDAY			= j
@@ -120,6 +121,8 @@ GFORCE					= Accélération de pesanteurs
 ETAW					= Voilement par cisaillement
 CONTROLCRACKW			= Maîtrise de la fissuration
 CRACKWIDTH				= Limite d'ouverture des fissures
+WARNINGCOMPREINF1		= Les armatures en compression ne peuventpas être prises en compte pour une dalle avec un seul lit d'armatures
+WARNINGCOMPREINF2		= Quand les armatures en compression sont prises en compte dans les calculs de la poutre, les exigences de l'EN 1992-1-1:2005, clause 9.2.1.2 (3) doivent être satisfaites, pour éviter un flambement prématuré des barres.
 
 #FRM_CALCULATIONSHEET
 TITLE					= Note de calculs
@@ -202,6 +205,12 @@ INFO_G2					= Charge permanente additionnelle (après coulage du béton)
 INFO_Q1					= Charge d'exploitation 1
 INFO_Q2					= Charge d'exploitation 2
 INFO_QC					= Charge de construction
+COMPOSITEBEAM			= Poutre mixte
+STEELBEAM				= Poutre acier
+STEELENCASEDBEAM		= Poutre acier partiellement enrobée
+MODULAR					= Coefficient d'équivalence
+SLAB					= Dalle
+ENCASEMENT				= Enrobage
 
 #FRM_COMBINATIONS
 TITLE					= Combinaisons
@@ -248,7 +257,7 @@ RIBS					= Ondes
 ROW_NUMBER				= Nombre de files
 SPAN					= Travée
 STUDS					= Goujons
-WIDTH					= Largeur
+WIDTH					= Longueur
 WARNING_CMBTRAVEE		= L'ensemble des informations renseignées doit être correct pour sélectionner une autre travée
 ADD						= Ajouter
 DELETE					= Supprimer
@@ -257,6 +266,7 @@ WEB_STUD				= Goujon soudé sur l'âme
 WEB_REINF				= Armature traversant l'âme
 CLASS					= Classe
 REINFORCEMENTS			= Armatures
+STUDCONCRETECOVER		= L'épaisseur d'enrobage des goujons ($) est inférieure à la valeur minimale imposée par $.
 
 #FRM_DECKRESTRAINT
 TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)
@@ -264,7 +274,7 @@ OK						= Ok
 CANCEL					= Annuler
 RESTRAINTBYTHEDECK		= Poutre est maintenue latéralement par le bac 
 INDIVIDUALSHEET			= Tôle individuelle
-NUMBERSPANS				= Nombre de travée traversée par les tôles
+NUMBERSPANS				= Nombre de travées traversées par les tôles
 SHEETLENGTH				= Longueur
 SHEETWIDTH				= Largeur
 DIMENSIONS				= Dimensions
@@ -300,6 +310,13 @@ BENDINGSTIFF			= Rigidité à la flexion
 SHEARSTIFF				= Rigidité au cisaillement
 DRAWING					= Dessin
 THETA					= Prise en compte de la rigidité flexionnelle du bac
+FLOOR					= Plancher
+FASTENINGRDB			= Fixation
+RESULTS					= Résultats
+OPTIONS					= Options
+BEAMSPACING				= Entraxe des solives
+THCOATING				= Épaisseur du revêtement
+FUP						= Résistance ultime
 
 #FRMEDITSTUDS	
 TITLE					= Base de données des goujons
@@ -435,16 +452,16 @@ SPECIFICHEAT			= Chaleur spécifique
 CONCRETEREDUC250		= Résistance du béton réduire pour une température inférieure à 250°
 ARMAFROID				= Armatures formées à froid
 ARMACOMP				= Armatures comprimées prises en compte
-DALLEFEM				= Echauffement de la dalle calculé par différences finies
-TDALLEFEM				= Epaisseur max des éléments finis 
+DALLEFEM				= Échauffement de la dalle calculé par différences finies
+TDALLEFEM				= Épaisseur max des éléments finis 
 BOLTZMANN				= Constante de Boltzmann 
 TIMEINCREMENT			= Incrément de temps
 REFERENCETEMP			= Température de référence 
 MAXTEMP					= Température maximale 
 FORMFACTOR				= Facteur de forme
-EMISSIVITYSTEELSURF		= Emissivité de l'acier
-EMISSIVITYFIRE			= Emissivité du feu
-EMISSIVITYCONCRETE		= Emissivité du béton
+EMISSIVITYSTEELSURF		= Émissivité de l'acier
+EMISSIVITYFIRE			= Émissivité du feu
+EMISSIVITYCONCRETE		= Émissivité du béton
 CONVECTIONFACTOR		= Facteur de transfert thermique par convection
 BELOWSLAB				= Sous la dalle
 ABOVESLAB				= Au-dessus de la dalle
@@ -456,6 +473,11 @@ TEMPREBARS				= Température des armatures égale à la
 AVERAGETEMP				= température moyenne
 MAXTEMP2				= température maximale
 AXISTEMP				= température à l'axe
+FRENCHNA				= Conductivité thermique du béton selon AN française
+CONSTANTRHOC			= Masse volumique du béton constante
+MOISTURECONTENT			= Teneur en eau
+ENCASEDROOTFILLET		= Les congés de raccordement sont pris en compte dans le calcul des sections enrobées selon l'Annexe F de l'EN 1994-1-2
+SIZEELT					= Épaisseur des éléments
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Coefficients d'accompagnement
@@ -508,7 +530,8 @@ SWIMMINGSCREED			= Chappe flottante
 TITLE					= Confort vibratoire des planchers
 TOTALDAMPING			= Amortissement total
 WITH					= Avec
-FREQUENCYSLAB			= Fréquence incluant l'effet de la dalle													
+FREQUENCYSLAB			= Fréquence incluant l'effet de la dalle	
+MGENEANALYTIC			= Masse généralisée calculée avec les formules Hivoss pour les poutres à 1 travée												
 
 #FRM_IDENTIFICATION
 CANCEL					= Annuler
@@ -560,6 +583,7 @@ SOFTOPT					= Options du logiciel
 COPYPICTURE				= Copier l'image
 DELBEAM					= Supprimer la poutre
 DUPBEAM					= Dupliquer la poutre
+ADDBEAMFILE				= Ajouter une poutre issue d'un fichier
 ERRORCAPACITY			= La capacité maximale de la liste a été atteinte, aucun nouvel ajout n'est possible 
 ERROREMPTYCELL			= Cellule vide
 ERRORNONNUMERIC			= Valeur non numérique
@@ -593,7 +617,7 @@ TSBSECTIONA				= Profilé acier
 TSBSECTIONSFB			= Section slimfloor SFB
 TSBSECTIONIFBA			= Section slimfloor IFB type A
 TSBSECTIONIFBB			= Section slimfloor IFB type B
-TSBSECTIONSAB			= Section slimfloor SAB
+TSBSECTIONSAB			= Section slimfloor AFB
 TSBSLAB					= Dalle
 TSBSPACINGS				= Configuration transversale
 TSBSPANS				= Portées
@@ -641,16 +665,21 @@ PARAMETERS				= Paramètres
 RELATIVEHUMIDITY		= Humidité ralative
 PSIL					= Multiplicateur de fluage
 CONCRETEPROP			= Propriétés du béton
-RESULTS					= Résultats
+RESULTS					= Coefficients d'équivalence
 AGET					= Age du béton
 AGET0					= Age du béton lors du chargement
 CONCRETE				= Classe du béton
 NOTIONALSIZE			= Rayon moyen de l'élément béton
 COEFANNEXB				= Coefficients / Annexe B EN 1992-1-1
 LONGTERM_N				= Coefficient d'équivalence pour les charges permanentes
-SHORTTERM_N				= Coefficient d'équivalence pour les charges d'exploitation
+SHORTTERM_N				= Chargement à court terme
 RCOMPRESSION			= Résistance à la compression
-RTENSION				= Résistance à la traction							   
+RTENSION				= Résistance à la traction		
+LOADS					= Type de chargement
+LIVELOADS				= Charges d'exploitation
+PERMANENTLOADS			= Charges permanentes
+SHRINKAGE				= Retrait
+IMPOSEDD				= Déformations imposées				   
 
 #FRM_PPLOADCASE
 TITLE					= Cas de charge
@@ -795,6 +824,11 @@ CONTINUOUSRIBANDDECK	= Nervure et bac continus
 CONTINUOUSRIB			= Nervure béton continue
 DISCONTINUOUSDECK		= Bac discontinu
 DISCONTINUOUSRIBDECK	= Nervure et bac discontinus
+ERRORLWC				= La masse volumique du béton léger doit être comprise entre $ et $
+ERRORNWC				= La masse volumique du béton normal ne doit pas être inférieure à $
+ERRORCCOVER1			= Lit d'armature n°$
+ERRORCCOVER2			= L'épaisseur d'enrobage ($) devrait être supérieure à la valeur minimale requise pour l'adhérence ($)
+REINFRATIO				= Taux d'armature
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre
@@ -813,7 +847,7 @@ SPANS					= Portées
 LEFTSLABCONTINUITY		= La dalle est continue sur l'appui gauche
 RIGHTSLABCONTINUITY		= La dalle est continue sur l'appui droit
 
-#FRM_STANDARDSTEELSECTIONS
+#FRM_STEELSECTIONSUSUAL
 AUTOMATICHA				= Hauteur totale automatiquement calculée
 AUTOMATICHW				= Hauteur de l'âme automatiquement calculée
 CANCEL					= Annuler
@@ -834,6 +868,11 @@ UPPERF					= Semelle supérieure
 WEB						= Âme 
 WELDEDSYM				= PRS bisymétrique
 WELDEDP					= PRS mono-symétrique
+PLATE					= Plat de renfort sous la semelle inférieure
+PLATEW					= Largeur
+PLATET					= Épaisseur
+PLATEGRADE				= Nuance
+WARNINGRATIOAF			= Le rapport entre l'aire de la semelle inférieure et celui de l'aire supérieure doit être compris entre $ et $
 
 #FRM_START
 BROWSEFILES				= Parcourir
@@ -897,7 +936,7 @@ SERIAL					= Série
 STEEL					= Acier
 STEELGRADE				= Nuance d'acier
 TITLE					= Définition de la poutre acier
-SABSECTION				= Section SAB
+SABSECTION				= Section AFB
 WIDTH					= Largeur
 
 #GENERAL
@@ -917,6 +956,8 @@ FLS						= ELF
 ULSC					= ELU_C
 SLSC					= ELS_C
 COPY					= Copie
+GAZ						= Gaz chauds
+STEELPROFILE			= Profilé acier
 
 #OPTCALCULMAIN
 TITLE					= Options de calcul
@@ -926,6 +967,7 @@ GAMMA					= Coefficients nationaux par défaut
 SCOPE					= Domaine d'application
 CALCUL					= Options de calcul
 SLIMFLOOR				= Dalles et planchers minces
+CONNECTORS				= Connecteurs
 FIRE					= Calcul à l'incendie
 MODIF					= Attention : la modification des paramètres sera prise en compte lors de l'ajout de nouvelles poutres uniquement. 
 MODIF2					= Les valeurs des paramètres des poutres déjà créées resteront inchangées.  
@@ -958,6 +1000,27 @@ OTHERPERMANENT			= Autres charges permanentes
 SHRINKAGE				= Retrait
 ETAW					= Voilement par cisaillement
 
+#OPTCALCONNECTORS
+TITLE					= Options pour les connecteurs
+DIMENSIONS				= Dimensions
+DIAMIN					= Diamètre minimal
+DIAMAX					= Diamètre maximal
+DEFAULT					= par défaut
+DMAXPREPUNCHED			= avec bac perpendiculaire prépercé
+DMAXWELDEDTHROUGH		= soudage à travers un bac perpendiculaire
+RATIOH_D				= Ratio hauteur / diamètre
+EUROCODEGEN1			= Eurocodes génération 1
+EUROCODEGEN2			= Eurocodes génération 2
+DETAILING				= Details constructifs
+HEIGHTABOVESHEETING		= Hauteur mini du goujon au dessus d'un bac perpendiculaire
+EDGEDISTANCE			= Distance mini au bord d'un 	e semelle
+SPACING					= Espacement des connecteurs
+SPACINGLONGI			= Espacement longitudinal
+SPACINGTRANS			= Espacement transversal
+COMPOSITESLAB			= Dalle mixte
+SOLIDSLAB				= Dalle pleine
+STUDCONCRETECOVER		= Épaisseur d'enrobage
+
 #OPTCALGAMMA
 TITLE					= Coefficients nationaux
 LOADS					= Coefficients partiels
@@ -973,15 +1036,14 @@ TITLE					= Calcul incendie
 CONSTANTS				= Constantes
 PARAMETERS				= Paramètres de calcul
 BOLTZMAN				= Constante de Boltzman
-EMISSIVITYC				= Emissivité du béton
-EMISSIVITYF				= Emissivité du feu
+EMISSIVITYC				= Émissivité du béton
+EMISSIVITYF				= Émissivité du feu
 CONVECTIONFACTORSLAB	= Coefficient de convection au-dessus de la dalle
 CONVECTIONFACTOR		= Coefficient de convection
 FORMFACTOR				= Coefficient de forme
 SHADOWFACTOR			= Coefficient de correction pour l'effet d'ombre
 TEMPREFERENCE			= Température de référence
 TEMPMAX					= Température maximale
-
 
 #OPTCALSCOPE
 TITLE					= Domaine d'application
@@ -995,7 +1057,15 @@ THETAHAUNCH				= Angle d'inclinaison des renformis
 HAUNCHTH				= Epaisseur des renformis
 SOLIDSLABTH				= Epaisseur de la dalle béton
 COMPOSITESLABTH			= Epaisseur de la dalle mixte (au-dessus du bac)
+CONCRETEPROP			= Propriétés du béton
 RHOLWC					= Masse volumique du béton léger
+RHONWC					= Masse volumique du béton normal
+WELDEDSECTION			= Dimensions des sections soudées
+WEBTHICKNESS			= Épaisseur de l'âme
+WEBHEIGHT				= Hauteur de l'âme
+FLANGETHICKNESS			= Épaisseur des semelles
+FLANGEWIDTH				= Largeur des semelles
+RATIOFLANGEAREA			= Ratio des aires de semelle
 
 #OPTCALSLIMFLOOR
 TITLE					= Planchers minces
@@ -1003,7 +1073,9 @@ SLABS					= Dalles
 SLIMFLOORDIM			= Dimensions des slimfloors
 DEPTHMAX				= Hauteur maximale d'un profil laminé intégré
 SLABSUPPORTMIN			= Largeur minimale d'un support de dalle
-THICKNESSMIN			= Epaisseur minimale du plat
+THICKNESSMIN			= Épaisseur minimale du plat
+RESTRAINTBYSHEETS		= Maintien au déversement par le bac
+ECSEAMMAX				= Espacement max des fixations de couture
 
 #OPTSOFTMAIN
 TITLE					= Options logiciel
@@ -1026,9 +1098,12 @@ DISPLAYFMLOADCASES		= Afficher les sollicitations par cas de charge
 DISPLAYFMULS			= Afficher les sollicitations par combinaison ELU
 DISPLAYFMSLS			= Afficher les sollicitations par combinaison ELS
 DISPLAYFMFLS			= Afficher les sollicitations par combinaison Feu
-DISPLAYDIAGRAMS			= Afficher les diagrammes de sollicitations
+DISPLAYOPTIONS			= Options pour l'affichage des sollicitations
+DISPLAYDIAGRAMS			= Diagrammes de sollicitations
+DISPLAYTABLES			= Tableau de sollicitations
+DISPLAYMINMAX			= Valeurs enveloppes
 DISPLAYSIGMA			= Afficher les contraintes élastiques
-ULS						= Etats Limites Ultimes
+ULS						= États Limites Ultimes
 DISPMELCOMPOSITEBEAMS	= Afficher les moments élastiques des poutres mixtes
 
 #OPTSOFTDATABASES
@@ -1040,29 +1115,13 @@ STEELS					= Structural steels
 CLICKTOEDIT				= Click on databases in blue to edit them
 FILTRESOFT				= Software filter
 HIDEFILTER				= Hide unauthorized profiles
-
-#RESERVE
-EPROFILS				= Base de données des profilés d'ArcelorMittal
-EACIER					= Base de données des aciers
-
-STEELAVAIL		= Afficher uniquement les aciers disponibles
-CHOIXSTEEL		= Options pour la sélection des aciers
-BASEONLY		= Uniquement les aciers de base
-STANDARDONLY	= Uniquement les aciers sous normes pour le profil sélectionné
-BASEANDSTANDARD = Aciers de base et acier sous normes disponibles pour le profil sélectionné
-BASEIFNOSTD		= Acier de base si aucun acier disponible pour le profil sélectionné
-ALLSTEEL		= Tous les aciers de la base de données
-HIDESTEELTHICK	= Masquer les aciers non compatibles avec l'épaisseur du profil
-GRPWEBFILES		= Mise à jour des bases de données depuis Internet
-NBWEBFILES		= Nombre de fichers web
-DELETEWEBF		= Supprimer tous les fichers web
-TTIPEDITBAC		= Cliquez pour modifier la base de données des bacs acier
-TTIPEDITHILTI	= Cliquez pour modifier la base de données des connecteurs Hilti
-TTIPEDITSTUDS	= Cliquer pour modifier la base de données des goujons
-UNIVERSALDTB	= Utiliser des bases de données généralisées
-SAVEOPTIONS		= Enregistrez ces options pour la prochaine session Expert
-EXPERTOPT		= Options d'expert
-SHOWEC3C		= Afficher les courbes de réductions de l'EC3	
+CHOIXSTEEL				= Options la sélection de l'acier
+HIDESTEELTHICK			= Cacher les aciers non compatibles avec l'épaisseur du profilé
+BASEONLY				= Acier de base
+STANDARDONLY			= Uniquement  les aciers compatibles avec le profilé
+BASEANDSTANDARD 		= Aciers de base et aciers compatibles
+BASEIFNOSTD				= Aciers de base si aucun acier compatible
+ALLSTEEL				= Tous les aciers de la base
 
 #OPTSOFTDIRECTORIES
 DIRECTORIES				= Répertoire
@@ -1092,6 +1151,10 @@ USERNAME				= Nom de l'utilisateur
 FIRM					= Entreprise
 INTERNETCHECKS			= Contrôles internet
 VERSION					= Version
+WEB						= Mise à jour - internet
+WEBVERSION				= Contrôle de la version au démarrage
+WEBFILE					= Contrôle de la base de données des profilés au démarrage
+WEBUPDATE				= Vérifier les mises à jour maintenant
 
 #OPTSOFTUNITS
 TITLE					= Unités
