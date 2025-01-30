@@ -1807,6 +1807,7 @@ Public Class Frm_SectionAcierStandard
 #Region "   Gestion selection profile "
 
     Private Sub GestionChangeProfile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Grid_ProfilesSup.SelectionChanged
+
         If lBuild Then Exit Sub
 
         Dim indRow As Integer

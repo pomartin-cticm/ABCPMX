@@ -38,12 +38,13 @@ Public Module Mod_Demarrage
 
         LogicielReglages.lNoS235 = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
         LogicielReglages.lPRS = (LogicielInfo.Maitre = EnuMaitre.CTICM)
+        LogicielReglages.lEC3 = (LogicielInfo.Maitre = EnuMaitre.CTICM)
         LogicielReglages.lDelivery = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
 
         LogicielReglages.lG2 = False
 
-        'LogicielOptions.lFrenchOnly = (LogicielInfo.Maitre = EnuMaitre.CTICM)
-        LogicielReglages.lFrenchOnly = False
+        LogicielReglages.lFrenchOnly = (LogicielInfo.Maitre = EnuMaitre.CTICM)
+        'LogicielReglages.lFrenchOnly = False
 
     End Sub
 
@@ -129,7 +130,7 @@ Public Module Mod_Demarrage
         '--> Réglages CTICM/AM
 
         LogicielInfo.Maitre = EnuMaitre.CTICM
-        'LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
+        LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
 
         InitialiseReglagesLogiciel()
         InitialiseVersion()

@@ -262,11 +262,12 @@ Public Module Mod_Declarations
     End Structure
 
     Public Structure struc_ReglagesLogiciel
-        Public lNoS235 As Boolean                   'Indique si on applique le filtre empechant la sélection de nuance S235/S275 en mode normal 
-        Public lPRS As Boolean                      'Indique si version accessible aux PRS
-        Public lDelivery As Boolean                 'Indique si on affiche les conditions de livraison des laminés
-        Public lG2 As Boolean                       'Indique si Génération 2 des Eurocodes accessible en mode normal
-        Public lFrenchOnly As Boolean               'Indique si interface en français uniquement (mode normal)
+        Public lNoS235 As Boolean               ' Indique si on applique le filtre empechant la sélection de nuance S235/S275 en mode normal 
+        Public lPRS As Boolean                  ' Indique si version accessible aux PRS
+        Public lDelivery As Boolean             ' Indique si on affiche les conditions de livraison des laminés
+        Public lG2 As Boolean                   ' Indique si Génération 2 des Eurocodes accessible en mode normal
+        Public lFrenchOnly As Boolean           ' Indique si interface en français uniquement (mode normal)
+        Public lEC3 As Boolean                  ' Indique si on affiche les aciers avec les propriétés de la table 3.1 de l'EN 1993-1-1 (en plus de la norme produit)
     End Structure
 
     Public Enum Enu_Normes

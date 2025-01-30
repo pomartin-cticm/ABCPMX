@@ -14,12 +14,13 @@ Public Class Frm_Juridique
         Me.Text = LogicielInfo.NomLogiciel
         Me.RadioButton_En.Text = LogicielInfo.ListeLangue(0)
         Me.RadioButton_Fr.Text = LogicielInfo.ListeLangue(1)
+        Me.RadioButton_En.Visible = Not LogicielReglages.lFrenchOnly
         Me.Icon = Frm_PMX.Icon
 
         '--> Initialisation des controls
-        If LogicielInfo.ListeLangue(LogicielOptions.IndLangue) = LogicielInfo.ListeLangue(0) Then
+        If (LogicielInfo.ListeLangue(LogicielOptions.IndLangue) = LogicielInfo.ListeLangue(0)) And (Not LogicielReglages.lFrenchOnly) Then
             RadioButton_En.Checked = True
-        ElseIf LogicielInfo.ListeLangue(LogicielOptions.IndLangue) = LogicielInfo.ListeLangue(1) Then
+        ElseIf (LogicielInfo.ListeLangue(LogicielOptions.IndLangue) = LogicielInfo.ListeLangue(1)) Or LogicielReglages.lFrenchOnly Then
             RadioButton_Fr.Checked = True
         End If
 

@@ -879,12 +879,16 @@ Public Module Mod_BasesDonneesBinaires
         Dim lDisplay As Boolean = True
         Dim IndStdSteel As Integer
         Dim lBase, lCompatible As Boolean
+        Dim lAcierEC3 As Boolean
+        Const QUALITEEC3 As String = "EC3"
+        Dim lEC3OK As Boolean = True
 
         '-->
 
         lBase = (SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Norm).iBase = 1)
         IndStdSteel = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Norm).StIndex
         lIsNuanceCompatibleProfile = (IndStd(CorIndStd(CShort(IndStdSteel)) - 1) = 1)
+        lAcierEC3 = (Qualite.Trim.ToUpper = QUALITEEC3)
 
         Select Case ChoiceAcier
             Case EnuChoiceAcier.AllSteel
@@ -905,7 +909,11 @@ Public Module Mod_BasesDonneesBinaires
             lCompatible = True
         End If
 
-        Return (lDisplay And lCompatible)
+        If lAcierEC3 Then
+            lEC3OK = LogicielOptions.lExpert Or LogicielReglages.lEC3
+        End If
+
+        Return (lDisplay And lCompatible And lEC3OK)
 
     End Function
 

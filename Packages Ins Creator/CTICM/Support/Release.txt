@@ -11,13 +11,13 @@ ABC-PMX Software
 
 Copyright CTICM-ArcelorMittal - 2025
 ABC-PMX has been developed by CTICM - PARIS - FRANCE
-03-01-2025
+30-01-2025
 ================================================================
 
 Version 1.00 (Beta3): 03/01/25
 ---------------------
 
-First edition of the piece of software. Without slimfloors. First edition of fire design
+First edition of the piece of software. Without slimfloors and without fire design
 
 Delivered with ArcelorMittal DataBase - 2022-1
 

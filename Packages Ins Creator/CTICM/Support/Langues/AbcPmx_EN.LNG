@@ -107,6 +107,7 @@ YOUNGSMODULUSREBAR		= Young's modulus of rebars
 SECTIONSPROP			= Properties of cross-sections
 SIMPLIFIEDBEFF			= Simplified distribution of slab effective width
 REBARSINCOMPRESSION		= Rebars in compression taken into account
+ENCASEMENTINPROPER		= Encasement considered for the properties at room temperatures
 AGET					= Age of concrete
 AGET0					= Age of concrete at loading
 SYMBOLFORDAY			= d
@@ -120,6 +121,8 @@ GFORCE					= G-force
 ETAW					= Shear buckling
 CONTROLCRACKW			= Control of concrete cracking
 CRACKWIDTH				= Limit of crack width
+WARNINGCOMPREINF1		= Rebars in compression can not be considered with only one layer of reinforcement in the slab
+WARNINGCOMPREINF2		= When rebars in compression are considered in the design of the beam, requirements of EN 1992-1-1:2005, 9.2.1.2 (3) should be fulfiled to avoid premature buckling
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
@@ -263,6 +266,7 @@ WEB_STUD				= Stud welded on the web
 WEB_REINF				= Dowels
 CLASS					= Class
 REINFORCEMENTS			= Reinforcements
+STUDCONCRETECOVER		= The concrete converage of studs ($) is lower than the minimum requirement of $.
 
 #FRM_DECKRESTRAINT
 TITLE					= Restraint of the beam by the steel deck (construction phase only)
@@ -270,7 +274,7 @@ OK						= Ok
 CANCEL					= Cancel
 RESTRAINTBYTHEDECK		= The beam is laterally restrained by the deck
 INDIVIDUALSHEET			= Individual sheet
-NUMBERSPANS				= Number of crossed spans by sheets
+NUMBERSPANS				= Number of spans crossed by the sheets
 SHEETLENGTH				= Length
 SHEETWIDTH				= Width
 DIMENSIONS				= Dimensions
@@ -306,6 +310,13 @@ BENDINGSTIFF			= Bending stiffness
 SHEARSTIFF				= Shear stiffness
 DRAWING					= Drawing
 THETA					= Flexural bending of deck accounted for in the calculation
+FLOOR					= Floor
+FASTENINGRDB			= Fastening
+RESULTS					= Results
+OPTIONS					= Options
+BEAMSPACING				= Spacing of beams
+THCOATING				= Thickness of coating
+FUP						= Ultimate resistance
 
 #FRMEDITSTUDS	
 TITLE					= Studs data base
@@ -670,7 +681,6 @@ PERMANENTLOADS			= Permanent loads
 SHRINKAGE				= Shrinkage
 IMPOSEDD				= Imposed deformations
 
-
 #FRM_PPLOADCASE
 TITLE					= Load cases
 LOADCASE 				= Load cases
@@ -814,7 +824,11 @@ CONTINUOUSRIBANDDECK	= Continuous concrete rib and steel deck
 CONTINUOUSRIB			= Continuous concrete rib
 DISCONTINUOUSDECK		= Discontinuous steel deck
 DISCONTINUOUSRIBDECK	= Discontinuous concrete rib and steel deck
-
+ERRORLWC				= Density of light weight concrete should be between $ and $
+ERRORNWC				= Density of normal weight concrete should be greater or equal than $
+ERRORCCOVER1			= Reinforcement layer n°$
+ERRORCCOVER2			= The concrete coverage ($) should not be less than the minimal value required for bond ($)
+REINFRATIO				= Reinforcement ratio
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam
@@ -858,6 +872,7 @@ PLATE					= Reinforcing plate under the lower flange
 PLATEW					= Width
 PLATET					= Thickness
 PLATEGRADE				= Steel grade
+WARNINGRATIOAF			= The ratio of the area of the lower flange to the area of the upper flange should be greater or equal to $ and smaller or equal to $
 
 #FRM_START
 BROWSEFILES				= Browse
@@ -940,6 +955,24 @@ TITLE					= Definition of the steel profile
 SABSECTION				= AFB Section
 WIDTH					= Width
 
+#FRM_UPDATE
+TITLE					= Updates
+CLOSE					= Close
+GRPSOFTUPDATE			= $ Update
+WEBACCESFAILED1			= Impossible to check online the updates of VCA+
+WEBACCESFAILED2 		= Please check the connection of your computer 
+UPTODATE				= The current version $ is up-to-date
+GRPSECTIONS				= Profiles and steels databases
+NEWBASE					= A new database for profiles is available
+NEWBASESTEEL			= A new database for steels is available
+BASEUPTODATE			= The current database for profiles is up-to-date
+BASESTEELUPTOD			= The current database for steels is up-to-date
+DOWNLOAD				= Download the new databases
+SECTIONFAILED			= Check failed
+RESTART					= Download OK: The databases are up-to-date
+OPENLNK					= Open download page
+NOINFO					= Information about updates is missing
+
 #GENERAL
 SELFWEIGHT				= Self-weight
 OTHERG					= Other permanent loads
@@ -980,7 +1013,7 @@ ENGEN1					= First generation of Eurocodes
 ENGEN2					= Second generation of Eurocodes (drafts)
 SECTIONPROP				= Properties of cross-sections
 COMPRESSIONREBARS		= Rebars in compression taken into account
-SIMPLIFIEDEFFW			= Simplified distribution of the effective of the concrete flange
+SIMPLIFIEDEFFW			= Simplified distribution of the effective width of the concrete flange
 YOUNGSREBAR				= Young's modulus of reinforcements
 DELTACDEV				= Allowance for the deviation of rebars
 MODEL					= Numerical model parameters
@@ -1020,6 +1053,7 @@ SPACINGLONGI			= Longitudinal spacing
 SPACINGTRANS			= Transverse spacing
 COMPOSITESLAB			= Composite slab
 SOLIDSLAB				= Solid slab
+STUDCONCRETECOVER		= Concrete converage
 
 #OPTCALGAMMA
 TITLE					= Default national factors
@@ -1045,7 +1079,6 @@ SHADOWFACTOR			= Correction factor for the shadow effect
 TEMPREFERENCE			= Reference temperature
 TEMPMAX					= Maximal temperature
 
-
 #OPTCALSCOPE
 TITLE					= Scope of application
 BEAMDEF					= Definition of the beam
@@ -1058,7 +1091,15 @@ THETAHAUNCH				= Inclination angle of concrete haunches
 HAUNCHTH				= Thickness of slab haunch
 SOLIDSLABTH				= Thickness of solid slab
 COMPOSITESLABTH			= Thickness of composite slab (above ribs)
+CONCRETEPROP			= Properties of concrete
 RHOLWC					= Density of light weight concrete
+RHONWC					= Density of normal weight concrete
+WELDEDSECTION			= Dimensions of welded sections
+WEBTHICKNESS			= Thickness of the web
+WEBHEIGHT				= Height of the web
+FLANGETHICKNESS			= Thickness of the flanges
+FLANGEWIDTH				= Width of the flanges
+RATIOFLANGEAREA			= Ratio of the flanges areas
 
 #OPTCALSLIMFLOOR
 TITLE					= Slimfloors
@@ -1067,6 +1108,8 @@ SLIMFLOORDIM			= Slimfloor dimensions
 DEPTHMAX				= Maximal depth of a slim floor hot rolled profile
 SLABSUPPORTMIN			= Minimum width of a slab support
 THICKNESSMIN			= Minimum thickness of the plate
+RESTRAINTBYSHEETS		= Lateral restraint by the steel sheeting
+ECSEAMMAX				= Max spacing of seam fastening
 
 #OPTSOFTMAIN
 TITLE					= Software options
@@ -1076,7 +1119,7 @@ GENERAL					= General parameters
 DIRECTORIES				= Directories
 UNITS					= Units
 DATABASES				= Databases
-CALCULSHEET				= Calculation sheet
+CALCULSHEET				= Preliminary design report
 EXPERT					= Expert Mode
 EXPERTMODEACTIVE		= Expert Mode active
 
@@ -1106,30 +1149,13 @@ STEELS					= Structural steels
 CLICKTOEDIT				= Click on databases in blue to edit them
 FILTRESOFT				= Software filter
 HIDEFILTER				= Hide unauthorized profiles
-
-#RESERVE
-EPROFILS		= ArcelorMittal Profiles database
-EACIER			= Steels database
-
-STEELAVAIL		= Show only available steels
-CHOIXSTEEL		= Options for the selection of steel
-BASEONLY		= Only base steels
-STANDARDONLY	= Only steel under norms available for the selected profile
-BASEANDSTANDARD = Base steel and steel under norms available for the selected profile
-BASEIFNOSTD		= Base steel if no steel available for the selected profile
-ALLSTEEL		= All steels of the database
-HIDESTEELTHICK	= Hide steels not compatible with profile thickness
-GRPWEBFILES		= Databases from internet update
-NBWEBFILES		= Number of web files
-DELETEWEBF		= Delete all web files
-TTIPEDITBAC		= Click to edit steel sheets database
-TTIPEDITHILTI	= Click to edit Hilti connectors database
-TTIPEDITSTUDS	= Click to edit studs database
-UNIVERSALDTB	= Use generalised databases
-SAVEOPTIONS		= Save these options for the next Expert session
-EXPERTOPT		= Expert options
-SHOWEC3C		= Show EC3 reduction curves	
-
+CHOIXSTEEL				= Options for the selection of steel
+HIDESTEELTHICK			= Hide steels not compatible with profile thickness
+BASEONLY				= Only base steels
+STANDARDONLY			= Only steel under norms available for the selected profile
+BASEANDSTANDARD 		= Base steel and steel under norms available for the selected profile
+BASEIFNOSTD				= Base steel if no steel available for the selected profile
+ALLSTEEL				= All steels of the database
 
 #OPTSOFTDIRECTORIES
 DIRECTORIES				= Directories
@@ -1153,13 +1179,16 @@ UNVALIDKEY				= Key is not valid
 TITLE					= General settings
 LANGUAGES				= Languages
 USERGI					= User interface
-CALCULREPORT			= Calculation report
+CALCULREPORT			= Preliminary design report
 IDENTIFICATION			= Identification
 USERNAME				= User name
 FIRM					= Firm
 INTERNETCHECKS			= Internet checks
 VERSION					= Version
-
+WEB						= Internet Update
+WEBVERSION				= Control of the version at launch
+WEBFILE					= Control of the profiles database at launch
+WEBUPDATE				= Check updates now
 
 #OPTSOFTUNITS
 TITLE					= Units

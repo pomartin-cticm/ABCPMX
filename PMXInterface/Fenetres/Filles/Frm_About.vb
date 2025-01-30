@@ -92,7 +92,15 @@ Public Class Frm_About
     End Sub
 
     Private Sub AfficheNomLogiciel()
-        Me.lbl_NomLogiciel.Text = LogicielInfo.Racine & " V" & LogicielInfo.Version.Label & " (@ " & CStr(LogicielInfo.Version.Annee) & ")"
+
+        Dim Chaine As String = CStr(LogicielInfo.Version.Annee)
+        If lCTICM Then
+            Chaine = " (@ CTICM-ArcelorMittal " & Chaine & ")"
+        Else
+            Chaine = " (@ ArcelorMittal-CTICM " & Chaine & ")"
+        End If
+
+        Me.lbl_NomLogiciel.Text = LogicielInfo.Racine & " V" & LogicielInfo.Version.Label & Chaine
     End Sub
 
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
