@@ -541,10 +541,28 @@
     <Compile Include="Fenetres\Options\Frm_OptionsLogicielUnits.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Utilitaires\Frm_ModularN_ResultatsG1.Designer.vb">
+      <DependentUpon>Frm_ModularN_ResultatsG1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Utilitaires\Frm_ModularN_ResultatsG1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Utilitaires\Frm_ModularN_ResultatsG2.Designer.vb">
+      <DependentUpon>Frm_ModularN_ResultatsG2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Utilitaires\Frm_ModularN_ResultatsG2.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Utilitaires\Frm_ModularRatio.Designer.vb">
       <DependentUpon>Frm_ModularRatio.vb</DependentUpon>
     </Compile>
     <Compile Include="Fenetres\Utilitaires\Frm_ModularRatio.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Utilitaires\Frm_ModularRatioN.Designer.vb">
+      <DependentUpon>Frm_ModularRatioN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Utilitaires\Frm_ModularRatioN.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\Mod_AccesFichiers.vb" />
@@ -807,8 +825,17 @@
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielUnits.resx">
       <DependentUpon>Frm_OptionsLogicielUnits.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Utilitaires\Frm_ModularN_ResultatsG1.resx">
+      <DependentUpon>Frm_ModularN_ResultatsG1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Utilitaires\Frm_ModularN_ResultatsG2.resx">
+      <DependentUpon>Frm_ModularN_ResultatsG2.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Utilitaires\Frm_ModularRatio.resx">
       <DependentUpon>Frm_ModularRatio.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Utilitaires\Frm_ModularRatioN.resx">
+      <DependentUpon>Frm_ModularRatioN.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

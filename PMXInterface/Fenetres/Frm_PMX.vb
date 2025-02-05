@@ -563,8 +563,13 @@ Public Class Frm_PMX
     End Sub
 
     Private Sub TSbtn_Calcul_Click(sender As Object, e As EventArgs) Handles TSbtn_Calcul.Click
-        Frm_ModularRatio.ShowDialog()
-        Frm_ModularRatio.Dispose()
+        If Me.chk_NewF.Checked Then
+            Frm_ModularRatioN.ShowDialog()
+            'Frm_ModularRatioN.Dispose()
+        Else
+            Frm_ModularRatio.ShowDialog()
+            Frm_ModularRatio.Dispose()
+        End If
     End Sub
 
 
@@ -956,15 +961,12 @@ Public Class Frm_PMX
 
             Case EnuFenetres.Chargements
 
-
-
                 Frm_ChargementN.ShowDialog()
                 'If lNew Then
                 '    Frm_ChargementN.ShowDialog()
                 'Else
                 '    Frm_Chargement.ShowDialog()
                 'End If
-
 
             Case EnuFenetres.Gamma
 
@@ -975,7 +977,6 @@ Public Class Frm_PMX
             Case EnuFenetres.Combinaisons
 
                 Frm_Combinaisons.ShowDialog()
-
 
             Case EnuFenetres.Hivoss
 

@@ -481,7 +481,7 @@
 
 #Region " Outils pour la méthode Hivoss "
 
-    Public Function FrequenceDalle(LPoutre As Decimal, PorteeDalle As Decimal, LargInfluence As Decimal, MasseProfile As Decimal, G As Decimal) As Decimal
+    Public Function FrequenceDalle(LPoutre As Decimal, PorteeDalle As Decimal, LargInfluence As Decimal, MasseProfile As Decimal, G As Decimal, lGeneration1 As Boolean) As Decimal
         '---------------------------------------------------------------------------------------------------
         '   01/12/23 :  Création - POM
         '---------------------------------------------------------------------------------------------------
@@ -491,6 +491,8 @@
         '   PorteeDalle     [E] :   Portée de la dalle
         '   LargInfleunce   [E] :   Largeur d'influence des charges sur la dalle
         '   MasseProfile    [E] :   Masse du profilé acier
+        '   G               [E] :   Valeur de G (gravité)
+        '   lGeneration1    [E] :   Indique si calculs selon génération 1 des Eurocodes
         '---------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -515,7 +517,7 @@
 
         '--> Calcul inertie dalle / unite de longueur
 
-        EIx = cls_Acier.EYACIER * kConvMPaPa * Me.InertieTransversaleH(Me.beton.CoefficientEquivalenceCT)
+        EIx = cls_Acier.EYACIER * kConvMPaPa * Me.InertieTransversaleH(Me.beton.CoefficientEquivalenceCT(lGeneration1))
 
         '--> Flèche de la dalle sous charges Gravitaires
 

@@ -418,7 +418,7 @@ Public Class Frm_DalleSlimFloor
 
     Private Sub MAJI_ProprietesBeton()
 
-        MyDalleLoc.beton.Calcul_Proprietes()
+        MyDalleLoc.beton.Calcul_Proprietes(MyProjet.Poutres(MyProjet.IndEnCours).Param.lGeneration1)
 
     End Sub
 

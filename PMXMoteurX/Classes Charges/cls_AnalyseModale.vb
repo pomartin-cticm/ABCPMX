@@ -106,11 +106,12 @@ Public Class cls_AnalyseModale
         Dim nEqEnrobCT As Decimal
         Dim SigneM() As Decimal = Nothing
         Dim pMyElts As cls_Poutre.strucBeamElements = Nothing
+        Dim lGene1 As Boolean = MyPoutre.Param.lGeneration1
 
         '--> Initialisations
 
-        nEqDalleCT = MyPoutre.Dalle.beton.CoefficientEquivalenceCT
-        nEqEnrobCT = MyPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT
+        nEqDalleCT = MyPoutre.Dalle.beton.CoefficientEquivalenceCT(lGene1)
+        nEqEnrobCT = MyPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT(lGene1)
 
         MyPoutre.PrepareNodesN()
         MyPoutre.InitialiseSigneMoment(SigneM)

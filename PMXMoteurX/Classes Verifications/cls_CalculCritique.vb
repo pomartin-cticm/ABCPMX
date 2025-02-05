@@ -38,6 +38,8 @@
         Dim iTravP As Integer, iTravD As Integer, iTrav As Integer
         Dim zTop As Decimal
 
+        Dim lGeneration1 As Boolean = myPoutre.Param.lGeneration1
+
         '--> Initialisation
 
         '--> Préparation des données pour le calcul LTBeamN
@@ -73,10 +75,10 @@
         '---[ Propriétés élémentaires
 
         pAire = myPoutre.Section.ProfilA.Aire
-        If lEnrob Then nEqEc = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT
+        If lEnrob Then nEqEc = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT(lGeneration1)
         myPoutre.Section.ProprietesElastiquesMyy_Usuel(1, True, myPoutre.Param.Gamma, nEqEc, zAne, pInertieY, mElRd, myPoutre.Param.lEnrobProp, False, True)
         myPoutre.Section.ProprietesElastiquesMzz(1, True, myPoutre.Param.Gamma, nEqEc, zAneZ, pInertieZ, mElRd, True)
-        pInertieT = myPoutre.Section.InertieT
+        pInertieT = myPoutre.Section.InertieT(lGeneration1)
         pInertieW = myPoutre.Section.ProfilA.InertieW
         rGirPolaire = myPoutre.Section.ProfilA.RayonGirationPolaireCalcul
         pzS = myPoutre.Section.ProfilA.PositionCentreS

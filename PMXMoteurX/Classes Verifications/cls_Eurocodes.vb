@@ -201,6 +201,7 @@
         Dim bEff As Decimal
         Dim zANE As Decimal
         Dim InertieY As Decimal
+        Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
 
         '--( Calcul
 
@@ -209,8 +210,8 @@
         Else
             bEff = myBeam.BeffDalle(myBeam.LongueurTravee(1), 1, myBeam.Param.lLargeurEfficaceSimplifiee, True, cls_Poutre.EnuTypeLargeurParticipante.Totale)
         End If
-        NeqEnrob = myBeam.Section.Enrobage.Beton.CoefficientEquivalenceCT
-        NeqDalle = myBeam.Dalle.beton.CoefficientEquivalenceCT
+        NeqEnrob = myBeam.Section.Enrobage.Beton.CoefficientEquivalenceCT(lGeneration1)
+        NeqDalle = myBeam.Dalle.beton.CoefficientEquivalenceCT(lGeneration1)
 
         Hc = myBeam.Dalle.EpaisseurActive
         InertieY = myBeam.Section.InertieYY(1, True, myBeam.Param.Gamma, NeqEnrob, NeqDalle, True, bEff, myBeam.Dalle, myBeam.Param.lEnrobProp, zANE)

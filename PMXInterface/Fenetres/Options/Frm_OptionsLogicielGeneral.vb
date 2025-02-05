@@ -115,7 +115,7 @@
                 MyLst.Items.Add(tabLangues(i))
         Next i
 
-        MyLst.SelectedIndex = IndexL
+        MyLst.SelectedIndex = Math.Min(IndexL, MyLst.Items.Count - 1)
         MyLst.Refresh()
 
     End Sub

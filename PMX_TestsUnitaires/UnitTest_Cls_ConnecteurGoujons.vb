@@ -33,7 +33,7 @@ Imports PMXMoteur2
             .Param.Gamma.GammaVc = 1.25
 
             .Dalle.beton.Classe = "C25/30"
-            .Dalle.beton.Calcul_Proprietes()
+            .Dalle.beton.Calcul_Proprietes(True)
 
             'CofraPlus 60
             .Dalle.Bac.Hp = 58 / 1000
@@ -172,7 +172,7 @@ Imports PMXMoteur2
             .Param.Gamma.GammaVc = 1.25
 
             .Dalle.beton.Classe = "C25/30"
-            .Dalle.beton.Calcul_Proprietes()
+            .Dalle.beton.Calcul_Proprietes(True)
 
             'CofraPlus 60
             .Dalle.Bac.Hp = 58 / 1000

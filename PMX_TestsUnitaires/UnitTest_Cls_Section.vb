@@ -322,7 +322,7 @@ Imports PMXMoteur2
 
         'ValRef = 62.8 * 10 ^ (-8)  ' Changement de formules
         ValRef = 64.28 * 10 ^ (-8)
-        DeltaV = (MySection.InertieT - ValRef) / ValRef
+        DeltaV = (MySection.InertieT(True) - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '=== ACIER + ENROBAGE ============================================================================
@@ -333,7 +333,7 @@ Imports PMXMoteur2
 
         MySection.Enrobage.Ratio_bc = 1
         MySection.Enrobage.Beton.Classe = "C25/30"
-        MySection.Enrobage.Beton.Calcul_Proprietes()
+        MySection.Enrobage.Beton.Calcul_Proprietes(True)
 
         '--> Définition du lit d'armature supérieure
 
@@ -371,7 +371,7 @@ Imports PMXMoteur2
 
         '--> Coefficient d'équivalence court terme du béton
 
-        nEqEc = MySection.Enrobage.Beton.CoefficientEquivalence(50, 1, 1, 1, 0)
+        nEqEc = MySection.Enrobage.Beton.CoefficientEquivalence(50, 1, 1, 1, 0, True)
 
         '--> Tests des propriétés élastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
 
@@ -407,14 +407,14 @@ Imports PMXMoteur2
         '# Coefficient d'équivalent CT
 
         ValRef = 6.672
-        DeltaV = (MySection.Enrobage.Beton.CoefficientEquivalenceCT - ValRef) / ValRef
+        DeltaV = (MySection.Enrobage.Beton.CoefficientEquivalenceCT(True) - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Inertie de torsion
 
         ' Valeur de référence légèrement <> de celle de l'article, car n0 est calculé avec Ecm obtenu par la formule, et non la valeur tabulée
         ValRef = 1131 * 10 ^ (-8)
-        DeltaV = (MySection.InertieT - ValRef) / ValRef
+        DeltaV = (MySection.InertieT(True) - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '--> Tests des propriétés plastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
@@ -544,7 +544,7 @@ Imports PMXMoteur2
 
         MySection.Enrobage.Ratio_bc = 1
         MySection.Enrobage.Beton.Classe = "C25/30"
-        MySection.Enrobage.Beton.Calcul_Proprietes()
+        MySection.Enrobage.Beton.Calcul_Proprietes(True)
 
         '--> Définition du lit d'armature supérieure
 
@@ -582,7 +582,7 @@ Imports PMXMoteur2
 
         '--> Coefficient d'équivalence court terme du béton
 
-        nEqEc = MySection.Enrobage.Beton.CoefficientEquivalence(50, 1, 1, 1, 0)
+        nEqEc = MySection.Enrobage.Beton.CoefficientEquivalence(50, 1, 1, 1, 0, True)
 
         '--> Tests des propriétés élastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
 
@@ -711,7 +711,7 @@ Imports PMXMoteur2
         bEff = 3
         Eta = 1
         MyDalle.beton.Classe = "C25/30"
-        MyDalle.beton.Calcul_Proprietes()
+        MyDalle.beton.Calcul_Proprietes(True)
         MyDalle.type = cls_Dalle.Enum_TypeDalle.Mixte
         MyDalle.Ep_td = 0.12
         MyDalle.Bac.InitialiseCofraPlus60()
@@ -829,7 +829,7 @@ Imports PMXMoteur2
         bEff = 3
         Eta = 1
         MyDalle.beton.Classe = "C25/30"
-        MyDalle.beton.Calcul_Proprietes()
+        MyDalle.beton.Calcul_Proprietes(True)
         MyDalle.type = cls_Dalle.Enum_TypeDalle.Mixte
         MyDalle.Ep_td = 0.12
         MyDalle.Bac.InitialiseCofraPlus60()
@@ -934,7 +934,7 @@ Imports PMXMoteur2
         bEff = 2.0
         Eta = 1
         MyDalle.beton.Classe = "C30/37"
-        MyDalle.beton.Calcul_Proprietes()
+        MyDalle.beton.Calcul_Proprietes(True)
         MyDalle.type = cls_Dalle.Enum_TypeDalle.Pleine
         MyDalle.Ep_td = 0.25
         MyDalle.Ep_th = 0
@@ -1021,7 +1021,7 @@ Imports PMXMoteur2
         bEff = 2.65
         Eta = 1
         MyDalle.beton.Classe = "C30/37"
-        MyDalle.beton.Calcul_Proprietes()
+        MyDalle.beton.Calcul_Proprietes(True)
         MyDalle.type = cls_Dalle.Enum_TypeDalle.Pleine
         MyDalle.Ep_td = 0.2
         MyDalle.Ep_th = 0

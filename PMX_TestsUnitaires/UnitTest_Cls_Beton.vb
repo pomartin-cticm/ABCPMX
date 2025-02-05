@@ -24,7 +24,7 @@ Imports PMXMoteur2
 
         MyBet.Classe = cls_Beton.TabClasseBeton(1)      '"C25/30"
         MyBet.lLeger = False
-        MyBet.Calcul_Proprietes()
+        MyBet.Calcul_Proprietes(True)
 
         '--> Test des propriétés du béton
 
@@ -54,7 +54,7 @@ Imports PMXMoteur2
 
         '--> Test valeur court terme du coefficient d'équivalence
 
-        n0 = MyBet.CoefficientEquivalence(80, 0.1, 1, 1, 0)
+        n0 = MyBet.CoefficientEquivalence(80, 0.1, 1, 1, 0, True)
 
         ValRef = 6.6718
         DeltaV = (n0 - ValRef) / ValRef
@@ -101,7 +101,7 @@ Imports PMXMoteur2
         '# n
 
         ValRef = 29.96
-        DeltaV = (MyBet.CoefficientEquivalence(RH, h0, time_t, time_t0, PsiL) - ValRef) / ValRef
+        DeltaV = (MyBet.CoefficientEquivalence(RH, h0, time_t, time_t0, PsiL, True) - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
 
@@ -127,7 +127,7 @@ Imports PMXMoteur2
 
         MyBet.Classe = cls_Beton.TabClasseBeton(4)      '"C40/30"
         MyBet.lLeger = False
-        MyBet.Calcul_Proprietes()
+        MyBet.Calcul_Proprietes(True)
 
         '--> Test des propriétés du béton
 
@@ -157,7 +157,7 @@ Imports PMXMoteur2
 
         '--> Test valeur court terme du coefficient d'équivalence
 
-        n0 = MyBet.CoefficientEquivalence(80, 0.1, 1, 1, 0)
+        n0 = MyBet.CoefficientEquivalence(80, 0.1, 1, 1, 0, True)
 
         ValRef = 5.9624
         DeltaV = (n0 - ValRef) / ValRef
@@ -204,7 +204,7 @@ Imports PMXMoteur2
         '# n
 
         ValRef = 16.37
-        DeltaV = (MyBet.CoefficientEquivalence(RH, h0, time_t, time_t0, PsiL) - ValRef) / ValRef
+        DeltaV = (MyBet.CoefficientEquivalence(RH, h0, time_t, time_t0, PsiL, True) - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub
@@ -230,7 +230,7 @@ Imports PMXMoteur2
         MyBet.Classe = cls_Beton.TabClasseBetonLeger(2)      '"LC30/33"
         MyBet.lLeger = True
         MyBet.RhoC = 1500
-        MyBet.Calcul_Proprietes()
+        MyBet.Calcul_Proprietes(True)
 
         '--> Test des propriétés du béton
 

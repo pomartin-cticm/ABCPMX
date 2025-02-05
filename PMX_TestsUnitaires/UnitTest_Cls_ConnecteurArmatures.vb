@@ -30,7 +30,7 @@ Imports PMXMoteur2
             .Param.Gamma.GammaVc = 1.25
 
             .Dalle.beton.Classe = "C25/30"
-            .Dalle.beton.Calcul_Proprietes()
+            .Dalle.beton.Calcul_Proprietes(True)
 
             .Dalle.ConnecteurArmature.ds = 23 / 1000
 

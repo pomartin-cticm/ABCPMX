@@ -531,7 +531,7 @@ Public Class cls_VerificationsAcier
 
         If lSigma Then
             '=== ZZZ
-            nEqEc = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT
+            nEqEc = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT(myPoutre.Param.lGeneration1)
             myPoutre.Section.ProprietesElastiquesMyy_Usuel(1, False, myPoutre.Param.Gamma, nEqEc, zANE, InertieY, MRk, myPoutre.Param.lEnrobProp, False)
         Else
             myPoutre.Section.ProprietesPlastiquesMyy_Usuel(1, False, myPoutre.Param.Gamma, 0, zANE, MRk, myPoutre.Param.lEnrobProp)

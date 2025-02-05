@@ -42,10 +42,13 @@ Public Module Mod_Demarrage
         LogicielReglages.lDelivery = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
 
         LogicielReglages.lG2 = False
+        LogicielReglages.lG1 = True
 
         LogicielReglages.lFrenchOnly = (LogicielInfo.Maitre = EnuMaitre.CTICM)
         'LogicielReglages.lFrenchOnly = False
 
+        lSLIM = False
+        lFIRE = False
     End Sub
 
     Private Sub InitialiseVersion()

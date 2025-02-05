@@ -60,6 +60,7 @@ Public Class cls_VerificationsELS
         Dim lRetrait As Boolean = True
         Dim lMixte As Boolean = myBeam.lMixte
         Dim lDefQ(2) As Boolean
+        Dim lGenEN1 As Boolean = myBeam.Param.lGeneration1
 
         '--> Initialisation de la classe
 
@@ -112,7 +113,7 @@ Public Class cls_VerificationsELS
 
                 If myBeam.lTraveeConsoleGauche Then
                     bEff = myBeam.BeffDalle(0, 1, myBeam.Param.lLargeurEfficaceSimplifiee, False)
-                    DeltaSG = myBeam.Section.DeltaSigma(myBeam.Dalle, bEff)
+                    DeltaSG = myBeam.Section.DeltaSigma(myBeam.Dalle, bEff, lGenEN1)
                     iNodeD = myBeam.Nodes.iNodeExtTrav(0, 0)
                     iNodeF = CInt((myBeam.Nodes.iNodeExtTrav(1, 0) + myBeam.Nodes.iNodeExtTrav(1, 1)) / 2)
                     myBeam.PtsSigma.AjusteDeltaS(DeltaSG, SigmaELS, iNodeD, iNodeF)
@@ -121,7 +122,7 @@ Public Class cls_VerificationsELS
 
                 If myBeam.lTraveeConsoleDroite Then
                     bEff = myBeam.BeffDalle(myBeam.LongueurTravee(1), 1, myBeam.Param.lLargeurEfficaceSimplifiee, False)
-                    DeltaSD = myBeam.Section.DeltaSigma(myBeam.Dalle, bEff)
+                    DeltaSD = myBeam.Section.DeltaSigma(myBeam.Dalle, bEff, lGenEN1)
                     iNodeF = myBeam.Nodes.iNodeExtTrav(myBeam.IndiceDerniereTravee, 1)
                     iNodeD = CInt((myBeam.Nodes.iNodeExtTrav(1, 0) + myBeam.Nodes.iNodeExtTrav(1, 1)) / 2)
                     myBeam.PtsSigma.AjusteDeltaS(DeltaSD, SigmaELS, iNodeD, iNodeF)

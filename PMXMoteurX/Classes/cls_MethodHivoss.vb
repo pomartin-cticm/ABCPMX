@@ -852,7 +852,8 @@ Public Class cls_MethodHivoss
             MasseProfil = myBeam.Section.ProfilA.Aire * cls_Acier.RHOACIER
             PorteeDalle = myBeam.PorteeDalle
 
-            Me.FreqDalle = myBeam.Dalle.FrequenceDalle(myBeam.LongueurTravee(1), PorteeDalle, myBeam.LargeurInfluence, MasseProfil, myBeam.Param.GraviteG)
+            Me.FreqDalle = myBeam.Dalle.FrequenceDalle(myBeam.LongueurTravee(1), PorteeDalle, myBeam.LargeurInfluence, MasseProfil,
+                                                       myBeam.Param.GraviteG, myBeam.Param.lGeneration1)
             Me.FreqPoutre = Me.Frequence
             Me.Frequence = CDec(1 / Math.Sqrt(1 / Me.FreqPoutre ^ 2 + 1 / Me.FreqDalle ^ 2))
         End If

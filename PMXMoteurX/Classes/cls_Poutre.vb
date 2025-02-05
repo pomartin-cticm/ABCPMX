@@ -4213,6 +4213,8 @@ Public Class cls_Poutre
         Dim pEtatDalleNonMixte As cls_CasDeCharge.EnuEtatDalle = cls_CasDeCharge.EnuEtatDalle.Acier
         Dim pEtatDalleMixte As cls_CasDeCharge.EnuEtatDalle = cls_CasDeCharge.EnuEtatDalle.Mixte
 
+        Dim lGene1 As Boolean = Me.Param.lGeneration1
+
         '--> Initialisation
 
         Me.Elements.Clear()
@@ -4226,8 +4228,8 @@ Public Class cls_Poutre
             End If
         End If
 
-        nEqDalleCT = Me.Dalle.beton.CoefficientEquivalenceCT
-        nEqEnrobCT = Me.Section.Enrobage.Beton.CoefficientEquivalenceCT
+        nEqDalleCT = Me.Dalle.beton.CoefficientEquivalenceCT(lGene1)
+        nEqEnrobCT = Me.Section.Enrobage.Beton.CoefficientEquivalenceCT(lGene1)
         'nEqDalleLT = 3 * nEqDalleCT
         'nEqEnrobLT = 3 * nEqEnrobCT
 
@@ -4237,15 +4239,15 @@ Public Class cls_Poutre
         Dim H0Enrob As Decimal = Me.Section.NotionalSizeEnrobage
 
         If lMixte Then
-            nEqDalleG1 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.AgeT0G1(0), Me.Param.PsiLPermanent)
-            nEqDalleG2 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.AgeT0G2(0), Me.Param.PsiLPermanent)
-            nEqDalleSH = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.AgeT0SH(0), Me.Param.PsiLRetrait)
+            nEqDalleG1 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.AgeT0G1(0), Me.Param.PsiLPermanent, lGene1)
+            nEqDalleG2 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.AgeT0G2(0), Me.Param.PsiLPermanent, lGene1)
+            nEqDalleSH = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.AgeT0SH(0), Me.Param.PsiLRetrait, lGene1)
         End If
 
         If lEnrob Then
-            nEqEnrobG1 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.AgeT0G1(1), Me.Param.PsiLPermanent)
-            nEqEnrobG2 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.AgeT0G2(1), Me.Param.PsiLPermanent)
-            nEqEnrobSH = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.AgeT0SH(1), Me.Param.PsiLRetrait)
+            nEqEnrobG1 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.AgeT0G1(1), Me.Param.PsiLPermanent, lGene1)
+            nEqEnrobG2 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.AgeT0G2(1), Me.Param.PsiLPermanent, lGene1)
+            nEqEnrobSH = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.AgeT0SH(1), Me.Param.PsiLRetrait, lGene1)
         End If
 
         iTrav0 = Me.IndicePremiereTravee

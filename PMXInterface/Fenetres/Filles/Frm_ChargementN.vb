@@ -86,6 +86,7 @@ Public Class Frm_ChargementN
     Dim strPoutreAcierEnrob As String = "Poutre acier partiellement enrobée"
     Dim strPoutreAcier As String = "Poutre acier"
 
+    Dim lGeneration1 As Boolean = MyProjet.Poutres(MyProjet.IndEnCours).Param.lGeneration1
 #End Region
 
 #Region "===OUVERTURE==="
@@ -748,14 +749,14 @@ Public Class Frm_ChargementN
                 PsiL = MyPoutreLoc.Param.PsiLPermanent
                 If lNDalle Then
                     t0 = MyPoutreLoc.Param.AgeT0G1(0)
-                    nDalle = MyPoutreLoc.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, t0, PsiL)
+                    nDalle = MyPoutreLoc.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, t0, PsiL, lGeneration1)
                 End If
                 If lNEnrob Then
                     If lConstruction Then
-                        nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalenceCT
+                        nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalenceCT(lGeneration1)
                     Else
                         t0 = MyPoutreLoc.Param.AgeT0G1(1)
-                        nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalence(RH, H0Enrob, TimeT, t0, PsiL)
+                        nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalence(RH, H0Enrob, TimeT, t0, PsiL, lGeneration1)
                     End If
                 End If
 
@@ -766,31 +767,31 @@ Public Class Frm_ChargementN
                 PsiL = MyPoutreLoc.Param.PsiLPermanent
                 If lNDalle Then
                     t0 = MyPoutreLoc.Param.AgeT0G2(0)
-                    nDalle = MyPoutreLoc.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, t0, PsiL)
+                    nDalle = MyPoutreLoc.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, t0, PsiL, lGeneration1)
                 End If
                 If lNEnrob Then
                     t0 = MyPoutreLoc.Param.AgeT0G2(1)
-                    nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalence(RH, H0Enrob, TimeT, t0, PsiL)
+                    nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalence(RH, H0Enrob, TimeT, t0, PsiL, lGeneration1)
                 End If
             Case rad_Q1.Checked
                 Me.lbl_EtatDalle.Text = strCasNormal
                 lNDalle = lMixte
                 lNEnrob = lEnrob
                 If lNDalle Then
-                    nDalle = MyPoutreLoc.Dalle.beton.CoefficientEquivalenceCT
+                    nDalle = MyPoutreLoc.Dalle.beton.CoefficientEquivalenceCT(lGeneration1)
                 End If
                 If lNEnrob Then
-                    nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalenceCT
+                    nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalenceCT(lGeneration1)
                 End If
             Case rad_Q2.Checked
                 Me.lbl_EtatDalle.Text = strCasNormal
                 lNDalle = lMixte
                 lNEnrob = lEnrob
                 If lNDalle Then
-                    nDalle = MyPoutreLoc.Dalle.beton.CoefficientEquivalenceCT
+                    nDalle = MyPoutreLoc.Dalle.beton.CoefficientEquivalenceCT(lGeneration1)
                 End If
                 If lNEnrob Then
-                    nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalenceCT
+                    nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalenceCT(lGeneration1)
                 End If
 
         End Select

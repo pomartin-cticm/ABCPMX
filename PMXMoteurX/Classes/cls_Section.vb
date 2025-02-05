@@ -874,13 +874,15 @@ Public Class cls_Section
         Return pInertieT
     End Function
 
-    Public Function InertieT() As Decimal
+    Public Function InertieT(lGeneration1 As Boolean) As Decimal
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
         '   Calcul des propriétés élastiques en torsion de la section
         '   Pour un profilé acier avec enrobage, on utilise la formule du guide "Déversement des poutres en acier"
         '   Pas de prise en compte de la dalle
+        '-------------------------------------------------------------------------------------------------------------------
+        '   lGeneration1    [E] :   Indique si calculs avec génération 1 des Eurocodes
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -896,7 +898,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            nEq = Me.Enrobage.Beton.CoefficientEquivalenceCT
+            nEq = Me.Enrobage.Beton.CoefficientEquivalenceCT(lGeneration1)
             'hW = Me.ProfilA.HauteurAmeHw
             'Bc = Me.LargeurEnrobagePartielBc
 
@@ -1356,7 +1358,7 @@ Public Class cls_Section
 
 #Region " Effet du béton tendu dans le calcul des contraintes "
 
-    Public Function DeltaSigma(myDalle As cls_Dalle, bEff As Decimal) As Decimal
+    Public Function DeltaSigma(myDalle As cls_Dalle, bEff As Decimal, lGeneration1 As Boolean) As Decimal
         '----------------------------------------------------------------------------------------------------------------
         '   16/04/24 :  Création - POM
         '----------------------------------------------------------------------------------------------------------------
@@ -1364,6 +1366,7 @@ Public Class cls_Section
         '----------------------------------------------------------------------------------------------------------------
         '   bEff        [E] :   Largeur efficace de dalle
         '   myDalle     [E] :   Dalle traitée
+        '   lGeneration1[E] :   Indique si calculs avec génération 1 des Eurocodes
         '----------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -1379,13 +1382,13 @@ Public Class cls_Section
 
         '--> Calcul
 
-        DeltaS = 0.4 * Fctm / (Me.AlphaSt(bEff, myDalle) * RauS)
+        DeltaS = 0.4 * Fctm / (Me.AlphaSt(bEff, myDalle, lGeneration1) * RauS)
 
         Return DeltaS
 
     End Function
 
-    Public Function AlphaSt(bEff As Decimal, myDalle As cls_Dalle) As Decimal
+    Public Function AlphaSt(bEff As Decimal, myDalle As cls_Dalle, lGeneration1 As Boolean) As Decimal
         '----------------------------------------------------------------------------------------------------------------
         '   16/04/24 :  Création - POM
         '----------------------------------------------------------------------------------------------------------------
@@ -1394,6 +1397,7 @@ Public Class cls_Section
         '----------------------------------------------------------------------------------------------------------------
         '   bEff        [E] :   Largeur efficace de dalle
         '   myDalle     [E] :   Dalle traitée
+        '   lGeneration1[E] :   Indique si calcul avec génération 1 des Eurocodes
         '----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -1406,8 +1410,8 @@ Public Class cls_Section
 
         '--( Initialisation
 
-        nEqEc = Me.Enrobage.Beton.CoefficientEquivalenceCT
-        nEqDalle = myDalle.beton.CoefficientEquivalenceCT
+        nEqEc = Me.Enrobage.Beton.CoefficientEquivalenceCT(lGeneration1)
+        nEqDalle = myDalle.beton.CoefficientEquivalenceCT(lGeneration1)
 
         '--( Calcul
 

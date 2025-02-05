@@ -1,7 +1,8 @@
 ﻿Imports PMXMoteur2
 Imports System.IO
 
-Public Class Frm_ModularRatio
+Public Class Frm_ModularRatioN
+
 
 #Region " Attributs "
 
@@ -27,6 +28,10 @@ Public Class Frm_ModularRatio
     Dim iCharge As Integer
     Dim iChargePrec As Integer
 
+    Dim lCalculG1 As Boolean            ' Indique si le calcul se fait selon la génération 1
+
+    Dim Bloc As New Dictionary(Of String, String)
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -51,16 +56,28 @@ Public Class Frm_ModularRatio
     End Sub
 
     Private Sub InitialiserFenetre()
+
         RemplirComboRH()
         RemplirComboBeton()
         RemplirComboCharges()
+        RemplirComboCiment()
+        RemplirComboNorm()
+        MAJI_Norme()
 
-        Me.txt_AgeT.Text = GetStringInUnit(AgeT, Enu_TypeVariable.SansType, 2, 0, False)
+        Me.txt_AgeT.Text = GetStringInUnitN(AgeT, Enu_TypeVariable.SansType, 2, 0, NON_U, False)
 
-        Me.txt_H0.Text = GetStringInUnit(RayonH0, Enu_TypeVariable.Dimension, 3, 2, False)
+        Me.txt_H0.Text = GetStringInUnitN(RayonH0, Enu_TypeVariable.Dimension, 3, 2, NON_U, True)
+
+        Me.txt_kE.Text = GetStringInUnitN(MonBeton.kE, Enu_TypeVariable.SansType, 4, 1, NON_U, True)
 
         AfficherAgeT0()
         MAJI_TxtAgeT0()
+
+        PrepareAffResultats()
+        If lCalculG1 Then
+            AfficherResultatsIntermediaresG1()
+        Else
+        End If
 
     End Sub
 
@@ -76,7 +93,13 @@ Public Class Frm_ModularRatio
         Me.etq_UnitModule.Text = "GPa"
         Me.etq_UnitSigma1.Text = "MPa"
         Me.etq_UnitSigma2.Text = "MPa"
-        Me.etq_UnitSigma3.Text = "MPa"
+        'Me.etq_UnitSigma3.Text = "MPa"
+
+        Dim lFrancais As Boolean = (LogicielInfo.ListeLangue(LogicielOptions.IndLangue) = FRANCAIS)
+        Dim UnitJour As String = "d"
+        If lFrancais Then UnitJour = "j"
+        Me.etq_UnitD1.Text = UnitJour
+        Me.etq_UnitD2.Text = UnitJour
 
     End Sub
 
@@ -108,6 +131,7 @@ Public Class Frm_ModularRatio
 
         iCharge = 0
         iChargePrec = 0
+
     End Sub
 
     Private Sub RemplirComboBeton()
@@ -116,7 +140,47 @@ Public Class Frm_ModularRatio
 
         Me.cmb_ClasseBeton.Items.AddRange(cls_Beton.TabClasseBeton)
 
-        Me.cmb_ClasseBeton.SelectedIndex = 0
+        'Me.cmb_ClasseBeton.SelectedIndex = 0
+
+        Me.cmb_ClasseBeton.SelectedIndex = Array.IndexOf(cls_Beton.TabClasseBeton, MonBeton.Classe)
+
+    End Sub
+
+    Private Sub RemplirComboCiment()
+
+        Me.cmb_ClassCiment.Items.Clear()
+
+        Me.cmb_ClassCiment.Items.AddRange(cls_Beton.TabClasseCiment)
+
+        'Me.cmb_ClassCiment.SelectedIndex = 1
+        Me.cmb_ClassCiment.SelectedIndex = Array.IndexOf(cls_Beton.TabClasseCiment, MonBeton.Ciment)
+
+    End Sub
+
+    Private Sub RemplirComboNorm()
+
+        Dim indG1 As Integer = -1
+        Dim indG2 As Integer = -1
+        Dim iSelect As Integer = 0
+
+        Me.cmb_Norme.Items.Clear()
+
+        If LogicielReglages.lG1 Or LogicielOptions.lExpert Then
+            Me.cmb_Norme.Items.Add(TabNormeEN(0))
+            indG1 = 0
+        End If
+        If LogicielReglages.lG2 Or LogicielOptions.lExpert Then
+            Me.cmb_Norme.Items.Add(TabNormeEN(1))
+            indG2 = indG1 + 1
+        End If
+
+        Select Case OptionsCalcul.Norme
+            Case cls_OptionsCalcul.Enu_Normes.EurocodesG1
+                iSelect = Math.Max(indG1, 0)
+            Case cls_OptionsCalcul.Enu_Normes.EurocodesG2
+                iSelect = Math.Max(indG2, 0)
+        End Select
+        Me.cmb_Norme.SelectedIndex = iSelect
 
     End Sub
 
@@ -124,7 +188,6 @@ Public Class Frm_ModularRatio
 
         If File.Exists(LogicielFichiers.Langue) Then
 
-            Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_MODULARRATIOTOOL")
             BlocLine.CreationBloc(Bloc)
 
@@ -136,20 +199,25 @@ Public Class Frm_ModularRatio
                 Me.btn_OK.Text = Bloc("CLOSE")
 
                 Me.lbl_Parameters.Text = Bloc("PARAMETERS")
+                Me.lbl_Norme.Text = Bloc("NORM")
                 Me.lbl_Beton.Text = Bloc("CONCRETE")
                 Me.lbl_PsiL.Text = Bloc("PSIL")
                 Me.lbl_RelativeRH.Text = Bloc("RELATIVEHUMIDITY")
-                Me.lbl_AgeT.Text = Bloc("AGET")
-                Me.lbl_AgeT0.Text = Bloc("AGET0")
+
+                Me.lbl_Ages.Text = Bloc("AGES")
+                Me.lbl_AgeT.Text = Bloc("AGETN")
+                Me.lbl_AgeT0.Text = Bloc("AGET0N")
                 Me.lbl_DimensionH0.Text = Bloc("NOTIONALSIZE")
 
                 Me.lbl_PropBeton.Text = Bloc("CONCRETEPROP")
+                Me.lbl_ClasseCiment.Text = Bloc("CLASSCEMENT")
+                Me.lbl_ModuleEcm.Text = Bloc("SECANTMODULUS")
                 Me.lbl_ResistanceCompression.Text = Bloc("RCOMPRESSION")
-                Me.lbl_ResistanceTraction.Text = Bloc("RTENSION")
+                'Me.lbl_ResistanceTraction.Text = Bloc("RTENSION")
 
                 Me.lbl_Resultats.Text = Bloc("RESULTS")
-                Me.lbl_CoefLongTerme.Text = Bloc("LONGTERM_N")
-                Me.lbl_CoefCourtTerme.Text = Bloc("SHORTTERM_N")
+                'Me.lbl_CoefLongTerme.Text = Bloc("LONGTERM_N")
+                'Me.lbl_CoefCourtTerme.Text = Bloc("SHORTTERM_N")
 
                 Me.lbl_CoefficientAnnexB.Text = Bloc("COEFANNEXB")
 
@@ -163,7 +231,7 @@ Public Class Frm_ModularRatio
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_ModularRatio/GestionLangue")
             Finally
-                Bloc.Clear()
+                'Bloc.Clear()
             End Try
 
         End If
@@ -193,18 +261,25 @@ Public Class Frm_ModularRatio
         PrepareTextBoxDipo(Me.txt_Ecm, False)
         PrepareTextBoxDipo(Me.txt_Fck, False)
         PrepareTextBoxDipo(Me.txt_Fcm, False)
-        PrepareTextBoxDipo(Me.txt_Fctm, False)
-
-        PrepareTextBoxDipo(Me.txt_BetaC, False)
-        PrepareTextBoxDipo(Me.txt_BetaFcm, False)
-        PrepareTextBoxDipo(Me.txt_BetaT0, False)
-        PrepareTextBoxDipo(Me.txt_Phi0, False)
-        PrepareTextBoxDipo(Me.txt_PhiRH, False)
-        PrepareTextBoxDipo(Me.txt_PhiT, False)
+        'PrepareTextBoxDipo(Me.txt_Fctm, False)
         PrepareTextBoxDipo(Me.txt_PsiL2, False)
 
         PrepareTextBoxDipo(Me.txt_n0, False)
         PrepareTextBoxDipo(Me.txt_nL, False)
+
+    End Sub
+
+    Private Sub PrepareAffResultats()
+
+        Me.pan_ConteneurResultats.Controls.Clear()
+
+        If lCalculG1 Then
+            Me.pan_ConteneurResultats.Controls.Add(Frm_ModularN_ResultatsG1.pan_AnnexB)
+            Frm_ModularN_ResultatsG1.InitialiseFenetre(Bloc)
+        Else
+            Me.pan_ConteneurResultats.Controls.Add(Frm_ModularN_ResultatsG2.pan_ResultsAnnexB)
+            Frm_ModularN_ResultatsG2.InitialiseFenetre(Bloc)
+        End If
 
     End Sub
 
@@ -227,12 +302,12 @@ Public Class Frm_ModularRatio
         '   Mise à joure des propriétés du béton
         '--------------------------------------------------------------------------------------------------
 
-        MonBeton.Calcul_Proprietes(True)
+        MonBeton.Calcul_Proprietes(lCalculG1)
 
-        Me.txt_Ecm.Text = GetStringInUnit(MonBeton.Ecm, Enu_TypeVariable.ContrainteGPa, 4, 3, False)
-        Me.txt_Fck.Text = GetStringInUnit(MonBeton.Fck, Enu_TypeVariable.ContrainteMPa, 3, 2, False)
-        Me.txt_Fcm.Text = GetStringInUnit(MonBeton.Fcm, Enu_TypeVariable.ContrainteMPa, 3, 2, False)
-        Me.txt_Fctm.Text = GetStringInUnit(MonBeton.Fctm, Enu_TypeVariable.ContrainteMPa, 3, 2, False)
+        Me.txt_Ecm.Text = GetStringInUnitN(MonBeton.Ecm, Enu_TypeVariable.ContrainteGPa, 4, 3, NON_U, False)
+        Me.txt_Fck.Text = GetStringInUnitN(MonBeton.Fck, Enu_TypeVariable.ContrainteMPa, 3, 2, NON_U, False)
+        Me.txt_Fcm.Text = GetStringInUnitN(MonBeton.Fcm, Enu_TypeVariable.ContrainteMPa, 3, 2, NON_U, False)
+        'Me.txt_Fctm.Text = GetStringInUnit(MonBeton.Fctm, Enu_TypeVariable.ContrainteMPa, 3, 2, False)
 
     End Sub
 
@@ -240,39 +315,68 @@ Public Class Frm_ModularRatio
 
         Dim RH As Decimal = cls_OptionsCalcul.tabRH(Me.cmb_RH.SelectedIndex)
         Dim PsiL As Decimal = tabPsiL(Me.cmb_Charge.SelectedIndex)
-        Dim n0 As Decimal = MonBeton.CoefficientEquivalenceCT(True)
-        Dim nL As Decimal = MonBeton.CoefficientEquivalence(RH, RayonH0, AgeT, AgeT0, PsiL, True)
+        Dim n0 As Decimal = MonBeton.CoefficientEquivalenceCT(lCalculG1)
+        Dim nL As Decimal = MonBeton.CoefficientEquivalence(RH, RayonH0, AgeT, AgeT0, PsiL, lCalculG1)
 
         Me.txt_n0.Text = GetStringInUnitN(n0, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
         Me.txt_nL.Text = GetStringInUnitN(nL, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
 
         Me.txt_PsiL2.Text = GetStringInUnitN(PsiL, Enu_TypeVariable.SansType, 3, 2, NON_U, True)
 
-        Dim PhiRH As Decimal = MonBeton.PhiRH(RH, RayonH0)
+        If lCalculG1 Then
+            AfficherResultatsIntermediaresG1()
+        Else
+            AfficherResultatsIntermediaresG2()
+        End If
 
-        Me.txt_PhiRH.Text = GetStringInUnitN(PhiRH, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
+    End Sub
+
+    Private Sub AfficherResultatsIntermediaresG2()
+
+        Dim RH As Decimal = cls_OptionsCalcul.tabRH(Me.cmb_RH.SelectedIndex)
+
+        Dim PhiT, PhiTBc, PhiTDc As Decimal
+        Dim pBetaBcFcm As Decimal
+        Dim pBetaDcFcm As Decimal
+        Dim pBetaBcT As Decimal
+        Dim pBetaDcRH As Decimal
+        Dim pBetaDcT0, pBetaDcTT0 As Decimal
+        Dim t0Adj As Decimal
+
+        t0Adj = MonBeton.AgeAjuste(AgeT0)
+
+        pBetaBcFcm = MonBeton.BetaBcFcm
+        pBetaDcFcm = MonBeton.BetaDcFcm
+        pBetaBcT = MonBeton.BetaBcT(AgeT, AgeT0, t0Adj)
+        pBetaDcRH = MonBeton.BetaDcRH(RH, RayonH0)
+        pBetaDcT0 = MonBeton.BetaDcT0(t0Adj)
+        pBetaDcTT0 = MonBeton.BetaDcTT0(RayonH0, AgeT, AgeT0, t0Adj)
+
+        PhiTBc = pBetaBcFcm * pBetaBcT
+        PhiTDc = pBetaDcFcm * pBetaDcRH * pBetaDcT0 * pBetaDcTT0
+
+        PhiT = PhiTBc + PhiTDc
+
+        Frm_ModularN_ResultatsG2.AfficherResultats(PhiT, PhiTBc, PhiTDc, pBetaDcRH, pBetaBcFcm, pBetaDcFcm, pBetaBcT, pBetaDcTT0, pBetaDcT0)
+
+    End Sub
+
+    Private Sub AfficherResultatsIntermediaresG1()
+
+        Dim RH As Decimal = cls_OptionsCalcul.tabRH(Me.cmb_RH.SelectedIndex)
+        Dim PhiRH As Decimal = MonBeton.PhiRH(RH, RayonH0)
 
         Dim BetaFcm As Decimal = MonBeton.BetaFcm
 
-        Me.txt_BetaFcm.Text = GetStringInUnitN(BetaFcm, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
-
         Dim BetaT0 As Decimal = MonBeton.Beta_t0(AgeT0)
-
-        Me.txt_BetaT0.Text = GetStringInUnitN(BetaT0, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
 
         Dim Phi0 As Decimal = PhiRH * BetaFcm * BetaT0
 
-        Me.txt_Phi0.Text = GetStringInUnitN(Phi0, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
-
         Dim BetaC As Decimal = MonBeton.BetaC_tt0(RH, RayonH0, AgeT, AgeT0)
-
-        Me.txt_BetaC.Text = GetStringInUnitN(BetaC, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
 
         Dim PhiT As Decimal = Phi0 * BetaC
 
-        Me.txt_PhiT.Text = GetStringInUnitN(PhiT, Enu_TypeVariable.SansType, 3, 2, NON_U, False)
-
-        Me.lbl_CoefLongTerme.Text = Me.cmb_Charge.Text
+        Frm_ModularN_ResultatsG1.AfficherResultats(PhiRH, BetaFcm, BetaT0, Phi0, BetaC, PhiT)
 
     End Sub
 
@@ -280,11 +384,37 @@ Public Class Frm_ModularRatio
 
 #Region " Evènements "
 
+    Private Sub cmb_Norme_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Norme.SelectedIndexChanged
+        MAJI_Norme()
+        PrepareAffResultats()
+        MAJI_Coefficients()
+    End Sub
+
+    Private Sub MAJI_Norme()
+        lCalculG1 = (Me.cmb_Norme.SelectedIndex = 0) And (LogicielReglages.lG1 Or LogicielOptions.lExpert)
+
+        If lCalculG1 Then
+            Me.TLpan_Milieu.RowStyles(1).Height = 0
+        Else
+            Me.TLpan_Milieu.RowStyles(1).Height = 65
+        End If
+
+        Me.img_H0.Invalidate()
+    End Sub
+
     Private Sub cmb_ClasseBeton_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ClasseBeton.SelectedIndexChanged
 
         If lBuild Then Exit Sub
         MonBeton.Classe = cls_Beton.TabClasseBeton(Me.cmb_ClasseBeton.SelectedIndex)
         MAJI_ProprietesBeton()
+        MAJI_Coefficients()
+
+    End Sub
+
+    Private Sub cmb_ClassCiment_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ClassCiment.SelectedIndexChanged
+        If lBuild Then Exit Sub
+        MonBeton.Ciment = cls_Beton.TabClasseCiment(Me.cmb_ClassCiment.SelectedIndex)
+        'MAJI_ProprietesBeton()
         MAJI_Coefficients()
 
     End Sub
@@ -334,14 +464,18 @@ Public Class Frm_ModularRatio
 
     End Sub
 
-    Private Sub txt_Age_TextChanged(sender As Object, e As EventArgs) Handles txt_AgeT.TextChanged, txt_AgeT0.TextChanged
+    Private Sub txt_Age_TextChanged(sender As Object, e As EventArgs) Handles txt_AgeT.TextChanged, txt_AgeT0.TextChanged, txt_kE.TextChanged
         If lBuild Then Exit Sub
 
         Dim Valeur As Decimal
+        Dim lBeton As Boolean = False
 
         If VerificationSaisie(sender, Valeur) Then
 
             Select Case sender.name
+                Case Me.txt_kE.Name
+                    MonBeton.kE = Valeur
+                    lBeton = True
                 Case Me.txt_AgeT.Name
                     AgeT = Valeur
                 Case Me.txt_AgeT0.Name
@@ -349,6 +483,7 @@ Public Class Frm_ModularRatio
                     AgeT0_Normal = Valeur
             End Select
         End If
+        If lBeton Then MAJI_ProprietesBeton()
         MAJI_Coefficients()
     End Sub
 
@@ -382,6 +517,14 @@ Public Class Frm_ModularRatio
                 kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
                 ValMin = 0.02 / kUnit
                 lValMax = False
+
+            Case Me.txt_kE.Name
+
+                kUnit = 1
+                ValMin = 5000
+                ValMax = 13000
+                lValMax = True
+
         End Select
 
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
@@ -422,7 +565,7 @@ Public Class Frm_ModularRatio
 #Region " Dessin des symboles "
 
     Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_PsiL2.Paint, img_RH.Paint, img_H0.Paint,
-        img_AgeT0.Paint, img_AgeT.Paint, img_Fctm.Paint, img_Fcm.Paint, img_Fck.Paint, img_Ecm.Paint, img_nL.Paint, img_n0.Paint
+        img_AgeT0.Paint, img_AgeT.Paint, img_Fcm.Paint, img_Fck.Paint, img_Ecm.Paint, img_nL.Paint, img_n0.Paint, img_kE.Paint
 
         '--> Déclarations
 
@@ -446,6 +589,10 @@ Public Class Frm_ModularRatio
         lEgal = True
         Select Case sender.name
 
+            Case Me.img_kE.Name
+                strSymbol = "k"
+                strIndice = "E"
+
             Case Me.img_RH.Name
                 strSymbol = "RH"
                 strIndice = ""
@@ -465,7 +612,7 @@ Public Class Frm_ModularRatio
 
             Case Me.img_H0.Name
                 strSymbol = "h"
-                strIndice = "0"
+                If lCalculG1 Then strIndice = "0" Else strIndice = "n"
 
             Case Me.img_Ecm.Name
                 strSymbol = "E"
@@ -479,9 +626,9 @@ Public Class Frm_ModularRatio
                 strSymbol = "f"
                 strIndice = "cm"
 
-            Case Me.img_Fctm.Name
-                strSymbol = "f"
-                strIndice = "ctm"
+            'Case Me.img_Fctm.Name
+            '    strSymbol = "f"
+            '    strIndice = "ctm"
 
             Case Me.img_n0.Name
                 strSymbol = "n"
@@ -502,67 +649,6 @@ Public Class Frm_ModularRatio
     End Sub
 
 
-#End Region
-
-#Region " Dessin des expressions (symboles) "
-
-    Private Sub PaintExpression(sender As Object, e As PaintEventArgs) Handles img_PhiRH.Paint
-
-        Dim myFormul As String = ""
-        Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
-        ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
-        myFormul = "\Sj\s\-RH\= ="
-
-        DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_PhiRH.ClientRectangle.Width, Me.img_PhiRH.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
-
-    End Sub
-
-    Private Sub img_BetaFcm_Paint(sender As Object, e As PaintEventArgs) Handles img_BetaFcm.Paint
-        Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
-        ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
-        Dim myFormul As String = "\Sb\s(" & strItal & "f\i\-cm\=) ="
-
-        DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
-
-    End Sub
-
-    Private Sub img_PhiT_Paint(sender As Object, e As PaintEventArgs) Handles img_PhiT.Paint
-        Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
-        ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
-        Dim myFormul As String = "\Sj\s(" & strItal & "t\i, " & strItal & "t\i\-0\=) ="
-
-        DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
-
-    End Sub
-
-    Private Sub imgBetaC_Paint(sender As Object, e As PaintEventArgs) Handles imgBetaC.Paint
-        Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
-        ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
-        Dim myFormul As String = "\Sb\s\-c\=(" & strItal & "t\i, " & strItal & "t\i\-0\=) ="
-
-        DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
-
-    End Sub
-
-    Private Sub img_Phi0_Paint(sender As Object, e As PaintEventArgs) Handles img_Phi0.Paint
-        Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
-        ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
-        Dim myFormul As String = "\Sj\s\-0\= ="
-
-        DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
-
-    End Sub
-
-    Private Sub img_BetaT0_Paint(sender As Object, e As PaintEventArgs) Handles img_BetaT0.Paint
-        Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
-        ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
-        Dim myFormul As String = "\Sb\s(" & strItal & "t\i\-0\=) ="
-
-        DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
-
-    End Sub
-
-    Const strItal As String = "\i"
 #End Region
 
 End Class

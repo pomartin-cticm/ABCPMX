@@ -97,7 +97,7 @@ Public Class Frm_PPHivoss
             MasseProfil = MyBeam.Section.ProfilA.Aire * cls_Acier.RHOACIER
             PorteeDalle = MyBeam.PorteeDalle
 
-            MyBeam.Dalle.FrequenceDalle(MyBeam.LongueurTravee(1), PorteeDalle, MyBeam.LargeurInfluence, MasseProfil, MyBeam.Param.GraviteG)
+            MyBeam.Dalle.FrequenceDalle(MyBeam.LongueurTravee(1), PorteeDalle, MyBeam.LargeurInfluence, MasseProfil, MyBeam.Param.GraviteG, MyBeam.Param.lGeneration1)
             FreqBeam = Frequency
             Frequency = CDec(1 / Math.Sqrt(1 / FreqBeam ^ 2 + 1 / FreqDalle ^ 2))
         End If

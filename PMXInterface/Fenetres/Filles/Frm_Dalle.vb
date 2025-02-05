@@ -486,7 +486,7 @@ Public Class Frm_Dalle
 
     Private Sub MAJI_ProprietesBeton()
 
-        MyDalleLoc.beton.Calcul_Proprietes()
+        MyDalleLoc.beton.Calcul_Proprietes(MyProjet.Poutres(MyProjet.IndEnCours).Param.lGeneration1)
 
         'Me.txt_Fck.Text = GetStringNoUnit(MyDalleLoc.beton.Fck, Enu_TypeVariable.Contrainte)
         'Me.txt_RhoC.Text = GetStringNoUnit(MyDalleLoc.beton.Ecm, Enu_TypeVariable.ModuleY)

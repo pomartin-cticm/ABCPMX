@@ -349,6 +349,7 @@ Public Class Frm_OptionsCalcul
             GereTransfertValeur(LocalOptionsScope.RhoCBetonLegerMin, OptionsScope.RhoCBetonLegerMin, lModif)
             GereTransfertValeur(LocalOptionsScope.RhoCBetonNormalMin, OptionsScope.RhoCBetonNormalMin, lModif)
         End If
+
         GereTransfertValeur(LocalOptionsScope.ThetaH, OptionsScope.ThetaH, lModif)
 
         '# Fenêtre Dalle et slimfloor

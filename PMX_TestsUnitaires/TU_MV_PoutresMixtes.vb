@@ -418,7 +418,7 @@ Imports PMXMoteur2
 
         Dim n0 As Decimal = 210 / 31.476 '= 6.6717
         Valeur = n0 'calcul manuel car l'article n0 = 210/31
-        ValRef = myPoutre.Dalle.beton.CoefficientEquivalenceCT()
+        ValRef = myPoutre.Dalle.beton.CoefficientEquivalenceCT(True)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
         '--> Vérification des calculs des coefficients d'équivalences à LT (50 ans)
@@ -1118,7 +1118,7 @@ Imports PMXMoteur2
 
         Dim n0 As Decimal = 210 / 31.476 '= 6.6717
         Valeur = n0 'calcul manuel car l'article n0 = 210/31
-        ValRef = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT()
+        ValRef = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT(True)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
         '--> Propriétés en phase de coulage, poutre non etayée
@@ -1843,7 +1843,7 @@ Imports PMXMoteur2
 
         Dim n0 As Decimal = 210 / 31.476 '= 6.6717
         Valeur = n0 'calcul manuel car l'article n0 = 210/31
-        ValRef = myBeam.Dalle.beton.CoefficientEquivalenceCT()
+        ValRef = myBeam.Dalle.beton.CoefficientEquivalenceCT(True)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
         '--> Vérification des calculs des coefficients d'équivalences à LT de la DALLE (50 ans)

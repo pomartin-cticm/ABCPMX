@@ -545,7 +545,7 @@ Public Class Frm_Enrobage
         '-- Beton ----------------------------------------------------------------------------------------------------------------------
 
         GereTransfertValeur(MySection.Enrobage.Beton.Classe, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Beton.Classe, lModif)
-        MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Beton.Calcul_Proprietes()
+        MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Beton.Calcul_Proprietes(MyProjet.Poutres(MyProjet.IndEnCours).Param.lGeneration1)
         GereTransfertValeur(MySection.Enrobage.Beton.RhoC, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Beton.RhoC, lModif)
 
         '-- Acier ---------------------------------------------------------------------------------------------------------------------
@@ -944,7 +944,7 @@ Public Class Frm_Enrobage
 
     Private Sub MAJI_ProprietesBeton()
 
-        MySection.Enrobage.Beton.Calcul_Proprietes()
+        MySection.Enrobage.Beton.Calcul_Proprietes(MyProjet.Poutres(MyProjet.IndEnCours).Param.lGeneration1)
 
         Me.txt_Fck.Text = GetStringNoUnit(MySection.Enrobage.Beton.Fck, Enu_TypeVariable.Contrainte)
         Me.txt_Ecm.Text = GetStringNoUnit(MySection.Enrobage.Beton.Ecm, Enu_TypeVariable.ModuleY)

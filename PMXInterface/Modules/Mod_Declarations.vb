@@ -4,8 +4,14 @@ Public Module Mod_Declarations
 
 #Region " Gestion des fonctionnalités avec les versions "
 
-    Public Const lSLIM As Boolean = False              ' Indique si les sections slim floors sont disponibles dans le logiciel
-    Public Const lFIRE As Boolean = True               ' Indique si le calcul au feu est disponible dans le logiciel
+    Public lSLIM As Boolean                         ' Indique si les sections slim floors sont disponibles dans le logiciel
+    Public lFIRE As Boolean                         ' Indique si le calcul au feu est disponible dans le logiciel
+
+#End Region
+
+#Region " Normes "
+
+    Public TabNormeEN() As String = {"EN 1994-1-1:2005", "EN 1994-1-1:2025"}
 
 #End Region
 
@@ -266,6 +272,7 @@ Public Module Mod_Declarations
         Public lPRS As Boolean                  ' Indique si version accessible aux PRS
         Public lDelivery As Boolean             ' Indique si on affiche les conditions de livraison des laminés
         Public lG2 As Boolean                   ' Indique si Génération 2 des Eurocodes accessible en mode normal
+        Public lG1 As Boolean                   ' Indique si Génération 1 des Eurocodes accessible en mode normal
         Public lFrenchOnly As Boolean           ' Indique si interface en français uniquement (mode normal)
         Public lEC3 As Boolean                  ' Indique si on affiche les aciers avec les propriétés de la table 3.1 de l'EN 1993-1-1 (en plus de la norme produit)
     End Structure
