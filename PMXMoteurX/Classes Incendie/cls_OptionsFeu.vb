@@ -37,6 +37,8 @@
     Public lDalleFEM As Boolean                             ' Indique pour les poutres mixtes si on calcule l'échauffement par une analyse EF
     Public tDalleEFmax As Decimal                           ' Epaisseur maximale d'un elt dalle pour le calcul numérique de l'échauffement de la dalle
 
+    Public lCreuxProteges As Boolean                        ' Indique pour les dalles mixtes perpendiculaires, si les creux d'ondes sont protégés
+
     Public Const BOLTZMANN As Decimal = 5.67 * 10 ^ (-8)    ' Constante de Boltzmann
 
     Public lReductionConcreteStrength As Boolean            ' Indique si on réduit la résistance du béton armé pour T<250° (True) ou non (False)
@@ -119,6 +121,8 @@
         Me.MethodTempArma = enuTypeInterpoleTempArma.Moyenne
 
         Me.lCongesEnrobe = True
+
+        Me.lCreuxProteges = True
 
     End Sub
 

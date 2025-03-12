@@ -533,7 +533,7 @@ Public Class Frm_OptionsFeu
 
     '    lBuild = True
 
-    '    With MyPoutreLoc.ParamFeu
+    '    With myBeamLoc.ParamFeu
 
     '        Select Case cmb_SurfaceType.SelectedIndex
     '            Case 0
@@ -924,7 +924,7 @@ Public Class Frm_OptionsFeu
             GereTransfertValeur(MyPoutreLoc.ParamFeu.DeltaTCalcul, .DeltaTCalcul, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.TempRef, .TempRef, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.PhiViewFactor, .PhiViewFactor, lModif)
-            'GereTransfertValeur(MyPoutreLoc.ParamFeu.EmissivitySteel, .EmissivitySteel, lModif)
+            'GereTransfertValeur(myBeamLoc.ParamFeu.EmissivitySteel, .EmissivitySteel, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.EmissivityFire, .EmissivityFire, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.EmissivityC, .EmissivityC, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.ConvectionCoef, .ConvectionCoef, lModif)

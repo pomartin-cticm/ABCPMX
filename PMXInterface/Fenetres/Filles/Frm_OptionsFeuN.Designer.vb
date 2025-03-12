@@ -49,7 +49,7 @@ Partial Class Frm_OptionsFeuN
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(457, 369)
+        Me.pan_General.Size = New System.Drawing.Size(457, 411)
         Me.pan_General.TabIndex = 4
         '
         'TLpan_Main
@@ -64,7 +64,7 @@ Partial Class Frm_OptionsFeuN
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(457, 369)
+        Me.TLpan_Main.Size = New System.Drawing.Size(457, 411)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -78,7 +78,7 @@ Partial Class Frm_OptionsFeuN
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 332)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 374)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -116,7 +116,7 @@ Partial Class Frm_OptionsFeuN
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(451, 323)
+        Me.pan_Main.Size = New System.Drawing.Size(451, 365)
         Me.pan_Main.TabIndex = 1
         '
         'TLpan_Lignes
@@ -135,7 +135,7 @@ Partial Class Frm_OptionsFeuN
         Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLpan_Lignes.Size = New System.Drawing.Size(451, 323)
+        Me.TLpan_Lignes.Size = New System.Drawing.Size(451, 365)
         Me.TLpan_Lignes.TabIndex = 0
         '
         'TLpan_ChoixEL
@@ -205,14 +205,14 @@ Partial Class Frm_OptionsFeuN
         Me.pan_Contenu.Location = New System.Drawing.Point(0, 41)
         Me.pan_Contenu.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.pan_Contenu.Name = "pan_Contenu"
-        Me.pan_Contenu.Size = New System.Drawing.Size(451, 282)
+        Me.pan_Contenu.Size = New System.Drawing.Size(451, 324)
         Me.pan_Contenu.TabIndex = 5
         '
         'Frm_OptionsFeuN
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(457, 369)
+        Me.ClientSize = New System.Drawing.Size(457, 411)
         Me.Controls.Add(Me.pan_General)
         Me.MaximizeBox = False
         Me.MaximumSize = New System.Drawing.Size(473, 540)

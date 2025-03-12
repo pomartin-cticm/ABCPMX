@@ -111,13 +111,13 @@ Public Class Frm_Chargement
     Private Sub InitialiserVariables()
         MyPoutreLoc = New cls_Poutre(NomChargements)
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
-        'MyPoutreLoc.InitialisePoidsPropres()
+        'myBeamLoc.InitialisePoidsPropres()
         PreparerCalculEF(MyPoutreLoc)
 
         NbTravees = MyPoutreLoc.NbTravees
 
         For Each element As KeyValuePair(Of String, cls_ChargementUtilisateur) In MyPoutreLoc.ChargesU
-            'ReDim Preserve element.Value.WSurf(MyPoutreLoc.IndiceDerniereTravee)
+            'ReDim Preserve element.Value.WSurf(myBeamLoc.IndiceDerniereTravee)
             ReDim Preserve element.Value.QSurf(MyPoutreLoc.IndiceDerniereTravee)
             ReDim Preserve element.Value.Forces(MyPoutreLoc.IndiceDerniereTravee)
             ReDim Preserve element.Value.FReparties(MyPoutreLoc.IndiceDerniereTravee)
@@ -820,7 +820,7 @@ Public Class Frm_Chargement
                     xPrec = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(nbF - 1).xPosT
                     xPos = xPrec + (MyPoutreLoc.LongueurTravee(traveeEnCours) - xPrec) / (1 / kPOS - CDec(nbF))
                 End If
-                'MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Add(New cls_Force(MyPoutreLoc.LongueurTravee(traveeEnCours) / 2, 10 ^ 3, MyPoutreLoc.xPositionAppui(True, traveeEnCours))) '1kN
+                'myBeamLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Add(New cls_Force(myBeamLoc.LongueurTravee(traveeEnCours) / 2, 10 ^ 3, myBeamLoc.xPositionAppui(True, traveeEnCours))) '1kN
                 MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Add(New cls_Force(xPos, FORCECDEF, MyPoutreLoc.xPositionAppui(True, traveeEnCours))) '1kN
                 NbChargePonctuelle = Math.Min(NbChargePonctuelle + 1, NbChargePonctuelleMAX)
                 iChargePonctuelleSelect = nbF
@@ -843,10 +843,10 @@ Public Class Frm_Chargement
 
         'MAJ AffichageOptFeu des valeurs dans la section charge surfacique 
 
-        'If lMAJLargeur Then txt_WidthApplication.Text = MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+        'If lMAJLargeur Then txt_WidthApplication.Text = myBeamLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
         If lMAJLargeur Then txt_WidthApplication.Text = MyPoutreLoc.LargeurInfluence
         If lMAJPression Then txt_UniformLoad.Text = MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2)
-        'txt_ResultingForce.Text = MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) * MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+        'txt_ResultingForce.Text = myBeamLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) * myBeamLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
         txt_ResultingForce.Text = MyPoutreLoc.LongueurTravee(traveeEnCours) * MyPoutreLoc.LargeurInfluence * MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
 
     End Sub
@@ -984,7 +984,7 @@ Public Class Frm_Chargement
         If VerificationSaisie(sender, ValeurUI) Then
             Select Case sender.name
                 Case txt_WidthApplication.Name
-                    'MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) = ValeurUI
+                    'myBeamLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) = ValeurUI
                     MAJIAffichageChargeSurfacique(False, True)
                 Case txt_UniformLoad.Name
                     MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) = ValeurUI

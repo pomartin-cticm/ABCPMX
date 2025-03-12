@@ -79,7 +79,7 @@ Public Class Frm_Gamma
         list_txtbox.Add(txt_GammaC)
         list_txtbox.Add(txt_GammaVs)
         list_txtbox.Add(txt_GammaVc)
-        'list_txtbox.Add((txt_GammaVp, Not MyPoutreLoc.Param.Gamma.lGammaV_unique))
+        'list_txtbox.Add((txt_GammaVp, Not myBeamLoc.Param.Gamma.lGammaV_unique))
         list_txtbox.Add(txt_GammaS)
         list_txtbox.Add(txt_GammaP)
         list_txtbox.Add(txt_GammaM_fi)
@@ -272,7 +272,7 @@ Public Class Frm_Gamma
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM_fi, .GammaM_fi, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaS_fi, .GammaS_fi, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaC_fi, .GammaC_fi, lModif)
-            'GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaS_fi, .GammaS_fi, lModif)
+            'GereTransfertValeur(myBeamLoc.Param.Gamma.GammaS_fi, .GammaS_fi, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaV_fi, .GammaV_fi, lModif)
 
         End With

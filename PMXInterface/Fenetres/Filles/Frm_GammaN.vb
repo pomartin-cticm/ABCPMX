@@ -96,7 +96,7 @@ Public Class Frm_GammaN
         'list_txtbox.Add(txt_GammaC)
         'list_txtbox.Add(txt_GammaVs)
         'list_txtbox.Add(txt_GammaVc)
-        ''list_txtbox.Add((txt_GammaVp, Not MyPoutreLoc.Param.Gamma.lGammaV_unique))
+        ''list_txtbox.Add((txt_GammaVp, Not myBeamLoc.Param.Gamma.lGammaV_unique))
         'list_txtbox.Add(txt_GammaS)
         'list_txtbox.Add(txt_GammaP)
         'list_txtbox.Add(txt_GammaM_fi)

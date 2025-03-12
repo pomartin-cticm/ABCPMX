@@ -182,6 +182,7 @@ Public Class Frm_OptionsFeuN
             End If
             GereTransfertValeur(BeamLoc.ParamFeu.EpProtection, .EpProtection, lModif)
             GereTransfertValeur(BeamLoc.ParamFeu.lArmaFormeeAFroid, .lArmaFormeeAFroid, lModif)
+            GereTransfertValeur(BeamLoc.ParamFeu.lCreuxProteges, .lCreuxProteges, lModif)
 
             '--> Options de calcul
 
@@ -202,7 +203,7 @@ Public Class Frm_OptionsFeuN
             GereTransfertValeur(BeamLoc.ParamFeu.DeltaTCalcul, .DeltaTCalcul, lModif)
             GereTransfertValeur(BeamLoc.ParamFeu.TempRef, .TempRef, lModif)
             GereTransfertValeur(BeamLoc.ParamFeu.PhiViewFactor, .PhiViewFactor, lModif)
-            'GereTransfertValeur(MyPoutreLoc.ParamFeu.EmissivitySteel, .EmissivitySteel, lModif)
+            'GereTransfertValeur(myBeamLoc.ParamFeu.EmissivitySteel, .EmissivitySteel, lModif)
             GereTransfertValeur(BeamLoc.ParamFeu.EmissivityFire, .EmissivityFire, lModif)
             GereTransfertValeur(BeamLoc.ParamFeu.EmissivityC, .EmissivityC, lModif)
             GereTransfertValeur(BeamLoc.ParamFeu.ConvectionCoef, .ConvectionCoef, lModif)

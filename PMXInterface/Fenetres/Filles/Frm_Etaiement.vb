@@ -309,21 +309,21 @@ Public Class Frm_Etaiement
                 MyPoutreLoc.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.PointPropped
 
                 'Me.chk_EtaisConsoleGauche.Visible = True
-                'If Not MyPoutreLoc.lTraveeConsoleGauche Then
+                'If Not myBeamLoc.lTraveeConsoleGauche Then
                 '    Me.chk_EtaisConsoleGauche.Enabled = False
                 '    Me.chk_EtaisConsoleGauche.Checked = False
                 'Else
                 '    Me.chk_EtaisConsoleGauche.Enabled = True
-                '    Me.chk_EtaisConsoleGauche.Checked = MyPoutreLoc.lEtaisConsoleGauche
+                '    Me.chk_EtaisConsoleGauche.Checked = myBeamLoc.lEtaisConsoleGauche
                 'End If
 
                 'Me.chk_EtaisConsoleDroite.Visible = True
-                'If Not MyPoutreLoc.lTraveeConsoleDroite Then
+                'If Not myBeamLoc.lTraveeConsoleDroite Then
                 '    Me.chk_EtaisConsoleDroite.Enabled = False
                 '    Me.chk_EtaisConsoleDroite.Checked = False
                 'Else
                 '    Me.chk_EtaisConsoleDroite.Enabled = True
-                '    Me.chk_EtaisConsoleDroite.Checked = MyPoutreLoc.lEtaisConsoleDroite
+                '    Me.chk_EtaisConsoleDroite.Checked = myBeamLoc.lEtaisConsoleDroite
                 'End If
 
                 'Me.lbl_NbPP.Visible = True
@@ -364,7 +364,7 @@ Public Class Frm_Etaiement
     Private Sub cmb_LocPP_SelectedIndexChanged(sender As Object, e As EventArgs) Handles rad_UnderSlab.CheckedChanged, rad_UnderBeam.CheckedChanged
         If lBuild Then Exit Sub
 
-        'MyPoutreLoc.lEtaisSousProfileAcier = cmb_LocPP.SelectedIndex = 0
+        'myBeamLoc.lEtaisSousProfileAcier = cmb_LocPP.SelectedIndex = 0
         MyPoutreLoc.lEtaisSousProfileAcier = rad_UnderBeam.Checked
 
         img_Etaiement.Invalidate()

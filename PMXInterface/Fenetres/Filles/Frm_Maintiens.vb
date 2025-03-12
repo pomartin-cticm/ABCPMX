@@ -287,7 +287,7 @@ Public Class Frm_Maintiens
     End Sub
 
     Private Sub AfficherPoutreEnCours()
-        'Select Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2)
+        'Select Case myBeamLoc.TypeMaintien(traveeEnCours.Item2)
         Select Case MyPoutreLoc.TypeMaintien
             Case cls_Poutre.EnuTypeMaintiensPoutre.NotRestrained
                 rad_NonRestrain.Checked = True
@@ -353,7 +353,7 @@ Public Class Frm_Maintiens
                     Next
                 End If
 
-                'If .TypeMaintien(i_travee) <> MyPoutreLoc.TypeMaintien(i_travee) Then
+                'If .TypeMaintien(i_travee) <> myBeamLoc.TypeMaintien(i_travee) Then
                 If MyPoutreLoc.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.PointRestrained And MyPoutreLoc.NombreTotalMaintiens = 0 Then MyPoutreLoc.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.NotRestrained
 
                 If .TypeMaintien <> MyPoutreLoc.TypeMaintien Then
@@ -613,9 +613,9 @@ Public Class Frm_Maintiens
 
         Next
 
-        'For Each maintiens As cls_Maintiens In MyPoutreLoc.Maintiens(traveeEnCours.Item2)
-        '    'index_maintien = MyPoutreLoc.Maintiens(traveeEnCours.Item2).IndexOf(maintiens)
-        '    val += MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count + 1)
+        'For Each maintiens As cls_Maintiens In myBeamLoc.Maintiens(traveeEnCours.Item2)
+        '    'index_maintien = myBeamLoc.Maintiens(traveeEnCours.Item2).IndexOf(maintiens)
+        '    val += myBeamLoc.LongueurTravee(traveeEnCours.Item2) / (myBeamLoc.Maintiens(traveeEnCours.Item2).Count + 1)
         '    maintiens.x_Loc = val
         'Next
     End Sub
@@ -651,7 +651,7 @@ Public Class Frm_Maintiens
         '        iSelect = 1
 
         '    Case strTypeTravee_ConsoleDroite
-        '        traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleDroite, MyPoutreLoc.IndiceTraveeConsoleDroite)
+        '        traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleDroite, myBeamLoc.IndiceTraveeConsoleDroite)
         '        iSelect = 99
 
         'End Select

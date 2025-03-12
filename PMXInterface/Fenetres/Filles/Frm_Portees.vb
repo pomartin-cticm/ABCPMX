@@ -535,7 +535,7 @@ Public Class Frm_Portees
                 ValMin = OptionsScope.PorteeConsoleMin / kUnit
                 ValMax = OptionsScope.RatioPorteeConsoleMax * MyPoutreLoc.LongueurTravee(1) / kUnit
                 'ValMin = Format(CONSOLEMIN / kUnit, formatLONGUEUR)
-                'ValMax = Format(RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit, formatLONGUEUR)
+                'ValMax = Format(RATIOCONSOLEMAX * myBeamLoc.LongueurTravee(1) / kUnit, formatLONGUEUR)
 
             Case Me.txt_D1.Name
 

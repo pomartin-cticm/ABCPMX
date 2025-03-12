@@ -23,11 +23,43 @@ Public Class Frm_OptionsFeuN_Poutre
         GestionStyle()
         GestionUnites()
 
+        MAJI_CreuxOndes()
+
         Me.pan_General.Dock = DockStyle.Fill
 
         AffichePoutreEncours(myBeam)
 
         lBuild = False
+
+    End Sub
+
+    Private Sub MAJI_CreuxOndes()
+
+        Dim lDalMixtePerp As Boolean = False
+
+        With MyProjet.Poutres(MyProjet.IndEnCours)
+            If .Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
+
+                If .Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
+
+                    If .Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu Then
+
+                        lDalMixtePerp = True
+
+                    End If
+
+                End If
+
+            End If
+        End With
+
+        Me.chk_ProtectionCreuxOndes.Visible = lDalMixtePerp
+
+        If lDalMixtePerp Then
+
+            Me.chk_ProtectionCreuxOndes.Enabled = LogicielOptions.lExpert And LogicielReglages.lCreuxO
+
+        End If
 
     End Sub
 
@@ -42,6 +74,8 @@ Public Class Frm_OptionsFeuN_Poutre
 
             Me.chk_ProtectionThermique.Checked = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
             Me.chk_AcierGalva.Checked = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise)
+
+            Me.chk_ProtectionCreuxOndes.Checked = myBeam.ParamFeu.lCreuxProteges
 
             MAJ_ProtectionType(myBeam)
             MAJ_InsulationType(myBeam)
@@ -74,6 +108,10 @@ Public Class Frm_OptionsFeuN_Poutre
         strSurfaceType(1) = BlocL("UNPROTECTED")
 
         RemplirComboAvecTableau(Me.cmb_SurfaceType, strSurfaceType)
+
+        '--> Protection des crexu d'ondes
+
+        Me.chk_ProtectionCreuxOndes.Text = BlocL("PROTECTEDTROUGH")
 
         '--> chk_AcierGalva
 
@@ -164,7 +202,9 @@ Public Class Frm_OptionsFeuN_Poutre
 
         Me.pan_Protection.Visible = lProtege
 
-        Me.pan_Protection.Top = Me.chk_AcierGalva.Top
+        Me.pan_Protection.Top = Me.pan_SurfaceAcier.Top + Me.pan_SurfaceAcier.Height
+
+        Me.chk_AcierGalva.Visible = Not lProtege
 
     End Sub
 
@@ -350,6 +390,14 @@ Public Class Frm_OptionsFeuN_Poutre
         MAJI_CalcuFeu(Frm_OptionsFeuN.BeamLoc)
 
     End Sub
+
+    Private Sub chk_ProtectionCreuxOndes_CheckedChanged(sender As Object, e As EventArgs) Handles chk_ProtectionCreuxOndes.CheckedChanged
+        If lBuild Then Exit Sub
+
+        Frm_OptionsFeuN.BeamLoc.ParamFeu.lCreuxProteges = Me.chk_ProtectionCreuxOndes.Checked
+
+    End Sub
+
 
     Private Sub chk_AcierGalva_CheckedChanged(sender As Object, e As EventArgs) Handles chk_AcierGalva.CheckedChanged
         If lBuild Then Exit Sub

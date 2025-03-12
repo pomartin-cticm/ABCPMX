@@ -287,7 +287,7 @@ Public Class Frm_OptionsCalculPoutre
 
     Private Function ValideSaisieFenetre() As Boolean
 
-        Dim lOK As Boolean
+        Dim lOK As Boolean = True
 
         AnalyseArmaComp(lOK)
 

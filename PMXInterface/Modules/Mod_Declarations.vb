@@ -5,7 +5,6 @@ Public Module Mod_Declarations
 #Region " Gestion des fonctionnalités avec les versions "
 
     Public lSLIM As Boolean                         ' Indique si les sections slim floors sont disponibles dans le logiciel
-    Public lFIRE As Boolean                         ' Indique si le calcul au feu est disponible dans le logiciel
 
 #End Region
 
@@ -275,6 +274,8 @@ Public Module Mod_Declarations
         Public lG1 As Boolean                   ' Indique si Génération 1 des Eurocodes accessible en mode normal
         Public lFrenchOnly As Boolean           ' Indique si interface en français uniquement (mode normal)
         Public lEC3 As Boolean                  ' Indique si on affiche les aciers avec les propriétés de la table 3.1 de l'EN 1993-1-1 (en plus de la norme produit)
+        Public lFIRE As Boolean                 ' Indique si le calcul au feu est disponible dans le logiciel
+        Public lCreuxO As Boolean               ' Indique si gestion creux d'ondes
     End Structure
 
     Public Enum Enu_Normes

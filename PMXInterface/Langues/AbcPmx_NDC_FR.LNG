@@ -26,6 +26,7 @@ PROFILE					= Profilé
 MASS 					= Masse
 WELDEDS					= Reconstitué par soudage
 CONNECTION				= Connexion
+STUDS					= Goujons
 SLABSOLID				= Dalle pleine
 SLABCOMPOSITE			= Dalle mixte
 SLABPREF				= Dalle pleine partiellement prefabriquée

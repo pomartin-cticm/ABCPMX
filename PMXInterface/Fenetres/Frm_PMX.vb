@@ -134,6 +134,8 @@ Public Class Frm_PMX
         MAJToolBarPoutre()
         MAJI_BOBasse()
 
+        Me.TSbtn_PostT.Visible = LogicielOptions.lDebug Or LogicielOptions.lExpert
+
     End Sub
 
     Private Sub GestionLangueMessageGeneraux()
@@ -855,7 +857,7 @@ Public Class Frm_PMX
 
             Case Me.TSbtn_OptionsIncendie.Name
                 'FilleEnCours = EnuFenetres.Incendie
-                If lFIRE Then
+                If LogicielReglages.lFIRE Then
 
                     FilleEnCours = EnuFenetres.Incendie
 
@@ -2115,6 +2117,7 @@ Public Class Frm_PMX
         MyGr.Dispose()
         Image.Dispose()
     End Sub
+
 
     Private Sub TSbtn_Cotations_Click(sender As Object, e As EventArgs) Handles TSbtn_Cotations.Click
         lCotation = Not lCotation

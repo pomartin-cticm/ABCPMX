@@ -607,42 +607,42 @@ Partial Class Frm_PMX
         '
         Me.TSmenuPPLargeurEfficace.Image = CType(resources.GetObject("TSmenuPPLargeurEfficace.Image"), System.Drawing.Image)
         Me.TSmenuPPLargeurEfficace.Name = "TSmenuPPLargeurEfficace"
-        Me.TSmenuPPLargeurEfficace.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPLargeurEfficace.Size = New System.Drawing.Size(188, 30)
         Me.TSmenuPPLargeurEfficace.Text = "Largeur efficace"
         '
         'TSmenuPPChargements
         '
         Me.TSmenuPPChargements.Image = CType(resources.GetObject("TSmenuPPChargements.Image"), System.Drawing.Image)
         Me.TSmenuPPChargements.Name = "TSmenuPPChargements"
-        Me.TSmenuPPChargements.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPChargements.Size = New System.Drawing.Size(188, 30)
         Me.TSmenuPPChargements.Text = "Chargements"
         '
         'TSmenuPPCombinaisons
         '
         Me.TSmenuPPCombinaisons.Image = CType(resources.GetObject("TSmenuPPCombinaisons.Image"), System.Drawing.Image)
         Me.TSmenuPPCombinaisons.Name = "TSmenuPPCombinaisons"
-        Me.TSmenuPPCombinaisons.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPCombinaisons.Size = New System.Drawing.Size(188, 30)
         Me.TSmenuPPCombinaisons.Text = "Combinaisons"
         '
         'TSmenuPPVerifications
         '
         Me.TSmenuPPVerifications.Image = CType(resources.GetObject("TSmenuPPVerifications.Image"), System.Drawing.Image)
         Me.TSmenuPPVerifications.Name = "TSmenuPPVerifications"
-        Me.TSmenuPPVerifications.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPVerifications.Size = New System.Drawing.Size(188, 30)
         Me.TSmenuPPVerifications.Text = "Vérifications"
         '
         'TSmenuPPModePropre
         '
         Me.TSmenuPPModePropre.Image = CType(resources.GetObject("TSmenuPPModePropre.Image"), System.Drawing.Image)
         Me.TSmenuPPModePropre.Name = "TSmenuPPModePropre"
-        Me.TSmenuPPModePropre.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPModePropre.Size = New System.Drawing.Size(188, 30)
         Me.TSmenuPPModePropre.Text = "Mode propre"
         '
         'TSMenuPP_Hivoss
         '
         Me.TSMenuPP_Hivoss.Image = CType(resources.GetObject("TSMenuPP_Hivoss.Image"), System.Drawing.Image)
         Me.TSMenuPP_Hivoss.Name = "TSMenuPP_Hivoss"
-        Me.TSMenuPP_Hivoss.Size = New System.Drawing.Size(158, 22)
+        Me.TSMenuPP_Hivoss.Size = New System.Drawing.Size(188, 30)
         Me.TSMenuPP_Hivoss.Text = "Hivoss"
         '
         'TSbtn_PPLargeurEfficace
@@ -795,6 +795,7 @@ Partial Class Frm_PMX
         Me.chk_NewF.TabIndex = 8
         Me.chk_NewF.Text = "Nouvelle fenetre "
         Me.chk_NewF.UseVisualStyleBackColor = True
+        Me.chk_NewF.Visible = False
         '
         'img_Main
         '

@@ -267,6 +267,8 @@ WEB_REINF				= Dowels
 CLASS					= Class
 REINFORCEMENTS			= Reinforcements
 STUDCONCRETECOVER		= The concrete converage of studs ($) is lower than the minimum requirement of $.
+STUDPREPUNCHED			= The diameter of studs with prepunched steel profiled sheeting should not be greater than 22 mm or smaller than 19 mm.
+STUDWELDEDTHROUGH		= The diameter of studs welded trough the steel profiled sheeting should be greater than 20 mm.
 
 #FRM_DECKRESTRAINT
 TITLE					= Restraint of the beam by the steel deck (construction phase only)
@@ -426,7 +428,7 @@ TITLE					= Fire calculation options
 CANCEL					= Cancel
 OK						= Ok
 BEAMPARAM				= Beam parameters
-CALCULPARAM				= Calculation parameters
+CALCULPARAM				= Fire design parameters
 CALCULOPTIONS			= Calculation options
 FIRECALCULATION			= Fire calculation
 SURFACETYPE				= Surface type
@@ -478,6 +480,7 @@ CONSTANTRHOC			= Constant density of concrete
 MOISTURECONTENT			= Moisture content
 ENCASEDROOTFILLET		= Root fillets are taken into account in the fire design of encased section according to Annex F of EN 1994-1-2
 SIZEELT					= Size of the elements
+PROTECTEDTROUGH			= The voids between the deck and the flange are filled
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Combination factors
@@ -728,6 +731,8 @@ SERVICEABILITY 			= Serviceability
 ULS						= ULS
 SLS						= SLS
 FLS						= FLS
+ULS_C					= ULS-C
+SLS_C					= SLS-C
 NOCOMBINATIONFORULS		= No defined combinations for ultimate limit state
 NOCOMBINATIONFORULSC	= No defined combinations for ultimate limit state in construction phase
 NOCOMBINATIONFORFLS		= No defined combinations for fire limit state

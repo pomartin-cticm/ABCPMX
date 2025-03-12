@@ -720,6 +720,8 @@ Public Class cls_Projet
             AjouteLigneFrmt(Lines, "FrenchAN", .lANFrance)
             AjouteLigneFrmt(Lines, "VariableCDens", .lRhoCvar)
             AjouteLigneFrmt(Lines, "CompressionReinf", .lArmaCompression)
+            AjouteLigneFrmt(Lines, "FilledVoids", .lCreuxProteges)
+
             AjouteLigneFrmt(Lines, "ColdFormReinf", .lArmaFormeeAFroid)
             AjouteLigneFrmt(Lines, "SlabFEM", .lDalleFEM)
             AjouteLigneFrmt(Lines, "SlabTmax", .tDalleEFmax)
@@ -2752,6 +2754,7 @@ Public Class cls_Projet
                         Case "VARIAB" : .lRhoCvar = CBool((Mots(nbMots)))
                         Case "COMPRE" : .lArmaCompression = CBool((Mots(nbMots)))
                         Case "COLDFO" : .lArmaFormeeAFroid = CBool((Mots(nbMots)))
+                        Case "FILLED" : .lCreuxProteges = CBool((Mots(nbMots)))
                         Case "SLABFE" : .lDalleFEM = CBool((Mots(nbMots)))
                         Case "CONCRE" : .lReductionConcreteStrength = CBool((Mots(nbMots)))
 

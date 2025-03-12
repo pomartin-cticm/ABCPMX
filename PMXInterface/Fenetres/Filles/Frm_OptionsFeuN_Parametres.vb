@@ -209,7 +209,7 @@ Public Class Frm_OptionsFeuN_Parametres
 
     Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) _
         Handles img_Boltzmann.Paint, img_TimeIncrement.Paint, img_ReferenceTemp.Paint, img_MaxTemp.Paint, img_FormFactor.Paint,
-        img_EmissivityFire.Paint, img_ConvectionFactor.Paint, img_ShadowEffect.Paint, img_ConvectionSlab.Paint, img_ConcreteResistance.Paint
+        img_EmissivityFire.Paint, img_ConvectionFactor.Paint, img_ShadowEffect.Paint, img_ConvectionSlab.Paint, img_ConcreteResistance.Paint, img_EmissiviteBeton.Paint
 
 
         '--> Déclarations

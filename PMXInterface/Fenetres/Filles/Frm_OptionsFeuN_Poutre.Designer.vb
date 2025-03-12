@@ -24,10 +24,13 @@ Partial Class Frm_OptionsFeuN_Poutre
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.pan_ParamPoutre = New System.Windows.Forms.Panel()
-        Me.cmb_SurfaceType = New System.Windows.Forms.ComboBox()
+        Me.pan_SurfaceAcier = New System.Windows.Forms.Panel()
         Me.chk_ProtectionThermique = New System.Windows.Forms.CheckBox()
+        Me.chk_AcierGalva = New System.Windows.Forms.CheckBox()
+        Me.cmb_SurfaceType = New System.Windows.Forms.ComboBox()
         Me.lbl_SurfaceType = New System.Windows.Forms.Label()
         Me.pan_Protection = New System.Windows.Forms.Panel()
+        Me.chk_ProtectionCreuxOndes = New System.Windows.Forms.CheckBox()
         Me.etq_UnitD2 = New System.Windows.Forms.Label()
         Me.lbl_EpProtec = New System.Windows.Forms.Label()
         Me.txt_EpProtec = New System.Windows.Forms.TextBox()
@@ -51,12 +54,12 @@ Partial Class Frm_OptionsFeuN_Poutre
         Me.lbl_tDalleFEMmax = New System.Windows.Forms.Label()
         Me.chk_CalculFeu = New System.Windows.Forms.CheckBox()
         Me.chk_ArmaFroid = New System.Windows.Forms.CheckBox()
-        Me.chk_AcierGalva = New System.Windows.Forms.CheckBox()
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_General = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_ParamPoutre = New System.Windows.Forms.Label()
         Me.ErrorProvider_OptionsFeu = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_ParamPoutre.SuspendLayout()
+        Me.pan_SurfaceAcier.SuspendLayout()
         Me.pan_Protection.SuspendLayout()
         CType(Me.img_EpProtec, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_SpecificHeat, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -71,20 +74,48 @@ Partial Class Frm_OptionsFeuN_Poutre
         '
         Me.pan_ParamPoutre.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_ParamPoutre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ParamPoutre.Controls.Add(Me.pan_SurfaceAcier)
         Me.pan_ParamPoutre.Controls.Add(Me.cmb_SurfaceType)
-        Me.pan_ParamPoutre.Controls.Add(Me.chk_ProtectionThermique)
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_SurfaceType)
         Me.pan_ParamPoutre.Controls.Add(Me.pan_Protection)
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_tDalleFEMmax)
         Me.pan_ParamPoutre.Controls.Add(Me.chk_CalculFeu)
         Me.pan_ParamPoutre.Controls.Add(Me.chk_ArmaFroid)
-        Me.pan_ParamPoutre.Controls.Add(Me.chk_AcierGalva)
         Me.pan_ParamPoutre.Dock = System.Windows.Forms.DockStyle.Top
         Me.pan_ParamPoutre.Location = New System.Drawing.Point(0, 30)
         Me.pan_ParamPoutre.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_ParamPoutre.Name = "pan_ParamPoutre"
-        Me.pan_ParamPoutre.Size = New System.Drawing.Size(380, 249)
+        Me.pan_ParamPoutre.Size = New System.Drawing.Size(380, 292)
         Me.pan_ParamPoutre.TabIndex = 2
+        '
+        'pan_SurfaceAcier
+        '
+        Me.pan_SurfaceAcier.Controls.Add(Me.chk_ProtectionThermique)
+        Me.pan_SurfaceAcier.Controls.Add(Me.chk_AcierGalva)
+        Me.pan_SurfaceAcier.Location = New System.Drawing.Point(2, 53)
+        Me.pan_SurfaceAcier.Name = "pan_SurfaceAcier"
+        Me.pan_SurfaceAcier.Size = New System.Drawing.Size(372, 48)
+        Me.pan_SurfaceAcier.TabIndex = 124
+        '
+        'chk_ProtectionThermique
+        '
+        Me.chk_ProtectionThermique.AutoSize = True
+        Me.chk_ProtectionThermique.Location = New System.Drawing.Point(5, 27)
+        Me.chk_ProtectionThermique.Name = "chk_ProtectionThermique"
+        Me.chk_ProtectionThermique.Size = New System.Drawing.Size(148, 17)
+        Me.chk_ProtectionThermique.TabIndex = 80
+        Me.chk_ProtectionThermique.Text = "chk_ProtectionThermique"
+        Me.chk_ProtectionThermique.UseVisualStyleBackColor = True
+        '
+        'chk_AcierGalva
+        '
+        Me.chk_AcierGalva.AutoSize = True
+        Me.chk_AcierGalva.Location = New System.Drawing.Point(5, 4)
+        Me.chk_AcierGalva.Name = "chk_AcierGalva"
+        Me.chk_AcierGalva.Size = New System.Drawing.Size(102, 17)
+        Me.chk_AcierGalva.TabIndex = 4
+        Me.chk_AcierGalva.Text = "chk_AcierGalva"
+        Me.chk_AcierGalva.UseVisualStyleBackColor = True
         '
         'cmb_SurfaceType
         '
@@ -94,16 +125,6 @@ Partial Class Frm_OptionsFeuN_Poutre
         Me.cmb_SurfaceType.Size = New System.Drawing.Size(137, 21)
         Me.cmb_SurfaceType.TabIndex = 122
         Me.cmb_SurfaceType.Visible = False
-        '
-        'chk_ProtectionThermique
-        '
-        Me.chk_ProtectionThermique.AutoSize = True
-        Me.chk_ProtectionThermique.Location = New System.Drawing.Point(7, 51)
-        Me.chk_ProtectionThermique.Name = "chk_ProtectionThermique"
-        Me.chk_ProtectionThermique.Size = New System.Drawing.Size(148, 17)
-        Me.chk_ProtectionThermique.TabIndex = 80
-        Me.chk_ProtectionThermique.Text = "chk_ProtectionThermique"
-        Me.chk_ProtectionThermique.UseVisualStyleBackColor = True
         '
         'lbl_SurfaceType
         '
@@ -117,6 +138,7 @@ Partial Class Frm_OptionsFeuN_Poutre
         '
         'pan_Protection
         '
+        Me.pan_Protection.Controls.Add(Me.chk_ProtectionCreuxOndes)
         Me.pan_Protection.Controls.Add(Me.etq_UnitD2)
         Me.pan_Protection.Controls.Add(Me.lbl_EpProtec)
         Me.pan_Protection.Controls.Add(Me.txt_EpProtec)
@@ -137,10 +159,20 @@ Partial Class Frm_OptionsFeuN_Poutre
         Me.pan_Protection.Controls.Add(Me.img_Density)
         Me.pan_Protection.Controls.Add(Me.txt_ThermalConductivity)
         Me.pan_Protection.Controls.Add(Me.img_ThermalConductivity)
-        Me.pan_Protection.Location = New System.Drawing.Point(3, 91)
+        Me.pan_Protection.Location = New System.Drawing.Point(2, 103)
         Me.pan_Protection.Name = "pan_Protection"
-        Me.pan_Protection.Size = New System.Drawing.Size(357, 156)
+        Me.pan_Protection.Size = New System.Drawing.Size(372, 184)
         Me.pan_Protection.TabIndex = 79
+        '
+        'chk_ProtectionCreuxOndes
+        '
+        Me.chk_ProtectionCreuxOndes.AutoSize = True
+        Me.chk_ProtectionCreuxOndes.Location = New System.Drawing.Point(20, 160)
+        Me.chk_ProtectionCreuxOndes.Name = "chk_ProtectionCreuxOndes"
+        Me.chk_ProtectionCreuxOndes.Size = New System.Drawing.Size(156, 17)
+        Me.chk_ProtectionCreuxOndes.TabIndex = 5
+        Me.chk_ProtectionCreuxOndes.Text = "chk_ProtectionCreuxOndes"
+        Me.chk_ProtectionCreuxOndes.UseVisualStyleBackColor = True
         '
         'etq_UnitD2
         '
@@ -337,16 +369,6 @@ Partial Class Frm_OptionsFeuN_Poutre
         Me.chk_ArmaFroid.Text = "chk_ArmaFroid"
         Me.chk_ArmaFroid.UseVisualStyleBackColor = True
         '
-        'chk_AcierGalva
-        '
-        Me.chk_AcierGalva.AutoSize = True
-        Me.chk_AcierGalva.Location = New System.Drawing.Point(7, 73)
-        Me.chk_AcierGalva.Name = "chk_AcierGalva"
-        Me.chk_AcierGalva.Size = New System.Drawing.Size(102, 17)
-        Me.chk_AcierGalva.TabIndex = 4
-        Me.chk_AcierGalva.Text = "chk_AcierGalva"
-        Me.chk_AcierGalva.UseVisualStyleBackColor = True
-        '
         'pan_General
         '
         Me.pan_General.AutoScroll = True
@@ -354,7 +376,7 @@ Partial Class Frm_OptionsFeuN_Poutre
         Me.pan_General.Location = New System.Drawing.Point(12, 12)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(380, 319)
+        Me.pan_General.Size = New System.Drawing.Size(380, 393)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_General
@@ -370,7 +392,7 @@ Partial Class Frm_OptionsFeuN_Poutre
         Me.TLpan_General.RowCount = 2
         Me.TLpan_General.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_General.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_General.Size = New System.Drawing.Size(380, 280)
+        Me.TLpan_General.Size = New System.Drawing.Size(380, 324)
         Me.TLpan_General.TabIndex = 0
         '
         'lbl_ParamPoutre
@@ -402,6 +424,8 @@ Partial Class Frm_OptionsFeuN_Poutre
         Me.Text = "Frm_OptionsFeuNPoutre"
         Me.pan_ParamPoutre.ResumeLayout(False)
         Me.pan_ParamPoutre.PerformLayout()
+        Me.pan_SurfaceAcier.ResumeLayout(False)
+        Me.pan_SurfaceAcier.PerformLayout()
         Me.pan_Protection.ResumeLayout(False)
         Me.pan_Protection.PerformLayout()
         CType(Me.img_EpProtec, System.ComponentModel.ISupportInitialize).EndInit()
@@ -449,4 +473,6 @@ Partial Class Frm_OptionsFeuN_Poutre
     Friend WithEvents TLpan_General As TableLayoutPanel
     Friend WithEvents lbl_ParamPoutre As Label
     Friend WithEvents ErrorProvider_OptionsFeu As ErrorProvider
+    Friend WithEvents chk_ProtectionCreuxOndes As CheckBox
+    Friend WithEvents pan_SurfaceAcier As Panel
 End Class
