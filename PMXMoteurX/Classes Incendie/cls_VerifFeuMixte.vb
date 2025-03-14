@@ -127,6 +127,10 @@
         Dim TempFs As Decimal                   ' Température de la semelle supérieure
         Dim TempFi As Decimal                   ' Température de la semelle inférieure
         Dim TempW As Decimal                    ' Température de l'âme
+        Dim TempFsN, TempFsC As Decimal         ' Temperatures de la semelle supérieure avec prise en compte de creux d'ondes non remplis
+        Dim TempFiN As Decimal                  ' Température de la semelle inférieure pour le calcul avec creux d'ondes
+        Dim TempWN As Decimal                   ' Température de l'âme pour le calcul avec creux d'ondes
+        Dim Temp0 As Decimal
 
         Dim kReducYFs As Decimal                ' Coefficient réduction limite d'élasticité en fct température de la semelle sup
         Dim kReducYFi As Decimal                ' Coefficient réduction limite d'élasticité en fct température de la semelle inf
@@ -187,6 +191,11 @@
         Dim RhoC As Decimal                     ' Masse volumique du béton à froid
         Dim lANFrance As Boolean                ' Indique si prise en compte AN française de l'EN 1994-1-2:2005
 
+        Dim lMethCreuxOndes As Boolean          ' Indique si on applique la méthode spéciale du CTICM
+        '                                         pour le calcul de léchauffement des profilés protégés et creux d'ondes non remplis
+        Dim PhiVoid As Decimal                  ' Coefficient de vue pour les creux d'ondes
+        Dim CRed1, CRed2 As Decimal             ' Coefficients pour le calcul de la température des gaz dans les creux d'ondes
+
         '--( Paramètres analyse diagramme moments
 
         Dim iNodeMmax() As Integer = Nothing
@@ -194,12 +203,16 @@
         Dim xMZero(,) As Decimal = Nothing
         Dim lTraveeMomNeg() As Boolean = Nothing
         Dim DeltaRd() As List(Of Decimal) = Nothing
+        Dim NbStepsCalcul As Integer
 
         '--( Initialisation
 
         TempG = myBeam.ParamFeu.TempRef
         TempFs = myBeam.ParamFeu.TempRef
+        TempFsN = myBeam.ParamFeu.TempRef
+        TempFsC = myBeam.ParamFeu.TempRef
         TempFi = myBeam.ParamFeu.TempRef
+        TempFiN = myBeam.ParamFeu.TempRef
         TempW = myBeam.ParamFeu.TempRef
         TempRef = myBeam.ParamFeu.TempRef
 
@@ -236,6 +249,17 @@
 
         VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW)
 
+        '# condition requise pour appliquer la méthode spéciale
+        lMethCreuxOndes = myBeam.Dalle.lMixte And myBeam.Dalle.Bac.lPerpendiculaire _
+                      And (myBeam.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu) And (Not myBeam.ParamFeu.lCreuxProteges) _
+                      And (myBeam.ParamFeu.lProtectionPaint Or myBeam.ParamFeu.lProtectionSpray)
+
+        If lMethCreuxOndes Then
+            PhiVoid = EN_Feu.PhiVoid(myBeam.Dalle.Bac, myBeam.Section.ProfilA.Bfs, myBeam.ParamFeu.EpProtection)
+            CRed1 = EN_Feu.CoefRed1(PhiVoid)
+            CRed2 = EN_Feu.CoefRed2(PhiVoid)
+        End If
+
         '--( Préparation du maillage de la dalle
 
         If myBeam.ParamFeu.lDalleFEM Then
@@ -260,9 +284,17 @@
         End If
         lNormal = Not myBeam.Dalle.beton.lLeger
 
+        '--( Nombre de pas de calcul
+
+        If lMethCreuxOndes Then
+            NbStepsCalcul = Array.IndexOf(cls_VerifFeuMixte.TimeSteps, CDec(120), 0) + 1
+        Else
+            NbStepsCalcul = Me.NbStep
+        End If
+
         '--( Boucle sur TimeSteps
 
-        For iSTep = 0 To Me.NbStep - 1
+        For iSTep = 0 To NbStepsCalcul - 1
 
             TimeTarget = cls_VerifFeuMixte.TimeSteps(iSTep) * kConvMinSec
             lCont = IsSmaller(TimeT, TimeTarget)
@@ -284,6 +316,32 @@
                         TempFs += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivS, TimeT, DeltaT, myBeam.ParamFeu)
                         TempFi = TempFs
                         TempW = TempFs
+                    ElseIf lMethCreuxOndes Then
+                        '--( 13/03/25 )--
+
+                        '#temperature dans la semelle supérieure
+                        TempFsN += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivS, TimeT, DeltaT, myBeam.ParamFeu)
+                        TempFsC += EN_Feu.DeltaTempSemSupCreuxOnde(TempFs, TempG, MassivS, TimeT, DeltaT, CRed1, CRed2, myBeam.ParamFeu)
+
+                        TempFs = Math.Max(TempFsN, TempFsC)
+
+                        '#temperature dans la semelle inférieure
+
+                        TempFiN += EN_Feu.DeltaTempAcierProtege(TempFi, TempG, MassivFi, TimeT, DeltaT, myBeam.ParamFeu)
+
+                        '# correction de la température de la semelle inférieure, en fonction de la température de la semelle sup
+                        Temp0 = EN_Feu.TemperatureTheta0(TempFiN)
+                        If IsGreater(TempFsC, Temp0) Then
+                            TempFi = EN_Feu.TemperatureFiCorrigee(TempFi, TempFsC, Temp0, myBeam.Section.ProfilA.ha, iSTep)
+                        Else
+                            TempFi = TempFiN
+                        End If
+
+                        '#température dans l'âme
+                        TempWN += EN_Feu.DeltaTempAcierProtege(TempW, TempG, MassivW, TimeT, DeltaT, myBeam.ParamFeu)
+
+                        TempW = Math.Max(TempWN, (TempFsC + TempFi) / 2)
+
                     Else
                         TempFs += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivFs, TimeT, DeltaT, myBeam.ParamFeu)
                         TempFi += EN_Feu.DeltaTempAcierProtege(TempFi, TempG, MassivFi, TimeT, DeltaT, myBeam.ParamFeu)
@@ -301,7 +359,7 @@
                     FEMDalle.Calcul_thermique_Dalle_beton(EpDalle, NbTranches, EpTranche, DeltaT, TempCTranche,
                                                           TempG, TempRef, ConvC, ConvCC, TeneurU, EpsilonF,
                                                           cls_OptionsFeu.BOLTZMANN, EpsilonC, lNormal,
-                                                          rhoc, lRhoCVar, lANFrance, lGeneration1)
+                                                          RhoC, lRhoCVar, lANFrance, lGeneration1)
                 End If
 
                 '# 
@@ -383,7 +441,7 @@
 
             '## Classification
 
-            For iSTep = 0 To Me.NbStep - 1
+            For iSTep = 0 To NbStepsCalcul - 1
 
                 '# Calcul des densités de connexion
 
@@ -412,17 +470,17 @@
 
         '--( Recherche de la durée de résistance au feu
 
-        DureeResistanceAuFeu()
+        DureeResistanceAuFeu(NbStepsCalcul)
 
     End Sub
 
-    Private Sub DureeResistanceAuFeu()
+    Private Sub DureeResistanceAuFeu(NbStepsCal As Integer)
         '--------------------------------------------------------------------------------------------------------------------------
         '   18/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------
         '   Recherche du pas de calcul pour lequel tous les critères sont OK
         '--------------------------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
+        '   NbStepsCal      [E] :   Nombre de pas de températures maxi
         '--------------------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -431,7 +489,7 @@
 
         '--( Traitement
 
-        RStep = NbStep - 1
+        RStep = NbStepsCal - 1
         lResist = IsResistanceAuFeuOK(RStep)
 
         Do While (Not lResist) And (Me.RStep >= 0)

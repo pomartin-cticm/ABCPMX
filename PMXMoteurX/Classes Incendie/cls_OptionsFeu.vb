@@ -12,6 +12,7 @@
     Public Const TempMax As Decimal = 1200                  ' Température max (°)
 
     Public EmissivityFire As Decimal                        ' Emissivité du feu
+    Public EmissivityFireCreuxO As Decimal                  ' Emissivité du feu pour un calcu de creux d'onde
     Public EmissivityC As Decimal                           ' Emissivité du béton
     'Public EmissivitySteel As Decimal                        ' Emissivité de l'acier
 
@@ -85,6 +86,7 @@
         'Me.DeltaTprotege = 10               ' [secondes]
 
         Me.EmissivityFire = 1.0
+        Me.EmissivityFireCreuxO = 0.7
         'Me.EmissivitySteel = 0.7
         Me.EmissivityC = 1
 
@@ -173,12 +175,40 @@
               Or (Me.Protection = enu_TypeProtection.BoardsVermiculite) _
               Or (Me.Protection = enu_TypeProtection.BoardsSilicate)
 
-
-
         Return lBoard
+
     End Function
 
+    Public Function lProtectionPaint() As Boolean
+        '-------------------------------------------------------------------------------------------------------
+        '   01/05/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------
+        '   Indique si la protection est de type par peinture intumescente
+        '-------------------------------------------------------------------------------------------------------
+        '-------------------------------------------------------------------------------------------------------
 
+        Return Me.Protection = enu_TypeProtection.IntumescentPaint
+
+    End Function
+
+    Public Function lProtectionSpray() As Boolean
+        '-------------------------------------------------------------------------------------------------------
+        '   01/05/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------
+        '   Indique si la protection est de type par spray
+        '-------------------------------------------------------------------------------------------------------
+        '-------------------------------------------------------------------------------------------------------
+
+        Dim lSpray As Boolean
+
+        lSpray = (Me.Protection = enu_TypeProtection.LowDensitySpray_Mineral) _
+              Or (Me.Protection = enu_TypeProtection.LowDensitySpray_Vermiculite) _
+              Or (Me.Protection = enu_TypeProtection.HighDensitySpray_PerliteCement) _
+              Or (Me.Protection = enu_TypeProtection.HighDensitySpray_PerlitePlaster)
+
+        Return lSpray
+
+    End Function
 
 #End Region
 

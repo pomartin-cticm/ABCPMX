@@ -197,6 +197,35 @@
 
     End Function
 
+    Public Function TemperatureGazVoid(TimeT As Decimal, CRed1 As Decimal, CRed2 As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   13/03/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Courbe des gaz chauds dans les creux d'ondes non remplis
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TimeT       [E] :   Temps auquel on calcule la température en secondes
+        '   CRed1, CRed2[E] :   Paramètres pour le calcul de la température
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim myTemp As Decimal
+        Const Time40mn As Decimal = 60 * 40
+        Dim Temp40 As Decimal = 20 + 345 * CRed1 * Math.Log10(321)
+        Dim Temp120 As Decimal = 20 + 345 * CRed2 * Math.Log10(961)
+
+        If IsSmallerOrEqual(TimeT, Time40mn) Then
+            myTemp = 20 + 345 * CRed1 * Math.Log10(8 * TimeT / kConvMinSec + 1)
+        Else
+
+            myTemp = temp40 + (temp120 - temp40) / 80 * (TimeT / kConvMinSec - 40)
+        End If
+
+
+        Return myTemp
+
+    End Function
+
 #End Region
 
 #Region " Echauffement tabulé de la dalle "
@@ -464,6 +493,322 @@
 
 #End Region
 
+#Region " Echauffement des parties en acier protégées avec creux d'ondes non remplis "
+
+    Public Function DeltaTempSemSupCreuxOnde(TempA As Decimal, TempGvoid As Decimal, Massivete As Decimal,
+                                             TimeT As Decimal, DeltaT As Decimal, Cred1 As Decimal, Cred2 As Decimal, myParamFeu As cls_OptionsFeu) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   13/03/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Echauffement de la semelle supérieure protégée en présence de croux d'ondes non remplis
+        '   sur un pas de temps DeltaT (selon EN 1993-1-2 § 4.2.5.2)
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempA       [E] :   Température de l'acier au début du pas de temps
+        '   TempGvoid   [E] :   Température des gaz au début du pas de temps, dans la cavité
+        '   Massivete   [E] :   Massiveté de la partie en acier protégée
+        '   TimeT       [E] :   Temps en secondes
+        '   DeltaT      [E] :   Pas de temps en secondes
+        '   myParamFeu  [E] :   Options de calcul au feu
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim DeltaTempA As Decimal
+        Dim cA, RhoA As Decimal                 ' Chaleur massique et masse volumique acier
+        Dim FluxTherm, FluxConv, FluxRad As Decimal
+        Dim TempG As Decimal
+        Dim EpsilonA As Decimal
+
+        '--( Traitement
+
+        cA = Me.ChaleurSpecifiqueAcier(TempA)
+        RhoA = cls_Acier.RHOACIER
+        EpsilonA = EmissiviteAcier(TempA, myParamFeu.TypeSurface)
+
+        If IsEqual(Cred2, 1) Then
+            TempG = Me.TemperatureGazISO(TimeT)
+        Else
+            TempG = Me.TemperatureGazVoid(TimeT, Cred1, Cred2)
+        End If
+
+        FluxConv = myParamFeu.ConvectionCoef * (TempG - TempA)
+        FluxRad = Me.FluxRadiatif(TempA, TempG, EpsilonA, myParamFeu, True)
+        FluxTherm = FluxRad + FluxConv
+
+        DeltaTempA = Massivete / (cA * RhoA) * DeltaT * FluxTherm
+
+        '--( 
+
+        Return Math.Max(0, DeltaTempA)
+
+    End Function
+
+
+    Public Function PhiVoid(myBac As cls_Bac, Bfs As Decimal, dp As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   13/03/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul du paramètre Phi Cavité pour une onde de bac non remplies avec semelle protégée
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   myBac       [E] :   Bac de la dalle mixte
+        '   Bfs         [E] :   Largeur de la semelle supérieure
+        '   dp          [E] :   Epaisseur de la protection feu
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        Dim Phi As Decimal
+        Dim R1, R2 As Decimal
+
+        R1 = 2 * myBac.Hp / (Bfs + 2 * dp)
+        R2 = (myBac.Ep + myBac.Bb - 2 * myBac.Bt) / (Bfs + 2 * dp)
+
+        Phi = 4 * Math.Atan(R1) * Math.Atan(R2)
+
+        Return Phi
+
+    End Function
+
+    Public Function CoefRed1(PhiV As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   14/03/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul du CRed1 
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   PhiV        [E] :   Coefficient de vue des creux d'ondes
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        Return Math.Max(0, 0.125 * Math.Log(PhiV) + 0.71)
+
+    End Function
+
+    Public Function CoefRed2(PhiV As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   14/03/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul du CRed2 
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   PhiV        [E] :   Coefficient de vue des creux d'ondes
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        Return Math.Min(1, 0.11 * Math.Log(PhiV) + 0.8)
+
+    End Function
+
+    Public Function TemperatureTheta0(TempFI As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   14/03/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la temperature Theta0 à partir de laquelle on modifie la température de la semelle inférieure quand creux d'ondes
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempFI       [E] :   Température de la semelle inférieure
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        Dim Theta0 As Decimal
+
+        'Select Case True
+        '    Case IsSmallerOrEqual(TempFI, 450)
+        '        Theta0 = 400
+        '    Case IsSmallerOrEqual(TempFI, 550) And IsGreater(TempFI, 450)
+        '        Theta0 = Me.Interpole(450, 550, 400, 450, TempFI)
+        '    Case IsSmallerOrEqual(TempFI, 650) And IsGreater(TempFI, 550)
+        '        Theta0 = Me.Interpole(550, 650, 450, 500, TempFI)
+        '    Case IsGreater(TempFI, 650)
+        '        Theta0 = 500
+        'End Select
+
+        Theta0 = Me.ExtraireValeurTableauCoefModTi({400, 450, 550}, TempFI)
+
+        Return Theta0
+
+    End Function
+
+    Private Function ExtraireValeurTableauCoefModTi(TabValeur() As Decimal, TempFi As Decimal)
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   14/03/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la temperature Theta0 à partir de laquelle on modifie la température de la semelle inférieure quand creux d'ondes
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TabValeur   [E] :   Tableau de valeurs à extraire (0 pour 450°C, 1 pour 550°C, 2 pour 650°C)
+        '   TempFI      [E] :   Température de la semelle inférieure
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myVal As Decimal
+
+        '--( Traitement
+
+        Select Case True
+            Case IsSmallerOrEqual(TempFi, 450)
+                myVal = TabValeur(0)
+            Case IsSmallerOrEqual(TempFi, 550) And IsGreater(TempFi, 450)
+                myVal = Me.Interpole(450, 550, TabValeur(0), TabValeur(1), TempFi)
+            Case IsSmallerOrEqual(TempFi, 650) And IsGreater(TempFi, 550)
+                myVal = Me.Interpole(550, 650, TabValeur(1), TabValeur(2), TempFi)
+            Case IsGreater(TempFi, 650)
+                myVal = TabValeur(2)
+        End Select
+
+        Return myVal
+    End Function
+
+
+    Public Function TemperatureFiCorrigee(TempFi As Decimal, TempFs As Decimal, Theta0 As Decimal, Hpro As Decimal, iStep As Integer) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   14/03/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la température corrigée pour la semelle inférieure, dans le cas de la méthode du creux d'onde non rempli
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempFi      [E] :   Température initialie de la semelle inférieure
+        '   TempFs      [E] :   Température de la semelle supérieure exposé aux gaz de la cavité
+        '   Theta0      [E] :   Température seuil
+        '   Hpro        [E] :   Hauteur du profilé
+        '   iStep       [E] :   Indice de la durée d'incendie à prendre en compte
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim TempFiMod As Decimal
+        Dim aTheta As Decimal
+
+        '--( Calculs
+
+        aTheta = Me.CoefATheta(TempFi, Hpro, iStep)
+
+        TempFiMod = TempFi * (1 + (TempFs - Theta0) * aTheta)
+
+        Return TempFiMod
+
+    End Function
+
+
+    Public Function CoefATheta(TempFi As Decimal, Hpro As Decimal, iStep As Integer) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   14/03/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient de correction pour la température corrigée pour la semelle inférieure, dans le cas de la méthode du creux d'onde non rempli
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempFi      [E] :   Température initialie de la semelle inférieure
+        '   Hpro        [E] :   Hauteur du profilé
+        '   iStep       [E] :   Indice de la durée d'incendie à prendre en compte
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim ValH1(2) As Decimal
+        Dim ValH2(2) As Decimal
+
+        Dim nbHPro As Decimal
+
+        Dim myATheta As Decimal
+        Dim pCoef(1) As Decimal
+
+        '--( Initialisation du tableau de valeurs
+
+        Dim TabATheta(,,) As Decimal =
+       {
+            {
+                {0.2, 1, 1.4, 0.65, 0},
+                {0.2, 2, 3.2, 1.8, 0.75},
+                {0.2, 3, 4.6, 2.8, 1.5},
+                {0.2, 4, 5.6, 3.8, 2.0}
+            },
+            {
+                {0.3, 1, 0, 0, 0},
+                {0.3, 2, 1, 0, 0},
+                {0.3, 3, 2, 1.1, 0.65},
+                {0.3, 4, 2.6, 1.6, 0.88}
+            },
+            {
+                {0.4, 1, 0, 0, 0},
+                {0.4, 2, 0, 0, 0},
+                {0.4, 3, 0.6, 0, 0},
+                {0.4, 4, 1.2, 0.76, 0.35}
+            },
+            {
+                {0.5, 1, 0, 0, 0},
+                {0.5, 2, 0, 0, 0},
+                {0.5, 3, 0, 0, 0},
+                {0.5, 4, 0, 0, 0}
+            }
+       }
+
+
+        '--( Initialisation
+
+        nbHPro = TabATheta.GetUpperBound(0)
+
+        '--( Traitement
+
+        If IsSmaller(Hpro, TabATheta(0, 0, 0)) Then
+
+            '== Cas d'une hauteur inférieure à la première des hauteurs traitées (200 mm)
+            ValH1(0) = TabATheta(0, iStep, 2)
+            ValH1(1) = TabATheta(0, iStep, 3)
+            ValH1(2) = TabATheta(0, iStep, 4)
+
+            myATheta = ExtraireValeurTableauCoefModTi(ValH1, TempFi)
+
+        ElseIf IsGreaterOrEqual(Hpro, TabATheta(nbHPro, 0, 0)) Then
+
+            '== Cas d'une hauteur supérieure ou égale à la dernière des hauteurs traitées (500 mm)
+
+            ValH1(0) = TabATheta(nbHPro, iStep, 2)
+            ValH1(1) = TabATheta(nbHPro, iStep, 3)
+            ValH1(2) = TabATheta(nbHPro, iStep, 4)
+
+            myATheta = ExtraireValeurTableauCoefModTi(ValH1, TempFi)
+
+        Else
+            '== Cas entre les deux
+
+            Dim iHp As Integer = 0
+            Dim lCont As Boolean
+
+            lCont = (iHp < nbHPro - 1) And (IsGreaterOrEqual(Hpro, TabATheta(iHp + 1, 0, 0)))
+
+            Do While lCont
+                iHp += 1
+
+                lCont = (iHp < nbHPro - 1) And (IsGreaterOrEqual(Hpro, TabATheta(iHp + 1, 0, 0)))
+            Loop
+
+            For i As Integer = 0 To 2
+                ValH1(i) = TabATheta(iHp, iStep, i + 2)
+                ValH2(i) = TabATheta(iHp + 1, iStep, i + 2)
+            Next
+
+            pCoef(0) = Me.ExtraireValeurTableauCoefModTi(ValH1, TempFi)
+            pCoef(1) = Me.ExtraireValeurTableauCoefModTi(ValH2, TempFi)
+
+            CoefATheta = Me.Interpole(TabATheta(iHp, 0, 0), TabATheta(iHp + 1, 0, 0), pCoef(0), pCoef(1), Hpro)
+
+        End If
+
+        Return CoefATheta / 10 ^ 4
+
+    End Function
+
+    Private Function Interpole(x1 As Decimal, x2 As Decimal, y1 As Decimal, y2 As Decimal, x As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   14/03/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Fonction d'interpolation linéaire
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   x1,x2       [E] :   Abscisses de référence
+        '   y1,y2       [E] :   Valeurs du résultat pour les abscisses de référence
+        '   x           [E] :   Abscisse ou on cherche le résultat
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        Dim Result As Decimal
+
+        Result = y1 + (y2 - y1) / (x2 - x1) * (x2 - x)
+
+        Return Result
+
+    End Function
+
+#End Region
+
 #Region " Echauffement des parties en acier "
 
     Public Function DeltaTempAcierProtege(TempA As Decimal, TempG As Decimal, Massivete As Decimal,
@@ -605,7 +950,7 @@
         Return myEpsilonA
     End Function
 
-    Public Function FluxRadiatif(TempA As Decimal, TempG As Decimal, EpsilonA As Decimal, myParamFeu As cls_OptionsFeu) As Decimal
+    Public Function FluxRadiatif(TempA As Decimal, TempG As Decimal, EpsilonA As Decimal, myParamFeu As cls_OptionsFeu, Optional lCreuxOndes As Boolean = False) As Decimal
         '--------------------------------------------------------------------------------------------------------------------------------
         '   22/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------------
@@ -626,7 +971,11 @@
 
         '--( Initialisation 
 
-        EpsilonF = myParamFeu.EmissivityFire
+        If lCreuxOndes Then
+            EpsilonF = myParamFeu.EmissivityFireCreuxO
+        Else
+            EpsilonF = myParamFeu.EmissivityFire
+        End If
         SigmaB = cls_OptionsFeu.BOLTZMANN
         Phi = myParamFeu.PhiViewFactor
 
