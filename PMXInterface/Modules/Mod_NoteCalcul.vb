@@ -11344,6 +11344,8 @@ Module Mod_NoteCalcul
         Dim EN_Feu As New cls_EurocodesFeu
         Dim kSh As Decimal
         Dim lSsExposee As Boolean
+        Dim lMethCreuxOndes As Boolean
+        Dim lBacPerpendiculaire As Boolean = myBeam.Dalle.lMixte And myBeam.Dalle.Bac.lPerpendiculaire And myBeam.Dalle.Bac.lNervuresContinues
 
         '--( Titre
 
@@ -11351,40 +11353,95 @@ Module Mod_NoteCalcul
 
         '--( Massiveté
 
+        lMethCreuxOndes = EN_Feu.MethodeCreuxOnde(myBeam)
         lSsExposee = EN_Feu.SemelleSupExposee(myBeam)
-        If lSsExposee Then
-            AddLigneNDC(TABW2 & BlocFEU("UPPERFEXPOSED"))
-        Else
-            AddLigneNDC(TABW2 & BlocFEU("UPPERFNOTEXPOSED"))
-        End If
 
-        If lMixte Then
-            If Not lProtege Then
-                kSh = EN_Feu.kShMixte(myBeam.Section.ProfilA)
-            End If
+        If lMethCreuxOndes Then
+
+            EditionELFeuParametresCreuxOndes(myBeam)
+
         Else
 
-            Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
-            MassiveteBox = EN_Feu.MassiveteSectionAcierBox(myBeam.Section.ProfilA, lSsExposee)
+            If lProtege And lBacPerpendiculaire Then
 
-            If Not lProtege Then
+                AddLigneNDC(TABW2 & BlocFEU("UPPERFEXPOSED"))
+                AddLigneNDC(TABW2 & BlocFEU("UPPERFNOTEXPOSED"))
 
-                kSh = 0.9 * MassiveteBox / Massivete
+            Else
+                If lSsExposee Then
+                    AddLigneNDC(TABW2 & BlocFEU("UPPERFEXPOSED"))
+                Else
+                    AddLigneNDC(TABW2 & BlocFEU("UPPERFNOTEXPOSED"))
+                End If
 
             End If
 
-            AddLigneNDC(TABW2 & BlocFEU("SECTIONFACTOR") & TABAFF & "A\-m\=/V = " & GetStringInUnitN(Massivete, Enu_TypeVariable.Massivete, 4, 2, OUI, True))
-            AddLigneNDC(TABW2 & BlocFEU("SECTIONFACTORBOX") & TABAFF & "(A\-m\=/V)\-b\= = " & GetStringInUnitN(MassiveteBox, Enu_TypeVariable.Massivete, 4, 2, OUI, True))
+            If lMixte Then
+                If Not lProtege Then
+                    kSh = EN_Feu.kShMixte(myBeam.Section.ProfilA)
+                End If
+            Else
+
+                Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
+                MassiveteBox = EN_Feu.MassiveteSectionAcierBox(myBeam.Section.ProfilA, lSsExposee)
+
+                If Not lProtege Then
+
+                    kSh = 0.9 * MassiveteBox / Massivete
+
+                End If
+
+                AddLigneNDC(TABW2 & BlocFEU("SECTIONFACTOR") & TABAFF & "A\-m\=/V = " & GetStringInUnitN(Massivete, Enu_TypeVariable.Massivete, 4, 2, OUI, True))
+                AddLigneNDC(TABW2 & BlocFEU("SECTIONFACTORBOX") & TABAFF & "(A\-m\=/V)\-b\= = " & GetStringInUnitN(MassiveteBox, Enu_TypeVariable.Massivete, 4, 2, OUI, True))
+
+            End If
+
+            '--( Facteur d'ombre
+
+            If Not lProtege Then
+                AddLigneNDC(TABW2 & BlocFEU("SHADOWFACTOR") & TABAFF & "k\-sh\= = " & GetStringInUnitN(kSh, Enu_TypeVariable.SansType, 4, 2, NON, True))
+            End If
+
 
         End If
 
-        '--( Facteur d'ombre
 
-        If Not lProtege Then
-            AddLigneNDC(TABW2 & BlocFEU("SHADOWFACTOR") & TABAFF & "k\-sh\= = " & GetStringInUnitN(kSh, Enu_TypeVariable.SansType, 4, 2, NON, True))
-        End If
 
     End Sub
+
+    Private Sub EditionELFeuParametresCreuxOndes(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   22/10/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition des paramètres utilisés dans les calculs au feu, dans le cas de la méthode du creux d'onde non remplis
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre Calculée au feu
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim PhiVoid As Decimal
+        Dim EN_Feu As New cls_EurocodesFeu
+        Dim CRed(2) As Decimal
+
+        '# Général
+
+        AddLigneNDC(TABW2 & BlocFEU("EMPTYVOIDS"))
+        AddLigneNDC(TABW2 & BlocFEU("COMETHOD"))
+        AddLigneNDC(TABW2 & BlocFEU("COTIMELIMIT"))
+
+        '# Coefficient cavité
+
+        PhiVoid = EN_Feu.PhiVoid(myBeam.Dalle.Bac, myBeam.Section.ProfilA.Bfs, myBeam.ParamFeu.EpProtection)
+        CRed(1) = EN_Feu.CoefRed1(PhiVoid)
+        CRed(2) = EN_Feu.CoefRed2(PhiVoid)
+
+        AddLigneNDC(TABW2 & BlocFEU("PHIVOID") & TABAFF & "\SF\s\-void\= = " & GetStringInUnitN(PhiVoid, Enu_TypeVariable.SansType, 4, 3, NON, False))
+        AddLigneNDC(TABW2 & BlocFEU("CREDFACTORS") & TABAFF & "c\-red1\= = " & GetStringInUnitN(CRed(1), Enu_TypeVariable.SansType, 4, 3, NON, False))
+        AddLigneNDC(TABW2 & TABAFF & "c\-red2\= = " & GetStringInUnitN(CRed(2), Enu_TypeVariable.SansType, 4, 3, NON, False))
+
+    End Sub
+
 
     Private Sub EditionELFeuCourbes(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
@@ -11394,6 +11451,24 @@ Module Mod_NoteCalcul
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre Calculée au feu
         '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Const TABVARL1 As String = "\T25"
+        Const TABVARL2 As String = "\T28"
+        Dim indB As Integer = 1
+        Dim lMethCO As Boolean
+        Dim EN_Feu As New cls_EurocodesFeu
+        Dim lBoard As Boolean
+        Dim lProtege As Boolean
+        Dim lMixte As Boolean
+
+        '--( Initialisation
+
+        lMethCO = EN_Feu.MethodeCreuxOnde(myBeam)
+        lBoard = myBeam.ParamFeu.lProtectionBoard
+        lProtege = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
+        lMixte = myBeam.lMixte
 
         '--( Titre
 
@@ -11411,6 +11486,46 @@ Module Mod_NoteCalcul
                 nbLignes += NbLigDiag
                 ' Case cls_Section.Enum_TypeSection.Mixte
 
+                '# légendes des courbes
+
+                AddLigneNDC(TABW2 & BlocFEU("CURVES") & ":")
+
+                AddLigneNDC(TABVARL1 & "1" & TABVARL2 & BlocFEU("ISOCURVE"))
+
+                If lMethCO Then
+                    indB += 1
+                    AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("VOIDCURVE"))
+
+                End If
+
+                If lMixte Then
+                    If (lProtege And lBoard) Then
+                        indB += 1
+                        AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELPROFILE"))
+                    Else
+                        indB += 1
+                        AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELUPPFLANGE"))
+                        indB += 1
+                        AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELLOWFLANGE"))
+                        indB += 1
+                        AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELWEB"))
+
+                    End If
+                    If myBeam.ParamFeu.lDalleFEM Then
+                        indB += 1
+                        AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELLOWSLAB"))
+                        indB += 1
+                        AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELUPPSLAB"))
+
+                    Else
+                        indB += 1
+                        AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELLOWSLAB"))
+                        indB += 1
+                        AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELUPPSLAB"))
+
+                    End If
+
+                End If
         End Select
 
 
@@ -11805,6 +11920,12 @@ Module Mod_NoteCalcul
         ' Dim lBuckling As Boolean = IsGreater(myBeam.VerifFeuMixte.ElancementW, myBeam.VerifFeuMixte.ElancementWMax)
         'Dim lBoard As Boolean = myBeam.ParamFeu.lProtectionBoard
         'Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
+        Dim NbSteps As Integer
+        Dim EN_Feu As New cls_EurocodesFeu
+
+        '--( Initialisation
+
+        NbSteps = NombreTimeStepsIncendie(EN_Feu.MethodeCreuxOnde(myBeam))
 
         '--( Titre
 
@@ -11812,19 +11933,19 @@ Module Mod_NoteCalcul
 
         '## Tableau des températures
 
-        EditionTemperatureFeuMixte(myBeam)
+        EditionTemperatureFeuMixte(myBeam, NbSteps)
 
         '## Tableau des résistances des connecteurs
 
-        EditionFeuResistancePRd(myBeam)
+        EditionFeuResistancePRd(myBeam, NbSteps)
 
         '## Tableau des critères de résistance
 
-        EditionCritereFeuMixteTemp(myBeam)
+        EditionCritereFeuMixteTemp(myBeam, NbSteps)
 
     End Sub
 
-    Private Sub EditionFeuResistancePRd(myBeam As cls_Poutre)
+    Private Sub EditionFeuResistancePRd(myBeam As cls_Poutre, NbSteps As Integer)
         '-----------------------------------------------------------------------------------------------------------------
         '   18/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -11832,6 +11953,7 @@ Module Mod_NoteCalcul
         '   Pour les poutres mixtes
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
+        '   NbSteps     [E] :   Nombre de durées d'exposition dans le tableau des températures
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -11840,7 +11962,7 @@ Module Mod_NoteCalcul
         Dim LargCol() As Single = Nothing
         Dim iStep As Integer
 
-        Dim NbReq As Integer = (cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1) * 1 + 2
+        Dim NbReq As Integer = (NbSteps) * 1 + 2
 
         '--( Entete du tableau
 
@@ -11849,11 +11971,11 @@ Module Mod_NoteCalcul
         AddLigneNDC("\T10\U" & BlocFEU("PRD_STUDS") & "\u")
         SauteLigne()
 
-        EnteteTableauFeuConnecteurs(NCOL, largcol)
+        EnteteTableauFeuConnecteurs(NCOL, LargCol)
 
         '--( Remplissage tableau
 
-        For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
+        For iStep = 0 To NbSteps - 1
             LigneTableauFeuConnecteurs(iStep, myBeam, NCOL, LargCol)
         Next
 
@@ -11980,7 +12102,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionCritereFeuMixteTemp(myBeam As cls_Poutre)
+    Private Sub EditionCritereFeuMixteTemp(myBeam As cls_Poutre, NbSteps As Integer)
         '-----------------------------------------------------------------------------------------------------------------
         '   18/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -11988,6 +12110,7 @@ Module Mod_NoteCalcul
         '   Pour les poutres mixtes
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
+        '   NbSteps     [E] :   Nombre de durées d'exposition dans le tableau des températures
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -11996,7 +12119,7 @@ Module Mod_NoteCalcul
         Dim LargCol() As Single = Nothing
         Dim iStep As Integer
         Dim lBuckling As Boolean = IsGreater(myBeam.VerifFeuMixte.ElancementW, myBeam.VerifFeuMixte.ElancementWMax)
-        Dim NbReq As Integer = (cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1) * 1 + 2
+        Dim NbReq As Integer = NbSteps * 1 + 2
 
         '--( Entete du tableau
 
@@ -12008,7 +12131,7 @@ Module Mod_NoteCalcul
 
         '--( Remplissage tableau
 
-        For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
+        For iStep = 0 To NbSteps - 1
             LigneTableauVerifFeuMixte(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBuckling)
         Next
 
@@ -12018,7 +12141,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionTemperatureFeuMixte(myBeam As cls_Poutre)
+    Private Sub EditionTemperatureFeuMixte(myBeam As cls_Poutre, NbSteps As Integer)
         '-----------------------------------------------------------------------------------------------------------------
         '   18/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -12027,31 +12150,33 @@ Module Mod_NoteCalcul
         '   Tableau des températures dans les différentes parties
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
+        '   NbSteps     [E] :   Nombre de durées d'exposition dans le tableau des températures
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
 
         Dim lMultiSpan As Boolean = myBeam.lMultiSpan
         Dim lBoard As Boolean = myBeam.ParamFeu.lProtectionBoard
+        '--( Traitement
 
         If lMultiSpan Then
 
             If lBoard Then
-                EditionTemperatureFeuMixteBoardMulti(myBeam)
+                EditionTemperatureFeuMixteBoardMulti(myBeam, NbSteps)
             Else
-                EditionTemperatureFeuMixteStandard(myBeam, lBoard, True)
-                EditionTemperatureFeuMixteDalle(myBeam)
+                EditionTemperatureFeuMixteStandard(myBeam, lBoard, NbSteps, True)
+                EditionTemperatureFeuMixteDalle(myBeam, NbSteps)
             End If
 
         Else
 
-            EditionTemperatureFeuMixteStandard(myBeam, lBoard)
+            EditionTemperatureFeuMixteStandard(myBeam, lBoard, NbSteps)
 
         End If
 
     End Sub
 
-    Private Sub EditionTemperatureFeuMixteBoardMulti(myBeam As cls_Poutre)
+    Private Sub EditionTemperatureFeuMixteBoardMulti(myBeam As cls_Poutre, NbSteps As Integer)
         '-----------------------------------------------------------------------------------------------------------------
         '   18/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -12061,6 +12186,7 @@ Module Mod_NoteCalcul
         '   avec les températures de la dalle, y compris les lits d'armatures
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
+        '   NbSteps     [E] :   Nombre de durées d'exposition dans le tableau des températures
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -12087,7 +12213,7 @@ Module Mod_NoteCalcul
 
         '--( Tableau
 
-        For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
+        For iStep = 0 To NbSteps - 1
             LigneTableauTempDalleFeuBoardMulti(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBetonL, nbArma, lArmaFroid)
         Next
 
@@ -12246,7 +12372,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionTemperatureFeuMixteDalle(myBeam As cls_Poutre)
+    Private Sub EditionTemperatureFeuMixteDalle(myBeam As cls_Poutre, NbSteps As Integer)
         '-----------------------------------------------------------------------------------------------------------------
         '   18/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -12256,6 +12382,7 @@ Module Mod_NoteCalcul
         '   Tableau avec les températures de la dalle, y compris les lits d'armatures
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
+        '   NbSteps     [E] :   Nombre de durées d'exposition dans le tableau des températures
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -12427,7 +12554,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionTemperatureFeuMixteStandard(myBeam As cls_Poutre, lBoard As Boolean, Optional lAcierSeul As Boolean = False)
+    Private Sub EditionTemperatureFeuMixteStandard(myBeam As cls_Poutre, lBoard As Boolean, NbSteps As Integer, Optional lAcierSeul As Boolean = False)
         '-----------------------------------------------------------------------------------------------------------------
         '   18/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -12438,6 +12565,7 @@ Module Mod_NoteCalcul
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
         '   lBoard      [E] :   Indique si protection par panneaux
+        '   NbSteps     [E] :   Nombre de durées d'exposition dans le tableau des températures
         '   lAcierSeul  [E] :   Indique si le tableau ne concerne que les parties en acier
         '-----------------------------------------------------------------------------------------------------------------
 
@@ -12464,7 +12592,7 @@ Module Mod_NoteCalcul
         '--( AffichageOptFeu tableau
 
         EnteteTableauTempVerifFeuMixte(NCOL, LargCol, lBoard, lAcierSeul)
-        For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
+        For iStep = 0 To NbSteps - 1
             LigneTableauTempVerifFeuMixte(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBoard, lBetonL, lAcierSeul)
         Next
         FinTableau()
@@ -12488,6 +12616,26 @@ Module Mod_NoteCalcul
         SauteLigne()
 
     End Sub
+
+    Private Function NombreTimeStepsIncendie(lMethCreuxOndes As Boolean) As Integer
+        '-----------------------------------------------------------------------------------------------------------------
+        '   16/03/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------       
+        '-----------------------------------------------------------------------------------------------------------------       
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim NbStepsCalcul As Integer
+
+        If lMethCreuxOndes Then
+            NbStepsCalcul = Array.IndexOf(cls_VerifFeuMixte.TimeSteps, CDec(120), 0) + 1
+        Else
+            NbStepsCalcul = cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1
+        End If
+
+        Return NbStepsCalcul
+    End Function
 
     Private Sub EnteteTableauTempVerifFeuMixte(ByRef NCOL As Integer, ByRef LargCol() As Single,
                                                lUni As Boolean, Optional lAcierSeul As Boolean = False)

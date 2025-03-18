@@ -137,6 +137,7 @@
         Dim kReducYW As Decimal                 ' Coefficient réduction limite d'élasticité en fct température de l'âme
 
         Dim MassivFs As Decimal                 ' Massiveté de la semelle sup
+        Dim MassivFsCo As Decimal               ' Massiveté de la semelle sup pour le calcul vis-à-vis des creux d'ondes
         Dim MassivFi As Decimal                 ' Massiveté de la semelle inf
         Dim MassivW As Decimal                  ' Massiveté de l'âme
         Dim MassivS As Decimal                  ' Massiveté de la section complète
@@ -221,6 +222,7 @@
         nbCombiELU = myBeam.CombiA_ELF.nbCombi
         lProtege = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
         MassivFs = EN_Feu.MassiveteSemelleSup(myBeam.Section.ProfilA, lSsExposee)
+        MassivFsCo = EN_Feu.MassiveteSemelleSupCreuxOndes(myBeam.Dalle.Bac, myBeam.Section.ProfilA)
         MassivFi = EN_Feu.MassiveteSemelleInf(myBeam.Section.ProfilA)
         MassivW = EN_Feu.MassiveteAme(myBeam.Section.ProfilA)
         MassivS = EN_Feu.MassiveteSectionAcierBoardP(myBeam.Section.ProfilA)
@@ -250,9 +252,7 @@
         VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW)
 
         '# condition requise pour appliquer la méthode spéciale
-        lMethCreuxOndes = myBeam.Dalle.lMixte And myBeam.Dalle.Bac.lPerpendiculaire _
-                      And (myBeam.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu) And (Not myBeam.ParamFeu.lCreuxProteges) _
-                      And (myBeam.ParamFeu.lProtectionPaint Or myBeam.ParamFeu.lProtectionSpray)
+        lMethCreuxOndes = EN_Feu.MethodeCreuxOnde(myBeam)
 
         If lMethCreuxOndes Then
             PhiVoid = EN_Feu.PhiVoid(myBeam.Dalle.Bac, myBeam.Section.ProfilA.Bfs, myBeam.ParamFeu.EpProtection)
@@ -320,8 +320,8 @@
                         '--( 13/03/25 )--
 
                         '#temperature dans la semelle supérieure
-                        TempFsN += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivS, TimeT, DeltaT, myBeam.ParamFeu)
-                        TempFsC += EN_Feu.DeltaTempSemSupCreuxOnde(TempFs, TempG, MassivS, TimeT, DeltaT, CRed1, CRed2, myBeam.ParamFeu)
+                        TempFsN += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivFs, TimeT, DeltaT, myBeam.ParamFeu)
+                        TempFsC += EN_Feu.DeltaTempSemSupCreuxOnde(TempFs, TempG, MassivFsCo, TimeT, DeltaT, CRed1, CRed2, myBeam.ParamFeu)
 
                         TempFs = Math.Max(TempFsN, TempFsC)
 
@@ -332,7 +332,7 @@
                         '# correction de la température de la semelle inférieure, en fonction de la température de la semelle sup
                         Temp0 = EN_Feu.TemperatureTheta0(TempFiN)
                         If IsGreater(TempFsC, Temp0) Then
-                            TempFi = EN_Feu.TemperatureFiCorrigee(TempFi, TempFsC, Temp0, myBeam.Section.ProfilA.ha, iSTep)
+                            TempFi = EN_Feu.TemperatureFiCorrigee(TempFiN, TempFsC, Temp0, myBeam.Section.ProfilA.ha, iSTep)
                         Else
                             TempFi = TempFiN
                         End If

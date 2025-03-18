@@ -322,16 +322,17 @@ Public Class Frm_OptionsFeuN_Poutre
                 Me.txt_ThermalConductivity.Enabled = True
                 Me.txt_SpecificHeat.Enabled = True
 
-                Me.txt_Density.Text = GetStringInUnit(.Protection_MasseVol, Enu_TypeVariable.SansType, 3, 2, False)
-                Me.txt_SpecificHeat.Text = GetStringInUnit(.Protection_ChaleurMassique, Enu_TypeVariable.SansType, 3, 2, False)
+                MAJI_ProprietesProtection(myBeam.ParamFeu)
+                'Me.txt_Density.Text = GetStringInUnit(.Protection_MasseVol, Enu_TypeVariable.SansType, 3, 2, False)
+                'Me.txt_SpecificHeat.Text = GetStringInUnit(.Protection_ChaleurMassique, Enu_TypeVariable.SansType, 3, 2, False)
 
-                If .Protection = cls_OptionsFeu.enu_TypeProtection.IntumescentPaint Then
-                    Me.txt_ThermalConductivity.ReadOnly = False
-                Else
-                    Me.txt_ThermalConductivity.ReadOnly = True
-                End If
+                'If .Protection = cls_OptionsFeu.enu_TypeProtection.IntumescentPaint Then
+                '    Me.txt_ThermalConductivity.ReadOnly = False
+                'Else
+                '    Me.txt_ThermalConductivity.ReadOnly = True
+                'End If
 
-                Me.txt_ThermalConductivity.Text = GetStringInUnit(.Protection_Conductivite, Enu_TypeVariable.SansType, 3, 3, False)
+                'Me.txt_ThermalConductivity.Text = GetStringInUnit(.Protection_Conductivite, Enu_TypeVariable.SansType, 3, 3, False)
 
             Else
 
@@ -349,6 +350,24 @@ Public Class Frm_OptionsFeuN_Poutre
             End If
 
         End With
+    End Sub
+
+    Private Sub MAJI_ProprietesProtection(ParamFeu As cls_OptionsFeu)
+
+        With ParamFeu
+            Me.txt_Density.Text = GetStringInUnit(.Protection_MasseVol, Enu_TypeVariable.SansType, 3, 2, False)
+            Me.txt_SpecificHeat.Text = GetStringInUnit(.Protection_ChaleurMassique, Enu_TypeVariable.SansType, 3, 2, False)
+
+            If .Protection = cls_OptionsFeu.enu_TypeProtection.IntumescentPaint Then
+                Me.txt_ThermalConductivity.ReadOnly = False
+            Else
+                Me.txt_ThermalConductivity.ReadOnly = True
+            End If
+
+            Me.txt_ThermalConductivity.Text = GetStringInUnit(.Protection_Conductivite, Enu_TypeVariable.SansType, 3, 3, False)
+
+        End With
+
     End Sub
 
     Private Sub MAJI_CalcuFeu(myBeam As cls_Poutre)
@@ -522,6 +541,8 @@ Public Class Frm_OptionsFeuN_Poutre
             End Select
 
         End With
+
+        MAJI_ProprietesProtection(Frm_OptionsFeuN.BeamLoc.ParamFeu)
 
     End Sub
 

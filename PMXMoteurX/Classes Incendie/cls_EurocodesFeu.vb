@@ -945,6 +945,8 @@
                 Else
                     myEpsilonA = 0.7
                 End If
+            Case Else
+                myEpsilonA = 0.7
         End Select
 
         Return myEpsilonA
@@ -1382,7 +1384,44 @@
     End Function
 #End Region
 
-#Region " Exposition de la semelle supérieure "
+#Region " Exposition de la semelle supérieure et autres fonctions "
+
+    Public Function NombreTimeStepsIncendie(myBeam As cls_Poutre) As Integer
+        '-----------------------------------------------------------------------------------------------------------------
+        '   16/03/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Indique le nombre de durées d'exposition prises en compte dans le calcul incendie
+        '-----------------------------------------------------------------------------------------------------------------       
+        '   
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim NbStepsCalcul As Integer
+
+        If Me.MethodeCreuxOnde(myBeam) Then
+            NbStepsCalcul = Array.IndexOf(cls_VerifFeuMixte.TimeSteps, CDec(120), 0) + 1
+        Else
+            NbStepsCalcul = cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1
+        End If
+
+        Return NbStepsCalcul
+
+    End Function
+
+    Public Function MethodeCreuxOnde(myBeam As cls_Poutre) As Boolean
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   22/10/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Indique si on applique la méthode du creux d'onde
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   myBeam  [E] :   Poutre traitée
+        '------------------------------------------------------------------------------------------------------------------------------
+
+        Return myBeam.Dalle.lMixte And myBeam.Dalle.Bac.lPerpendiculaire _
+                                   And (myBeam.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu) And (Not myBeam.ParamFeu.lCreuxProteges) _
+                                   And (myBeam.ParamFeu.lProtectionPaint Or myBeam.ParamFeu.lProtectionSpray)
+    End Function
 
     Public Function SemelleSupExposee(myBeam As cls_Poutre) As Boolean
         '------------------------------------------------------------------------------------------------------------------------------
@@ -1401,8 +1440,7 @@
         '--( Traitement
 
         If myBeam.Dalle.lMixte Then
-            lExpo = False
-        Else
+
             Select Case myBeam.Dalle.Bac.Orientation
                 Case cls_Bac.Enum_Orientation.Parallele
                     Cr = myBeam.Dalle.Bac.Bb / myBeam.Section.ProfilA.Bfs
@@ -1416,7 +1454,13 @@
                     End Select
 
             End Select
+
             lExpo = IsGreaterOrEqual(Cr, 0.85)
+
+        Else
+
+            lExpo = False
+
         End If
 
         Return lExpo
@@ -1470,6 +1514,28 @@
         If lSemSupExposee Then Peri += myProfil.Bfs
 
         Return (Peri / Aire)
+
+    End Function
+
+    Public Function MassiveteSemelleSupCreuxOndes(myBac As cls_Bac, myProfil As cls_ProfilA) As Decimal
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   23/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la massiveté d'une semelle supérieure
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   myProfil        [E] :   Profilé
+        '   myBac           [E] :   Bac du plancher mixte
+        '------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim MassiV As Decimal
+
+        '--( Calculs
+
+        MassiV = (2 * myBac.Bt + myBac.Bb - myBac.Ep) / ((myBac.Bt + myBac.Bb) * myProfil.Tfs)
+
+        Return (MassiV)
 
     End Function
 
