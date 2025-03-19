@@ -215,6 +215,7 @@
         TempFi = myBeam.ParamFeu.TempRef
         TempFiN = myBeam.ParamFeu.TempRef
         TempW = myBeam.ParamFeu.TempRef
+        TempWN = myBeam.ParamFeu.TempRef
         TempRef = myBeam.ParamFeu.TempRef
 
         lSsExposee = EN_Feu.SemelleSupExposee(myBeam)
@@ -320,14 +321,14 @@
                         '--( 13/03/25 )--
 
                         '#temperature dans la semelle supérieure
-                        TempFsN += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivFs, TimeT, DeltaT, myBeam.ParamFeu)
-                        TempFsC += EN_Feu.DeltaTempSemSupCreuxOnde(TempFs, TempG, MassivFsCo, TimeT, DeltaT, CRed1, CRed2, myBeam.ParamFeu)
+                        TempFsN += EN_Feu.DeltaTempAcierProtege(TempFsN, TempG, MassivFs, TimeT, DeltaT, myBeam.ParamFeu)
+                        TempFsC += EN_Feu.DeltaTempSemSupCreuxOnde(TempFsC, TempG, MassivFsCo, TimeT, DeltaT, CRed1, CRed2, myBeam.ParamFeu)
 
                         TempFs = Math.Max(TempFsN, TempFsC)
 
                         '#temperature dans la semelle inférieure
 
-                        TempFiN += EN_Feu.DeltaTempAcierProtege(TempFi, TempG, MassivFi, TimeT, DeltaT, myBeam.ParamFeu)
+                        TempFiN += EN_Feu.DeltaTempAcierProtege(TempFiN, TempG, MassivFi, TimeT, DeltaT, myBeam.ParamFeu)
 
                         '# correction de la température de la semelle inférieure, en fonction de la température de la semelle sup
                         Temp0 = EN_Feu.TemperatureTheta0(TempFiN)
@@ -338,7 +339,7 @@
                         End If
 
                         '#température dans l'âme
-                        TempWN += EN_Feu.DeltaTempAcierProtege(TempW, TempG, MassivW, TimeT, DeltaT, myBeam.ParamFeu)
+                        TempWN += EN_Feu.DeltaTempAcierProtege(TempWN, TempG, MassivW, TimeT, DeltaT, myBeam.ParamFeu)
 
                         TempW = Math.Max(TempWN, (TempFsC + TempFi) / 2)
 
@@ -394,7 +395,7 @@
             '# Calcul des températures dans le béton dans le cas de la méthode tabulée
 
             If Not myBeam.ParamFeu.lDalleFEM Then
-                EN_Feu.TemperatureDalleTabulee(TimeSteps(iSTep), myBeam.Param.lGeneration1, NbTranches, TempCTranche)
+                EN_Feu.TemperatureDalleTabulee(TimeSteps(iSTep), TempG, myBeam.Param.lGeneration1, NbTranches, TempCTranche)
             End If
 
             '# Récupération de la température dans la dalle

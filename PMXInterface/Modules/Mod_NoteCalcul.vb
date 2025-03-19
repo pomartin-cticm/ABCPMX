@@ -1130,6 +1130,12 @@ Module Mod_NoteCalcul
         '--( Déclarations
 
         Dim Chaine As String = ""
+        Dim EN_Feu As New cls_EurocodesFeu
+        Dim lMethodCO As Boolean
+
+        '--( Initialisation
+
+        lMethodCO = EN_Feu.MethodeCreuxOnde(myBeam)
 
         '--( Traitement
 
@@ -1175,7 +1181,14 @@ Module Mod_NoteCalcul
                     End Select
 
                     AddLigneNDC(TABW2 & BlocFEU("PROTECTIONTYPE") & TABAFF & Chaine)
-                    AddLigneNDC(TABW2 & BlocFEU("PRO_THICK") & TABAFF & "d\-p\= = " & GetStringInUnitN(myBeam.ParamFeu.EpProtection, Enu_TypeVariable.Dimension, 4, 2, Enu_AfficheUnite.Non, True) & " °C")
+                    AddLigneNDC(TABW2 & BlocFEU("PRO_THICK") & TABAFF & "d\-p\= = " & GetStringInUnitN(myBeam.ParamFeu.EpProtection, Enu_TypeVariable.Dimension, 4, 2, Enu_AfficheUnite.OuiNdC, True))
+
+                    If lMethodCO Then
+                        AddLigneNDC(TABW2 & BlocFEU("EMPTYVOIDS"))
+                        AddLigneNDC(TABW2 & BlocFEU("COMETHOD"))
+                    Else
+                        AddLigneNDC(TABW2 & BlocFEU("FILLEDVOIDS"))
+                    End If
 
                     AddLigneNDC(TABW2 & BlocFEU("PRO_PROP") & ":")
 
@@ -11405,8 +11418,6 @@ Module Mod_NoteCalcul
 
         End If
 
-
-
     End Sub
 
     Private Sub EditionELFeuParametresCreuxOndes(myBeam As cls_Poutre)
@@ -11438,7 +11449,7 @@ Module Mod_NoteCalcul
 
         AddLigneNDC(TABW2 & BlocFEU("PHIVOID") & TABAFF & "\SF\s\-void\= = " & GetStringInUnitN(PhiVoid, Enu_TypeVariable.SansType, 4, 3, NON, False))
         AddLigneNDC(TABW2 & BlocFEU("CREDFACTORS") & TABAFF & "c\-red1\= = " & GetStringInUnitN(CRed(1), Enu_TypeVariable.SansType, 4, 3, NON, False))
-        AddLigneNDC(TABW2 & TABAFF & "c\-red2\= = " & GetStringInUnitN(CRed(2), Enu_TypeVariable.SansType, 4, 3, NON, False))
+        AddLigneNDC(TABW2 & TABVAR5 & "c\-red2\= = " & GetStringInUnitN(CRed(2), Enu_TypeVariable.SansType, 4, 3, NON, False))
 
     End Sub
 
@@ -11454,8 +11465,8 @@ Module Mod_NoteCalcul
 
         '--( Déclarations
 
-        Const TABVARL1 As String = "\T25"
-        Const TABVARL2 As String = "\T28"
+        Const TABVARL1 As String = "\T15"
+        Const TABVARL2 As String = "\T18"
         Dim indB As Integer = 1
         Dim lMethCO As Boolean
         Dim EN_Feu As New cls_EurocodesFeu

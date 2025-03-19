@@ -51,6 +51,7 @@ Public Module Mod_Demarrage
         LogicielReglages.lFIRE = True
 
         LogicielReglages.lCreuxO = (LogicielInfo.Maitre = EnuMaitre.CTICM)
+
     End Sub
 
     Private Sub InitialiseVersion()
@@ -62,8 +63,8 @@ Public Module Mod_Demarrage
 
         LogicielInfo.Version.Annee = 2025
         LogicielInfo.Version.Principal = 1
-        LogicielInfo.Version.Indice = 0
-        LogicielInfo.Version.Beta = 0
+        LogicielInfo.Version.Indice = 10
+        LogicielInfo.Version.Beta = 1
 
         Dim Chaine As String = ""
 

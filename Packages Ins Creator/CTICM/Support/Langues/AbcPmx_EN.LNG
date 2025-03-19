@@ -428,7 +428,7 @@ TITLE					= Fire calculation options
 CANCEL					= Cancel
 OK						= Ok
 BEAMPARAM				= Beam parameters
-CALCULPARAM				= Calculation parameters
+CALCULPARAM				= Fire design parameters
 CALCULOPTIONS			= Calculation options
 FIRECALCULATION			= Fire calculation
 SURFACETYPE				= Surface type
@@ -480,6 +480,7 @@ CONSTANTRHOC			= Constant density of concrete
 MOISTURECONTENT			= Moisture content
 ENCASEDROOTFILLET		= Root fillets are taken into account in the fire design of encased section according to Annex F of EN 1994-1-2
 SIZEELT					= Size of the elements
+PROTECTEDTROUGH			= The voids between the deck and the flange are filled
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Combination factors

@@ -189,9 +189,26 @@
         '   TimeT       [E] :   Temps auquel on calcule la température en secondes
         '--------------------------------------------------------------------------------------------------------------------------------
 
+        'Dim myTemp As Decimal
+
+        'myTemp = 20 + 345 * Math.Log10(8 * TimeT / kConvMinSec + 1)
+
+        Return TemperatureGazISO_Minutes(TimeT / kConvMinSec)
+
+    End Function
+
+    Public Function TemperatureGazISO_Minutes(TimeTminutes As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Courbe ISO des gaz chauds (selon EN 1991-1-2 3.2.1 (1))
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TimeTminutes    [E] :   Temps en minutes auquel on calcule la température en secondes
+        '--------------------------------------------------------------------------------------------------------------------------------
+
         Dim myTemp As Decimal
 
-        myTemp = 20 + 345 * Math.Log10(8 * TimeT / kConvMinSec + 1)
+        myTemp = 20 + 345 * Math.Log10(8 * TimeTminutes + 1)
 
         Return myTemp
 
@@ -379,7 +396,7 @@
 
     End Sub
 
-    Public Sub TemperatureDalleTabuleeGeneration1(TimeStep As Decimal, nbTranches As Integer, ByRef TempDalle() As Decimal)
+    Public Sub TemperatureDalleTabuleeGeneration1(TimeStep As Decimal, nbTranches As Integer, ByRef TempDalle() As Decimal, TempG As Decimal)
         '-------------------------------------------------------------------------------------------------------------------------------------------------
         '   23/04/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -389,6 +406,7 @@
         '   TimeStep    [E] :   Temps de calcul
         '   nbTranches  [E] :   Nombre de tranches dans la dalle
         '   TempDalle   [S] :   Température dans chaque couche de la dalle
+        '   TempG       [E] :   Température des gaz chauds au moment considéré
         '-------------------------------------------------------------------------------------------------------------------------------------------------
 
         '--( Initialisation - Déclaration
@@ -420,6 +438,16 @@
         For iTn As Integer = 0 To nbTranches - 1
 
             TempDalle(iTn) = TabTempC(iTn)
+
+        Next
+
+        '--( Traitement des températures à 1200°C: on ne dépasse pas la température des gaz chauds
+
+        For iTn As Integer = 0 To nbTranches - 1
+
+            If IsEqual(TempDalle(iTn), 1200) Then
+                TempDalle(iTn) = Math.Min(TempDalle(iTn), TempG)
+            End If
 
         Next
 
@@ -471,20 +499,21 @@
 
     End Sub
 
-    Public Sub TemperatureDalleTabulee(TimeStep As Decimal, lGeneratUN As Decimal, nbTranches As Integer, ByRef TempDalle() As Decimal)
+    Public Sub TemperatureDalleTabulee(TimeStep As Decimal, TempG As Decimal, lGeneratUN As Decimal, nbTranches As Integer, ByRef TempDalle() As Decimal)
         '-------------------------------------------------------------------------------------------------------------------------------------------------
         '   23/04/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------------------------------------
         '   Calcul des température de la dalle par la méthode tabulée
         '-------------------------------------------------------------------------------------------------------------------------------------------------
         '   TimeStep    [E] :   Temps de calcul
+        '   TempG       [E] :   Température des gaz chauds au moment considéré
         '   lGeneratUN  [E] :   Indique si première génération de l'Eurocode (True) ou non (False)
         '   nbTranches  [E] :   Nombre de tranches dans la dalle
         '   TempDalle   [S] :   Température dans chaque couche de la dalle
         '-------------------------------------------------------------------------------------------------------------------------------------------------
 
         If lGeneratUN Then
-            TemperatureDalleTabuleeGeneration1(TimeStep, nbTranches, TempDalle)
+            TemperatureDalleTabuleeGeneration1(TimeStep, nbTranches, TempDalle, TempG)
         Else
             TemperatureDalleTabuleeGeneration2(TimeStep, nbTranches, TempDalle)
         End If
@@ -559,7 +588,8 @@
         Dim R1, R2 As Decimal
 
         R1 = 2 * myBac.Hp / (Bfs + 2 * dp)
-        R2 = (myBac.Ep + myBac.Bb - 2 * myBac.Bt) / (Bfs + 2 * dp)
+        ' R2 = (myBac.Ep + myBac.Bb - 2 * myBac.Bt) / (Bfs + 2 * dp)
+        R2 = (myBac.Ep - myBac.Bb) / (Bfs + 2 * dp)
 
         Phi = 4 * Math.Atan(R1) * Math.Atan(R2)
 
@@ -801,7 +831,7 @@
 
         Dim Result As Decimal
 
-        Result = y1 + (y2 - y1) / (x2 - x1) * (x2 - x)
+        Result = y1 + (y2 - y1) / (x2 - x1) * (x - x1)
 
         Return Result
 

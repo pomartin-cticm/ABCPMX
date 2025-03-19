@@ -434,7 +434,7 @@ FIRECALCULATION			= Calcul au feu
 SURFACETYPE				= Type de surface
 PROTECTED				= Protégé
 UNPROTECTED				= Non protégé
-GALVANISED				= Galvanisé
+GALVANISED				= Poutre acier galvanisée
 PROTECTIONTYPE			= Type de protection
 SPRAY					= Flocage
 INTUMESCENTPAINT		= Peinture intumescente
@@ -480,6 +480,7 @@ CONSTANTRHOC			= Masse volumique du béton constante
 MOISTURECONTENT			= Teneur en eau
 ENCASEDROOTFILLET		= Les congés de raccordement sont pris en compte dans le calcul des sections enrobées selon l'Annexe F de l'EN 1994-1-2
 SIZEELT					= Épaisseur des éléments
+PROTECTEDTROUGH			= Les creux d'ondes au dessus de la semelle supérieure sont remplis
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Coefficients d'accompagnement

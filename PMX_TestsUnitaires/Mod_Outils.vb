@@ -177,4 +177,46 @@ Module Mod_Outils
 
 #End Region
 
+#Region " Outils gestion température tabulée dans la dalle "
+
+    Public Sub PrepareTempRefDalle(ByRef TempRef() As Decimal, TimeStep As Decimal)
+        '------------------------------------------------------------------------------------------------------------------------------------------
+        '   19/03/25 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------------------
+        '   Mise à jour des températures de référence dans la dalle
+        '------------------------------------------------------------------------------------------------------------------------------------------
+        '   TempRef     [E/S] : Tableau des température de référence
+        '   TimeStep    [E] :   Durée d'exposition au feu, en minutes
+        '------------------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim nbTemp As Integer
+
+        Dim En_Feu As New cls_EurocodesFeu
+
+        Const TEMPMAX As Decimal = 1200
+
+        '--( Traitement
+
+        nbTemp = TempRef.GetUpperBound(0)
+
+
+        For i As Integer = 0 To nbTemp
+
+            If IsEqual(TEMPMAX, TempRef(i)) Then
+
+                TempRef(i) = Math.Min(TEMPMAX, En_Feu.TemperatureGazISO_Minutes(TimeStep))
+
+            End If
+
+
+        Next
+
+    End Sub
+
+
+
+#End Region
+
 End Module

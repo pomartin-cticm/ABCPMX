@@ -1235,11 +1235,16 @@ Imports PMXMoteur2
     ''' Test de la méthode qui renvoi la temperature de la dalle
     ''' </summary>
     <TestMethod()> Public Sub TestMethod_TemperatureDalleTabulee()
-        Dim EpDalle, EpTranches(), TempDalle(), TempDalleRef(), TimeStep, Tau, TauRef As Decimal
+        Dim EpDalle, TimeStep, Tau, TauRef As Decimal
+        Dim TempDalle() As Decimal = Nothing
+        Dim EpTranches() As Decimal = Nothing
+        Dim TempDalleRef() As Decimal = Nothing
+
         Dim nbTranches As Integer
         Dim EurocodeFeu As New cls_EurocodesFeu
         Dim lGenerationUN As Boolean = True
         Dim lGenerationDEUX As Boolean = False
+        Dim EN_Feu As New cls_EurocodesFeu
 
         TauRef = 1 / 10000
 
@@ -1263,7 +1268,9 @@ Imports PMXMoteur2
 
         TempDalleRef = {535, 470, 415, 350, 300, 250, 210, 180, 160, 140, 125, 110, 80, 60}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationUN, nbTranches, TempDalle)
+        PrepareTempRefDalle(TempDalleRef, TimeStep)
+
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationUN, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1276,8 +1283,9 @@ Imports PMXMoteur2
         TimeStep = 60
 
         TempDalleRef = {705, 642, 581, 525, 469, 421, 374, 327, 289, 250, 200, 175, 140, 100}
+        PrepareTempRefDalle(TempDalleRef, TimeStep)
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationUN, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationUN, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1290,8 +1298,9 @@ Imports PMXMoteur2
         TimeStep = 90
 
         TempDalleRef = {1200, 738, 681, 627, 571, 519, 473, 428, 387, 345, 294, 271, 220, 160}
+        PrepareTempRefDalle(TempDalleRef, TimeStep)
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationUN, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationUN, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1304,8 +1313,9 @@ Imports PMXMoteur2
         TimeStep = 120
 
         TempDalleRef = {1200, 1200, 754, 697, 642, 591, 542, 493, 454, 415, 369, 342, 270, 210}
+        PrepareTempRefDalle(TempDalleRef, TimeStep)
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationUN, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationUN, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1318,8 +1328,9 @@ Imports PMXMoteur2
         TimeStep = 180
 
         TempDalleRef = {1200, 1200, 1200, 1200, 738, 689, 635, 590, 549, 508, 469, 430, 330, 260}
+        PrepareTempRefDalle(TempDalleRef, TimeStep)
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationUN, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationUN, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1332,8 +1343,9 @@ Imports PMXMoteur2
         TimeStep = 240
 
         TempDalleRef = {1200, 1200, 1200, 1200, 1200, 740, 700, 670, 645, 550, 520, 495, 395, 305}
+        PrepareTempRefDalle(TempDalleRef, TimeStep)
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationUN, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationUN, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1354,8 +1366,9 @@ Imports PMXMoteur2
         TimeStep = 30
 
         TempDalleRef = {535, 470, 415, 350, 300, 250, 210, 180, 160, 140, 125, 110}
+        PrepareTempRefDalle(TempDalleRef, TimeStep)
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationUN, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationUN, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1368,8 +1381,9 @@ Imports PMXMoteur2
         TimeStep = 60
 
         TempDalleRef = {705, 642, 581, 525, 469, 421, 374, 327, 289, 250, 200, 175}
+        PrepareTempRefDalle(TempDalleRef, TimeStep)
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationUN, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationUN, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1382,8 +1396,9 @@ Imports PMXMoteur2
         TimeStep = 90
 
         TempDalleRef = {1200, 738, 681, 627, 571, 519, 473, 428, 387, 345, 294, 271}
+        PrepareTempRefDalle(TempDalleRef, TimeStep)
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationUN, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationUN, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1396,8 +1411,9 @@ Imports PMXMoteur2
         TimeStep = 120
 
         TempDalleRef = {1200, 1200, 754, 697, 642, 591, 542, 493, 454, 415, 369, 342}
+        PrepareTempRefDalle(TempDalleRef, TimeStep)
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationUN, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationUN, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1410,8 +1426,9 @@ Imports PMXMoteur2
         TimeStep = 180
 
         TempDalleRef = {1200, 1200, 1200, 1200, 738, 689, 635, 590, 549, 508, 469, 430}
+        PrepareTempRefDalle(TempDalleRef, TimeStep)
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationUN, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationUN, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1424,8 +1441,9 @@ Imports PMXMoteur2
         TimeStep = 240
 
         TempDalleRef = {1200, 1200, 1200, 1200, 1200, 740, 700, 670, 645, 550, 520, 495}
+        PrepareTempRefDalle(TempDalleRef, TimeStep)
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationUN, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationUN, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1454,7 +1472,7 @@ Imports PMXMoteur2
 
         TempDalleRef = {675, 513, 363, 260, 187, 135, 101, 76, 59, 46, 37, 31, 27, 24, 23, 22}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationDEUX, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationDEUX, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1468,7 +1486,7 @@ Imports PMXMoteur2
 
         TempDalleRef = {831, 684, 531, 418, 331, 263, 209, 166, 133, 108, 89, 73, 61, 51, 44, 38}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationDEUX, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationDEUX, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1482,7 +1500,7 @@ Imports PMXMoteur2
 
         TempDalleRef = {912, 777, 629, 514, 423, 349, 290, 241, 200, 166, 138, 117, 100, 86, 74, 65}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationDEUX, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationDEUX, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1496,7 +1514,7 @@ Imports PMXMoteur2
 
         TempDalleRef = {967, 842, 698, 583, 491, 415, 352, 300, 256, 218, 186, 159, 137, 119, 105, 94}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationDEUX, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationDEUX, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1510,7 +1528,7 @@ Imports PMXMoteur2
 
         TempDalleRef = {1042, 932, 797, 685, 591, 514, 448, 392, 344, 303, 267, 236, 209, 186, 166, 149}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationDEUX, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationDEUX, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1524,7 +1542,7 @@ Imports PMXMoteur2
 
         TempDalleRef = {1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationDEUX, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationDEUX, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1546,7 +1564,7 @@ Imports PMXMoteur2
 
         TempDalleRef = {675, 513, 363, 260, 187, 135, 101, 76, 59, 46, 37}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationDEUX, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationDEUX, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1560,7 +1578,7 @@ Imports PMXMoteur2
 
         TempDalleRef = {831, 684, 531, 418, 331, 263, 209, 166, 133, 108, 89}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationDEUX, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationDEUX, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1574,7 +1592,7 @@ Imports PMXMoteur2
 
         TempDalleRef = {912, 777, 629, 514, 423, 349, 290, 241, 200, 166, 138}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationDEUX, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationDEUX, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1588,7 +1606,7 @@ Imports PMXMoteur2
 
         TempDalleRef = {967, 842, 698, 583, 491, 415, 352, 300, 256, 218, 186}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationDEUX, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationDEUX, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1602,7 +1620,7 @@ Imports PMXMoteur2
 
         TempDalleRef = {1042, 932, 797, 685, 591, 514, 448, 392, 344, 303, 267}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationDEUX, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationDEUX, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1
@@ -1616,7 +1634,7 @@ Imports PMXMoteur2
 
         TempDalleRef = {1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200}
 
-        EurocodeFeu.TemperatureDalleTabulee(TimeStep, lGenerationDEUX, nbTranches, TempDalle)
+        EurocodeFeu.TemperatureDalleTabulee(TimeStep, EN_Feu.TemperatureGazISO_Minutes(TimeStep), lGenerationDEUX, nbTranches, TempDalle)
 
         Assert.IsTrue(TempDalle.Length = TempDalleRef.Length)
         For i As Integer = 0 To TempDalle.Length - 1

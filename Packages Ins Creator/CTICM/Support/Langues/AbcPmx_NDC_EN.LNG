@@ -677,6 +677,21 @@ TABSTEELWEB				= Web
 TABCONCRETESLAB			= Upper and lower fibres of the concrete slab
 TABCONNECTOR			= Welded stud
 PRD_STUDS				= Shear resistance of the welded studs
+EMPTYVOIDS				= The voids between the steel deck and the upper flange are empty
+COMETHOD				= The specific CTICM method for the heating of the profile is applied
+FILLEDVOIDS				= The voids between the steel deck and the upper flange are assumed to be filled (protection of the upper flange)
+PHIVOID					= Void factor
+CREDFACTORS				= Factors
+COTIMELIMIT				= Calculation limited to R120
+CURVES					= Curves of temperatures
+ISOCURVE				= Hot gazes according to ISO xxx
+VOIDCURVE				= Hot gazes in the voids between the deck and the uper flange
+TEMPSTEELPROFILE		= Steel profile
+TEMPSTEELUPPFLANGE		= Upper flange
+TEMPSTEELLOWFLANGE		= Lower flange
+TEMPSTEELWEB			= Web
+TEMPSTEELLOWSLAB		= Lower fibre of the slab
+TEMPSTEELUPPSLAB		= Upper fibre of the slab
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations
