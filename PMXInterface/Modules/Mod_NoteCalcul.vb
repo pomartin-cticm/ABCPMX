@@ -2484,7 +2484,6 @@ Module Mod_NoteCalcul
                                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.Espacement_Bac_TransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON, False) & " " & BlocG("RIB"))
                             Else
                                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.Espacement_Bac_TransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON, False) & " " & BlocG("RIBS"))
-                                End
                             End If
                         End If
                         AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.EspacementZone(i, j), Enu_TypeVariable.Dimension, 4, 0, NON, False))
@@ -11474,6 +11473,10 @@ Module Mod_NoteCalcul
         Dim lProtege As Boolean
         Dim lMixte As Boolean
 
+        '--( On ne trace pas les courbes d'échauffement si on a un poutrelle partiellement enrobée
+
+        If myBeam.lEnrobage Then Exit Sub
+
         '--( Initialisation
 
         lMethCO = EN_Feu.MethodeCreuxOnde(myBeam)
@@ -11732,10 +11735,15 @@ Module Mod_NoteCalcul
         Dim NCOL As Integer
         Dim LargCol() As Single = Nothing
         Dim iStep As Integer
+        Dim iStepMax As Integer
 
         '--( Titre
 
         AddTitreNdC(2, BlocFEU("FIRE_CHECKS_DETAIL"))
+
+        '--( Initialisation
+
+        iStepMax = Math.Min(cls_VerifFeuEnrobe.TimeSteps.GetUpperBound(0), myBeam.VerifFeuEnrob.RMaxLim)
 
         '--( Entete du tableau
 
@@ -11743,7 +11751,7 @@ Module Mod_NoteCalcul
 
         '--( Remplissage tableau
 
-        For iStep = 0 To cls_VerifFeuEnrobe.TimeSteps.GetUpperBound(0)
+        For iStep = 0 To iStepMax
             LigneTableauVerifFeuEnrob(iStep, myBeam.VerifFeuEnrob, NCOL, LargCol)
         Next
 
@@ -11769,8 +11777,8 @@ Module Mod_NoteCalcul
         InitialiseLigneTableau(NCOL, HLIGNE)
 
         AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuEnrobe.TimeSteps(iStep)))
-        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
-        AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, False, False))
+        AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, False, False))
 
     End Sub
 
@@ -11817,7 +11825,7 @@ Module Mod_NoteCalcul
         '-----------------------------------------------------------------------------------------------------------------
         '   Edition de la synthèse des calculs au feu pour une poutre à section partielnt enrobée
         '-----------------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Calcul au feu
+        '   myBeam      [E] :   Poutre traitée
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -11827,6 +11835,10 @@ Module Mod_NoteCalcul
         '--( Titre
 
         AddTitreNdC(2, BlocFEU("FIRE_CHECKS_SYMMARY"))
+
+        '--( Domaine d'application de l'annexe F
+
+        DomaineApplicationAnnexF(myBeam)
 
         '--( Durée de résistance au feu
 
@@ -11843,6 +11855,74 @@ Module Mod_NoteCalcul
         AfficheSyntheseCritere(myBeam, myBeam.VerifFeuEnrob.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), False, True)
 
     End Sub
+
+    Private Sub DomaineApplicationAnnexF(mybeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   15/04/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Gestion du domaine d'application de l'annexe F dans la Note de calcul
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lRestriction As Boolean
+        Dim iStepP As Integer
+        Dim Hlim As Decimal
+        Dim Alim As Decimal
+        Dim HauteurP As Decimal
+        Dim LargeurBc As Decimal
+        Dim AireHBc As Decimal
+
+        Const TABVARSUP As String = "\T35" & SUPEGAL & "\T45"
+
+        '--( Initialisation
+
+        lRestriction = (mybeam.VerifFeuEnrob.RMaxLim < cls_VerifFeuEnrobe.TimeSteps.GetUpperBound(0))
+
+        '--( Gestion des restrictions d'application
+
+        If lRestriction Then
+
+            iStepP = mybeam.VerifFeuEnrob.RMaxLim + 1
+
+            Hlim = mybeam.VerifFeuEnrob.DimensionMin(iStepP)
+            Alim = mybeam.VerifFeuEnrob.AireMin(iStepP)
+
+            HauteurP = mybeam.Section.ProfilA.ha
+            LargeurBc = mybeam.Section.ProfilA.Bfs * mybeam.Section.Enrobage.Ratio_bc
+
+            AireHBc = HauteurP * LargeurBc
+
+            AddLigneNDC(TABW2 & RemplaceDollar(BlocFEU("RESTRICTEDSTEPS"), "R" & cls_VerifFeuEnrobe.TimeSteps(mybeam.VerifFeuEnrob.RMaxLim).ToString))
+            AddLigneNDC(TABW2 & RemplaceDollar(BlocFEU("CONDITIONNOTMET"), "R" & cls_VerifFeuEnrobe.TimeSteps(mybeam.VerifFeuEnrob.RMaxLim + 1).ToString) & ":")
+
+            If IsSmaller(HauteurP, Hlim) Then
+                AddLigneNDC(TABW3 & "h = " & GetStringInUnitN(HauteurP, Enu_TypeVariable.Dimension, 4, 3, True, True) _
+                          & TABVARSUP & "h\-min\= = " & GetStringInUnitN(Hlim, Enu_TypeVariable.Dimension, 4, 3, True, True) & "\BAL")
+
+                AfficheBalise(False)
+            End If
+            If IsSmaller(LargeurBc, Hlim) Then
+                AddLigneNDC(TABW3 & "b\-c\= = " & GetStringInUnitN(LargeurBc, Enu_TypeVariable.Dimension, 4, 3, True, True) _
+                          & TABVARSUP & "b\-c,min\= = " & GetStringInUnitN(Hlim, Enu_TypeVariable.Dimension, 4, 3, True, True) & "\BAL")
+
+                AfficheBalise(False)
+            End If
+            If IsSmaller(AireHBc, Alim) Then
+                AddLigneNDC(TABW3 & "h b\-c\= = " & GetStringInUnitN(AireHBc * 1000 ^ 2, Enu_TypeVariable.SansType, 4, 0, False, True) & " mm2" _
+                          & TABVARSUP & "(hb\-c\=)\-min\= = " & GetStringInUnitN(Alim * 1000 ^ 2, Enu_TypeVariable.SansType, 4, 0, True, True) & " mm2" & "\BAL")
+
+                AfficheBalise(False)
+            End If
+
+            SauteLigne()
+        End If
+
+
+    End Sub
+
 
     Private Sub EditionVerificationsFEUSyntheseAcier(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------

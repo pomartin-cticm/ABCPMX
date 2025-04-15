@@ -328,6 +328,24 @@ Public Class cls_ProfilA
         Return Av
     End Function
 
+    Public Function AireAme() As Decimal
+        '-----------------------------------------------------------------------------------------
+        '   08/08/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------
+        '   Retourne l'aire de l'âme seule (hors congés)
+        '-----------------------------------------------------------------------------------------
+
+        Dim AireW As Decimal = 0
+
+        Select Case Me.typeProfileAcier
+            Case Enum_TypeSectionAcier.LamineSlimIFBA, Enum_TypeSectionAcier.LamineSlimIFBB
+            Case Else
+                AireW = Me.HauteurAmeHw * Me.Tw
+        End Select
+
+        Return AireW
+    End Function
+
     ''' <summary>
     ''' Hauteur de l'âme entre le nu intérieur des semelles
     ''' </summary>

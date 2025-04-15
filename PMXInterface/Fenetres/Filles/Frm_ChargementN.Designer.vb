@@ -1415,11 +1415,11 @@ Partial Class Frm_ChargementN
         '
         Me.pan_ChargesSurfaciques.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_ChargesSurfaciques.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ChargesSurfaciques.Controls.Add(Me.lbl_UnitUniformLoad)
         Me.pan_ChargesSurfaciques.Controls.Add(Me.lbl_ResultingForce)
         Me.pan_ChargesSurfaciques.Controls.Add(Me.lbl_UniformLoad)
         Me.pan_ChargesSurfaciques.Controls.Add(Me.lbl_WidthApplication)
         Me.pan_ChargesSurfaciques.Controls.Add(Me.lbl_UnitResultingForce)
-        Me.pan_ChargesSurfaciques.Controls.Add(Me.lbl_UnitUniformLoad)
         Me.pan_ChargesSurfaciques.Controls.Add(Me.lbl_UnitWidthApplication)
         Me.pan_ChargesSurfaciques.Controls.Add(Me.txt_ResultingForce)
         Me.pan_ChargesSurfaciques.Controls.Add(Me.txt_UniformLoad)

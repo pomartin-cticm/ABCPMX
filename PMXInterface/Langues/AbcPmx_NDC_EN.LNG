@@ -692,6 +692,8 @@ TEMPSTEELLOWFLANGE		= Lower flange
 TEMPSTEELWEB			= Web
 TEMPSTEELLOWSLAB		= Lower fibre of the slab
 TEMPSTEELUPPSLAB		= Upper fibre of the slab
+RESTRICTEDSTEPS			= Fire design restricted to $
+CONDITIONNOTMET			= At $, following condition of EN 1994-1-2, Table F.3 is not met
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations

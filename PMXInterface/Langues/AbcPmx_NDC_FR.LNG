@@ -671,7 +671,7 @@ UPPERFEXPOSED			= La semelle supérieure est exposée au feu
 SECTIONFACTOR			= Massiveté du profilé métallique
 SECTIONFACTORBOX		= Facteur de massiveté enveloppe
 SHADOWFACTOR			= Facteur d'ombre
-ABSTEELPRO				= Profilé en acier
+TABSTEELPRO				= Profilé en acier
 TABSTEELUPFLANGE		= Semelle supérieure
 TABSTEELLOFLANGE		= Semelle inférieure
 TABSTEELWEB				= Âme
@@ -693,6 +693,8 @@ TEMPSTEELLOWFLANGE		= Semelle inférieure
 TEMPSTEELWEB			= Âme
 TEMPSTEELLOWSLAB		= Fibre inférieure de la dalle
 TEMPSTEELUPPSLAB		= Fibre supérieure de la dalle 
+RESTRICTEDSTEPS			= Calcul au feu limité à $
+CONDITIONNOTMET			= Pour $, la condition suivante du Tableau F.3 de l'EN 1994-1-2 n'est pas satisfaite
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Évaluation des vibrations du plancher

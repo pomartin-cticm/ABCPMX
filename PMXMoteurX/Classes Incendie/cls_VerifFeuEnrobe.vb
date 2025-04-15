@@ -6,17 +6,21 @@ Public Class cls_VerifFeuEnrobe
 
     Public Shared TimeSteps() As Decimal = {30, 60, 90, 120, 180}
 
+    Dim HlimTabF8() As Decimal = {0.12, 0.15, 0.17, 0.2, 0.25}          ' Limite de dimensions pour la vérification de la résistance au feu des poutres acier enrobées (Annexe F de l'EN 1994-1-2)
+    Dim SlimTabF8() As Decimal = {0.0175, 0.024, 0.035, 0.05, 0.08}     ' Limite d'aire pour la vérification de la résistance au feu des poutres acier enrobées (Annexe F de l'EN 1994-1-2)
 #End Region
 
 #Region " Attributs "
 
-    Public CritereM() As cls_Critere                    ' Resistance à la flexion
-    Public CritereV() As cls_Critere                    ' Resistance effort tranchant
-    Public CritereMV() As cls_Critere                   ' Résistance à l'interacion MV
+    Public CritereM() As cls_Critere                            ' Resistance à la flexion
+    Public CritereV() As cls_Critere                            ' Resistance effort tranchant
+    Public CritereMV() As cls_Critere                           ' Résistance à l'interacion MV
 
     Private NbStep As Integer
 
-    Public RStep As Integer                             ' Indice du dernier pas de calcul de la table TimeStep pour laquelle tous les critères sont OK
+    Public RStep As Integer                                     ' Indice du dernier pas de calcul de la table TimeStep pour laquelle tous les critères sont OK
+
+    Public RMaxLim As Integer                                   ' Indice du dernier pas de calcul pour lequel on respecte les conditions d'application de l'annexe F
 
 #End Region
 
@@ -25,6 +29,7 @@ Public Class cls_VerifFeuEnrobe
     Public Sub New()
         Me.NbStep = cls_VerifFeuEnrobe.TimeSteps.GetUpperBound(0) + 1
         Me.RStep = -1
+        Me.RMaxLim = -1
     End Sub
 
     Private Sub InitialiseCriteres(NbNodes As Integer, NbCombi As Integer, IndDerniereT As Integer)
@@ -76,11 +81,22 @@ Public Class cls_VerifFeuEnrobe
         Dim Beff(,) As Decimal = Nothing
         Dim VRd As Decimal
 
+        Dim HauteurH As Decimal
+        Dim LargeurBc As Decimal
+        Dim AireHBc As Decimal
+
+        Dim lOKlim As Boolean
+        Dim Hlim, Slim As Decimal
+
         '--( Initialisation
 
         nbCombiELU = myBeam.CombiA_ELF.nbCombi
         Me.InitialiseCriteres(myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee)
         myBeam.MaillageBeff(myBeam.Param.lLargeurEfficaceSimplifiee, False, Beff)
+
+        HauteurH = myBeam.Section.ProfilA.ha
+        LargeurBc = myBeam.Section.ProfilA.Bfs * myBeam.Section.Enrobage.Ratio_bc
+        AireHBc = HauteurH * LargeurBc
 
         '--( Boucle et calcul sur chaque time step
 
@@ -94,27 +110,38 @@ Public Class cls_VerifFeuEnrobe
             VRd = ResistanceEffortTranchant(myBeam.Section.ProfilA, myBeam.Section.FyW, myBeam.Param.EtaW, myBeam.Section.Enrobage.Ratio_bc,
                                             myBeam.Param.Gamma.GammaM_fi, cls_VerifFeuEnrobe.TimeSteps(iStep))
 
-            '# Boucle sur les combinaisons de calcul
+            '# Conditions d'application de l'annexe F
 
-            For iCombi = 0 To nbCombiELU - 1
+            Hlim = Me.DimensionMin(iStep)
+            Slim = Me.AireMin(iStep)
 
-                '## Combinaisons des moments
+            lOKlim = (IsGreaterOrEqual(HauteurH, Hlim)) And (IsGreaterOrEqual(LargeurBc, Hlim)) And (IsGreaterOrEqual(AireHBc, Slim))
 
-                myBeam.CombiA_ELF.CombineMoments(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, MEd, False)
+            If lOKlim Then
+                Me.RMaxLim = iStep
 
-                '## Combinaison des efforts tranchants
+                '# Boucle sur les combinaisons de calcul
 
-                myBeam.CombiA_ELF.CombineEffortsT(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, VEd, False)
+                For iCombi = 0 To nbCombiELU - 1
 
-                '## Vérification en flexion
+                    '## Combinaisons des moments
 
-                RunCriteresMomentsPlastiques(myBeam, iCombi, iStep, MEd, MRdPos, MRdNeg)
+                    myBeam.CombiA_ELF.CombineMoments(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, MEd, False)
 
-                '## Vérification à l'effort tranchant
+                    '## Combinaison des efforts tranchants
 
-                RunCriteresEffortTranchant(myBeam, iCombi, iStep, VEd, VRd)
+                    myBeam.CombiA_ELF.CombineEffortsT(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, VEd, False)
 
-            Next
+                    '## Vérification en flexion
+
+                    RunCriteresMomentsPlastiques(myBeam, iCombi, iStep, MEd, MRdPos, MRdNeg)
+
+                    '## Vérification à l'effort tranchant
+
+                    RunCriteresEffortTranchant(myBeam, iCombi, iStep, VEd, VRd)
+
+                Next
+            End If
         Next
 
         '--( Recherche de la durée de résistance au feu
@@ -138,13 +165,19 @@ Public Class cls_VerifFeuEnrobe
 
         '--( Traitement
 
-        RStep = NbStep - 1
-        lResist = IsResistanceAuFeuOK(RStep)
+        RStep = Math.Min(NbStep - 1, Me.RMaxLim)
 
-        Do While (Not lResist) And (Me.RStep >= 0)
-            Me.RStep -= 1
-            If Me.RStep >= 0 Then lResist = IsResistanceAuFeuOK(RStep)
-        Loop
+        If RStep >= 0 Then
+
+            lResist = IsResistanceAuFeuOK(RStep)
+
+            Do While (Not lResist) And (Me.RStep >= 0)
+                Me.RStep -= 1
+                If Me.RStep >= 0 Then lResist = IsResistanceAuFeuOK(RStep)
+            Loop
+
+        End If
+
 
     End Sub
 
@@ -303,12 +336,12 @@ Public Class cls_VerifFeuEnrobe
 
         kRedV = 1 + Hwl * (ReducKa - 1) / (2 * Hw)
 
-        VRd = FyW / (GammaM * Math.Sqrt(3)) * myProfile.AireAv(Eta) * kRedV * kConvMPaPa
+        'VRd = FyW / (GammaM * Math.Sqrt(3)) * myProfile.AireAv(Eta) * kRedV * kConvMPaPa
+        VRd = FyW / (GammaM * Math.Sqrt(3)) * myProfile.AireAme * kRedV * kConvMPaPa
 
         Return VRd
 
     End Function
-
 
 #End Region
 
@@ -920,6 +953,59 @@ Public Class cls_VerifFeuEnrobe
 
 
 #End Region
+
+#Region " Conditions d'application "
+
+    Public Function DimensionMin(iStep As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+        '   15/04/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Conditions d'application de l'annexe F: renvoie la dimension minimale de la section en fonction du temps
+        '-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+        '   iStep    [E] :      Indeice du Temps de calcul
+        '-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        Dim Hlim As Decimal
+        'Dim iStep As Integer
+
+        'iStep = Array.IndexOf(cls_VerifFeuEnrobe.TimeSteps, TimeStep)
+
+        If iStep < 0 Then
+            Hlim = 0
+        Else
+            Hlim = Me.HlimTabF8(iStep)
+        End If
+
+        Return Hlim
+
+    End Function
+
+    Public Function AireMin(iStep As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+        '   15/04/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Conditions d'application de l'annexe F: renvoie l'aire minimale de la section en fonction du temps
+        '-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+        '   iStep    [E] :      Indeice du Temps de calcul
+        '-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        Dim Hlim As Decimal
+        'Dim iStep As Integer
+
+        'iStep = Array.IndexOf(cls_VerifFeuEnrobe.TimeSteps, TimeStep)
+
+        If iStep < 0 Then
+            Hlim = 0
+        Else
+            Hlim = Me.SlimTabF8(iStep)
+        End If
+
+        Return Hlim
+
+    End Function
+
+#End Region
+
 
 
 End Class
