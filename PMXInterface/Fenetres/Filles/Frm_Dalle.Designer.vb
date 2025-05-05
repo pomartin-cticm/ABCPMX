@@ -82,6 +82,7 @@ Partial Class Frm_Dalle
         Me.cmb_TypeDalle = New System.Windows.Forms.ComboBox()
         Me.lbl_General = New System.Windows.Forms.Label()
         Me.pan_Armatures = New System.Windows.Forms.Panel()
+        Me.chk_Lit0 = New System.Windows.Forms.CheckBox()
         Me.pan_DonneesArma = New System.Windows.Forms.Panel()
         Me.lbl_LitNo = New System.Windows.Forms.Label()
         Me.txt_zs = New System.Windows.Forms.TextBox()
@@ -100,6 +101,10 @@ Partial Class Frm_Dalle
         Me.chk_Lit2 = New System.Windows.Forms.CheckBox()
         Me.chk_Lit1 = New System.Windows.Forms.CheckBox()
         Me.pan_Img = New System.Windows.Forms.Panel()
+        Me.TLpan_Images = New System.Windows.Forms.TableLayoutPanel()
+        Me.img_Dalle = New System.Windows.Forms.PictureBox()
+        Me.pan_TauxArma = New System.Windows.Forms.Panel()
+        Me.lbl_TauxArma = New System.Windows.Forms.Label()
         Me.pan_EpaisseurMixte = New System.Windows.Forms.Panel()
         Me.rdb_EpPleine = New System.Windows.Forms.RadioButton()
         Me.rdb_EpTotale = New System.Windows.Forms.RadioButton()
@@ -124,7 +129,6 @@ Partial Class Frm_Dalle
         Me.lbl_EpPreDalle = New System.Windows.Forms.Label()
         Me.img_EpPredalle = New System.Windows.Forms.PictureBox()
         Me.etq_UnitDim8 = New System.Windows.Forms.Label()
-        Me.img_Dalle = New System.Windows.Forms.PictureBox()
         Me.pan_Renformis = New System.Windows.Forms.Panel()
         Me.txt_Hh = New System.Windows.Forms.TextBox()
         Me.lbl_Renformis = New System.Windows.Forms.Label()
@@ -133,9 +137,7 @@ Partial Class Frm_Dalle
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.imgList_BOArma = New System.Windows.Forms.ImageList(Me.components)
         Me.ToolTipDalle = New System.Windows.Forms.ToolTip(Me.components)
-        Me.TLpan_Images = New System.Windows.Forms.TableLayoutPanel()
-        Me.pan_TauxArma = New System.Windows.Forms.Panel()
-        Me.lbl_TauxArma = New System.Windows.Forms.Label()
+        Me.lbl_NoArma = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -162,6 +164,9 @@ Partial Class Frm_Dalle
         CType(Me.img_esp, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Img.SuspendLayout()
+        Me.TLpan_Images.SuspendLayout()
+        CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_TauxArma.SuspendLayout()
         Me.pan_EpaisseurMixte.SuspendLayout()
         CType(Me.img_Tc, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Td2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -170,12 +175,9 @@ Partial Class Frm_Dalle
         Me.pan_Predalle.SuspendLayout()
         CType(Me.img_EpJoint, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_EpPredalle, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Renformis.SuspendLayout()
         CType(Me.Img_Hh, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TLpan_Images.SuspendLayout()
-        Me.pan_TauxArma.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -881,16 +883,29 @@ Partial Class Frm_Dalle
         '
         Me.pan_Armatures.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Armatures.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Armatures.Controls.Add(Me.chk_Lit0)
         Me.pan_Armatures.Controls.Add(Me.pan_DonneesArma)
         Me.pan_Armatures.Controls.Add(Me.chk_AjouterSupprimerLit)
         Me.pan_Armatures.Controls.Add(Me.chk_Lit2)
         Me.pan_Armatures.Controls.Add(Me.chk_Lit1)
+        Me.pan_Armatures.Controls.Add(Me.lbl_NoArma)
         Me.pan_Armatures.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Armatures.Location = New System.Drawing.Point(0, 287)
         Me.pan_Armatures.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Armatures.Name = "pan_Armatures"
         Me.pan_Armatures.Size = New System.Drawing.Size(251, 149)
         Me.pan_Armatures.TabIndex = 11
+        '
+        'chk_Lit0
+        '
+        Me.chk_Lit0.Appearance = System.Windows.Forms.Appearance.Button
+        Me.chk_Lit0.Image = CType(resources.GetObject("chk_Lit0.Image"), System.Drawing.Image)
+        Me.chk_Lit0.Location = New System.Drawing.Point(2, 4)
+        Me.chk_Lit0.Margin = New System.Windows.Forms.Padding(0)
+        Me.chk_Lit0.Name = "chk_Lit0"
+        Me.chk_Lit0.Size = New System.Drawing.Size(44, 44)
+        Me.chk_Lit0.TabIndex = 6
+        Me.chk_Lit0.UseVisualStyleBackColor = True
         '
         'pan_DonneesArma
         '
@@ -1057,7 +1072,7 @@ Partial Class Frm_Dalle
         '
         Me.chk_Lit2.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_Lit2.Image = CType(resources.GetObject("chk_Lit2.Image"), System.Drawing.Image)
-        Me.chk_Lit2.Location = New System.Drawing.Point(47, 4)
+        Me.chk_Lit2.Location = New System.Drawing.Point(90, 4)
         Me.chk_Lit2.Margin = New System.Windows.Forms.Padding(0)
         Me.chk_Lit2.Name = "chk_Lit2"
         Me.chk_Lit2.Size = New System.Drawing.Size(44, 44)
@@ -1068,7 +1083,7 @@ Partial Class Frm_Dalle
         '
         Me.chk_Lit1.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_Lit1.Image = CType(resources.GetObject("chk_Lit1.Image"), System.Drawing.Image)
-        Me.chk_Lit1.Location = New System.Drawing.Point(3, 4)
+        Me.chk_Lit1.Location = New System.Drawing.Point(46, 4)
         Me.chk_Lit1.Margin = New System.Windows.Forms.Padding(0)
         Me.chk_Lit1.Name = "chk_Lit1"
         Me.chk_Lit1.Size = New System.Drawing.Size(44, 44)
@@ -1088,6 +1103,55 @@ Partial Class Frm_Dalle
         Me.pan_Img.Name = "pan_Img"
         Me.pan_Img.Size = New System.Drawing.Size(507, 531)
         Me.pan_Img.TabIndex = 1
+        '
+        'TLpan_Images
+        '
+        Me.TLpan_Images.ColumnCount = 1
+        Me.TLpan_Images.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_Images.Controls.Add(Me.img_Dalle, 0, 0)
+        Me.TLpan_Images.Controls.Add(Me.pan_TauxArma, 0, 1)
+        Me.TLpan_Images.Location = New System.Drawing.Point(15, 217)
+        Me.TLpan_Images.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
+        Me.TLpan_Images.Name = "TLpan_Images"
+        Me.TLpan_Images.RowCount = 2
+        Me.TLpan_Images.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_Images.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_Images.Size = New System.Drawing.Size(384, 204)
+        Me.TLpan_Images.TabIndex = 89
+        '
+        'img_Dalle
+        '
+        Me.img_Dalle.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.img_Dalle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_Dalle.Location = New System.Drawing.Point(0, 0)
+        Me.img_Dalle.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
+        Me.img_Dalle.Name = "img_Dalle"
+        Me.img_Dalle.Size = New System.Drawing.Size(100, 50)
+        Me.img_Dalle.TabIndex = 3
+        Me.img_Dalle.TabStop = False
+        '
+        'pan_TauxArma
+        '
+        Me.pan_TauxArma.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_TauxArma.Controls.Add(Me.lbl_TauxArma)
+        Me.pan_TauxArma.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_TauxArma.Location = New System.Drawing.Point(0, 174)
+        Me.pan_TauxArma.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_TauxArma.Name = "pan_TauxArma"
+        Me.pan_TauxArma.Size = New System.Drawing.Size(384, 30)
+        Me.pan_TauxArma.TabIndex = 4
+        '
+        'lbl_TauxArma
+        '
+        Me.lbl_TauxArma.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_TauxArma.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_TauxArma.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_TauxArma.Margin = New System.Windows.Forms.Padding(0, 0, 0, 2)
+        Me.lbl_TauxArma.Name = "lbl_TauxArma"
+        Me.lbl_TauxArma.Size = New System.Drawing.Size(384, 30)
+        Me.lbl_TauxArma.TabIndex = 0
+        Me.lbl_TauxArma.Text = "lbl_TauxArma"
+        Me.lbl_TauxArma.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_EpaisseurMixte
         '
@@ -1341,17 +1405,6 @@ Partial Class Frm_Dalle
         Me.etq_UnitDim8.TabIndex = 78
         Me.etq_UnitDim8.Text = "mm"
         '
-        'img_Dalle
-        '
-        Me.img_Dalle.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_Dalle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Dalle.Location = New System.Drawing.Point(0, 0)
-        Me.img_Dalle.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
-        Me.img_Dalle.Name = "img_Dalle"
-        Me.img_Dalle.Size = New System.Drawing.Size(100, 50)
-        Me.img_Dalle.TabIndex = 3
-        Me.img_Dalle.TabStop = False
-        '
         'pan_Renformis
         '
         Me.pan_Renformis.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -1416,43 +1469,14 @@ Partial Class Frm_Dalle
         Me.imgList_BOArma.Images.SetKeyName(0, "Ajouter")
         Me.imgList_BOArma.Images.SetKeyName(1, "Supprimer")
         '
-        'TLpan_Images
+        'lbl_NoArma
         '
-        Me.TLpan_Images.ColumnCount = 1
-        Me.TLpan_Images.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Images.Controls.Add(Me.img_Dalle, 0, 0)
-        Me.TLpan_Images.Controls.Add(Me.pan_TauxArma, 0, 1)
-        Me.TLpan_Images.Location = New System.Drawing.Point(15, 217)
-        Me.TLpan_Images.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
-        Me.TLpan_Images.Name = "TLpan_Images"
-        Me.TLpan_Images.RowCount = 2
-        Me.TLpan_Images.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Images.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Images.Size = New System.Drawing.Size(384, 204)
-        Me.TLpan_Images.TabIndex = 89
-        '
-        'pan_TauxArma
-        '
-        Me.pan_TauxArma.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_TauxArma.Controls.Add(Me.lbl_TauxArma)
-        Me.pan_TauxArma.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_TauxArma.Location = New System.Drawing.Point(0, 174)
-        Me.pan_TauxArma.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_TauxArma.Name = "pan_TauxArma"
-        Me.pan_TauxArma.Size = New System.Drawing.Size(384, 30)
-        Me.pan_TauxArma.TabIndex = 4
-        '
-        'lbl_TauxArma
-        '
-        Me.lbl_TauxArma.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_TauxArma.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_TauxArma.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_TauxArma.Margin = New System.Windows.Forms.Padding(0, 0, 0, 2)
-        Me.lbl_TauxArma.Name = "lbl_TauxArma"
-        Me.lbl_TauxArma.Size = New System.Drawing.Size(384, 30)
-        Me.lbl_TauxArma.TabIndex = 0
-        Me.lbl_TauxArma.Text = "lbl_TauxArma"
-        Me.lbl_TauxArma.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lbl_NoArma.Location = New System.Drawing.Point(2, 48)
+        Me.lbl_NoArma.Name = "lbl_NoArma"
+        Me.lbl_NoArma.Size = New System.Drawing.Size(246, 57)
+        Me.lbl_NoArma.TabIndex = 7
+        Me.lbl_NoArma.Text = "lbl_NoArma"
+        Me.lbl_NoArma.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Frm_Dalle
         '
@@ -1504,6 +1528,9 @@ Partial Class Frm_Dalle
         CType(Me.img_esp, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Img.ResumeLayout(False)
+        Me.TLpan_Images.ResumeLayout(False)
+        CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_TauxArma.ResumeLayout(False)
         Me.pan_EpaisseurMixte.ResumeLayout(False)
         Me.pan_EpaisseurMixte.PerformLayout()
         CType(Me.img_Tc, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1515,13 +1542,10 @@ Partial Class Frm_Dalle
         Me.pan_Predalle.PerformLayout()
         CType(Me.img_EpJoint, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_EpPredalle, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Renformis.ResumeLayout(False)
         Me.pan_Renformis.PerformLayout()
         CType(Me.Img_Hh, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TLpan_Images.ResumeLayout(False)
-        Me.pan_TauxArma.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -1638,4 +1662,6 @@ Partial Class Frm_Dalle
     Friend WithEvents TLpan_Images As TableLayoutPanel
     Friend WithEvents pan_TauxArma As Panel
     Friend WithEvents lbl_TauxArma As Label
+    Friend WithEvents chk_Lit0 As CheckBox
+    Friend WithEvents lbl_NoArma As Label
 End Class

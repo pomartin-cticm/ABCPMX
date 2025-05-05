@@ -41,6 +41,9 @@ CRECOMMENDED			= Recommended
 CCRITICAL				= Critical
 CNOTRECOMMENDED			= Not recommended
 
+#NDC_OUTOFSCOPE
+NOREINFORCEMENT			= Longitudinal reinforcement should be defined for composite beams with cantilevers
+
 #NDC_MAIN
 TITLE					= Calculation report
 USER					= User
@@ -426,6 +429,7 @@ ZPLASTIC				= Location of the plastic neutral axis
 ZSHEAR					= Location of the shear center
 ZSI_LAYERS				= Location of the layer axis, measured from the upper face of the slab
 ZS_REINF				= Location of the layer axis, measured from the upper face of the profile
+NOREINFORCEMENT			= Longitudinal reinforcements are not defined
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties

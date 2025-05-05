@@ -657,6 +657,7 @@ Public Class Frm_PMX
 
         Dim lOK As Boolean = True
         Dim lEnrob As Boolean = myBeam.lEnrobage
+        Dim lMixte As Boolean = myBeam.lMixte
         Dim Hw As Decimal
         Dim LambdaW As Decimal
         Dim FyW, Epsilon As Decimal
@@ -677,6 +678,16 @@ Public Class Frm_PMX
 
             If IsGreater(LambdaW, 124 * Epsilon) Then
                 myBeam.iErrScope.Add(1)
+            End If
+
+        End If
+
+        '# Pour les poutres mixtes avec consoles, définition requise des armatures longitudinales
+
+        If lMixte Then
+
+            If (myBeam.NbTravees > 1) And myBeam.Dalle.lNoArma Then
+                myBeam.iErrScope.Add(2)
             End If
 
         End If

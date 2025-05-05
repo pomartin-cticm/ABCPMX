@@ -821,6 +821,7 @@ PREPUNCHED				= Bac prépercé
 PRESLAB					= Parti préfa.
 REBARS					= Armatures longitudinales
 REBARSTEEL				= Acier des armatures								   
+REINFLAYER0				= Pas d'armature définie
 REINFLAYER1				= Première nappe
 REINFLAYER2				= Deuxième nappe
 REMOVELAYER				= Supprimer la deuxième nappe d'armatures
@@ -846,6 +847,7 @@ ERRORNWC				= La masse volumique du béton normal ne doit pas être inférieure 
 ERRORCCOVER1			= Lit d'armature n°$
 ERRORCCOVER2			= L'épaisseur d'enrobage ($) devrait être supérieure à la valeur minimale requise pour l'adhérence ($)
 REINFRATIO				= Taux d'armature
+NOREINFORCEMENT			= Pour les poutres mixtes sans parties en console ou pour les poutres non mixtes, la définition des armatures longitudinales n'est pas requise
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre

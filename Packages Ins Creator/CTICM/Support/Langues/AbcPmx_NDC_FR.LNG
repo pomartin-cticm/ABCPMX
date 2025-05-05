@@ -17,7 +17,7 @@ EDGECOMPENC				= Poutre mixte de rive, avec profilé partiellement enrobé
 SPANLENGTH				= Portée
 SPANLENGTHS				= Portées
 ULS						= États limites ultimes
-ULSCOMPOSITE			= États limites ultimes en situation normale (phase mixte)
+ULSCOMPOSITE			= États limites ultimes en situation normalde (phase mixte)
 ULSCONSTRUCTION			= États limites ultimes en phase de construction
 ULSFIRE					= États limites ultimes à l'incendie 
 SLS						= États limites de service
@@ -40,6 +40,9 @@ CZONE					= Zone de confort
 CRECOMMENDED			= Recommandé
 CCRITICAL				= Critique
 CNOTRECOMMENDED			= Non recommandé
+
+#NDC_OUTOFSCOPE
+NOREINFORCEMENT			= Les armatures longitudinales doivent être défines dans le cas des poutres mixtes avec console
 
 #NDC_MAIN
 TITLE					= Note de calculs
@@ -426,7 +429,7 @@ ZPLASTIC				= Position axe neutre plastique
 ZSHEAR					= Position centre de cisaillement
 ZSI_LAYERS				= Position de la nappe, mesurée depuis la face supérieure de la dalle
 ZS_REINF				= Position du lit, mesurée depuis la face supérieure du profilé
-
+NOREINFORCEMENT			= Les armatures longitudinales ne sont pas définies
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Propriétés de la section
@@ -671,7 +674,7 @@ UPPERFEXPOSED			= La semelle supérieure est exposée au feu
 SECTIONFACTOR			= Massiveté du profilé métallique
 SECTIONFACTORBOX		= Facteur de massiveté enveloppe
 SHADOWFACTOR			= Facteur d'ombre
-ABSTEELPRO				= Profilé en acier
+TABSTEELPRO				= Profilé en acier
 TABSTEELUPFLANGE		= Semelle supérieure
 TABSTEELLOFLANGE		= Semelle inférieure
 TABSTEELWEB				= Âme
@@ -693,6 +696,8 @@ TEMPSTEELLOWFLANGE		= Semelle inférieure
 TEMPSTEELWEB			= Âme
 TEMPSTEELLOWSLAB		= Fibre inférieure de la dalle
 TEMPSTEELUPPSLAB		= Fibre supérieure de la dalle 
+RESTRICTEDSTEPS			= Calcul au feu limité à $ 
+CONDITIONNOTMET			= Pour $, la condition suivante du Tableau F.3 de l'EN 1994-1-2 n'est pas satisfaite
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Évaluation des vibrations du plancher

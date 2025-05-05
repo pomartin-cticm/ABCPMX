@@ -93,7 +93,8 @@ Module Mod_NoteCalcul
     Private strRacineELS As String
     Private strRacineELF As String
 
-    Private BlocG As New Dictionary(Of String, String)
+    Private BlocG As New Dictionary(Of String, String)                      ' Messages généraux
+    Private BlocOofS As New Dictionary(Of String, String)                   ' Messages quand hors domaine d'application
     Private BlocSP As New Dictionary(Of String, String)
     Private BlocAnalyse As New Dictionary(Of String, String)
     Private BlocELU As New Dictionary(Of String, String)
@@ -225,13 +226,13 @@ Module Mod_NoteCalcul
 
         EditionParametres(myPro.Poutres(myPro.IndEnCours))
 
-        '--|=========================================
-        '--| PROPRIETES DES SECTIONS
-        '--|=========================================
-
-        EditionProprietesSection(myPro.Poutres(myPro.IndEnCours))
-
         If lControleOK Then
+
+            '--|=========================================
+            '--| PROPRIETES DES SECTIONS
+            '--|=========================================
+
+            EditionProprietesSection(myPro.Poutres(myPro.IndEnCours))
 
             '--|=========================================
             '--| ANALYSE DE LA POUTRE
@@ -310,6 +311,9 @@ Module Mod_NoteCalcul
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_MAIN")
             BlocLine.CreationBloc(BlocG)
 
+            BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_OUTOFSCOPE")
+            BlocLine.CreationBloc(BlocOofS)
+
             BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_SECTIONPROP")
             BlocLine.CreationBloc(BlocSP)
 
@@ -384,6 +388,12 @@ Module Mod_NoteCalcul
                         AddLigneNDC(TABAFF2 & "124 \Se\s = " & GetStringInUnitN(Limit, Enu_TypeVariable.SansType, 4, 2, NON, True))
 
                         AddLigneNDC(TABW2 & RemplaceDollar(BlocG("LIMITWEBSLENDERENCASED"), "124 \Se\s"))
+
+                    Case 2
+                        '# Pas d'armatures longitudinales définies dans le cas de poutres mixtes avec console
+
+                        AddLigneNDC(TABW2 & "\U" & BlocOofS("NOREINFORCEMENT") & "\u")
+
 
                 End Select
 
@@ -2103,54 +2113,61 @@ Module Mod_NoteCalcul
         '   Edition des armatures longi d'une dalle
         '----------------------------------------------------------------------------------------------
 
-        If nbLignes + 6 + HLIGNEENTETE + MyBeam.Dalle.NbLitsArmaActifs * HLIGNE > MAXLIGNEPPAG Then SautePage()
+        If MyBeam.Dalle.lNoArma Then
 
-        AddTitreNdC(3, BlocG("LONGI_REINFORCEMENTS"))
+            ' On affiche rien si les armatures longitudinales ne sont pas définies
+            '--( Cas sans définition d'armatures longitudinales
+            'AddLigneNDC(TABW2 & BlocG("NOREINFORCEMENT"))
 
-        '--> Géométrie
+        Else
+            If nbLignes + 6 + HLIGNEENTETE + MyBeam.Dalle.NbLitsArmaActifs * HLIGNE > MAXLIGNEPPAG Then SautePage()
+            AddTitreNdC(3, BlocG("LONGI_REINFORCEMENTS"))
 
-        AddLigneNDC(TABW2 & BlocG("NB_LAYERS") & TABAFF & CStr(MyBeam.Dalle.NbLitsArmaActifs))
-        SauteLigne()
+            '--> Géométrie
 
-        AddLigneNDC("\TABLEAU 18")
-        InitialiseLigne(5, HLIGNEENTETE, True)
-        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "i")
-        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "e\-si\=" & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
-        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "d\-si\=" & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
-        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "z\-si\=" & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
-        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "A\-si\=" & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & "\+2\=/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+            AddLigneNDC(TABW2 & BlocG("NB_LAYERS") & TABAFF & CStr(MyBeam.Dalle.NbLitsArmaActifs))
+            SauteLigne()
 
-        For i As Integer = 0 To MyBeam.Dalle.NbLitsArmaActifs - 1
-            If MyBeam.Dalle.LitArma(i).lActive Then
-                InitialiseLigne(5, HLIGNE, True)
-                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, i + 1)
-                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).EspBar, Enu_TypeVariable.Dimension, 4, 0, False))
-                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).PhiS, Enu_TypeVariable.Dimension, 4, 0, False))
-                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).z_s, Enu_TypeVariable.Dimension, 4, 0, False))
-                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).AireParULargeur, Enu_TypeVariable.AireMM2, 4, 0, False))
-            End If
-        Next
+            AddLigneNDC("\TABLEAU 18")
+            InitialiseLigne(5, HLIGNEENTETE, True)
+            AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "i")
+            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "e\-si\=" & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "d\-si\=" & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "z\-si\=" & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "A\-si\=" & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & "\+2\=/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
 
-        FinTableau()
+            For i As Integer = 0 To MyBeam.Dalle.NbLitsArmaActifs - 1
+                If MyBeam.Dalle.LitArma(i).lActive Then
+                    InitialiseLigne(5, HLIGNE, True)
+                    AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, i + 1)
+                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).EspBar, Enu_TypeVariable.Dimension, 4, 0, False))
+                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).PhiS, Enu_TypeVariable.Dimension, 4, 0, False))
+                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).z_s, Enu_TypeVariable.Dimension, 4, 0, False))
+                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).AireParULargeur, Enu_TypeVariable.AireMM2, 4, 0, False))
+                End If
+            Next
 
-        AddLigneNDC(TABW2 & BlocG("WITH"))
-        AddLigneNDC(TABW3 & "e\-si\= : " & TABVAR1 & BlocG("ESI_LAYERS"))
-        AddLigneNDC(TABW3 & "d\-si\= : " & TABVAR1 & BlocG("DSI_LAYERS"))
-        AddLigneNDC(TABW3 & "z\-si\= : " & TABVAR1 & BlocG("ZSI_LAYERS"))
-        AddLigneNDC(TABW3 & "A\-si\= : " & TABVAR1 & BlocG("ASI_LAYERS"))
+            FinTableau()
 
-        SauteLigne()
-        AddLigneNDC(TABW2 & BlocG("REINFRATIO") & " : " & TABAFF & "\Sr\s\-s\= = " & GetStringInUnitN(MyBeam.Dalle.TauxArma * 100, Enu_TypeVariable.SansType, 3, 2, NON_U, True) & " %")
+            AddLigneNDC(TABW2 & BlocG("WITH"))
+            AddLigneNDC(TABW3 & "e\-si\= : " & TABVAR1 & BlocG("ESI_LAYERS"))
+            AddLigneNDC(TABW3 & "d\-si\= : " & TABVAR1 & BlocG("DSI_LAYERS"))
+            AddLigneNDC(TABW3 & "z\-si\= : " & TABVAR1 & BlocG("ZSI_LAYERS"))
+            AddLigneNDC(TABW3 & "A\-si\= : " & TABVAR1 & BlocG("ASI_LAYERS"))
 
-        '--> Acier
+            SauteLigne()
+            AddLigneNDC(TABW2 & BlocG("REINFRATIO") & " : " & TABAFF & "\Sr\s\-s\= = " & GetStringInUnitN(MyBeam.Dalle.TauxArma * 100, Enu_TypeVariable.SansType, 3, 2, NON_U, True) & " %")
 
-        If nbLignes + 5 > MAXLIGNEPPAG Then SautePage()
+            '--> Acier
 
-        AddTitreNdC(3, BlocG("MATERIAL_LONGI_REINF"))
-        AddLigneNDC(TABW2 & BlocG("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Dalle.AcierArmatures.Classe)
-        AddLigneNDC(TABW2 & BlocG("FYS_REINFORCEMENT") & TABAFF & "f\-sk\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
-        AddLigneNDC(TABW2 & BlocG("ES_REINFORCEMENT") & TABAFF & "E\-s\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
+            If nbLignes + 5 > MAXLIGNEPPAG Then SautePage()
 
+            AddTitreNdC(3, BlocG("MATERIAL_LONGI_REINF"))
+            AddLigneNDC(TABW2 & BlocG("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Dalle.AcierArmatures.Classe)
+            AddLigneNDC(TABW2 & BlocG("FYS_REINFORCEMENT") & TABAFF & "f\-sk\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
+            AddLigneNDC(TABW2 & BlocG("ES_REINFORCEMENT") & TABAFF & "E\-s\=" & TABEGAL & GetStringInUnitN(MyBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
+
+        End If
         'SauteLigne()
         If nbLignes + 30 > MAXLIGNEPPAG Then SautePage()
         AddLigneNDC("\IMG SLAB 5 80 30 NoCadre")

@@ -13,10 +13,11 @@ VERSIONLINK     		= Voulez-vous être redirigé vers le site web du CTICM ?
 WARNING					= Avertissement
 
 #FRM_ABOUT
-TITLE					= A propos d'ABCPMX-II
+TITLE					= A propos du logiciel $
 OK						= Ok
+DESCRIPTION_II			= Calcul des poutres mixtes acier-béton selon la NF EN 1994-1-1
 DESCRIPTION				= Description
-DESCRIPTION_CONT		= Le logiciel ABC-PMX vise le calcul de poutres mixtes selon l'EN 1994-1-1. Son développement est cofinancé par ArcelorMittal et le CTICM.
+DESCRIPTION_CONT		= Le logiciel $ vise le calcul de poutres mixtes selon l'EN 1994-1-1. Son développement est cofinancé par ArcelorMittal et le CTICM.
 INFORMATION				= Information
 MAITRE					= Droits
 VERSION					= Version
@@ -821,6 +822,7 @@ PREPUNCHED				= Bac prépercé
 PRESLAB					= Parti préfa.
 REBARS					= Armatures longitudinales
 REBARSTEEL				= Acier des armatures								   
+REINFLAYER0				= Pas d'armature définie
 REINFLAYER1				= Première nappe
 REINFLAYER2				= Deuxième nappe
 REMOVELAYER				= Supprimer la deuxième nappe d'armatures
@@ -846,6 +848,7 @@ ERRORNWC				= La masse volumique du béton normal ne doit pas être inférieure 
 ERRORCCOVER1			= Lit d'armature n°$
 ERRORCCOVER2			= L'épaisseur d'enrobage ($) devrait être supérieure à la valeur minimale requise pour l'adhérence ($)
 REINFRATIO				= Taux d'armature
+NOREINFORCEMENT			= Pour les poutres mixtes sans parties en console ou pour les poutres non mixtes, la définition des armatures longitudinales n'est pas requise
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre

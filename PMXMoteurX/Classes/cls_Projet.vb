@@ -320,7 +320,7 @@ Public Class cls_Projet
 
     End Sub
 
-    Private Sub SaveFileBlocArmaDalle(LitArma As List(Of Cls_Armatures_Longi), mySteelR As cls_AcierArmature, ByRef Lines As List(Of String))
+    Private Sub SaveFileBlocArmaDalle(lNoArma As Boolean, LitArma As List(Of Cls_Armatures_Longi), mySteelR As cls_AcierArmature, ByRef Lines As List(Of String))
         '-------------------------------------------------------------------------------------
         '   05/09/24 :  Création - POM
         '-------------------------------------------------------------------------------------
@@ -332,6 +332,7 @@ Public Class cls_Projet
         '==[ Classe Armature Dalle ]=================================================================
 
         Lines.Add("BLOCK " & BkARMADALLE)
+        AjouteLigneFrmt(Lines, "NoBar", lNoArma)
 
         For i As Integer = 0 To LitArma.Count - 1
 
@@ -970,7 +971,7 @@ Public Class cls_Projet
 
             '==[ Bloc armatures dalle ]===============================================================
 
-            SaveFileBlocArmaDalle(pTre.Dalle.LitArma, pTre.Dalle.AcierArmatures, Lines)
+            SaveFileBlocArmaDalle(pTre.Dalle.lNoArma, pTre.Dalle.LitArma, pTre.Dalle.AcierArmatures, Lines)
 
             '==[ Bloc des Goujons ]===================================================================
 
@@ -1300,7 +1301,7 @@ Public Class cls_Projet
 
                 Case BkARMADALLE
 
-                    ReadBlocArmatureDalle(Me.Poutres.Last.Dalle.LitArma, Me.Poutres.Last.Dalle.AcierArmatures, Lines, indBlocs(iBloc) + 1, iFin)
+                    ReadBlocArmatureDalle(Me.Poutres.Last.Dalle.lNoArma, Me.Poutres.Last.Dalle.LitArma, Me.Poutres.Last.Dalle.AcierArmatures, Lines, indBlocs(iBloc) + 1, iFin)
 
                 Case BkGOUJON
 
@@ -1494,7 +1495,7 @@ Public Class cls_Projet
                 Case BkARMADALLE
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim acier_armature_dalle As New cls_AcierArmature
-                    ReadBlocArmatureDalle(ptre_en_cours.Dalle.LitArma, acier_armature_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ReadBlocArmatureDalle(ptre_en_cours.Dalle.lNoArma, ptre_en_cours.Dalle.LitArma, acier_armature_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.AcierArmatures = acier_armature_dalle
 
                 Case BkGOUJON
@@ -2485,7 +2486,7 @@ Public Class cls_Projet
 
     End Sub
 
-    Private Sub ReadBlocArmatureDalle(ByRef myLits As List(Of Cls_Armatures_Longi), ByRef mySteelR As cls_AcierArmature, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocArmatureDalle(ByRef lNoArma As Boolean, ByRef myLits As List(Of Cls_Armatures_Longi), ByRef mySteelR As cls_AcierArmature, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '-------------------------------------------------------------------------------------
         '   05/09/24 :  Création - POM
         '-------------------------------------------------------------------------------------
@@ -2514,6 +2515,10 @@ Public Class cls_Projet
                 MotCle = Mots(1).Substring(0, Math.Min(NBCAR, Mots(1).Length)).ToUpper
 
                 Select Case MotCle
+
+                    Case "NOBAR"
+
+                        lNoArma = Mots(nbMots)
 
                     Case "ESPBAR"
                         indexI = CInt(TraiteReal(Mots(2)))

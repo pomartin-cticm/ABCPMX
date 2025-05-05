@@ -36,8 +36,10 @@ Public Class Frm_About
 
                 '=== MENU PRINCIPAL ==============================================================='
 
-                Me.Text = Bloc("TITLE")
+                Me.Text = RemplaceDollar(Bloc("TITLE"), LogicielInfo.NomLogiciel)
                 Me.btn_OK.Text = Bloc("OK")
+
+                Me.lbl_Verification.Text = Bloc("DESCRIPTION_II")
 
             Catch ex As Exception
 
@@ -100,7 +102,7 @@ Public Class Frm_About
             Chaine = " (@ ArcelorMittal-CTICM " & Chaine & ")"
         End If
 
-        Me.lbl_NomLogiciel.Text = LogicielInfo.Racine & " V" & LogicielInfo.Version.Label & Chaine
+        Me.lbl_NomLogiciel.Text = LogicielInfo.NomLogiciel & " V" & LogicielInfo.Version.Label & Chaine
     End Sub
 
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click

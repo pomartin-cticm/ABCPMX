@@ -70,6 +70,11 @@
     Public Cofradal As New cls_Cofradal
 
     ''' <summary>
+    ''' Indique si aucune armature longitudinale est définie
+    ''' </summary>
+    Public lNoArma As Boolean
+
+    ''' <summary>
     ''' Lits d'armatures dans la dalle
     ''' </summary>
     Public LitArma As New List(Of Cls_Armatures_Longi)
@@ -658,6 +663,8 @@
         Me.LitArma(1).lActive = False
 
         Me.LitArma(1).z_s = 0.045
+
+        Me.lNoArma = False
 
     End Sub
 

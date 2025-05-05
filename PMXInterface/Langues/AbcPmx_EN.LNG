@@ -13,7 +13,7 @@ VERSIONLINK				= Do you want to be redirected to the CTICM website?
 WARNING					= Warning
 
 #FRM_ABOUT
-TITLE					= About ABCPMX-II
+TITLE					= About $
 OK						= Ok
 DESCRIPTION				= Description
 DESCRIPTION_CONT		= ABC-PMX software aims at the calculation of composite beams according to EN 1994-1-1. Its development is co-funded by ArcelorMittal and CTICM. 
@@ -821,6 +821,7 @@ PREPUNCHED				= Prepunched sheeting
 PRESLAB					= Prefab. part
 REBARS					= Longitudinal reinforcement
 REBARSTEEL				= Reinforcement steel
+REINFLAYER0				= Longitudinal reinforcement not defined
 REINFLAYER1				= First layer
 REINFLAYER2				= Second layer
 REMOVELAYER				= Remove the second layer of reinforcement
@@ -846,6 +847,7 @@ ERRORNWC				= Density of normal weight concrete should be greater or equal than 
 ERRORCCOVER1			= Reinforcement layer n°$
 ERRORCCOVER2			= The concrete coverage ($) should not be less than the minimal value required for bond ($)
 REINFRATIO				= Reinforcement ratio
+NOREINFORCEMENT			= For composite beams without cantilever and for steel beams, the definition of longitudinal reinforcement is not required
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam

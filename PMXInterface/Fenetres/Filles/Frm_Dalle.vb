@@ -139,6 +139,7 @@ Public Class Frm_Dalle
                 '=== ARMATURES ====================================================================
 
                 Me.lbl_Armatures.Text = Bloc("REBARS")
+                Me.ToolTipDalle.SetToolTip(Me.chk_Lit0, Bloc("REINFLAYER0"))
                 Me.ToolTipDalle.SetToolTip(Me.chk_Lit1, Bloc("REINFLAYER1"))
                 Me.ToolTipDalle.SetToolTip(Me.chk_Lit2, Bloc("REINFLAYER2"))
                 Me.lbl_Diametre.Text = Bloc("DIAMETER")
@@ -151,6 +152,8 @@ Public Class Frm_Dalle
                 strLitNo(1) = Bloc("SECONDLAYER")
 
                 strTauxArma = Bloc("REINFRATIO")
+
+                Me.lbl_NoArma.Text = Bloc("NOREINFORCEMENT")                   'Pour une poutre sans console, il n'est pas nécessaire de définir les lits d'armature"
 
                 '=== ACIER DES ARMATURES ==========================================================
 
@@ -321,6 +324,8 @@ Public Class Frm_Dalle
 
         MAJI_SaisieEpMixte()
 
+        Me.chk_Lit0.Enabled = (MyProjet.Poutres(MyProjet.IndEnCours).NbTravees = 1)
+
     End Sub
 
     Private Sub RemplirComboClasseBeton()
@@ -397,13 +402,18 @@ Public Class Frm_Dalle
 
         '--> Armatures
 
-        'Ajout GuD: Permet de réinitialiser la variable iLitSelect à l'ouverture
-        If MyDalleLoc.LitArma(1).lActive Then
-            iLitSelect = 1
-            iSelect = 200
+        If MyDalleLoc.lNoArma Then
+            iLitSelect = -1
+            iSelect = -1
         Else
-            iLitSelect = 0
-            iSelect = 100
+            'Ajout GuD: Permet de réinitialiser la variable iLitSelect à l'ouverture
+            If MyDalleLoc.LitArma(1).lActive Then
+                iLitSelect = 1
+                iSelect = 200
+            Else
+                iLitSelect = 0
+                iSelect = 100
+            End If
         End If
 
         MAJI_BOArmatures()
@@ -515,14 +525,24 @@ Public Class Frm_Dalle
 
     Private Sub AfficherLitEncours()
 
-        Me.lbl_LitNo.Text = strLitNo(iLitSelect)
-        Me.txt_PhiS.Text = GetStringInUnit(MyDalleLoc.LitArma(iLitSelect).PhiS, Enu_TypeVariable.Dimension, 4, 3, False)
-        Me.txt_esp.Text = GetStringInUnit(MyDalleLoc.LitArma(iLitSelect).EspBar, Enu_TypeVariable.Dimension, 4, 3, False)
-        Me.txt_zs.Text = GetStringInUnit(MyDalleLoc.LitArma(iLitSelect).z_s, Enu_TypeVariable.Dimension, 4, 3, False)
+        If iLitSelect = -1 Then
 
-        Me.img_esp.Invalidate()
-        Me.img_PhiS.Invalidate()
-        Me.img_zs.Invalidate()
+            Me.pan_DonneesArma.Visible = False
+
+        Else
+
+            Me.pan_DonneesArma.Visible = True
+
+            Me.lbl_LitNo.Text = strLitNo(iLitSelect)
+            Me.txt_PhiS.Text = GetStringInUnit(MyDalleLoc.LitArma(iLitSelect).PhiS, Enu_TypeVariable.Dimension, 4, 3, False)
+            Me.txt_esp.Text = GetStringInUnit(MyDalleLoc.LitArma(iLitSelect).EspBar, Enu_TypeVariable.Dimension, 4, 3, False)
+            Me.txt_zs.Text = GetStringInUnit(MyDalleLoc.LitArma(iLitSelect).z_s, Enu_TypeVariable.Dimension, 4, 3, False)
+
+            Me.img_esp.Invalidate()
+            Me.img_PhiS.Invalidate()
+            Me.img_zs.Invalidate()
+
+        End If
     End Sub
 
 #End Region
@@ -721,6 +741,7 @@ Public Class Frm_Dalle
         '--> Armatures
 
         ' GereTransfertValeur(MyDalleLoc.NbLitsArmaActifs, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.NbLitsArmaActifs, lModif)
+        GereTransfertValeur(MyDalleLoc.lNoArma, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.lNoArma, lModif)
 
         For i As Integer = 0 To 1
 
@@ -754,14 +775,18 @@ Public Class Frm_Dalle
 
 #Region " Evènements sur la BO Armatures + évènements saisie "
 
-    Private Sub BOArma_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Lit2.CheckedChanged, chk_Lit1.CheckedChanged
+    Private Sub BOArma_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Lit2.CheckedChanged, chk_Lit1.CheckedChanged, chk_Lit0.CheckedChanged
 
         If lBuild Then Exit Sub
 
         Select Case sender.name
+            Case Me.chk_Lit0.Name : iLitSelect = -1 : iSelect = -1
+
             Case Me.chk_Lit1.Name : iLitSelect = 0 : iSelect = 100
             Case Me.chk_Lit2.Name : iLitSelect = 1 : iSelect = 200
         End Select
+
+        MyDalleLoc.lNoArma = (iLitSelect = -1)
 
         MAJ_ValeursLimites()
 
@@ -772,15 +797,18 @@ Public Class Frm_Dalle
         MAJI_StatutBOArma()
 
         Me.img_Dalle.Invalidate()
+
     End Sub
 
     Private Sub MAJI_StatutBOArma()
         Dim lBuildBack As Boolean = lBuild
         lBuild = True
 
+        Me.chk_Lit0.Checked = (iLitSelect = -1)
         Me.chk_Lit1.Checked = (iLitSelect = 0)
         Me.chk_Lit2.Checked = (iLitSelect = 1)
 
+        Me.chk_AjouterSupprimerLit.Visible = Not (iLitSelect = -1)
         Me.chk_AjouterSupprimerLit.Checked = False
 
         lBuild = lBuildBack

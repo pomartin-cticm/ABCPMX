@@ -149,14 +149,16 @@ Public Module Mod_Demarrage
             Case EnuMaitre.ArcelorMittal
                 LogicielInfo.MailSupport = EMAIL_ARCELORMITTAL
                 LogicielInfo.NomLogiciel = "ABC-PMX"
+                LogicielInfo.Racine = "ABCPMX"
 
             Case EnuMaitre.CTICM
                 LogicielInfo.MailSupport = EMAIL_CTICM
-                LogicielInfo.NomLogiciel = "ABC-PMX"
+                LogicielInfo.NomLogiciel = "PMX"
+                LogicielInfo.Racine = "ABCPMX"
+
         End Select
 
         LogicielInfo.Extension = "pmx"
-        LogicielInfo.Racine = "ABCPMX"
 
         LogicielRep.Install = Application.StartupPath
         LogicielRep.Config = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\" & LabelMaitre() & "\" _
