@@ -514,7 +514,7 @@ Public Class cls_ModeleP
     End Sub
 
     Public Sub MaillageProfileUsuels_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FyP As Decimal)
+                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FyP As Decimal, Optional lWeb As Boolean = True)
         '-------------------------------------------------------------------------------------------------------------------
         '   25/04/24 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -527,6 +527,7 @@ Public Class cls_ModeleP
         '   FyInf       [E] :   Limite d'élasticité semelle inf
         '   FyW         [E] :   Limite d'élasticité âme
         '   FyP         [E] :   Limite d'élasticité plat renfort
+        '   lWeb        [E] :   Indique si on prend en compte l'âme du profilé dans le modèle
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -547,7 +548,9 @@ Public Class cls_ModeleP
 
         '# Âme
 
-        Me.AddMaille(Hw * MyProfil.Tw, Hw, zRef - MyProfil.Tfs - Hw / 2, 1, 1, 1, FyW, (1 - RhoV), GammaM)
+        If lWeb Then
+            Me.AddMaille(Hw * MyProfil.Tw, Hw, zRef - MyProfil.Tfs - Hw / 2, 1, 1, 1, FyW, (1 - RhoV), GammaM)
+        End If
 
         '# Semelle inférieure
 
@@ -555,7 +558,7 @@ Public Class cls_ModeleP
 
         '# Congés supérieurs
 
-        If IsGreater(MyProfil.Rcs, 0) Then
+        If IsGreater(MyProfil.Rcs, 0) And lWeb Then
 
             Me.AddMailleConges(MyProfil.Rcs, zRef - MyProfil.Tfs, 1, 1, 1, FyW, (1 - RhoV), GammaM, cls_Maille.EnuTypeMaille.CongeSup)
 
@@ -563,7 +566,7 @@ Public Class cls_ModeleP
 
         '# Congés inférieurs
 
-        If IsGreater(MyProfil.Rci, 0) Then
+        If IsGreater(MyProfil.Rci, 0) And lWeb Then
 
             Me.AddMailleConges(MyProfil.Rci, zRef - MyProfil.ha + MyProfil.Tfi, 1, 1, 1, FyW, (1 - RhoV), GammaM, cls_Maille.EnuTypeMaille.CongeInf)
 

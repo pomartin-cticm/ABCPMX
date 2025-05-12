@@ -468,7 +468,7 @@
                 'myBeam.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, myBeam.Param.Gamma, RhoV,
                 '                                                 bEff(iNode), DeltaRd(iTravee)(iNodeDeb + iNode), myBeam.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
                 MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, rhoVLoc,
-                                                                 bEff(iNode), DeltaRd(iTravee)(iNode - iNodeDeb), MyPoutre.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
+                                                                 bEff(iNode), DeltaRd(iTravee)(iNode - iNodeDeb), MyPoutre.Dalle, True, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
 
                 If kfin > kDeb Then
                     pzANP(iNode, kfin) = pzANP(iNode, kDeb)
@@ -533,7 +533,7 @@
                 '==
 
                 MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, rhoVLoc,
-                                                                 bEff(iNode), DeltaRd(iTravee)(iNode - iNodeDeb), MyPoutre.Dalle, zANP, pMfRd(iNode, kDeb))
+                                                                 bEff(iNode), DeltaRd(iTravee)(iNode - iNodeDeb), MyPoutre.Dalle, True, zANP, pMfRd(iNode, kDeb))
 
                 If kfin > kDeb Then
                     pMfRd(iNode, kfin) = pMfRd(iNode, kDeb)
@@ -565,6 +565,8 @@
         '--> Déclarations
 
         Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
+        Const lWEB As Boolean = True
+        Dim lRec As Boolean
 
         '--> Initialisation
 
@@ -575,9 +577,9 @@
         For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
             For k = 0 To 1
                 If MEd(iNode, k) > 0 Then
-                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANE(iNode, k), True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, MyPoutre.Dalle.Ep_td)
+                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANE(iNode, k), True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, False, False, lWEB, lRec, MyPoutre.Dalle.Ep_td)
                 Else
-                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANE(iNode, k), False, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, MyPoutre.Dalle.Ep_td)
+                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANE(iNode, k), False, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, False, False, lWEB, lRec, MyPoutre.Dalle.Ep_td)
                 End If
             Next
         Next
@@ -616,6 +618,8 @@
 
         Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
         Dim kDeb, kFin As Integer
+        Const lWEB As Boolean = True
+        Dim lRec As Boolean
 
         '--> Initialisation
 
@@ -630,7 +634,7 @@
 
             For k = kDeb To kFin
 
-                ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANP(iNode, k), zANE(iNode, k), True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, MyPoutre.Dalle.Ep_td)
+                ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANP(iNode, k), zANE(iNode, k), True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec, MyPoutre.Dalle.Ep_td)
 
             Next
         Next

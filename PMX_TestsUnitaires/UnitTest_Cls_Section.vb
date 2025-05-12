@@ -1130,6 +1130,8 @@ Imports PMXMoteur2
         Dim z_ANE As Decimal
         Dim lFlexionPositive, lGEN_1_EC As Boolean
         Dim ValRef, DeltaV As Decimal
+        Const lWEB As Boolean = True
+        Dim lRec As Boolean
 
         c_sem_sup = 141.5 / 1000
         t_sem_sup = 15 / 1000 'c/t(sem,sup) = 9.43
@@ -1151,7 +1153,7 @@ Imports PMXMoteur2
         lGEN_1_EC = True
         z_ANE = 20 / 1000 'ANE dans la dalle
 
-        Dim classeSection As Integer = section.ClasseSection(z_ANE, 0, lFlexionPositive, section.lSlimFloor, section.lEnrobage, lGEN_1_EC, td)
+        Dim classeSection As Integer = section.ClasseSection(z_ANE, 0, lFlexionPositive, section.lSlimFloor, section.lEnrobage, lGEN_1_EC, False, False, lWEB, lRec, td)
         ValRef = 1
         DeltaV = (classeSection - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
@@ -1159,7 +1161,7 @@ Imports PMXMoteur2
         'Cas M>0 avec ANE dans l'ame
         z_ANE = -50 / 1000
         'alpha = 0.118
-        classeSection = section.ClasseSection(z_ANE, 0, lFlexionPositive, section.lSlimFloor, section.lEnrobage, lGEN_1_EC, td)
+        classeSection = section.ClasseSection(z_ANE, 0, lFlexionPositive, section.lSlimFloor, section.lEnrobage, lGEN_1_EC, False, False, lWEB, lRec, td)
         ValRef = 2
         DeltaV = (classeSection - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
@@ -1168,7 +1170,7 @@ Imports PMXMoteur2
         section.f_y.fs = 275
         epsilon_sem_sup = 0.9244
         'psi = -7.466
-        classeSection = section.ClasseSection(z_ANE, z_ANE, lFlexionPositive, section.lSlimFloor, section.lEnrobage, lGEN_1_EC, td)
+        classeSection = section.ClasseSection(z_ANE, z_ANE, lFlexionPositive, section.lSlimFloor, section.lEnrobage, lGEN_1_EC, False, False, lWEB, lRec, td)
         ValRef = 3
         DeltaV = (classeSection - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
@@ -1176,7 +1178,7 @@ Imports PMXMoteur2
         'Cas identique précédent mais avec M<0 et zAN dans la dalle
         z_ANE = 50 / 1000
         lFlexionPositive = False
-        classeSection = section.ClasseSection(z_ANE, z_ANE, lFlexionPositive, section.lSlimFloor, section.lEnrobage, lGEN_1_EC, td)
+        classeSection = section.ClasseSection(z_ANE, z_ANE, lFlexionPositive, section.lSlimFloor, section.lEnrobage, lGEN_1_EC, False, False, lWEB, lRec, td)
         'psi = 0.216
         ValRef = 3
         DeltaV = (classeSection - ValRef) / ValRef
@@ -1191,7 +1193,7 @@ Imports PMXMoteur2
         c_sem_sup = 146.5 / 1000
         t_sem_sup = 15 / 1000 'c/t(sem,sup) = 9.766
         epsilon_sem_sup = 0.9244
-        classeSection = section.ClasseSection(z_ANE, z_ANE, lFlexionPositive, section.lSlimFloor, section.lEnrobage, lGEN_1_EC, td)
+        classeSection = section.ClasseSection(z_ANE, z_ANE, lFlexionPositive, section.lSlimFloor, section.lEnrobage, lGEN_1_EC, False, False, lWEB, lRec, td)
         ValRef = 3
         DeltaV = (classeSection - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)

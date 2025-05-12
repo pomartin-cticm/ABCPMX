@@ -33,6 +33,7 @@ Module Mod_NoteCalcul
     Private Const TABAFF As String = " :\T50"
     Private Const TABEGAL As String = "\T55 = "
     Private Const SUPEGAL As String = ChrW(8805)
+    Private Const INFEGAL As String = ChrW(8804)
     Private Const TABSUPEGAL As String = "\T55 " & SUPEGAL & " "
     Private Const TABAFF2 As String = " :\T35"
     Private Const TABAFF3 As String = " :\T20"
@@ -1104,7 +1105,7 @@ Module Mod_NoteCalcul
 
         EditionParametresMaintiens(MyBeam)
 
-        '--[ Maintiens par le bac en phsase de construction par le bac acier
+        '--[ Maintiens par le bac en phase de construction par le bac acier
 
         EditionParametresMaintienBac(MyBeam)
 
@@ -2431,6 +2432,8 @@ Module Mod_NoteCalcul
         '   Edition définition connexion
         '----------------------------------------------------------------------------------------------
 
+        Dim lZone2 As Boolean = False
+
         If nbLignes + 12 > MAXLIGNEPPAG Then SautePage()
 
         AddTitreNdC(3, BlocG("CONNECTION_ARR"))
@@ -2488,6 +2491,8 @@ Module Mod_NoteCalcul
                 '                    Dim lDerniereTravee As Boolean 'Permet de gérer la séparation par une ligne grise entre deux travées comportant des maintiens latéraux consévutives
 
                 Dim iTraveeAffichee As Integer = 1
+                Dim strStar As String = ""
+                lZone2 = False
 
                 For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
                     For j As Integer = 0 To .NombreZones(i) - 1
@@ -2495,7 +2500,14 @@ Module Mod_NoteCalcul
                         InitialiseLigne(nbColonne, HLIGNE, True)
                         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, iTraveeAffichee)
                         AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.LongueurZone(i, j), Enu_TypeVariable.Longueur, 4, 0, NON, False))
-                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.NrTransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON, False))
+                        If (.NrTransZone(i, j) > 1) Then
+                            lZone2 = True
+                            strStar = " (*)"
+                        Else
+                            strStar = ""
+                        End If
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.NrTransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON, False) & strStar)
+
                         If lDalleMixteEtPerp Then
                             If .Espacement_Bac_TransZone(i, j) = 1 Then
                                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(.Espacement_Bac_TransZone(i, j), Enu_TypeVariable.SansType, 4, 0, NON, False) & " " & BlocG("RIB"))
@@ -2517,6 +2529,20 @@ Module Mod_NoteCalcul
                 Next
 
                 FinTableau()
+
+                If lZone2 Then
+
+                    AddLigneNDC("\T15" & "*" & "\T20" & RemplaceDollar(BlocG("SYREQUIREMENTS"), " \Is\i\-y\= :"))
+
+                    Dim syMini As Decimal = MyBeam.Dalle.SyMiniConnecteurs
+                    Dim syMaxi As Decimal = MyBeam.Dalle.SyMaxiConnecteurs(MyBeam.Section.ProfilA.Bfs, 2)
+
+                    AddLigneNDC("\T25" & " \Is\i\-y\= " & SUPEGAL & " " & GetStringInUnitN(syMini, Enu_TypeVariable.Dimension, 4, 3, True, True))
+                    AddLigneNDC("\T25" & " \Is\i\-y\= " & INFEGAL & " " & GetStringInUnitN(syMaxi, Enu_TypeVariable.Dimension, 4, 3, True, True) & " " & BlocG("FOR2"))
+
+                End If
+
+
             End If
 
         End With

@@ -15,6 +15,7 @@ WARNING					= Warning
 #FRM_ABOUT
 TITLE					= About $
 OK						= Ok
+DESCRIPTION_II			= Design of composite beams according to EN 1994-1-1
 DESCRIPTION				= Description
 DESCRIPTION_CONT		= ABC-PMX software aims at the calculation of composite beams according to EN 1994-1-1. Its development is co-funded by ArcelorMittal and CTICM. 
 INFORMATION				= Information

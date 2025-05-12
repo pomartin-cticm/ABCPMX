@@ -425,6 +425,7 @@ Imports PMXMoteur2
         Dim ageT As Integer = 50 * 365 '50 ans, en jours
         Dim ageT0 As Integer = 28
         Dim h0 As Decimal = 2 * 62 / 1000
+        h0 = h0 * (1 + myPoutre.Dalle.Bac.Hp * myPoutre.Dalle.Bac.LargeurBmoyenne / (myPoutre.Dalle.Bac.Ep * myPoutre.Dalle.EpaisseurActive))
         Dim PHIrh As Decimal = 1 + (1 - 50 / 100) / (0.1 * (h0 * 1000) ^ (1 / 3))
         Dim betaFcm As Decimal = 16.8 / Math.Sqrt(25 + 8)
         Dim betaT0 As Decimal = 1 / (0.1 + ageT0 ^ 0.2)
@@ -488,7 +489,7 @@ Imports PMXMoteur2
         '--> Coefficient d'équivalent CE SH
 
         ageT0 = 1
-        h0 = 2 * myPoutre.Dalle.EpaisseurActive
+        'h0 = 2 * myPoutre.Dalle.EpaisseurActive
         PHIrh = 1 + (1 - 50 / 100) / (0.1 * (h0 * 1000) ^ (1 / 3))
         betaFcm = 16.8 / Math.Sqrt(25 + 8)
         betaT0 = 1 / (0.1 + ageT0 ^ 0.2)
@@ -1850,6 +1851,7 @@ Imports PMXMoteur2
         Dim ageT As Integer = 50 * 365 '50 ans, en jours
         Dim ageT0 As Integer = 28
         Dim h0 As Decimal = 164 / 1000
+        h0 = h0 * (1 + myBeam.Dalle.Bac.Hp * myBeam.Dalle.Bac.LargeurBmoyenne / (myBeam.Dalle.Bac.Ep * myBeam.Dalle.EpaisseurActive))
         Dim PHIrh As Decimal = 1 + (1 - 50 / 100) / (0.1 * (h0 * 1000) ^ (1 / 3))
         Dim betaFcm As Decimal = 16.8 / Math.Sqrt(25 + 8)
         Dim betaT0 As Decimal = 1 / (0.1 + ageT0 ^ 0.2)
@@ -1916,7 +1918,7 @@ Imports PMXMoteur2
 
         ageT = 50 * 365 '50 ans, en jours
         ageT0 = 1
-        h0 = 164 / 1000
+        'h0 = 164 / 1000
         PHIrh = 1 + (1 - 50 / 100) / (0.1 * (h0 * 1000) ^ (1 / 3))
         betaFcm = 16.8 / Math.Sqrt(25 + 8)
         betaT0 = 1 / (0.1 + ageT0 ^ 0.2)
@@ -2089,7 +2091,8 @@ Imports PMXMoteur2
         Dim NR, deltazG, Mr, deltaR As Decimal
         NR = 325 * 10 ^ (-6) * myBeam.Section.Acier.EYoung / myBeam.Elements(4).nEqDalle * Beff * myBeam.Dalle.EpaisseurActive * 10 ^ 6 'N
 
-        myBeam.Section.ProprietesElastiquesMixteMyy(1, True, myBeam.Param.Gamma, 24.74, 25.19, Beff, myBeam.Dalle, zANE, InertieY, Mel)
+        'myBeam.Section.ProprietesElastiquesMixteMyy(1, True, myBeam.Param.Gamma, 24.74, 25.19, Beff, myBeam.Dalle, zANE, InertieY, Mel)
+        myBeam.Section.ProprietesElastiquesMixteMyy(1, True, myBeam.Param.Gamma, 24.74, 24.47, Beff, myBeam.Dalle, zANE, InertieY, Mel)
         deltazG = myBeam.Dalle.Bac.Hp + myBeam.Dalle.EpaisseurActive / 2 - zANE
         Mr = NR * deltazG
         deltaR = (Mr * myBeam.LongueurTravee(myBeam.IndicePremiereTravee) ^ 2) / (8 * myBeam.Section.Acier.EYoung * 10 ^ 6 * InertieY)

@@ -430,6 +430,8 @@ ZSHEAR					= Location of the shear center
 ZSI_LAYERS				= Location of the layer axis, measured from the upper face of the slab
 ZS_REINF				= Location of the layer axis, measured from the upper face of the profile
 NOREINFORCEMENT			= Longitudinal reinforcements are not defined
+SYREQUIREMENTS			= Requirements on transverse spacing $
+FOR2					= For 2 studs
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties

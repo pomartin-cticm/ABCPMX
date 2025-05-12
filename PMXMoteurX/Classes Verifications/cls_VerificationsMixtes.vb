@@ -167,7 +167,8 @@
         Dim zANE(,) As Decimal = Nothing                ' Position des ANE sous moment 
         Dim lRElastiqueImpose As Boolean = False        ' Vérification élastique imposée
         'Dim lRElastique As Boolean
-        Dim ClasseSection(,) As Integer = Nothing       ' Tableau dimensions (NbNodes, 0 ou 1 pour gauche ou droite)
+        Dim ClasseSection(,) As Integer = Nothing       ' Tableau dimensions (NbNodes, 0 ou 1 pour gauche ou droite) Classe de la section
+        Dim lReclasse(,) As Boolean = Nothing           ' Tableau dimensions (NbNodes, 0 ou 1 pour gauche ou droite) Indique si on a reclassé la section en ignorant l'âme, pour obtenir une meilleure classe
         Dim Beff() As Decimal = {0}                     ' Largeurs participantes de la dalle
         Dim lSimple As Boolean = False
         '   Dim ClasseP(), ClasseM() As Integer         ' Tableau des classes de section en flexion poisitive et négative
@@ -354,11 +355,14 @@
                 ' avec prise en compte de la connection,
                 ' sans prise en compte de la réduction induit par l'effort tranchant 
 
-                Me.MaillageProprietesPlastiquesN(iCombi, myBeam, MEd, DeltaRd, Beff, iNodeZero, zANP, MplRd)
+                Me.MaillageProprietesPlastiquesN(iCombi, myBeam, MEd, DeltaRd, Beff, iNodeZero, True, zANP, MplRd)
+
+                '# Calcul des moments plastiques  MfRd
+                Me.MaillageProprietesMfRd(myBeam, MEd, DeltaRd, Beff, MfRd)
 
                 '# Classes des sections
 
-                Me.CalculeClasseSectionsMaillage(myBeam, MEd, zANE, zANP, ClasseSection, lClasse3, lClasse4)
+                Me.CalculeClasseSectionsMaillage(myBeam, MEd, MfRd, zANE, zANP, ClasseSection, lReclasse, lClasse3, lClasse4)
                 'lCombiClass3 = lCombiClass3 And lClasse3
                 'lCombiClass4 = lCombiClass4 And lClasse4
 
@@ -374,7 +378,7 @@
 
                 '# Vérification sous moment fléchissant
 
-                Me.RunCritereMoments(myBeam, lFirst, iCombi, Me.lCalculPlastic, lClasse3, MEd, SigmaELU, MplRd)
+                Me.RunCritereMoments(myBeam, lFirst, iCombi, Me.lCalculPlastic, lClasse3, MEd, SigmaELU, MplRd, MfRd, lReclasse)
 
                 '# Vérification sous effort tranchant
 
@@ -397,8 +401,8 @@
 
                 If Me.ShearB.lCheckRequired Or Not (lCalculPlastic) Then
 
-                    '# Calcul des moments plastiques  MfRd
-                    Me.MaillageProprietesMfRd(myBeam, MEd, DeltaRd, Beff, MfRd)
+                    ''# Calcul des moments plastiques  MfRd
+                    'Me.MaillageProprietesMfRd(myBeam, MEd, DeltaRd, Beff, MfRd)
 
                     '# Interaction MV pour le voilement par cisaillement
                     Me.RunCritereInteractionMVoilementCisaillement(myBeam, iCombi, MEd, VEd, VbRd, MplRd, MfRd)
@@ -413,7 +417,7 @@
                     ' avec prise en compte de la connection,
                     ' sans prise en compte de la réduction induit par l'effort tranchant 
 
-                    Me.MaillageProprietesPlastiquesN(iCombi, myBeam, MEd, DeltaRd, Beff, iNodeZero, zANPMV, MVRd, Me.RhoV)
+                    Me.MaillageProprietesPlastiquesN(iCombi, myBeam, MEd, DeltaRd, Beff, iNodeZero, True, zANPMV, MVRd, Me.RhoV)
 
                     '# Vérification sous interaction MV
 
@@ -450,7 +454,7 @@
     End Sub
 
     Private Sub MaillageProprietesPlastiquesN(iCombi As Integer, myBeam As cls_Poutre, MEd(,) As Decimal, DeltaRd(,) As List(Of Decimal),
-                                              bEff() As Decimal, iNodeZero(,) As Integer,
+                                              bEff() As Decimal, iNodeZero(,) As Integer, lWeb As Boolean,
                                               ByRef pzANP(,) As Decimal, ByRef pMPlRd(,) As Decimal,
                                               Optional rhoV As Decimal(,) = Nothing)
         '----------------------------------------------------------------------------------------------------------
@@ -466,6 +470,7 @@
         '   iNodeZero       [E] :   Indice des noeuds des sections indiquant la distance requise pour la connexion des armatures en M<0
         '   bEff            [E] :   Largeur efficace de dalle
         '   RhoV            [E] :   Coefficient pour l'interaction MV
+        '   lWeb            [E] :   Indique si on prend en compte l'âme du profilé (sinon, on calcule un MfplRd)
         '   pzANP           [S] :   position ANP
         '   pMplRd          [S] :   moment plastique (en fonction du signe de MEd)
         '----------------------------------------------------------------------------------------------------------
@@ -543,7 +548,7 @@
                 End If
 
                 myBeam.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, myBeam.Param.Gamma, rhoVLoc, bEff(iNode),
-                                                               RdConnex, myBeam.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
+                                                               RdConnex, myBeam.Dalle, lWeb, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
 
                 '--( Traitement du coefficient beta
 
@@ -700,7 +705,7 @@
                 RConnex = Math.Min(RConnexG, RConnexD)
 
                 MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, rhoVLoc,
-                                                                 bEff(iNode), RConnex, MyPoutre.Dalle, zANP, pMfRd(iNode, kDeb))
+                                                                 bEff(iNode), RConnex, MyPoutre.Dalle, True, zANP, pMfRd(iNode, kDeb))
 
                 If kfin > kDeb Then
                     pMfRd(iNode, kfin) = pMfRd(iNode, kDeb)
@@ -732,6 +737,8 @@
         '--> Déclarations
 
         Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
+        Const lWEB As Boolean = True
+        Dim lRec As Boolean
 
         '--> Initialisation
 
@@ -742,9 +749,9 @@
         For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
             For k = 0 To 1
                 If MEd(iNode, k) > 0 Then
-                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANE(iNode, k), True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, MyPoutre.Dalle.Ep_td)
+                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANE(iNode, k), True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec, MyPoutre.Dalle.Ep_td)
                 Else
-                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANE(iNode, k), False, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, MyPoutre.Dalle.Ep_td)
+                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANE(iNode, k), False, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec, MyPoutre.Dalle.Ep_td)
                 End If
             Next
         Next
@@ -762,19 +769,20 @@
 
     End Sub
 
-    Private Sub CalculeClasseSectionsMaillage(MyPoutre As cls_Poutre, MEd(,) As Decimal, zANE(,) As Decimal,
-                                              zANP(,) As Decimal, ByRef ClasseSection(,) As Integer,
+    Private Sub CalculeClasseSectionsMaillage(MyPoutre As cls_Poutre, MEd(,) As Decimal, MfRd(,) As Decimal, zANE(,) As Decimal,
+                                              zANP(,) As Decimal, ByRef ClasseSection(,) As Integer, ByRef lReclasse(,) As Boolean,
                                               ByRef lClasse3 As Boolean, ByRef lClasse4 As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   02/11/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Calcul de la calsse des sections le long du maillage
         '----------------------------------------------------------------------------------------------------------
-        '   myBeam        [E] :   Poutre à traiter
+        '   myBeam          [E] :   Poutre à traiter
         '   MEd             [E] :   Diagramme des moments aux ELU
         '   zANP            [E] :   Positions des ANP plastiques sous le moment ELU
         '   zANE            [E] :   Position de l'ANE au droit du noeud
         '   ClasseSection   [S] :   Classe des sections (calculée en fonction du signe de MEd)
+        '   lReclasse       [S] :   Indique si la section a été reclassée en négligeant l'âme
         '   lClasse3        [S] :   Indique si au moins une des sections est de classe 3
         '   lClasse4        [S] :   Indique si au moins une des sections est de classe 4
         '----------------------------------------------------------------------------------------------------------
@@ -783,10 +791,13 @@
 
         Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
         Dim kDeb, kFin As Integer
+        Dim lWEB As Boolean = True
+        'Dim lRec As Boolean
 
         '--> Initialisation
 
         ReDim ClasseSection(MyPoutre.Nodes.nbNodes - 1, 1)
+        ReDim lReclasse(MyPoutre.Nodes.nbNodes - 1, 1)
 
         '--> Boucle sur les noeuds
 
@@ -797,7 +808,9 @@
 
             For k = kDeb To kFin
 
-                ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANP(iNode, k), zANE(iNode, k), True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, MyPoutre.Dalle.Ep_td)
+                lWEB = IsGreater(Math.Abs(MEd(iNode, k)), Math.Abs(MfRd(iNode, k)))
+
+                ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANP(iNode, k), zANE(iNode, k), True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, False, False, lWEB, lReclasse(iNode, k), MyPoutre.Dalle.Ep_td)
 
             Next
         Next
@@ -1346,7 +1359,7 @@
 #Region " Critères de vérification "
 
     Private Sub RunCritereMoments(MyPoutre As cls_Poutre, ByRef lFirst As Boolean, iCombi As Integer, lPlastique As Boolean, lClasse3 As Boolean,
-                                  MEd(,) As Decimal, SigmaELU(,,) As Decimal, MplRd(,) As Decimal)
+                                  MEd(,) As Decimal, SigmaELU(,,) As Decimal, MplRd(,) As Decimal, MfRd(,) As Decimal, lReclasseW(,) As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   25/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -1359,8 +1372,9 @@
         '   lPlastique  [E] :   Indique si contexte de calcul plastique 
         '   MEd         [E] :   Table des moments fléchissants le long de la barre
         '   SigmaELU    [E] :   Contraintes normales aux ELU
-        '   MplRdP      [E] :   Table des moments plastiques > 0 le long de la barre
-        '   MplRdM      [E] :   Table des moments plastiques < 0 le long de la barre
+        '   MplRd       [E] :   Table des moments plastiques le long de la barre (tenant compte du signe)
+        '   MfRd        [E] :   Table des moments plastiques le long de la barre, tenant compte du signe et ignorant la contribution de l'âme
+        '   lReclasseW  [E] :   Indique si la section a été reclassée en ignorant la contribution de l'âme
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -1379,7 +1393,7 @@
             RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
         Else
             '# Résistance plastique possible
-            RunCriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRd)
+            RunCriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRd, MfRd, lReclasseW)
         End If
         lFirst = False
     End Sub
@@ -1588,7 +1602,7 @@
 
     End Sub
 
-    Private Sub RunCriteresMomentsPlastiques(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, MplRd(,) As Decimal)
+    Private Sub RunCriteresMomentsPlastiques(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, MplRd(,) As Decimal, MfRd(,) As Decimal, lReclasseW(,) As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -1624,7 +1638,12 @@
                 If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
                 If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
                 For k = iDebK To iFinK
-                    Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MplRd(iNode, k))
+                    If lReclasseW(iNode, k) Then
+                        ' Si la section a été reclassée pour bénéficier d'une résistance plastique, on ne tient pas compte de l'âme pour le calcul de MRd
+                        Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MfRd(iNode, k))
+                    Else
+                        Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MplRd(iNode, k))
+                    End If
                 Next
             Next
         Next

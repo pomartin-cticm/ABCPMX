@@ -160,6 +160,8 @@ Public Class cls_VerificationsAcier
         Dim lMaintienBac As Boolean = myBeam.MaintienBac.lMaintienBac
         Dim LambdaBLT, AlphaLT As Decimal
         Dim VmRd As Decimal
+        Const lWEB As Boolean = True
+        Dim lRec As Boolean
 
         '--> Initialisations
 
@@ -220,8 +222,8 @@ Public Class cls_VerificationsAcier
         '    La classe des sections ne dépend pas du chargement (il n'y a pas d'effort axial) ni des contraintes.
         '    On classe donc les sections une fois pour toute, en dehors de la boucle sur les combinaisons de calcul
 
-        ClasseP = myBeam.Section.ClasseSection(zANP, zANE, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1)
-        ClasseM = myBeam.Section.ClasseSection(zANP, zANE, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1)
+        ClasseP = myBeam.Section.ClasseSection(zANP, zANE, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec)
+        ClasseM = myBeam.Section.ClasseSection(zANP, zANE, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec)
 
         '# Type de vérification pour les sections
 

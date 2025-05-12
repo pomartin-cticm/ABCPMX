@@ -131,7 +131,8 @@ Public Class cls_VerifFeuAcier
         Dim lMontantR As Boolean = myBeam.lTraveeConsoleGauche And myBeam.lTraveeConsoleDroite
         Dim RatioGammaM As Decimal
         Dim FyAcier As Decimal
-
+        Const lWEB As Boolean = True
+        Dim lRec As Boolean
         'Dim pTimeR As Decimal
 
         '--( Initialisation
@@ -180,8 +181,8 @@ Public Class cls_VerifFeuAcier
         '    La classe des sections ne dépend pas du chargement (il n'y a pas d'effort axial) ni des contraintes.
         '    On classe donc les sections une fois pour toute, en dehors de la boucle sur les combinaisons de calcul
 
-        ClasseP = myBeam.Section.ClasseSection(zANP0, zANE0, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, 0, True)
-        ClasseM = myBeam.Section.ClasseSection(zANP0, zANE0, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, 0, True)
+        ClasseP = myBeam.Section.ClasseSection(zANP0, zANE0, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, True, False, lWEB, lrec, 0)
+        ClasseM = myBeam.Section.ClasseSection(zANP0, zANE0, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, True, False, lWEB, lrec, 0)
 
         Me.TimeInter = CInt((Me.TimeInter / DeltaT)) * DeltaT
 

@@ -5405,7 +5405,7 @@ Public Class cls_Poutre
 
             For iNode = 0 To NbNodes - 1
 
-                If iNode = 0 Then kDeb = 1 Else kDeb = 1
+                If iNode = 0 Then kDeb = 1 Else kDeb = 0
                 If iNode = NbNodes - 1 Then kFin = 0 Else kFin = 1
 
                 For k = kDeb To kFin

@@ -115,6 +115,51 @@
 
 #Region " Propriétés "
 
+    Public ReadOnly Property SyMaxiConnecteurs(Bf As Decimal, Nr As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------
+        '   07/05/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------
+        '   Renvoie l'espacement transversal maxi des connecteurs
+        '---------------------------------------------------------------------------------------------
+
+        Get
+
+            Dim SyMaxi As Decimal
+            Const Ed As Decimal = 20 / 1000
+
+            If Me.lMixte Then
+                SyMaxi = 4 * Me.Goujons.d
+            Else
+                SyMaxi = 2.5 * Me.Goujons.d
+            End If
+
+            SyMaxi = (Bf - 2 * Ed) / (Nr - 1)
+
+            Return SyMaxi
+        End Get
+    End Property
+
+    Public ReadOnly Property SyMiniConnecteurs As Decimal
+        '---------------------------------------------------------------------------------------------
+        '   07/05/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------
+        '   Renvoie l'espacement transversal mini des connecteurs
+        '---------------------------------------------------------------------------------------------
+
+        Get
+
+            Dim SyMini As Decimal
+
+            If Me.lMixte Then
+                SyMini = 4 * Me.Goujons.d
+            Else
+                SyMini = 2.5 * Me.Goujons.d
+            End If
+
+            Return SyMini
+        End Get
+    End Property
+
     Public ReadOnly Property TauxArma
         '---------------------------------------------------------------------------------------------
         '   29/01/25 :  Création - POM
@@ -213,7 +258,7 @@
 
         Dim MyH0 As Decimal
         Dim Ac, perimU As Decimal
-        Dim b As Decimal 'Largeur de la plaque à l'interface de la dalle béton
+        Dim b_Inter As Decimal                    'Largeur de la plaque ou semelle à l'interface de la dalle béton
         Dim b_dispo, b1, b2 As Decimal
 
         If MyPoutre.lIntermediaire Then 'poutre intermédiaire
@@ -247,33 +292,35 @@
 
         Select Case MyPoutre.Section.ProfilA.typeProfileAcier
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
-                b = MyPoutre.Section.ProfilA.Bfs
+                b_Inter = MyPoutre.Section.ProfilA.Bfs
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                b = MyPoutre.Section.ProfilA.Plat_b
+                b_Inter = MyPoutre.Section.ProfilA.Plat_b
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                b = MyPoutre.Section.ProfilA.Bfi
+                b_Inter = MyPoutre.Section.ProfilA.Bfi
         End Select
 
         Select Case Me.type
             Case Enum_TypeDalle.Pleine 'dans le cas d'une slimfloor, th = 0
-                Ac = b_dispo * Me.Ep_td + Me.Ep_th * (b + Me.Ep_th * Math.Tan(Me.ThetaRd))
-                perimU = 2 * b_dispo - b + 2 * Me.Ep_th / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 'GUD: Rajout du *2 devant le Me.th/math.cos ... -> A vérifier car je me suis basé sur la formule (65) du MT
+                Ac = b_dispo * Me.Ep_td + Me.Ep_th * (b_Inter + Me.Ep_th * Math.Tan(Me.ThetaRd))
+                perimU = 2 * b_dispo - b_Inter + 2 * Me.Ep_th / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 'GUD: Rajout du *2 devant le Me.th/math.cos ... -> A vérifier car je me suis basé sur la formule (65) du MT
 
             Case Enum_TypeDalle.Mixte
                 If Me.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
                     Ac = b_dispo * (Me.EpaisseurActive + Bac.Hp * Bac.LargeurBmoyenne / Bac.Ep)
                     perimU = b_dispo
                 Else
-                    Ac = b_dispo * Me.EpaisseurActive
+                    'R25-002
+                    'Ac = b_dispo * Me.EpaisseurActive
+                    Ac = b_dispo * (Me.EpaisseurActive + Bac.Hp * Bac.LargeurBmoyenne / Bac.Ep)
                     perimU = b_dispo
                 End If
 
             Case Enum_TypeDalle.PartiellementPrefabriquee
                 Ac = b_dispo * Me.Ep_td
-                perimU = 2 * b_dispo - b
+                perimU = 2 * b_dispo - b_Inter
 
             Case Enum_TypeDalle.PlancherPrefabrique 'dans ce cas, la section est nécessairement une slimfloor
-                Ac = b_dispo * Me.EpaisseurActive + b * Me.Cofradal.dp
+                Ac = b_dispo * Me.EpaisseurActive + b_Inter * Me.Cofradal.dp
                 perimU = b_dispo
 
         End Select

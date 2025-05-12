@@ -109,6 +109,8 @@ Public Class cls_Section
         Dim lFlexionPositive As Boolean = True
         Dim lBetonSlimfloor As Boolean = False
         Dim lBetonEnrobage As Boolean = False
+        Const lWEB As Boolean = True
+        Dim lRec As Boolean
 
         'Initialisation
         If lCompressionPure Then
@@ -119,7 +121,7 @@ Public Class cls_Section
             zANP = Me.ProfilA.zANP
         End If
 
-        classeLoc = Me.ClasseSection(zANP, zANE, lFlexionPositive, lBetonSlimfloor, lBetonEnrobage, lG1_EN, 0, False, lCompressionPure)
+        classeLoc = Me.ClasseSection(zANP, zANE, lFlexionPositive, lBetonSlimfloor, lBetonEnrobage, lG1_EN, False, lCompressionPure, lWEB, lrec, 0)
 
         Return classeLoc
     End Function
@@ -291,7 +293,7 @@ Public Class cls_Section
     End Sub
 
     Public Sub ProprietesPlastiquesMixteMyyEta(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
-                                               bEff As Decimal, DeltaRd As Decimal, MyDalle As cls_Dalle,
+                                               bEff As Decimal, DeltaRd As Decimal, MyDalle As cls_Dalle, lWeb As Boolean,
                                                ByRef zANP As Decimal, ByRef MplRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
@@ -305,6 +307,7 @@ Public Class cls_Section
         '   bEff        [E] :   Largeur efficace de la dalle (si secion mixte)
         '   DeltaRd     [E] :   Cumul des résistance des connecteurs de la dalle jusqu'au point de moment nul (si section mixte)
         '   MyDalle     [E] :   Dalle
+        '   lWeb        [E] :   Indique si on prend en compte l'âme dans le calcul (MfRd sinon)
         '   zANP        [S] :   Position axe neutre plastique
         '   MplRd       [S] :   Moment plastique
         '-------------------------------------------------------------------------------------------------------------------
@@ -327,7 +330,7 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        MyModele.MaillageProfileUsuels_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd)
+        MyModele.MaillageProfileUsuels_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, lWeb)
 
         '# Béton d'enrobage
 
@@ -1576,8 +1579,8 @@ Public Class cls_Section
     ''' <param name="td">Optionel: indique l'épaisseur totale de la dalle (si pertinent)</param>
     ''' <returns></returns>
     Public Function ClasseSection(zANP As Decimal, zANE As Decimal, lFlexionPositive As Boolean,
-                                  lBetonSlimfloor As Boolean, lBetonEnrobage As Boolean, lG1_EN As Boolean, Optional td As Decimal = 0,
-                                  Optional lCalculFeu As Boolean = False, Optional lCompressionPure As Boolean = False) As Integer
+                                  lBetonSlimfloor As Boolean, lBetonEnrobage As Boolean, lG1_EN As Boolean, lCalculFeu As Boolean, lCompressionPure As Boolean, lWeb As Boolean, ByRef lReclasse As Boolean,
+                                  Optional td As Decimal = 0) As Integer
 
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
@@ -1590,7 +1593,12 @@ Public Class cls_Section
         '   lG1_EN              [E] :   Indique si le calcul de la classe se fait selon les Eurocodes actuels (True) ou selon la deuxieme génération d'Eurocodes (False)
         '   td                  [E] :   Epaisseur totale de la dalle (hors renformis)
         '   lCalculFeu          [E] :   Indique si calcul au feu
+        '   lCompressionPure    [E] :   Indique si on est en compression pure
+        '   lWeb                [E] :   Indique s'il est possible de ne pas prendre en compte la classe de l'âme (POM) (On peut la négliger si paramètre à faux)
+        '   lReclasse           [E] :   Indique si la section  été reclassée après avoir négligé l'âme (POM)
         '----------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
 
         Dim classeSemellesSup, classeAme, classeSemellesInf, classePlatInfSFB, classeSectionTotale As Integer
         Dim lSemelleSupComprimeeLoc, lSemelleInfComprimeeLoc As Boolean
@@ -1599,6 +1607,7 @@ Public Class cls_Section
         Dim epsilon_finf As Decimal = Epsilon_Inf
         Dim epsilon_platSFB As Decimal '= Me.Epsilon_Spd
         ' Dim alpha, psi As Decimal
+        Dim classeSectionTotaleR As Integer
 
         If Me.lSlimFloor Then epsilon_platSFB = Me.Epsilon_Spd
         If lCalculFeu Then
@@ -1616,6 +1625,8 @@ Public Class cls_Section
         ' --> Initialisation des variables locales 
 
         calcul_cf_tf(cfsup, tfsup, cfinf, tfinf, cplat, tplat) 'calcul les différentes valeurs de c et t pour la semelle sup, inf et le plat soudé (le cas échéant)
+
+        lReclasse = False
 
         ' --> Calcul classe semelle supérieure
 
@@ -1646,9 +1657,18 @@ Public Class cls_Section
         classeAme = Me.ClassificationPlastiqueAme(lFlexionPositive, zANP, lG1_EN, lCalculFeu)
 
         ' --> Calcul classe section totale 
-        classeSectionTotale = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, Math.Max(classePlatInfSFB, classeAme)))
 
-        If classeSectionTotale = 3 Then
+        classeSectionTotale = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, Math.Max(classePlatInfSFB, classeAme)))
+        If Not lWeb Then
+            classeSectionTotaleR = Math.Max(2, Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, classePlatInfSFB)))
+            '--( Si la classe de la section est plus favorable sans lâme, on la reclasse (uniquement si cela est possible, c'est à dire lWeb=false, et si on reclasse pour du calcul plastique)
+            If (classeSectionTotaleR < classeSectionTotale) And (classeSectionTotaleR = 2) Then
+                lReclasse = True
+                classeSectionTotale = classeSectionTotaleR
+            End If
+        End If
+
+        If (classeSectionTotale = 3) Then
 
             '---------------------------------------------
             '---------------------------------------------
@@ -1671,7 +1691,18 @@ Public Class cls_Section
             ' --> Calcul classe section totale
 
             classeSectionTotale = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, Math.Max(classePlatInfSFB, classeAme)))
-            classeSectionTotale = Math.Max(classeSectionTotale, 3)
+            If Not lWeb Then
+                '--( Si la classe de la section est plus favorable sans lâme, on la reclasse (uniquement si cela est possible)
+                classeSectionTotaleR = Math.Max(2, Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, classePlatInfSFB)))
+                If (classeSectionTotaleR < classeSectionTotale) And (classeSectionTotaleR = 2) Then
+                    lReclasse = True
+                    classeSectionTotale = classeSectionTotaleR
+                End If
+
+            Else
+                classeSectionTotale = Math.Max(classeSectionTotale, 3)
+
+            End If
 
         End If
 

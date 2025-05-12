@@ -142,6 +142,8 @@
         'Dim EpsilonW As Decimal
         'Dim lEnrob As Boolean = myBeam.lEnrobage
         'Dim lproPRS As Boolean = Not myBeam.Section.lLamine
+        Const lWEB As Boolean = True
+        Dim lRec As Boolean
 
         '--> Initialisations
 
@@ -180,8 +182,8 @@
 
         '# Classes de la section
 
-        ClasseP = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1)
-        ClasseM = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1)
+        ClasseP = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec)
+        ClasseM = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec)
 
         '# Type de vérification pour les sections
 
