@@ -796,6 +796,14 @@ Module Mod_Outils
                     Unite = SEP & LogicielInfo.Unit_Longueur(0) & "2"
                 End If
 
+            Case Enu_TypeVariable.ChargeLineique
+                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                If lNdC Then
+                    Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+                Else
+                    Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+                End If
+
             Case Enu_TypeVariable.ChargeSurfacique
                 kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2
                 If lNdC Then

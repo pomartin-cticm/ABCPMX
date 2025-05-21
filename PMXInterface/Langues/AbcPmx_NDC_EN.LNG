@@ -596,6 +596,10 @@ WSLENDERNESS			= Web slenderness
 WSLENDERNESSLIMIT		= Limit of web slenderness
 WTOFWEBS				= Web to flanges welds 
 
+#NDC_DETAILSULS
+TITLE					= Detailed ULS checking
+BENDINGR				= Bending resistance
+
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Serviceability Limit States
 DEFLECTIONS				= Deflections

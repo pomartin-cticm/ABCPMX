@@ -13,10 +13,11 @@ VERSIONLINK     		= Voulez-vous être redirigé vers le site web du CTICM ?
 WARNING					= Avertissement
 
 #FRM_ABOUT
-TITLE					= A propos d'ABCPMX-II
+TITLE					= A propos du logiciel $
 OK						= Ok
+DESCRIPTION_II			= Calcul des poutres mixtes acier-béton selon la NF EN 1994-1-1
 DESCRIPTION				= Description
-DESCRIPTION_CONT		= Le logiciel ABC-PMX vise le calcul de poutres mixtes selon l'EN 1994-1-1. Son développement est cofinancé par ArcelorMittal et le CTICM.
+DESCRIPTION_CONT		= Le logiciel $ vise le calcul de poutres mixtes selon l'EN 1994-1-1. Son développement est cofinancé par ArcelorMittal et le CTICM.
 INFORMATION				= Information
 MAITRE					= Droits
 VERSION					= Version
@@ -434,7 +435,7 @@ FIRECALCULATION			= Calcul au feu
 SURFACETYPE				= Type de surface
 PROTECTED				= Protégé
 UNPROTECTED				= Non protégé
-GALVANISED				= Galvanisé
+GALVANISED				= Poutre acier galvanisée
 PROTECTIONTYPE			= Type de protection
 SPRAY					= Flocage
 INTUMESCENTPAINT		= Peinture intumescente
@@ -480,6 +481,7 @@ CONSTANTRHOC			= Masse volumique du béton constante
 MOISTURECONTENT			= Teneur en eau
 ENCASEDROOTFILLET		= Les congés de raccordement sont pris en compte dans le calcul des sections enrobées selon l'Annexe F de l'EN 1994-1-2
 SIZEELT					= Épaisseur des éléments
+PROTECTEDTROUGH			= Les creux d'ondes au dessus de la semelle supérieure sont remplis
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Coefficients d'accompagnement
@@ -820,10 +822,11 @@ PREPUNCHED				= Bac prépercé
 PRESLAB					= Parti préfa.
 REBARS					= Armatures longitudinales
 REBARSTEEL				= Acier des armatures								   
+REINFLAYER0				= Pas d'armature définie
 REINFLAYER1				= Première nappe
 REINFLAYER2				= Deuxième nappe
 REMOVELAYER				= Supprimer la deuxième nappe d'armatures
-RIBCONFIG				= Configuration of the rib at beam support
+RIBCONFIG				= Configuration des nervures au droit de la poutre
 RIBORIENT				= Orientation du bac
 SECONDLAYER				= Deuxième nappe d'armature
 SHEETBASE				= Depuis la base de donnée
@@ -845,6 +848,7 @@ ERRORNWC				= La masse volumique du béton normal ne doit pas être inférieure 
 ERRORCCOVER1			= Lit d'armature n°$
 ERRORCCOVER2			= L'épaisseur d'enrobage ($) devrait être supérieure à la valeur minimale requise pour l'adhérence ($)
 REINFRATIO				= Taux d'armature
+NOREINFORCEMENT			= Pour les poutres mixtes sans parties en console ou pour les poutres non mixtes, la définition des armatures longitudinales n'est pas requise
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre

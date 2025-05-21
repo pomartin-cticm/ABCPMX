@@ -407,6 +407,7 @@ Public Module Mod_Declarations
         Dimension
         Effort
         ForceRepartie
+        ChargeLineique
         ChargeSurfacique
         Frequence
         Inertie

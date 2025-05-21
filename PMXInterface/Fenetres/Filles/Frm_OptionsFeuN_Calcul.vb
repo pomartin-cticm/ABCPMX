@@ -100,6 +100,8 @@ Public Class Frm_OptionsFeuN_Calcul
 
             '--> Options de calcul
 
+            Me.chk_DalleFEM.Checked = .lDalleFEM
+
             MAJI_FEM(myBeam)
             Me.txt_tDalleFEMmax.Text = GetStringInUnitN(.tDalleEFmax, Enu_TypeVariable.Dimension, 3, 2, Enu_AfficheUnite.Non, True)
             Me.chk_ArmaComp.Checked = .lArmaCompression
@@ -312,6 +314,18 @@ Public Class Frm_OptionsFeuN_Calcul
         Return lOk
     End Function
 
+    Private Sub chk_RhoCconstante_CheckedChanged(sender As Object, e As EventArgs) Handles chk_RhoCconstante.CheckedChanged
+        If lBuild Then Exit Sub
+
+        Frm_OptionsFeuN.BeamLoc.ParamFeu.lRhoCvar = Not chk_RhoCconstante.Checked
+
+    End Sub
+    Private Sub chk_ANFrance_CheckedChanged(sender As Object, e As EventArgs) Handles chk_ANFrance.CheckedChanged
+        If lBuild Then Exit Sub
+
+        Frm_OptionsFeuN.BeamLoc.ParamFeu.lANFrance = chk_ANFrance.Checked
+
+    End Sub
 
 #End Region
 

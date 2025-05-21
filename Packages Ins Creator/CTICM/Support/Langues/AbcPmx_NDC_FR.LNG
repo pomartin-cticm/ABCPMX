@@ -430,6 +430,8 @@ ZSHEAR					= Position centre de cisaillement
 ZSI_LAYERS				= Position de la nappe, mesurée depuis la face supérieure de la dalle
 ZS_REINF				= Position du lit, mesurée depuis la face supérieure du profilé
 NOREINFORCEMENT			= Les armatures longitudinales ne sont pas définies
+SYREQUIREMENTS			= Exigences pour l'entraxe transversal $
+FOR2					= Pour 2 goujons
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Propriétés de la section
@@ -593,6 +595,10 @@ WHERE					= Avec
 WSLENDERNESS			= Elancement géométrique de l'âme
 WSLENDERNESSLIMIT		= Limite d'élancement
 WTOFWEBS				= Soudures âme-semelles
+
+#NDC_DETAILSULS
+TITLE					= Calculs détaillés aux ELU
+BENDINGR				= Résistance à la flexion
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Etats limites de service

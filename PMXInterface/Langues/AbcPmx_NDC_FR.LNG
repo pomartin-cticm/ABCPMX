@@ -596,6 +596,10 @@ WSLENDERNESS			= Elancement géométrique de l'âme
 WSLENDERNESSLIMIT		= Limite d'élancement
 WTOFWEBS				= Soudures âme-semelles
 
+#NDC_DETAILSULS
+TITLE					= Calculs détaillés aux ELU
+BENDINGR				= Résistance à la flexion
+
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Etats limites de service
 DEFLECTIONS				= Flèche

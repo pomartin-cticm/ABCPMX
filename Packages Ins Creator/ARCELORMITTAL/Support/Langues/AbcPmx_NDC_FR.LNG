@@ -17,7 +17,7 @@ EDGECOMPENC				= Poutre mixte de rive, avec profilé partiellement enrobé
 SPANLENGTH				= Portée
 SPANLENGTHS				= Portées
 ULS						= États limites ultimes
-ULSCOMPOSITE			= États limites ultimes en situation normale (phase mixte)
+ULSCOMPOSITE			= États limites ultimes en situation normalde (phase mixte)
 ULSCONSTRUCTION			= États limites ultimes en phase de construction
 ULSFIRE					= États limites ultimes à l'incendie 
 SLS						= États limites de service
@@ -40,6 +40,9 @@ CZONE					= Zone de confort
 CRECOMMENDED			= Recommandé
 CCRITICAL				= Critique
 CNOTRECOMMENDED			= Non recommandé
+
+#NDC_OUTOFSCOPE
+NOREINFORCEMENT			= Les armatures longitudinales doivent être défines dans le cas des poutres mixtes avec console
 
 #NDC_MAIN
 TITLE					= Note de calculs
@@ -426,7 +429,9 @@ ZPLASTIC				= Position axe neutre plastique
 ZSHEAR					= Position centre de cisaillement
 ZSI_LAYERS				= Position de la nappe, mesurée depuis la face supérieure de la dalle
 ZS_REINF				= Position du lit, mesurée depuis la face supérieure du profilé
-
+NOREINFORCEMENT			= Les armatures longitudinales ne sont pas définies
+SYREQUIREMENTS			= Exigences pour l'entraxe transversal $
+FOR2					= Pour 2 goujons
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Propriétés de la section
@@ -591,6 +596,10 @@ WSLENDERNESS			= Elancement géométrique de l'âme
 WSLENDERNESSLIMIT		= Limite d'élancement
 WTOFWEBS				= Soudures âme-semelles
 
+#NDC_DETAILSULS
+TITLE					= Calculs détaillés aux ELU
+BENDINGR				= Résistance à la flexion
+
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Etats limites de service
 DEFLECTIONS				= Flèche
@@ -634,7 +643,7 @@ FIRE_CHECKS_DETAIL		= Résultats détaillés
 FIRE_CHECKS_PARAM		= Paramètres du calcul
 FIRE_CHECKS_CURVES		= Courbes de résultats
 TIMERESISTANCE			= Résistance au feu
-TIMESTEP				= Durée d'exposition
+TIMESTEP				= Durée
 TEMPSTEEL				= Températures dans le profilé métallique
 TEMPSLAB				= Températures dans la dalle
 TEMPPARTS				= Températures dans les éléments de la poutre
@@ -650,7 +659,7 @@ SLABTEMPBYFEM			= La température dans la dalle est obtenue par un calcul aux di
 SLABTEMPBYTAB			= La température dans la dalle est obtenue à partir du Tableau D.5 de la NF EN 1994-1-2:2005
 SLABTEMPBYTABG2			= La température dans la dalle est obtenue à partir du Tableau B.6 de la prEN 1994-1-2:2023
 HDGLAVA					= Le profilé métallique est galvanisé
-PROTECTEDSTEEL			= The steel profile has a thermal protection
+PROTECTEDSTEEL			= Le profilé métallique dispose d'une protection thermique
 PROTECTIONTYPE			= Protection thermique
 PRO_SPRAYPERCEM			= Flocage par du perlite avec ciment
 PRO_SPRAYPERPLAST		= Flocage par du perlite avec platre
@@ -671,13 +680,30 @@ UPPERFEXPOSED			= La semelle supérieure est exposée au feu
 SECTIONFACTOR			= Massiveté du profilé métallique
 SECTIONFACTORBOX		= Facteur de massiveté enveloppe
 SHADOWFACTOR			= Facteur d'ombre
-ABSTEELPRO				= Profilé en acier
+TABSTEELPRO				= Profilé en acier
 TABSTEELUPFLANGE		= Semelle supérieure
 TABSTEELLOFLANGE		= Semelle inférieure
 TABSTEELWEB				= Âme
 TABCONCRETESLAB			= Fibres inférieure et supérieure de la dalle
 TABCONNECTOR			= Goujons soudés
 PRD_STUDS				= Résistance des goujons soudés
+EMPTYVOIDS				= Les creux d'ondes entre la dalle et la semelle ne sont pas remplis
+COMETHOD				= La méthode spécifique du CTICM est appliquée pour le calcul de l'échauffement
+FILLEDVOIDS				= Les creux d'ondes entre la dalle et la semelle sont remplis (protection de la semelle supérieure)
+PHIVOID					= Facteur d'effet de cavité
+CREDFACTORS				= Coefficients
+COTIMELIMIT				= Calcul limité à R120
+CURVES					= Courbes de températures
+ISOCURVE				= Gaz chauds
+VOIDCURVE				= Gaz chauds dans les cavités entre la dalle et le profilé
+TEMPSTEELPROFILE		= Profilé acier
+TEMPSTEELUPPFLANGE		= Semelle supérieure
+TEMPSTEELLOWFLANGE		= Semelle inférieure
+TEMPSTEELWEB			= Âme
+TEMPSTEELLOWSLAB		= Fibre inférieure de la dalle
+TEMPSTEELUPPSLAB		= Fibre supérieure de la dalle 
+RESTRICTEDSTEPS			= Calcul au feu limité à $ 
+CONDITIONNOTMET			= Pour $, la condition suivante du Tableau F.3 de l'EN 1994-1-2 n'est pas satisfaite
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Évaluation des vibrations du plancher

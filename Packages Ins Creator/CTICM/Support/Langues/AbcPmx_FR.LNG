@@ -13,10 +13,11 @@ VERSIONLINK     		= Voulez-vous être redirigé vers le site web du CTICM ?
 WARNING					= Avertissement
 
 #FRM_ABOUT
-TITLE					= A propos d'ABCPMX-II
+TITLE					= A propos du logiciel $
 OK						= Ok
+DESCRIPTION_II			= Calcul des poutres mixtes acier-béton selon la NF EN 1994-1-1
 DESCRIPTION				= Description
-DESCRIPTION_CONT		= Le logiciel ABC-PMX vise le calcul de poutres mixtes selon l'EN 1994-1-1. Son développement est cofinancé par ArcelorMittal et le CTICM.
+DESCRIPTION_CONT		= Le logiciel $ vise le calcul de poutres mixtes selon l'EN 1994-1-1. Son développement est cofinancé par ArcelorMittal et le CTICM.
 INFORMATION				= Information
 MAITRE					= Droits
 VERSION					= Version
@@ -825,7 +826,7 @@ REINFLAYER0				= Pas d'armature définie
 REINFLAYER1				= Première nappe
 REINFLAYER2				= Deuxième nappe
 REMOVELAYER				= Supprimer la deuxième nappe d'armatures
-RIBCONFIG				= Configuration of the rib at beam support
+RIBCONFIG				= Configuration des nervures au droit de la poutre
 RIBORIENT				= Orientation du bac
 SECONDLAYER				= Deuxième nappe d'armature
 SHEETBASE				= Depuis la base de donnée

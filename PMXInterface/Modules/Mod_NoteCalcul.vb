@@ -99,6 +99,7 @@ Module Mod_NoteCalcul
     Private BlocSP As New Dictionary(Of String, String)
     Private BlocAnalyse As New Dictionary(Of String, String)
     Private BlocELU As New Dictionary(Of String, String)
+    Private BlocELUd As New Dictionary(Of String, String)
     Private BlocFEU As New Dictionary(Of String, String)
     Private BlocELS As New Dictionary(Of String, String)
     Private BlocHiVoss As New Dictionary(Of String, String)
@@ -323,6 +324,8 @@ Module Mod_NoteCalcul
 
             BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSULS")
             BlocLine.CreationBloc(BlocELU)
+            BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_DETAILSULS")
+            BlocLine.CreationBloc(BlocELUd)
 
             BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSSLS")
             BlocLine.CreationBloc(BlocELS)
@@ -332,6 +335,7 @@ Module Mod_NoteCalcul
 
             BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_HIVOSS")
             BlocLine.CreationBloc(BlocHiVoss)
+
         Catch ex As Exception
             GestionErreurAffichageLangue("Mod_NoteCalcul", "InitialiseBlocNDC")
         End Try
@@ -2103,7 +2107,7 @@ Module Mod_NoteCalcul
 
         qSlab = (mBeton + mBac) * GraviteG
         Chaine = BlocG("SLAB")
-        AddLigneNDC(TABW2 & BlocG("Q_SLAB") & TABAFF & "q\-" & Chaine & "\=" & TABEGAL & GetStringInUnitN(qSlab, Enu_TypeVariable.ChargeSurfacique, 4, 3, OUI, True))
+        AddLigneNDC(TABW2 & BlocG("Q_SLAB") & TABAFF & "q\-" & Chaine & "\=" & TABEGAL & GetStringInUnitN(qSlab, Enu_TypeVariable.ChargeLineique, 4, 3, OUI, True))
 
     End Sub
 
@@ -6843,6 +6847,13 @@ Module Mod_NoteCalcul
             If MyBeam.lMixte Then
                 EditionFerraillageTransversal(MyBeam)
             End If
+
+            '# Calculs détaillés
+
+            If LogicielOptions.lExpert Then
+                EditionVerificationsELUDetail(MyBeam, False)
+            End If
+
         End If
 
         '--( Phase de construction pour les poutres mixtes
@@ -6969,9 +6980,9 @@ Module Mod_NoteCalcul
         Reference = "  [" & Reference & "]"
 
         If myShearB.lCheckRequired Then
-            AddLigneNDC(TABW2 & Symbol & "<=" & Symbol2 & " : " & BlocELU("SHEARBREQUIRED") & Reference)
+            AddLigneNDC(TABW2 & Symbol & ">" & Symbol2 & " : " & BlocELU("SHEARBREQUIRED") & Reference)
         Else
-            AddLigneNDC(TABW2 & Symbol & ">" & Symbol2 & " : " & BlocELU("SHEARBNOTREQUIRED") & Reference)
+            AddLigneNDC(TABW2 & Symbol & INFEGAL & Symbol2 & " : " & BlocELU("SHEARBNOTREQUIRED") & Reference)
         End If
 
 
@@ -7374,8 +7385,55 @@ Module Mod_NoteCalcul
 
     End Sub
 
+#End Region
+
+#Region " Edition des calculs détaillés ELU "
+
+    Private Sub EditionVerificationsELUDetail(MyBeam As cls_Poutre, lConstruction As Boolean)
+        '-------------------------------------------------------------------------------------------
+        '   12/05/25 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Détail de calcul des critères ELU
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam          [E] :   Poutre
+        '   lConstruction   [E] :   Indique si phase de construction pour une poutre mixte
+        '-------------------------------------------------------------------------------------------
+
+        '--> Titre
+
+        AddTitreNdC(2, BlocELUd("TITLE"))
+
+        '--( Vérification de la flexion
+
+        EditionDetailFlexion(MyBeam, lConstruction)
+
+    End Sub
+
+    Private Sub EditionDetailFlexion(myBeam As cls_Poutre, lConstruction As Boolean)
+        '-------------------------------------------------------------------------------------------
+        '   12/05/25 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Détail de calcul du critère ELU de flexion
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam              [E] :   Poutre
+        '   lConstruction       [E] :   Indique si phase de construction pour une poutre mixte
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+        Dim myBord As Integer = Bordures.Tous
+
+        '--> Initialisation
+
+        AddTitreNdC(2, BlocELUd("BENDINGR"))
+
+    End Sub
+
 
 #End Region
+
+
+
+
 
 #Region "***Edition vérifications ELU pour les poutres MIXTEs***"
 

@@ -430,6 +430,8 @@ ZSHEAR					= Location of the shear center
 ZSI_LAYERS				= Location of the layer axis, measured from the upper face of the slab
 ZS_REINF				= Location of the layer axis, measured from the upper face of the profile
 NOREINFORCEMENT			= Longitudinal reinforcements are not defined
+SYREQUIREMENTS			= Requirements on transverse spacing $
+FOR2					= For 2 studs
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties
@@ -593,6 +595,10 @@ WHERE					= Where
 WSLENDERNESS			= Web slenderness
 WSLENDERNESSLIMIT		= Limit of web slenderness
 WTOFWEBS				= Web to flanges welds 
+
+#NDC_DETAILSULS
+TITLE					= Detailed ULS checking
+BENDINGR				= Bending resistance
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Serviceability Limit States

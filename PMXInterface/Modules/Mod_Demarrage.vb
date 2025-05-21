@@ -148,7 +148,7 @@ Public Module Mod_Demarrage
         Select Case LogicielInfo.Maitre
             Case EnuMaitre.ArcelorMittal
                 LogicielInfo.MailSupport = EMAIL_ARCELORMITTAL
-                LogicielInfo.NomLogiciel = "ABC-PMX"
+                LogicielInfo.NomLogiciel = "ABC+"
                 LogicielInfo.Racine = "ABCPMX"
 
             Case EnuMaitre.CTICM
