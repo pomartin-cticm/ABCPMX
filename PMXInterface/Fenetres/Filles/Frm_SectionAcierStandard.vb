@@ -331,7 +331,6 @@ Public Class Frm_SectionAcierStandard
         '== Plats
 
 
-
     End Sub
 
     Private Sub AfficherPlatEnCours()
@@ -445,6 +444,7 @@ Public Class Frm_SectionAcierStandard
         '---------------------------------------------------------------------------------------------------------
         '   10/01/24 : Création - GUD
         '---------------------------------------------------------------------------------------------------------
+
         MAJ_Aciers("", "")
 
         Dim iSteel As Integer = 0
@@ -2231,9 +2231,14 @@ Public Class Frm_SectionAcierStandard
 
                     'If lAvailable Or Not OptionsDataBase.lShowSteelAvailOnly Then
 
-                    If Not lPRS Then lDisplay = SteelIsToDisplay(Serie, Profile, kvpGrade.Key, kvpQualite.Key, kvpSteel.Key, ChoiceSteel, lIsNuanceCompatibleProfile)
+                    If lPRS Then
+                        lDisplay = SteelIsToDisplayPRS(kvpGrade.Key, kvpQualite.Key, kvpSteel.Key)
+                    Else
+                        lDisplay = SteelIsToDisplay(Serie, Profile, kvpGrade.Key, kvpQualite.Key, kvpSteel.Key, ChoiceSteel, lIsNuanceCompatibleProfile)
+                    End If
 
-                    If lDisplay Or lPRS Then
+                    'If lDisplay Or lPRS Then
+                    If lDisplay Then
                         MySteel.Nuance = kvpGrade.Key
                         MySteel.Qualite = kvpQualite.Key
                         MySteel.Reduc = kvpSteel.Key
@@ -2264,6 +2269,45 @@ Public Class Frm_SectionAcierStandard
 
     End Sub
 
+    Private Function SteelIsToDisplayPRS(ByVal Nuance As String, ByVal Qualite As String, ByVal Norm As String) As Boolean
+        '------------------------------------------------------------------------------------------------------------------------------------------
+        '   26/06/25 :  Création - POM - V1.00
+        '------------------------------------------------------------------------------------------------------------------------------------------
+        '   Indique si la nuance est à afficher, pour un PRS
+        '------------------------------------------------------------------------------------------------------------------------------------------
+        '
+        '------------------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lisHistar As Boolean
+        Dim lDisplay As Boolean = True
+        Dim lAcierEC3 As Boolean
+        Const QUALITEEC3 As String = "EC3"
+        Dim lEC3OK As Boolean = True
+
+        '--( Traitement
+
+        lisHistar = (Nuance.Trim.ToUpper.Contains(lblHISTAR))
+        lAcierEC3 = (Qualite.Trim.ToUpper = QUALITEEC3)
+
+        If lIsHISTAR Then
+            If (Not LogicielReglages.lHISTAR) And (Not LogicielOptions.lExpert) Then lDisplay = False
+        End If
+
+        'If OptionsDatabase.lNoSteelLowThick Then
+        '    lCompatible = EpMax <= SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Norm).EpMax * (1.00001)
+        'Else
+        '    lCompatible = True
+        'End If
+
+        If lAcierEC3 Then
+            lEC3OK = LogicielOptions.lExpert Or LogicielReglages.lEC3
+        End If
+
+        Return (lDisplay And lEC3OK)
+    End Function
+
     Private Function SteelIsToDisplay(ByVal Serie As String, ByVal Profile As String,
                                       ByVal Nuance As String, ByVal Qualite As String, ByVal Norm As String, ByVal ChoiceAcier As EnuChoiceAcier,
                                       ByRef lIsNuanceCompatibleProfile As Boolean) As Boolean
@@ -2272,6 +2316,7 @@ Public Class Frm_SectionAcierStandard
         '   06/12/12 :  Création - POM - V3.00
         '
         '------------------------------------------------------------------------------------------------------------------------------------------
+        '   Indique si la nuance est à afficher, pour un laminé
         '------------------------------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration

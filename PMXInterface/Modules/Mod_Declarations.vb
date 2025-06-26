@@ -276,6 +276,7 @@ Public Module Mod_Declarations
         Public lEC3 As Boolean                  ' Indique si on affiche les aciers avec les propriétés de la table 3.1 de l'EN 1993-1-1 (en plus de la norme produit)
         Public lFIRE As Boolean                 ' Indique si le calcul au feu est disponible dans le logiciel
         Public lCreuxO As Boolean               ' Indique si gestion creux d'ondes
+        Public lHISTAR As Boolean               ' Indique si on affiche les aciers HISTAR
     End Structure
 
     Public Enum Enu_Normes
@@ -547,6 +548,8 @@ Public Module Mod_Declarations
     'Public Const RHOCLEGERMIN As Decimal = 1500                 ' Masse volumique min du béton léger
     'Public Const RHOCLEGERMAX As Decimal = 2200                 ' Masse volumique max du béton léger
     'Public Const RHOCNORMALMIN As Decimal = 2000                ' Masse volumique min du béton normal
+
+    Public Const lblHISTAR As String = "HISTAR"
 
 #End Region
 

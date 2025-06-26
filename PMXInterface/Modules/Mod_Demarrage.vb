@@ -39,6 +39,7 @@ Public Module Mod_Demarrage
         LogicielReglages.lNoS235 = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
         LogicielReglages.lPRS = (LogicielInfo.Maitre = EnuMaitre.CTICM)
         LogicielReglages.lEC3 = (LogicielInfo.Maitre = EnuMaitre.CTICM)
+        LogicielReglages.lHISTAR = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
         LogicielReglages.lDelivery = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
 
         LogicielReglages.lG2 = False
@@ -495,6 +496,7 @@ Public Module Mod_Demarrage
         OptionsDatabase.FiltreSoft = "ABC"
         OptionsDatabase.lShowSteelAvailOnly = True
         OptionsDatabase.ChoiceSteel = EnuChoiceAcier.BaseIfNoStandardSteel
+        'OptionsDatabase.ChoiceSteel = EnuChoiceAcier.BaseAndStandardSteels
         OptionsDatabase.lNoSteelLowThick = True
         OptionsDatabase.lSaveConfig = False
         OptionsDatabase.lShowEC3 = True

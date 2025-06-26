@@ -882,6 +882,7 @@ Public Module Mod_BasesDonneesBinaires
         Dim lAcierEC3 As Boolean
         Const QUALITEEC3 As String = "EC3"
         Dim lEC3OK As Boolean = True
+        Dim lIsHISTAR As Boolean
 
         '-->
 
@@ -889,6 +890,7 @@ Public Module Mod_BasesDonneesBinaires
         IndStdSteel = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Norm).StIndex
         lIsNuanceCompatibleProfile = (IndStd(CorIndStd(CShort(IndStdSteel)) - 1) = 1)
         lAcierEC3 = (Qualite.Trim.ToUpper = QUALITEEC3)
+        lIsHISTAR = (Nuance.Trim.ToUpper.Contains(lblHISTAR))
 
         Select Case ChoiceAcier
             Case EnuChoiceAcier.AllSteel
@@ -902,6 +904,10 @@ Public Module Mod_BasesDonneesBinaires
             Case EnuChoiceAcier.StandardSteelOnly
                 lDisplay = lIsNuanceCompatibleProfile
         End Select
+
+        If lIsHISTAR Then
+            If (Not LogicielReglages.lHISTAR) And (Not LogicielOptions.lExpert) Then lDisplay = False
+        End If
 
         If OptionsDatabase.lNoSteelLowThick Then
             lCompatible = EpMax <= SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Norm).EpMax * (1.00001)

@@ -12794,16 +12794,19 @@ Module Mod_NoteCalcul
         indice = 1
         If lBoard Then
             AddLigneNDC("\T10(" & CStr(indice) & ") : " & BlocFEU("TABSTEELPRO"))
+            indice += 1
         Else
             AddLigneNDC("\T10(" & CStr(indice) & ") : " & BlocFEU("TABSTEELUPFLANGE") _
                       & "\T35(" & CStr(indice + 1) & ") : " & BlocFEU("TABSTEELLOFLANGE") _
                       & "\T60(" & CStr(indice + 2) & ") : " & BlocFEU("TABSTEELWEB"))
-            indice += 2
+            indice += 3
         End If
+
         If Not lAcierSeul Then
 
             AddLigneNDC("\T10(" & CStr(indice) & ") : " & BlocFEU("TABCONCRETESLAB") _
                       & "\T60(" & CStr(indice + 1) & ") : " & BlocFEU("TABCONNECTOR"))
+
         End If
         SauteLigne()
 
