@@ -303,7 +303,7 @@ Imports PMXMoteur2
         'Test quand Temp< 20°
         TempA = 12
         ReducFckBetonRef = 1.0
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -311,7 +311,7 @@ Imports PMXMoteur2
         'Test quand Temp = 20°
         TempA = 20
         ReducFckBetonRef = 1.0
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -319,15 +319,25 @@ Imports PMXMoteur2
         'Test quand Temp = 30°
         TempA = 20
         ReducFckBetonRef = 1.0
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
 
+        'Test quand Temp = 225° méthode simplifiée
+
+        TempA = 225
+        ReducFckBetonRef = 1.0
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal, True)
+        TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
+
+        'Assert.IsTrue(TauReduc <= TauRef)
+        Assert.IsTrue(IsEqual(ReducFckBeton, ReducFckBetonRef, 0.005))
+
         'Test quand Temp = 600°
         TempA = 600
         ReducFckBetonRef = 0.45
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -335,7 +345,7 @@ Imports PMXMoteur2
         'Test quand Temp = 630°
         TempA = 630
         ReducFckBetonRef = 0.405
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -343,7 +353,7 @@ Imports PMXMoteur2
         'Test quand Temp = 700°
         TempA = 700
         ReducFckBetonRef = 0.3
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -351,7 +361,7 @@ Imports PMXMoteur2
         'Test quand Temp = 1100°
         TempA = 1100
         ReducFckBetonRef = 0.01
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -359,7 +369,7 @@ Imports PMXMoteur2
         'Test quand Temp = 1170°
         TempA = 1170
         ReducFckBetonRef = 0.003
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -367,7 +377,7 @@ Imports PMXMoteur2
         'Test quand Temp = 1200°
         TempA = 1200
         ReducFckBetonRef = 0
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef)) 'Le dénominateur est égal à 0 
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -375,7 +385,7 @@ Imports PMXMoteur2
         'Test quand Temp > 1200°
         TempA = 1250
         ReducFckBetonRef = 0
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonNormal, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef)) 'Le dénominateur est égal à 0 
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -402,7 +412,7 @@ Imports PMXMoteur2
         'Test quand Temp< 20°
         TempA = 12
         ReducFckBetonRef = 1.0
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -410,7 +420,7 @@ Imports PMXMoteur2
         'Test quand Temp = 20°
         TempA = 20
         ReducFckBetonRef = 1.0
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -418,15 +428,25 @@ Imports PMXMoteur2
         'Test quand Temp = 30°
         TempA = 20
         ReducFckBetonRef = 1.0
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
 
+        'Test quand Temp = 225° méthode simplifiée
+
+        TempA = 225
+        ReducFckBetonRef = 1.0
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger, True)
+        TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
+
+        'Assert.IsTrue(TauReduc <= TauRef)
+        Assert.IsTrue(IsEqual(ReducFckBeton, ReducFckBetonRef, 0.005))
+
         'Test quand Temp = 600°
         TempA = 600
         ReducFckBetonRef = 0.64
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -434,7 +454,7 @@ Imports PMXMoteur2
         'Test quand Temp = 630°
         TempA = 630
         ReducFckBetonRef = 0.604
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -442,7 +462,7 @@ Imports PMXMoteur2
         'Test quand Temp = 700°
         TempA = 700
         ReducFckBetonRef = 0.52
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -450,7 +470,7 @@ Imports PMXMoteur2
         'Test quand Temp = 1100°
         TempA = 1100
         ReducFckBetonRef = 0.04
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -458,7 +478,7 @@ Imports PMXMoteur2
         'Test quand Temp = 1170°
         TempA = 1170
         ReducFckBetonRef = 0.012
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef) / ReducFckBetonRef)
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -466,7 +486,7 @@ Imports PMXMoteur2
         'Test quand Temp = 1200°
         TempA = 1200
         ReducFckBetonRef = 0
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef)) 'Le dénominateur est égal à 0 
 
         Assert.IsTrue(TauReduc <= TauRef)
@@ -474,7 +494,7 @@ Imports PMXMoteur2
         'Test quand Temp > 1200°
         TempA = 1250
         ReducFckBetonRef = 0
-        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger)
+        ReducFckBeton = EurocodeFeu.ReducFckBeton(TempA, lBetonLeger, False)
         TauReduc = Math.Abs((ReducFckBeton - ReducFckBetonRef)) 'Le dénominateur est égal à 0 
 
         Assert.IsTrue(TauReduc <= TauRef)

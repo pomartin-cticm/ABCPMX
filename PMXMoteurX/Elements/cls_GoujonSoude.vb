@@ -857,7 +857,7 @@ Public Class cls_GoujonSoude
         '--( Calcul des coefficients de réduction en fonction de la température
 
         kuTheta = ENFeu.ReducFuAcier(ThetaV)
-        kcTheta = ENFeu.ReducFckBeton(ThetaC, lBetonLeger)
+        kcTheta = ENFeu.ReducFckBeton(ThetaC, lBetonLeger, False)
 
         '--( Résistances en dalle pleine
 

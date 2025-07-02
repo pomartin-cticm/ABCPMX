@@ -12206,12 +12206,14 @@ Module Mod_NoteCalcul
         Dim Nr As Decimal = 1
         Dim GammaVfi As Decimal
         Dim iZone As Integer
+        Dim lS250 As Boolean
 
         '--( Initialisation 
 
         ThetaV = myBeam.VerifFeuMixte.TempVStep(iStep)
         ThetaC = myBeam.VerifFeuMixte.TempVcStep(iStep)
         lLeger = myBeam.Dalle.beton.lLeger
+        lS250 = Not myBeam.ParamFeu.lReductionConcreteStrength
 
         lPleine = myBeam.Dalle.lPleineOuPrefa
         lPerp = myBeam.Dalle.Bac.lPerpendiculaire
@@ -12242,7 +12244,7 @@ Module Mod_NoteCalcul
         AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
                    GetStringInUnitN(ThetaC, Enu_TypeVariable.Temperature, 3, 2, NON, False))
         AddCellule(LargCol(1), BTous, PositionTexteInCell.Centre,
-                   GetStringInUnitN(EN_Feu.ReducFckBeton(ThetaC, lLeger), Enu_TypeVariable.SansType, 4, 3, NON, False))
+                   GetStringInUnitN(EN_Feu.ReducFckBeton(ThetaC, lLeger, lS250), Enu_TypeVariable.SansType, 4, 3, NON, False))
 
         PRd = myBeam.Dalle.Goujons.PRdStudFeu(ThetaV, ThetaC, myBeam.Param.lGeneration1, lLeger, lPleine, lPerpPRd, lCofra220,
                                               myBeam.Dalle.Bac, Nr, Fck, Ecm, Fctk_005, GammaVfi, GammaVfi)
@@ -12390,10 +12392,12 @@ Module Mod_NoteCalcul
         Dim nbArma As Integer
         Dim NbReq As Integer = (cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1) * 2
         Dim iStep As Integer
+        Dim lS250 As Boolean
 
         '--( Entête
 
         nbArma = myBeam.Dalle.LitArma.Count
+        lS250 = Not myBeam.ParamFeu.lReductionConcreteStrength
 
         AddLigneNDC("\T10\U" & BlocFEU("TEMPSLAB") & "\u")
         SauteLigne()
@@ -12406,7 +12410,7 @@ Module Mod_NoteCalcul
         '--( Tableau
 
         For iStep = 0 To NbSteps - 1
-            LigneTableauTempDalleFeuBoardMulti(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBetonL, nbArma, lArmaFroid)
+            LigneTableauTempDalleFeuBoardMulti(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBetonL, nbArma, lArmaFroid, lS250)
         Next
 
         '--( Fin
@@ -12416,7 +12420,7 @@ Module Mod_NoteCalcul
     End Sub
 
     Private Sub LigneTableauTempDalleFeuBoardMulti(iStep As Integer, myVerifFeu As cls_VerifFeuMixte, NCOL As Integer, LargCol() As Single,
-                                                   lBetonL As Boolean, nbArma As Integer, lArmaFroid As Boolean)
+                                                   lBetonL As Boolean, nbArma As Integer, lArmaFroid As Boolean, lSimple250 As Boolean)
         '-----------------------------------------------------------------------------------------------------------------
         '   04/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -12431,6 +12435,7 @@ Module Mod_NoteCalcul
         '   lBetonL     [E] :   Indique si béton léger
         '   nbArma      [E] :   nombre d'armatures dans la dalle
         '   lArmaFroid  [E] :   indique si armatures formées à froid
+        '   lSimple250  [E] :   Indique si kctheta=1 en dessous de 250°C
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -12475,11 +12480,11 @@ Module Mod_NoteCalcul
         AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
         AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
-        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON, False))
-        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON, False))
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL, lSimple250), Enu_TypeVariable.SansType, 3, 2, NON, False))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL, lSimple250), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
         AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
-        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON, False))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL, lSimple250), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
         For k As Integer = 0 To nbArma - 1
             AddCellule(LargCol(1), Bordinf, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFskArmatures(myVerifFeu.TempArmaStep(iStep)(k), lArmaFroid), Enu_TypeVariable.SansType, 3, 2, NON, False))
@@ -12585,10 +12590,12 @@ Module Mod_NoteCalcul
         Dim lArmaFroid As Boolean = myBeam.ParamFeu.lArmaFormeeAFroid
         Dim nbArma As Integer
         Dim NbReq As Integer = (cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1) * 2
+        Dim lSimple250 As Boolean
 
         '--( Initialisation
 
         nbArma = myBeam.Dalle.LitArma.Count
+        lSimple250 = Not myBeam.ParamFeu.lReductionConcreteStrength
 
         '--( Gestion titre et saut de page
 
@@ -12602,14 +12609,14 @@ Module Mod_NoteCalcul
 
         EnteteTableauTempDalleFeuMixte(NCOL, LargCol, nbArma)
         For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
-            LigneTableauTempDalleFeuMixte(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBetonL, nbArma, lArmaFroid)
+            LigneTableauTempDalleFeuMixte(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBetonL, nbArma, lArmaFroid, lSimple250)
         Next
         FinTableau()
 
     End Sub
 
     Private Sub LigneTableauTempDalleFeuMixte(iStep As Integer, myVerifFeu As cls_VerifFeuMixte, NCOL As Integer, LargCol() As Single,
-                                              lBetonL As Boolean, nbArma As Integer, lArmaFroid As Boolean)
+                                              lBetonL As Boolean, nbArma As Integer, lArmaFroid As Boolean, lSimple250 As Boolean)
         '-----------------------------------------------------------------------------------------------------------------
         '   04/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -12624,6 +12631,7 @@ Module Mod_NoteCalcul
         '   lBetonL     [E] :   Indique si béton léger
         '   nbArma      [E] :   nombre d'armatures dans la dalle
         '   lArmaFroid  [E] :   indique si armatures formées à froid
+        '   lSimple250  [E] :   Indique si kctheta=1 en dessous de 250°C    
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -12662,11 +12670,11 @@ Module Mod_NoteCalcul
 
         AddCellule(LargCol(0), Bordinf, PositionTexteInCell.Centre, "")
 
-        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON, False))
-        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON, False))
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL, lSimple250), Enu_TypeVariable.SansType, 3, 2, NON, False))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL, lSimple250), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
         AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
-        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, 3, 2, NON, False))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL, lSimple250), Enu_TypeVariable.SansType, 3, 2, NON, False))
 
         For k As Integer = 0 To nbArma - 1
             AddCellule(LargCol(1), Bordinf, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFskArmatures(myVerifFeu.TempArmaStep(iStep)(k), lArmaFroid), Enu_TypeVariable.SansType, 3, 2, NON, False))
@@ -12768,6 +12776,7 @@ Module Mod_NoteCalcul
         Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
         Dim NbReq As Integer = (cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1) * 2
         Dim indice As Integer
+        Dim lSimple250 As Boolean
 
         '--( Gestion titre et saut de page
 
@@ -12783,9 +12792,10 @@ Module Mod_NoteCalcul
 
         '--( AffichageOptFeu tableau
 
+        lSimple250 = Not myBeam.ParamFeu.lReductionConcreteStrength
         EnteteTableauTempVerifFeuMixte(NCOL, LargCol, lBoard, lAcierSeul)
         For iStep = 0 To NbSteps - 1
-            LigneTableauTempVerifFeuMixte(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBoard, lBetonL, lAcierSeul)
+            LigneTableauTempVerifFeuMixte(iStep, myBeam.VerifFeuMixte, lSimple250, NCOL, LargCol, lBoard, lBetonL, lAcierSeul)
         Next
         FinTableau()
 
@@ -12961,7 +12971,7 @@ Module Mod_NoteCalcul
         End If
     End Sub
 
-    Private Sub LigneTableauTempVerifFeuMixte(iStep As Integer, myVerifFeu As cls_VerifFeuMixte, NCOL As Integer, LargCol() As Single,
+    Private Sub LigneTableauTempVerifFeuMixte(iStep As Integer, myVerifFeu As cls_VerifFeuMixte, lSimple250 As Boolean, NCOL As Integer, LargCol() As Single,
                                               lUni As Boolean, lBetonL As Boolean, Optional lAcierSeul As Boolean = False)
         '-----------------------------------------------------------------------------------------------------------------
         '   04/05/24 :  Création - POM
@@ -12972,6 +12982,7 @@ Module Mod_NoteCalcul
         '-----------------------------------------------------------------------------------------------------------------
         '   iStep       [E] :   Indice du pas de temps
         '   myVerifFeu  [E] :   Critères
+        '   lSimple250  [E] :   Indique si kctheta=1 en dessous de 250°C
         '   NCOL        [E] :   Nombre de colonnes dans le tableau
         '   LargCol     [E] :   Largeur des colonnes du tab
         '   lUni        [E] :   Indique si température uniforme du profilé
@@ -13042,11 +13053,11 @@ Module Mod_NoteCalcul
         End If
 
         If Not lAcierSeul Then
-            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
-            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
+            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL, lSimple250), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL, lSimple250), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
 
             AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
-            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL, lSimple250), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
         End If
     End Sub
 

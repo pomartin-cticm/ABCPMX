@@ -7,6 +7,7 @@ Public Class Frm_Ouverture
 
     Dim strFiltresExtension As String
     Dim strNonDispo As String
+    Dim strSaveModif As String
 
     Public lNewP As Boolean = False
 
@@ -54,6 +55,8 @@ Public Class Frm_Ouverture
                 Me.Button_Valider.Text = Bloc("OK")
 
                 strNonDispo = Bloc("NOTAVAILABLE") & Chr(13) & RemplaceDollar(Bloc("LATER"), LogicielInfo.Racine)
+
+                strSaveModif = Bloc("SAVEPROJECT")
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -173,49 +176,98 @@ Public Class Frm_Ouverture
 
 #Region "=== Fermeture Fenetre ==="
 
+    Private Sub GestionProjetEnCours(ByRef lFermer As Boolean)
+        '--------------------------------------------------------------------
+        '   02/07/2025 - Création - POM
+        '--------------------------------------------------------------------
+        '   Avant d'écraser les poutres du projet en cours, on demande si sauvegarde
+        '--------------------------------------------------------------------
+        '--------------------------------------------------------------------
+
+        Dim Rep As DialogResult
+
+
+        If Not MyProjet.lSaved Then
+
+            Dim Message As String
+            Message = RemplaceDollar(strSaveModif, MyProjet.Nom)
+
+            Rep = DemandeConfirmationYesNoCancel(Message)
+        Else
+            Rep = Windows.Forms.DialogResult.Yes
+        End If
+
+        Select Case Rep
+            Case Windows.Forms.DialogResult.Yes
+                Frm_PMX.EnregistrerProjetEnCours()
+                lFermer = True
+            Case Windows.Forms.DialogResult.No
+                lFermer = True
+            Case Windows.Forms.DialogResult.Cancel
+                lFermer = False
+        End Select
+
+        If lFermer Then
+
+        End If
+
+    End Sub
+
     Private Sub Button_Valider_Click(sender As Object, e As EventArgs) Handles Button_Valider.Click
 
-        If TabPage_NewProject.Visible Then          '==> NOUVEAU PROJET
+        Dim lFermer As Boolean
+        Dim lCancel As Boolean = False
 
-            Dim lOK As Boolean
+        '--> Gestion d'un nouveau projet
 
-            '--> Gestion d'un nouveau projet
+        If Me.lNewP Then
 
-            If Me.lNewP Then
+            GestionProjetEnCours(lFermer)
+
+            If Not lFermer Then
+                lCancel = True
+            Else
                 MyProjet.Poutres.Clear()
             End If
+        End If
 
-            '--> Ajout de la nouvelle poutre
+        If Not lCancel Then
 
-            Frm_AjoutePP.TraitementSaisie(lok)
+            If TabPage_NewProject.Visible Then          '==> NOUVEAU PROJET
 
-            '--> AffichageOptFeu de la soudure créee
-            '   Frm_MAIN.AffichageFenetreFille()
+                Dim lOK As Boolean
 
-            If lOK Then
-                '--> Mise à jour du TreeView
-                Frm_PMX.AffichageTViewChk()
+                '--> Ajout de la nouvelle poutre
 
-                '--> Fermeture
-                Me.Close()
-            Else
-                'MsgBox(strNonDispo)
+                Frm_AjoutePP.TraitementSaisie(lOK)
 
-                GestionErrorsPMX("", "", strNonDispo, False)
+                '--> AffichageOptFeu de la soudure créee
+                '   Frm_MAIN.AffichageFenetreFille()
+
+                If lOK Then
+                    '--> Mise à jour du TreeView
+                    Frm_PMX.AffichageTViewChk()
+
+                    '--> Fermeture
+                    Me.Close()
+                Else
+                    'MsgBox(strNonDispo)
+
+                    GestionErrorsPMX("", "", strNonDispo, False)
+
+                End If
+
+            ElseIf TabPage_OpenProject.Visible Then     '==> OUVRIR PROJET
+
+                If ListBox_RecentFiles.SelectedIndices.Count > 0 Then   '--> un fichier récent séléctionné
+
+                    Dim FileName As String = ListBox_RecentFiles.SelectedItem
+
+                    Ouverture_FichierRecent(FileName)
+
+                End If
 
             End If
-
-
-        ElseIf TabPage_OpenProject.Visible Then     '==> OUVRIR PROJET
-
-            If ListBox_RecentFiles.SelectedIndices.Count > 0 Then   '--> un fichier récent séléctionné
-
-                Dim FileName As String = ListBox_RecentFiles.SelectedItem
-
-                Ouverture_FichierRecent(FileName)
-
-            End If
-
         End If
 
     End Sub

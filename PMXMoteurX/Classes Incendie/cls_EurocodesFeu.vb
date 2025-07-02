@@ -132,7 +132,7 @@
 
     End Function
 
-    Public Function ReducFckBeton(TempA As Decimal, lBetonLeger As Boolean) As Decimal
+    Public Function ReducFckBeton(TempA As Decimal, lBetonLeger As Boolean, lSimple250 As Boolean) As Decimal
         '--------------------------------------------------------------------------------------------------------------------------------
         '   22/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------------
@@ -140,17 +140,30 @@
         '--------------------------------------------------------------------------------------------------------------------------------
         '   TempA       [E] :   Température de l'acier
         '   lBetonLeger [E] :   Indique si on est en présence d'un béton léger (True) ou non (False)
+        '   lSimple250  [E] :   Indique si on applique la simplification de calcul selon EN 1994-1-2:2005, 7.4.1.2.2 (3)
+        '                       selon laquelle on considère kcTheta = 1 si température inférieure à 250°C
         '--------------------------------------------------------------------------------------------------------------------------------
 
-        Dim indColonneReducFck As Integer
+        '--( Déclarations
 
-        If Not lBetonLeger Then
-            indColonneReducFck = 1
+        Dim indColonneReducFck As Integer
+        Dim kcTheta As Decimal
+
+        '--( Traitement
+
+        If lSimple250 And IsSmallerOrEqual(TempA, 250) Then
+            kcTheta = 1
         Else
-            indColonneReducFck = 2
+            If Not lBetonLeger Then
+                indColonneReducFck = 1
+            Else
+                indColonneReducFck = 2
+            End If
+
+            kcTheta = Recherche_TableReductionFacteur(TableReductionFacteurBeton, TempA, indColonneReducFck)
         End If
 
-        Return Recherche_TableReductionFacteur(TableReductionFacteurBeton, TempA, indColonneReducFck)
+        Return kcTheta
 
     End Function
 

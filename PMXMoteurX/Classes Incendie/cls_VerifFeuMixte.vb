@@ -582,6 +582,7 @@
 
         Dim nbLits As Integer = myBeam.Dalle.LitArma.Count
         'Dim ThetaS As Decimal'
+        Dim lSimple250 As Boolean = Not myBeam.ParamFeu.lReductionConcreteStrength
 
         '--> Initialisation
 
@@ -598,7 +599,7 @@
         ReDim kReducC(NbTranches - 1)
 
         For iTr As Integer = 0 To NbTranches - 1
-            kReducC(iTr) = EN_Feu.ReducFckBeton(TempC(iTr), lBetonL)
+            kReducC(iTr) = EN_Feu.ReducFckBeton(TempC(iTr), lBetonL, lSimple250)
         Next
 
         '# Coeff de réduction pour les armatures

@@ -904,6 +904,7 @@ RECENTFILES				= Recent Files
 FILE					= File
 NOTAVAILABLE			= Section not available for this version of the software
 LATER					= Slim floor section will be available in a future version of $
+SAVEPROJECT				= Do you want to save the modifications on the projet $?
 
 #FRM_SFBSECTIONS
 CANCEL					= Cancel

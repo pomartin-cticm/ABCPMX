@@ -1825,13 +1825,13 @@ Imports PMXMoteur2
         '-- Dalle
         Theta = myBeam.VerifFeuMixte.TempDalleStep(0, 0)
 
-        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        Valeur = ENFeu.ReducFckBeton(Theta, False, False)
         ValRef = 0.548
         Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 
         Theta = myBeam.VerifFeuMixte.TempDalleStep(0, 1)
 
-        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        Valeur = ENFeu.ReducFckBeton(Theta, False, False)
         ValRef = 1
         Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 
@@ -1845,7 +1845,7 @@ Imports PMXMoteur2
 
         Theta = myBeam.VerifFeuMixte.TempVcStep(0)
 
-        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        Valeur = ENFeu.ReducFckBeton(Theta, False, False)
         ValRef = 0.856
         Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 
@@ -2118,13 +2118,13 @@ Imports PMXMoteur2
         '-- Dalle
         Theta = myBeam.VerifFeuMixte.TempDalleStep(0, 0)
 
-        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        Valeur = ENFeu.ReducFckBeton(Theta, False, False)
         ValRef = 0.548
         Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 
         Theta = myBeam.VerifFeuMixte.TempDalleStep(0, 1)
 
-        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        Valeur = ENFeu.ReducFckBeton(Theta, False, False)
         ValRef = 1
         Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 
@@ -2138,7 +2138,7 @@ Imports PMXMoteur2
 
         Theta = myBeam.VerifFeuMixte.TempVcStep(0)
 
-        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        Valeur = ENFeu.ReducFckBeton(Theta, False, False)
         ValRef = 0.866
         Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 
@@ -2464,13 +2464,13 @@ Imports PMXMoteur2
         '-- Dalle
         Theta = myBeam.VerifFeuMixte.TempDalleStep(iStep, 0)
 
-        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        Valeur = ENFeu.ReducFckBeton(Theta, False, False)
         ValRef = 0.548
         Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 
         Theta = myBeam.VerifFeuMixte.TempDalleStep(iStep, 1)
 
-        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        Valeur = ENFeu.ReducFckBeton(Theta, False, False)
         ValRef = 1
         Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 
@@ -2484,7 +2484,7 @@ Imports PMXMoteur2
 
         Theta = myBeam.VerifFeuMixte.TempVcStep(iStep)
 
-        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        Valeur = ENFeu.ReducFckBeton(Theta, False, False)
         ValRef = 1
         Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 
@@ -2520,13 +2520,13 @@ Imports PMXMoteur2
         '-- Dalle
         Theta = myBeam.VerifFeuMixte.TempDalleStep(iStep, 0)
 
-        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        Valeur = ENFeu.ReducFckBeton(Theta, False, False)
         ValRef = 0
         '  Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 
         Theta = myBeam.VerifFeuMixte.TempDalleStep(iStep, 1)
 
-        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        Valeur = ENFeu.ReducFckBeton(Theta, False, False)
         ValRef = 0.89
         Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 
@@ -2540,7 +2540,7 @@ Imports PMXMoteur2
 
         Theta = myBeam.VerifFeuMixte.TempVcStep(iStep)
 
-        Valeur = ENFeu.ReducFckBeton(Theta, False)
+        Valeur = ENFeu.ReducFckBeton(Theta, False, False)
         ValRef = 0.954
         Assert.IsTrue(IsEqual(Valeur, ValRef, 0.005))
 

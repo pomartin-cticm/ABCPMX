@@ -904,6 +904,7 @@ RECENTFILES				= Fichiers récents
 FILE					= Fichier
 NOTAVAILABLE			= Section non disponible dans cette version du logiciel
 LATER 					= Les sections de plancher minces seront disponibles dans une future version de $.
+SAVEPROJECT				= Souhaitez vous enregistrer les modifications du projet $ ?
 
 #FRM_SFBSECTIONS
 CANCEL					= Annuler

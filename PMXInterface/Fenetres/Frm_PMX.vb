@@ -453,6 +453,8 @@ Public Class Frm_PMX
         Frm_Ouverture.lNewP = True
         Frm_Ouverture.ShowDialog()
 
+        Me.img_Main.Invalidate()
+
     End Sub
 
     Private Sub AjouterPoutre()
@@ -1432,7 +1434,7 @@ Public Class Frm_PMX
         My.Settings.Save()
     End Sub
 
-    Private Sub EnregistrerProjetEnCours()
+    Public Sub EnregistrerProjetEnCours()
         '-----------------------------------------------------------------------------------
         '   11/04/08 :  Création - Version 1.00
         '-----------------------------------------------------------------------------------
