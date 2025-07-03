@@ -512,7 +512,7 @@
 
     End Sub
 
-    Public Sub TemperatureDalleTabulee(TimeStep As Decimal, TempG As Decimal, lGeneratUN As Decimal, nbTranches As Integer, ByRef TempDalle() As Decimal)
+    Public Sub TemperatureDalleTabulee(TimeStep As Decimal, TempG As Decimal, lGeneratUN As Boolean, nbTranches As Integer, ByRef TempDalle() As Decimal)
         '-------------------------------------------------------------------------------------------------------------------------------------------------
         '   23/04/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------------------------------------

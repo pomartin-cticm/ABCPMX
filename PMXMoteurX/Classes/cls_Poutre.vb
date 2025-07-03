@@ -621,7 +621,7 @@ Public Class cls_Poutre
 
 #End Region
 
-#Region " CONSTRUCTEURS "
+#Region "===CONSTRUCTEURS==================="
 
     Private Sub InitialiseChargements(vNomCharges() As String)
         '-------------------------------------------------------------------------------------------------------
@@ -666,6 +666,7 @@ Public Class cls_Poutre
             Next
             Me.lCombFeu(i) = False
         Next
+        Me.lCombFeu(0) = True
         For i = 0 To nbCombELUConstruction - 1
             Me.CoefCombELCU(i) = New List(Of Decimal)
             For j = 1 To nbCharges

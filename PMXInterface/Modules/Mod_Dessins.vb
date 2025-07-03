@@ -16,6 +16,9 @@ Public Module Mod_Dessins
 
     Public Const lCONTOURCOTE As Boolean = False
 
+    Const DELTATHETA As Decimal = 25
+    Const DELTATime As Decimal = 5 * 60
+
 #End Region
 
 #Region " Dessins pour la fenetre principale (FRM_MAIN) "
@@ -13427,7 +13430,8 @@ Public Module Mod_Dessins
     End Sub
 
     Private Sub DessineCourbeTempGaz(ByRef myGr As Graphics, ByRef myParAff As Struc_Affichage, myFont As Font,
-                                     kConvX As Decimal, kConvY As Decimal, ColorG As Color, indG As Integer, TimeMax As Decimal)
+                                     kConvX As Decimal, kConvY As Decimal, ColorG As Color, indG As Integer,
+                                     TimeMax As Decimal, tPosInd As Decimal)
         '-----------------------------------------------------------------------------------------------
         '   22/10/24 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
@@ -13439,7 +13443,8 @@ Public Module Mod_Dessins
         '   kConvY      [E] :   Facteur de conversion / y
         '   ColorG      [E] :   Couleur de la courbe des gaz
         '   indG        [E] :   Indice de la courbe pour la légende
-        '   TimeMax     [E] :   Durée max d'expo en secondes
+        '   tPosInd     [E] :   Temps au droit duquel on place l'indice de la courbe en min (si -1, on place à l'extrémité droite)   
+        '   TimeMax     [E] :   Durée max d'expo en secondes 
         '-----------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -13454,6 +13459,7 @@ Public Module Mod_Dessins
         Dim xe, ye As Double
         Dim t(1) As Decimal
         Dim TimeMaxMin As Decimal = TimeMax / 60
+        Dim ThetaInd As Decimal
 
         '--( Courbe des gaz
 
@@ -13476,7 +13482,21 @@ Public Module Mod_Dessins
 
         Next
 
-        AddTexte(myGr, New SolidBrush(ColorG), CStr(indG), myFont, xe, ye, myParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
+        If tPosInd = -1 Then
+            AddTexte(myGr, New SolidBrush(ColorG), CStr(indG), myFont, xe, ye, myParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
+        Else
+
+            ThetaInd = ENFeu.TemperatureGazISO(CDec(tPosInd * 60))
+            xo = tPosInd * kConvX * 60
+            yo = ThetaInd * kConvY
+
+            xe = (tPosInd * 60 - DELTATime) * kConvX
+            ye = (ThetaInd + DELTATHETA) * kConvY
+
+            AddLigne(myGr, myPenG, xo, yo, xe, ye, myParAff)
+            AddTexte(myGr, New SolidBrush(ColorG), CStr(indG), myFont, xe, ye, myParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
+
+        End If
 
     End Sub
 
@@ -13538,7 +13558,8 @@ Public Module Mod_Dessins
 
     Private Sub DessineCourbeTempElt(ByRef myGr As Graphics, ByRef myParAff As Struc_Affichage, myFont As Font,
                                      kConvX As Decimal, kConvY As Decimal, ColorC As Color, indC As Integer,
-                                     TempRef As Decimal, TempInter As List(Of Decimal), TimeInter As Decimal)
+                                     TempRef As Decimal, TempInter As List(Of Decimal), TimeInter As Decimal,
+                                     TimeIndSec As Decimal, lDessus As Boolean)
         '-----------------------------------------------------------------------------------------------
         '   22/10/24 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
@@ -13552,7 +13573,9 @@ Public Module Mod_Dessins
         '   indC        [E] :   Indice de la courbe pour la légende
         '   TempRef     [E] :   Température à t = 0
         '   TempInter   [E] :   Liste des températures à tracer
-        '   TimeInter   [E] :   Intervalle de temps entre les température de la liste
+        '   TimeInter   [E] :   Intervalle de temps entre les température de la liste (en secondes)
+        '   TimeIndSec  [E] :   Temps (en secondes) au droit duquel on place l'indice de la courbe en secondes (si -1, on place à l'extrémité droite)
+        '   lDessus     [E] :   Si True, on place l'indice au dessus de la courbe, sinon en dessous 
         '-----------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -13563,6 +13586,11 @@ Public Module Mod_Dessins
 
         Dim xo, yo As Double
         Dim xe, ye As Double
+
+        Dim lTrouve As Boolean = False
+        Dim tInd, TempInd As Decimal
+        Dim VAlign As VerticalAlignement
+        Dim kSigne As Decimal
 
         '-( Traitement
 
@@ -13581,18 +13609,46 @@ Public Module Mod_Dessins
 
             AddLigne(myGr, myPenC, xo, yo, xe, ye, myParAff)
 
+            If (Not lTrouve) And (t(1) > TimeIndSec) Then
+                lTrouve = True
+                tInd = t(1)
+                TempInd = Theta(1)
+            End If
+
             t(0) = t(1)
             Theta(0) = Theta(1)
 
         Next
 
-        AddTexte(myGr, New SolidBrush(ColorC), CStr(indC), myFont, xe, ye, myParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
+        If TimeIndSec = -1 Then
+            AddTexte(myGr, New SolidBrush(ColorC), CStr(indC), myFont, xe, ye, myParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
+        Else
+
+            If lDessus Then
+                VAlign = VerticalAlignement.Top
+                kSigne = 1
+            Else
+                VAlign = VerticalAlignement.Bottom
+                kSigne = -1
+            End If
+
+            xo = tInd * kConvX
+            yo = TempInd * kConvY
+
+            xe = (tInd - kSigne * DELTATime) * kConvX
+            ye = (TempInd + kSigne * DELTATHETA) * kConvY
+
+            AddLigne(myGr, myPenC, xo, yo, xe, ye, myParAff)
+            AddTexte(myGr, New SolidBrush(ColorC), CStr(indC), myFont, xe, ye, myParAff, HorizontalAlignment.Center, VAlign)
+
+        End If
 
     End Sub
 
     Private Sub DessineCourbeTempDalleTab(ByRef myGr As Graphics, ByRef myParAff As Struc_Affichage, myFont As Font,
                                           kConvX As Decimal, kConvY As Decimal, ColorC As Color, indC As Integer,
-                                          TempRef As Decimal, TimeSteps() As Decimal, TempDStep(,) As Decimal, NbSteps As Integer)
+                                          TempRef As Decimal, TimeSteps() As Decimal,
+                                          TempDStep(,) As Decimal, NbSteps As Integer, IndtPosInd As Integer)
         '-----------------------------------------------------------------------------------------------
         '   24/10/24 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
@@ -13609,6 +13665,7 @@ Public Module Mod_Dessins
         '   TimeSteps   [E] :   Tableau des temps auxquels la température a été calculée (en minutes)
         '   TempDStep   [E] :   Tabeau des températures sur les deux faces de la dalle
         '   NbSteps     [E] :   Nombre de durées d'exposition prises en compte dans la courbe
+        '   indtPosInd  [E] :   Indice du Temps au droit duquel on place l'indice de la courbe en min (si -1, on place à l'extrémité droite) 
         '-----------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -13619,6 +13676,10 @@ Public Module Mod_Dessins
 
         Dim xo, yo As Double
         Dim xe, ye As Double
+
+        Dim ThetaInd As Decimal
+        Dim kSigne As Decimal
+        Dim VAlign() As VerticalAlignement = {VerticalAlignement.Bottom, VerticalAlignement.Top}
 
         '-( Traitement
 
@@ -13645,7 +13706,23 @@ Public Module Mod_Dessins
 
             Next
 
-            AddTexte(myGr, New SolidBrush(ColorC), CStr(indC + k), myFont, xe, ye, myParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
+            If IndtPosInd = -1 Then
+                AddTexte(myGr, New SolidBrush(ColorC), CStr(indC + k), myFont, xe, ye, myParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
+            Else
+
+                kSigne = CDec(k * 2 - 1)
+                ThetaInd = TempDStep(IndtPosInd, k)
+                xo = TimeSteps(IndtPosInd) * 60 * kConvX
+                yo = ThetaInd * kConvY
+
+                xe = (TimeSteps(IndtPosInd) * 60 - kSigne * DELTATime) * kConvX
+                ye = (ThetaInd + kSigne * DELTATHETA) * kConvY
+
+                AddLigne(myGr, myPenC, xo, yo, xe, ye, myParAff)
+                AddTexte(myGr, New SolidBrush(ColorC), CStr(indC + k), myFont, xe, ye, myParAff, HorizontalAlignment.Center, VAlign(k))
+
+            End If
+
         Next
 
     End Sub
@@ -13694,6 +13771,9 @@ Public Module Mod_Dessins
         Dim EN_Feu As New cls_EurocodesFeu
         Dim NbSteps As Integer
         Dim lMethCO As Boolean
+        Dim tR30 As Decimal = cls_VerifFeuMixte.TimeSteps(0)
+
+        Const kUnitS As Decimal = 60
 
         '--( Initialisations
 
@@ -13703,7 +13783,7 @@ Public Module Mod_Dessins
         lMethCO = EN_Feu.MethodeCreuxOnde(myBeam)
 
         'TimeMax = Math.Max((myBeam.VerifFeuMixte.TempFSInter.Count * myBeam.VerifFeuMixte.TimeInter), cls_VerifFeuMixte.TimeSteps.Last * 60)
-        TimeMax = Math.Max((myBeam.VerifFeuMixte.TempFSInter.Count * myBeam.VerifFeuMixte.TimeInter), cls_VerifFeuMixte.TimeSteps(NbSteps - 1) * 60)
+        TimeMax = Math.Max((myBeam.VerifFeuMixte.TempFSInter.Count * myBeam.VerifFeuMixte.TimeInter), cls_VerifFeuMixte.TimeSteps(NbSteps - 1) * kUnitS)
 
         TempMax = tabTemp.Max
 
@@ -13717,9 +13797,10 @@ Public Module Mod_Dessins
 
         '--( Tracé de la courbe de température des gaz
 
-        DessineCourbeTempGaz(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorG, 1, TimeMax)
+        indB += 1
+        DessineCourbeTempGaz(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorG, indB, TimeMax, tR30)
 
-        '--( Tracé de la courbe de temérature des gaz dans les cavités
+        '--( Tracé de la courbe de température des gaz dans les cavités
 
         If lMethCO Then
             Dim PhiVoid As Decimal
@@ -13738,21 +13819,21 @@ Public Module Mod_Dessins
             '## Teméprature de la section
             indB += 1
             DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, indB,
-                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempFSInter, myBeam.VerifFeuMixte.TimeInter)
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempFSInter, myBeam.VerifFeuMixte.TimeInter, cls_VerifFeuMixte.TimeSteps(1) * kUnitS, True)
 
         Else
             '## Température de la semelle sup
             indB += 1
             DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, indB,
-                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempFSInter, myBeam.VerifFeuMixte.TimeInter)
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempFSInter, myBeam.VerifFeuMixte.TimeInter, cls_VerifFeuMixte.TimeSteps(0) * kUnitS, False)
             '## Température de la semelle inf
             indB += 1
             DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, indB,
-                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempFIInter, myBeam.VerifFeuMixte.TimeInter)
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempFIInter, myBeam.VerifFeuMixte.TimeInter, cls_VerifFeuMixte.TimeSteps(0) / 2 * kUnitS, True)
             '## Température de l'âme
             indB += 1
             DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, indB,
-                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempWInter, myBeam.VerifFeuMixte.TimeInter)
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempWInter, myBeam.VerifFeuMixte.TimeInter, cls_VerifFeuMixte.TimeSteps(0) / 2 * kUnitS, True)
 
         End If
 
@@ -13763,17 +13844,17 @@ Public Module Mod_Dessins
             '### Fibre inférieure
             indB += 1
             DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorB, indB,
-                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempDInter(0), myBeam.VerifFeuMixte.TimeInter)
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempDInter(0), myBeam.VerifFeuMixte.TimeInter, cls_VerifFeuMixte.TimeSteps(1) * kUnitS, True)
 
             '### Fibre supérieure
             indB += 1
             DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorB, indB,
-                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempDInter(1), myBeam.VerifFeuMixte.TimeInter)
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuMixte.TempDInter(1), myBeam.VerifFeuMixte.TimeInter, cls_VerifFeuMixte.TimeSteps(1) * kUnitS, False)
 
         Else
             indB += 1
             DessineCourbeTempDalleTab(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorB, indB,
-                                      myBeam.ParamFeu.TempRef, cls_VerifFeuMixte.TimeSteps, myBeam.VerifFeuMixte.TempDalleStep, NbSteps)
+                                      myBeam.ParamFeu.TempRef, cls_VerifFeuMixte.TimeSteps, myBeam.VerifFeuMixte.TempDalleStep, NbSteps, 1)
         End If
 
         '--( Fin
@@ -13819,11 +13900,14 @@ Public Module Mod_Dessins
         Dim tabTemp() As Decimal = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200}
         Dim tabTempLabel() As Decimal = {100, 300, 500, 700, 900, 1100, 1200}
 
+        Dim tR30 As Decimal = cls_VerifFeuAcier.TimeSteps(0)
+        Const kUnitS As Decimal = 60
+
         '--( Initialisations
 
         InitialiseCourbesEchauffement(pWi, pHi, MyParAff, LargD, HautD, dCar, xLeft, yTop)
 
-        TimeMax = Math.Max((myBeam.VerifFeuAcier.TempAInter.Count * myBeam.VerifFeuAcier.TimeInter), cls_VerifFeuAcier.TimeSteps.Last * 60)
+        TimeMax = Math.Max((myBeam.VerifFeuAcier.TempAInter.Count * myBeam.VerifFeuAcier.TimeInter), cls_VerifFeuAcier.TimeSteps.Last * kUnitS)
 
         TempMax = tabTemp.Max
 
@@ -13837,12 +13921,12 @@ Public Module Mod_Dessins
 
         '--( Tracé de la courbe de température des gaz
 
-        DessineCourbeTempGaz(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorG, 1, TimeMax)
+        DessineCourbeTempGaz(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorG, 1, TimeMax, tr30)
 
         '--( Tracé de la courbe de température de l'acier
 
         DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, 2,
-                             myBeam.ParamFeu.TempRef, myBeam.VerifFeuAcier.TempAInter, myBeam.VerifFeuAcier.TimeInter)
+                             myBeam.ParamFeu.TempRef, myBeam.VerifFeuAcier.TempAInter, myBeam.VerifFeuAcier.TimeInter, cls_VerifFeuAcier.TimeSteps(1) * kUnitS, True)
 
         '--( Fin
 

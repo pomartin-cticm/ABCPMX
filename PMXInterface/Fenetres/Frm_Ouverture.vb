@@ -229,6 +229,7 @@ Public Class Frm_Ouverture
             Else
                 MyProjet.Poutres.Clear()
             End If
+
         End If
 
         If Not lCancel Then
