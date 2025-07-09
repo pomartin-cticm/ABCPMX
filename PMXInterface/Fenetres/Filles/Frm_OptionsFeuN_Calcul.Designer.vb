@@ -26,6 +26,9 @@ Partial Class Frm_OptionsFeuN_Calcul
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_General = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_CalculOptions = New System.Windows.Forms.Panel()
+        Me.pan_TempArma = New System.Windows.Forms.Panel()
+        Me.lbl_TempRebars = New System.Windows.Forms.Label()
+        Me.cmb_TempRebars = New System.Windows.Forms.ComboBox()
         Me.chk_CongeEnrobe = New System.Windows.Forms.CheckBox()
         Me.pan_OptionsFEM = New System.Windows.Forms.Panel()
         Me.lbl_SizeElt = New System.Windows.Forms.Label()
@@ -38,8 +41,6 @@ Partial Class Frm_OptionsFeuN_Calcul
         Me.img_tDalleFEMmax = New System.Windows.Forms.PictureBox()
         Me.txt_tDalleFEMmax = New System.Windows.Forms.TextBox()
         Me.lbl_UnitD1 = New System.Windows.Forms.Label()
-        Me.cmb_TempRebars = New System.Windows.Forms.ComboBox()
-        Me.lbl_TempRebars = New System.Windows.Forms.Label()
         Me.chk_DalleFEM = New System.Windows.Forms.CheckBox()
         Me.chk_ArmaComp = New System.Windows.Forms.CheckBox()
         Me.chk_ReductionConcreteStrenght = New System.Windows.Forms.CheckBox()
@@ -48,6 +49,7 @@ Partial Class Frm_OptionsFeuN_Calcul
         Me.pan_General.SuspendLayout()
         Me.TLpan_General.SuspendLayout()
         Me.pan_CalculOptions.SuspendLayout()
+        Me.pan_TempArma.SuspendLayout()
         Me.pan_OptionsFEM.SuspendLayout()
         CType(Me.img_U, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_tDalleFEMmax, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -84,10 +86,9 @@ Partial Class Frm_OptionsFeuN_Calcul
         '
         Me.pan_CalculOptions.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_CalculOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_CalculOptions.Controls.Add(Me.pan_TempArma)
         Me.pan_CalculOptions.Controls.Add(Me.chk_CongeEnrobe)
         Me.pan_CalculOptions.Controls.Add(Me.pan_OptionsFEM)
-        Me.pan_CalculOptions.Controls.Add(Me.cmb_TempRebars)
-        Me.pan_CalculOptions.Controls.Add(Me.lbl_TempRebars)
         Me.pan_CalculOptions.Controls.Add(Me.chk_DalleFEM)
         Me.pan_CalculOptions.Controls.Add(Me.chk_ArmaComp)
         Me.pan_CalculOptions.Controls.Add(Me.chk_ReductionConcreteStrenght)
@@ -98,12 +99,38 @@ Partial Class Frm_OptionsFeuN_Calcul
         Me.pan_CalculOptions.Size = New System.Drawing.Size(380, 275)
         Me.pan_CalculOptions.TabIndex = 4
         '
+        'pan_TempArma
+        '
+        Me.pan_TempArma.Controls.Add(Me.lbl_TempRebars)
+        Me.pan_TempArma.Controls.Add(Me.cmb_TempRebars)
+        Me.pan_TempArma.Location = New System.Drawing.Point(7, 237)
+        Me.pan_TempArma.Name = "pan_TempArma"
+        Me.pan_TempArma.Size = New System.Drawing.Size(350, 32)
+        Me.pan_TempArma.TabIndex = 124
+        '
+        'lbl_TempRebars
+        '
+        Me.lbl_TempRebars.AutoSize = True
+        Me.lbl_TempRebars.Location = New System.Drawing.Point(3, 10)
+        Me.lbl_TempRebars.Name = "lbl_TempRebars"
+        Me.lbl_TempRebars.Size = New System.Drawing.Size(84, 13)
+        Me.lbl_TempRebars.TabIndex = 77
+        Me.lbl_TempRebars.Text = "lbl_TempRebars"
+        '
+        'cmb_TempRebars
+        '
+        Me.cmb_TempRebars.FormattingEnabled = True
+        Me.cmb_TempRebars.Location = New System.Drawing.Point(210, 5)
+        Me.cmb_TempRebars.Name = "cmb_TempRebars"
+        Me.cmb_TempRebars.Size = New System.Drawing.Size(137, 21)
+        Me.cmb_TempRebars.TabIndex = 78
+        '
         'chk_CongeEnrobe
         '
         Me.chk_CongeEnrobe.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chk_CongeEnrobe.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.chk_CongeEnrobe.Location = New System.Drawing.Point(7, 231)
+        Me.chk_CongeEnrobe.Location = New System.Drawing.Point(7, 199)
         Me.chk_CongeEnrobe.Name = "chk_CongeEnrobe"
         Me.chk_CongeEnrobe.Size = New System.Drawing.Size(349, 32)
         Me.chk_CongeEnrobe.TabIndex = 123
@@ -217,23 +244,6 @@ Partial Class Frm_OptionsFeuN_Calcul
         Me.lbl_UnitD1.TabIndex = 24
         Me.lbl_UnitD1.Text = "lbl_UnitD1"
         '
-        'cmb_TempRebars
-        '
-        Me.cmb_TempRebars.FormattingEnabled = True
-        Me.cmb_TempRebars.Location = New System.Drawing.Point(210, 200)
-        Me.cmb_TempRebars.Name = "cmb_TempRebars"
-        Me.cmb_TempRebars.Size = New System.Drawing.Size(137, 21)
-        Me.cmb_TempRebars.TabIndex = 78
-        '
-        'lbl_TempRebars
-        '
-        Me.lbl_TempRebars.AutoSize = True
-        Me.lbl_TempRebars.Location = New System.Drawing.Point(25, 203)
-        Me.lbl_TempRebars.Name = "lbl_TempRebars"
-        Me.lbl_TempRebars.Size = New System.Drawing.Size(84, 13)
-        Me.lbl_TempRebars.TabIndex = 77
-        Me.lbl_TempRebars.Text = "lbl_TempRebars"
-        '
         'chk_DalleFEM
         '
         Me.chk_DalleFEM.AutoSize = True
@@ -296,6 +306,8 @@ Partial Class Frm_OptionsFeuN_Calcul
         Me.TLpan_General.PerformLayout()
         Me.pan_CalculOptions.ResumeLayout(False)
         Me.pan_CalculOptions.PerformLayout()
+        Me.pan_TempArma.ResumeLayout(False)
+        Me.pan_TempArma.PerformLayout()
         Me.pan_OptionsFEM.ResumeLayout(False)
         Me.pan_OptionsFEM.PerformLayout()
         CType(Me.img_U, System.ComponentModel.ISupportInitialize).EndInit()
@@ -327,4 +339,5 @@ Partial Class Frm_OptionsFeuN_Calcul
     Friend WithEvents ErrorProvider_FeuCal As ErrorProvider
     Friend WithEvents chk_CongeEnrobe As CheckBox
     Friend WithEvents lbl_SizeElt As Label
+    Friend WithEvents pan_TempArma As Panel
 End Class

@@ -806,15 +806,27 @@
 
         '--( Déclaration
 
-        Dim iMethod As Integer = 1
+        'Dim iMethod As Integer = 1
         Dim ThetaS As Decimal
+
+        Dim iMethod As cls_OptionsFeu.enuTypeInterpoleTempArma
 
         '--( Initialisation
 
+        iMethod = myBeam.ParamFeu.MethodTempArma
+
+        '--( Traitement
+
         Select Case iMethod
-            Case 0 : ThetaS = Me.TemperatureLitArmaAlAxe(myBeam.Dalle, iArma, NbTranches, eTran, TempC)
-            Case 1 : ThetaS = Me.TemperatureLitArmaMoyenne(myBeam.Dalle, iArma, NbTranches, eTran, TempC)
-            Case 2 : ThetaS = Me.TemperatureLitArmaAlAxe(myBeam.Dalle, iArma, NbTranches, eTran, TempC)
+            Case cls_OptionsFeu.enuTypeInterpoleTempArma.Axe
+                ThetaS = Me.TemperatureLitArmaAlAxe(myBeam.Dalle, iArma, NbTranches, eTran, TempC)
+            Case cls_OptionsFeu.enuTypeInterpoleTempArma.Maximale
+                ThetaS = Me.TemperatureLitArmaAlAxe(myBeam.Dalle, iArma, NbTranches, eTran, TempC)
+            Case cls_OptionsFeu.enuTypeInterpoleTempArma.Moyenne
+                ThetaS = Me.TemperatureLitArmaMoyenne(myBeam.Dalle, iArma, NbTranches, eTran, TempC)
+                'Case 0 : ThetaS = Me.TemperatureLitArmaAlAxe(myBeam.Dalle, iArma, NbTranches, eTran, TempC)
+                'Case 1 : ThetaS = Me.TemperatureLitArmaMoyenne(myBeam.Dalle, iArma, NbTranches, eTran, TempC)
+                'Case 2 : ThetaS = Me.TemperatureLitArmaAlAxe(myBeam.Dalle, iArma, NbTranches, eTran, TempC)
         End Select
 
         Return ThetaS
@@ -831,7 +843,7 @@
         '   Cette routine doit impérativement avoir été précédée par l'initialisation  InitialiseCalculTempArmaMoyenne
         '--------------------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
-        '   iArma       [E] :   Inidice du lit d'armature
+        '   iArma       [E] :   Indice du lit d'armature
         '   NbTranches  [E] :   Nombre de tranches discrétisant la dalle
         '   zTran       [E] :   Position de chaque tranche
         '   eTran       [E] :   Epaisseur de chaque tranche

@@ -13502,7 +13502,7 @@ Public Module Mod_Dessins
 
     Private Sub DessineCourbeTempGazVoid(ByRef myGr As Graphics, ByRef myParAff As Struc_Affichage, myFont As Font,
                                          kConvX As Decimal, kConvY As Decimal, ColorG As Color, indG As Integer, TimeMax As Decimal,
-                                         CRed1 As Decimal, CRed2 As Decimal)
+                                         tPosInd As Decimal, CRed1 As Decimal, CRed2 As Decimal)
         '-----------------------------------------------------------------------------------------------
         '   22/10/24 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
@@ -13515,6 +13515,7 @@ Public Module Mod_Dessins
         '   ColorG      [E] :   Couleur de la courbe des gaz
         '   indG        [E] :   Indice de la courbe pour la légende
         '   TimeMax     [E] :   Durée max d'expo en secondes
+        '   tPosInd     [E] :   Temps au droit duquel on place l'indice de la courbe en min (si -1, on place à l'extrémité droite)   
         '   CRed1,CRed2 [E] :   Coefficient pour le calcul des températures
         '-----------------------------------------------------------------------------------------------
 
@@ -13523,6 +13524,7 @@ Public Module Mod_Dessins
         Dim ENFeu As New cls_EurocodesFeu
         Dim ThetaG(1) As Decimal
         Dim ThetaA(1) As Decimal
+        Dim ThetaInd As Decimal
 
         Dim myPenG As New Pen(ColorG)
 
@@ -13552,8 +13554,20 @@ Public Module Mod_Dessins
 
         Next
 
-        AddTexte(myGr, New SolidBrush(ColorG), CStr(indG), myFont, xe, ye, myParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
+        If tPosInd = -1 Then
+            AddTexte(myGr, New SolidBrush(ColorG), CStr(indG), myFont, xe, ye, myParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
+        Else
+            ThetaInd = ENFeu.TemperatureGazVoid(CDec(tPosInd * 60), CRed1, CRed2)
+            xo = tPosInd * kConvX * 60
+            yo = ThetaInd * kConvY
 
+            xe = (tPosInd * 60 - DELTATime) * kConvX
+            ye = (ThetaInd + DELTATHETA) * kConvY
+
+            AddLigne(myGr, myPenG, xo, yo, xe, ye, myParAff)
+            AddTexte(myGr, New SolidBrush(ColorG), CStr(indG), myFont, xe, ye, myParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
+
+        End If
     End Sub
 
     Private Sub DessineCourbeTempElt(ByRef myGr As Graphics, ByRef myParAff As Struc_Affichage, myFont As Font,
@@ -13809,7 +13823,7 @@ Public Module Mod_Dessins
             CRed(0) = EN_Feu.CoefRed1(PhiVoid)
             CRed(1) = EN_Feu.CoefRed2(PhiVoid)
 
-            DessineCourbeTempGazVoid(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorG, 2, TimeMax, CRed(0), CRed(1))
+            DessineCourbeTempGazVoid(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorG, 2, TimeMax, tR30, CRed(0), CRed(1))
             indB = 2
         End If
 

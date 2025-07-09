@@ -17,6 +17,7 @@ Public Class Frm_OptionsFeuN_Calcul
         GestionStyle()
         GestionLangues(BlocL)
         GestionUnites()
+        PrepareFenetre()
         RemplirComboTempRebar()
 
         Me.pan_General.Dock = DockStyle.Fill
@@ -31,6 +32,10 @@ Public Class Frm_OptionsFeuN_Calcul
         Me.lbl_CalculOptions.BackColor = CouleurBackBandeaux
         Me.lbl_CalculOptions.ForeColor = CouleurForeBandeaux
 
+    End Sub
+
+    Private Sub PrepareFenetre()
+        Me.pan_TempArma.Visible = LogicielOptions.lExpert
     End Sub
 
     Private Sub GestionUnites()

@@ -55,77 +55,6 @@ Public Module Mod_Demarrage
 
     End Sub
 
-    Private Sub InitialiseVersion()
-        '---------------------------------------------------------------------------------------------------------------
-        '   30/08/2024 :    POM - Création
-        '---------------------------------------------------------------------------------------------------------------
-        '   Initialisation des paramètres de version
-        '---------------------------------------------------------------------------------------------------------------
-
-        LogicielInfo.Version.Annee = 2025
-        LogicielInfo.Version.Principal = 1
-        LogicielInfo.Version.Indice = 10
-        LogicielInfo.Version.Beta = 1
-
-        Dim Chaine As String = ""
-
-        If LogicielInfo.Version.Indice < 10 Then
-            Chaine = "0" & CStr(LogicielInfo.Version.Indice)
-        Else
-            Chaine = CStr(LogicielInfo.Version.Indice)
-        End If
-
-        LogicielInfo.Version.Label = CStr(LogicielInfo.Version.Principal) & "." & Chaine
-
-        If LogicielInfo.Version.Beta > 0 Then
-            Chaine = " beta " & CStr(LogicielInfo.Version.Beta)
-            LogicielInfo.Version.Label += Chaine
-        End If
-
-    End Sub
-
-    Public Function ABCPMXIndiceVersion() As Single
-        '------------------------------------------------------------------------------------------
-        '   16/01/25 :  Création - POM
-        '------------------------------------------------------------------------------------------
-        '
-        '   Retourne un réel pour représenter la version du logiciel
-        '
-        '------------------------------------------------------------------------------------------
-        '==R17-010
-
-        Dim kDiv As Single = 100
-        'If LogicielInfo.Version.Indice < 10 Then kDiv = 100
-
-        Dim IndV As Single = LogicielInfo.Version.Principal + LogicielInfo.Version.Indice / kDiv
-        IndV = CSng(Math.Round(IndV, 2))
-
-        Return IndV
-
-    End Function
-
-    Private Function LabelMaitre() As String
-        Dim Label As String = ""
-        Select Case LogicielInfo.Maitre
-            Case EnuMaitre.CTICM : Label = "CTICM"
-            Case EnuMaitre.ArcelorMittal : Label = "ARCELORMITTAL"
-        End Select
-        Return Label
-    End Function
-    Public Function LabelVersion() As String
-        Dim Chaine As String = ""
-        Dim Label As String = ""
-
-        If LogicielInfo.Version.Indice < 10 Then
-            Chaine = "0" & CStr(LogicielInfo.Version.Indice)
-        Else
-            Chaine = CStr(LogicielInfo.Version.Indice)
-        End If
-
-        Label = CStr(LogicielInfo.Version.Principal) & "." & Chaine
-        Return Label
-    End Function
-
     Public Sub InitialiseLogiciel()
         '---------------------------------------------------------------------------------------------------------------
         '   25/05/2023 :    POM - Création
@@ -136,8 +65,8 @@ Public Module Mod_Demarrage
 
         '--> Réglages CTICM/AM
 
-        LogicielInfo.Maitre = EnuMaitre.CTICM
-        'LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
+        'LogicielInfo.Maitre = EnuMaitre.CTICM
+        LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
 
         InitialiseReglagesLogiciel()
         InitialiseVersion()
@@ -394,6 +323,78 @@ Public Module Mod_Demarrage
         lDebug = True
         LogicielOptions.lDebug = True
     End Sub
+
+    Private Sub InitialiseVersion()
+        '---------------------------------------------------------------------------------------------------------------
+        '   30/08/2024 :    POM - Création
+        '---------------------------------------------------------------------------------------------------------------
+        '   Initialisation des paramètres de version
+        '---------------------------------------------------------------------------------------------------------------
+
+        LogicielInfo.Version.Annee = 2025
+        LogicielInfo.Version.Principal = 1
+        LogicielInfo.Version.Indice = 10
+        LogicielInfo.Version.Beta = 0
+
+        Dim Chaine As String = ""
+
+        If LogicielInfo.Version.Indice < 10 Then
+            Chaine = "0" & CStr(LogicielInfo.Version.Indice)
+        Else
+            Chaine = CStr(LogicielInfo.Version.Indice)
+        End If
+
+        LogicielInfo.Version.Label = CStr(LogicielInfo.Version.Principal) & "." & Chaine
+
+        If LogicielInfo.Version.Beta > 0 Then
+            Chaine = " beta " & CStr(LogicielInfo.Version.Beta)
+            LogicielInfo.Version.Label += Chaine
+        End If
+
+    End Sub
+
+    Public Function ABCPMXIndiceVersion() As Single
+        '------------------------------------------------------------------------------------------
+        '   16/01/25 :  Création - POM
+        '------------------------------------------------------------------------------------------
+        '
+        '   Retourne un réel pour représenter la version du logiciel
+        '
+        '------------------------------------------------------------------------------------------
+        '==R17-010
+
+        Dim kDiv As Single = 100
+        'If LogicielInfo.Version.Indice < 10 Then kDiv = 100
+
+        Dim IndV As Single = LogicielInfo.Version.Principal + LogicielInfo.Version.Indice / kDiv
+        IndV = CSng(Math.Round(IndV, 2))
+
+        Return IndV
+
+    End Function
+
+    Private Function LabelMaitre() As String
+        Dim Label As String = ""
+        Select Case LogicielInfo.Maitre
+            Case EnuMaitre.CTICM : Label = "CTICM"
+            Case EnuMaitre.ArcelorMittal : Label = "ARCELORMITTAL"
+        End Select
+        Return Label
+    End Function
+
+    Public Function LabelVersion() As String
+        Dim Chaine As String = ""
+        Dim Label As String = ""
+
+        If LogicielInfo.Version.Indice < 10 Then
+            Chaine = "0" & CStr(LogicielInfo.Version.Indice)
+        Else
+            Chaine = CStr(LogicielInfo.Version.Indice)
+        End If
+
+        Label = CStr(LogicielInfo.Version.Principal) & "." & Chaine
+        Return Label
+    End Function
 
     Private Sub InitialiseRapports()
         '--------------------------------------------------------------------------------------------------------

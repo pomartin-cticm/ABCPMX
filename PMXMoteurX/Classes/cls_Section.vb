@@ -1595,7 +1595,8 @@ Public Class cls_Section
         '   lCalculFeu          [E] :   Indique si calcul au feu
         '   lCompressionPure    [E] :   Indique si on est en compression pure
         '   lWeb                [E] :   Indique s'il est possible de ne pas prendre en compte la classe de l'âme (POM) (On peut la négliger si paramètre à faux)
-        '   lReclasse           [E] :   Indique si la section  été reclassée après avoir négligé l'âme (POM)
+        '                               Quand lWeb est vrai, cela signifie qu'une partie du moment est reprise par l'âme, on doit donc nécessairement la prendre en compte dans la classification
+        '   lReclasse           [E] :   Indique si la section  été reclassée après avoir négligé l'âme (POM - R25-002)
         '----------------------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -1700,6 +1701,7 @@ Public Class cls_Section
                 End If
 
             Else
+
                 classeSectionTotale = Math.Max(classeSectionTotale, 3)
 
             End If
