@@ -19,7 +19,7 @@ Version 1.10 : 09/07/25
 
 Includes :
 - the fire design of steel and composite beams, according to EN 1993-1-2 and EN 1994-1-2
-- corrections of bugs and improvements R25-001 and R25-002
+- corrections of bugs and improvements R25-001 to R25-003
 
 
 Version 1.00 : 03/03/25

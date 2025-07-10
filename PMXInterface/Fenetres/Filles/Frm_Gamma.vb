@@ -228,8 +228,6 @@ Public Class Frm_Gamma
         ErrorProvider.Clear()
     End Sub
 
-
-
     Private Function ValideSaisieFenetre() As Boolean
         lFrm_Valide = True
 
@@ -252,10 +250,10 @@ Public Class Frm_Gamma
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaQ, .GammaQ, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi0_Q1, .Psi0_Q1, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi1_Q1, .Psi1_Q1, lModif)
-            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi2_Q1, .Psi1_Q1, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi2_Q1, .Psi2_Q1, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi0_Q2, .Psi0_Q2, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi1_Q2, .Psi1_Q2, lModif)
-            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi2_Q2, .Psi1_Q2, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi2_Q2, .Psi2_Q2, lModif)
 
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM0, .GammaM0, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM1, .GammaM1, lModif)

@@ -249,6 +249,7 @@ Public Class Frm_GammaN
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
         lModif = False
 
+        '==R25-003
         With MyProjet.Poutres(MyProjet.IndEnCours).Param.Gamma
 
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaG_sup, .GammaG_sup, lModif)
@@ -256,10 +257,10 @@ Public Class Frm_GammaN
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaQ, .GammaQ, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi0_Q1, .Psi0_Q1, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi1_Q1, .Psi1_Q1, lModif)
-            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi2_Q1, .Psi1_Q1, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi2_Q1, .Psi2_Q1, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi0_Q2, .Psi0_Q2, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi1_Q2, .Psi1_Q2, lModif)
-            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi2_Q2, .Psi1_Q2, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi2_Q2, .Psi2_Q2, lModif)
 
 
             GereTransfertValeur(locGammaM.GammaM0, .GammaM0, lModif)
