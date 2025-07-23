@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Windows
 Imports PMXMoteur2
 
 Public Class Frm_SectionSFB
@@ -43,10 +44,6 @@ Public Class Frm_SectionSFB
     Dim ColorGrade As Color = Color.Crimson
     Dim ColorNotPossible As Color = Color.LightGray
 
-    '---- Messages
-    Dim strNuanceWP As String()
-    Dim strReductionCurveWP As String()
-
     '---- Memoriser les lignes tableaux sélectionnées
     Dim iLignePro, iLigneAcier As Integer
 
@@ -65,6 +62,9 @@ Public Class Frm_SectionSFB
     '---- Nuance S235/S275 autorisée (V3.09)
     Dim lNuancePossible As Boolean
     Dim NuancesExclues() As String = {"S235", "S275"}
+
+    Dim AcierPlats As New List(Of strucAcierLocal)
+    Private NuancesPlats() As String = {"S235", "S275", "S355"}
 
 #End Region
 
@@ -119,19 +119,6 @@ Public Class Frm_SectionSFB
                 Me.lbl_Qualite.Text = Bloc("QUALITY")
                 Me.lbl_ReductionCurve.Text = Bloc("REDUCTIONCURVE")
 
-                ReDim strNuanceWP(4)
-
-                Me.strNuanceWP(0) = "S235"
-                Me.strNuanceWP(1) = "S275"
-                Me.strNuanceWP(2) = "S355"
-                Me.strNuanceWP(3) = "S420"
-                Me.strNuanceWP(4) = "S460"
-
-                ReDim strReductionCurveWP(1)
-
-                Me.strReductionCurveWP(0) = "EC3"
-                Me.strReductionCurveWP(1) = "EN 10025"
-
                 Me.lbl_WPSteel.Text = Bloc("STEEL")
 
 
@@ -174,6 +161,9 @@ Public Class Frm_SectionSFB
 
         Me.img_Section.Dock = DockStyle.Fill
         Me.img_ReductionCurve.Dock = DockStyle.Fill
+        Me.pan_Acier.Dock = DockStyle.Fill
+
+        AfficheBtnFyFu()
 
         '== Preparation des options disponibles en fonctions du maitre d'ouvrage
 
@@ -181,7 +171,7 @@ Public Class Frm_SectionSFB
             Case EnuMaitre.ArcelorMittal
                 If Not LogicielOptions.lExpert Then Me.TLpan_Gauche.RowStyles(1).Height = 0
             Case EnuMaitre.CTICM
-                Me.GridDelivery.Visible = True ' LogicielOptions.lExpert
+                'Me.GridDelivery.Visible = True ' LogicielOptions.lExpert
         End Select
 
         '== Transfert vers variable locale
@@ -200,9 +190,10 @@ Public Class Frm_SectionSFB
 
         PrepareLookGrille(Me.Grid_ProfilesSup, Me.Col_HISTARSup, Me.Col_ListeSup, Me.lst_GammeS.BackColor, RATIOHIGAMME)
         PrepareLookGrille(Me.GridAciers, Me.Col_Grade, Me.Col_Qualite, Me.Col_ReductionCurve, Me.lst_GammeS.BackColor, Ratio1, Ratio2)
-        PrepareLookGrille(Me.GridDelivery, Me.Col_Index, Me.Col_Message, Me.lst_GammeS.BackColor, 0.1)
+        ' PrepareLookGrille(Me.GridDelivery, Me.Col_Index, Me.Col_Message, Me.lst_GammeS.BackColor, 0.1)
         PrepareGridDelivery()
 
+        RemplirCmbNuancesPlats()
     End Sub
 
     Private Sub GestionUnites()
@@ -213,17 +204,17 @@ Public Class Frm_SectionSFB
     End Sub
 
     Private Sub RemplirComboBox()
-        Me.cmb_GradeWP.Items.Clear()
-        For i As Integer = 0 To strNuanceWP.Count - 1
-            Me.cmb_GradeWP.Items.Add(strNuanceWP(i))
-        Next
-        Me.cmb_GradeWP.SelectedIndex = 0
+        'Me.cmb_GradeWP.Items.Clear()
+        'For i As Integer = 0 To strNuanceWP.Count - 1
+        '    Me.cmb_GradeWP.Items.Add(strNuanceWP(i))
+        'Next
+        'Me.cmb_GradeWP.SelectedIndex = 0
 
-        Me.cmb_ReductionCurveWP.Items.Clear()
-        For i As Integer = 0 To strReductionCurveWP.Count - 1
-            Me.cmb_ReductionCurveWP.Items.Add(strReductionCurveWP(i))
-        Next
-        Me.cmb_ReductionCurveWP.SelectedIndex = 0
+        'Me.cmb_ReductionCurveWP.Items.Clear()
+        'For i As Integer = 0 To strReductionCurveWP.Count - 1
+        '    Me.cmb_ReductionCurveWP.Items.Add(strReductionCurveWP(i))
+        'Next
+        'Me.cmb_ReductionCurveWP.SelectedIndex = 0
     End Sub
 
     Private Sub GestionStyle()
@@ -245,7 +236,82 @@ Public Class Frm_SectionSFB
 
         AfficherProfileLamineEnCours()
         AfficherPlatSoudeEnCours()
+
     End Sub
+
+    Private Sub AfficheBtnFyFu()
+
+        Select Case DrawProperty
+            Case EnuDrawProperty.Fy : Me.btn_FyFu.Image = imgList_UY.Images("Fy")
+            Case EnuDrawProperty.Fu : Me.btn_FyFu.Image = imgList_UY.Images("Fu")
+
+        End Select
+
+    End Sub
+
+    Private Sub RemplirCmbNuancesPlats()
+
+        Dim MySteel As strucAcierLocal
+
+        AcierPlats.Clear()
+
+        For Each kvpGrade As KeyValuePair(Of String, strucGrade) In SteelBase.Grades
+
+            For Each kvpQualite As KeyValuePair(Of String, strucQualite) In kvpGrade.Value.Qualites
+
+                For Each kvpSteel As KeyValuePair(Of String, strucReduction) In kvpQualite.Value.ReductionCurv
+
+                    If isAcierPlat(kvpGrade.Key, kvpQualite.Key) Then
+
+                        MySteel.Nuance = kvpGrade.Key
+                        MySteel.Qualite = kvpQualite.Key
+                        MySteel.Reduc = kvpSteel.Key
+
+                        AcierPlats.Add(MySteel)
+
+                    End If
+
+                Next
+
+            Next
+
+        Next
+
+        Me.cmb_NuancePlat.Items.Clear()
+
+        For iAcier As Integer = 0 To AcierPlats.Count - 1
+
+            Me.cmb_NuancePlat.Items.Add(AcierPlats(iAcier).Nuance & "/" & AcierPlats(iAcier).Qualite)
+
+        Next
+
+    End Sub
+
+    Private Function isAcierPlat(Nuance As String, Qualite As String) As Boolean
+        '-----------------------------------------------------------------------------------------------------------------------
+        '   18/11/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------
+        '   Indique si on prend en compte l'acier pour les plats de renfort
+        '-----------------------------------------------------------------------------------------------------------------------
+        '   Nuance      [E] :   Nuance
+        '   Qualite     [E] :   Qualité
+        '-----------------------------------------------------------------------------------------------------------------------
+
+        Dim lOK As Boolean
+
+        lOK = (Array.IndexOf(NuancesPlats, Nuance) >= 0)
+
+        If lOK Then
+
+            If Not ((Qualite.IndexOf("EC3") >= 0) Or (Qualite.IndexOf("JR") >= 0)) Then
+                lOK = False
+            End If
+
+        End If
+
+        Return lOK
+
+    End Function
 
     Private Sub AfficherProfileLamineEnCours()
         '---------------------------------------------------------------------------------------------------------
@@ -302,17 +368,52 @@ Public Class Frm_SectionSFB
         Me.txt_bpSFB.Text = GetStringInUnit(MySectionLoc.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 1, False)
         Me.txt_tpSFB.Text = GetStringInUnit(MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False)
 
-        Me.cmb_GradeWP.SelectedItem = MySectionLoc.AcierPlat.Nuance
+        'Me.cmb_GradeWP.SelectedItem = MySectionLoc.AcierPlat.Nuance
 
-        If MySectionLoc.AcierPlat.Qualite = "EC3" Then
-            Me.cmb_ReductionCurveWP.SelectedItem = "EC3"
-        Else
-            Me.cmb_ReductionCurveWP.SelectedItem = "EN 10025"
-        End If
+        'If MySectionLoc.AcierPlat.Qualite = "EC3" Then
+        '    Me.cmb_ReductionCurveWP.SelectedItem = "EC3"
+        'Else
+        '    Me.cmb_ReductionCurveWP.SelectedItem = "EN 10025"
+        'End If
+        '==> Affichage de la nuance
+
+        Me.cmb_NuancePlat.SelectedIndex = GetIndiceNuancePlat()
 
         MAJ_InfoWP()
 
     End Sub
+
+    Private Function GetIndiceNuancePlat() As Integer
+        '---------------------------------------------------------------------------------------------------------
+        '   18/11/24 : Création - POM
+        '---------------------------------------------------------------------------------------------------------
+        '   Fonction qui retourne l'indice de la nuance de plat à afficher dans le combobox
+        '---------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Indice As Integer = 0
+
+        Dim iAcier As Integer = 0
+        Dim lTrouve As Boolean = False
+        Dim nbAciers As Integer = AcierPlats.Count
+
+        '--( Traitements
+
+        Do While (Not lTrouve) And iAcier < nbAciers
+            iAcier += 1
+
+            lTrouve = (MySectionLoc.AcierPlat.Nuance = AcierPlats(iAcier - 1).Nuance) _
+                  And (MySectionLoc.AcierPlat.Qualite = AcierPlats(iAcier - 1).Qualite) _
+                  And (MySectionLoc.AcierPlat.Reduction = AcierPlats(iAcier - 1).Reduc)
+
+        Loop
+
+        If lTrouve Then Indice = iAcier - 1
+
+        Return Indice
+
+    End Function
 
     Private Sub RemplirSeries()
 
@@ -547,13 +648,16 @@ Public Class Frm_SectionSFB
     Private Sub img_Section_Paint(sender As Object, e As PaintEventArgs) Handles img_Section.Paint
 
         DessinProfileSFBAcier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
-                           FontBase, kAdjust, True, False, iSelect)
+                              FontBase, kAdjust, True, False, iSelect)
 
     End Sub
 
     Private Sub img_ReductionCurve_Paint(sender As Object, e As PaintEventArgs) Handles img_ReductionCurve.Paint
 
-        DessinPropAcier(e.Graphics, Me.img_ReductionCurve.ClientRectangle.Height, Me.img_ReductionCurve.ClientRectangle.Width, True)
+        DessinProprietesAcier(e.Graphics, Me.img_ReductionCurve.ClientRectangle.Height, Me.img_ReductionCurve.ClientRectangle.Width, True,
+                              DrawProperty = EnuDrawProperty.Fy, MySectionLoc)
+
+        'DessinPropAcier(e.Graphics, Me.img_ReductionCurve.ClientRectangle.Height, Me.img_ReductionCurve.ClientRectangle.Width, True)
 
     End Sub
 
@@ -1086,6 +1190,29 @@ Public Class Frm_SectionSFB
 
 #End Region
 
+#Region " Evènements Textbox "
+
+    Private Sub EnterTextBox(sender As Object, e As EventArgs) Handles txt_tpSFB.Enter, txt_bpSFB.Enter
+        If lBuild Then Exit Sub
+        Select Case sender.name
+            Case Me.txt_tpSFB.Name
+                iSelect = 10
+            Case Me.txt_bpSFB.Name
+                iSelect = 11
+
+        End Select
+        Me.img_Section.Invalidate()
+
+    End Sub
+
+    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_tpSFB.Leave, txt_bpSFB.Leave
+        If lBuild Then Exit Sub
+        iSelect = -1
+        Me.img_Section.Invalidate()
+    End Sub
+
+#End Region
+
 #Region "   Gestion selection profile "
 
     Private Sub GestionChangeProfile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Grid_ProfilesSup.SelectionChanged
@@ -1178,32 +1305,32 @@ Public Class Frm_SectionSFB
 
     Private Sub RemplirDelivery(ByVal Serie As String, ByVal Profile As String)
 
-        Dim iRow As Integer = 0
+        'Dim iRow As Integer = 0
 
-        Me.lbl_Delivery.Text = RemplaceDollar(strDeliveryConditions, Profile)
-        Me.GridDelivery.Rows.Clear()
+        'Me.lbl_Delivery.Text = RemplaceDollar(strDeliveryConditions, Profile)
+        'Me.GridDelivery.Rows.Clear()
 
-        'GridDelivery.AutoResizeRow(iRow - 1)
+        ''GridDelivery.AutoResizeRow(iRow - 1)
 
-        For i As Integer = 1 To MyCatalogue.nbDelivery
+        'For i As Integer = 1 To MyCatalogue.nbDelivery
 
-            If MyCatalogue.Series(Serie).Profiles(Profile).IndDeliv(i - 1) = 1 Then
+        '    If MyCatalogue.Series(Serie).Profiles(Profile).IndDeliv(i - 1) = 1 Then
 
-                GridDelivery.Rows.Add()
-                iRow += 1
-                GridDelivery(0, iRow - 1).Value = CStr(iRow)
-                GridDelivery(1, iRow - 1).Value = MyCatalogue.Delivery(i - 1)(ILangueDelivery)
-                GridDelivery(1, iRow - 1).Selected = False
-            End If
+        '        GridDelivery.Rows.Add()
+        '        iRow += 1
+        '        GridDelivery(0, iRow - 1).Value = CStr(iRow)
+        '        GridDelivery(1, iRow - 1).Value = MyCatalogue.Delivery(i - 1)(ILangueDelivery)
+        '        GridDelivery(1, iRow - 1).Selected = False
+        '    End If
 
-        Next
+        'Next
 
     End Sub
 
     Private Sub PrepareGridDelivery()
 
-        GridDelivery.Columns(1).CellTemplate.Style.WrapMode = DataGridViewTriState.True
-        GridDelivery.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
+        'GridDelivery.Columns(1).CellTemplate.Style.WrapMode = DataGridViewTriState.True
+        'GridDelivery.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
 
     End Sub
 
@@ -1686,6 +1813,9 @@ Public Class Frm_SectionSFB
 
         Nuance = cmb_GradeWP.SelectedItem
 
+        Qualite = ""
+        Norme = ""
+
         If Me.cmb_ReductionCurveWP.SelectedItem = "EC3" Then
             Qualite = "EC3"
             Norme = "Table 3.1"
@@ -1707,7 +1837,23 @@ Public Class Frm_SectionSFB
         TransfertGridAcier(Nuance, Qualite, Norme, MySectionLoc.AcierPlat)
         MAJNuancesPossibles(MySectionLoc.AcierPlat)
         MAJ_InfoWP()
+
     End Sub
+
+    Private Sub cmb_NuancePlat_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NuancePlat.SelectedIndexChanged
+
+        If lBuild Then Exit Sub
+
+        Dim inDice As Integer = Me.cmb_NuancePlat.SelectedIndex
+
+        'MySectionLoc.AcierPlat.Nuance = AcierPlats(inDice).Nuance
+        'MySectionLoc.AcierPlat.Qualite = AcierPlats(inDice).Qualite
+        'MySectionLoc.AcierPlat.Reduction = AcierPlats(inDice).Reduc
+
+        TransfertGridAcier(AcierPlats(inDice).Nuance, AcierPlats(inDice).Qualite, AcierPlats(inDice).Reduc, MySectionLoc.AcierPlat)
+
+    End Sub
+
 
     Private Sub MAJ_InfoWP()
         Dim msg As String
@@ -1721,6 +1867,7 @@ Public Class Frm_SectionSFB
 
         Me.lbl_InfoFyWP.Text = msg
     End Sub
+
 
     Private Sub ExtraitValeursEnveloppeAciers(ByVal Nuance As String, ByVal Variable As EnuDrawProperty,
                                               ByRef EpMin As Double, ByRef EpMax As Double, ByRef VMax As Double)
@@ -1764,6 +1911,24 @@ Public Class Frm_SectionSFB
             Next
 
         Next
+
+    End Sub
+
+#End Region
+
+
+#Region " Gestion affichage Fy Fu "
+
+    Private Sub btn_FyFu_Click(sender As Object, e As EventArgs) Handles btn_FyFu.Click
+
+        Select Case DrawProperty
+            Case EnuDrawProperty.Fu : DrawProperty = EnuDrawProperty.Fy
+            Case EnuDrawProperty.Fy : DrawProperty = EnuDrawProperty.Fu
+        End Select
+
+        AfficheBtnFyFu()
+
+        Me.img_ReductionCurve.Invalidate()
 
     End Sub
 

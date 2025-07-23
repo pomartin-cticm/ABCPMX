@@ -945,6 +945,55 @@ Public Class cls_Section
     End Property
 
     ''' <summary>
+    ''' Renvoie la position z de la fibre inférieure du profilé
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property zInf As Decimal
+        Get
+            Dim pzInf As Decimal
+            Select Case Me.TypeSection
+                Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
+                    pzInf = -Me.ProfilA.Plat_t
+                Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
+                    pzInf = -Me.ProfilA.Plat_t
+                Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
+                    pzInf = -Me.ProfilA.Tfi
+                Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
+                    pzInf = -Me.ProfilA.Tfi
+                Case Else
+                    pzInf = -Me.ProfilA.ha - Me.ProfilA.Plat_t
+            End Select
+            Return pzInf
+        End Get
+    End Property
+
+
+    ''' <summary>
+    ''' Retourne la largeur du plat inférieur supportant la dalle, dans le cas d'un slimfloor
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property LargeurPlatInfSlim As Decimal
+        Get
+            Dim pbInf As Decimal
+
+            Select Case Me.TypeSection
+                Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
+                    pbInf = Me.ProfilA.Plat_b
+                Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
+                    pbInf = Me.ProfilA.Plat_b
+                Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
+                    pbInf = Me.ProfilA.Bfi
+                Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
+                    pbInf = Me.ProfilA.Bfi
+                Case Else
+                    pbInf = 0
+            End Select
+
+            Return pbInf
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Indique si la section est slimfloor ou non
     ''' </summary>
     ''' <returns></returns>

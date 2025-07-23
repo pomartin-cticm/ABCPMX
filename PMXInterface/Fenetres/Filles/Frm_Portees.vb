@@ -24,6 +24,8 @@ Public Class Frm_Portees
 
     Dim LongueurTraveesIni() As Decimal     ' Longueurs initiales des travées
 
+    Dim lSlimMixte As Boolean
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -34,11 +36,16 @@ Public Class Frm_Portees
 
     Public Sub InitialiserFenetre()
         InitialiserVariables()
+        PrepareFenetre()
         GestionLangues()
         GestionStyle()
         GestionUnites()
         AfficherPoutreEnCours()
         lBuild = False
+    End Sub
+
+    Private Sub PrepareFenetre()
+        Me.rad_Rive.Visible = Not lSlimMixte
     End Sub
 
     Private Sub InitialiserVariables()
@@ -49,6 +56,8 @@ Public Class Frm_Portees
         For iTravee As Integer = 0 To MyPoutreLoc.LongueurTravee.GetUpperBound(0)
             LongueurTraveesIni(iTravee) = MyPoutreLoc.LongueurTravee(iTravee)
         Next
+
+        lSlimMixte = MyPoutreLoc.Section.lSlimFloor And MyPoutreLoc.lMixte
 
     End Sub
 

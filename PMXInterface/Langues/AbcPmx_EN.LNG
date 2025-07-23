@@ -655,6 +655,7 @@ EDITPROFILES			= Edit ArcelorMittal profiles
 EDITSTUDS				= Edit Studs
 EDITDECKS				= Edit Steel profiled sheetings
 WELDEDSEC				= Welded
+PLATE					= Plate
 FIRENOTAVAIL			= Fire calculation is not available in this version of $.
 FIRELATER				= It will be released in a future version.
 CONFIRMBEAMREMOVE		= Confirm the removal of the beam $ from the project

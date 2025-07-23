@@ -32,6 +32,7 @@ Public Class Frm_PMX
     Dim strTSbtn_IFB_A As String
     Dim strTSbtn_IFB_B As String
     Dim strPRS As String
+    Dim strPlat As String
 
     Dim strFeuNonDispo As String
 
@@ -321,6 +322,7 @@ Public Class Frm_PMX
                 strMsgFermetureFrm = Bloc("SAVEBEFORECLOSE")
 
                 strPRS = Bloc("WELDEDSEC")
+                strPlat = Bloc("PLATE")
 
                 strFeuNonDispo = RemplaceDollar(Bloc("FIRENOTAVAIL"), LogicielInfo.Racine) & Chr(13) & Bloc("FIRELATER")
                 strConfirmerSupp = Bloc("CONFIRMBEAMREMOVE")
@@ -2068,7 +2070,7 @@ Public Class Frm_PMX
         If Not MyProjet.Poutres.Count = 0 Then DessinFrmMain_Coupe(e.Graphics,
                                                                    Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height,
                                                                    MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation, lIdent,
-                                                                   MyProjet.Entreprise, MyProjet.Nom, strPRS, FontFrm)
+                                                                   MyProjet.Entreprise, MyProjet.Nom, strPRS, strPlat, FontFrm)
     End Sub
 
     Private Sub Frm_PMX_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
@@ -2124,7 +2126,7 @@ Public Class Frm_PMX
 
         If Not MyProjet.Poutres.Count = 0 Then DessinFrmMain_Coupe(MyGr, ImageSize.Width, ImageSize.Height,
                                                                    MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation, lIdent,
-                                                                   MyProjet.Entreprise, MyProjet.Nom, strPRS, FontFrm)
+                                                                   MyProjet.Entreprise, MyProjet.Nom, strPRS, strPlat, FontFrm)
 
         My.Computer.Clipboard.SetImage(Image)
         MyGr.Dispose()

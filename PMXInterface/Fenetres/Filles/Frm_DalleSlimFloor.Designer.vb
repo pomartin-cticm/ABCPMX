@@ -1051,6 +1051,7 @@ Partial Class Frm_DalleSlimFloor
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_DalleSlimFloor"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Frm_DalleSlimFloor"
         Me.pan_Beton.ResumeLayout(False)
         Me.pan_Beton.PerformLayout()

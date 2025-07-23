@@ -73,7 +73,6 @@ Public Class Frm_SectionAcierStandard
     Dim AcierPlats As New List(Of strucAcierLocal)
     Private NuancesPlats() As String = {"S235", "S275", "S355"}
 
-
     Dim strWarningA As String
     Dim ErreurRatioAf As String
 
@@ -337,7 +336,7 @@ Public Class Frm_SectionAcierStandard
         '---------------------------------------------------------------------------------------------------------
         '   18/11/24 : Création - POM
         '---------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu du plat de renfort en cours
+        '   Affichage du plat de renfort en cours
         '---------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -348,7 +347,7 @@ Public Class Frm_SectionAcierStandard
         Me.txt_Wplat.Text = GetStringInUnitN(MySectionLoc.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 1, Enu_AfficheUnite.Non, True)
         MAJI_Plats()
 
-        '==> AffichageOptFeu de la nuance
+        '==> Affichage de la nuance
 
         Me.cmb_NuancePlat.SelectedIndex = GetIndiceNuancePlat()
 
@@ -778,8 +777,11 @@ Public Class Frm_SectionAcierStandard
 
     Private Sub img_ReductionCurve_Paint(sender As Object, e As PaintEventArgs) Handles img_ReductionCurve.Paint
 
-        DessinPropAcier(e.Graphics, Me.img_ReductionCurve.ClientRectangle.Height, Me.img_ReductionCurve.ClientRectangle.Width, True,
-                        DrawProperty = EnuDrawProperty.Fy)
+        DessinProprietesAcier(e.Graphics, Me.img_ReductionCurve.ClientRectangle.Height, Me.img_ReductionCurve.ClientRectangle.Width, True,
+                              DrawProperty = EnuDrawProperty.Fy, MySectionLoc)
+
+        'DessinPropAcier(e.Graphics, Me.img_ReductionCurve.ClientRectangle.Height, Me.img_ReductionCurve.ClientRectangle.Width, True,
+        '                DrawProperty = EnuDrawProperty.Fy)
 
     End Sub
 
@@ -1096,103 +1098,6 @@ Public Class Frm_SectionAcierStandard
         End If
 
     End Sub
-
-    'Private Sub DrawReductionCurveOLD(ByVal MyGr As Graphics, ByVal RcParAff As Struc_Affichage, myFont As Font,
-    '                               ByVal kFact As Double, ByVal lSelect As Boolean,
-    '                               ByVal EpMax As Double, ByVal Plages As List(Of cls_Acier.strucPlage),
-    '                               ByVal MyColor As Color, ByVal iEp As Integer, ByVal lNuanceOK As Boolean,
-    '                               lDessineFy As Boolean)
-    '    '----------------------------------------------------------------------------------------------
-    '    '
-    '    '   21/09/12 :  Création - Version 3.00
-    '    '
-    '    '----------------------------------------------------------------------------------------------
-    '    '
-    '    '   AffichageOptFeu de l'épaisseur max et de fy calcul
-    '    '
-    '    '----------------------------------------------------------------------------------------------
-    '    '
-    '    '   MyGr        [E] :   Graphics dans lequel on dessine
-    '    '   RcParAff    [E] :   Paramètre d'affichage
-    '    '   myFont      [E] :   Police utilisée pour affichage
-    '    '   kFact       [E] :   Facteur d'affichage des valeurs fy
-    '    '   lSelect     [E] :   
-    '    '   EpMax,Plages[E] :   Paramètres décrivant la fonction fy-t
-    '    '   MyColor     [E] :   Couleur d'affichage
-    '    '   iEp         [E] :   Epaisseur du trait
-    '    '   lNuanceOK   [E] :   ?
-    '    '   lDessineFy  [E] :   Indique si on dessine Fy ou Fu
-    '    '----------------------------------------------------------------------------------------------
-
-    '    '--> Déclarations
-
-    '    Dim NbPlages As Integer
-    '    Dim Chaine As String
-
-    '    Dim MyPen As New Pen(MyColor, iEp)
-    '    Dim MyPenBlack As Pen 'New Pen(Color.Black, 0.75)
-    '    Dim MyColorBlack As Color
-    '    Dim TabVal As New List(Of Decimal)
-    '    Dim i As Integer
-
-    '    '--> Initialisation
-
-    '    NbPlages = Plages.Count
-    '    If lNuanceOK Then
-    '        MyPenBlack = New Pen(Color.Black)
-    '        MyColorBlack = Color.Black
-    '    Else
-    '        MyPenBlack = New Pen(ColorNotPossible)
-    '        MyColorBlack = ColorNotPossible
-    '    End If
-
-    '    '--> Tableau des valeurs
-
-    '    For i = 0 To NbPlages - 1
-
-    '    Next
-
-    '    '--> Traitement
-
-    '    If lSelect Then
-
-    '        For i = 0 To NbPlages - 2
-
-    '            AddLigne(MyGr, MyPen, Plages(i).Ep, kFact * Plages(i).Fy, Plages(i + 1).Ep, kFact * Plages(i).Fy, RcParAff)
-    '            AddLigne(MyGr, MyPenBlack, Plages(i + 1).Ep, kFact * Plages(i).Fy, Plages(i + 1).Ep, kFact * Plages(i + 1).Fy, RcParAff)
-
-    '        Next
-    '        AddLigne(MyGr, MyPen, Plages(NbPlages - 1).Ep, kFact * Plages(NbPlages - 1).Fy, EpMax, kFact * Plages(NbPlages - 1).Fy, RcParAff)
-
-
-    '        For i = 0 To NbPlages - 1
-
-    '            AddLigne(MyGr, MyPenBlack, Plages(i).Ep, 0, Plages(i).Ep, kFact * Plages(i).Fy, RcParAff)
-
-    '        Next
-    '        AddLigne(MyGr, MyPenBlack, EpMax, 0, EpMax, kFact * Plages(NbPlages - 1).Fy, RcParAff)
-
-    '    End If
-
-    '    '--> Cotation
-
-    '    If lSelect Then
-    '        For i = 0 To NbPlages - 2
-    '            'Chaine = GetStringInUnit(Plages(i).Fy, Enu_TypeVariable.Contrainte, 3, 0, False)
-    '            Chaine = GetStringInUnit(Plages(i).Fy, Enu_TypeVariable.SansType, 3, 0, False)
-    '            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, (Plages(i).Ep + Plages(i + 1).Ep) / 2, kFact * Plages(i).Fy, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
-    '        Next
-    '        Chaine = GetStringInUnit(Plages(NbPlages - 1).Fy, Enu_TypeVariable.SansType, 3, 0, False)
-    '        AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, (EpMax + Plages(NbPlages - 1).Ep) / 2, kFact * Plages(NbPlages - 1).Fy, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
-    '        For i = 0 To NbPlages - 1
-    '            Chaine = GetStringInUnit(Plages(i).Ep, Enu_TypeVariable.Dimension, 3, 0, False)
-    '            AddTexte(MyGr, New SolidBrush(MyColorBlack), Chaine, myFont, Plages(i).Ep, 0, RcParAff, HorizontalAlignment.Right, VerticalAlignement.Top)
-    '        Next
-    '        Chaine = GetStringInUnit(EpMax, Enu_TypeVariable.Dimension, 3, 0, False)
-    '        AddTexte(MyGr, New SolidBrush(MyColorBlack), Chaine, myFont, EpMax, 0, RcParAff, HorizontalAlignment.Right, VerticalAlignement.Top)
-    '    End If
-
-    'End Sub
 
     Private Sub DrawEpEtFyCalcul(ByVal MyGr As Graphics, ByVal RcParAff As Struc_Affichage, ByVal kFact As Double,
                                  ByVal EpPlagesMax As Double, ByVal EpProf As Double, ByVal FyCalcul As Double,
@@ -2562,7 +2467,6 @@ Public Class Frm_SectionAcierStandard
             Return lOK
 
     End Function
-
 
 
 #End Region

@@ -655,6 +655,7 @@ EDITPROFILES			= Editer les profilés ArcelorMittal
 EDITSTUDS				= Editer les goujons
 EDITDECKS				= Editer les bacs acier
 WELDEDSEC				= PRS
+PLATE					= Plat
 FIRENOTAVAIL			= Le calcul au feu n'est pas disponible dans cette version de $.
 FIRELATER				= Il sera fourni dans une future version.
 CONFIRMBEAMREMOVE		= Confirmer la suppression de la poutre $ du projet

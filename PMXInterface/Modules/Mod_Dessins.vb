@@ -19,12 +19,15 @@ Public Module Mod_Dessins
     Const DELTATHETA As Decimal = 25
     Const DELTATime As Decimal = 5 * 60
 
+    Dim ColorNotPossible As Color = Color.LightGray
+
+
 #End Region
 
 #Region " Dessins pour la fenetre principale (FRM_MAIN) "
     Public Sub DessinFrmMain_Coupe(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, myBeam As cls_Poutre,
                                    lZoomPlus As Boolean, lCotation As Boolean, lIdentification As Boolean,
-                                   Company As String, Projet As String, strPRS As String, myFont As Font,
+                                   Company As String, Projet As String, strPRS As String, strPlat As String, myFont As Font,
                                    ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   26/06/23 :  Version 1.00
@@ -38,6 +41,7 @@ Public Module Mod_Dessins
         '   lCotation   [E] :   Indique si affichage cotation
         '   lIdentificat[E] :   Indique si affichage de l'identification
         '   strPRS      [E] :   Message pour section soudée
+        '   strPlat     [E] :   Message pour plat
         '   myFont      [E] :   Police à utiliser pour l'affichage
         '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
         '-----------------------------------------------------------------------------------------------
@@ -214,126 +218,24 @@ Public Module Mod_Dessins
 
         '--> Dessin des cotations pour les profilés
 
-        If lCotation And Not lZoomPlus Then
+        If lCotation Then
 
-            If Not lSlimfloor Or myBeam.lIntermediaire Then
-                'cotation à gauche 
-                xo_cotes = -EntraxeD1
-                xe_cotes = 0
-                If lSlimfloor Then
-                    yo_cotes = -dCar / 2
-                Else
-                    'yo_cotes = -dCar
-                    yo_cotes = -Ha - dCote
-                End If
-                ye_cotes = yo_cotes
-
-                AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
-                Chaine = GetStringNoUnit(EntraxeD1, Enu_TypeVariable.Dimension)
-                AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
-
-            End If
-
-            'cotation à droite
-            xo_cotes = EntraxeD2
-            xe_cotes = 0
+            DessinFrmMain_Cotation_Entraxes(myBeam, myGr, MyParAff, MyPen, MyFontNormal, EntraxeD1, EntraxeD2, dCote, lZoomPlus)
 
             If lSlimfloor Then
-                yo_cotes = -dCar / 2
+                DessinFrmMain_Cotation_SectionSlimF(myBeam, myGr, MyParAff, MyPen, MyFontNormal, dCote, dCar, lZoomPlus, myBrushB)
             Else
-                'yo_cotes = -dCar
-                yo_cotes = -Ha - dCote
+                DessinFrmMain_Cotation_SectionStandard(myBeam, myGr, MyParAff, MyPen, MyFontNormal, dCote, dCar, lZoomPlus)
             End If
-            ye_cotes = yo_cotes
-
-            AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
-            Chaine = GetStringNoUnit(EntraxeD2, Enu_TypeVariable.Dimension)
-            AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
-
-            '-- Hauteur du profilé
-
-            Dim hPro As Decimal = myBeam.Section.ProfilA.ha
-            'Dim xVcote As Decimal = EntraxeD2 - 2 * myBeam.Section.ProfilA.BfMax
-            Dim xVcote As Decimal = 0 - 1 * dCar
-
-            AddFleche(myGr, MyPen, xVcote, 0, xVcote, -hPro, MyParAff, True, True)
-            Chaine = GetStringInUnitN(hPro, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-            AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, xVcote, -hPro / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
-
-            '-- Hauteur de la dalle
-
-            Dim hDalle As Decimal = myBeam.Dalle.zTop
-            Dim DeltaZ As Decimal = dCar / 5
-
-            AddLigne(myGr, xVcote, 0, xVcote, hDalle, MyParAff)
-            AddFleche(myGr, MyPen, xVcote, hDalle, xVcote, hDalle + DeltaZ, MyParAff, True, False)
-
-            Chaine = GetStringInUnitN(hDalle, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-            AddTexte(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, xVcote, hDalle + DeltaZ, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top, lContour, MyPen)
-
-            '-- Hauteur totale
-
-            xVcote = 0 - 1.5 * dCar
-
-            AddFleche(myGr, MyPen, xVcote, -hPro, xVcote, +hDalle, MyParAff, True, True)
-            Chaine = GetStringInUnitN(hPro + hDalle, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-            AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, xVcote, -hPro / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
-
 
         End If
 
-        '--( AffichageOptFeu du nom du profilé
+        '--( Affichage du nom du profilé
 
         'If (Not MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym Or Not MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym) And lCotation Then
         If lCotation Then
-            Dim horAlignement As HorizontalAlignment
 
-            If lSlimfloor Then
-                horAlignement = HorizontalAlignment.Left
-                xo_cotes = Math.Max(myBeam.Section.ProfilA.Bfs / 2, Math.Max(myBeam.Section.ProfilA.Bfi / 2, myBeam.Section.ProfilA.Plat_b / 2))
-                If lZoomPlus Then
-                    xo_cotes += dCar / 4
-                Else
-                    xo_cotes += dCar / 2
-                End If
-                xe_cotes = xo_cotes
-                yo_cotes = MyDalle.preDalle_ep
-                ye_cotes = MyDalle.Ep_td
-
-                Chaine = MySection.ProfilA.NomProfile
-            Else
-                xo_cotes = myBeam.Section.ProfilA.Bfs / 2
-                If lZoomPlus Then
-                    xo_cotes += dCar / 4
-                Else
-                    xo_cotes += dCar / 2
-                End If
-                xe_cotes = xo_cotes
-                yo_cotes = zREF
-                ye_cotes = yo_cotes - MySection.ProfilA.ha
-
-                If lLamine Then
-                    Chaine = MySection.ProfilA.NomProfile
-                Else
-                    Chaine = strPRS
-                End If
-
-                horAlignement = HorizontalAlignment.Center
-
-            End If
-
-            Select Case MySection.ProfilA.typeProfileAcier
-                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                    Chaine += " (SFB Slim Floor)"
-                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                    Chaine += " (IFB-A Slim Floor)"
-                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                    Chaine += " (IFB-B Slim Floor)"
-                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                    Chaine += " (SAB Slim Floor)"
-            End Select
-
-            AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, horAlignement, VerticalAlignement.Middle, New SolidBrush(Color.Transparent), MyPen, lContour)
+            DessinFrmMain_LabelProfiles(myBeam, myGr, MyParAff, MyPen, MyFontNormal, lZoomPlus, dCar, strPRS, strPlat, zREF)
 
         End If
 
@@ -378,6 +280,7 @@ Public Module Mod_Dessins
         End If
 
         '--> Trémie gauche
+
         If myBeam.lTremieGauche Then
             AddRectanglePlein(myGr, myBrushT, MyPenContour, -myBeam.EntraxeD1 + myBeam.DistanceDsl1, yInfTremieG, -myBeam.DistanceDsl1, ySupTremieG, MyParAff, True, True, True, False, False)
 
@@ -407,6 +310,7 @@ Public Module Mod_Dessins
         End If
 
         '--> Trémie droite  
+
         If myBeam.lTremieDroite Then
             AddRectanglePlein(myGr, myBrushT, MyPenContour, myBeam.DistanceDsl2, yInfTremieD, myBeam.EntraxeD2 - myBeam.DistanceDsl2, ySupTremieD, MyParAff, True, True, True, False, False)
 
@@ -433,11 +337,9 @@ Public Module Mod_Dessins
 
             End If
 
-
         End If
 
-
-        'AffichageOptFeu nom du goujon disposé, le cas écheant
+        'Affichage nom du goujon disposé, le cas écheant
 
         If myBeam.lMixte And lCotation Then
             'Cotation
@@ -469,6 +371,352 @@ Public Module Mod_Dessins
         If lIdentification Then DessinIdentification(myGr, myBeam, Company, Projet, MyFontNormal)
 
     End Sub
+
+    Private Sub DessinFrmMain_LabelProfiles(myBeam As cls_Poutre, myGr As Graphics, myParAff As Struc_Affichage,
+                                            myPen As Pen, myFont As Font, lZoomPlus As Boolean, dCar As Decimal,
+                                            strPRS As String, strPlat As String, ZRef As Decimal)
+        '-----------------------------------------------------------------------------------------------
+        '   21/07/25 :  Version 1.10 - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin des labels des profilés pour la fenêtre principale - Cas des sections standard
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre à dessiner
+        '   myParAff    [E] :   Paramètres d'affichage  
+        '   myPen       [E] :   Pen à utiliser pour les fleches/cotations    
+        '   myFont      [E] :   Police à utiliser pour l'affichage  
+        '   EntraxeD1   [E] :   Entraxe de la poutre à gauche
+        '   EntraxeD2   [E] :   Entraxe de la poutre à droite
+        '   dCote       [E] :   Décalage pour les cotations 
+        '   dCar        [E] :   Dimension caracteristique pour le dessin
+        '   strPRS      [E] :   Label pour PRS
+        '   strPlat     [E] :   Label pour un plat
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim horAlignement As HorizontalAlignment
+        Dim lContour As Boolean = lCONTOURCOTE
+
+        Dim lSlimfloor As Boolean
+        Dim Chaine As String = ""
+        Dim xo_cotes, xe_cotes, yo_cotes, ye_cotes As Decimal
+        Dim lLamine, lPlat As Boolean
+
+        '--( Initialisation
+
+        lSlimfloor = myBeam.Section.lSlimFloor
+        lLamine = myBeam.Section.lLamine
+        lPlat = myBeam.Section.ProfilA.lPlat And (Not IsEqual(myBeam.Section.ProfilA.Plat_t, 0D)) And (Not IsEqual(myBeam.Section.ProfilA.Plat_b, 0D))
+
+        '--( Traitement
+
+        If lSlimfloor Then
+            horAlignement = HorizontalAlignment.Left
+            xo_cotes = Math.Max(myBeam.Section.ProfilA.Bfs / 2, Math.Max(myBeam.Section.ProfilA.Bfi / 2, myBeam.Section.ProfilA.Plat_b / 2))
+            xo_cotes = myBeam.Section.LargeurPlatInfSlim / 2
+            If lZoomPlus Then
+                xo_cotes += dCar / 10
+            Else
+                xo_cotes += dCar / 8
+            End If
+            xe_cotes = xo_cotes
+            yo_cotes = 0 ' myBeam.Section.zInf
+            ye_cotes = yo_cotes + myBeam.Section.ProfilA.ha
+
+            Chaine = myBeam.Section.ProfilA.NomProfile
+
+            Select Case myBeam.Section.ProfilA.typeProfileAcier
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                    Chaine += " (SFB)"
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                    Chaine += " (IFB-A)"
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                    Chaine += " (IFB-B)"
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                    Chaine += " (SAB)"
+            End Select
+
+        Else
+            xo_cotes = myBeam.Section.ProfilA.Bfs / 2
+            If lZoomPlus Then
+                xo_cotes += dCar / 10
+            Else
+                xo_cotes += dCar / 8
+            End If
+            xe_cotes = xo_cotes
+            yo_cotes = ZRef
+            ye_cotes = yo_cotes - myBeam.Section.ProfilA.ha
+
+            If lLamine Then
+                Chaine = myBeam.Section.ProfilA.NomProfile
+            Else
+                Chaine = strPRS
+            End If
+
+            horAlignement = HorizontalAlignment.Left
+
+        End If
+
+        '--( Affichage du label du profilé
+
+        AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, myParAff, horAlignement, VerticalAlignement.Middle, New SolidBrush(Color.Transparent), myPen, lContour)
+
+        '--( Ajout des dimensions du plat (la cas échéant)
+
+        If lSlimfloor Then
+
+            Select Case myBeam.Section.TypeSection
+                Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte,
+                     cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Bmixte
+
+                    Chaine = strPlat & " (" &
+                         GetStringInUnitN(myBeam.Section.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 3, NON_U, True) & " x " &
+                         GetStringInUnitN(myBeam.Section.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 3, NON_U, True) & ")"
+
+                    xo_cotes = myBeam.Section.LargeurPlatInfSlim / 2
+                    If lZoomPlus Then
+                        xo_cotes += dCar / 10
+                    Else
+                        xo_cotes += dCar / 8
+                    End If
+
+                    yo_cotes = myBeam.Section.zInf + myBeam.Section.ProfilA.Plat_t / 2
+
+                    AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xo_cotes, yo_cotes, myParAff, horAlignement, VerticalAlignement.Top, New SolidBrush(Color.Transparent), myPen, lContour)
+
+            End Select
+
+        Else
+
+            If lPlat Then
+
+                Chaine = strPlat & " (" &
+                         GetStringInUnitN(myBeam.Section.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 3, NON_U, True) & " x " &
+                         GetStringInUnitN(myBeam.Section.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 3, NON_U, True) & ")"
+
+                xo_cotes = myBeam.Section.ProfilA.Bfs / 2
+                If lZoomPlus Then
+                    xo_cotes += dCar / 10
+                Else
+                    xo_cotes += dCar / 8
+                End If
+
+                yo_cotes = ZRef - myBeam.Section.ProfilA.ha - myBeam.Section.ProfilA.Plat_t / 2
+
+                AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xo_cotes, yo_cotes, myParAff, horAlignement, VerticalAlignement.Middle, New SolidBrush(Color.Transparent), myPen, lContour)
+
+            End If
+
+        End If
+
+    End Sub
+
+    Private Sub DessinFrmMain_Cotation_SectionSlimF(myBeam As cls_Poutre, myGr As Graphics, myParAff As Struc_Affichage, myPen As Pen, myFont As Font,
+                                                    dCote As Decimal, dCar As Decimal, lZoomPlus As Boolean, myBrushB As Brush)
+        '-----------------------------------------------------------------------------------------------
+        '   21/07/25 :  Version 1.10 - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin des cotations pour la fenêtre principale - Cas des sections slim floor
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre à dessiner
+        '   myParAff    [E] :   Paramètres d'affichage  
+        '   myPen       [E] :   Pen à utiliser pour les fleches/cotations    
+        '   myFont      [E] :   Police à utiliser pour l'affichage  
+        '   EntraxeD1   [E] :   Entraxe de la poutre à gauche
+        '   EntraxeD2   [E] :   Entraxe de la poutre à droite
+        '   dCote       [E] :   Décalage pour les cotations 
+        '   dCar        [E] :   Dimension caracteristique pour le dessin
+        '   lZoomPlus   [E] :   Indique si zoom
+        '   myBrushB    [E] :   Pinceau pour le béton (dalle)
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Chaine As String = ""
+        Dim Ha As Decimal = myBeam.Section.ProfilA.ha
+        Dim lContour As Boolean = lCONTOURCOTE
+        Dim zTop, zBot As Decimal
+        Dim bPlatInf As Decimal
+
+        '--( Initialisation
+
+        zTop = myBeam.Dalle.zTop
+        zBot = myBeam.Section.zInf
+        bPlatInf = myBeam.Section.LargeurPlatInfSlim
+
+        '--( Référence
+
+        AddLigne(myGr, myPen, -1.5 * dCar, zBot, -1.15 * bPlatInf / 2, zBot, myParAff)
+
+        '-- Hauteur du profilé
+
+        Dim hPro As Decimal = myBeam.Section.ProfilA.ha
+        'Dim xVcote As Decimal = EntraxeD2 - 2 * myBeam.Section.ProfilA.BfMax
+        Dim xVcote As Decimal = 0 - 1 * dCar
+
+        AddFleche(myGr, myPen, xVcote, zBot, xVcote, zBot + hPro, myParAff, True, True)
+        Chaine = GetStringInUnitN(hPro, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        'AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, hPro / 2, myParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), myPen, lContour)
+        AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, hPro / 2, myParAff, HorizontalAlignment.Center, VerticalAlignement.Middle,
+                     myBrushB, myPen, lContour)
+
+        '-- Hauteur totale
+
+        xVcote = 0 - 1.5 * dCar
+
+        AddFleche(myGr, myPen, xVcote, zBot, xVcote, zTop, myParAff, True, True)
+        Chaine = GetStringInUnitN(zTop - zBot, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, (zTop + zBot) / 2, myParAff,
+                     HorizontalAlignment.Center, VerticalAlignement.Middle, myBrushB, myPen, lContour)
+
+        '-- Hauteur de la partie préfabriquée
+
+
+        '-- Hauteur enrobage semelle
+
+
+
+    End Sub
+
+    Private Sub DessinFrmMain_Cotation_Entraxes(myBeam As cls_Poutre, myGr As Graphics, myParAff As Struc_Affichage, myPen As Pen, myFont As Font,
+                                                EntraxeD1 As Decimal, EntraxeD2 As Decimal, dCote As Decimal, lZoomPlus As Boolean)
+        '-----------------------------------------------------------------------------------------------
+        '   21/07/25 :  Version 1.10 - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin des cotations des entraxes pour la fenêtre principale - Cas général
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre à dessiner
+        '   myParAff    [E] :   Paramètres d'affichage  
+        '   myPen       [E] :   Pen à utiliser pour les fleches/cotations    
+        '   myFont      [E] :   Police à utiliser pour l'affichage  
+        '   EntraxeD1   [E] :   Entraxe de la poutre à gauche
+        '   EntraxeD2   [E] :   Entraxe de la poutre à droite
+        '   dCote       [E] :   Décalage pour les cotations 
+        '   dCar        [E] :   Dimension caracteristique pour le dessin
+        '   lZoomPlus   [E] :   Indique si zoom
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim xo_cotes, xe_cotes, yo_cotes, ye_cotes As Decimal
+        Dim Chaine As String = ""
+        Dim Ha As Decimal = myBeam.Section.ProfilA.ha
+        Dim lContour As Boolean = lCONTOURCOTE
+
+        '--( Cotation de la poutre à gauche
+
+        If myBeam.lIntermediaire And (Not lZoomPlus) Then
+
+            xo_cotes = -EntraxeD1
+            xe_cotes = 0
+
+            yo_cotes = -Ha - dCote
+
+            ye_cotes = yo_cotes
+
+            AddFleche(myGr, myPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, myParAff, True, True)
+            Chaine = GetStringNoUnit(EntraxeD1, Enu_TypeVariable.Dimension)
+            AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, myParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), myPen, lContour)
+
+        End If
+
+        '--( Cotation de la poutre à droite
+
+        If (Not lZoomPlus) Then
+            xo_cotes = EntraxeD2
+            xe_cotes = 0
+
+            yo_cotes = -Ha - dCote
+            ye_cotes = yo_cotes
+
+            AddFleche(myGr, myPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, myParAff, True, True)
+            Chaine = GetStringNoUnit(EntraxeD2, Enu_TypeVariable.Dimension)
+            AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, myParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), myPen, lContour)
+        End If
+
+    End Sub
+
+    Private Sub DessinFrmMain_Cotation_SectionStandard(myBeam As cls_Poutre, myGr As Graphics, myParAff As Struc_Affichage, myPen As Pen, myFont As Font,
+                                                       dCote As Decimal, dCar As Decimal, lZoomPlus As Boolean)
+        '-----------------------------------------------------------------------------------------------
+        '   21/07/25 :  Version 1.10 - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin des cotations pour la fenêtre principale - Cas des sections standard
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre à dessiner
+        '   myParAff    [E] :   Paramètres d'affichage  
+        '   myPen       [E] :   Pen à utiliser pour les fleches/cotations    
+        '   myFont      [E] :   Police à utiliser pour l'affichage  
+        '   EntraxeD1   [E] :   Entraxe de la poutre à gauche
+        '   EntraxeD2   [E] :   Entraxe de la poutre à droite
+        '   dCote       [E] :   Décalage pour les cotations 
+        '   dCar        [E] :   Dimension caracteristique pour le dessin
+        '   lZoomPlus   [E] :   Indique si zoom
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Chaine As String = ""
+        Dim Ha As Decimal = myBeam.Section.ProfilA.ha
+        Dim lContour As Boolean = lCONTOURCOTE
+        Dim lPlat As Boolean = myBeam.Section.ProfilA.lPlat And (Not IsEqual(myBeam.Section.ProfilA.Plat_t, 0D)) And (Not IsEqual(myBeam.Section.ProfilA.Plat_b, 0D))
+        Dim tPlat As Decimal
+
+        '--( Initialisation
+
+        If lPlat Then
+            tPlat = myBeam.Section.ProfilA.Plat_t
+        Else
+            tPlat = 0D
+        End If
+
+        '-- Hauteur du profilé
+
+        Dim hPro As Decimal = myBeam.Section.ProfilA.ha
+        'Dim xVcote As Decimal = EntraxeD2 - 2 * myBeam.Section.ProfilA.BfMax
+        Dim xVcote As Decimal = 0 - 1 * dCar
+
+        AddFleche(myGr, myPen, xVcote, 0, xVcote, -hPro, myParAff, True, True)
+        Chaine = GetStringInUnitN(hPro, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, -hPro / 2, myParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), myPen, lContour)
+
+        '-- Plat
+
+        If lPlat Then
+
+            AddLigne(myGr, myPen, xVcote, -hPro, xVcote, -hPro - tPlat, myParAff)
+            AddFleche(myGr, myPen, xVcote, -hPro - tPlat * 1.05, xVcote, -hPro - tPlat, myParAff, False, True)
+            Chaine = GetStringInUnitN(tPlat, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+            AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, -hPro - tPlat * 1.1, myParAff, HorizontalAlignment.Center, VerticalAlignement.Top, New SolidBrush(SystemColors.ControlLightLight), myPen, lContour)
+
+        End If
+
+        '-- Hauteur de la dalle
+
+        Dim hDalle As Decimal = myBeam.Dalle.zTop
+        Dim DeltaZ As Decimal = dCar / 5
+
+        AddLigne(myGr, xVcote, 0, xVcote, hDalle, myParAff)
+        AddFleche(myGr, myPen, xVcote, hDalle, xVcote, hDalle + DeltaZ, myParAff, True, False)
+
+        Chaine = GetStringInUnitN(hDalle, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        AddTexte(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, hDalle + DeltaZ, myParAff, HorizontalAlignment.Center, VerticalAlignement.Top, lContour, myPen)
+
+        '-- Hauteur totale
+
+        xVcote = 0 - 1.5 * dCar
+
+        AddFleche(myGr, myPen, xVcote, -hPro - tPlat, xVcote, +hDalle, myParAff, True, True)
+        Chaine = GetStringInUnitN(hPro + hDalle + tPlat, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, -hPro / 2, myParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), myPen, lContour)
+
+    End Sub
+
+
 
     Private Sub DessinIdentification(myGr As Graphics, myBeam As cls_Poutre, Company As String, Projet As String, myFont As Font)
         '---------------------------------------------------------------------------------------------------------------------------
@@ -504,7 +752,7 @@ Public Module Mod_Dessins
     Private Sub DessinFrmMainCoupeProfile(myGr As Graphics, mySection As cls_Section, lEnrob As Boolean,
                                           yPos As Decimal, lPrincipal As Boolean, zRef As Decimal,
                                           myParAff As Struc_Affichage, myBrushB As Brush, myBrushE As Brush, myBrushP As Brush,
-                                          Optional lInter As Boolean = False)
+                                          Optional lInter As Boolean = True)
         '---------------------------------------------------------------------------------------------------------------------------
         '   10/11/23    :   Création - POM 
         '---------------------------------------------------------------------------------------------------------------------------
@@ -516,7 +764,7 @@ Public Module Mod_Dessins
         '   lPrincipal  [E] :   Indique si profilé étudié
         '   yPos        [E] :   Position du profilé
         '   zRef        [E] :   Position z de référence
-        '   lInter      [E] :   Indique si poutre intermédiaire ou de rive
+        '   lInter      [E] :   Indique si poutre intermédiaire (ou sinon de rive)
         '   myParAff    [E] :   Paramètres d'affichage
         '   myBrushB    [E] :   Pinceau pour le béton d'enrobage
         '   myBrushE    [E] :   Pinceau pour les armatures d'enrobage
@@ -534,7 +782,7 @@ Public Module Mod_Dessins
 
         '--( Dessin de la section acier
 
-        DessinProfileMetal(myGr, mySection.ProfilA, myBrushP, myParAff, zRef, yPos, Not lInter)
+        DessinProfileMetal(myGr, mySection.ProfilA, myBrushP, myParAff, zRef, Not lInter, yPos)
 
     End Sub
 
@@ -1961,9 +2209,9 @@ Public Module Mod_Dessins
 
         '--> Dessin de la section acier
 
-        Dim lRepresentationPoutreExtremite As Boolean = Not lIntermediaire And myBeam.Section.lSlimFloor
+        Dim lDessinRive As Boolean = (Not lIntermediaire) And myBeam.Section.lSlimFloor
 
-        DessinProfileMetal(myGr, myBeam.Section.ProfilA, myBrushP, MyParAff, zREF, 0, lRepresentationPoutreExtremite)
+        DessinProfileMetal(myGr, myBeam.Section.ProfilA, myBrushP, MyParAff, zREF, lDessinRive, 0)
 
         '--> Dessin des étriers
 
@@ -4622,14 +4870,8 @@ Public Module Mod_Dessins
         '   Utilisé pour la fenêtre définition de la section acier
         '---------------------------------------------------------------------------------------------------------------------------
         '   Valeurs de iSelect: 
-        '       0 pour ha
-        '       1 pour bfs ou b
-        '       2 pour tfs ou tf
-        '       3 pour bfi (PRS non sym)
-        '       4 pour tfi (PRS non sym)
-        '       5 pour tw
-        '       6 pour r
-        '       7 pour hw
+        '       10 pour tp
+        '       11 pour bp
         '---------------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -4653,9 +4895,6 @@ Public Module Mod_Dessins
         Else
             myBrushG = New LinearGradientBrush(New PointF(0, 0), New PointF(Height, Width), Color.DarkGray, CouleurAcierNormal)
         End If
-
-
-
 
         '--> Initialisation des paramètres d'affichage
 
@@ -4683,7 +4922,7 @@ Public Module Mod_Dessins
 
         '--> Dessin de la section acier
 
-        DessinProfileMetal(MyGr, section.ProfilA, myBrushG, MyParAff, zRef, 0, Not MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire)
+        DessinProfileMetal(MyGr, section.ProfilA, myBrushG, MyParAff, zRef, Not MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire)
 
         '--> Cotation
 
@@ -4703,7 +4942,6 @@ Public Module Mod_Dessins
             yo = -section.ProfilA.ha
             ye = 0
 
-
             If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
                 xo = -section.ProfilA.Plat_b / 2 - dCar
                 xe = xo
@@ -4711,9 +4949,6 @@ Public Module Mod_Dessins
                 xo = -section.ProfilA.Bfs / 2 - dCar
                 xe = xo
             End If
-
-
-
 
             MyColor = StyleCouleur(iSelect, 0)
             MyPen.Color = MyColor
@@ -4724,11 +4959,8 @@ Public Module Mod_Dessins
 
             '-- Bp --
 
-            Dim iRef As Int16
-            Select Case section.ProfilA.typeProfileAcier
-                Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym : iRef = 1
-                Case Else : iRef = 3
-            End Select
+            Dim iRef As Int16 = 11
+
             MyColor = StyleCouleur(iSelect, iRef)
             MyPen.Color = MyColor
 
@@ -4765,46 +4997,9 @@ Public Module Mod_Dessins
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
             AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
-            '-- Bfs --
-
-            If Not lLam Then
-
-                MyColor = StyleCouleur(iSelect, 1)
-                MyPen.Color = MyColor
-
-                yo = 0 + dCar
-                ye = yo
-                xo = section.ProfilA.Bfs / 2
-                xe = -xo
-                If lAffSymbol Then Chaine = "bfs" Else Chaine = GetStringNoUnit(section.ProfilA.Bfs, Enu_TypeVariable.Dimension)
-                AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
-                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
-
-            End If
-
-            '-- Hw --
-
-            'If Not lLam Then
-
-            '    MyColor = StyleCouleur(iSelect, 7)
-            '    MyPen.Color = MyColor
-
-            '    yo = 0 - section.ProfilA.Tfs
-            '    ye = -section.ProfilA.ha + section.ProfilA.Tfi
-            '    xo = -Math.Min(section.ProfilA.Bfs, section.ProfilA.Bfi) / 2 + dCar
-            '    xe = xo
-
-            '    AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
-            '    If lAffSymbol Then Chaine = "hw" Else Chaine = GetStringNoUnit(section.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension)
-            '    AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, (yo + ye) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
-            'End If
-
             '-- Tp --
 
-            Select Case section.ProfilA.typeProfileAcier
-                Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym : iRef = 2
-                Case Else : iRef = 4
-            End Select
+            iRef = 10
             MyColor = StyleCouleur(iSelect, iRef)
             MyPen.Color = MyColor
 
@@ -4960,7 +5155,7 @@ Public Module Mod_Dessins
 
         '--> Dessin de la section acier
 
-        DessinProfileMetal(MyGr, section.ProfilA, myBrushG, MyParAff, zRef, 0, Not MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire)
+        DessinProfileMetal(MyGr, section.ProfilA, myBrushG, MyParAff, zRef, Not MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire)
 
         '--> Cotation
 
@@ -5624,7 +5819,7 @@ Public Module Mod_Dessins
             lRepresentationPoutreExtremite = False
         End If
 
-        DessinProfileMetal(MyGr, myBeam.Section.ProfilA, myBrushPSel, MyParaff1, ZREF, 0, lRepresentationPoutreExtremite)
+        DessinProfileMetal(MyGr, myBeam.Section.ProfilA, myBrushPSel, MyParaff1, ZREF, lRepresentationPoutreExtremite)
 
         '--> AffichageOptFeu de la voisine à gauche
 
@@ -11686,7 +11881,7 @@ Public Module Mod_Dessins
     End Sub
 
     Private Sub DessinProfileMetal(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
-                                   zRef As Decimal, Optional xPos As Decimal = 0, Optional lExtremite As Boolean = False)
+                                   zRef As Decimal)
         '---------------------------------------------------------------------------------------------------------------------------
         '   01/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -11697,17 +11892,29 @@ Public Module Mod_Dessins
         '   MyBrush     [E] :   Pinceau utilisé pour le remplissage
         '   MyParrffloc [E] :   Paramètres d'affichage
         '   zRef        [E] :   z de reférence (0 pour la fibre supérieure de la section acier)
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        DessinProfileMetal(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, False)
+
+    End Sub
+
+    Private Sub DessinProfileMetal(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
+                                   zRef As Decimal, lRive As Boolean, Optional xPos As Decimal = 0)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   01/04/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Dessin du profilé métallique
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics d'affichage
+        '   MyProfil    [E] :   Profilé métallique affiché
+        '   MyBrush     [E] :   Pinceau utilisé pour le remplissage
+        '   MyParrffloc [E] :   Paramètres d'affichage
+        '   zRef        [E] :   z de reférence (0 pour la fibre supérieure de la section acier)
+        '   lRive       [E] :   Profilé métallique en rive de dalle 
         '   xPos        [E] :   Position x de la section représentée
         '---------------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
-
-        'Dim xPts() As Single = Nothing
-        'Dim yPts() As Single = Nothing
-        'Dim nbPts As Integer
-
-        'Dim xe, ye As Double
-        'Dim xo, yo As Double
 
         Dim MyPenContour As New Pen(Color.Black, 1)
 
@@ -11721,23 +11928,22 @@ Public Module Mod_Dessins
                 DessinProfilePRS(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos)
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                DessinSlimSFB(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos, lExtremite)
+                DessinSlimSFB(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos, lRive)
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                DessinSlimIFBA(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos, lExtremite)
+                DessinSlimIFBA(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos, lRive)
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                DessinSlimIFBB(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos, lExtremite)
+                DessinSlimIFBB(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos, lRive)
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                DessinSlimSAB(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos, lExtremite)
+                DessinSlimSAB(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, xPos, lRive)
 
         End Select
     End Sub
 
-
     Private Sub DessinSlimSAB(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
-                              zRef As Decimal, xPos As Decimal, lExtremite As Boolean)
+                              zRef As Decimal, xPos As Decimal, lRive As Boolean)
         '---------------------------------------------------------------------------------------------------------------------------
         '   02/11/24    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -11758,11 +11964,11 @@ Public Module Mod_Dessins
         Dim yPts() As Single = Nothing
         Dim nbPts As Integer
 
-        Dim xe, ye As Double
-        Dim xo, yo As Double
+        'Dim xe, ye As Double
+        'Dim xo, yo As Double
 
         '--( Dessin
-        PrepareContourLamine(MyProfil, xPts, yPts, nbPts, lExtremite)
+        PrepareContourLamine(MyProfil, xPts, yPts, nbPts, lRive)
         DecalePts(yPts, nbPts, zRef)
         If Math.Abs(xPos) > 0 Then
             DecalePts(xPts, nbPts, xPos)
@@ -14114,6 +14320,442 @@ Public Module Mod_Dessins
     '    AddTexte(myGr, New SolidBrush(ColorA), "2: " & labelDessin("STEELPROFILE"), FontAxe, 0, -dCar, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
 
     'End Sub
+
+#End Region
+
+#Region " Dessin des propriétés de l'acier dans les fenêtres Frm_Section... "
+
+    Public Sub DessinProprietesAcier(ByVal MyGr As Graphics, ByVal sHI As Single, ByVal sWI As Single, ByVal lNuanceOK As Boolean, lFy As Boolean, mySection As cls_Section)
+        '----------------------------------------------------------------------------------------------
+        '   22/07/25 :  Création - Version 1.20 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Graphique des propriétés fy ou fu de l'acier
+        '----------------------------------------------------------------------------------------------
+        '   MyGr            [E] :   Graphics dans lequel on dessine
+        '   sHI, sWI        [E] :   Dimensions du PictureBox
+        '   lNuanceOK       [E] :   Indique si l'utilisateur en mode normal peut sélectionner cette nuance
+        '   lFy             [E] :   Indique si affichage fy ou fu
+        '----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim RCParAff As Struc_Affichage
+        Dim xMin, xMax, yMin, yMax As Double
+        Dim Nuance, Norme, Qualite As String
+        'Dim iSteel As Integer
+        Dim EpMin, EpMax, VMax As Double
+        Dim kFact As Double
+
+        Dim EpProfile, FyPro As Double
+        Dim EpPRSfs, EpPRSw, EpPRSfi, EpPRSMax, FyPRSfs, FyPRSw, FyPRSfi, FyPRSMin As Double
+
+        Dim ColorPen As Color = Color.Black
+        Dim ColorExclu As Color = ColorNotPossible
+        Dim ColorNormal As Color
+        Dim ColorSelect As Color
+
+        Dim MyPen As Pen 'New Pen(ColorPen)
+        Dim MyBrush As Brush 'New SolidBrush(ColorPen)
+        Dim myFont As New Font(FontBase.Name, 8, FontStyle.Bold)
+        Dim MyBrushTitre As Brush   'New SolidBrush(Color.DarkRed)
+
+        Dim zBoni, xBoni As Double
+        Dim EpPlagesMax As Double
+        Dim lLamine As Boolean = mySection.lLamine
+
+        '--( Initialisation couleurs
+
+        If lNuanceOK Then
+            MyPen = New Pen(ColorPen)
+            MyBrush = New SolidBrush(ColorPen)
+            ColorNormal = Color.DarkGray
+            ColorSelect = Color.DarkOrange
+            MyBrushTitre = New SolidBrush(Color.DarkRed)
+        Else
+            MyPen = New Pen(ColorExclu)
+            MyBrush = New SolidBrush(ColorExclu)
+            ColorNormal = ColorExclu
+            ColorSelect = ColorExclu
+            MyBrushTitre = New SolidBrush(ColorExclu)
+        End If
+
+        '--( Epaisseur du profilé pour le calcul
+
+        If lLamine Then
+            EpProfile = Math.Max(mySection.ProfilA.Tw, mySection.ProfilA.Tfs)
+            If lFy Then
+                FyPro = mySection.Acier.LimiteFy(EpProfile)
+            Else
+                FyPro = mySection.Acier.LimiteFu(EpProfile)
+            End If
+        Else
+            EpPRSfs = mySection.ProfilA.Tfs
+            EpPRSw = mySection.ProfilA.Tw
+            EpPRSfi = mySection.ProfilA.Tfi
+            EpPRSMax = Math.Max(EpPRSfs, Math.Max(EpPRSfi, EpPRSw))
+
+            If lFy Then
+                FyPRSfs = mySection.Acier.LimiteFy(EpPRSfs)
+                FyPRSw = mySection.Acier.LimiteFy(EpPRSw)
+                FyPRSfi = mySection.Acier.LimiteFy(EpPRSfi)
+                FyPRSMin = mySection.Acier.LimiteFy(EpPRSMax)
+            Else
+                FyPRSfs = mySection.Acier.LimiteFu(EpPRSfs)
+                FyPRSw = mySection.Acier.LimiteFu(EpPRSw)
+                FyPRSfi = mySection.Acier.LimiteFu(EpPRSfi)
+                FyPRSMin = mySection.Acier.LimiteFu(EpPRSMax)
+            End If
+
+        End If
+
+        EpPlagesMax = mySection.Acier.EpMax
+
+        '--( Initialisation
+
+        Const kEch As Decimal = 0.92
+
+        'If Me.GridAciers.Rows.Count <= 0 Then Exit Sub
+
+        'iSteel = Me.GridAciers.SelectedCells(0).RowIndex
+        Nuance = mySection.Acier.Nuance
+        Qualite = mySection.Acier.Qualite
+        Norme = mySection.Acier.NormeProduit
+
+        ExtraitValeursEnveloppeAciers(Nuance, lFy, EpMin, EpMax, VMax)
+
+        If mySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+            EpMax = Math.Max(EpMax, EpProfile)
+        Else
+            EpMax = Math.Max(EpMax, EpPRSMax)
+        End If
+
+        kFact = EpMax / VMax * sHI / sWI
+        xMin = 0
+        xMax = EpMax
+        yMin = 0
+        yMax = VMax * kFact
+
+        ParametresAffichage(RCParAff, xMin, yMin, xMax - xMin, yMax - yMin, sWI, sHI)
+
+        Dim ChaineFy As String = ""
+        Dim hBoni As Single = MyGr.MeasureString(ChaineFy, myFont).Height
+        Dim ChaineT As String = "t (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")"
+        Dim wBoni As Single = MyGr.MeasureString(ChaineT, myFont).Width
+
+        If lFy Then ChaineFy = "fy (MPa)" Else ChaineFy = "fu (MPa)"
+
+        yMax += hBoni / RCParAff.CRed
+        xMax += wBoni / RCParAff.CRed
+        yMin -= 2 * hBoni / RCParAff.CRed
+        'xMin -= wBoni / RCParAff.CRed
+
+        ParametresAffichage(RCParAff, xMin, yMin, xMax - xMin, yMax - yMin, sWI, sHI)
+
+        '--( Dessin des axes
+
+        AddFleche(MyGr, MyPen, 0, 0, xMax, 0, RCParAff, False, True)
+        AddFleche(MyGr, MyPen, 0, 0, 0, yMax, RCParAff, False, True)
+
+        AddTexte(MyGr, MyBrush, ChaineFy, myFont, 0, yMax, RCParAff, HorizontalAlignment.Left, VerticalAlignement.Top)
+        AddTexte(MyGr, MyBrush, ChaineT, myFont, xMax, 0, RCParAff, HorizontalAlignment.Right, VerticalAlignement.Bottom)
+
+        '--( Représentation des courbes
+
+        Dim iEp As Integer
+        Const iEPNORMAL As Integer = 1
+        Const iEPSELECT As Integer = 2
+
+        Dim MyColor As Color
+        Dim lSelect As Boolean
+
+        For Each kvpQualite As KeyValuePair(Of String, strucQualite) In SteelBase.Grades(Nuance).Qualites
+
+            For Each kvpSteel As KeyValuePair(Of String, strucReduction) In kvpQualite.Value.ReductionCurv
+
+                'If Qualite = kvpQualite.Key And Norme = kvpSteel.Key Then
+                If Qualite = kvpQualite.Key And Norme.Contains(kvpSteel.Key) Then
+                    MyColor = ColorSelect
+                    iEp = iEPSELECT
+                    lSelect = True
+                Else
+                    MyColor = ColorNormal
+                    iEp = iEPNORMAL
+                    lSelect = False
+                End If
+
+                If lSelect Then
+                    DrawReductionCurve(MyGr, RCParAff, myFont, kEch * kFact, lSelect,
+                                       kvpSteel.Value.EpMax, kvpSteel.Value.Plages, MyColor, iEp, lNuanceOK, lFy)
+                End If
+            Next
+
+        Next
+
+        '--( Représentation de la position du profilé dans la courbe de réduction
+
+        zBoni = YUnivers(RCParAff, sHI)
+        xBoni = XUnivers(RCParAff, sWI / 2)
+
+        If lLamine Then
+            DrawEpEtFyCalcul(MyGr, RCParAff, kEch * kFact, EpPlagesMax, EpProfile, FyPro, xBoni, zBoni, myFont, lNuanceOK, lFy)
+        Else
+            DrawEpEtFyCalcul(MyGr, RCParAff, kEch * kFact, EpPlagesMax, EpPRSfs, FyPRSfs, xBoni, zBoni, myFont, lNuanceOK, lFy, False)
+            DrawEpEtFyCalcul(MyGr, RCParAff, kEch * kFact, EpPlagesMax, EpPRSw, FyPRSw, xBoni, zBoni, myFont, lNuanceOK, lFy, False)
+            DrawEpEtFyCalcul(MyGr, RCParAff, kEch * kFact, EpPlagesMax, EpPRSfi, FyPRSfi, xBoni, zBoni, myFont, lNuanceOK, lFy, False)
+            DrawEpEtFyCalcul(MyGr, RCParAff, kEch * kFact, EpPlagesMax, EpPRSMax, FyPRSMin, xBoni, zBoni, myFont, lNuanceOK, lFy, True, True)
+        End If
+
+        '--( Titre
+
+        Dim Chaine As String
+
+        Chaine = Nuance & " - " & Qualite
+        Dim wC, hC As Single
+        Dim MyFontTitre As New Font(FontBase.Name, 8, FontStyle.Bold)
+
+        wC = MyGr.MeasureString(Chaine, MyFontTitre).Width
+        hC = MyGr.MeasureString(Chaine, MyFontTitre).Height
+
+        MyGr.DrawString(Chaine, MyFontTitre, MyBrushTitre, sWI / 2 - wC / 2, 1 / 2 * hC)
+
+        '--( Gestion du message d'avertissement pour les nuances non autorisées
+
+        If Not lNuanceOK Then
+            '     DrawWarningNuance(MyGr, sHI, sWI)
+        End If
+
+        '--( Libérer la mémoire
+
+        myFont.Dispose()
+        MyPen.Dispose()
+        MyBrush.Dispose()
+        MyFontTitre.Dispose()
+        MyBrushTitre.Dispose()
+
+    End Sub
+
+    Private Sub DrawReductionCurve(ByVal MyGr As Graphics, ByVal RcParAff As Struc_Affichage, myFont As Font,
+                                   ByVal kFact As Double, ByVal lSelect As Boolean,
+                                   ByVal EpMax As Double, ByVal Plages As List(Of cls_Acier.strucPlage),
+                                   ByVal MyColor As Color, ByVal iEp As Integer, ByVal lNuanceOK As Boolean,
+                                   lDessineFy As Boolean)
+        '----------------------------------------------------------------------------------------------
+        '   22/07/25 :  Création - Version 1.20 - POM
+        '----------------------------------------------------------------------------------------------
+        '
+        '   AffichageOptFeu de l'épaisseur max et de fy calcul
+        '
+        '----------------------------------------------------------------------------------------------
+        '
+        '   MyGr        [E] :   Graphics dans lequel on dessine
+        '   RcParAff    [E] :   Paramètre d'affichage
+        '   myFont      [E] :   Police utilisée pour affichage
+        '   kFact       [E] :   Facteur d'affichage des valeurs fy
+        '   lSelect     [E] :   
+        '   EpMax,Plages[E] :   Paramètres décrivant la fonction fy-t
+        '   MyColor     [E] :   Couleur d'affichage
+        '   iEp         [E] :   Epaisseur du trait
+        '   lNuanceOK   [E] :   ?
+        '   lDessineFy  [E] :   Indique si on dessine Fy ou Fu
+        '----------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim NbPlages As Integer
+        Dim Chaine As String
+
+        Dim MyPen As New Pen(MyColor, iEp)
+        Dim MyPenBlack As Pen 'New Pen(Color.Black, 0.75)
+        Dim MyColorBlack As Color
+        Dim TabVal As New List(Of Decimal)
+        Dim i As Integer
+
+        '--> Initialisation
+
+        NbPlages = Plages.Count
+        If lNuanceOK Then
+            MyPenBlack = New Pen(Color.Black)
+            MyColorBlack = Color.Black
+        Else
+            MyPenBlack = New Pen(ColorNotPossible)
+            MyColorBlack = ColorNotPossible
+        End If
+
+        '--> Tableau des valeurs
+
+        For i = 0 To NbPlages - 1
+            If lDessineFy Then
+                TabVal.Add(Plages(i).Fy)
+            Else
+                TabVal.Add(Plages(i).Fu)
+            End If
+        Next
+
+        '--> Traitement
+
+        If lSelect Then
+
+            For i = 0 To NbPlages - 2
+
+                AddLigne(MyGr, MyPen, Plages(i).Ep, kFact * TabVal(i), Plages(i + 1).Ep, kFact * TabVal(i), RcParAff)
+                AddLigne(MyGr, MyPenBlack, Plages(i + 1).Ep, kFact * TabVal(i), Plages(i + 1).Ep, kFact * TabVal(i + 1), RcParAff)
+
+            Next
+            AddLigne(MyGr, MyPen, Plages(NbPlages - 1).Ep, kFact * TabVal(NbPlages - 1), EpMax, kFact * TabVal(NbPlages - 1), RcParAff)
+
+
+            For i = 0 To NbPlages - 1
+
+                AddLigne(MyGr, MyPenBlack, Plages(i).Ep, 0, Plages(i).Ep, kFact * TabVal(i), RcParAff)
+
+            Next
+            AddLigne(MyGr, MyPenBlack, EpMax, 0, EpMax, kFact * TabVal(NbPlages - 1), RcParAff)
+
+        End If
+
+        '--> Cotation
+
+        If lSelect Then
+            For i = 0 To NbPlages - 2
+                'Chaine = GetStringInUnit(Plages(i).Fy, Enu_TypeVariable.Contrainte, 3, 0, False)
+                Chaine = GetStringInUnit(TabVal(i), Enu_TypeVariable.SansType, 3, 0, False)
+                AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, (Plages(i).Ep + Plages(i + 1).Ep) / 2, kFact * TabVal(i), RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+            Next
+            Chaine = GetStringInUnit(TabVal(NbPlages - 1), Enu_TypeVariable.SansType, 3, 0, False)
+            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, (EpMax + Plages(NbPlages - 1).Ep) / 2, kFact * TabVal(NbPlages - 1), RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+            For i = 0 To NbPlages - 1
+                Chaine = GetStringInUnit(Plages(i).Ep, Enu_TypeVariable.Dimension, 3, 0, False)
+                AddTexte(MyGr, New SolidBrush(MyColorBlack), Chaine, myFont, Plages(i).Ep, 0, RcParAff, HorizontalAlignment.Right, VerticalAlignement.Top)
+            Next
+            Chaine = GetStringInUnit(EpMax, Enu_TypeVariable.Dimension, 3, 0, False)
+            AddTexte(MyGr, New SolidBrush(MyColorBlack), Chaine, myFont, EpMax, 0, RcParAff, HorizontalAlignment.Right, VerticalAlignement.Top)
+        End If
+
+    End Sub
+
+    Private Sub DrawEpEtFyCalcul(ByVal MyGr As Graphics, ByVal RcParAff As Struc_Affichage, ByVal kFact As Double,
+                                 ByVal EpPlagesMax As Double, ByVal EpProf As Double, ByVal FyCalcul As Double,
+                                 ByVal xBoni As Double, ByVal zBoni As Double,
+                                 ByVal myFont As Font, ByVal lNuanceOK As Boolean, lFy As Boolean,
+                                 Optional ByVal lLegende As Boolean = True, Optional ByVal lPRS As Boolean = False)
+        '----------------------------------------------------------------------------------------------
+        '   22/07/25 :  Création - Version 1.20 - POM
+        '----------------------------------------------------------------------------------------------
+        '
+        '   AffichageOptFeu de l'épaisseur max et de fy calcul
+        '
+        '----------------------------------------------------------------------------------------------
+        '
+        '   MyGr        [E] :   Graphics dans lequel on dessine
+        '   RcParAff    [E] :   Paramètre d'affichage
+        '   kFact       [E] :   Facteur d'affichage des valeurs fy
+        '   
+        '   EpPlagesMax [E] :   Epaisseur maximale des plages de la courbe de réduction'
+        '   EpProf      [E] :   Epaisseur de profilé pris en compte pour les calcul
+        '   FyCalcul    [E] :   Valeur de Fy (ou Fu) pour le calcul
+        '   
+        '   xBoni, zBoni[E] :   Position pour l'affichage du texte sur les valeurs de calcul
+        '   MyFont      [E] :   Police d'affichage
+        '   lNuanceOK   [E) :   Indique si la nuance d'acier est accessible à l'utilisateur
+        '
+        '----------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Chaine As String
+        Dim MyColor As Color '= Color.DarkOrchid
+        Dim MyPen As Pen    'New Pen(MyColor, 2)
+        Dim MyPenProf As Pen    'New Pen(MyColor, 2)
+        Dim SymbIndex As String = "u"
+        Const EPSILONG As Double = 0.0001
+
+        '--> Initialisation
+
+        If lNuanceOK Then
+            MyColor = Color.DarkOrchid
+        Else
+            MyColor = ColorNotPossible
+        End If
+        MyPen = New Pen(MyColor, 2)
+        MyPenProf = New Pen(MyColor, 2)
+        If EpProf > EpPlagesMax * (1 + EPSILONG) Then
+            MyPenProf.DashStyle = Drawing2D.DashStyle.Dash
+        End If
+        If lFy Then SymbIndex = "y"
+
+        '--> Traitement
+
+        If lLegende Then
+            Chaine = GetStringInUnit(EpProf, Enu_TypeVariable.Dimension, 3, 1, False)
+            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, EpProf, 0, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+        End If
+
+        AddLigne(MyGr, MyPenProf, EpProf, 0, EpProf, kFact * FyCalcul, RcParAff)
+        If EpProf > EpPlagesMax * (1 + EPSILONG) Then
+            AddLigne(MyGr, MyPenProf, EpPlagesMax, kFact * FyCalcul, EpProf, kFact * FyCalcul, RcParAff)
+        End If
+
+        If lLegende Then
+            If lPRS Then
+                Chaine = "tmax = " & GetStringInUnit(EpProf, Enu_TypeVariable.Dimension, 3, 1, True) & "   -  f" & SymbIndex & ",min = " & GetStringInUnit(FyCalcul, Enu_TypeVariable.SansType, 3, 0, False) & " MPa"
+            Else
+                Chaine = "t = " & GetStringInUnit(EpProf, Enu_TypeVariable.Dimension, 3, 1, True) & "   -  f" & SymbIndex & " = " & GetStringInUnit(FyCalcul, Enu_TypeVariable.SansType, 3, 0, False) & " MPa"
+            End If
+            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, xBoni, zBoni, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
+        End If
+
+        MyPen.Dispose()
+        MyPenProf.Dispose()
+
+    End Sub
+
+    Private Sub ExtraitValeursEnveloppeAciers(ByVal Nuance As String, lFy As Boolean,
+                                              ByRef EpMin As Double, ByRef EpMax As Double, ByRef VMax As Double)
+        '------------------------------------------------------------------------------------------------------------------
+        '   22/07/25 :  Création - Version 1.20 - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Extrait les valeurs enveloppes de la nuance sélectionnée
+        '------------------------------------------------------------------------------------------------------------------
+        '   Nuance  [E] :   Nuance d'acier sélectionnée
+        '   lFy     [E] :   Indique si on extrait les valeurs fy ou fu
+        '   EpMin   [S] :   Epaisseur minimale associée à la nuance
+        '   EpMax   [S] :   Epaisseur maximale associée à la nuance
+        '   VMax    [S] :   Valeur maximale de fy ou fu associée à la nuance
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--( Initialisations 
+
+        EpMin = 0
+        EpMax = 0
+        VMax = 0
+
+        '--( Boucle sur les nuances de la base de données
+
+        For Each kvpQualite As KeyValuePair(Of String, strucQualite) In SteelBase.Grades(Nuance).Qualites
+
+            For Each kvpSteel As KeyValuePair(Of String, strucReduction) In kvpQualite.Value.ReductionCurv
+                If EpMin = 0 Then
+                    EpMin = kvpSteel.Value.Plages(0).Ep
+                Else
+                    EpMin = Math.Min(EpMin, kvpSteel.Value.Plages(0).Ep)
+                End If
+                EpMax = Math.Max(EpMax, kvpSteel.Value.EpMax)
+
+                For Each kVP As cls_Acier.strucPlage In kvpSteel.Value.Plages
+
+                    If lFy Then
+                        VMax = Math.Max(VMax, kVP.Fy)
+                    Else
+                        VMax = Math.Max(VMax, kVP.Fu)
+                    End If
+
+                Next
+
+            Next
+
+        Next
+
+    End Sub
 
 #End Region
 
