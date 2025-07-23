@@ -14325,7 +14325,8 @@ Public Module Mod_Dessins
 
 #Region " Dessin des propriétés de l'acier dans les fenêtres Frm_Section... "
 
-    Public Sub DessinProprietesAcier(ByVal MyGr As Graphics, ByVal sHI As Single, ByVal sWI As Single, ByVal lNuanceOK As Boolean, lFy As Boolean, mySection As cls_Section)
+    Public Sub DessinProprietesAcier(ByVal MyGr As Graphics, ByVal sHI As Single, ByVal sWI As Single,
+                                     ByVal lNuanceOK As Boolean, lFy As Boolean, mySection As cls_Section)
         '----------------------------------------------------------------------------------------------
         '   22/07/25 :  Création - Version 1.20 - POM
         '----------------------------------------------------------------------------------------------
@@ -14362,6 +14363,8 @@ Public Module Mod_Dessins
         Dim zBoni, xBoni As Double
         Dim EpPlagesMax As Double
         Dim lLamine As Boolean = mySection.lLamine
+        Dim lSlim As Boolean = mySection.lSlimFloor
+        Dim lSlimIFBB As Boolean = mySection.lSlimFloor_IFB_B
 
         '--( Initialisation couleurs
 
@@ -14381,8 +14384,12 @@ Public Module Mod_Dessins
 
         '--( Epaisseur du profilé pour le calcul
 
-        If lLamine Then
-            EpProfile = Math.Max(mySection.ProfilA.Tw, mySection.ProfilA.Tfs)
+        If lLamine Or lSlim Then
+            If lSlimIFBB Then
+                EpProfile = Math.Max(mySection.ProfilA.Tw, mySection.ProfilA.Tfi)
+            Else
+                EpProfile = Math.Max(mySection.ProfilA.Tw, mySection.ProfilA.Tfs)
+            End If
             If lFy Then
                 FyPro = mySection.Acier.LimiteFy(EpProfile)
             Else
@@ -14496,7 +14503,7 @@ Public Module Mod_Dessins
         zBoni = YUnivers(RCParAff, sHI)
         xBoni = XUnivers(RCParAff, sWI / 2)
 
-        If lLamine Then
+        If lLamine Or lSlim Then
             DrawEpEtFyCalcul(MyGr, RCParAff, kEch * kFact, EpPlagesMax, EpProfile, FyPro, xBoni, zBoni, myFont, lNuanceOK, lFy)
         Else
             DrawEpEtFyCalcul(MyGr, RCParAff, kEch * kFact, EpPlagesMax, EpPRSfs, FyPRSfs, xBoni, zBoni, myFont, lNuanceOK, lFy, False)

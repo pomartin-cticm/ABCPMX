@@ -944,6 +944,8 @@ WIDTH					= Width
 WEBHEIGHT				= Web height
 THICKNESS				= Thickness
 IFBSECTION				= IFB section
+TOPPLATE				= Top plate
+BOTPLATE				= Bottom plate
 
 #FRM_SABSECTIONS
 CANCEL					= Cancel

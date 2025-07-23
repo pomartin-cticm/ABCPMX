@@ -944,6 +944,8 @@ WEBHEIGHT				= Hauteur de l'âme
 WIDTH					= Largeur
 THICKNESS				= Epaisseur
 IFBSECTION				= Section IFB
+TOPPLATE				= Plat supérieur
+BOTPLATE				= Plat inférieur
 
 #FRM_SABSECTIONS
 CANCEL					= Annuler

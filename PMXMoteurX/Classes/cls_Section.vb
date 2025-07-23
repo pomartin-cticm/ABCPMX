@@ -1007,6 +1007,16 @@ Public Class cls_Section
     End Property
 
     ''' <summary>
+    ''' Indique si la section est une slimfloor de type IFB_B
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property lSlimFloor_IFB_B As Boolean
+        Get
+            Return (Me.TypeSection = Enum_TypeSection.IFB_B) Or (Me.TypeSection = Enum_TypeSection.IFB_Bmixte)
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Indique si la section comprend un enrobage partiel
     ''' </summary>
     Public ReadOnly Property lEnrobage As Boolean
@@ -1379,6 +1389,21 @@ Public Class cls_Section
             End If
 
             Return MyFy
+        End Get
+    End Property
+
+    Public ReadOnly Property FuSpd As Decimal
+        Get
+            Dim myFu As Decimal
+
+            If Me.lUser Then '--[ Acier défini directement par l'utilisateur
+                myFu = 0 'Me.f_u.spd
+
+            Else '--[ Acier de la base de donnée : Recherche dans les plages
+                myFu = Me.AcierPlat.LimiteFu(Me.ProfilA.Plat_t)
+            End If
+
+            Return myFu
         End Get
     End Property
 

@@ -23,6 +23,7 @@ Partial Class Frm_SectionIFB
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_SectionIFB))
         Me.GridAciers = New System.Windows.Forms.DataGridView()
         Me.Col_Grade = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Col_Qualite = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -44,12 +45,13 @@ Partial Class Frm_SectionIFB
         Me.TLpan_Saisie = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
+        Me.pan_Plat = New System.Windows.Forms.Panel()
+        Me.cmb_NuancePlat = New System.Windows.Forms.ComboBox()
+        Me.lbl_Width = New System.Windows.Forms.Label()
+        Me.lbl_WPSteel = New System.Windows.Forms.Label()
+        Me.lbl_Plat = New System.Windows.Forms.Label()
         Me.lbl_IFBSection = New System.Windows.Forms.Label()
         Me.Pan_DimPRS = New System.Windows.Forms.Panel()
-        Me.lbl_InfoFyWP = New System.Windows.Forms.Label()
-        Me.cmb_ReductionCurveWP = New System.Windows.Forms.ComboBox()
-        Me.cmb_GradeWP = New System.Windows.Forms.ComboBox()
-        Me.lbl_WPSteel = New System.Windows.Forms.Label()
         Me.chk_Hw = New System.Windows.Forms.CheckBox()
         Me.chk_Ht = New System.Windows.Forms.CheckBox()
         Me.lbl_Info = New System.Windows.Forms.Label()
@@ -61,12 +63,7 @@ Partial Class Frm_SectionIFB
         Me.img_hw = New System.Windows.Forms.PictureBox()
         Me.lbl_Height = New System.Windows.Forms.Label()
         Me.lbl_Web = New System.Windows.Forms.Label()
-        Me.lbl_Width = New System.Windows.Forms.Label()
         Me.pan_Lamine = New System.Windows.Forms.Panel()
-        Me.lbl_Delivery = New System.Windows.Forms.Label()
-        Me.GridDelivery = New System.Windows.Forms.DataGridView()
-        Me.Col_Index = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Col_Message = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lbl_Profiles = New System.Windows.Forms.Label()
         Me.Grid_ProfilesSup = New System.Windows.Forms.DataGridView()
         Me.Col_ListeSup = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -75,6 +72,11 @@ Partial Class Frm_SectionIFB
         Me.lst_GammeS = New System.Windows.Forms.ListBox()
         Me.lbl_ParentProfile = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.pan_Acier = New System.Windows.Forms.Panel()
+        Me.lbl_InfoFyWP = New System.Windows.Forms.Label()
+        Me.btn_FyFu = New System.Windows.Forms.Button()
+        Me.cmb_ReductionCurveWP = New System.Windows.Forms.ComboBox()
+        Me.cmb_GradeWP = New System.Windows.Forms.ComboBox()
         Me.img_ReductionCurve = New System.Windows.Forms.PictureBox()
         Me.img_Section = New System.Windows.Forms.PictureBox()
         Me.pan_Main = New System.Windows.Forms.Panel()
@@ -85,6 +87,7 @@ Partial Class Frm_SectionIFB
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.imgList_UY = New System.Windows.Forms.ImageList(Me.components)
         CType(Me.GridAciers, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_tp, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_bp, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -94,13 +97,14 @@ Partial Class Frm_SectionIFB
         Me.TLpan_Saisie.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
         Me.TLpan_Gauche.SuspendLayout()
+        Me.pan_Plat.SuspendLayout()
         Me.Pan_DimPRS.SuspendLayout()
         CType(Me.img_ha, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_hw, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Lamine.SuspendLayout()
-        CType(Me.GridDelivery, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
+        Me.pan_Acier.SuspendLayout()
         CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Main.SuspendLayout()
@@ -129,7 +133,7 @@ Partial Class Frm_SectionIFB
         Me.GridAciers.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.GridAciers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.GridAciers.ShowCellToolTips = False
-        Me.GridAciers.Size = New System.Drawing.Size(335, 500)
+        Me.GridAciers.Size = New System.Drawing.Size(335, 426)
         Me.GridAciers.TabIndex = 21
         '
         'Col_Grade
@@ -153,7 +157,7 @@ Partial Class Frm_SectionIFB
         'etq_UnitDim4
         '
         Me.etq_UnitDim4.AutoSize = True
-        Me.etq_UnitDim4.Location = New System.Drawing.Point(289, 124)
+        Me.etq_UnitDim4.Location = New System.Drawing.Point(289, 45)
         Me.etq_UnitDim4.Name = "etq_UnitDim4"
         Me.etq_UnitDim4.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim4.TabIndex = 3
@@ -162,7 +166,7 @@ Partial Class Frm_SectionIFB
         'etq_UnitDim3
         '
         Me.etq_UnitDim3.AutoSize = True
-        Me.etq_UnitDim3.Location = New System.Drawing.Point(289, 95)
+        Me.etq_UnitDim3.Location = New System.Drawing.Point(289, 16)
         Me.etq_UnitDim3.Name = "etq_UnitDim3"
         Me.etq_UnitDim3.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim3.TabIndex = 3
@@ -170,21 +174,21 @@ Partial Class Frm_SectionIFB
         '
         'txt_tp
         '
-        Me.txt_tp.Location = New System.Drawing.Point(225, 121)
+        Me.txt_tp.Location = New System.Drawing.Point(225, 42)
         Me.txt_tp.Name = "txt_tp"
         Me.txt_tp.Size = New System.Drawing.Size(58, 20)
         Me.txt_tp.TabIndex = 2
         '
         'txt_bp
         '
-        Me.txt_bp.Location = New System.Drawing.Point(225, 92)
+        Me.txt_bp.Location = New System.Drawing.Point(225, 13)
         Me.txt_bp.Name = "txt_bp"
         Me.txt_bp.Size = New System.Drawing.Size(58, 20)
         Me.txt_bp.TabIndex = 2
         '
         'img_tp
         '
-        Me.img_tp.Location = New System.Drawing.Point(189, 121)
+        Me.img_tp.Location = New System.Drawing.Point(189, 42)
         Me.img_tp.Name = "img_tp"
         Me.img_tp.Size = New System.Drawing.Size(37, 20)
         Me.img_tp.TabIndex = 1
@@ -192,7 +196,7 @@ Partial Class Frm_SectionIFB
         '
         'img_bp
         '
-        Me.img_bp.Location = New System.Drawing.Point(189, 92)
+        Me.img_bp.Location = New System.Drawing.Point(189, 13)
         Me.img_bp.Name = "img_bp"
         Me.img_bp.Size = New System.Drawing.Size(37, 20)
         Me.img_bp.TabIndex = 1
@@ -203,7 +207,7 @@ Partial Class Frm_SectionIFB
         Me.lbl_Thickness.AutoSize = True
         Me.lbl_Thickness.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline)
         Me.lbl_Thickness.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Thickness.Location = New System.Drawing.Point(11, 121)
+        Me.lbl_Thickness.Location = New System.Drawing.Point(11, 42)
         Me.lbl_Thickness.Name = "lbl_Thickness"
         Me.lbl_Thickness.Size = New System.Drawing.Size(72, 13)
         Me.lbl_Thickness.TabIndex = 0
@@ -236,7 +240,7 @@ Partial Class Frm_SectionIFB
         Me.pan_DefinitionAcier.Location = New System.Drawing.Point(0, 30)
         Me.pan_DefinitionAcier.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_DefinitionAcier.Name = "pan_DefinitionAcier"
-        Me.pan_DefinitionAcier.Size = New System.Drawing.Size(354, 550)
+        Me.pan_DefinitionAcier.Size = New System.Drawing.Size(354, 477)
         Me.pan_DefinitionAcier.TabIndex = 2
         '
         'lbl_ReductionCurve
@@ -277,7 +281,7 @@ Partial Class Frm_SectionIFB
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.lbl_Acier, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.pan_DefinitionAcier, 0, 1)
-        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
@@ -287,7 +291,7 @@ Partial Class Frm_SectionIFB
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(354, 580)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(354, 507)
         Me.TableLayoutPanel1.TabIndex = 0
         '
         'pan_Droite
@@ -298,7 +302,7 @@ Partial Class Frm_SectionIFB
         Me.pan_Droite.Location = New System.Drawing.Point(653, 0)
         Me.pan_Droite.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Droite.Name = "pan_Droite"
-        Me.pan_Droite.Size = New System.Drawing.Size(354, 580)
+        Me.pan_Droite.Size = New System.Drawing.Size(354, 507)
         Me.pan_Droite.TabIndex = 1
         '
         'TLpan_Saisie
@@ -316,7 +320,7 @@ Partial Class Frm_SectionIFB
         Me.TLpan_Saisie.Name = "TLpan_Saisie"
         Me.TLpan_Saisie.RowCount = 1
         Me.TLpan_Saisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Saisie.Size = New System.Drawing.Size(1007, 580)
+        Me.TLpan_Saisie.Size = New System.Drawing.Size(1007, 507)
         Me.TLpan_Saisie.TabIndex = 0
         '
         'pan_Gauche
@@ -327,28 +331,103 @@ Partial Class Frm_SectionIFB
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(353, 580)
+        Me.pan_Gauche.Size = New System.Drawing.Size(353, 507)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLpan_Gauche
         '
         Me.TLpan_Gauche.ColumnCount = 1
         Me.TLpan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_Gauche.Controls.Add(Me.pan_Plat, 0, 5)
+        Me.TLpan_Gauche.Controls.Add(Me.lbl_Plat, 0, 4)
         Me.TLpan_Gauche.Controls.Add(Me.lbl_IFBSection, 0, 2)
         Me.TLpan_Gauche.Controls.Add(Me.Pan_DimPRS, 0, 3)
         Me.TLpan_Gauche.Controls.Add(Me.pan_Lamine, 0, 1)
         Me.TLpan_Gauche.Controls.Add(Me.lbl_ParentProfile, 0, 0)
-        Me.TLpan_Gauche.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TLpan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLpan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_Gauche.Name = "TLpan_Gauche"
-        Me.TLpan_Gauche.RowCount = 4
+        Me.TLpan_Gauche.RowCount = 6
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 290.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
-        Me.TLpan_Gauche.Size = New System.Drawing.Size(353, 580)
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 95.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_Gauche.Size = New System.Drawing.Size(353, 507)
         Me.TLpan_Gauche.TabIndex = 0
+        '
+        'pan_Plat
+        '
+        Me.pan_Plat.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Plat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Plat.Controls.Add(Me.lbl_InfoFyWP)
+        Me.pan_Plat.Controls.Add(Me.cmb_NuancePlat)
+        Me.pan_Plat.Controls.Add(Me.lbl_Width)
+        Me.pan_Plat.Controls.Add(Me.lbl_Thickness)
+        Me.pan_Plat.Controls.Add(Me.lbl_WPSteel)
+        Me.pan_Plat.Controls.Add(Me.txt_bp)
+        Me.pan_Plat.Controls.Add(Me.txt_tp)
+        Me.pan_Plat.Controls.Add(Me.etq_UnitDim4)
+        Me.pan_Plat.Controls.Add(Me.etq_UnitDim3)
+        Me.pan_Plat.Controls.Add(Me.img_bp)
+        Me.pan_Plat.Controls.Add(Me.img_tp)
+        Me.pan_Plat.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Plat.Location = New System.Drawing.Point(0, 385)
+        Me.pan_Plat.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Plat.Name = "pan_Plat"
+        Me.pan_Plat.Size = New System.Drawing.Size(353, 122)
+        Me.pan_Plat.TabIndex = 7
+        '
+        'cmb_NuancePlat
+        '
+        Me.cmb_NuancePlat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmb_NuancePlat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_NuancePlat.FormattingEnabled = True
+        Me.cmb_NuancePlat.Location = New System.Drawing.Point(189, 75)
+        Me.cmb_NuancePlat.Name = "cmb_NuancePlat"
+        Me.cmb_NuancePlat.Size = New System.Drawing.Size(113, 21)
+        Me.cmb_NuancePlat.TabIndex = 59
+        '
+        'lbl_Width
+        '
+        Me.lbl_Width.AutoSize = True
+        Me.lbl_Width.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline)
+        Me.lbl_Width.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Width.Location = New System.Drawing.Point(11, 13)
+        Me.lbl_Width.Name = "lbl_Width"
+        Me.lbl_Width.Size = New System.Drawing.Size(51, 13)
+        Me.lbl_Width.TabIndex = 0
+        Me.lbl_Width.Text = "lbl_Width"
+        Me.lbl_Width.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lbl_WPSteel
+        '
+        Me.lbl_WPSteel.AutoSize = True
+        Me.lbl_WPSteel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline)
+        Me.lbl_WPSteel.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_WPSteel.Location = New System.Drawing.Point(14, 78)
+        Me.lbl_WPSteel.Name = "lbl_WPSteel"
+        Me.lbl_WPSteel.Size = New System.Drawing.Size(65, 13)
+        Me.lbl_WPSteel.TabIndex = 35
+        Me.lbl_WPSteel.Text = "lbl_WPSteel"
+        Me.lbl_WPSteel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lbl_Plat
+        '
+        Me.lbl_Plat.AutoSize = True
+        Me.lbl_Plat.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Plat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Plat.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Plat.Location = New System.Drawing.Point(0, 356)
+        Me.lbl_Plat.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
+        Me.lbl_Plat.Name = "lbl_Plat"
+        Me.lbl_Plat.Size = New System.Drawing.Size(353, 29)
+        Me.lbl_Plat.TabIndex = 6
+        Me.lbl_Plat.Text = "lbl_Plat"
+        Me.lbl_Plat.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lbl_IFBSection
         '
@@ -356,7 +435,7 @@ Partial Class Frm_SectionIFB
         Me.lbl_IFBSection.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_IFBSection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_IFBSection.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_IFBSection.Location = New System.Drawing.Point(0, 321)
+        Me.lbl_IFBSection.Location = New System.Drawing.Point(0, 231)
         Me.lbl_IFBSection.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.lbl_IFBSection.Name = "lbl_IFBSection"
         Me.lbl_IFBSection.Size = New System.Drawing.Size(353, 29)
@@ -368,72 +447,23 @@ Partial Class Frm_SectionIFB
         '
         Me.Pan_DimPRS.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.Pan_DimPRS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Pan_DimPRS.Controls.Add(Me.lbl_InfoFyWP)
-        Me.Pan_DimPRS.Controls.Add(Me.cmb_ReductionCurveWP)
-        Me.Pan_DimPRS.Controls.Add(Me.cmb_GradeWP)
-        Me.Pan_DimPRS.Controls.Add(Me.lbl_WPSteel)
         Me.Pan_DimPRS.Controls.Add(Me.chk_Hw)
         Me.Pan_DimPRS.Controls.Add(Me.chk_Ht)
         Me.Pan_DimPRS.Controls.Add(Me.lbl_Info)
-        Me.Pan_DimPRS.Controls.Add(Me.etq_UnitDim4)
         Me.Pan_DimPRS.Controls.Add(Me.etq_UnitDim1)
         Me.Pan_DimPRS.Controls.Add(Me.etq_UnitDim2)
-        Me.Pan_DimPRS.Controls.Add(Me.etq_UnitDim3)
-        Me.Pan_DimPRS.Controls.Add(Me.txt_tp)
         Me.Pan_DimPRS.Controls.Add(Me.txt_ha)
         Me.Pan_DimPRS.Controls.Add(Me.txt_hw)
-        Me.Pan_DimPRS.Controls.Add(Me.txt_bp)
         Me.Pan_DimPRS.Controls.Add(Me.img_ha)
         Me.Pan_DimPRS.Controls.Add(Me.img_hw)
-        Me.Pan_DimPRS.Controls.Add(Me.img_tp)
-        Me.Pan_DimPRS.Controls.Add(Me.img_bp)
         Me.Pan_DimPRS.Controls.Add(Me.lbl_Height)
         Me.Pan_DimPRS.Controls.Add(Me.lbl_Web)
-        Me.Pan_DimPRS.Controls.Add(Me.lbl_Thickness)
-        Me.Pan_DimPRS.Controls.Add(Me.lbl_Width)
         Me.Pan_DimPRS.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Pan_DimPRS.Location = New System.Drawing.Point(0, 350)
+        Me.Pan_DimPRS.Location = New System.Drawing.Point(0, 260)
         Me.Pan_DimPRS.Margin = New System.Windows.Forms.Padding(0)
         Me.Pan_DimPRS.Name = "Pan_DimPRS"
-        Me.Pan_DimPRS.Size = New System.Drawing.Size(353, 230)
+        Me.Pan_DimPRS.Size = New System.Drawing.Size(353, 95)
         Me.Pan_DimPRS.TabIndex = 4
-        '
-        'lbl_InfoFyWP
-        '
-        Me.lbl_InfoFyWP.AutoSize = True
-        Me.lbl_InfoFyWP.Location = New System.Drawing.Point(139, 198)
-        Me.lbl_InfoFyWP.Name = "lbl_InfoFyWP"
-        Me.lbl_InfoFyWP.Size = New System.Drawing.Size(70, 13)
-        Me.lbl_InfoFyWP.TabIndex = 38
-        Me.lbl_InfoFyWP.Text = "lbl_InfoFyWP"
-        '
-        'cmb_ReductionCurveWP
-        '
-        Me.cmb_ReductionCurveWP.FormattingEnabled = True
-        Me.cmb_ReductionCurveWP.Location = New System.Drawing.Point(211, 159)
-        Me.cmb_ReductionCurveWP.Name = "cmb_ReductionCurveWP"
-        Me.cmb_ReductionCurveWP.Size = New System.Drawing.Size(75, 21)
-        Me.cmb_ReductionCurveWP.TabIndex = 36
-        '
-        'cmb_GradeWP
-        '
-        Me.cmb_GradeWP.FormattingEnabled = True
-        Me.cmb_GradeWP.Location = New System.Drawing.Point(142, 159)
-        Me.cmb_GradeWP.Name = "cmb_GradeWP"
-        Me.cmb_GradeWP.Size = New System.Drawing.Size(50, 21)
-        Me.cmb_GradeWP.TabIndex = 37
-        '
-        'lbl_WPSteel
-        '
-        Me.lbl_WPSteel.AutoSize = True
-        Me.lbl_WPSteel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline)
-        Me.lbl_WPSteel.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_WPSteel.Location = New System.Drawing.Point(14, 162)
-        Me.lbl_WPSteel.Name = "lbl_WPSteel"
-        Me.lbl_WPSteel.Size = New System.Drawing.Size(65, 13)
-        Me.lbl_WPSteel.TabIndex = 35
-        Me.lbl_WPSteel.Text = "lbl_WPSteel"
-        Me.lbl_WPSteel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'chk_Hw
         '
@@ -536,24 +566,10 @@ Partial Class Frm_SectionIFB
         Me.lbl_Web.Text = "lbl_Web"
         Me.lbl_Web.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'lbl_Width
-        '
-        Me.lbl_Width.AutoSize = True
-        Me.lbl_Width.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline)
-        Me.lbl_Width.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Width.Location = New System.Drawing.Point(11, 92)
-        Me.lbl_Width.Name = "lbl_Width"
-        Me.lbl_Width.Size = New System.Drawing.Size(51, 13)
-        Me.lbl_Width.TabIndex = 0
-        Me.lbl_Width.Text = "lbl_Width"
-        Me.lbl_Width.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
         'pan_Lamine
         '
         Me.pan_Lamine.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Lamine.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Lamine.Controls.Add(Me.lbl_Delivery)
-        Me.pan_Lamine.Controls.Add(Me.GridDelivery)
         Me.pan_Lamine.Controls.Add(Me.lbl_Profiles)
         Me.pan_Lamine.Controls.Add(Me.Grid_ProfilesSup)
         Me.pan_Lamine.Controls.Add(Me.lbl_Gamme)
@@ -562,48 +578,8 @@ Partial Class Frm_SectionIFB
         Me.pan_Lamine.Location = New System.Drawing.Point(0, 30)
         Me.pan_Lamine.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Lamine.Name = "pan_Lamine"
-        Me.pan_Lamine.Size = New System.Drawing.Size(353, 290)
+        Me.pan_Lamine.Size = New System.Drawing.Size(353, 200)
         Me.pan_Lamine.TabIndex = 3
-        '
-        'lbl_Delivery
-        '
-        Me.lbl_Delivery.Location = New System.Drawing.Point(7, 187)
-        Me.lbl_Delivery.Name = "lbl_Delivery"
-        Me.lbl_Delivery.Size = New System.Drawing.Size(322, 15)
-        Me.lbl_Delivery.TabIndex = 37
-        Me.lbl_Delivery.Text = "lbl_Delivery"
-        Me.lbl_Delivery.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'GridDelivery
-        '
-        Me.GridDelivery.AllowUserToAddRows = False
-        Me.GridDelivery.AllowUserToDeleteRows = False
-        Me.GridDelivery.AllowUserToResizeColumns = False
-        Me.GridDelivery.AllowUserToResizeRows = False
-        Me.GridDelivery.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.GridDelivery.ColumnHeadersVisible = False
-        Me.GridDelivery.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Col_Index, Me.Col_Message})
-        Me.GridDelivery.Location = New System.Drawing.Point(6, 205)
-        Me.GridDelivery.MultiSelect = False
-        Me.GridDelivery.Name = "GridDelivery"
-        Me.GridDelivery.RowHeadersVisible = False
-        Me.GridDelivery.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.GridDelivery.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.GridDelivery.ShowCellToolTips = False
-        Me.GridDelivery.Size = New System.Drawing.Size(338, 76)
-        Me.GridDelivery.TabIndex = 36
-        '
-        'Col_Index
-        '
-        Me.Col_Index.HeaderText = "Col_Index"
-        Me.Col_Index.Name = "Col_Index"
-        Me.Col_Index.ReadOnly = True
-        '
-        'Col_Message
-        '
-        Me.Col_Message.HeaderText = "Col_Message"
-        Me.Col_Message.Name = "Col_Message"
-        Me.Col_Message.ReadOnly = True
         '
         'lbl_Profiles
         '
@@ -682,7 +658,7 @@ Partial Class Frm_SectionIFB
         '
         Me.TableLayoutPanel2.ColumnCount = 1
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.img_ReductionCurve, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.pan_Acier, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.img_Section, 0, 0)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(353, 0)
@@ -691,17 +667,68 @@ Partial Class Frm_SectionIFB
         Me.TableLayoutPanel2.RowCount = 2
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(300, 580)
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(300, 507)
         Me.TableLayoutPanel2.TabIndex = 2
+        '
+        'pan_Acier
+        '
+        Me.pan_Acier.Controls.Add(Me.btn_FyFu)
+        Me.pan_Acier.Controls.Add(Me.cmb_ReductionCurveWP)
+        Me.pan_Acier.Controls.Add(Me.cmb_GradeWP)
+        Me.pan_Acier.Controls.Add(Me.img_ReductionCurve)
+        Me.pan_Acier.Location = New System.Drawing.Point(1, 253)
+        Me.pan_Acier.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
+        Me.pan_Acier.Name = "pan_Acier"
+        Me.pan_Acier.Size = New System.Drawing.Size(245, 235)
+        Me.pan_Acier.TabIndex = 3
+        '
+        'lbl_InfoFyWP
+        '
+        Me.lbl_InfoFyWP.AutoSize = True
+        Me.lbl_InfoFyWP.Location = New System.Drawing.Point(192, 101)
+        Me.lbl_InfoFyWP.Name = "lbl_InfoFyWP"
+        Me.lbl_InfoFyWP.Size = New System.Drawing.Size(70, 13)
+        Me.lbl_InfoFyWP.TabIndex = 38
+        Me.lbl_InfoFyWP.Text = "lbl_InfoFyWP"
+        '
+        'btn_FyFu
+        '
+        Me.btn_FyFu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_FyFu.Image = CType(resources.GetObject("btn_FyFu.Image"), System.Drawing.Image)
+        Me.btn_FyFu.Location = New System.Drawing.Point(214, 3)
+        Me.btn_FyFu.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_FyFu.Name = "btn_FyFu"
+        Me.btn_FyFu.Size = New System.Drawing.Size(28, 28)
+        Me.btn_FyFu.TabIndex = 2
+        Me.btn_FyFu.UseVisualStyleBackColor = True
+        '
+        'cmb_ReductionCurveWP
+        '
+        Me.cmb_ReductionCurveWP.FormattingEnabled = True
+        Me.cmb_ReductionCurveWP.Location = New System.Drawing.Point(114, 167)
+        Me.cmb_ReductionCurveWP.Name = "cmb_ReductionCurveWP"
+        Me.cmb_ReductionCurveWP.Size = New System.Drawing.Size(75, 21)
+        Me.cmb_ReductionCurveWP.TabIndex = 36
+        Me.cmb_ReductionCurveWP.Visible = False
+        '
+        'cmb_GradeWP
+        '
+        Me.cmb_GradeWP.FormattingEnabled = True
+        Me.cmb_GradeWP.Location = New System.Drawing.Point(45, 167)
+        Me.cmb_GradeWP.Name = "cmb_GradeWP"
+        Me.cmb_GradeWP.Size = New System.Drawing.Size(50, 21)
+        Me.cmb_GradeWP.TabIndex = 37
+        Me.cmb_GradeWP.Visible = False
         '
         'img_ReductionCurve
         '
         Me.img_ReductionCurve.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.img_ReductionCurve.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_ReductionCurve.Location = New System.Drawing.Point(1, 290)
+        Me.img_ReductionCurve.Location = New System.Drawing.Point(34, 23)
         Me.img_ReductionCurve.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
         Me.img_ReductionCurve.Name = "img_ReductionCurve"
-        Me.img_ReductionCurve.Size = New System.Drawing.Size(100, 50)
+        Me.img_ReductionCurve.Size = New System.Drawing.Size(100, 34)
         Me.img_ReductionCurve.TabIndex = 1
         Me.img_ReductionCurve.TabStop = False
         '
@@ -723,7 +750,7 @@ Partial Class Frm_SectionIFB
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(1007, 580)
+        Me.pan_Main.Size = New System.Drawing.Size(1007, 507)
         Me.pan_Main.TabIndex = 1
         '
         'btn_OK
@@ -766,7 +793,7 @@ Partial Class Frm_SectionIFB
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.pan_Provi, 4, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 589)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 516)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -783,7 +810,7 @@ Partial Class Frm_SectionIFB
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(1013, 626)
+        Me.pan_General.Size = New System.Drawing.Size(1013, 553)
         Me.pan_General.TabIndex = 5
         '
         'TLpan_Main
@@ -798,24 +825,31 @@ Partial Class Frm_SectionIFB
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(1013, 626)
+        Me.TLpan_Main.Size = New System.Drawing.Size(1013, 553)
         Me.TLpan_Main.TabIndex = 0
         '
         'ErrorProvider
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'Frm_SectionIFB_A
+        'imgList_UY
+        '
+        Me.imgList_UY.ImageStream = CType(resources.GetObject("imgList_UY.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.imgList_UY.TransparentColor = System.Drawing.Color.Transparent
+        Me.imgList_UY.Images.SetKeyName(0, "Fu")
+        Me.imgList_UY.Images.SetKeyName(1, "Fy")
+        '
+        'Frm_SectionIFB
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Annuler
-        Me.ClientSize = New System.Drawing.Size(1013, 626)
+        Me.ClientSize = New System.Drawing.Size(1013, 553)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "Frm_SectionIFB_A"
+        Me.Name = "Frm_SectionIFB"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_SectionIFB_A"
         CType(Me.GridAciers, System.ComponentModel.ISupportInitialize).EndInit()
@@ -829,15 +863,17 @@ Partial Class Frm_SectionIFB
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLpan_Gauche.ResumeLayout(False)
         Me.TLpan_Gauche.PerformLayout()
+        Me.pan_Plat.ResumeLayout(False)
+        Me.pan_Plat.PerformLayout()
         Me.Pan_DimPRS.ResumeLayout(False)
         Me.Pan_DimPRS.PerformLayout()
         CType(Me.img_ha, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_hw, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Lamine.ResumeLayout(False)
         Me.pan_Lamine.PerformLayout()
-        CType(Me.GridDelivery, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.pan_Acier.ResumeLayout(False)
         CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Main.ResumeLayout(False)
@@ -874,10 +910,6 @@ Partial Class Frm_SectionIFB
     Friend WithEvents Pan_DimPRS As Panel
     Friend WithEvents lbl_Width As Label
     Friend WithEvents pan_Lamine As Panel
-    Friend WithEvents lbl_Delivery As Label
-    Friend WithEvents GridDelivery As DataGridView
-    Friend WithEvents Col_Index As DataGridViewTextBoxColumn
-    Friend WithEvents Col_Message As DataGridViewTextBoxColumn
     Friend WithEvents lbl_Profiles As Label
     Friend WithEvents Grid_ProfilesSup As DataGridView
     Friend WithEvents Col_ListeSup As DataGridViewTextBoxColumn
@@ -886,7 +918,6 @@ Partial Class Frm_SectionIFB
     Friend WithEvents lst_GammeS As ListBox
     Friend WithEvents lbl_ParentProfile As Label
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
-    Friend WithEvents img_ReductionCurve As PictureBox
     Friend WithEvents img_Section As PictureBox
     Friend WithEvents pan_Main As Panel
     Friend WithEvents btn_OK As Button
@@ -911,4 +942,11 @@ Partial Class Frm_SectionIFB
     Friend WithEvents cmb_ReductionCurveWP As ComboBox
     Friend WithEvents cmb_GradeWP As ComboBox
     Friend WithEvents lbl_WPSteel As Label
+    Friend WithEvents pan_Acier As Panel
+    Friend WithEvents btn_FyFu As Button
+    Friend WithEvents img_ReductionCurve As PictureBox
+    Friend WithEvents imgList_UY As ImageList
+    Friend WithEvents pan_Plat As Panel
+    Friend WithEvents lbl_Plat As Label
+    Friend WithEvents cmb_NuancePlat As ComboBox
 End Class

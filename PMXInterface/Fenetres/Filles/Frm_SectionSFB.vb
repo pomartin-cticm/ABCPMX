@@ -1852,18 +1852,12 @@ Public Class Frm_SectionSFB
 
         TransfertGridAcier(AcierPlats(inDice).Nuance, AcierPlats(inDice).Qualite, AcierPlats(inDice).Reduc, MySectionLoc.AcierPlat)
 
+        MAJ_InfoWP()
     End Sub
-
 
     Private Sub MAJ_InfoWP()
         Dim msg As String
-        msg = "fy = " & MySectionLoc.FySpd & " MPa ("
-
-        If MySectionLoc.AcierPlat.Qualite = "EC3" Then
-            msg += MySectionLoc.AcierPlat.Nuance & " - " & MySectionLoc.AcierPlat.Reduction & ")" 'EC3 - Table 3.1
-        Else
-            msg += MySectionLoc.AcierPlat.Reduction & ")" '10025-2 ou 10025-4
-        End If
+        msg = "fy = " & MySectionLoc.FySpd & " MPa | fu = " & MySectionLoc.FuSpd & " MPa"
 
         Me.lbl_InfoFyWP.Text = msg
     End Sub

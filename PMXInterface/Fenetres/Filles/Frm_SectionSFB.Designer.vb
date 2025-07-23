@@ -203,6 +203,8 @@ Partial Class Frm_SectionSFB
         '
         Me.pan_Acier.Controls.Add(Me.btn_FyFu)
         Me.pan_Acier.Controls.Add(Me.img_ReductionCurve)
+        Me.pan_Acier.Controls.Add(Me.cmb_ReductionCurveWP)
+        Me.pan_Acier.Controls.Add(Me.cmb_GradeWP)
         Me.pan_Acier.Location = New System.Drawing.Point(1, 249)
         Me.pan_Acier.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
         Me.pan_Acier.Name = "pan_Acier"
@@ -241,8 +243,6 @@ Partial Class Frm_SectionSFB
         Me.Pan_DimPRS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Pan_DimPRS.Controls.Add(Me.cmb_NuancePlat)
         Me.Pan_DimPRS.Controls.Add(Me.lbl_InfoFyWP)
-        Me.Pan_DimPRS.Controls.Add(Me.cmb_ReductionCurveWP)
-        Me.Pan_DimPRS.Controls.Add(Me.cmb_GradeWP)
         Me.Pan_DimPRS.Controls.Add(Me.etq_UnitDim2SFB)
         Me.Pan_DimPRS.Controls.Add(Me.etq_UnitDim1SFB)
         Me.Pan_DimPRS.Controls.Add(Me.txt_tpSFB)
@@ -265,15 +265,15 @@ Partial Class Frm_SectionSFB
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_NuancePlat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NuancePlat.FormattingEnabled = True
-        Me.cmb_NuancePlat.Location = New System.Drawing.Point(195, 79)
+        Me.cmb_NuancePlat.Location = New System.Drawing.Point(160, 79)
         Me.cmb_NuancePlat.Name = "cmb_NuancePlat"
-        Me.cmb_NuancePlat.Size = New System.Drawing.Size(113, 21)
+        Me.cmb_NuancePlat.Size = New System.Drawing.Size(142, 21)
         Me.cmb_NuancePlat.TabIndex = 58
         '
         'lbl_InfoFyWP
         '
         Me.lbl_InfoFyWP.AutoSize = True
-        Me.lbl_InfoFyWP.Location = New System.Drawing.Point(136, 120)
+        Me.lbl_InfoFyWP.Location = New System.Drawing.Point(162, 108)
         Me.lbl_InfoFyWP.Name = "lbl_InfoFyWP"
         Me.lbl_InfoFyWP.Size = New System.Drawing.Size(70, 13)
         Me.lbl_InfoFyWP.TabIndex = 5
@@ -283,7 +283,7 @@ Partial Class Frm_SectionSFB
         'cmb_ReductionCurveWP
         '
         Me.cmb_ReductionCurveWP.FormattingEnabled = True
-        Me.cmb_ReductionCurveWP.Location = New System.Drawing.Point(208, 79)
+        Me.cmb_ReductionCurveWP.Location = New System.Drawing.Point(142, 80)
         Me.cmb_ReductionCurveWP.Name = "cmb_ReductionCurveWP"
         Me.cmb_ReductionCurveWP.Size = New System.Drawing.Size(75, 21)
         Me.cmb_ReductionCurveWP.TabIndex = 4
@@ -292,7 +292,7 @@ Partial Class Frm_SectionSFB
         'cmb_GradeWP
         '
         Me.cmb_GradeWP.FormattingEnabled = True
-        Me.cmb_GradeWP.Location = New System.Drawing.Point(139, 79)
+        Me.cmb_GradeWP.Location = New System.Drawing.Point(86, 80)
         Me.cmb_GradeWP.Name = "cmb_GradeWP"
         Me.cmb_GradeWP.Size = New System.Drawing.Size(50, 21)
         Me.cmb_GradeWP.TabIndex = 4
