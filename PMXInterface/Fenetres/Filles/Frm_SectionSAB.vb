@@ -150,6 +150,9 @@ Public Class Frm_SectionSAB
 
         Me.img_Section.Dock = DockStyle.Fill
         Me.img_ReductionCurve.Dock = DockStyle.Fill
+        Me.pan_Acier.Dock = DockStyle.Fill
+
+        AfficheBtnFyFu()
 
         '== Preparation des options disponibles en fonctions du maitre d'ouvrage
 
@@ -157,7 +160,7 @@ Public Class Frm_SectionSAB
             Case EnuMaitre.ArcelorMittal
                 If Not LogicielOptions.lExpert Then Me.TLpan_Gauche.RowStyles(1).Height = 0
             Case EnuMaitre.CTICM
-                Me.GridDelivery.Visible = True ' LogicielOptions.lExpert
+                'Me.GridDelivery.Visible = True ' LogicielOptions.lExpert
         End Select
 
         '== Transfert vers variable locale
@@ -176,8 +179,6 @@ Public Class Frm_SectionSAB
 
         PrepareLookGrille(Me.Grid_ProfilesSup, Me.Col_HISTARSup, Me.Col_ListeSup, Me.lst_GammeS.BackColor, RATIOHIGAMME)
         PrepareLookGrille(Me.GridAciers, Me.Col_Grade, Me.Col_Qualite, Me.Col_ReductionCurve, Me.lst_GammeS.BackColor, Ratio1, Ratio2)
-        PrepareLookGrille(Me.GridDelivery, Me.Col_Index, Me.Col_Message, Me.lst_GammeS.BackColor, 0.1)
-        PrepareGridDelivery()
 
     End Sub
 
@@ -223,8 +224,6 @@ Public Class Frm_SectionSAB
 
             Me.lst_GammeS.Text = MyGam
             RemplissageGrilleProfile(Me.Grid_ProfilesSup, MyGam, NbProG)
-
-            RemplirDelivery(MyGam, MyProf)
 
             Dim iPro As Integer = 0
             Dim lTrouve As Boolean = False
@@ -500,7 +499,11 @@ Public Class Frm_SectionSAB
 
     Private Sub img_ReductionCurve_Paint(sender As Object, e As PaintEventArgs) Handles img_ReductionCurve.Paint
 
-        DessinPropAcier(e.Graphics, Me.img_ReductionCurve.ClientRectangle.Height, Me.img_ReductionCurve.ClientRectangle.Width, True)
+        DessinProprietesAcier(e.Graphics, Me.img_ReductionCurve.ClientRectangle.Height, Me.img_ReductionCurve.ClientRectangle.Width, True,
+                              DrawProperty = EnuDrawProperty.Fy, MySectionLoc)
+
+
+        ' DessinPropAcier(e.Graphics, Me.img_ReductionCurve.ClientRectangle.Height, Me.img_ReductionCurve.ClientRectangle.Width, True)
 
     End Sub
 
@@ -1101,41 +1104,6 @@ Public Class Frm_SectionSAB
 
 #End Region
 
-#Region "   Conditions de livraison "
-
-    Private Sub RemplirDelivery(ByVal Serie As String, ByVal Profile As String)
-
-        Dim iRow As Integer = 0
-
-        Me.lbl_Delivery.Text = RemplaceDollar(strDeliveryConditions, Profile)
-        Me.GridDelivery.Rows.Clear()
-
-        'GridDelivery.AutoResizeRow(iRow - 1)
-
-        For i As Integer = 1 To MyCatalogue.nbDelivery
-
-            If MyCatalogue.Series(Serie).Profiles(Profile).IndDeliv(i - 1) = 1 Then
-
-                GridDelivery.Rows.Add()
-                iRow += 1
-                GridDelivery(0, iRow - 1).Value = CStr(iRow)
-                GridDelivery(1, iRow - 1).Value = MyCatalogue.Delivery(i - 1)(ILangueDelivery)
-                GridDelivery(1, iRow - 1).Selected = False
-            End If
-
-        Next
-
-    End Sub
-
-    Private Sub PrepareGridDelivery()
-
-        GridDelivery.Columns(1).CellTemplate.Style.WrapMode = DataGridViewTriState.True
-        GridDelivery.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
-
-    End Sub
-
-#End Region
-
 #Region "   Mise à jour des données "
 
     'Private Sub MAJ_AvailablePro(ByVal lCustom As Boolean)
@@ -1646,6 +1614,31 @@ Public Class Frm_SectionSAB
 
     End Sub
 
+#End Region
+
+#Region " Gestion affichage Fy Fu "
+    Private Sub btn_FyFu_Click(sender As Object, e As EventArgs) Handles btn_FyFu.Click
+
+        Select Case DrawProperty
+            Case EnuDrawProperty.Fu : DrawProperty = EnuDrawProperty.Fy
+            Case EnuDrawProperty.Fy : DrawProperty = EnuDrawProperty.Fu
+        End Select
+
+        AfficheBtnFyFu()
+
+        Me.img_ReductionCurve.Invalidate()
+
+    End Sub
+
+    Private Sub AfficheBtnFyFu()
+
+        Select Case DrawProperty
+            Case EnuDrawProperty.Fy : Me.btn_FyFu.Image = imgList_UY.Images("Fy")
+            Case EnuDrawProperty.Fu : Me.btn_FyFu.Image = imgList_UY.Images("Fu")
+
+        End Select
+
+    End Sub
 #End Region
 
 End Class

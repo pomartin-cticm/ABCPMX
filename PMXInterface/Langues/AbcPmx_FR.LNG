@@ -961,7 +961,7 @@ STEEL					= Acier
 STEELGRADE				= Nuance d'acier
 TITLE					= Définition de la poutre acier
 SABSECTION				= Section AFB
-WIDTH					= Largeur
+WIDTH					= Largeur semelle supérieure
 
 #GENERAL
 SELFWEIGHT				= Poids propre

@@ -1910,7 +1910,6 @@ Public Class Frm_SectionSFB
 
 #End Region
 
-
 #Region " Gestion affichage Fy Fu "
 
     Private Sub btn_FyFu_Click(sender As Object, e As EventArgs) Handles btn_FyFu.Click

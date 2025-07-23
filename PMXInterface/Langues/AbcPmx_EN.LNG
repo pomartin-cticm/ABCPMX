@@ -961,7 +961,7 @@ STEEL					= Steel
 STEELGRADE				= Steel grade
 TITLE					= Definition of the steel profile
 SABSECTION				= AFB section
-WIDTH					= Width
+WIDTH					= Width of the top flange
 
 #FRM_SFBSECTIONS
 CANCEL					= Cancel

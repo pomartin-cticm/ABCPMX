@@ -23,6 +23,7 @@ Partial Class Frm_SectionSAB
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_SectionSAB))
         Me.lbl_Grade = New System.Windows.Forms.Label()
         Me.Col_Grade = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Col_Qualite = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -44,10 +45,6 @@ Partial Class Frm_SectionSAB
         Me.txt_bfs = New System.Windows.Forms.TextBox()
         Me.lbl_Width = New System.Windows.Forms.Label()
         Me.pan_Lamine = New System.Windows.Forms.Panel()
-        Me.lbl_Delivery = New System.Windows.Forms.Label()
-        Me.GridDelivery = New System.Windows.Forms.DataGridView()
-        Me.Col_Index = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Col_Message = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lbl_Profiles = New System.Windows.Forms.Label()
         Me.Grid_ProfilesSup = New System.Windows.Forms.DataGridView()
         Me.Col_ListeSup = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -56,6 +53,8 @@ Partial Class Frm_SectionSAB
         Me.lst_GammeS = New System.Windows.Forms.ListBox()
         Me.lbl_ParentProfile = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.pan_Acier = New System.Windows.Forms.Panel()
+        Me.btn_FyFu = New System.Windows.Forms.Button()
         Me.img_ReductionCurve = New System.Windows.Forms.PictureBox()
         Me.img_Section = New System.Windows.Forms.PictureBox()
         Me.pan_Main = New System.Windows.Forms.Panel()
@@ -66,6 +65,7 @@ Partial Class Frm_SectionSAB
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.imgList_UY = New System.Windows.Forms.ImageList(Me.components)
         CType(Me.img_bfs, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.GridAciers, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -76,9 +76,9 @@ Partial Class Frm_SectionSAB
         Me.TLpan_Gauche.SuspendLayout()
         Me.Pan_DimPRS.SuspendLayout()
         Me.pan_Lamine.SuspendLayout()
-        CType(Me.GridDelivery, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
+        Me.pan_Acier.SuspendLayout()
         CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Main.SuspendLayout()
@@ -311,7 +311,7 @@ Partial Class Frm_SectionSAB
         Me.Pan_DimPRS.Location = New System.Drawing.Point(0, 350)
         Me.Pan_DimPRS.Margin = New System.Windows.Forms.Padding(0)
         Me.Pan_DimPRS.Name = "Pan_DimPRS"
-        Me.Pan_DimPRS.Size = New System.Drawing.Size(353, 60)
+        Me.Pan_DimPRS.Size = New System.Drawing.Size(353, 61)
         Me.Pan_DimPRS.TabIndex = 4
         '
         'txt_bfs
@@ -337,8 +337,6 @@ Partial Class Frm_SectionSAB
         '
         Me.pan_Lamine.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Lamine.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Lamine.Controls.Add(Me.lbl_Delivery)
-        Me.pan_Lamine.Controls.Add(Me.GridDelivery)
         Me.pan_Lamine.Controls.Add(Me.lbl_Profiles)
         Me.pan_Lamine.Controls.Add(Me.Grid_ProfilesSup)
         Me.pan_Lamine.Controls.Add(Me.lbl_Gamme)
@@ -349,46 +347,6 @@ Partial Class Frm_SectionSAB
         Me.pan_Lamine.Name = "pan_Lamine"
         Me.pan_Lamine.Size = New System.Drawing.Size(353, 290)
         Me.pan_Lamine.TabIndex = 3
-        '
-        'lbl_Delivery
-        '
-        Me.lbl_Delivery.Location = New System.Drawing.Point(7, 187)
-        Me.lbl_Delivery.Name = "lbl_Delivery"
-        Me.lbl_Delivery.Size = New System.Drawing.Size(322, 15)
-        Me.lbl_Delivery.TabIndex = 37
-        Me.lbl_Delivery.Text = "lbl_Delivery"
-        Me.lbl_Delivery.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'GridDelivery
-        '
-        Me.GridDelivery.AllowUserToAddRows = False
-        Me.GridDelivery.AllowUserToDeleteRows = False
-        Me.GridDelivery.AllowUserToResizeColumns = False
-        Me.GridDelivery.AllowUserToResizeRows = False
-        Me.GridDelivery.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.GridDelivery.ColumnHeadersVisible = False
-        Me.GridDelivery.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Col_Index, Me.Col_Message})
-        Me.GridDelivery.Location = New System.Drawing.Point(6, 205)
-        Me.GridDelivery.MultiSelect = False
-        Me.GridDelivery.Name = "GridDelivery"
-        Me.GridDelivery.RowHeadersVisible = False
-        Me.GridDelivery.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.GridDelivery.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.GridDelivery.ShowCellToolTips = False
-        Me.GridDelivery.Size = New System.Drawing.Size(338, 76)
-        Me.GridDelivery.TabIndex = 36
-        '
-        'Col_Index
-        '
-        Me.Col_Index.HeaderText = "Col_Index"
-        Me.Col_Index.Name = "Col_Index"
-        Me.Col_Index.ReadOnly = True
-        '
-        'Col_Message
-        '
-        Me.Col_Message.HeaderText = "Col_Message"
-        Me.Col_Message.Name = "Col_Message"
-        Me.Col_Message.ReadOnly = True
         '
         'lbl_Profiles
         '
@@ -416,7 +374,7 @@ Partial Class Frm_SectionSAB
         Me.Grid_ProfilesSup.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.Grid_ProfilesSup.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.Grid_ProfilesSup.ShowCellToolTips = False
-        Me.Grid_ProfilesSup.Size = New System.Drawing.Size(215, 160)
+        Me.Grid_ProfilesSup.Size = New System.Drawing.Size(215, 252)
         Me.Grid_ProfilesSup.TabIndex = 18
         '
         'Col_ListeSup
@@ -446,7 +404,7 @@ Partial Class Frm_SectionSAB
         Me.lst_GammeS.FormattingEnabled = True
         Me.lst_GammeS.Location = New System.Drawing.Point(6, 25)
         Me.lst_GammeS.Name = "lst_GammeS"
-        Me.lst_GammeS.Size = New System.Drawing.Size(119, 160)
+        Me.lst_GammeS.Size = New System.Drawing.Size(119, 251)
         Me.lst_GammeS.TabIndex = 17
         '
         'lbl_ParentProfile
@@ -467,7 +425,7 @@ Partial Class Frm_SectionSAB
         '
         Me.TableLayoutPanel2.ColumnCount = 1
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.img_ReductionCurve, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.pan_Acier, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.img_Section, 0, 0)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(353, 0)
@@ -479,14 +437,35 @@ Partial Class Frm_SectionSAB
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(300, 411)
         Me.TableLayoutPanel2.TabIndex = 2
         '
+        'pan_Acier
+        '
+        Me.pan_Acier.Controls.Add(Me.btn_FyFu)
+        Me.pan_Acier.Controls.Add(Me.img_ReductionCurve)
+        Me.pan_Acier.Location = New System.Drawing.Point(1, 205)
+        Me.pan_Acier.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
+        Me.pan_Acier.Name = "pan_Acier"
+        Me.pan_Acier.Size = New System.Drawing.Size(245, 141)
+        Me.pan_Acier.TabIndex = 3
+        '
+        'btn_FyFu
+        '
+        Me.btn_FyFu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_FyFu.Image = CType(resources.GetObject("btn_FyFu.Image"), System.Drawing.Image)
+        Me.btn_FyFu.Location = New System.Drawing.Point(214, 3)
+        Me.btn_FyFu.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_FyFu.Name = "btn_FyFu"
+        Me.btn_FyFu.Size = New System.Drawing.Size(28, 28)
+        Me.btn_FyFu.TabIndex = 2
+        Me.btn_FyFu.UseVisualStyleBackColor = True
+        '
         'img_ReductionCurve
         '
         Me.img_ReductionCurve.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.img_ReductionCurve.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_ReductionCurve.Location = New System.Drawing.Point(1, 205)
+        Me.img_ReductionCurve.Location = New System.Drawing.Point(34, 23)
         Me.img_ReductionCurve.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
         Me.img_ReductionCurve.Name = "img_ReductionCurve"
-        Me.img_ReductionCurve.Size = New System.Drawing.Size(100, 50)
+        Me.img_ReductionCurve.Size = New System.Drawing.Size(100, 34)
         Me.img_ReductionCurve.TabIndex = 1
         Me.img_ReductionCurve.TabStop = False
         '
@@ -590,6 +569,13 @@ Partial Class Frm_SectionSAB
         '
         Me.ErrorProvider.ContainerControl = Me
         '
+        'imgList_UY
+        '
+        Me.imgList_UY.ImageStream = CType(resources.GetObject("imgList_UY.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.imgList_UY.TransparentColor = System.Drawing.Color.Transparent
+        Me.imgList_UY.Images.SetKeyName(0, "Fu")
+        Me.imgList_UY.Images.SetKeyName(1, "Fy")
+        '
         'Frm_SectionSAB
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -617,9 +603,9 @@ Partial Class Frm_SectionSAB
         Me.Pan_DimPRS.PerformLayout()
         Me.pan_Lamine.ResumeLayout(False)
         Me.pan_Lamine.PerformLayout()
-        CType(Me.GridDelivery, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.pan_Acier.ResumeLayout(False)
         CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Main.ResumeLayout(False)
@@ -651,10 +637,6 @@ Partial Class Frm_SectionSAB
     Friend WithEvents Pan_DimPRS As Panel
     Friend WithEvents lbl_Width As Label
     Friend WithEvents pan_Lamine As Panel
-    Friend WithEvents lbl_Delivery As Label
-    Friend WithEvents GridDelivery As DataGridView
-    Friend WithEvents Col_Index As DataGridViewTextBoxColumn
-    Friend WithEvents Col_Message As DataGridViewTextBoxColumn
     Friend WithEvents lbl_Profiles As Label
     Friend WithEvents Grid_ProfilesSup As DataGridView
     Friend WithEvents Col_ListeSup As DataGridViewTextBoxColumn
@@ -663,7 +645,6 @@ Partial Class Frm_SectionSAB
     Friend WithEvents lst_GammeS As ListBox
     Friend WithEvents lbl_ParentProfile As Label
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
-    Friend WithEvents img_ReductionCurve As PictureBox
     Friend WithEvents img_Section As PictureBox
     Friend WithEvents pan_Main As Panel
     Friend WithEvents btn_OK As Button
@@ -674,4 +655,8 @@ Partial Class Frm_SectionSAB
     Friend WithEvents TLpan_Main As TableLayoutPanel
     Friend WithEvents ErrorProvider As ErrorProvider
     Friend WithEvents txt_bfs As TextBox
+    Friend WithEvents pan_Acier As Panel
+    Friend WithEvents btn_FyFu As Button
+    Friend WithEvents img_ReductionCurve As PictureBox
+    Friend WithEvents imgList_UY As ImageList
 End Class
