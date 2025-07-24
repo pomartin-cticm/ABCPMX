@@ -5,6 +5,8 @@
     Public InfoW_msg As List(Of String)
     Public InfoW_lVisible As Boolean = False
 
+    Public str_InformationW As String = "Information - " & LogicielInfo.Racine
+
 #End Region
 
 #Region " Gestion Affichage des infos du logiciel "

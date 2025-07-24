@@ -578,6 +578,7 @@ RESTRAINTS				= Type of restraint
 RIGHTCANT				= Right cantilever span
 SPAN					= Span
 TITLE 					= Definition of the lateral restraints
+INFOCOMPOSITE			= For composite beams, lateral restraints are taken into account only for the construction phase, in the absence of a full propping
 
 #FRM_MAIN
 ABOUT					= About

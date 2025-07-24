@@ -109,6 +109,8 @@ Public Class Frm_Maintiens
 
     Dim FontFrm As Font
 
+    Dim strInfoW_PoutreMixte As String
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -188,6 +190,8 @@ Public Class Frm_Maintiens
                 'Me.lbl_.Text = Bloc("DRAWCONTROL")
                 Me.btn_Add.Text = Bloc("ADD")
                 Me.btn_Delete.Text = Bloc("DELETE")
+
+                strInfoW_PoutreMixte = Bloc("INFOCOMPOSITE") ' "Pour les poutres mixtes, les maitiens latéraux ne sont pris en compte que dans la phase de construction, en l'absence d'étaiement"
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -287,6 +291,9 @@ Public Class Frm_Maintiens
     End Sub
 
     Private Sub AfficherPoutreEnCours()
+
+        Me.img_info.Visible = MyPoutreLoc.lMixte
+
         'Select Case myBeamLoc.TypeMaintien(traveeEnCours.Item2)
         Select Case MyPoutreLoc.TypeMaintien
             Case cls_Poutre.EnuTypeMaintiensPoutre.NotRestrained
@@ -787,6 +794,29 @@ Public Class Frm_Maintiens
 
     Private Sub MAJI_PointRestraints(lEnable As Boolean)
         Me.btn_Delete.Enabled = lEnable
+    End Sub
+
+#End Region
+
+
+#Region " Infos W "
+
+    Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
+        'If InfoW_lVisible Then
+        '    InfoW_Fermer()
+        'Else
+        PublieInfoDegreConnex()
+        'End If
+    End Sub
+
+    Private Sub PublieInfoDegreConnex()
+
+        InfoW_Initialise()
+
+        InfoW_Add(strInfoW_PoutreMixte)
+
+        InfosW_Publie()
+
     End Sub
 
 #End Region

@@ -9,18 +9,27 @@
 #Region "===OUVERTURE==="
 
     Private Sub Frm_Info_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        gestionlangues
+        GestionLangues()
+        GestionStyle
         PrepareFenetre()
+    End Sub
+
+    Private Sub GestionStyle()
+
+        Me.lbl_InfoW.BackColor = CouleurBackBandeaux
+        Me.lbl_InfoW.ForeColor = CouleurForeBandeaux
+        Me.rtb_Info.BorderStyle = BorderStyle.None
+
     End Sub
 
     Private Sub GestionLangues()
 
+        Me.lbl_InfoW.Text = str_InformationW
 
     End Sub
 
     Private Sub PrepareFenetre()
 
-        Me.rtb_Info.BorderStyle = BorderStyle.None
 
         '== Affichage des informations du logiciel ==
 

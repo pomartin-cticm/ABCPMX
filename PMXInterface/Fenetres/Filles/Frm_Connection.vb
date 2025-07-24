@@ -1544,7 +1544,7 @@ Public Class Frm_Connection
 
 #End Region
 
-#Region " Infos "
+#Region " Infos W "
 
     Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
         'If InfoW_lVisible Then

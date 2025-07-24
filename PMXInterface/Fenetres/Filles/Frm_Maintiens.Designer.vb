@@ -49,6 +49,7 @@ Partial Class Frm_Maintiens
         Me.pan_Img_Maintiens = New System.Windows.Forms.Panel()
         Me.txt_Cotations = New System.Windows.Forms.TextBox()
         Me.img_Maintiens = New System.Windows.Forms.PictureBox()
+        Me.img_info = New System.Windows.Forms.PictureBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -60,6 +61,7 @@ Partial Class Frm_Maintiens
         Me.Panel1.SuspendLayout()
         Me.pan_Img_Maintiens.SuspendLayout()
         CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -201,6 +203,7 @@ Partial Class Frm_Maintiens
         '
         Me.pan_Maintiens.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Maintiens.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Maintiens.Controls.Add(Me.img_info)
         Me.pan_Maintiens.Controls.Add(Me.btn_Delete)
         Me.pan_Maintiens.Controls.Add(Me.Panel1)
         Me.pan_Maintiens.Controls.Add(Me.btn_Add)
@@ -360,6 +363,16 @@ Partial Class Frm_Maintiens
         Me.img_Maintiens.TabIndex = 1
         Me.img_Maintiens.TabStop = False
         '
+        'img_info
+        '
+        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
+        Me.img_info.Location = New System.Drawing.Point(222, 5)
+        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_info.Name = "img_info"
+        Me.img_info.Size = New System.Drawing.Size(20, 20)
+        Me.img_info.TabIndex = 81
+        Me.img_info.TabStop = False
+        '
         'Frm_Maintiens
         '
         Me.AcceptButton = Me.btn_OK
@@ -388,6 +401,7 @@ Partial Class Frm_Maintiens
         Me.pan_Img_Maintiens.ResumeLayout(False)
         Me.pan_Img_Maintiens.PerformLayout()
         CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -417,4 +431,5 @@ Partial Class Frm_Maintiens
     Friend WithEvents btn_Suivant As Button
     Friend WithEvents imgList_Navigation As ImageList
     Friend WithEvents Panel1 As Panel
+    Friend WithEvents img_info As PictureBox
 End Class

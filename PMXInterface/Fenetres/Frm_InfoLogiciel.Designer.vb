@@ -29,6 +29,7 @@ Partial Class Frm_InfoLogiciel
         Me.img_info = New System.Windows.Forms.PictureBox()
         Me.pan_Info = New System.Windows.Forms.Panel()
         Me.rtb_Info = New System.Windows.Forms.RichTextBox()
+        Me.lbl_InfoW = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.pan_G2.SuspendLayout()
         Me.TLPan_General.SuspendLayout()
@@ -64,6 +65,7 @@ Partial Class Frm_InfoLogiciel
         Me.TLPan_General.ColumnCount = 2
         Me.TLPan_General.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_General.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_General.Controls.Add(Me.lbl_InfoW, 1, 0)
         Me.TLPan_General.Controls.Add(Me.img_info, 0, 0)
         Me.TLPan_General.Controls.Add(Me.pan_Info, 1, 1)
         Me.TLPan_General.Dock = System.Windows.Forms.DockStyle.Fill
@@ -109,6 +111,20 @@ Partial Class Frm_InfoLogiciel
         Me.rtb_Info.TabIndex = 0
         Me.rtb_Info.Text = ""
         '
+        'lbl_InfoW
+        '
+        Me.lbl_InfoW.AutoSize = True
+        Me.lbl_InfoW.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_InfoW.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_InfoW.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_InfoW.Location = New System.Drawing.Point(30, 0)
+        Me.lbl_InfoW.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_InfoW.Name = "lbl_InfoW"
+        Me.lbl_InfoW.Size = New System.Drawing.Size(361, 30)
+        Me.lbl_InfoW.TabIndex = 83
+        Me.lbl_InfoW.Text = "lbl_Maintiens"
+        Me.lbl_InfoW.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'Frm_InfoLogiciel
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -123,6 +139,7 @@ Partial Class Frm_InfoLogiciel
         Me.pan_General.ResumeLayout(False)
         Me.pan_G2.ResumeLayout(False)
         Me.TLPan_General.ResumeLayout(False)
+        Me.TLPan_General.PerformLayout()
         CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Info.ResumeLayout(False)
         Me.ResumeLayout(False)
@@ -135,4 +152,5 @@ Partial Class Frm_InfoLogiciel
     Friend WithEvents img_info As PictureBox
     Friend WithEvents pan_Info As Panel
     Friend WithEvents rtb_Info As RichTextBox
+    Friend WithEvents lbl_InfoW As Label
 End Class

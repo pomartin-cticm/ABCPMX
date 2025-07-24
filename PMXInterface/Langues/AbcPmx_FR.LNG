@@ -578,6 +578,7 @@ RESTRAINTS				= Type de maintien
 RIGHTCANT				= Console droite
 SPAN					= Travée
 TITLE 					= Definition des maintiens latéraux de la poutre
+INFOCOMPOSITE			= Pour les poutres mixtes, les maitiens latéraux ne sont pris en compte que dans la phase de construction, en l'absence d'un étaiement complet
 
 #FRM_MAIN
 ABOUT					= A propos
