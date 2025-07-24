@@ -180,7 +180,7 @@ Public Class cls_Poutre
     Public LongueurZone(,) As Decimal
 
     ''' <summary>
-    ''' Nombre de zone définie pour une travée
+    ''' Nombre de zones de connexion définies pour une travée
     ''' </summary>
     Public NombreZones() As Integer
 
@@ -5501,6 +5501,99 @@ Public Class cls_Poutre
 
     End Function
 
+    Public Function RConnex(iTravee As Integer, xPosT As Decimal, lGauche As Decimal) As Decimal
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   24/07/25 :  Création - Version 1.20 - POM
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul la résistance cumulée de la connexion d'une travée entre une position et un appui
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   iTravee     [E] :   Indice de la travée
+        '   xPosT       [E] :   Position de la section étudiée, par rapport à l'appui gauche de la travée
+        '   lGauche     [E] :   Indique si calcul par rapport à l'appui gauche (True) ou droit (False)
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim pRConnex As Decimal = 0
+        Dim nbZones As Integer
+        Dim iZone, iStart, iFin As Integer
+        Dim iStep As Integer
+        Dim lCont As Boolean
+        Dim xCum, xRef, LongZone As Decimal
+        Dim PRd As Decimal
+        Dim lGene1 As Boolean
+        Dim lDallePleine, lPerp, lPerpPRd, lCofra220 As Boolean
+        Dim nR, NbCZone As Integer
+        Dim pEspace As Decimal
+        Dim Fck, Ecm, Fctk_005, gammaVs, gammaVc As Decimal
+        Dim DensitePRdZone As Decimal
+        Dim xPosD, xPosC, LRef As Decimal
+
+        '--( Initialisation
+
+        nbZones = Me.NombreZones(iTravee)
+        xPosD = Me.LongueurTravee(iTravee) - xPosT
+
+        If lGauche Then
+            iStart = 0
+            iFin = nbZones - 1
+            iStep = 1
+            xCum = 0
+            xPosC = xPosT
+        Else
+            iFin = 0
+            iStart = nbZones - 1
+            iStep = -1
+            xCum = Me.LongueurTravee(iTravee)
+            xPosC = xPosD
+        End If
+
+        lGene1 = Me.Param.lGeneration1
+        lDallePleine = Not Me.Dalle.lMixte
+        lPerp = Me.Dalle.Bac.lPerpendiculaire
+        lPerpPRd = Me.Dalle.Bac.lPerpendiculairePRd
+        lCofra220 = Me.Dalle.Bac.lCofraplus220 And lPerp And (Not lDallePleine)
+        gammaVs = Me.Param.Gamma.GammaVs
+        gammaVc = Me.Param.Gamma.GammaVc
+        Ecm = Me.Dalle.beton.Ecm
+        Fck = Me.Dalle.beton.Fck
+        Fctk_005 = Me.Dalle.beton.Fctk_005
+
+        '--( Calculs
+
+        lCont = True
+        iZone = iStart
+        Do While lCont And ((lGauche And (iZone <= iFin)) Or ((Not lGauche) And (iZone >= iFin)))
+
+            pEspace = Me.EntraxeLongiGoujons(iTravee, iZone)
+
+            nR = Me.NrTransZone(iTravee, iZone)
+            PRd = Me.Dalle.Goujons.ResistancePRd(lGene1, lDallePleine, lPerpPRd, lCofra220, Me.Dalle.Bac, nR, Fck, Ecm, Fctk_005, gammaVs, gammaVc)
+
+            NbCZone = Me.NombreGoujonTotParZone(iTravee, iZone)
+            LongZone = Me.LongueurZone(iTravee, iZone)
+
+            DensitePRdZone = PRd * NbCZone / LongZone
+
+            xRef = xCum
+            xCum += iStep * Me.LongueurZone(iTravee, iZone)
+
+            LRef = iStep * (iStep * Math.Min(iStep * xCum, iStep * xPosC) - xRef)
+
+            pRConnex += DensitePRdZone * LRef
+
+            lCont = IsSmaller(iStep * (xCum - xPosT), 0)
+
+            iZone += iStep
+        Loop
+
+        '--( Fin
+
+        Return pRConnex
+
+    End Function
+
+
 #End Region
 
 #Region " Vérifications "
@@ -5802,45 +5895,6 @@ Public Class cls_Poutre
         Next
 
         Exit Sub
-
-        ''--( Traitement travée en console; à gauche
-
-        'If Me.lTraveeConsoleGauche Then
-        '    iTravee = 0
-        '    iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
-        '    INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
-
-        '    For iNode = iNodDeb To INodFin
-        '        DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
-        '        DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTravee(0)))
-        '    Next
-        'End If
-
-        ''--( Traitement travée en console; à droite
-
-        'If Me.lTraveeConsoleDroite Then
-        '    iTravee = Me.IndiceDerniereTravee
-        '    iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
-        '    INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
-
-        '    For iNode = iNodDeb To INodFin
-        '        DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
-        '        DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTravee(iTravee)))
-        '    Next
-        'End If
-
-        ''--( Traitement travées sur deux appuis
-
-        'For iTravee = 1 To Me.NombreTraveesDeuxAppuis
-        '    iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
-        '    INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
-
-        '    For iNode = iNodDeb To INodFin
-        '        DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
-        '        DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTravee(iTravee)))
-        '    Next
-        'Next
-
 
     End Sub
 

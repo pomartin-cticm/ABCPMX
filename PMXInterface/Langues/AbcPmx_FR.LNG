@@ -245,6 +245,7 @@ OK						= Ok
 CANCEL					= Annuler
 CONNECTION				= Connection
 CONNECTORS				= Connecteurs
+STUD					= Goujons soudés
 DIAMETER				= Diamètre
 AUTOMATICDESIGN			= Dimensionnement automatique de la connection
 DISPOSITION_LON_BAC_TR	= Disposition toutes les 
@@ -270,6 +271,7 @@ REINFORCEMENTS			= Armatures
 STUDCONCRETECOVER		= L'épaisseur d'enrobage des goujons ($) est inférieure à la valeur minimale imposée par $.
 STUDPREPUNCHED			= Le diamètre des goujons avec bac prépercé ne doit pas être inférieur à 19 mm ni supérieur à 22 mm.
 STUDWELDEDTHROUGH		= Le diamètre des goujons soudé à travers le bac ne doit pas excéder 20 mm.
+INFOW_SHEARCONNECTION	= Le degré de connexion est calculé à mi-travée de la poutre, en supposant que la poutre en entièrement sous moment positif
 
 #FRM_DECKRESTRAINT
 TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)

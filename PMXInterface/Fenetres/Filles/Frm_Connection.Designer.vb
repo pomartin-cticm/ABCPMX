@@ -35,10 +35,8 @@ Partial Class Frm_Connection
         Me.TLPan_Droite = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Connection = New System.Windows.Forms.Label()
         Me.pan_ImgConnection = New System.Windows.Forms.Panel()
-        Me.img_Connection = New System.Windows.Forms.PictureBox()
         Me.pan_SaisieConnection = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.btn_Precedent = New System.Windows.Forms.Button()
         Me.btn_Suivant = New System.Windows.Forms.Button()
         Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
         Me.cmb_Travee = New System.Windows.Forms.ComboBox()
@@ -68,7 +66,6 @@ Partial Class Frm_Connection
         Me.txt_Indice = New System.Windows.Forms.TextBox()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
-        Me.img_Stud = New System.Windows.Forms.PictureBox()
         Me.lbl_Connecteurs = New System.Windows.Forms.Label()
         Me.pan_SaisieConnecteurs = New System.Windows.Forms.Panel()
         Me.etq_UnitFu = New System.Windows.Forms.Label()
@@ -79,12 +76,19 @@ Partial Class Frm_Connection
         Me.txt_fy = New System.Windows.Forms.TextBox()
         Me.txt_d = New System.Windows.Forms.TextBox()
         Me.txt_hsc = New System.Windows.Forms.TextBox()
+        Me.cmb_goujons = New System.Windows.Forms.ComboBox()
+        Me.ErrorProvider_Frm_Connection = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.lbl_DegreConnex = New System.Windows.Forms.Label()
+        Me.lbl_EtaSymbol = New System.Windows.Forms.Label()
+        Me.img_Connection = New System.Windows.Forms.PictureBox()
+        Me.img_info = New System.Windows.Forms.PictureBox()
+        Me.btn_Precedent = New System.Windows.Forms.Button()
+        Me.img_Stud = New System.Windows.Forms.PictureBox()
         Me.img_fu = New System.Windows.Forms.PictureBox()
         Me.img_fy = New System.Windows.Forms.PictureBox()
         Me.img_d = New System.Windows.Forms.PictureBox()
         Me.img_hsc = New System.Windows.Forms.PictureBox()
-        Me.cmb_goujons = New System.Windows.Forms.ComboBox()
-        Me.ErrorProvider_Frm_Connection = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.lbl_Stud = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -93,18 +97,19 @@ Partial Class Frm_Connection
         Me.pan_Droite.SuspendLayout()
         Me.TLPan_Droite.SuspendLayout()
         Me.pan_ImgConnection.SuspendLayout()
-        CType(Me.img_Connection, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_SaisieConnection.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
-        CType(Me.img_Stud, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_SaisieConnecteurs.SuspendLayout()
+        CType(Me.ErrorProvider_Frm_Connection, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Connection, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Stud, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_fu, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_fy, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_d, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_hsc, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.ErrorProvider_Frm_Connection, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -255,19 +260,13 @@ Partial Class Frm_Connection
         Me.pan_ImgConnection.Size = New System.Drawing.Size(532, 160)
         Me.pan_ImgConnection.TabIndex = 2
         '
-        'img_Connection
-        '
-        Me.img_Connection.Location = New System.Drawing.Point(98, 9)
-        Me.img_Connection.Margin = New System.Windows.Forms.Padding(0)
-        Me.img_Connection.Name = "img_Connection"
-        Me.img_Connection.Size = New System.Drawing.Size(74, 57)
-        Me.img_Connection.TabIndex = 75
-        Me.img_Connection.TabStop = False
-        '
         'pan_SaisieConnection
         '
         Me.pan_SaisieConnection.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieConnection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieConnection.Controls.Add(Me.img_info)
+        Me.pan_SaisieConnection.Controls.Add(Me.lbl_EtaSymbol)
+        Me.pan_SaisieConnection.Controls.Add(Me.lbl_DegreConnex)
         Me.pan_SaisieConnection.Controls.Add(Me.Panel1)
         Me.pan_SaisieConnection.Controls.Add(Me.chk_AutomaticDesign)
         Me.pan_SaisieConnection.Controls.Add(Me.txt_Portee)
@@ -310,17 +309,6 @@ Partial Class Frm_Connection
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(199, 28)
         Me.Panel1.TabIndex = 76
-        '
-        'btn_Precedent
-        '
-        Me.btn_Precedent.Image = CType(resources.GetObject("btn_Precedent.Image"), System.Drawing.Image)
-        Me.btn_Precedent.Location = New System.Drawing.Point(1, 2)
-        Me.btn_Precedent.Margin = New System.Windows.Forms.Padding(0)
-        Me.btn_Precedent.Name = "btn_Precedent"
-        Me.btn_Precedent.Size = New System.Drawing.Size(23, 23)
-        Me.btn_Precedent.TabIndex = 12
-        Me.btn_Precedent.TabStop = False
-        Me.btn_Precedent.UseVisualStyleBackColor = True
         '
         'btn_Suivant
         '
@@ -621,19 +609,6 @@ Partial Class Frm_Connection
         Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 386)
         Me.TLPan_Gauche.TabIndex = 0
         '
-        'img_Stud
-        '
-        Me.img_Stud.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Stud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Stud.Location = New System.Drawing.Point(0, 211)
-        Me.img_Stud.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
-        Me.img_Stud.Name = "img_Stud"
-        Me.img_Stud.Size = New System.Drawing.Size(250, 175)
-        Me.img_Stud.TabIndex = 76
-        Me.img_Stud.TabStop = False
-        '
         'lbl_Connecteurs
         '
         Me.lbl_Connecteurs.AutoSize = True
@@ -652,6 +627,7 @@ Partial Class Frm_Connection
         '
         Me.pan_SaisieConnecteurs.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieConnecteurs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieConnecteurs.Controls.Add(Me.lbl_Stud)
         Me.pan_SaisieConnecteurs.Controls.Add(Me.etq_UnitFu)
         Me.pan_SaisieConnecteurs.Controls.Add(Me.etq_UnitFy)
         Me.pan_SaisieConnecteurs.Controls.Add(Me.etq_UnitD)
@@ -675,7 +651,7 @@ Partial Class Frm_Connection
         'etq_UnitFu
         '
         Me.etq_UnitFu.AutoSize = True
-        Me.etq_UnitFu.Location = New System.Drawing.Point(147, 131)
+        Me.etq_UnitFu.Location = New System.Drawing.Point(169, 131)
         Me.etq_UnitFu.Name = "etq_UnitFu"
         Me.etq_UnitFu.Size = New System.Drawing.Size(21, 13)
         Me.etq_UnitFu.TabIndex = 75
@@ -684,7 +660,7 @@ Partial Class Frm_Connection
         'etq_UnitFy
         '
         Me.etq_UnitFy.AutoSize = True
-        Me.etq_UnitFy.Location = New System.Drawing.Point(147, 105)
+        Me.etq_UnitFy.Location = New System.Drawing.Point(169, 105)
         Me.etq_UnitFy.Name = "etq_UnitFy"
         Me.etq_UnitFy.Size = New System.Drawing.Size(21, 13)
         Me.etq_UnitFy.TabIndex = 75
@@ -693,7 +669,7 @@ Partial Class Frm_Connection
         'etq_UnitD
         '
         Me.etq_UnitD.AutoSize = True
-        Me.etq_UnitD.Location = New System.Drawing.Point(147, 79)
+        Me.etq_UnitD.Location = New System.Drawing.Point(169, 79)
         Me.etq_UnitD.Name = "etq_UnitD"
         Me.etq_UnitD.Size = New System.Drawing.Size(21, 13)
         Me.etq_UnitD.TabIndex = 75
@@ -702,7 +678,7 @@ Partial Class Frm_Connection
         'etq_UnitHsc
         '
         Me.etq_UnitHsc.AutoSize = True
-        Me.etq_UnitHsc.Location = New System.Drawing.Point(147, 53)
+        Me.etq_UnitHsc.Location = New System.Drawing.Point(169, 53)
         Me.etq_UnitHsc.Name = "etq_UnitHsc"
         Me.etq_UnitHsc.Size = New System.Drawing.Size(21, 13)
         Me.etq_UnitHsc.TabIndex = 75
@@ -711,7 +687,7 @@ Partial Class Frm_Connection
         'txt_fu
         '
         Me.txt_fu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_fu.Location = New System.Drawing.Point(83, 127)
+        Me.txt_fu.Location = New System.Drawing.Point(105, 127)
         Me.txt_fu.Name = "txt_fu"
         Me.txt_fu.Size = New System.Drawing.Size(58, 20)
         Me.txt_fu.TabIndex = 73
@@ -719,7 +695,7 @@ Partial Class Frm_Connection
         'txt_fy
         '
         Me.txt_fy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_fy.Location = New System.Drawing.Point(83, 101)
+        Me.txt_fy.Location = New System.Drawing.Point(105, 101)
         Me.txt_fy.Name = "txt_fy"
         Me.txt_fy.Size = New System.Drawing.Size(58, 20)
         Me.txt_fy.TabIndex = 73
@@ -727,7 +703,7 @@ Partial Class Frm_Connection
         'txt_d
         '
         Me.txt_d.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_d.Location = New System.Drawing.Point(83, 75)
+        Me.txt_d.Location = New System.Drawing.Point(105, 75)
         Me.txt_d.Name = "txt_d"
         Me.txt_d.Size = New System.Drawing.Size(58, 20)
         Me.txt_d.TabIndex = 73
@@ -735,15 +711,91 @@ Partial Class Frm_Connection
         'txt_hsc
         '
         Me.txt_hsc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_hsc.Location = New System.Drawing.Point(83, 49)
+        Me.txt_hsc.Location = New System.Drawing.Point(105, 49)
         Me.txt_hsc.Name = "txt_hsc"
         Me.txt_hsc.Size = New System.Drawing.Size(58, 20)
         Me.txt_hsc.TabIndex = 73
         '
+        'cmb_goujons
+        '
+        Me.cmb_goujons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_goujons.FormattingEnabled = True
+        Me.cmb_goujons.Location = New System.Drawing.Point(105, 15)
+        Me.cmb_goujons.Name = "cmb_goujons"
+        Me.cmb_goujons.Size = New System.Drawing.Size(118, 21)
+        Me.cmb_goujons.TabIndex = 0
+        '
+        'ErrorProvider_Frm_Connection
+        '
+        Me.ErrorProvider_Frm_Connection.ContainerControl = Me
+        '
+        'lbl_DegreConnex
+        '
+        Me.lbl_DegreConnex.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_DegreConnex.Location = New System.Drawing.Point(424, 106)
+        Me.lbl_DegreConnex.Name = "lbl_DegreConnex"
+        Me.lbl_DegreConnex.Size = New System.Drawing.Size(63, 14)
+        Me.lbl_DegreConnex.TabIndex = 78
+        Me.lbl_DegreConnex.Text = "lbl_DegreConnex"
+        Me.lbl_DegreConnex.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lbl_EtaSymbol
+        '
+        Me.lbl_EtaSymbol.Font = New System.Drawing.Font("Symbol", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.lbl_EtaSymbol.Location = New System.Drawing.Point(392, 106)
+        Me.lbl_EtaSymbol.Name = "lbl_EtaSymbol"
+        Me.lbl_EtaSymbol.Size = New System.Drawing.Size(36, 14)
+        Me.lbl_EtaSymbol.TabIndex = 79
+        Me.lbl_EtaSymbol.Text = "h"
+        Me.lbl_EtaSymbol.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'img_Connection
+        '
+        Me.img_Connection.Location = New System.Drawing.Point(98, 9)
+        Me.img_Connection.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_Connection.Name = "img_Connection"
+        Me.img_Connection.Size = New System.Drawing.Size(74, 57)
+        Me.img_Connection.TabIndex = 75
+        Me.img_Connection.TabStop = False
+        '
+        'img_info
+        '
+        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
+        Me.img_info.Location = New System.Drawing.Point(490, 103)
+        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_info.Name = "img_info"
+        Me.img_info.Size = New System.Drawing.Size(20, 20)
+        Me.img_info.TabIndex = 80
+        Me.img_info.TabStop = False
+        '
+        'btn_Precedent
+        '
+        Me.btn_Precedent.Image = CType(resources.GetObject("btn_Precedent.Image"), System.Drawing.Image)
+        Me.btn_Precedent.Location = New System.Drawing.Point(1, 2)
+        Me.btn_Precedent.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Precedent.Name = "btn_Precedent"
+        Me.btn_Precedent.Size = New System.Drawing.Size(23, 23)
+        Me.btn_Precedent.TabIndex = 12
+        Me.btn_Precedent.TabStop = False
+        Me.btn_Precedent.UseVisualStyleBackColor = True
+        '
+        'img_Stud
+        '
+        Me.img_Stud.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Stud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_Stud.Location = New System.Drawing.Point(0, 211)
+        Me.img_Stud.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
+        Me.img_Stud.Name = "img_Stud"
+        Me.img_Stud.Size = New System.Drawing.Size(250, 175)
+        Me.img_Stud.TabIndex = 76
+        Me.img_Stud.TabStop = False
+        '
         'img_fu
         '
         Me.img_fu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_fu.Location = New System.Drawing.Point(38, 127)
+        Me.img_fu.Location = New System.Drawing.Point(60, 127)
         Me.img_fu.Name = "img_fu"
         Me.img_fu.Size = New System.Drawing.Size(46, 20)
         Me.img_fu.TabIndex = 74
@@ -752,7 +804,7 @@ Partial Class Frm_Connection
         'img_fy
         '
         Me.img_fy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_fy.Location = New System.Drawing.Point(38, 101)
+        Me.img_fy.Location = New System.Drawing.Point(60, 101)
         Me.img_fy.Name = "img_fy"
         Me.img_fy.Size = New System.Drawing.Size(46, 20)
         Me.img_fy.TabIndex = 74
@@ -761,7 +813,7 @@ Partial Class Frm_Connection
         'img_d
         '
         Me.img_d.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_d.Location = New System.Drawing.Point(38, 75)
+        Me.img_d.Location = New System.Drawing.Point(60, 75)
         Me.img_d.Name = "img_d"
         Me.img_d.Size = New System.Drawing.Size(46, 20)
         Me.img_d.TabIndex = 74
@@ -770,24 +822,20 @@ Partial Class Frm_Connection
         'img_hsc
         '
         Me.img_hsc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_hsc.Location = New System.Drawing.Point(38, 49)
+        Me.img_hsc.Location = New System.Drawing.Point(60, 49)
         Me.img_hsc.Name = "img_hsc"
         Me.img_hsc.Size = New System.Drawing.Size(46, 20)
         Me.img_hsc.TabIndex = 74
         Me.img_hsc.TabStop = False
         '
-        'cmb_goujons
+        'lbl_Stud
         '
-        Me.cmb_goujons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_goujons.FormattingEnabled = True
-        Me.cmb_goujons.Location = New System.Drawing.Point(83, 15)
-        Me.cmb_goujons.Name = "cmb_goujons"
-        Me.cmb_goujons.Size = New System.Drawing.Size(118, 21)
-        Me.cmb_goujons.TabIndex = 0
-        '
-        'ErrorProvider_Frm_Connection
-        '
-        Me.ErrorProvider_Frm_Connection.ContainerControl = Me
+        Me.lbl_Stud.AutoSize = True
+        Me.lbl_Stud.Location = New System.Drawing.Point(8, 18)
+        Me.lbl_Stud.Name = "lbl_Stud"
+        Me.lbl_Stud.Size = New System.Drawing.Size(45, 13)
+        Me.lbl_Stud.TabIndex = 76
+        Me.lbl_Stud.Text = "lbl_Stud"
         '
         'Frm_Connection
         '
@@ -812,21 +860,22 @@ Partial Class Frm_Connection
         Me.TLPan_Droite.ResumeLayout(False)
         Me.TLPan_Droite.PerformLayout()
         Me.pan_ImgConnection.ResumeLayout(False)
-        CType(Me.img_Connection, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_SaisieConnection.ResumeLayout(False)
         Me.pan_SaisieConnection.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
-        CType(Me.img_Stud, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_SaisieConnecteurs.ResumeLayout(False)
         Me.pan_SaisieConnecteurs.PerformLayout()
+        CType(Me.ErrorProvider_Frm_Connection, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Connection, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Stud, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_fu, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_fy, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_d, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_hsc, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.ErrorProvider_Frm_Connection, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -892,4 +941,8 @@ Partial Class Frm_Connection
     Friend WithEvents imgList_Navigation As ImageList
     Friend WithEvents btn_Precedent As Button
     Friend WithEvents btn_Suivant As Button
+    Friend WithEvents lbl_EtaSymbol As Label
+    Friend WithEvents lbl_DegreConnex As Label
+    Friend WithEvents img_info As PictureBox
+    Friend WithEvents lbl_Stud As Label
 End Class

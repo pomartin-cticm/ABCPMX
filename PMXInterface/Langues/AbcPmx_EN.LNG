@@ -245,6 +245,7 @@ OK						= Ok
 CANCEL					= Cancel
 CONNECTION				= Connection
 CONNECTORS				= Connectors
+STUD					= Welded studs
 DIAMETER				= Diameter
 AUTOMATICDESIGN			= Automatic design of the connection
 DISPOSITION_LON_BAC_TR	= Disposition every
@@ -270,6 +271,7 @@ REINFORCEMENTS			= Reinforcements
 STUDCONCRETECOVER		= The concrete converage of studs ($) is lower than the minimum requirement of $.
 STUDPREPUNCHED			= The diameter of studs with prepunched steel profiled sheeting should not be greater than 22 mm or smaller than 19 mm.
 STUDWELDEDTHROUGH		= The diameter of studs welded trough the steel profiled sheeting should be greater than 20 mm.
+INFOW_SHEARCONNECTION	= The degree of shear connection is assessed at mid-span, assuming the beam is fully under positive bending moments
 
 #FRM_DECKRESTRAINT
 TITLE					= Restraint of the beam by the steel deck (construction phase only)

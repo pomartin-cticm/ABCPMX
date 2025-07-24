@@ -128,11 +128,12 @@ Public Class Frm_Connection
     Dim tabDiam() As Decimal
     Dim tabHsc() As Decimal
 
-
+    Dim strInfoW_DegreConnex As String
     Dim strWarningGoujons As String
 
     Dim strErrorDia(1) As String
 
+    Dim lMultiSpan As Boolean
 
 #End Region
 
@@ -183,6 +184,10 @@ Public Class Frm_Connection
         lTrans = (myBeamLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
         lNCont = Not (myBeamLoc.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu)
         lCf220 = myBeamLoc.Dalle.Bac.lCofraplus220
+        lMultiSpan = myBeamLoc.lMultiSpan
+
+        Me.lbl_EtaSymbol.Visible = Not lMultiSpan
+        Me.lbl_DegreConnex.Visible = Not lMultiSpan
 
         'Par défaut on affiche la première travée sur deux appuis
         traveeEnCours = 1
@@ -262,7 +267,7 @@ Public Class Frm_Connection
                 '=== MENU CONNECTEUR ==============================================================='
 
                 Me.lbl_Connecteurs.Text = Bloc("CONNECTORS")
-
+                Me.lbl_Stud.Text = Bloc("STUD")
 
                 strValMaxConseillee = Bloc("RECMAXVALUE")
 
@@ -296,6 +301,7 @@ Public Class Frm_Connection
                 WarningMessage_CmbTravee = Bloc("WARNING_CMBTRAVEE")
 
                 strWarningGoujons = Bloc("STUDCONCRETECOVER")
+                strInfoW_DegreConnex = Bloc("INFOW_SHEARCONNECTION")
 
                 strErrorDia(0) = Bloc("STUDPREPUNCHED")
                 strErrorDia(1) = Bloc("STUDWELDEDTHROUGH")
@@ -1090,17 +1096,78 @@ Public Class Frm_Connection
     Private Sub MAJ_SommeGoujons()
         'MAJ du calcul de la somme des goujons après les modifications des valeurs
 
-        'myBeamLoc.NombreGoujonsTot(traveeEnCours) = 0
-        'For i As Integer = 0 To 2
-        '    myBeamLoc.NombreGoujonsTot(traveeEnCours) += Math.Floor(myBeamLoc.ZoneNombreGoujonsTransv(traveeEnCours, i) * myBeamLoc.ZoneLongueur(traveeEnCours, i) / myBeamLoc.ZoneEspacement(traveeEnCours, i))
-        'Next
 
-        'Me.etq_Somme.Text = myBeamLoc.NombreGoujonsTot(traveeEnCours) & " " & strStud
         Me.etq_Somme.Text = myBeamLoc.NombreGoujonTot(traveeEnCours) & " " & strStud
 
-        Me.img_Connection.Invalidate()
+            Me.img_Connection.Invalidate()
+
+            MAJ_DegreConnexion()
 
     End Sub
+
+    Private Sub MAJ_DegreConnexion()
+        '-----------------------------------------------------------------------------------------
+        '   24/07/25 : Création - V1.20 - POM
+        '-----------------------------------------------------------------------------------------
+        '   Mis à jour du degré de connexion à mi portée de la poutre
+        '-----------------------------------------------------------------------------------------
+
+        Dim Eta As Decimal
+
+        If Not lMultiSpan Then
+            Eta = DegreeConnexionMiTravee()
+
+            Me.lbl_DegreConnex.Text = "= " & GetStringInUnitN(Eta, Enu_TypeVariable.SansType, 4, 3, Enu_AfficheUnite.Non, True)
+        End If
+
+    End Sub
+
+    Private Function DegreeConnexionMiTravee() As Decimal
+        '-----------------------------------------------------------------------------------------
+        '   24/07/25 : Création - V1.20 - POM
+        '-----------------------------------------------------------------------------------------
+        '   Calcul du degré de connexion à mi portée de la poutre en cours
+        '   Calcul pour la travée 0, supposée entièrement en M>0
+        '-----------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Eta As Decimal
+        Dim RConnexG, RConnexD, NConnex As Decimal
+        Dim bEff, NDalle As Decimal
+        Const iTravee As Integer = 1
+        Const lSimple As Boolean = False
+        Dim GammaC As Decimal = myBeamLoc.Param.Gamma.GammaC
+        Dim GammaS As Decimal = myBeamLoc.Param.Gamma.GammaS
+        Dim GammaM0 As Decimal = myBeamLoc.Param.Gamma.GammaM0
+        Dim NProfile, NArmaEnrobage, NEnrobage As Decimal
+        Dim LTravee As Decimal = myBeamLoc.LongueurTravee(iTravee)
+        Dim xPosT As Decimal = LTravee / 2
+
+        '--( Initialisation
+
+        NProfile = myBeamLoc.Section.ResistanceTractionProfile(gammaM0)
+        If myBeamLoc.Section.lEnrobage Then
+            NEnrobage = myBeamLoc.Section.NResistanceCompressionEnrobage(GammaC)
+            NArmaEnrobage = myBeamLoc.Section.NResistanceArmaturesEnrobage(GammaS)
+        End If
+
+        '--( Calculs
+
+        bEff = myBeamLoc.BeffDalle(xPosT, iTravee, lSimple, False)
+        NDalle = myBeamLoc.Dalle.NResistanceCompressionDalle(bEff, GammaC)
+        NConnex = Math.Min(NDalle, NProfile + NArmaEnrobage)
+
+        '----> Résistance de la connexion disponible à gauche et à droite
+        RConnexG = myBeamLoc.RConnex(iTravee, xPosT, True)
+        RConnexD = myBeamLoc.RConnex(iTravee, xPosT, False)
+
+        '----> Degré de connexion
+
+        Eta = Math.Min(RConnexG, RConnexD) / NConnex
+
+        Return Eta
+    End Function
 
 
     Private Sub txt_Largeur_I1_I2_I3_TextChanged(sender As Object, e As EventArgs) Handles txt_Largeur_I1.TextChanged, txt_Largeur_I2.TextChanged, txt_Largeur_I3.TextChanged
@@ -1410,6 +1477,8 @@ Public Class Frm_Connection
     End Sub
 
 
+#End Region
+
 #Region " Vérifiation des données "
     Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal, Optional VerifValConseillee As Boolean = False) As Boolean
 
@@ -1472,9 +1541,28 @@ Public Class Frm_Connection
 
 
 
+
 #End Region
 
+#Region " Infos "
 
+    Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
+        'If InfoW_lVisible Then
+        '    InfoW_Fermer()
+        'Else
+        PublieInfoDegreConnex()
+        'End If
+    End Sub
+
+    Private Sub PublieInfoDegreConnex()
+
+        InfoW_Initialise()
+        InfoW_Add(strInfoW_DegreConnex)
+        'InfoW_Add("Le degré de connexion est calculé à mi-travée de la poutre, en supposant que la poutre en entièrement sous moment positif")
+
+        InfosW_Publie()
+
+    End Sub
 
 #End Region
 
