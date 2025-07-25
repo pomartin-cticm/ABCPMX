@@ -114,6 +114,18 @@
     <Compile Include="Fenetres\EditionBases\Frm_EditGoujons.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_ConnectionSlimConnecteur.Designer.vb">
+      <DependentUpon>Frm_ConnectionSlimConnecteur.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_ConnectionSlimConnecteur.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_ConnectionSlimN.Designer.vb">
+      <DependentUpon>Frm_ConnectionSlimN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_ConnectionSlimN.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_MaintienBacN.Designer.vb">
       <DependentUpon>Frm_MaintienBacN.vb</DependentUpon>
     </Compile>
@@ -631,8 +643,14 @@
     <EmbeddedResource Include="Fenetres\Filles\Frm_ChargementN.resx">
       <DependentUpon>Frm_ChargementN.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_ConnectionSlimConnecteur.resx">
+      <DependentUpon>Frm_ConnectionSlimConnecteur.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_ConnectionSlimFloor.resx">
       <DependentUpon>Frm_ConnectionSlimFloor.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_ConnectionSlimN.resx">
+      <DependentUpon>Frm_ConnectionSlimN.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_DalleSlimFloor.resx">
       <DependentUpon>Frm_DalleSlimFloor.vb</DependentUpon>

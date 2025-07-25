@@ -798,7 +798,6 @@ Public Class Frm_Maintiens
 
 #End Region
 
-
 #Region " Infos W "
 
     Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click

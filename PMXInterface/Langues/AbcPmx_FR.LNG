@@ -273,6 +273,19 @@ STUDPREPUNCHED			= Le diamètre des goujons avec bac prépercé ne doit pas êtr
 STUDWELDEDTHROUGH		= Le diamètre des goujons soudé à travers le bac ne doit pas excéder 20 mm.
 INFOW_SHEARCONNECTION	= Le degré de connexion est calculé à mi-travée de la poutre, en supposant que la poutre en entièrement sous moment positif
 
+#FRM_CONNECTIONSLIM
+TITLE					= Definition of the connection
+OK						= Ok
+CANCEL					= Cancel
+CONNECTION				= Connection
+CONNECTORS				= Connectors
+FLANGE_STUD				= Studs welded on the upper flange
+WEB_STUD				= Studs welded on the web
+WEB_REINF				= Reinforcement dowels
+CONNECTORSTYPE			= Type of connectors
+STUDS					= Studs
+WSTUDS					= Welded studs
+
 #FRM_DECKRESTRAINT
 TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)
 OK						= Ok

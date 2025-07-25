@@ -959,7 +959,8 @@ Public Class Frm_PMX
 
             Case EnuFenetres.ConnexionSlimfloor
 
-                Frm_ConnectionSlimFloor.ShowDialog()
+                'Frm_ConnectionSlimFloor.ShowDialog()
+                Frm_ConnectionSlimN.ShowDialog()
 
 
             Case EnuFenetres.Maintiens

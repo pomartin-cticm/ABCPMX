@@ -690,7 +690,7 @@
     Sub New()
 
         Me.type = Enum_TypeDalle.Pleine
-        Me.typeConnecteur = Enum_TypeConnecteur.GoujonSoudeSemelleSup
+        Me.typeConnecteur = Enum_TypeConnecteur.GoujonSoudeAme
 
         'Me.Beff = 1
         Me.Ep_td = 0.12
