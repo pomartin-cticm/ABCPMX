@@ -41,6 +41,7 @@ Public Class Frm_ConnectionSlimN
     End Sub
 
     Private Sub GestionLangues()
+
         If File.Exists(LogicielFichiers.Langue) Then
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_CONNECTIONSLIM")
             BlocLine.CreationBloc(Bloc)
@@ -80,6 +81,14 @@ Public Class Frm_ConnectionSlimN
     Private Sub PrepareFenetre()
 
         AffichageFille()
+
+        Select Case AffParam
+            Case Enu_AffParamSlim.Connecteur
+                Me.rdb_Connecteurs.Checked = True
+            Case Enu_AffParamSlim.Connexion
+                Me.rdb_Connexion.Checked = True
+        End Select
+
     End Sub
 
 #End Region
@@ -110,8 +119,8 @@ Public Class Frm_ConnectionSlimN
                 Me.pan_ContenuFille.Controls.Add(Frm_ConnectionSlimConnecteur.pan_Main)
                 Frm_ConnectionSlimConnecteur.InitialiseFenetre(Bloc)
             Case Enu_AffParamSlim.Connexion
-                'Me.pan_ContenuFille.Controls.Add(Frm_MaintienBacN_Fixation.pan_Main)
-                'Frm_MaintienBacN_Fixation.InitialiseFenetre(Bloc)
+                Me.pan_ContenuFille.Controls.Add(Frm_ConnectionSlimConnexion.pan_Main)
+                Frm_ConnectionSlimConnexion.InitialiseFenetre(Bloc)
         End Select
 
     End Sub

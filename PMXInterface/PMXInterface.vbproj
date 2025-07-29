@@ -120,6 +120,12 @@
     <Compile Include="Fenetres\Filles\Frm_ConnectionSlimConnecteur.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_ConnectionSlimConnexion.Designer.vb">
+      <DependentUpon>Frm_ConnectionSlimConnexion.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_ConnectionSlimConnexion.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_ConnectionSlimN.Designer.vb">
       <DependentUpon>Frm_ConnectionSlimN.vb</DependentUpon>
     </Compile>
@@ -645,6 +651,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_ConnectionSlimConnecteur.resx">
       <DependentUpon>Frm_ConnectionSlimConnecteur.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_ConnectionSlimConnexion.resx">
+      <DependentUpon>Frm_ConnectionSlimConnexion.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_ConnectionSlimFloor.resx">
       <DependentUpon>Frm_ConnectionSlimFloor.vb</DependentUpon>

@@ -414,6 +414,34 @@
 #Region " Outils "
 
     ''' <summary>
+    ''' Indique si la dalle est connectée par des connecteurs de type goujon soudé à la semelle supérieure
+    ''' </summary>
+    Public ReadOnly Property lConnexSemSup As Boolean
+        Get
+
+            Dim lSemSup As Boolean
+
+            lSemSup = (Me.typeConnecteur = Enum_TypeConnecteur.GoujonSoudeSemelleSup)
+
+            Return lSemSup
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Indique si la dalle est connectée par des connecteurs de type goujon soudé à l'âme
+    ''' </summary>
+    Public ReadOnly Property lConnexAme As Boolean
+        Get
+
+            Dim lSemSup As Boolean
+
+            lSemSup = (Me.typeConnecteur = Enum_TypeConnecteur.GoujonSoudeAme)
+
+            Return lSemSup
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Indique si la dalle est mixte
     ''' </summary>
     ''' <returns></returns>

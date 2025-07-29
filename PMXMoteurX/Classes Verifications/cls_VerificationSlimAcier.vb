@@ -52,7 +52,7 @@
 
     Public Sub New()
         lCalculPlastic = True
-        methodeReduction = MethodeReductionPlatSlimFloor.methode1_ReducAire
+        methodeReduction = MethodeReductionPlatSlimFloor.methode3_ReducLimiteElasticite
     End Sub
 
     Private Sub InitialiseCriteres(NbNodes As Integer, NbCombi As Integer, IndDerniereT As Integer, lElastic As Boolean, lElastiTau As Boolean)
@@ -545,7 +545,8 @@
 
         lambda = 1 - Math.Sqrt(1 - mu)
 
-        psi = 1 - (mu ^ 2 * t * 3 * Math.Sqrt(3) + lambda * mu * (2 * e1 + e2) - lambda ^ 2 * (e1 - e2)) / (6 * mu * b)
+        'psi = 1 - (mu ^ 2 * t * 3 * Math.Sqrt(3) + lambda * mu * (2 * e1 + e2) - lambda ^ 2 * (e1 - e2)) / (6 * mu * b)
+        psi = 1 - (mu * t * 3 * Math.Sqrt(3) + lambda * (2 * e1 + e2)) / (6 * b) - lambda ^ 2 * (e1 - e2) / (6 * mu * b)
 
         psi = Math.Max(psi, 0) 'minoration par 0 au cas où
         psi = Math.Min(psi, 1) 'majoration par 1 au cas où

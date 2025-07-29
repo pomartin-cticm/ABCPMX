@@ -7,9 +7,11 @@ Public Class Frm_ConnectionSlimConnecteur
     Dim lBuild As Boolean
     Const PrefixeG As String = "M "
 
-    Dim lGoujon As Boolean
+    Dim lGoujon As Boolean              ' Indique si connexion par goujon, soit semelle soit âme
+    Dim lArmaDispo As Boolean           ' Indique si connexion par armature disponible
 
     Dim strStud, strArma As String
+    Dim strInfoW_ArmaConnex As String
 
 #End Region
 
@@ -71,10 +73,10 @@ Public Class Frm_ConnectionSlimConnecteur
 
             Me.lbl_Stud.Text = Bloc("STUDS")
 
-
-
             strStud = Bloc("WSTUDS")
             strArma = Bloc("WEB_REINF")
+
+            strInfoW_ArmaConnex = Bloc("INFOREINF")
 
             'Me.lbl_Connecteur.Text = Bloc("CONNECTEUR")
 
@@ -84,6 +86,7 @@ Public Class Frm_ConnectionSlimConnecteur
     End Sub
 
     Private Sub AfficheConnecteurEnCours()
+
         MAJAfficheConnecteurEnCours()
 
         Select Case Frm_ConnectionSlimN.localBeam.Dalle.typeConnecteur
@@ -94,6 +97,8 @@ Public Class Frm_ConnectionSlimConnecteur
             Case PMXMoteur2.cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup
                 Me.rdb_GoujonSemSup.Checked = True
         End Select
+
+        MAJ_DimensionsConnecteur()
 
     End Sub
 
@@ -129,6 +134,12 @@ Public Class Frm_ConnectionSlimConnecteur
     Private Sub PrepareFenetre()
 
         RemplirComboGoujons()
+
+        lArmaDispo = IsGreaterOrEqual(Frm_ConnectionSlimN.localBeam.Section.ProfilA.Tw, TWMINARMA) _
+                 And (Not Frm_ConnectionSlimN.localBeam.Section.lSlimFloor_IFB_B)
+
+        Me.rdb_Armatures.Enabled = lArmaDispo
+        Me.img_info.Visible = Not lArmaDispo
 
     End Sub
 
@@ -187,10 +198,19 @@ Public Class Frm_ConnectionSlimConnecteur
         Frm_ConnectionSlimN.localBeam.Dalle.Goujons.Fy = BaseGoujons(iStud).Fy
         Frm_ConnectionSlimN.localBeam.Dalle.Goujons.Fu = BaseGoujons(iStud).Fu
 
-        'MAJ_affichage_txt_connecteurs()
+        MAJ_DimensionsConnecteur()
         img_Stud.Invalidate()
 
         'MAJ_Valeurs_Limites()
+    End Sub
+
+    Private Sub MAJ_DimensionsConnecteur()
+
+        Me.txt_hsc.Text = GetStringInUnit(Frm_ConnectionSlimN.localBeam.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 0, False)
+        Me.txt_d.Text = GetStringInUnit(Frm_ConnectionSlimN.localBeam.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 0, False)
+        Me.txt_fy.Text = GetStringInUnit(Frm_ConnectionSlimN.localBeam.Dalle.Goujons.Fy, Enu_TypeVariable.Contrainte, 4, 0, False)
+        Me.txt_fu.Text = GetStringInUnit(Frm_ConnectionSlimN.localBeam.Dalle.Goujons.Fu, Enu_TypeVariable.Contrainte, 4, 0, False)
+
     End Sub
 
 #End Region
@@ -269,6 +289,24 @@ Public Class Frm_ConnectionSlimConnecteur
 
     End Sub
 
+#End Region
+
+#Region " Infos W "
+
+    Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
+
+        PublieInfoArmaConnex()
+
+    End Sub
+
+    Private Sub PublieInfoArmaConnex()
+
+        InfoW_Initialise()
+        InfoW_Add(strInfoW_ArmaConnex)
+
+        InfosW_Publie()
+
+    End Sub
 
 #End Region
 

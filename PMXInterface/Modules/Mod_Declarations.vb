@@ -534,6 +534,7 @@ Public Module Mod_Declarations
     Public Const GOUJ_RAPESPXsurD_MIN As Decimal = 5            ' Rapport espacement longitudinal mini sur diamètre, pour les goujons soudés
     Public Const GOUJ_RAPESPXsurTD_MAX As Decimal = 6           ' Rapport espacement longitudinal maxi sur epaisseur dalle, pour les goujons soudés
     Public Const GOUJ_RAPESPX As Decimal = 0.8                  ' Espacement longitudinal maxi, pour les goujons soudés
+    Public Const ARMA_RAPESPX As Decimal = 0.125                ' Espacement longitudinal maxi, pour les armatures comme connecteurs
 
     Public Const GOUJ_RAPESPYsurD_PLEINE_MIN As Decimal = 2.5   ' Rapport espacement transversal mini sur diamètre, pour les goujons soudés dans dalle pleine
     Public Const GOUJ_RAPESPYsurD_MIXTE_MIN As Decimal = 4      ' Rapport espacement transversal mini sur diamètre, pour les goujons soudés dans dalle mixte
@@ -550,6 +551,8 @@ Public Module Mod_Declarations
     'Public Const RHOCNORMALMIN As Decimal = 2000                ' Masse volumique min du béton normal
 
     Public Const lblHISTAR As String = "HISTAR"
+
+    Public Const TWMINARMA As Decimal = 0.0075                  ' Epaisseur minimale de l'âme pour pouvoir disposer une connexion par les armatures pour les slim floors
 
 #End Region
 

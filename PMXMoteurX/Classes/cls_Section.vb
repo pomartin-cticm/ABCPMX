@@ -17,16 +17,16 @@ Public Class cls_Section
     Public Enum Enum_TypeSection
         AcierSeul           ' Section acier
         AcierSeulEnrobage   ' Section acier avec enrobage partiel
-        Mixte           ' Section mixte acier-béton
-        MixteEnrobage   ' Section mixte acier-béton avec enrobage partiel
-        SFB             ' Section Slim floor SFB non mixte
-        SFBmixte        ' Section Slim floor SFB mixte
-        IFB_A           ' Section Slim floor IFB-A non mixte
-        IFB_Amixte      ' Section Slim floor IFB-A mixte
-        IFB_B           ' Section Slim floor IFB-B non mixte
-        IFB_Bmixte      ' Section Slim floor IFB-B mixte
-        SAB             ' Section Slim floor SAB non mixte
-        SABmixte        ' Section Slim floor SAB mixte
+        Mixte               ' Section mixte acier-béton
+        MixteEnrobage       ' Section mixte acier-béton avec enrobage partiel
+        SFB                 ' Section Slim floor SFB non mixte
+        SFBmixte            ' Section Slim floor SFB mixte
+        IFB_A               ' Section Slim floor IFB-A non mixte
+        IFB_Amixte          ' Section Slim floor IFB-A mixte
+        IFB_B               ' Section Slim floor IFB-B non mixte
+        IFB_Bmixte          ' Section Slim floor IFB-B mixte
+        SAB                 ' Section Slim floor SAB non mixte
+        SABmixte            ' Section Slim floor SAB mixte
     End Enum
 
 #End Region
@@ -83,6 +83,56 @@ Public Class cls_Section
 #End Region
 
 #Region " Propriétés (Méthodes) "
+
+    ''' <summary>
+    ''' Retourne la position de la fibre sup de la semelle sup
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function zSemSup() As Decimal
+        '--------------------------------------------------------------------------------------------------
+        '   25/07/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------
+
+        Dim zTop As Decimal
+
+        Select Case Me.TypeSection
+            Case Enum_TypeSection.AcierSeul, Enum_TypeSection.AcierSeulEnrobage, Enum_TypeSection.Mixte, Enum_TypeSection.MixteEnrobage
+                zTop = Me.ProfilA.hb
+            Case Enum_TypeSection.SFB, Enum_TypeSection.SFBmixte
+                zTop = Me.ProfilA.hb
+            Case Enum_TypeSection.SAB, Enum_TypeSection.SABmixte
+                zTop = Me.ProfilA.hb - Me.ProfilA.Tfi
+            Case Enum_TypeSection.IFB_B, Enum_TypeSection.IFB_Bmixte
+                zTop = Me.ProfilA.ha - Me.ProfilA.Tfi
+            Case Enum_TypeSection.IFB_A, Enum_TypeSection.IFB_Amixte
+                zTop = Me.ProfilA.ha - Me.ProfilA.Plat_t
+        End Select
+
+        Return zTop
+
+    End Function
+
+    ''' <summary>
+    ''' Retourne la somme de l'épaisseur semelle sup+congés sup
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function EpSemSupPlusCongesSup() As Decimal
+        '--------------------------------------------------------------------------------------------------
+        '   25/07/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------
+
+        Dim epTop As Decimal
+
+        Select Case Me.TypeSection
+            Case Enum_TypeSection.IFB_B, Enum_TypeSection.IFB_Bmixte
+                epTop = Me.ProfilA.Plat_t
+            Case Else
+                epTop = Me.ProfilA.Tfs + Me.ProfilA.Rcs
+        End Select
+
+        Return epTop
+
+    End Function
 
     ''' <summary>
     ''' Retourne la masse linéique du profilé (/!\ valeur retournée en kg/m /!\)
@@ -1007,12 +1057,42 @@ Public Class cls_Section
     End Property
 
     ''' <summary>
+    ''' Indique si la section est une slimfloor de type IFB_A
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property lSlimFloor_IFB_A As Boolean
+        Get
+            Return (Me.TypeSection = Enum_TypeSection.IFB_A) Or (Me.TypeSection = Enum_TypeSection.IFB_Amixte)
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Indique si la section est une slimfloor de type IFB_B
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property lSlimFloor_IFB_B As Boolean
         Get
             Return (Me.TypeSection = Enum_TypeSection.IFB_B) Or (Me.TypeSection = Enum_TypeSection.IFB_Bmixte)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Indique si la section est une slimfloor de type SFB
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property lSlimFloor_SFB As Boolean
+        Get
+            Return (Me.TypeSection = Enum_TypeSection.SFB) Or (Me.TypeSection = Enum_TypeSection.SFBmixte)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Indique si la section est une slimfloor de type SFB
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property lSlimFloor_SAB As Boolean
+        Get
+            Return (Me.TypeSection = Enum_TypeSection.SAB) Or (Me.TypeSection = Enum_TypeSection.SABmixte)
         End Get
     End Property
 

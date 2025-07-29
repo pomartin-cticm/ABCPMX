@@ -200,6 +200,10 @@ Public Module Mod_Dessins
         DessinLitArmaDalle_Frm_Main(myGr, MyDalle, 0, MySection.ProfilA.ha, MyParAff, myBrushA(0), EntraxeD2, myBeam.lIntermediaire, EntraxeD1, EntraxeMax)
         DessinLitArmaDalle_Frm_Main(myGr, MyDalle, 1, MySection.ProfilA.ha, MyParAff, myBrushA(0), EntraxeD2, myBeam.lIntermediaire, EntraxeD1, EntraxeMax)
 
+        '--> Dessins des connecteurs
+
+        If myBeam.lMixte Then DessinConnecteurs_Frm_Main(myGr, myBeam, MyParAff, myBrushC, EntraxeD2, myBeam.lIntermediaire, EntraxeD1)
+
         '--> Dessin de la poutre de gauche
 
         If myBeam.lIntermediaire Then
@@ -239,11 +243,7 @@ Public Module Mod_Dessins
 
         End If
 
-        '--> Dessins des connecteurs
-
-        If myBeam.lMixte Then DessinConnecteurs_Frm_Main(myGr, myBeam, MyParAff, myBrushC, EntraxeD2, myBeam.lIntermediaire, EntraxeD1)
-
-        '# Dessin tremies
+        '--> Dessin tremies
 
         If myBeam.lTremieGauche Or myBeam.lTremieDroite Then
             If lCofraplus220 Then
@@ -1863,67 +1863,282 @@ Public Module Mod_Dessins
 
     End Sub
 
-    Public Sub DessinConnecteurs_Frm_Main(ByRef MyGr As Graphics, MyPoutreLoc As cls_Poutre, MyParAffA As Struc_Affichage,
-                                                       MyBrushConnecteur As Brush, EntraxeD2 As Decimal, lIntermediaire As Boolean,
-                                                   Optional EntraxeD1 As Decimal = 0)
+    Public Sub DessinConnecteurs_Frm_Main(ByRef myGr As Graphics, myBeam As cls_Poutre, myParAffA As Struc_Affichage,
+                                          MyBrushConnecteur As Brush, EntraxeD2 As Decimal, lIntermediaire As Boolean,
+                                          Optional EntraxeD1 As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   24/06/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
         '   Dessin du Bac Acier
         '-----------------------------------------------------------------------------------------------
-        '   myGr        [E] :   Graphics dans lequel on dessine
-        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
-        '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
-        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
-        '   myBeam [E] :   Poutre locale        '   
+
+        '   myBeam      [E] :   Poutre locale        '   
         '-----------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
         Dim MyPenContour As New Pen(Color.Black, 1)
+        Dim lGoujonV, lGoujonH, lArma As Boolean
+        Dim lMixte As Boolean
+        Dim lSlim As Boolean = myBeam.lSlimFloor
 
-        '--> Dessin du goujon
+        '--( Initialisation
 
-        Dim xGoujon, yGoujon As Decimal
-        Dim dTete, hTete As Decimal
-        yGoujon = 0
+        lMixte = myBeam.lMixte
+        lGoujonV = (lSlim And myBeam.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup) Or Not lSlim
+        lGoujonH = (lSlim And myBeam.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme)
+        lArma = (lSlim And myBeam.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.ArmatureAme)
 
-        If MyPoutreLoc.lIntermediaire Then
-            xGoujon = -EntraxeD1
+        '--> Dessin des goujons verticaux
 
-            'Dessin du corps du goujon
-            AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Goujons.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Goujons.d / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc, MyParAffA, True, True)
-
-            'Dessin de la tete du goujon
-
-            MyPoutreLoc.Dalle.Goujons.DimensionsTete(dTete, hTete)
-            AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc, MyParAffA, True, True)
+        If lGoujonV Then
+            Dessin_FrmMain_GoujonsSemSup(myGr, myBeam, MyBrushConnecteur, myParAffA, EntraxeD1, EntraxeD2)
+        ElseIf lGoujonH Then
+            Dessin_FrmMain_GoujonsAme(myGr, myBeam, MyBrushConnecteur, myParAffA, EntraxeD1, EntraxeD2)
+        ElseIf lArma Then
+            Dessin_FrmMain_ConnectionArma(myGr, myBeam, MyBrushConnecteur, myParAffA, EntraxeD1, EntraxeD2)
         End If
 
-        '--
+    End Sub
 
-        xGoujon = 0
+    Private Sub Dessin_FrmMain_ConnectionArma(ByRef myGr As Graphics, myBeam As cls_Poutre, myBrushS As Brush,
+                                              myParAff As Struc_Affichage, EntraxeD1 As Decimal, EntraxeD2 As Decimal)
+        '-----------------------------------------------------------------------------------------------
+        '   25/07/25 :  Version 1.20 - Création - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin des connections par armature, pour les slim floor, dans la fenêtre principale
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre dont on dessine les goujons
+        '   myBrushS    [E] :   Pinceau pour le goujon
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   EntraxeDi   [E] :   Entraxes des poutres à gauche (1) et à droite (2)
+        '-----------------------------------------------------------------------------------------------
 
-        'Dessin du corps du goujon
-        AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Goujons.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Goujons.d / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc, MyParAffA, True, True)
+        '--( Déclarations
 
-        'Dessin de la tete du goujon
-        MyPoutreLoc.Dalle.Goujons.DimensionsTete(dTete, hTete)
-        AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc, MyParAffA, True, True)
+        Dim PhiS As Decimal
+        Dim aHv As Decimal          ' Distance de l'axe des armatures à la sousface des semelles sup
+        Dim Ls As Decimal           ' Longeur des armatures
+        Dim tw As Decimal
+        Dim zTop As Decimal
+        Const kArma As Decimal = 0.8
 
-        '--
+        '--( Initialisation
 
-        xGoujon = EntraxeD2
+        PhiS = myBeam.Dalle.ConnecteurArmature.ds
+        aHv = myBeam.Section.EpSemSupPlusCongesSup * 1.2 + PhiS / 2
+        Ls = (EntraxeD1 + EntraxeD2) / 2
+        tw = myBeam.Section.ProfilA.Tw
+        zTop = myBeam.Section.zSemSup
 
-        'Dessin du corps du goujon
-        AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Goujons.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Goujons.d / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc, MyParAffA, True, True)
+        '--( Dessin section à gauche
 
-        'Dessin de la tete du goujon
-        MyPoutreLoc.Dalle.Goujons.DimensionsTete(dTete, hTete)
-        AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.Goujons.hsc, MyParAffA, True, True)
+        If myBeam.lIntermediaire Then
+            Dessin_ArmaConnec(myGr, myBeam.Dalle.ConnecteurArmature, -EntraxeD1 - tw / 2, zTop - aHv, kArma * Ls / 2, myBrushS, myParAff, True)
+            Dessin_ArmaConnec(myGr, myBeam.Dalle.ConnecteurArmature, -EntraxeD1 + tw / 2, zTop - aHv, kArma * EntraxeD1 / 2, myBrushS, myParAff, False)
+        End If
+
+        Dessin_ArmaConnec(myGr, myBeam.Dalle.ConnecteurArmature, -tw / 2, zTop - aHv, kArma * EntraxeD1 / 2, myBrushS, myParAff, True)
+        Dessin_ArmaConnec(myGr, myBeam.Dalle.ConnecteurArmature, +tw / 2, zTop - aHv, kArma * EntraxeD2 / 2, myBrushS, myParAff, False)
+
+        Dessin_ArmaConnec(myGr, myBeam.Dalle.ConnecteurArmature, EntraxeD2 - tw / 2, zTop - aHv, kArma * EntraxeD2 / 2, myBrushS, myParAff, True)
+        Dessin_ArmaConnec(myGr, myBeam.Dalle.ConnecteurArmature, EntraxeD2 + tw / 2, zTop - aHv, kArma * Ls / 2, myBrushS, myParAff, False)
+
+    End Sub
+
+    Private Sub Dessin_FrmMain_GoujonsAme(ByRef myGr As Graphics, myBeam As cls_Poutre, myBrushS As Brush,
+                                          myParAff As Struc_Affichage, EntraxeD1 As Decimal, EntraxeD2 As Decimal)
+        '-----------------------------------------------------------------------------------------------
+        '   25/07/25 :  Version 1.20 - Création - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin des goujons sur l'âme, pour les slim floor, dans la fenêtre principale
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre dont on dessine les goujons
+        '   myBrushS    [E] :   Pinceau pour le goujon
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   EntraxeDi   [E] :   Entraxes des poutres à gauche (1) et à droite (2)
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim zGoujon As Decimal
+        Dim tw As Decimal
+
+        '--( Initialisation
+
+        zGoujon = myBeam.Section.ProfilA.ha / 2
+        tw = myBeam.Section.ProfilA.Tw
+
+        '--( Dessin section à gauche
+
+        If myBeam.lIntermediaire Then
+            Dessin_GoujonHorizontal(myGr, myBeam.Dalle.Goujons, -EntraxeD1 - tw / 2, zGoujon, myBrushS, myParAff, True)
+            Dessin_GoujonHorizontal(myGr, myBeam.Dalle.Goujons, -EntraxeD1 + tw / 2, zGoujon, myBrushS, myParAff, False)
+        End If
+
+        '--( Dessin section principale
+
+        Dessin_GoujonHorizontal(myGr, myBeam.Dalle.Goujons, -tw / 2, zGoujon, myBrushS, myParAff, True)
+        Dessin_GoujonHorizontal(myGr, myBeam.Dalle.Goujons, tw / 2, zGoujon, myBrushS, myParAff, False)
+
+        '--( Dessin Section à droite
+
+        Dessin_GoujonHorizontal(myGr, myBeam.Dalle.Goujons, EntraxeD2 - tw / 2, zGoujon, myBrushS, myParAff, True)
+        Dessin_GoujonHorizontal(myGr, myBeam.Dalle.Goujons, EntraxeD2 + tw / 2, zGoujon, myBrushS, myParAff, False)
+
+    End Sub
+
+    Private Sub Dessin_FrmMain_GoujonsSemSup(ByRef myGr As Graphics, myBeam As cls_Poutre, myBrushS As Brush,
+                                             myParAff As Struc_Affichage, EntraxeD1 As Decimal, EntraxeD2 As Decimal)
+        '-----------------------------------------------------------------------------------------------
+        '   25/07/25 :  Version 1.20 - Création - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin des goujons verticaux dans la fenêtre principale
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre dont on dessine les goujons
+        '   myBrushS    [E] :   Pinceau pour le goujon
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   EntraxeDi   [E] :   Entraxes des poutres à gauche (1) et à droite (2)
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim zGoujon As Decimal
+        Dim lSlim As Boolean = myBeam.lSlimFloor
+
+        '--( Initialisation
+
+        If lSlim Then
+            zGoujon = myBeam.Section.zSemSup
+        Else
+            zGoujon = 0
+        End If
+
+        '--( Dessin section à gauche
+
+        If myBeam.lIntermediaire Then
+
+            Dessin_GoujonVertical(myGr, myBeam.Dalle.Goujons, -EntraxeD1, zGoujon, myBrushS, myParAff)
+
+        End If
+
+        '--( Connecteur section principale
+
+        Dessin_GoujonVertical(myGr, myBeam.Dalle.Goujons, 0, zGoujon, myBrushS, myParAff)
+
+        '--( Connecteur section à droite
+
+        Dessin_GoujonVertical(myGr, myBeam.Dalle.Goujons, EntraxeD2, zGoujon, myBrushS, myParAff)
+
+    End Sub
+
+    Private Sub Dessin_ArmaConnec(ByRef myGr As Graphics, myStud As Cls_ConnecteurArmature,
+                                  xArma As Decimal, zArma As Decimal, LArma As Decimal,
+                                  myBrushS As Brush, myParAff As Struc_Affichage, lGauche As Boolean)
+        '-----------------------------------------------------------------------------------------------
+        '   25/07/25 :  Version 1.20 - Création - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin d'une armature utilisée comme connecteur
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myStud      [E] :   Goujon à dessiner
+        '   xStud,zStud [E] :   Position de la base du goujon
+        '   myBrushS    [E] :   Pinceau pour le goujon
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   lGauche     [E] :   Indique si la tête est à gauche ou à droite du dessin
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations 
+
+        Dim kGauche As Decimal = 1
+        Dim PhiS As Decimal
+
+        If lGauche Then kGauche = -1
+        PhiS = myStud.ds
+
+        '--( Dessin
+
+        AddRectanglePlein(myGr, myBrushS, MyPenContour, xArma, zArma - PhiS / 2,
+                                                        xArma + kGauche * LArma, zArma + PhiS / 2, myParAff, True, False)
+
+        AddLigne(myGr, MyPenContour, xArma, zArma - PhiS / 2, xArma + kGauche * LArma, zArma - PhiS / 2, myParAff)
+        AddLigne(myGr, MyPenContour, xArma, zArma + PhiS / 2, xArma + kGauche * LArma, zArma + PhiS / 2, myParAff)
+
+    End Sub
+
+    Private Sub Dessin_GoujonHorizontal(ByRef myGr As Graphics, myStud As cls_GoujonSoude, xStud As Decimal, zStud As Decimal,
+                                        myBrushS As Brush, myParAff As Struc_Affichage, lGauche As Boolean)
+        '-----------------------------------------------------------------------------------------------
+        '   25/07/25 :  Version 1.20 - Création - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin d'un goujon soudé sur l'âme (donc horizontal)
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myStud      [E] :   Goujon à dessiner
+        '   xStud,zStud [E] :   Position de la base du goujon
+        '   myBrushS    [E] :   Pinceau pour le goujon
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   lGauche     [E] :   Indique si la tête est à gauche ou à droite du dessin
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations 
+
+        Dim dTete, hTete As Decimal
+        Dim kGauche As Decimal = 1
+
+        If lGauche Then kGauche = -1
+
+        '--( Dessin du corps du goujon
+
+        AddRectanglePlein(myGr, myBrushS, MyPenContour, xStud, zStud - myStud.d / 2,
+                                                        xStud + kGauche * myStud.hsc, zStud + myStud.d / 2, myParAff, True, True)
+
+        '--( Dessin de la tete du goujon
+        myStud.DimensionsTete(dTete, hTete)
+        AddRectanglePlein(myGr, myBrushS, MyPenContour, xStud + kGauche * (myStud.hsc - hTete), zStud - dTete / 2,
+                                                        xStud + kGauche * myStud.hsc, zStud + dTete / 2, myParAff, True, True)
+    End Sub
+
+    Private Sub Dessin_GoujonVertical(ByRef myGr As Graphics, myStud As cls_GoujonSoude, xStud As Decimal, zStud As Decimal,
+                                      myBrushS As Brush, myParAff As Struc_Affichage,
+                                      Optional lSup As Boolean = True,
+                                      Optional kEch As Decimal = 1)
+        '-----------------------------------------------------------------------------------------------
+        '   25/07/25 :  Version 1.20 - Création - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin d'un goujon soudé vertical
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myStud      [E] :   Goujon à dessiner
+        '   xStud,zStud [E] :   Position de la base du goujon
+        '   myBrushS    [E] :   Pinceau pour le goujon
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   lSup        [E] :   Indique si goujon au dessus
+        '   kEch        [E] :   Coefficient d'échelle pour le dessin
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations 
+
+        Dim dTete, hTete As Decimal
+        Dim kTop As Decimal = 1
+
+        If Not lSup Then kTop = -1
+
+        '--( Dessin du corps du goujon
+        AddRectanglePlein(myGr, myBrushS, MyPenContour, xStud - myStud.d / 2, zStud,
+                                                        xStud + myStud.d / 2, zStud + kEch * kTop * myStud.hsc, myParAff, True, True)
+
+        '--( Dessin de la tete du goujon
+        myStud.DimensionsTete(dTete, hTete)
+        AddRectanglePlein(myGr, myBrushS, MyPenContour, xStud - dTete / 2, zStud + kEch * kTop * (myStud.hsc - hTete),
+                                                        xStud + dTete / 2, zStud + kEch * kTop * myStud.hsc, myParAff, True, True)
 
 
     End Sub
+
 
 #End Region
 
@@ -6715,314 +6930,14 @@ Public Module Mod_Dessins
 
     End Sub
 
-    Public Sub DessinFrmConnection_ConnecteursOLD(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double,
-                                               myBeam As cls_Poutre,
-                                               ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
-        '-----------------------------------------------------------------------------------------------
-        '   24/06/23 :  Version 1.00
-        '-----------------------------------------------------------------------------------------------
-        '   Dessin du Bac Acier
-        '-----------------------------------------------------------------------------------------------
-        '   myGr        [E] :   Graphics dans lequel on dessine
-        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
-        '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
-        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
-        '   myBeam      [E] :   Poutre dont on dessine la connexion 
-        '-----------------------------------------------------------------------------------------------
-
-        '--> Declarations
-
-        Dim myParAff As Struc_Affichage
-
-        Dim ColorPen As Color = Color.Blue
-        Dim ColorRedPen As Color = Color.Red
-
-        Dim CouleurBeton As Color = CouleurBetonNormal
-        Dim CouleurAcier As Color = CouleurAcierNormal
-        Dim CouleurConnect As Color = CouleurConnecteurNormal
-
-        Dim myBrushBac As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.LightGray, Color.DarkGray)
-        Dim myBrushBeton As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.Gray, CouleurBeton)
-        'Dim myBrushBac As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.Gray, CouleurBeton)
-        Dim myBrushProfilA As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), CouleurAcier, CouleurAcier)
-        Dim myBrushConnecteur As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), CouleurConnect, CouleurConnect)
-
-        Dim MyPenBrush As New SolidBrush(ColorPen)
-        Dim MyPenRedBrush As New SolidBrush(ColorRedPen)
-        Dim MyPen As New Pen(ColorPen)
-        Dim MyPenRed As New Pen(ColorRedPen)
-        Dim MyFontNormal As Font = FontBase
-        Dim myPenDash As New Pen(Color.Black, 0.75)
-
-        Dim xMin, yMin, xMax, yMax As Double
-        Dim dCar As Decimal
-
-        Dim xPts() As Single = Nothing
-        Dim yPts() As Single = Nothing
-        Dim nbPts As Integer
-        Dim lMixte As Boolean = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte)
-        Dim lParallel As Boolean = (myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele)
-        Dim lCofraplus220 As Boolean = myBeam.Dalle.Bac.lCofraplus220
-        Dim lNervureContinue As Boolean = Not (myBeam.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu)
-        Dim Bfs, zTop, Hp As Decimal
-        Dim xo, xe As Decimal
-        Dim Chaine As String
-
-        '--> Initialisation
-
-        dCar = myBeam.Dalle.Ep_td
-
-        '--> Dessin des éléments
-
-        If lMixte And lParallel Then
-
-            '===========================================================================================================================================
-            '= CAS D'UNE DALLE MIXTE, NERVURE PARALLELE : on voit la nervure en coupe
-            '===========================================================================================================================================
-
-            '--> Dessin du bac acier
-
-            With myBeam.Dalle.Bac
-
-                '--> Preparation de la zone d'affichage - Calcul de ParAff
-                xMin = - .Ep / 2
-                xMax = .Ep / 2
-
-                yMin = -myBeam.Section.ProfilA.Tfs
-                yMax = Math.Max(myBeam.Dalle.Ep_td, myBeam.Dalle.Goujons.hsc)
-
-                ParametresAffichage(myParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
-
-                '--> Calcul des points du pourtour du bac
-                .PrepareContourBacSimple1Nervure(xPts, yPts, nbPts)
-
-                '--> Remplissage contour
-                RemplirZone(myGr, myBrushBac, xPts, yPts, nbPts, myParAff, True)
-
-            End With
-
-            '--> Dessin de la dalle béton
-
-            '--> Calcul des points du pourtour de la dalle
-
-            Dim xPts_Dalle(xPts.Length / 2 + 1) As Single
-            Dim yPts_Dalle(xPts.Length / 2 + 1) As Single
-
-            For i As Integer = 0 To xPts.Length / 2 - 1
-                xPts_Dalle(i) = xPts(i)
-                yPts_Dalle(i) = yPts(i)
-            Next
-            xPts_Dalle(xPts.Length / 2) = xPts(xPts.Length / 2 - 1)
-            xPts_Dalle(xPts.Length / 2 + 1) = xPts(0)
-
-            yPts_Dalle(xPts.Length / 2) = myBeam.Dalle.Ep_td
-            yPts_Dalle(xPts.Length / 2 + 1) = myBeam.Dalle.Ep_td
-
-            nbPts = xPts_Dalle.Length
-
-            '--> Remplissage contour
-            RemplirZone(myGr, myBrushBeton, xPts_Dalle, yPts_Dalle, nbPts, myParAff, True)
-
-            '--> Dessin du goujon
-
-            Dim xGoujon As Decimal = 0
-            Dim yGoujon As Decimal = yPts(yPts.Length / 4)
-
-            'Dessin du corps du goujon
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - myBeam.Dalle.Goujons.d / 2, yGoujon, xGoujon + myBeam.Dalle.Goujons.d / 2, yGoujon + myBeam.Dalle.Goujons.hsc, myParAff, True, True)
-            'Dessin de la tete du goujon
-            Dim dTete, hTete As Decimal
-            myBeam.Dalle.Goujons.DimensionsTete(dTete, hTete)
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + myBeam.Dalle.Goujons.hsc - hTete, xGoujon + dTete / 2, yGoujon + myBeam.Dalle.Goujons.hsc, myParAff, True, True)
-
-            'Dessin de la semelle supérieure et de l'âme de la poutre
-            Dim xSemelleSup As Decimal = 0
-            Dim ySemelleSup As Decimal = yPts(3 * yPts.Length / 4)
-            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - myBeam.Section.ProfilA.Bfs / 2 / 2, ySemelleSup - myBeam.Section.ProfilA.Tfs, xSemelleSup + myBeam.Section.ProfilA.Bfs / 2 / 2, ySemelleSup, myParAff, True, True)
-
-            Dim xAme As Decimal = xSemelleSup
-            Dim yAme As Decimal = ySemelleSup - myBeam.Section.ProfilA.Tfs
-            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - myBeam.Section.ProfilA.Tw / 2, yAme - myBeam.Section.ProfilA.HauteurAmeHw, xAme + myBeam.Section.ProfilA.Tw / 2, yAme, myParAff, True, True)
-
-        Else
-
-            Bfs = myBeam.Section.ProfilA.Bfs
-            zTop = myBeam.Dalle.zTop
-            Hp = myBeam.Dalle.Bac.Hp
-
-            If lMixte And lCofraplus220 Then
-
-                '===========================================================================================================================================
-                '= CAS D'UNE DALLE MIXTE, AVEC COFRAPLUS 220
-                '===========================================================================================================================================
-
-                xMin = -Bfs
-                xMax = Bfs
-
-                yMin = -myBeam.Section.ProfilA.Tfs
-                yMax = Math.Max(myBeam.Dalle.zTop, myBeam.Dalle.Goujons.hsc)
-
-                ParametresAffichage(myParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
-
-                '--> Dessin de la dalle
-
-                nbPts = 0
-                AjoutePoint(-Bfs / 2, 0, xPts, yPts, nbPts)
-                AjoutePoint(Bfs / 2, 0, xPts, yPts, nbPts)
-                AjoutePoint(Bfs / 2, -Hp, xPts, yPts, nbPts)
-                AjoutePoint(Bfs, -Hp, xPts, yPts, nbPts)
-                AjoutePoint(Bfs, zTop, xPts, yPts, nbPts)
-                AjoutePoint(-Bfs, zTop, xPts, yPts, nbPts)
-                AjoutePoint(-Bfs, -Hp, xPts, yPts, nbPts)
-                AjoutePoint(-Bfs / 2, -Hp, xPts, yPts, nbPts)
-
-                RemplirZone(myGr, myBrushBeton, xPts, yPts, nbPts, myParAff, False, True)
-
-                '--( Partie bacs
-
-                AddRectanglePlein(myGr, myBrushBac, MyPenContour, -Bfs, 0, -Bfs / 2, -Hp, myParAff, True, False)
-                AddRectanglePlein(myGr, myBrushBac, MyPenContour, Bfs, 0, +Bfs / 2, -Hp, myParAff, True, False)
-
-                xo = -Bfs
-                xe = Bfs
-                AddLigne(myGr, MyPenContour, xo, zTop, xe, zTop, myParAff)
-
-                xo = Bfs / 2
-                AddLigne(myGr, MyPenContour, xo, 0, xo, -Hp, myParAff)
-                AddLigne(myGr, MyPenContour, -xo, 0, -xo, -Hp, myParAff)
-                AddLigne(myGr, MyPenContour, xo, 0, -xo, 0, myParAff)
-
-                AddLigne(myGr, myPenDash, -Bfs, 0, -Bfs / 2, 0, myParAff)
-                AddLigne(myGr, myPenDash, Bfs, 0, Bfs / 2, 0, myParAff)
-
-
-            ElseIf lMixte And (Not lNervureContinue) Then
-
-                '===========================================================================================================================================
-                '= CAS D'UNE DALLE MIXTE, NERVURE PERPENDICULAIRE AVEC NERVURE NON CONTINUE : on voit la nervure longitudinale en coupe
-                '===========================================================================================================================================
-
-                '--> Preparation de la zone d'affichage - Calcul de ParAff
-                xMin = -Bfs
-                xMax = Bfs
-
-                yMin = -myBeam.Section.ProfilA.Tfs
-                yMax = Math.Max(myBeam.Dalle.Ep_td, myBeam.Dalle.Goujons.hsc)
-
-                ParametresAffichage(myParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
-
-                '--> Dessin de la dalle béton
-
-                Dim xBeton As Decimal = 0
-                Dim yBeton As Decimal = 0
-                Const bApp As Decimal = 0.05
-
-                AddRectanglePlein(myGr, myBrushBeton, MyPenContour, xBeton - Bfs, yBeton, xBeton + Bfs, yBeton + myBeam.Dalle.Ep_td, myParAff, True, False)
-
-
-                '--( Partie bac
-
-                AddRectanglePlein(myGr, myBrushBac, MyPenContour, xBeton - Bfs, yBeton, xBeton - Bfs / 2 + bApp, Hp, myParAff, True, False)
-                AddRectanglePlein(myGr, myBrushBac, MyPenContour, xBeton + Bfs, yBeton, xBeton + Bfs / 2 - bApp, Hp, myParAff, True, False)
-                AddLigne(myGr, myPenDash, xBeton - Bfs / 2 + bApp, 0, xBeton - Bfs / 2 + bApp, Hp, myParAff)
-                AddLigne(myGr, myPenDash, xBeton - Bfs / 2 + bApp, Hp, xBeton - Bfs, Hp, myParAff)
-                AddLigne(myGr, myPenDash, xBeton + Bfs / 2 - bApp, 0, xBeton + Bfs / 2 - bApp, Hp, myParAff)
-                AddLigne(myGr, myPenDash, xBeton + Bfs / 2 - bApp, Hp, xBeton + Bfs, Hp, myParAff)
-
-                '--( compléments lignes de la dalle
-
-                xo = -Bfs
-                xe = Bfs
-                AddLigne(myGr, MyPenContour, xo, zTop, xe, zTop, myParAff)
-                AddLigne(myGr, MyPenContour, xo, yBeton, xe, yBeton, myParAff)
-
-            Else
-
-                '===========================================================================================================================================
-                '= AUTRES CAS
-                '===========================================================================================================================================
-
-                With myBeam.Section.ProfilA
-
-                    '--> Preparation de la zone d'affichage - Calcul de ParAff
-                    xMin = - .Bfs
-                    xMax = .Bfs
-
-                    yMin = -myBeam.Section.ProfilA.Tfs
-                    yMax = Math.Max(myBeam.Dalle.Ep_td, myBeam.Dalle.Goujons.hsc)
-
-                    ParametresAffichage(myParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
-
-                End With
-
-                '--> Dessin de la dalle béton
-
-                Dim xBeton As Decimal = 0
-                Dim yBeton As Decimal = 0
-
-                AddRectanglePlein(myGr, myBrushBeton, MyPenContour, xBeton - myBeam.Section.ProfilA.Bfs, yBeton, xBeton + myBeam.Section.ProfilA.Bfs, yBeton + myBeam.Dalle.Ep_td, myParAff, True, False)
-
-                '--( Partie bac pour les dalles mixtes
-
-                If lMixte Then
-                    AddRectanglePlein(myGr, myBrushBac, MyPenContour, -Bfs, 0, Bfs, Hp, myParAff, True, False)
-                End If
-
-                '--( Compléments lignes
-
-                AddLigne(myGr, MyPenContour, -Bfs, zTop, +Bfs, zTop, myParAff)
-                AddLigne(myGr, MyPenContour, -Bfs, 0, +Bfs, 0, myParAff)
-
-                If lMixte Then
-                    AddLigne(myGr, myPenDash, -Bfs, Hp, +Bfs, Hp, myParAff)
-                End If
-            End If
-
-            '--> Dessin du goujon
-
-            Dim xGoujon As Decimal = 0
-            Dim yGoujon As Decimal = 0
-
-            'Dessin du corps du goujon
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - myBeam.Dalle.Goujons.d / 2, yGoujon, xGoujon + myBeam.Dalle.Goujons.d / 2, yGoujon + myBeam.Dalle.Goujons.hsc, myParAff, True, True)
-            'Dessin de la tete du goujon
-            Dim dTete, hTete As Decimal
-            myBeam.Dalle.Goujons.DimensionsTete(dTete, hTete)
-
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + myBeam.Dalle.Goujons.hsc - hTete, xGoujon + dTete / 2, yGoujon + myBeam.Dalle.Goujons.hsc, myParAff, True, True)
-
-            '--> Dessin de la semelle supérieure et de l'âme de la poutre
-
-            Dim xSemelleSup As Decimal = 0
-            Dim ySemelleSup As Decimal = 0
-            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - myBeam.Section.ProfilA.Bfs / 2 / 2, ySemelleSup - myBeam.Section.ProfilA.Tfs, xSemelleSup + myBeam.Section.ProfilA.Bfs / 2 / 2, ySemelleSup, myParAff, True, True)
-
-            Dim xAme As Decimal = xSemelleSup
-            Dim yAme As Decimal = ySemelleSup - myBeam.Section.ProfilA.Tfs
-            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - myBeam.Section.ProfilA.Tw / 2, yAme - myBeam.Section.ProfilA.HauteurAmeHw, xAme + myBeam.Section.ProfilA.Tw / 2, yAme, myParAff, True, True)
-
-            '--( Cotation
-
-            xo = -0.75 * Bfs
-
-            AddFleche(myGr, MyPenContour, xo, 0, xo, zTop, myParAff, True, True)
-
-            Chaine = GetStringInUnitN(zTop, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-
-            AddTexte(myGr, New SolidBrush(Color.Black), Chaine, MyFontNormal, xo, 0.5 * zTop, myParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
-
-        End If
-
-    End Sub
-
     Public Sub DessinFrmConnection_Connection(MyGr As Graphics, MyPoutre As cls_Poutre, myFont As Font,
-                                ByVal pWi As Decimal, ByVal pHi As Decimal,
-                                kAdjust As Double, indTravee As Integer, ByVal lCote As Boolean, strStuds As String,
-                                ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+                                              ByVal pWi As Decimal, ByVal pHi As Decimal,
+                                              kAdjust As Double, indTravee As Integer, ByVal lCote As Boolean, strStuds As String,
+                                              ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '------------------------------------------------------------------------------------------------------------------
         '   21/07/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu des travées dans la fenêtre portées
+        '   Dessin de la connexion le long d'une poutre normale
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Poutre à dessiner
@@ -7033,7 +6948,6 @@ Public Module Mod_Dessins
         '   lCote       [E] :   Indique si affichage de la cote
         '   strStuds    [E] :   Indique la traduction associée au mot "goujons"
         '------------------------------------------------------------------------------------------------------------------
-
 
         '--> Déclarations
 
@@ -7055,7 +6969,8 @@ Public Module Mod_Dessins
         Dim MyBrushA As New SolidBrush(Color.LightBlue)
         Dim MyPen As New Pen(Color.Black, 1)
 
-        Dim CouleurConnecteur As Color = Color.White
+        'Dim CouleurConnecteur As Color = Color.White
+        Dim CouleurConnecteur As Color = CouleurConnecteurNormal
         Dim myBrushC As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurConnecteur)
         Const lAffSymbol As Boolean = False
         Dim Chaine As String
@@ -7068,11 +6983,11 @@ Public Module Mod_Dessins
         LongueurTravee = cls_Poutre.PORTEEDEFAUT
         LargeurSemelle = LongueurTravee / 8.5
         If Not MyPoutre.lAutomaticDesign Then
+            NombreZones = MyPoutre.NombreZones(indTravee)
             For i As Integer = 0 To 2
                 NombreGoujonsTrans(i) = MyPoutre.NrTransZone(indTravee, i)
                 LongueurZones(i) = MyPoutre.LongueurZone(indTravee, i) / MyPoutre.LongueurTravee(indTravee) * LongueurTravee
                 NombreGoujonsLongiZone(i) = 0.75 * MyPoutre.LongueurZone(indTravee, i) / MyPoutre.EspacementZone(indTravee, i)
-                NombreZones = MyPoutre.NombreZones(indTravee)
             Next
         Else
             NombreGoujonsTrans(0) = 1
@@ -7106,11 +7021,9 @@ Public Module Mod_Dessins
         yo = -LargeurSemelle / 2
         ye = LargeurSemelle / 2
 
-
         AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
 
         'Représentation des goujons sur la semelle supérieure
-
 
         For i As Integer = 0 To NombreZones - 1
             xo = 0
@@ -7132,7 +7045,6 @@ Public Module Mod_Dessins
             Next
         Next
 
-
         '=== COTES =======================================================
 
         If lCote Then
@@ -7150,7 +7062,7 @@ Public Module Mod_Dessins
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
                 'If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(myBeam.Longueur_Zone(indTravee, i), Enu_TypeVariable.Longueur)
-                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringInUnit(MyPoutre.LongueurZone(indTravee, i), Enu_TypeVariable.Longueur, 4, 2, False)
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringInUnitN(MyPoutre.LongueurZone(indTravee, i), Enu_TypeVariable.Longueur, 4, 2, NON_U, True)
                 AddTexteFond(MyGr, New SolidBrush(Color.Black), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
                 'On dessinne la côte supérieure qui donne le nombre de goujons disposés sur la zone étudiée 
@@ -7168,7 +7080,224 @@ Public Module Mod_Dessins
 
 #End Region
 
+#Region " Dessins pour Frm_ConnectionSlimConnexion "
+
+    Public Sub DessinFrmConnection_ConnectionSlim(myGr As Graphics, myBeam As cls_Poutre, myFont As Font,
+                                                  ByVal pWi As Decimal, ByVal pHi As Decimal,
+                                                  kAdjust As Double, indTravee As Integer, ByVal lCote As Boolean, strStuds As String,
+                                                  ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '------------------------------------------------------------------------------------------------------------------
+        '   21/07/23 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Dessin de la connexion le long d'une poutre slim floor
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   myBeam      [E] :   Poutre à dessiner
+        '   myFont      [E] :   Police pour les cotes
+        '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
+        '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
+        '   indTravee   [E] :   Indique quel est la travée sélectionnée
+        '   lCote       [E] :   Indique si affichage de la cote
+        '   strStuds    [E] :   Indique la traduction associée au mot "goujons"
+        '------------------------------------------------------------------------------------------------------------------
+
+        Select Case myBeam.Dalle.typeConnecteur
+            Case cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup
+                DessinFrmConnection_Connection(myGr, myBeam, myFont, pWi, pHi, kAdjust, indTravee, lCote, strStuds, xLeft, yTop)
+            Case cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme
+                DessinFrmConnectionSlim_ConnexAme(myGr, myBeam, myFont, pWi, pHi, kAdjust, indTravee, lCote, strStuds, False, xLeft, yTop)
+            Case cls_Dalle.Enum_TypeConnecteur.ArmatureAme
+                DessinFrmConnectionSlim_ConnexAme(myGr, myBeam, myFont, pWi, pHi, kAdjust, indTravee, lCote, strStuds, True, xLeft, yTop)
+        End Select
+
+    End Sub
+
+    Private Sub DessinFrmConnectionSlim_ConnexAme(myGr As Graphics, myBeam As cls_Poutre, myFont As Font,
+                                                  ByVal pWi As Decimal, ByVal pHi As Decimal,
+                                                  kAdjust As Double, indTravee As Integer, ByVal lCote As Boolean, strStuds As String,
+                                                  lArma As Boolean, ByVal xLeft As Decimal, ByVal yTop As Decimal)
+        '------------------------------------------------------------------------------------------------------------------
+        '   28/07/25 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Dessin de la connexion le long d'une poutre slim floor, cas de la connexion par goujons soudés sur l'âme
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   myBeam      [E] :   Poutre à dessiner
+        '   myFont      [E] :   Police pour les cotes
+        '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
+        '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
+        '   indTravee   [E] :   Indique quel est la travée sélectionnée
+        '   lCote       [E] :   Indique si affichage de la cote
+        '   strStuds    [E] :   Indique la traduction associée au mot "goujons"
+        '   lArma       [E] :   Indique si connexion par des armatures dans l'âme
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xMin, xMax As Decimal
+        Dim yMin, yMax As Decimal
+        Dim dCar As Decimal
+        Dim MyParAff As Struc_Affichage
+        Dim xo, yo As Decimal
+        Dim xe, ye As Decimal
+        'Dim LongueurTotalePoutre As Decimal
+        Dim LongueurTravee As Decimal
+        Dim Bfi As Decimal
+        Dim BPlat As Decimal
+        Dim tW As Decimal
+        Dim Largeur As Decimal
+        Dim NombreGoujonsTrans(2) As Integer
+        Dim LongueurZones(2) As Decimal
+        Dim NombreGoujonsLongiZone(2) As Integer
+        Dim NombreZones As Integer
+        Dim DiametreGoujons As Decimal
+        Dim EspaceLongiGoujons As Decimal
+        Dim MyBrushA As New SolidBrush(Color.LightBlue)
+        Dim MyPen As New Pen(Color.Black, 1)
+
+        'Dim CouleurConnecteur As Color = Color.White
+        Dim CouleurConnecteur As Color = CouleurConnecteurNormal
+
+        Dim myBrushC As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurConnecteur)
+        Const lAffSymbol As Boolean = False
+        Dim Chaine As String
+        Dim MyFontNormal As Font = myFont
+        Dim lTotal As Boolean = False
+        Dim lContour As Boolean = lCONTOURCOTE
+
+        Dim lPlatInf, lIFB_A, lIFB_B, lSAB, lSFB, lSem As Boolean
+        Dim kEchB As Decimal
+
+        '--> Initialisations
+
+        lSFB = myBeam.Section.lSlimFloor_SFB
+        lSAB = myBeam.Section.lSlimFloor_SAB
+        lIFB_A = myBeam.Section.lSlimFloor_IFB_A
+        lIFB_B = myBeam.Section.lSlimFloor_IFB_B
+        lPlatInf = lSFB Or lIFB_A
+        lSem = Not lIFB_B
+
+        LongueurTravee = myBeam.LongueurTravee(indTravee)
+
+        Bfi = myBeam.Section.ProfilA.Bfi
+        tW = myBeam.Section.ProfilA.Tw
+        BPlat = myBeam.Section.ProfilA.Plat_b
+
+        Largeur = Math.Max(Bfi, BPlat)
+
+        NombreZones = myBeam.NombreZones(indTravee)
+        For i As Integer = 0 To 2
+            NombreGoujonsTrans(i) = myBeam.NrTransZone(indTravee, i)
+            LongueurZones(i) = myBeam.LongueurZone(indTravee, i) / myBeam.LongueurTravee(indTravee) * LongueurTravee
+            NombreGoujonsLongiZone(i) = 0.75 * myBeam.LongueurZone(indTravee, i) / myBeam.EspacementZone(indTravee, i)
+        Next i
+        dCar = Math.Sqrt(LongueurTravee ^ 2 + Largeur ^ 2) / 20
+
+        '--( Paramètres d'affichage
+
+        kEchB = 1 / 10 * LongueurTravee / Largeur
+
+        xMin = 0
+        xMax = LongueurTravee
+        yMin = -kEchB * Largeur / 2 - dCar / 2
+        yMax = kEchB * Largeur / 2 + dCar / 2
+
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+        '--( Dessin du plat inférieur, le cas échéant
+
+        xo = 0
+        xe = LongueurTravee
+        If lPlatInf Then
+            yo = kEchB * BPlat / 2
+            ye = -kEchB * BPlat / 2
+            AddRectanglePlein(myGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+        End If
+
+        '--( Dessin de la semelle inférieure, le cas échéant
+
+        If lPlatInf Then
+            xo = 0
+            xe = LongueurTravee
+            yo = kEchB * Bfi / 2
+            ye = -kEchB * Bfi / 2
+            AddRectanglePlein(myGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+        End If
+
+
+        '--( Représentation des goujons soudés sur l'âme
+
+        For i As Integer = 0 To NombreZones - 1
+            xo = 0
+            yo = 0
+            For j As Integer = 0 To i - 1
+                xo += LongueurZones(j)
+            Next
+            EspaceLongiGoujons = LongueurZones(i) / (NombreGoujonsLongiZone(i))
+            For j As Integer = 1 To NombreGoujonsLongiZone(i)
+                xo += EspaceLongiGoujons
+                yo = 0
+
+                If Not (xo >= LongueurTravee - DiametreGoujons Or xo <= DiametreGoujons) Then
+
+                    If lArma Then
+                        AddLigne(myGr, New Pen(CouleurConnecteur), xo, kEchB * (tW / 2), xo, kEchB * (Largeur / 2) * 1.15, MyParAff)
+                        AddLigne(myGr, New Pen(CouleurConnecteur), xo, -kEchB * (tW / 2), xo, -kEchB * (Largeur / 2) * 1.15, MyParAff)
+                    Else
+                        Dessin_GoujonVertical(myGr, myBeam.Dalle.Goujons, xo, kEchB * (tW / 2), myBrushC, MyParAff, True, kEchB)
+                        Dessin_GoujonVertical(myGr, myBeam.Dalle.Goujons, xo, -kEchB * (tW / 2), myBrushC, MyParAff, False, kEchB)
+                    End If
+
+                End If
+
+            Next
+        Next
+
+        '--( Dessin de l'âme
+
+        xo = 0
+        xe = LongueurTravee
+        yo = kEchB * tW / 2
+        ye = -kEchB * tW / 2
+        AddRectanglePlein(myGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+        '--( Cotes
+
+        If lCote Then
+
+            xo = 0
+            xe = 0
+
+            For i As Integer = 0 To NombreZones - 1
+
+                xo = xe
+                xe += LongueurZones(i)
+
+                'On dessinne la côte inférieure qui donne la longueur de la zone étudiée 
+                Dim yCote As Decimal = -kEchB * Largeur / 2 - dCar
+
+                AddFleche(myGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringInUnit(myBeam.LongueurZone(indTravee, i), Enu_TypeVariable.Longueur, 4, 2, False)
+                AddTexteFond(myGr, New SolidBrush(Color.Black), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                'On dessinne la côte supérieure qui donne le nombre de goujons disposés sur la zone étudiée 
+                yCote = kEchB * Largeur / 2 + dCar
+
+                AddFleche(myGr, New Pen(Color.Red), xo, yCote, xe, yCote, MyParAff, True, True)
+                'Chaine = GetStringNoUnit(Math.Floor(myBeam.ZoneLongueur(indTravee, i) / myBeam.ZoneEspacement(indTravee, i)), Enu_TypeVariable.SansType) & " " & strStuds
+                Chaine = "2 x " & GetStringNoUnit(myBeam.NombreGoujonTotParZone(indTravee, i), Enu_TypeVariable.SansType) & " " & strStuds
+                AddTexteFond(myGr, New SolidBrush(Color.Red), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+            Next
+
+        End If
+
+    End Sub
+
+#End Region
+
 #Region "Dessins pour la connection (FRM_CONNECTIONSLIMFLOOR)"
+
     Public Sub DessineDalleConnectionSlimfloor(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre,
                              lIntermediaire As Boolean, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
@@ -7285,7 +7414,6 @@ Public Module Mod_Dessins
         Dim myBrushConnecteur As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), CouleurConnect, CouleurConnect)
         'Armatures
         Dim myBrushArmatures As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), ColorArmatures, ColorArmatures)
-
 
         '--> Dessin de la dalle
 

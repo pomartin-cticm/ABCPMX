@@ -282,10 +282,14 @@ CONNECTORS				= Connectors
 FLANGE_STUD				= Studs welded on the upper flange
 WEB_STUD				= Studs welded on the web
 WEB_REINF				= Reinforcement dowels
+REBARS					= Rebars
 CONNECTORSTYPE			= Type of connectors
 STUDS					= Studs
 WSTUDS					= Welded studs
-
+SPACING					= Longitudinal spacing
+ROW_NUMBER				= Number of rows
+WIDTH					= Length
+INFOREINF				= Composite dowels are not available for IFB-B sections nor for webs whose thickness is less than 7,5 mm
 
 #FRM_DECKRESTRAINT
 TITLE					= Restraint of the beam by the steel deck (construction phase only)

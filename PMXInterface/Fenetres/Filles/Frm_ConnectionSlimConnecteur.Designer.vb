@@ -22,6 +22,7 @@ Partial Class Frm_ConnectionSlimConnecteur
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_ConnectionSlimConnecteur))
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.TLPan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Image = New System.Windows.Forms.Panel()
@@ -35,6 +36,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.rdb_GoujonSemSup = New System.Windows.Forms.RadioButton()
         Me.pan_ConteneurConnecteur = New System.Windows.Forms.Panel()
         Me.pan_SaisieGoujons = New System.Windows.Forms.Panel()
+        Me.lbl_Stud = New System.Windows.Forms.Label()
         Me.etq_UnitFu = New System.Windows.Forms.Label()
         Me.etq_UnitFy = New System.Windows.Forms.Label()
         Me.etq_UnitD = New System.Windows.Forms.Label()
@@ -60,7 +62,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.lbl_Stud = New System.Windows.Forms.Label()
+        Me.img_info = New System.Windows.Forms.PictureBox()
         Me.pan_Main.SuspendLayout()
         Me.TLPan_Main.SuspendLayout()
         Me.pan_Image.SuspendLayout()
@@ -76,6 +78,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         CType(Me.img_Fsk, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Main
@@ -104,8 +107,8 @@ Partial Class Frm_ConnectionSlimConnecteur
         'pan_Image
         '
         Me.pan_Image.Controls.Add(Me.img_Stud)
-        Me.pan_Image.Location = New System.Drawing.Point(250, 0)
-        Me.pan_Image.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Image.Location = New System.Drawing.Point(251, 0)
+        Me.pan_Image.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.pan_Image.Name = "pan_Image"
         Me.pan_Image.Size = New System.Drawing.Size(200, 100)
         Me.pan_Image.TabIndex = 0
@@ -173,6 +176,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         '
         Me.pan_TypeConnecteur.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_TypeConnecteur.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_TypeConnecteur.Controls.Add(Me.img_info)
         Me.pan_TypeConnecteur.Controls.Add(Me.rdb_Armatures)
         Me.pan_TypeConnecteur.Controls.Add(Me.rdb_GoujonAme)
         Me.pan_TypeConnecteur.Controls.Add(Me.rdb_GoujonSemSup)
@@ -248,6 +252,15 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.pan_SaisieGoujons.Name = "pan_SaisieGoujons"
         Me.pan_SaisieGoujons.Size = New System.Drawing.Size(270, 169)
         Me.pan_SaisieGoujons.TabIndex = 2
+        '
+        'lbl_Stud
+        '
+        Me.lbl_Stud.AutoSize = True
+        Me.lbl_Stud.Location = New System.Drawing.Point(3, 23)
+        Me.lbl_Stud.Name = "lbl_Stud"
+        Me.lbl_Stud.Size = New System.Drawing.Size(45, 13)
+        Me.lbl_Stud.TabIndex = 77
+        Me.lbl_Stud.Text = "lbl_Stud"
         '
         'etq_UnitFu
         '
@@ -487,14 +500,15 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.PictureBox1.TabIndex = 74
         Me.PictureBox1.TabStop = False
         '
-        'lbl_Stud
+        'img_info
         '
-        Me.lbl_Stud.AutoSize = True
-        Me.lbl_Stud.Location = New System.Drawing.Point(3, 23)
-        Me.lbl_Stud.Name = "lbl_Stud"
-        Me.lbl_Stud.Size = New System.Drawing.Size(45, 13)
-        Me.lbl_Stud.TabIndex = 77
-        Me.lbl_Stud.Text = "lbl_Stud"
+        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
+        Me.img_info.Location = New System.Drawing.Point(226, 58)
+        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_info.Name = "img_info"
+        Me.img_info.Size = New System.Drawing.Size(20, 20)
+        Me.img_info.TabIndex = 81
+        Me.img_info.TabStop = False
         '
         'Frm_ConnectionSlimConnecteur
         '
@@ -526,6 +540,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         CType(Me.img_Fsk, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -569,4 +584,5 @@ Partial Class Frm_ConnectionSlimConnecteur
     Friend WithEvents TextBox1 As TextBox
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents lbl_Stud As Label
+    Friend WithEvents img_info As PictureBox
 End Class

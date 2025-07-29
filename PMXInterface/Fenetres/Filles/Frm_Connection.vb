@@ -45,7 +45,7 @@ Public Class Frm_Connection
     ''' </summary>
     Dim traveeEnCours As Integer = 1
 
-    Dim y_txt_cmb_esp_longi_actif As Decimal = 141
+    Dim y_txt_cmb_esp_longi_actif As Decimal = 64
     Dim y_txt_cmb_esp_longi_passif As Decimal = 165
 
     ''' <summary>
@@ -968,14 +968,14 @@ Public Class Frm_Connection
         Me.txt_I2.Visible = myBeamLoc.NombreZones(traveeEnCours) >= 2
         Me.txt_Largeur_I2.Visible = myBeamLoc.NombreZones(traveeEnCours) >= 2
         Me.cmb_NbRow_I2.Visible = myBeamLoc.NombreZones(traveeEnCours) >= 2
-        Me.cmb_EspLongi_I2.Visible = myBeamLoc.NombreZones(traveeEnCours) >= 2 And lBacTransv
-        Me.txt_EspLongi_I2.Visible = myBeamLoc.NombreZones(traveeEnCours) >= 2 And Not lBacTransv
+        Me.cmb_EspLongi_I2.Visible = (myBeamLoc.NombreZones(traveeEnCours) >= 2) And lBacTransv
+        Me.txt_EspLongi_I2.Visible = (myBeamLoc.NombreZones(traveeEnCours) >= 2) And Not lBacTransv
 
         Me.txt_I3.Visible = myBeamLoc.NombreZones(traveeEnCours) >= 3
         Me.txt_Largeur_I3.Visible = myBeamLoc.NombreZones(traveeEnCours) >= 3
         Me.cmb_NbRow_I3.Visible = myBeamLoc.NombreZones(traveeEnCours) >= 3
-        Me.cmb_EspLongi_I3.Visible = myBeamLoc.NombreZones(traveeEnCours) >= 3 And lBacTransv
-        Me.txt_EspLongi_I3.Visible = myBeamLoc.NombreZones(traveeEnCours) >= 3 And Not lBacTransv
+        Me.cmb_EspLongi_I3.Visible = (myBeamLoc.NombreZones(traveeEnCours) >= 3) And lBacTransv
+        Me.txt_EspLongi_I3.Visible = (myBeamLoc.NombreZones(traveeEnCours) >= 3) And Not lBacTransv
 
         'Met à jour les valeurs dans les txtbox ou cmbbox 
 
