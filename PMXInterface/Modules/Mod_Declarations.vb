@@ -286,7 +286,7 @@ Public Module Mod_Declarations
 
     Public Sub InitialiseOptionsScopeDefaut(ByRef myOptions As Struc_OptionsScope)
         '-----------------------------------------------------------------------------
-        '   09/08/23 :  Création - POM
+        '   30/07/25 :  Création - POM
         '-----------------------------------------------------------------------------
         '   Initialisation des paramètres définissant le domaine d'appication du logiciel
         '   Valeurs par défaut
@@ -380,6 +380,42 @@ Public Module Mod_Declarations
         myOptions.Phi = 1
         myOptions.TempRef = 20
 
+    End Sub
+
+    Public Sub InitialiseOptionsCalculDefaut(ByRef myOptions As Struc_OptionsCalcul)
+        '-----------------------------------------------------------------------------
+        '   30/07/25 :  Création - POM
+        '-----------------------------------------------------------------------------
+        '   Initialisation des paramètres définissant les options de calcul
+        '   Valeurs par défaut
+        '-----------------------------------------------------------------------------
+
+        myOptions.Norme = cls_OptionsCalcul.Enu_Normes.EurocodesG1
+        myOptions.lCompressionArma = False
+        myOptions.lLargeurEfficaceSimplifiee = False
+
+        myOptions.dMaxNodes = 1
+        myOptions.nbMinNodesTravee = 20
+        myOptions.nbMinNodesConsole = 5
+
+        myOptions.EsArmatures = 200000
+        myOptions.DeltaCDev = 0.01
+
+        myOptions.PsiLPermanent = 1.1
+        myOptions.PsiLRetrait = 0.55
+
+        ReDim myOptions.TimeT0G1(1)
+        ReDim myOptions.TimeT0G2(1)
+        ReDim myOptions.TimeT0SH(1)
+
+        myOptions.TimeT0G1(0) = 28
+        myOptions.TimeT0G1(1) = 56
+        myOptions.TimeT0G2(0) = 28
+        myOptions.TimeT0G2(1) = 56
+        myOptions.TimeT0SH(0) = 1
+        myOptions.TimeT0SH(1) = 1
+
+        myOptions.EtaW = 1
     End Sub
 
     Public Sub InitialiseOptionsCalcul()

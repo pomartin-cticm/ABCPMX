@@ -522,7 +522,8 @@ Public Class Frm_OptionsCalcul
 
         Select Case LastIndexW.OptionsCalcul
             Case Enu_OptionsCalcul.Calcul
-
+                InitialiseOptionsCalculDefaut(LocalOptionsCalcul)
+                Frm_OptionsCalculCalcul.InitialiseFrm(True)
             Case Enu_OptionsCalcul.Connecteurs
             Case Enu_OptionsCalcul.Gamma
                 InitialiseOptionsGamma(Me.GammaLoc)

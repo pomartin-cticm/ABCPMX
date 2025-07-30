@@ -18,12 +18,14 @@ Public Class Frm_OptionsCalculCalcul
 
 #Region "===OUVERTURE==="
 
-    Public Sub InitialiseFrm()
+    Public Sub InitialiseFrm(Optional lAfficheOnly As Boolean = False)
         lBuild = True
-        GestionLangue(Frm_OptionsCalcul.BlocLangues(BALISE))
-        GestionStyle()
-        GestionUnites()
-        RemplirCombos()
+        If Not lAfficheOnly Then
+            GestionLangue(Frm_OptionsCalcul.BlocLangues(BALISE))
+            GestionStyle()
+            GestionUnites()
+            RemplirCombos()
+        End If
         AfficherOptionsEnCours()
         lBuild = False
     End Sub

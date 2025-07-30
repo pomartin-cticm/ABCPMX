@@ -7,18 +7,20 @@
 
     Public CritereM As cls_Critere                  ' Resistance à la flexion
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
-    'Public CritereVb As cls_Critere                 ' Pas de voilement par cisaillement pour les slimfloors
     Public CritereMV As cls_Critere                 ' Résistance à l'interacion MV
-    'Public CritereMVb As cls_Critere                ' Pas d'interacion M+voilement par cisaillement
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
     Public CritereTauA As cls_Critere               ' Critère de contrainte de cisaillement élastique
     Public CritereSigmaVM As cls_Critere            ' Critère de contrainte élastique équivalente de Von Mises
-    'Public CritereLTB As cls_Critere                ' Pas de déversement
 
     Public RhoV As Decimal(,)                       ' Coefficient d'interaction : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
 
-    Public Psi_fi, rho_t_fi, Psi_y_fi As Decimal(,)   ' Coefficient de réduction de la semelle inférieure : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
-    Public Psi_spd, rho_t_spd, Psi_y_spd As Decimal(,) ' Coefficient de réduction du plat soudé inférieur : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
+    '== Pour tous les coefficents de réduction ci-dessous, : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
+    Public Psi_fi As Decimal(,)                     ' Coefficient de réduction de la semelle inférieure (aire, méthode 1)
+    Public rho_t_fi As Decimal(,)                   ' Coefficient de réduction de la semelle inférieure (épaisseur, méthode 2)
+    Public Psi_y_fi As Decimal(,)                   ' Coefficient de réduction de la semelle inférieure (limite d'élasticité, méthode 3)
+    Public Psi_spd As Decimal(,)                    ' Coefficient de réduction du plat soudé inférieur (aire, méthode 1)
+    Public rho_t_spd As Decimal(,)                  ' Coefficient de réduction du plat soudé inférieur (épaisseur, méthode 2)
+    Public Psi_y_spd As Decimal(,)                  ' Coefficient de réduction du plat soudé inférieur (limite d'élasticité, méthode 3)
 
     Public methodeReduction As MethodeReductionPlatSlimFloor
 
@@ -102,18 +104,16 @@
         '----------------------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU d'une poutre acier sans enrobage
+        '   Vérification aux ELU d'une poutre acier slim floor
         '----------------------------------------------------------------------------------------------------------
-        '   myBeam            [E] :   Poutre vérifiée
+        '   myBeam              [E] :   Poutre vérifiée
         '   lConstructionPhase  [E] :   Indique si vérification d'une poutre mixte en phase de construction
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
 
         Dim VplRd As Decimal                            ' Résistance plastique au cisaillement
-        'Dim VbRd As Decimal                             ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
         Dim VRd As Decimal                              ' Résistance à l'effort tranchant (soit plastique, soit voilement)
-        'Dim lTwoAdjacentCantilevers As Boolean          ' indique la présence de deux travées adjacentes en consoles (True) ou non
         Dim iCombi As Integer
         Dim combiELU As New cls_Combinaisons
         Dim nbCombiELU As Integer
@@ -139,9 +139,6 @@
         Dim lSoudure As Boolean                         ' Indique si un calcul de soudure est nécessaire 
         Dim lRetraitElastique As Boolean = True
         Dim lVerifElastic As Boolean                    ' Indique si on doit effectuer une verification élastique des sections
-        'Dim EpsilonW As Decimal
-        'Dim lEnrob As Boolean = myBeam.lEnrobage
-        'Dim lproPRS As Boolean = Not myBeam.Section.lLamine
         Const lWEB As Boolean = True
         Dim lRec As Boolean
 
@@ -159,14 +156,11 @@
 
         Me.InitialiseCoeffReduc(nbCombiELU, myBeam.Nodes.nbNodes)
         Me.InitialiseCriteresVM(myBeam.Nodes.nbNodes, myBeam.lEnrobage, nbCombiELU, myBeam.IndiceDerniereTravee)
+        Me.InitialiseRhoV(nbCombiELU, myBeam.Nodes.nbNodes)
 
         '# Tranchant résistant
 
         VplRd = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM0, myBeam.Param.EtaW)
-
-        '# Résistance au voilement par cisaillement
-
-        'sans objet pour les slimfloors
 
         '# Résistance à l'effort tranchant
 
@@ -174,24 +168,25 @@
 
         '# Propriétés élastiques section brutes
 
-        myBeam.Section.ProprietesElastiquesMyy_Slim(1, True, myBeam.Param.Gamma, 0, zANE_SectionBrute, InertieY_SectionBrute, MelRd_SectionBrute, True)
+        myBeam.Section.ProprietesElastiquesMyy_Slim(1, True, myBeam.Param.Gamma, zANE_SectionBrute, InertieY_SectionBrute, MelRd_SectionBrute)
 
         '# Propriétés plastiques section brutes
 
-        myBeam.Section.ProprietesPlastiquesMyy_Slim(1, True, myBeam.Param.Gamma, 0, zANP_SectionBrute, MplRd_SectionBrute, True)
+        myBeam.Section.ProprietesPlastiquesMyy_Slim(1, True, myBeam.Param.Gamma, 0, zANP_SectionBrute, MplRd_SectionBrute)
 
         '# Classes de la section
 
         ClasseP = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec)
-        ClasseM = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec)
+        ' ClasseM = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec)
 
         '# Type de vérification pour les sections
 
         lVerifElastic = myBeam.Param.lElasticDesignVM Or (ClasseP > 2)
-        If myBeam.lMultiSpan Then
-            '# dans le cas d'une poutre à plusieurs travées, on prend aussi en compte la classe de section en flexion négative
-            lVerifElastic = lVerifElastic Or (ClasseM > 2)
-        End If
+
+        'If myBeam.lMultiSpan Then
+        '    '# dans le cas d'une poutre à plusieurs travées, on prend aussi en compte la classe de section en flexion négative
+        '    lVerifElastic = lVerifElastic Or (ClasseM > 2)
+        'End If
         Me.lCalculPlastic = Not lVerifElastic
 
         '--> Boucle sur les combinaisons

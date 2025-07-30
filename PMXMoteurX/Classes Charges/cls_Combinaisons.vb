@@ -292,7 +292,9 @@
         '-----------------------------------------------------------------------------------------------------------
         '   Calcul les efforts nodaux d'un model EF a partir des tranchants
         '-----------------------------------------------------------------------------------------------------------
-        '   EffVz       [S] :   Table des efforts tranchants   CE N4EST PAS CORRECT
+        '   nbNodes     [E] :   Nombre de noeuds
+        '   Vz          [E] :   Table des efforts tranchants au droit de chaque noeud, issus du calcul
+        '   Q           [S] :   Effort local associé à chaque noeud
         '-----------------------------------------------------------------------------------------------------------
 
         '--> Déclarations

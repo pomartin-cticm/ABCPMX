@@ -1203,7 +1203,6 @@ Public Class cls_ProfilA
         '   lPlastic    [E] :   Indique si on calcule les propriétés plastiques
         '-------------------------------------------------------------------------------------------------------------------
 
-
         '--> Déclarations
 
         Dim MyModele As New cls_ModeleP

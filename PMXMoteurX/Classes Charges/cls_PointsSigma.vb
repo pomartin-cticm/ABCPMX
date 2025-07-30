@@ -234,6 +234,8 @@
                 'Me.zPos.Add(zSup - myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi)
                 'Me.zPos.Add(zSup - myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi)
 
+                Me.iProfile(0) = 0
+                Me.iProfile(1) = Me.zPos.Count - 1
 
         End Select
 

@@ -451,17 +451,43 @@ Public Class cls_ModeleP
 #Region " Outils de modélisation - Profilés "
 
     Public Sub MaillageProfileA_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                   FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
-                                   Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
-                                   Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
+                                   FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
         '   Maillage du profilé acier pour le calcul des propriétés / axe YY
         '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   RhoV        [E] :   Coefficient pour l'interaction MV
-        '   MyProfil    [E] :   Profilé à mailler
+        '   Gammas          [E] :   Coefficients partiels
+        '   RhoV            [E] :   Coefficient pour l'interaction MV
+        '   MyProfil        [E] :   Profilé à mailler
+        '   PsiAfi,PsiAspd  [E] :   Coefficient de réduction pour l'aire de la semelle inf et du plat (méthode 1 slim floor)
+        '   RhoTfi,RhoTspd  [E] :   Coefficient de réduction pour l'épaisseur de la semelle inf et du plat (méthode 2 slim floor)
+        '   PsiYfi,PsiYspd  [E] :   Coefficient de réduction pour la limite d'élasticité de la semelle inf et du plat (méthode 3 slim floor)
+        '-------------------------------------------------------------------------------------------------------------------
+
+        MaillageProfileA_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, 1, 1, 1, 1, 1, 1)
+
+    End Sub
+
+    Public Sub MaillageProfileA_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
+                                   FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
+                                   PsiAfi As Decimal, RhoTfi As Decimal, PsiYfi As Decimal,
+                                   PsiAspd As Decimal, RhoTspd As Decimal, PsiYspd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du profilé acier pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Gammas          [E] :   Coefficients partiels
+        '   RhoV            [E] :   Coefficient pour l'interaction MV
+        '   MyProfil        [E] :   Profilé à mailler
+        '   FySup           [E] :   Limite d'élasticité semelle supérieure
+        '   FyInf           [E] :   Limite d'élasticité semelle inférieure
+        '   FyW             [E] :   Limite d'élasticité âme
+        '   FySpd           [E] :   Limite d'élasticité plat
+        '   PsiAfi,PsiAspd  [E] :   Coefficient de réduction pour l'aire de la semelle inf et du plat (méthode 1 slim floor)
+        '   RhoTfi,RhoTspd  [E] :   Coefficient de réduction pour l'épaisseur de la semelle inf et du plat (méthode 2 slim floor)
+        '   PsiYfi,PsiYspd  [E] :   Coefficient de réduction pour la limite d'élasticité de la semelle inf et du plat (méthode 3 slim floor)
         '-------------------------------------------------------------------------------------------------------------------
 
         Select Case MyProfil.typeProfileAcier
@@ -469,52 +495,56 @@ Public Class cls_ModeleP
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
                 MaillageProfileUsuels_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                MaillageProfileASlimfloorsSFB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
+                MaillageProfileASlimfloorsSFB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, PsiAfi, RhoTfi, PsiYfi, PsiAspd, RhoTspd, PsiYspd)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                MaillageProfileASlimfloorsIFB_A_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_spd, rho_t_spd, Psi_y_spd)
+                MaillageProfileASlimfloorsIFB_A_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, PsiAspd, RhoTspd, PsiYspd)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                MaillageProfileASlimfloorsIFB_B_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi)
+                MaillageProfileASlimfloorsIFB_B_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, PsiAfi, RhoTfi, PsiYfi)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                MaillageProfileASlimfloorsSAB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi)
+                MaillageProfileASlimfloorsSAB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, PsiAfi, RhoTfi, PsiYfi)
         End Select
 
     End Sub
 
     Public Sub MaillageProfileASlim_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
-                                       Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
-                                       Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
+                                       PsiAfi As Decimal, RhoTfi As Decimal, PsiYfi As Decimal,
+                                       PsiAspd As Decimal, RhoTspd As Decimal, PsiYspd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
         '   Maillage du profilé acier pour le calcul des propriétés / axe YY
         '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   RhoV        [E] :   Coefficient pour l'interaction MV
-        '   MyProfil    [E] :   Profilé à mailler
-        '   FySup       [E] :   Limite d'élasticité semelle sup
-        '   FyInf       [E] :   Limite d'élasticité semelle inf
-        '   Fyw         [E] :   Limite d'élasticité âme
-        '   FySpd       [E] :   Limite d'élasticité plat
+        '   Gammas          [E] :   Coefficients partiels
+        '   RhoV            [E] :   Coefficient pour l'interaction MV
+        '   MyProfil        [E] :   Profilé à mailler
+        '   FySup           [E] :   Limite d'élasticité semelle supérieure
+        '   FyInf           [E] :   Limite d'élasticité semelle inférieure
+        '   FyW             [E] :   Limite d'élasticité âme
+        '   FySpd           [E] :   Limite d'élasticité plat
+        '   PsiAfi,PsiAspd  [E] :   Coefficient de réduction pour l'aire de la semelle inf et du plat (méthode 1 slim floor)
+        '   RhoTfi,RhoTspd  [E] :   Coefficient de réduction pour l'épaisseur de la semelle inf et du plat (méthode 2 slim floor)
+        '   PsiYfi,PsiYspd  [E] :   Coefficient de réduction pour la limite d'élasticité de la semelle inf et du plat (méthode 3 slim floor)
         '-------------------------------------------------------------------------------------------------------------------
 
 
         Select Case MyProfil.typeProfileAcier
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                MaillageProfileASlimfloorsSFB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
+                MaillageProfileASlimfloorsSFB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, PsiAfi, RhoTfi, PsiYfi, PsiAspd, RhoTspd, PsiYspd)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                MaillageProfileASlimfloorsIFB_A_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_spd, rho_t_spd, Psi_y_spd)
+                MaillageProfileASlimfloorsIFB_A_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, PsiAspd, RhoTspd, PsiYspd)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                MaillageProfileASlimfloorsIFB_B_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi)
+                MaillageProfileASlimfloorsIFB_B_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, PsiAfi, RhoTfi, PsiYfi)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                MaillageProfileASlimfloorsSAB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi)
+                MaillageProfileASlimfloorsSAB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, PsiAfi, RhoTfi, PsiYfi)
         End Select
 
     End Sub
 
     Public Sub MaillageProfileUsuels_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FyP As Decimal, Optional lWeb As Boolean = True)
+                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FyP As Decimal,
+                                        Optional lWeb As Boolean = True)
         '-------------------------------------------------------------------------------------------------------------------
         '   25/04/24 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -583,17 +613,44 @@ Public Class cls_ModeleP
     End Sub
 
     Private Sub MaillageProfileASlimfloorsSFB_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
-                                      Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
-                                        Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
+                                                 FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   03/01/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------
         '   Maillage du profilé acier usuels pour le calcul des propriétés / axe YY
         '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
+        '   GammaM      [E] :   Coefficient partiel pour l'acier
         '   RhoV        [E] :   Coefficient pour l'interaction MV
-        '   MyModele    [E/S]:  Modèle
+        '   MyProfil    [E] :    Profilé
+        '   FySup       [E] :   Limite d'élasticité semelle supérieure
+        '   FyInf       [E] :   Limite d'élasticité semelle inférieure
+        '   FyW         [E] :   Limite d'élasticité âme
+        '   FySpd       [E] :   Limite d'élasticité plat
+        '-------------------------------------------------------------------------------------------------------------------
+
+        MaillageProfileASlimfloorsSFB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, 1, 1, 1, 1, 1, 1)
+
+    End Sub
+
+    Private Sub MaillageProfileASlimfloorsSFB_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
+                                                 FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
+                                                 PsiAfi As Decimal, RhoTfi As Decimal, PsiYfi As Decimal,
+                                                 PsiAspd As Decimal, RhoTspd As Decimal, PsiYspd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   03/01/24 :  Création - GUD
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du profilé acier usuels pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaM          [E] :   Coefficient partiel pour l'acier
+        '   RhoV            [E] :   Coefficient pour l'interaction MV
+        '   MyProfil        [E] :    Profilé
+        '   FySup           [E] :   Limite d'élasticité semelle supérieure
+        '   FyInf           [E] :   Limite d'élasticité semelle inférieure
+        '   FyW             [E] :   Limite d'élasticité âme
+        '   FySpd           [E] :   Limite d'élasticité plat
+        '   PsiAfi,PsiAspd  [E] :   Coefficient de réduction pour l'aire de la semelle inf et du plat (méthode 1)
+        '   RhoTfi,RhoTspd  [E] :   Coefficient de réduction pour l'épaisseur de la semelle inf et du plat (méthode 2)
+        '   PsiYfi,PsiYspd  [E] :   Coefficient de réduction pour la limite d'élasticité de la semelle inf et du plat (méthode 3)
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -601,21 +658,21 @@ Public Class cls_ModeleP
         Dim Hw As Decimal
         Dim zRef As Decimal = MyProfil.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
 
-        Dim Afi, tfi, fy_fi As Decimal
-        Dim Aspd, tspd, fy_spd As Decimal
+        Dim Afi, pTfi, pFy_fi As Decimal
+        Dim Aspd, pTspd, pFy_spd As Decimal
 
         '--> Initialisation
 
         Hw = MyProfil.HauteurAmeHw
 
-        Afi = Psi_fi * MyProfil.AireFi
-        tfi = rho_t_fi * MyProfil.Tfi
-        fy_fi = Psi_y_spd * FyInf
+        Afi = PsiAfi * MyProfil.AireFi
+        pTfi = RhoTfi * MyProfil.Tfi
+        pFy_fi = PsiYspd * FyInf
 
         'plat soudé
-        Aspd = Psi_spd * MyProfil.AirePlat
-        tspd = rho_t_spd * MyProfil.Plat_t
-        fy_spd = Psi_y_spd * FySpd
+        Aspd = PsiAspd * MyProfil.AirePlat
+        pTspd = RhoTspd * MyProfil.Plat_t
+        pFy_spd = PsiYspd * FySpd
 
         '--> Modélisation du profilé acier
 
@@ -629,7 +686,7 @@ Public Class cls_ModeleP
 
         '# Semelle inférieure
 
-        Me.AddMaille(Afi, tfi, zRef - MyProfil.hb + MyProfil.Tfi / 2, 1, 1, 1, fy_fi, 1, GammaM)
+        Me.AddMaille(Afi, pTfi, zRef - MyProfil.hb + MyProfil.Tfi / 2, 1, 1, 1, pFy_fi, 1, GammaM)
 
         '# Congés supérieurs
 
@@ -649,38 +706,44 @@ Public Class cls_ModeleP
 
         '# Plat soudé inférieur dans le cas d'une section SFB
 
-
-        Me.AddMaille(Aspd, tspd, zRef - MyProfil.ha + MyProfil.Plat_t / 2, 1, 1, 1, fy_spd, 1, GammaM)
+        Me.AddMaille(Aspd, pTspd, zRef - MyProfil.ha + MyProfil.Plat_t / 2, 1, 1, 1, pFy_spd, 1, GammaM)
 
     End Sub
 
     Private Sub MaillageProfileASlimfloorsIFB_A_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
-                                     Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
+                                                   FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
+                                                   PsiAspd As Decimal, RhoTspd As Decimal, PsiYspd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   03/01/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------
         '   Maillage du profilé acier usuels pour le calcul des propriétés / axe YY
         '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   RhoV        [E] :   Coefficient pour l'interaction MV
-        '   Me    [E/S]:  Modèle
+        '   GammaM          [E] :   Coefficient partiel pour l'acier
+        '   RhoV            [E] :   Coefficient pour l'interaction MV
+        '   MyProfil        [E] :    Profilé
+        '   FySup           [E] :   Limite d'élasticité semelle supérieure
+        '   FyInf           [E] :   Limite d'élasticité semelle inférieure
+        '   FyW             [E] :   Limite d'élasticité âme
+        '   FySpd           [E] :   Limite d'élasticité plat
+        '   PsiAspd         [E] :   Coefficient de réduction pour l'aire du plat (méthode 1)
+        '   RhoTspd         [E] :   Coefficient de réduction pour l'épaisseur du plat (méthode 2)
+        '   PsiYspd         [E] :   Coefficient de réduction pour la limite d'élasticité du plat (méthode 3)
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
         Dim Hw As Decimal
-        Dim zRef As Decimal = MyProfil.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
+        Dim zRef As Decimal = MyProfil.zRefAraseSup             '== Cote de l'arase supérieure de la semelle supérieure du profilé 
 
-        Dim Aspd, tspd, fy_spd As Decimal
+        Dim Aspd, pTspd, pFy_spd As Decimal
 
         '--> Initialisation
 
         Hw = MyProfil.HauteurAmeHw
 
-        Aspd = Psi_spd * MyProfil.AirePlat
-        tspd = rho_t_spd * MyProfil.Plat_t
-        fy_spd = Psi_y_spd * FySpd
+        Aspd = PsiAspd * MyProfil.AirePlat
+        pTspd = RhoTspd * MyProfil.Plat_t
+        pFy_spd = PsiYspd * FySpd
 
         '--> Modélisation du profilé acier
 
@@ -702,21 +765,28 @@ Public Class cls_ModeleP
 
         '# Plat soudé inférieur dans le cas d'une section IFB-A
 
-        Me.AddMaille(Aspd, tspd, zRef - MyProfil.ha + MyProfil.Plat_t / 2, 1, 1, 1, fy_spd, 1, GammaM)
+        Me.AddMaille(Aspd, pTspd, zRef - MyProfil.ha + MyProfil.Plat_t / 2, 1, 1, 1, pFy_spd, 1, GammaM)
 
     End Sub
 
     Private Sub MaillageProfileASlimfloorsIFB_B_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
-                                     Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1)
+                                                   FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
+                                                   PsiAfi As Decimal, RhoTfi As Decimal, PsiYfi As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   03/01/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------
         '   Maillage du profilé acier usuels pour le calcul des propriétés / axe YY
         '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   RhoV        [E] :   Coefficient pour l'interaction MV
-        '   Me    [E/S]:  Modèle
+        '   GammaM          [E] :   Coefficient partiel pour l'acier
+        '   RhoV            [E] :   Coefficient pour l'interaction MV
+        '   MyProfil        [E] :    Profilé
+        '   FySup           [E] :   Limite d'élasticité semelle supérieure
+        '   FyInf           [E] :   Limite d'élasticité semelle inférieure
+        '   FyW             [E] :   Limite d'élasticité âme
+        '   FySpd           [E] :   Limite d'élasticité plat
+        '   PsiAfi          [E] :   Coefficient de réduction pour l'aire de la semelle inf (méthode 1)
+        '   RhoTfi          [E] :   Coefficient de réduction pour l'épaisseur de la semelle inf (méthode 2)
+        '   PsiYfi          [E] :   Coefficient de réduction pour la limite d'élasticité de la semelle inf (méthode 3)
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -724,15 +794,15 @@ Public Class cls_ModeleP
         Dim Hw As Decimal
         Dim zRef As Decimal = MyProfil.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
 
-        Dim Afi, tfi, fy_fi As Decimal
+        Dim Afi, pTfi, pFy_fi As Decimal
 
         '--> Initialisation
 
         Hw = MyProfil.HauteurAmeHw
 
-        Afi = Psi_fi * MyProfil.AireFi
-        tfi = rho_t_fi * MyProfil.Tfi
-        fy_fi = Psi_y_fi * FyInf
+        Afi = PsiAfi * MyProfil.AireFi
+        pTfi = RhoTfi * MyProfil.Tfi
+        pFy_fi = PsiYfi * FyInf
 
         '--> Modélisation du profilé acier
 
@@ -746,7 +816,7 @@ Public Class cls_ModeleP
 
         '# Semelle inférieure
 
-        Me.AddMaille(Afi, tfi, zRef - MyProfil.ha + MyProfil.Tfi / 2, 1, 1, 1, fy_fi, 1, GammaM)
+        Me.AddMaille(Afi, pTfi, zRef - MyProfil.ha + MyProfil.Tfi / 2, 1, 1, 1, pFy_fi, 1, GammaM)
 
         '# Congés inférieurs
 
@@ -759,16 +829,23 @@ Public Class cls_ModeleP
     End Sub
 
     Private Sub MaillageProfileASlimfloorsSAB_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
-                                    Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1)
+                                                 FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
+                                                 PsiAfi As Decimal, RhoTfi As Decimal, PsiYfi As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   03/01/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------
         '   Maillage du profilé acier usuels pour le calcul des propriétés / axe YY
         '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   RhoV        [E] :   Coefficient pour l'interaction MV
-        '   Me    [E/S]:  Modèle
+        '   GammaM          [E] :   Coefficient partiel pour l'acier
+        '   RhoV            [E] :   Coefficient pour l'interaction MV
+        '   MyProfil        [E] :    Profilé
+        '   FySup           [E] :   Limite d'élasticité semelle supérieure
+        '   FyInf           [E] :   Limite d'élasticité semelle inférieure
+        '   FyW             [E] :   Limite d'élasticité âme
+        '   FySpd           [E] :   Limite d'élasticité plat
+        '   PsiAfi          [E] :   Coefficient de réduction pour l'aire de la semelle inf (méthode 1)
+        '   RhoTfi          [E] :   Coefficient de réduction pour l'épaisseur de la semelle inf (méthode 2)
+        '   PsiYfi          [E] :   Coefficient de réduction pour la limite d'élasticité de la semelle inf (méthode 3)
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -776,15 +853,15 @@ Public Class cls_ModeleP
         Dim Hw As Decimal
         Dim zRef As Decimal = MyProfil.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
 
-        Dim Afi, tfi, fy_fi As Decimal
+        Dim Afi, pTfi, pFy_fi As Decimal
 
         '--> Initialisation
 
         Hw = MyProfil.HauteurAmeHw
 
-        Afi = Psi_fi * MyProfil.AireFi
-        tfi = rho_t_fi * MyProfil.Tfi
-        fy_fi = Psi_y_fi * FyInf
+        Afi = PsiAfi * MyProfil.AireFi
+        pTfi = RhoTfi * MyProfil.Tfi
+        pFy_fi = PsiYfi * FyInf
 
         '--> Modélisation du profilé acier
 
@@ -798,7 +875,7 @@ Public Class cls_ModeleP
 
         '# Semelle inférieure
 
-        Me.AddMaille(Afi, tfi, zRef - MyProfil.ha + MyProfil.Tfi / 2, 1, 1, 1, fy_fi, 1, GammaM)
+        Me.AddMaille(Afi, pTfi, zRef - MyProfil.ha + MyProfil.Tfi / 2, 1, 1, 1, pFy_fi, 1, GammaM)
 
         '# Congés supérieurs
 

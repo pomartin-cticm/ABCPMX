@@ -287,22 +287,42 @@ Public Class cls_Section
     End Sub
 
     Public Sub ProprietesPlastiquesMyy_Slim(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
-                                            ByRef zANP As Decimal, ByRef MplRd As Decimal, Optional ByVal lProfileAcierUniquement As Boolean = False,
-                                            Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
-                                            Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
+                                            ByRef zANP As Decimal, ByRef MplRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
-        '   11/07/23 :  Création - POM
+        '   30/07/25 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
-        '   Calcul des propriétés plastiques en flexion simple de la section / axe fort
+        '   Surcharge de ProprietesPlastiquesMyy_Slim
         '-------------------------------------------------------------------------------------------------------------------
-        '   Signe       [E] :   Signe du moment
-        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
-        '   Gammas      [E] :   Coefficients partiels
-        '   RhoV        [E] :   Coefficient pour l'interaction MV
-        '   zANP        [S] :   Position axe neutre plastique
-        '   MplRd       [S] :   Moment plastique
-        '   bEff        [E] :   Largeur efficace de la dalle (si secion mixte)
-        '   Eta         [E] :   Degré de connexion (si section mixte)
+        '   Signe           [E] :   Signe du moment
+        '   lValeurRd       [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas          [E] :   Coefficients partiels
+        '   RhoV            [E] :   Coefficient pour l'interaction MV
+        '   zANP            [S] :   Position axe neutre plastique
+        '   MplRd           [S] :   Moment plastique
+        '-------------------------------------------------------------------------------------------------------------------
+
+        ProprietesPlastiquesMyy_Slim(Signe, lValeurRd, Gammas, RhoV, zANP, MplRd, 1, 1, 1, 1, 1, 1)
+
+    End Sub
+
+    Public Sub ProprietesPlastiquesMyy_Slim(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
+                                            ByRef zANP As Decimal, ByRef MplRd As Decimal,
+                                            PsiAfi As Decimal, RhoTfi As Decimal, PsiYfi As Decimal,
+                                            PsiAspd As Decimal, RhoTspd As Decimal, PsiYspd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - GUD
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés plastiques en flexion simple de la section / axe fort pour slim floor
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe           [E] :   Signe du moment
+        '   lValeurRd       [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas          [E] :   Coefficients partiels
+        '   RhoV            [E] :   Coefficient pour l'interaction MV
+        '   zANP            [S] :   Position axe neutre plastique
+        '   MplRd           [S] :   Moment plastique
+        '   PsiAfi,PsiAspd  [E] :   Coefficient de réduction pour l'aire de la semelle inf et du plat (méthode 1 slim floor)
+        '   RhoTfi,RhoTspd  [E] :   Coefficient de réduction pour l'épaisseur de la semelle inf et du plat (méthode 2 slim floor)
+        '   PsiYfi,PsiYspd  [E] :   Coefficient de réduction pour la limite d'élasticité de la semelle inf et du plat (méthode 3 slim floor)
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -318,19 +338,7 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        MyModele.MaillageProfileASlim_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
-
-        If Me.lEnrobage And (Not lProfileAcierUniquement) Then
-
-            '# Béton d'enrobage
-
-            MyModele.MaillageEnrobage_YY(Gammas.GammaC, nEqEc, Me)
-
-            '# Armatures de l'enrobage
-
-            MyModele.MaillageArmaturesEnrobage_YY(Gammas.GammaS, Me)
-
-        End If
+        MyModele.MaillageProfileASlim_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, PsiAfi, RhoTfi, PsiYfi, PsiAspd, RhoTspd, PsiYspd)
 
         '--> Recherche de l'axe neutre plastique
 
@@ -694,25 +702,44 @@ Public Class cls_Section
         MelRd = MyModele.MomentElastique(Signe, zANE, InertieY, lValeurRd)
     End Sub
 
-    Public Sub ProprietesElastiquesMyy_Slim(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
-                                            ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal, Optional ByVal lProfileAcierUniquement As Boolean = False, Optional ByVal lCalculAlphaCr As Boolean = False,
-                                            Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
-                                            Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
+    Public Sub ProprietesElastiquesMyy_Slim(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma,
+                                            ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
-        '   11/07/23 :  Création - POM
+        '   30/07/25 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
-        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
-        '   ON NE PREND PAS EN COMPTE LA DALLE DANS LE CAS D'UNE SECTION MIXTE
+        '   Surcharge de ProprietesElastiquesMyy_Slim
         '-------------------------------------------------------------------------------------------------------------------
         '   Signe                   [E] :   Signe du moment
         '   lValeurRd               [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
         '   Gammas                  [E] :   Coefficients partiels
-        '   nEqEc                   [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
         '   zANE                    [S] :   Position axe neutre élastique
         '   InertieY                [S] :   Inertie de flexion / axe fort
         '   MelRd                   [S] :   Moment élastique
-        '   lProfileAcierUniquement [E] :   Indique si on calcul les propriétés élastiques en ne tenant compte que du profilé acier (True) ou si on prend en compte également le béton d'enrobage (False)
-        '   lCalculAlphaCr          [E] :   Indique si les propriétés élastiques selon l'axe ZZ sont utilisées pour le calcul de alpha critique (True) ou non (False)  
+        '-------------------------------------------------------------------------------------------------------------------
+
+        ProprietesElastiquesMyy_Slim(Signe, lValeurRd, Gammas, zANE, InertieY, MelRd, 1, 1, 1, 1, 1, 1)
+
+    End Sub
+
+    Public Sub ProprietesElastiquesMyy_Slim(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma,
+                                            ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal,
+                                            PsiAfi As Decimal, RhoTfi As Decimal, PsiYfi As Decimal,
+                                            PsiAspd As Decimal, RhoTspd As Decimal, PsiYspd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - GUD
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section Slim floor, par rapport à l'axe fort
+        '   ON NE PREND PAS EN COMPTE LA DALLE DANS LE CAS D'UNE SECTION MIXTE
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe           [E] :   Signe du moment
+        '   lValeurRd       [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas          [E] :   Coefficients partiels
+        '   zANE            [S] :   Position axe neutre élastique
+        '   InertieY        [S] :   Inertie de flexion / axe fort
+        '   MelRd           [S] :   Moment élastique
+        '   PsiAfi,PsiAspd  [E] :   Coefficient de réduction pour l'aire de la semelle inf et du plat (méthode 1 slim floor)
+        '   RhoTfi,RhoTspd  [E] :   Coefficient de réduction pour l'épaisseur de la semelle inf et du plat (méthode 2 slim floor)
+        '   PsiYfi,PsiYspd  [E] :   Coefficient de réduction pour la limite d'élasticité de la semelle inf et du plat (méthode 3 slim floor)
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -729,7 +756,7 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        MyModele.MaillageProfileASlim_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
+        MyModele.MaillageProfileASlim_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, PsiAfi, RhoTfi, PsiYfi, PsiAspd, RhoTspd, PsiYspd)
 
         '--> Recherche de l'axe neutre élastique
 
