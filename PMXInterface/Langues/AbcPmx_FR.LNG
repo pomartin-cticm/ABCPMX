@@ -1010,6 +1010,7 @@ STEELPROFILE			= Profilé acier
 TITLE					= Options de calcul
 APPLY					= Appliquer
 CANCEL					= Annuler
+RESET					= Valeurs initiales
 GAMMA					= Coefficients nationaux par défaut
 SCOPE					= Domaine d'application
 CALCUL					= Options de calcul
@@ -1121,6 +1122,7 @@ SLIMFLOORDIM			= Dimensions des slimfloors
 DEPTHMAX				= Hauteur maximale d'un profil laminé intégré
 SLABSUPPORTMIN			= Largeur minimale d'un support de dalle
 THICKNESSMIN			= Épaisseur minimale du plat
+THICKNESSWMIN			= Épaisseur minimale de l'âme pour la connexion par armatures
 RESTRAINTBYSHEETS		= Maintien au déversement par le bac
 ECSEAMMAX				= Espacement max des fixations de couture
 

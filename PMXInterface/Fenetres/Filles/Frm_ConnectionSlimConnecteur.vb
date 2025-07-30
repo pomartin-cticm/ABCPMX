@@ -1,4 +1,4 @@
-﻿
+﻿Imports PMXMoteur2
 
 Public Class Frm_ConnectionSlimConnecteur
 
@@ -135,7 +135,7 @@ Public Class Frm_ConnectionSlimConnecteur
 
         RemplirComboGoujons()
 
-        lArmaDispo = IsGreaterOrEqual(Frm_ConnectionSlimN.localBeam.Section.ProfilA.Tw, TWMINARMA) _
+        lArmaDispo = IsGreaterOrEqual(Frm_ConnectionSlimN.localBeam.Section.ProfilA.Tw, OptionsSlimFloor.Twcdmin) _
                  And (Not Frm_ConnectionSlimN.localBeam.Section.lSlimFloor_IFB_B)
 
         Me.rdb_Armatures.Enabled = lArmaDispo

@@ -136,22 +136,23 @@ Public Class Frm_OptionsCalcul
 
     End Sub
 
-    Private Sub GestionLangues(ByVal MyBloc As Dictionary(Of String, String))
+    Private Sub GestionLangues(ByVal myBloc As Dictionary(Of String, String))
 
         Try
 
-            Me.Text = MyBloc("TITLE")
+            Me.Text = myBloc("TITLE")
 
-            Me.PoMBtn_Gamma.Caption = MyBloc("GAMMA")
-            Me.PoMbtn_Scope.Caption = MyBloc("SCOPE")
-            Me.PoMbtn_Calcul.Caption = MyBloc("CALCUL")
-            Me.PoMbtn_SlimFloor.Caption = MyBloc("SLIMFLOOR")
-            Me.PoMbtn_Fire.Caption = MyBloc("FIRE")
-            Me.PoMbtn_Connecteurs.Caption = MyBloc("CONNECTORS")
+            Me.PoMBtn_Gamma.Caption = myBloc("GAMMA")
+            Me.PoMbtn_Scope.Caption = myBloc("SCOPE")
+            Me.PoMbtn_Calcul.Caption = myBloc("CALCUL")
+            Me.PoMbtn_SlimFloor.Caption = myBloc("SLIMFLOOR")
+            Me.PoMbtn_Fire.Caption = myBloc("FIRE")
+            Me.PoMbtn_Connecteurs.Caption = myBloc("CONNECTORS")
 
-            Me.btn_Appliquer.Text = MyBloc("APPLY")
-            Me.btn_Cancel.Text = MyBloc("CANCEL")
-            Me.strAvertissementModif = {MyBloc("MODIF"), MyBloc("MODIF2")}
+            Me.btn_Appliquer.Text = myBloc("APPLY")
+            Me.btn_Cancel.Text = myBloc("CANCEL")
+            Me.btn_Reset.Text = myBloc("RESET")
+            Me.strAvertissementModif = {myBloc("MODIF"), myBloc("MODIF2")}
 
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -356,7 +357,8 @@ Public Class Frm_OptionsCalcul
         If lExpert Then
             GereTransfertValeur(LocalOptionsSlimFloor.hslimmax, OptionsSlimFloor.hslimmax, lModif)
             GereTransfertValeur(LocalOptionsSlimFloor.bappmin, OptionsSlimFloor.bappmin, lModif)
-            GereTransfertValeur(LocalOptionsSlimFloor.tpinfmin, OptionsSlimFloor.tpinfmin, lModif)
+            GereTransfertValeur(LocalOptionsSlimFloor.Tpinfmin, OptionsSlimFloor.Tpinfmin, lModif)
+            GereTransfertValeur(LocalOptionsSlimFloor.Twcdmin, OptionsSlimFloor.Twcdmin, lModif)
         End If
 
         '# Fenêtre Options Calculs
@@ -393,11 +395,11 @@ Public Class Frm_OptionsCalcul
             GereTransfertValeur(LocalOptionsFeu.AlphaC, OptionsFeu.AlphaC, lModif)
             GereTransfertValeur(LocalOptionsFeu.EmissiviteC, OptionsFeu.EmissiviteC, lModif)
             GereTransfertValeur(LocalOptionsFeu.EmissiviteF, OptionsFeu.EmissiviteF, lModif)
-            GereTransfertValeur(LocalOptionsFeu.ksh, OptionsFeu.ksh, lModif)
-            GereTransfertValeur(LocalOptionsFeu.Phi, OptionsFeu.Phi, lModif)
             GereTransfertValeur(LocalOptionsFeu.TempRef, OptionsFeu.TempRef, lModif)
 
         End If
+        GereTransfertValeur(LocalOptionsFeu.ksh, OptionsFeu.ksh, lModif)
+        GereTransfertValeur(LocalOptionsFeu.Phi, OptionsFeu.Phi, lModif)
 
     End Sub
 
@@ -442,6 +444,7 @@ Public Class Frm_OptionsCalcul
         End If
 
         Dim SenderName As String = sender.name
+        Dim lReset As Boolean = True
         ' HideToutesLesFilles()
         UncheckedAllPomBtns(SenderName)
         Select Case SenderName
@@ -456,6 +459,7 @@ Public Class Frm_OptionsCalcul
             Case Me.PoMbtn_SlimFloor.Name
                 LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Slimfloor
                 AfficherFenetreFille()
+                lReset = LogicielOptions.lExpert
 
             Case Me.PoMbtn_Calcul.Name
                 LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Calcul
@@ -468,12 +472,15 @@ Public Class Frm_OptionsCalcul
             Case PoMbtn_Connecteurs.Name
                 LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Connecteurs
                 AfficherFenetreFille()
+                lReset = False
 
         End Select
         RedrawAllPomBtns()
 
         '--> Bouton checké ne change pas de couleur quand il est survolé (MouseOn)
         sender.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
+
+        Me.btn_Reset.Visible = lReset
 
         ' Me.etq_Debug.Text = LastIndexWindow.ConfigurationNEW.ToString
 
@@ -510,8 +517,55 @@ Public Class Frm_OptionsCalcul
     End Sub
 
     Private Sub btn_Reset_Click(sender As Object, e As EventArgs) Handles btn_Reset.Click
-        My.Settings.Reset()
-        Me.lSettingsReset = True
+        'My.Settings.Reset()
+        'Me.lSettingsReset = True
+
+        Select Case LastIndexW.OptionsCalcul
+            Case Enu_OptionsCalcul.Calcul
+
+            Case Enu_OptionsCalcul.Connecteurs
+            Case Enu_OptionsCalcul.Gamma
+                InitialiseOptionsGamma(Me.GammaLoc)
+                Frm_OptionsCalculsGamma.InitialiseFrm(True)
+            Case Enu_OptionsCalcul.Incendie
+                InitialiseOptionsFeu(LocalOptionsFeu)
+                Frm_OptionsCalculIncendie.InitialiserFenetre(True)
+            Case Enu_OptionsCalcul.Scope
+                InitialiseOptionsScopeDefaut(LocalOptionsScope)
+                Frm_OptionsCalculScope.InitialiseFrm(True)
+            Case Enu_OptionsCalcul.Slimfloor
+                InitialiseOptionsCalSlimFloor()
+                Frm_OptionsCalculSlimFloor.InitialiseFrm(True)
+        End Select
+
+    End Sub
+
+    Private Sub InitialiseOptionsGamma(ByRef myGamma As cls_Gamma)
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   29/07/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Valeurs par défaut des options de calcul pour les slimfloors
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   myGamma     [S] :   Paramètres à initialiser
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        myGamma = New cls_Gamma
+
+    End Sub
+
+    Private Sub InitialiseOptionsCalSlimFloor()
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   29/07/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Valeurs par défaut des options de calcul pour les slimfloors
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        LocalOptionsSlimFloor.Twcdmin = SLIM_TWMINARMA
+        LocalOptionsSlimFloor.Tpinfmin = SLIM_TPMINPLAT
+        LocalOptionsSlimFloor.Hslimmax = SLIM_HSMAX
+        LocalOptionsSlimFloor.Bappmin = SLIM_BAPPMIN
+
     End Sub
 
 #End Region

@@ -1408,8 +1408,9 @@ Public Class Frm_PMX
 
         '# Options slimfloors
         My.Settings.hslimmax = OptionsSlimFloor.hslimmax
-        My.Settings.bappmin = OptionsSlimFloor.bappmin
-        My.Settings.tpinfmin = OptionsSlimFloor.tpinfmin
+        My.Settings.bappmin = OptionsSlimFloor.Bappmin
+        My.Settings.tpinfmin = OptionsSlimFloor.Tpinfmin
+        My.Settings.Twcdmin = OptionsSlimFloor.Twcdmin
 
         '--( Note de calcul
         My.Settings.lNdCCourbeHivoss = OptionsNdC.lShowHivossCurve

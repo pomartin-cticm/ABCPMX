@@ -12,11 +12,13 @@ Public Class Frm_OptionsCalculIncendie
 
 #Region "===Ouverture==="
 
-    Public Sub InitialiserFenetre()
+    Public Sub InitialiserFenetre(Optional lAfficheOnly As Boolean = False)
         lBuild = True
-        GestionLangue(Frm_OptionsCalcul.BlocLangues(BALISE))
-        GestionStyle()
-        GestionUnites()
+        If Not lAfficheOnly Then
+            GestionLangue(Frm_OptionsCalcul.BlocLangues(BALISE))
+            GestionStyle()
+            GestionUnites()
+        End If
         AfficherOptionsEnCours()
         lBuild = False
     End Sub
@@ -73,14 +75,14 @@ Public Class Frm_OptionsCalculIncendie
     Private Sub AfficherOptionsEnCours()
 
         Me.txt_Sigma.Text = GetStringInUnitN(CDec(cls_OptionsFeu.BOLTZMANN * 10 ^ 8), Enu_TypeVariable.SansType, 5, 4, NON_U, True)
-        Me.txt_EmissiviteFeu.Text = GetStringInUnitN(OptionsFeu.EmissiviteF, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
-        Me.txt_EmissiviteBeton.Text = GetStringInUnitN(OptionsFeu.EmissiviteC, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
-        Me.txt_AlphaC.Text = GetStringInUnitN(OptionsFeu.AlphaC, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
-        Me.txt_AlphaCC.Text = GetStringInUnitN(OptionsFeu.AlphaCC, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
-        Me.txt_ksh.Text = GetStringInUnitN(OptionsFeu.ksh, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
-        Me.txt_Phi.Text = GetStringInUnitN(OptionsFeu.Phi, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
+        Me.txt_EmissiviteFeu.Text = GetStringInUnitN(LocalOptionsFeu.EmissiviteF, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
+        Me.txt_EmissiviteBeton.Text = GetStringInUnitN(LocalOptionsFeu.EmissiviteC, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
+        Me.txt_AlphaC.Text = GetStringInUnitN(LocalOptionsFeu.AlphaC, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
+        Me.txt_AlphaCC.Text = GetStringInUnitN(LocalOptionsFeu.AlphaCC, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
+        Me.txt_ksh.Text = GetStringInUnitN(LocalOptionsFeu.ksh, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
+        Me.txt_Phi.Text = GetStringInUnitN(LocalOptionsFeu.Phi, Enu_TypeVariable.SansType, 5, 4, NON_U, True)
 
-        Me.txt_TempReference.Text = GetStringInUnitN(OptionsFeu.TempRef, Enu_TypeVariable.SansType, 4, 1, NON_U, True)
+        Me.txt_TempReference.Text = GetStringInUnitN(LocalOptionsFeu.TempRef, Enu_TypeVariable.SansType, 4, 1, NON_U, True)
         Me.txt_TempMax.Text = GetStringInUnitN(cls_OptionsFeu.TempMax, Enu_TypeVariable.SansType, 4, 1, NON_U, True)
 
     End Sub
@@ -416,7 +418,6 @@ Public Class Frm_OptionsCalculIncendie
         lOk = (iErreur = 0)
         Return lOk
     End Function
-
 
 
 #End Region

@@ -13,11 +13,13 @@
 
 #Region "===OUVERTURE==="
 
-    Public Sub InitialiseFrm()
+    Public Sub InitialiseFrm(Optional lAfficheOnly As Boolean = False)
         lBuild = True
-        GestionLangue(Frm_OptionsCalcul.BlocLangues(BALISE))
-        GestionStyle()
-        GestionUnites()
+        If Not lAfficheOnly Then
+            GestionLangue(Frm_OptionsCalcul.BlocLangues(BALISE))
+            GestionStyle()
+            GestionUnites()
+        End If
         AfficherScopeEnCours()
         lBuild = False
     End Sub
@@ -238,8 +240,8 @@
 
         Const PORTEEMINMIN As Decimal = 2
         Const PORTEEMINMAX As Decimal = 5
-        'Const PORTEEMAXMIN As Decimal = 10
-        'Const PORTEEMAXMAX As Decimal = 100
+        Const PORTEEMAXMIN As Decimal = 10
+        Const PORTEEMAXMAX As Decimal = 100
         'Const ANGLEMIN As Decimal = 0
         'Const ANGLEMAX As Decimal = 45
 
@@ -249,6 +251,11 @@
                 ValMin = PORTEECONSOLEMINMIN / kUnit
                 ValMax = PORTEECONSOLEMINMAX / kUnit
                 lValMax = False
+
+            Case Me.txt_PorteeMaxi.Name
+
+                ValMin = PORTEEMAXMIN / kUnit
+                ValMax = PORTEEMAXMAX / kUnit
 
             Case Me.txt_PorteeMini.Name
 
@@ -287,6 +294,8 @@
                 ValMax = 45
                 kUnit = 1
 
+            Case Else
+                MsgBox("non prevu")
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 

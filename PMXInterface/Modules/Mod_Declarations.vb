@@ -284,6 +284,49 @@ Public Module Mod_Declarations
         Eurocodes_G2
     End Enum
 
+    Public Sub InitialiseOptionsScopeDefaut(ByRef myOptions As Struc_OptionsScope)
+        '-----------------------------------------------------------------------------
+        '   09/08/23 :  Création - POM
+        '-----------------------------------------------------------------------------
+        '   Initialisation des paramètres définissant le domaine d'appication du logiciel
+        '   Valeurs par défaut
+        '-----------------------------------------------------------------------------
+
+        myOptions.PorteeMin = 5
+        myOptions.PorteeMax = 25
+        myOptions.PorteeConsoleMin = 0.5
+        myOptions.RatioPorteeConsoleMax = 0.3
+
+        myOptions.NbMaxiEtaisP = 5
+
+        myOptions.ThetaH = 30
+        myOptions.EpDallePleineMin = 0.1
+        myOptions.RatioEpRenformisMax = 0.4
+        myOptions.EpDalleMixteMin = 0.05
+
+        myOptions.RhoCBetonLegerMax = 2200
+        myOptions.RhoCBetonLegerMin = 1500
+        myOptions.RhoCBetonNormalMin = 2000
+
+        myOptions.RatioEpPredalleMax = 0.5
+
+        myOptions.HwMin = 100 / 1000
+        myOptions.HwMax = 1500 / 1000
+        myOptions.TwMin = 3 / 1000
+        myOptions.TwMax = 50 / 1000
+
+        myOptions.BfMin = 100 / 1000
+        myOptions.BfMax = 500 / 1000
+        myOptions.TfMin = 6 / 1000
+        myOptions.TfMax = 100 / 1000
+
+        myOptions.RapportAfMax = 3
+        myOptions.RapportAfMin = 1
+
+        myOptions.MB_spCoutureMax = 500 / 1000
+
+    End Sub
+
     Public Sub InitialiseOptionsScope()
         '-----------------------------------------------------------------------------
         '   09/08/23 :  Création
@@ -327,15 +370,15 @@ Public Module Mod_Declarations
 
     End Sub
 
-    Public Sub InitialiseOptionsFeu()
+    Public Sub InitialiseOptionsFeu(ByRef myOptions As struc_OptionsFeu)
 
-        OptionsFeu.EmissiviteC = 1
-        OptionsFeu.EmissiviteF = 1
-        OptionsFeu.AlphaC = 25
-        OptionsFeu.AlphaCC = 4
-        OptionsFeu.ksh = 1
-        OptionsFeu.Phi = 1
-        OptionsFeu.TempRef = 20
+        myOptions.EmissiviteC = 1
+        myOptions.EmissiviteF = 1
+        myOptions.AlphaC = 25
+        myOptions.AlphaCC = 4
+        myOptions.ksh = 1
+        myOptions.Phi = 1
+        myOptions.TempRef = 20
 
     End Sub
 
@@ -370,7 +413,8 @@ Public Module Mod_Declarations
 
         OptionsSlimFloor.hslimmax = My.Settings.hslimmax
         OptionsSlimFloor.bappmin = My.Settings.bappmin
-        OptionsSlimFloor.tpinfmin = My.Settings.tpinfmin
+        OptionsSlimFloor.Tpinfmin = My.Settings.tpinfmin
+        OptionsSlimFloor.Twcdmin = My.Settings.Twcdmin
 
     End Sub
 
@@ -552,7 +596,15 @@ Public Module Mod_Declarations
 
     Public Const lblHISTAR As String = "HISTAR"
 
-    Public Const TWMINARMA As Decimal = 0.0075                  ' Epaisseur minimale de l'âme pour pouvoir disposer une connexion par les armatures pour les slim floors
+
+#End Region
+
+#Region " Valeurs par défaut des options de calcul slim floor "
+
+    Public Const SLIM_TWMINARMA As Decimal = 0.0075             ' Epaisseur minimale de l'âme pour pouvoir disposer une connexion par les armatures pour les slim floors
+    Public Const SLIM_TPMINPLAT As Decimal = 0.01               ' Epaisseur minimale d'un plat de slim floor
+    Public Const SLIM_HSMAX As Decimal = 0.65                   ' Hauteur maxi des profilés
+    Public Const SLIM_BAPPMIN As Decimal = 0.05                 ' Largeur mini des appui d'une dalle
 
 #End Region
 

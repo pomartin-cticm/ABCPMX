@@ -80,9 +80,10 @@
     End Structure
 
     Public Structure Struc_OptionsSlimFloor
-        Public hslimmax As Decimal                      ' hauteur maximale des sections slimfloors
-        Public bappmin As Decimal                       ' Largeur d'appui min à respecter
-        Public tpinfmin As Decimal                      ' Epaisseur min des plats soudés
+        Public Hslimmax As Decimal                      ' hauteur maximale des sections slimfloors
+        Public Bappmin As Decimal                       ' Largeur d'appui min à respecter
+        Public Tpinfmin As Decimal                      ' Epaisseur min des plats soudés
+        Public Twcdmin As Decimal                       ' Epaisseur min des âmes pour une connexion par armatures
     End Structure
 
     Public Structure struc_OptionsFeu

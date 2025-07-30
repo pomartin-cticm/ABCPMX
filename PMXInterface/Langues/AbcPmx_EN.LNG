@@ -1042,6 +1042,7 @@ STEELPROFILE			= Steel profile
 TITLE					= Calculation options
 APPLY					= Apply
 CANCEL					= Cancel
+RESET					= Initial values
 GAMMA					= Default national factors
 SCOPE					= Scope of application
 CALCUL					= Calculation options
@@ -1153,6 +1154,7 @@ SLIMFLOORDIM			= Slimfloor dimensions
 DEPTHMAX				= Maximal depth of a slim floor hot rolled profile
 SLABSUPPORTMIN			= Minimum width of a slab support
 THICKNESSMIN			= Minimum thickness of the plate
+THICKNESSWMIN			= Minimum thickness of the web for dowel connectors
 RESTRAINTBYSHEETS		= Lateral restraint by the steel sheeting
 ECSEAMMAX				= Max spacing of seam fastening
 

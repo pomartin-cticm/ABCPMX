@@ -31,23 +31,27 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.Label4 = New System.Windows.Forms.Label()
         Me.img_ecMax = New System.Windows.Forms.PictureBox()
         Me.txt_ecMax = New System.Windows.Forms.TextBox()
-        Me.etq_UnitDim4 = New System.Windows.Forms.Label()
+        Me.etq_UnitDim5 = New System.Windows.Forms.Label()
         Me.lbl_EntraxeCoutureMax = New System.Windows.Forms.Label()
         Me.lbl_MaintienBac = New System.Windows.Forms.Label()
         Me.pan_Dalles = New System.Windows.Forms.Panel()
         Me.img_bappmin = New System.Windows.Forms.PictureBox()
         Me.txt_bappmin = New System.Windows.Forms.TextBox()
-        Me.lbl_UnitDim2 = New System.Windows.Forms.Label()
+        Me.etq_UnitDim2 = New System.Windows.Forms.Label()
         Me.lbl_bappmin = New System.Windows.Forms.Label()
         Me.lbl_Dalles = New System.Windows.Forms.Label()
         Me.pan_SlimFloors = New System.Windows.Forms.Panel()
+        Me.lbl_TwcdMin = New System.Windows.Forms.Label()
+        Me.img_twcdmin = New System.Windows.Forms.PictureBox()
+        Me.txt_twcdmin = New System.Windows.Forms.TextBox()
+        Me.etq_UnitDim4 = New System.Windows.Forms.Label()
         Me.lbl_SlimFloor = New System.Windows.Forms.Label()
         Me.img_hslimmax = New System.Windows.Forms.PictureBox()
         Me.img_tpinfmin = New System.Windows.Forms.PictureBox()
         Me.txt_hslimmax = New System.Windows.Forms.TextBox()
         Me.txt_tpinfmin = New System.Windows.Forms.TextBox()
-        Me.lbl_UnitDim = New System.Windows.Forms.Label()
-        Me.lbl_UnitDim3 = New System.Windows.Forms.Label()
+        Me.etq_UnitDim1 = New System.Windows.Forms.Label()
+        Me.etq_UnitDim3 = New System.Windows.Forms.Label()
         Me.lbl_hslimmax = New System.Windows.Forms.Label()
         Me.lbl_tpinfmin = New System.Windows.Forms.Label()
         Me.lbl_Slimfloors = New System.Windows.Forms.Label()
@@ -60,6 +64,7 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.pan_Dalles.SuspendLayout()
         CType(Me.img_bappmin, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_SlimFloors.SuspendLayout()
+        CType(Me.img_twcdmin, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_hslimmax, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_tpinfmin, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -115,7 +120,7 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.Panel1.Controls.Add(Me.Label4)
         Me.Panel1.Controls.Add(Me.img_ecMax)
         Me.Panel1.Controls.Add(Me.txt_ecMax)
-        Me.Panel1.Controls.Add(Me.etq_UnitDim4)
+        Me.Panel1.Controls.Add(Me.etq_UnitDim5)
         Me.Panel1.Controls.Add(Me.lbl_EntraxeCoutureMax)
         Me.Panel1.Location = New System.Drawing.Point(4, 94)
         Me.Panel1.Name = "Panel1"
@@ -151,15 +156,15 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.txt_ecMax.Size = New System.Drawing.Size(58, 20)
         Me.txt_ecMax.TabIndex = 108
         '
-        'etq_UnitDim4
+        'etq_UnitDim5
         '
-        Me.etq_UnitDim4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitDim4.AutoSize = True
-        Me.etq_UnitDim4.Location = New System.Drawing.Point(683, 10)
-        Me.etq_UnitDim4.Name = "etq_UnitDim4"
-        Me.etq_UnitDim4.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitDim4.TabIndex = 110
-        Me.etq_UnitDim4.Text = "mm"
+        Me.etq_UnitDim5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim5.AutoSize = True
+        Me.etq_UnitDim5.Location = New System.Drawing.Point(683, 10)
+        Me.etq_UnitDim5.Name = "etq_UnitDim5"
+        Me.etq_UnitDim5.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim5.TabIndex = 110
+        Me.etq_UnitDim5.Text = "mm"
         '
         'lbl_EntraxeCoutureMax
         '
@@ -188,7 +193,7 @@ Partial Class Frm_OptionsCalculSlimFloor
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pan_Dalles.Controls.Add(Me.img_bappmin)
         Me.pan_Dalles.Controls.Add(Me.txt_bappmin)
-        Me.pan_Dalles.Controls.Add(Me.lbl_UnitDim2)
+        Me.pan_Dalles.Controls.Add(Me.etq_UnitDim2)
         Me.pan_Dalles.Controls.Add(Me.lbl_bappmin)
         Me.pan_Dalles.Location = New System.Drawing.Point(4, 30)
         Me.pan_Dalles.Name = "pan_Dalles"
@@ -212,15 +217,15 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.txt_bappmin.Size = New System.Drawing.Size(58, 20)
         Me.txt_bappmin.TabIndex = 108
         '
-        'lbl_UnitDim2
+        'etq_UnitDim2
         '
-        Me.lbl_UnitDim2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_UnitDim2.AutoSize = True
-        Me.lbl_UnitDim2.Location = New System.Drawing.Point(683, 10)
-        Me.lbl_UnitDim2.Name = "lbl_UnitDim2"
-        Me.lbl_UnitDim2.Size = New System.Drawing.Size(23, 13)
-        Me.lbl_UnitDim2.TabIndex = 110
-        Me.lbl_UnitDim2.Text = "mm"
+        Me.etq_UnitDim2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim2.AutoSize = True
+        Me.etq_UnitDim2.Location = New System.Drawing.Point(683, 10)
+        Me.etq_UnitDim2.Name = "etq_UnitDim2"
+        Me.etq_UnitDim2.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim2.TabIndex = 110
+        Me.etq_UnitDim2.Text = "mm"
         '
         'lbl_bappmin
         '
@@ -247,19 +252,59 @@ Partial Class Frm_OptionsCalculSlimFloor
         '
         Me.pan_SlimFloors.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_SlimFloors.Controls.Add(Me.lbl_TwcdMin)
+        Me.pan_SlimFloors.Controls.Add(Me.img_twcdmin)
+        Me.pan_SlimFloors.Controls.Add(Me.txt_twcdmin)
+        Me.pan_SlimFloors.Controls.Add(Me.etq_UnitDim4)
         Me.pan_SlimFloors.Controls.Add(Me.lbl_SlimFloor)
         Me.pan_SlimFloors.Controls.Add(Me.img_hslimmax)
         Me.pan_SlimFloors.Controls.Add(Me.img_tpinfmin)
         Me.pan_SlimFloors.Controls.Add(Me.txt_hslimmax)
         Me.pan_SlimFloors.Controls.Add(Me.txt_tpinfmin)
-        Me.pan_SlimFloors.Controls.Add(Me.lbl_UnitDim)
-        Me.pan_SlimFloors.Controls.Add(Me.lbl_UnitDim3)
+        Me.pan_SlimFloors.Controls.Add(Me.etq_UnitDim1)
+        Me.pan_SlimFloors.Controls.Add(Me.etq_UnitDim3)
         Me.pan_SlimFloors.Controls.Add(Me.lbl_hslimmax)
         Me.pan_SlimFloors.Controls.Add(Me.lbl_tpinfmin)
         Me.pan_SlimFloors.Location = New System.Drawing.Point(4, 160)
         Me.pan_SlimFloors.Name = "pan_SlimFloors"
-        Me.pan_SlimFloors.Size = New System.Drawing.Size(731, 87)
+        Me.pan_SlimFloors.Size = New System.Drawing.Size(731, 115)
         Me.pan_SlimFloors.TabIndex = 146
+        '
+        'lbl_TwcdMin
+        '
+        Me.lbl_TwcdMin.AutoSize = True
+        Me.lbl_TwcdMin.Location = New System.Drawing.Point(39, 82)
+        Me.lbl_TwcdMin.Name = "lbl_TwcdMin"
+        Me.lbl_TwcdMin.Size = New System.Drawing.Size(67, 13)
+        Me.lbl_TwcdMin.TabIndex = 130
+        Me.lbl_TwcdMin.Text = "lbl_TwcdMin"
+        '
+        'img_twcdmin
+        '
+        Me.img_twcdmin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_twcdmin.Location = New System.Drawing.Point(556, 79)
+        Me.img_twcdmin.Name = "img_twcdmin"
+        Me.img_twcdmin.Size = New System.Drawing.Size(63, 20)
+        Me.img_twcdmin.TabIndex = 128
+        Me.img_twcdmin.TabStop = False
+        '
+        'txt_twcdmin
+        '
+        Me.txt_twcdmin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_twcdmin.Location = New System.Drawing.Point(619, 79)
+        Me.txt_twcdmin.Name = "txt_twcdmin"
+        Me.txt_twcdmin.Size = New System.Drawing.Size(58, 20)
+        Me.txt_twcdmin.TabIndex = 127
+        '
+        'etq_UnitDim4
+        '
+        Me.etq_UnitDim4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim4.AutoSize = True
+        Me.etq_UnitDim4.Location = New System.Drawing.Point(683, 82)
+        Me.etq_UnitDim4.Name = "etq_UnitDim4"
+        Me.etq_UnitDim4.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim4.TabIndex = 129
+        Me.etq_UnitDim4.Text = "mm"
         '
         'lbl_SlimFloor
         '
@@ -307,25 +352,25 @@ Partial Class Frm_OptionsCalculSlimFloor
         Me.txt_tpinfmin.Size = New System.Drawing.Size(58, 20)
         Me.txt_tpinfmin.TabIndex = 104
         '
-        'lbl_UnitDim
+        'etq_UnitDim1
         '
-        Me.lbl_UnitDim.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_UnitDim.AutoSize = True
-        Me.lbl_UnitDim.Location = New System.Drawing.Point(683, 30)
-        Me.lbl_UnitDim.Name = "lbl_UnitDim"
-        Me.lbl_UnitDim.Size = New System.Drawing.Size(23, 13)
-        Me.lbl_UnitDim.TabIndex = 106
-        Me.lbl_UnitDim.Text = "mm"
+        Me.etq_UnitDim1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim1.AutoSize = True
+        Me.etq_UnitDim1.Location = New System.Drawing.Point(683, 30)
+        Me.etq_UnitDim1.Name = "etq_UnitDim1"
+        Me.etq_UnitDim1.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim1.TabIndex = 106
+        Me.etq_UnitDim1.Text = "mm"
         '
-        'lbl_UnitDim3
+        'etq_UnitDim3
         '
-        Me.lbl_UnitDim3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_UnitDim3.AutoSize = True
-        Me.lbl_UnitDim3.Location = New System.Drawing.Point(683, 56)
-        Me.lbl_UnitDim3.Name = "lbl_UnitDim3"
-        Me.lbl_UnitDim3.Size = New System.Drawing.Size(23, 13)
-        Me.lbl_UnitDim3.TabIndex = 106
-        Me.lbl_UnitDim3.Text = "mm"
+        Me.etq_UnitDim3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim3.AutoSize = True
+        Me.etq_UnitDim3.Location = New System.Drawing.Point(683, 56)
+        Me.etq_UnitDim3.Name = "etq_UnitDim3"
+        Me.etq_UnitDim3.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim3.TabIndex = 106
+        Me.etq_UnitDim3.Text = "mm"
         '
         'lbl_hslimmax
         '
@@ -378,6 +423,7 @@ Partial Class Frm_OptionsCalculSlimFloor
         CType(Me.img_bappmin, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_SlimFloors.ResumeLayout(False)
         Me.pan_SlimFloors.PerformLayout()
+        CType(Me.img_twcdmin, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_hslimmax, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_tpinfmin, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
@@ -392,23 +438,27 @@ Partial Class Frm_OptionsCalculSlimFloor
     Friend WithEvents lbl_SlimFloor As Label
     Friend WithEvents img_hslimmax As PictureBox
     Friend WithEvents txt_hslimmax As TextBox
-    Friend WithEvents lbl_UnitDim As Label
+    Friend WithEvents etq_UnitDim1 As Label
     Friend WithEvents lbl_hslimmax As Label
     Friend WithEvents img_tpinfmin As PictureBox
     Friend WithEvents txt_tpinfmin As TextBox
-    Friend WithEvents lbl_UnitDim3 As Label
+    Friend WithEvents etq_UnitDim3 As Label
     Friend WithEvents lbl_tpinfmin As Label
     Friend WithEvents pan_Dalles As Panel
     Friend WithEvents lbl_Dalles As Label
     Friend WithEvents img_bappmin As PictureBox
     Friend WithEvents txt_bappmin As TextBox
-    Friend WithEvents lbl_UnitDim2 As Label
+    Friend WithEvents etq_UnitDim2 As Label
     Friend WithEvents lbl_bappmin As Label
     Friend WithEvents Panel1 As Panel
     Friend WithEvents img_ecMax As PictureBox
     Friend WithEvents txt_ecMax As TextBox
-    Friend WithEvents etq_UnitDim4 As Label
+    Friend WithEvents etq_UnitDim5 As Label
     Friend WithEvents lbl_EntraxeCoutureMax As Label
     Friend WithEvents lbl_MaintienBac As Label
     Friend WithEvents Label4 As Label
+    Friend WithEvents lbl_TwcdMin As Label
+    Friend WithEvents img_twcdmin As PictureBox
+    Friend WithEvents txt_twcdmin As TextBox
+    Friend WithEvents etq_UnitDim4 As Label
 End Class
