@@ -3530,11 +3530,11 @@ Public Class cls_Poutre
                 If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
                 If iNode = iNodeFin Then kfin = 0 Else kfin = 1
 
-                Me.Section.ProprietesElastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, 0, zANE(iNode, kDeb), InertieY, MelRd(iNode, iCombi), True, False,
+                Me.Section.ProprietesElastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, zANE(iNode, kDeb), InertieY, MelRd(iNode, iCombi),
                                                         Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
                                                         Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
 
-                Me.Section.ProprietesPlastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, 1, zANP(iNode, kDeb), MplRd(iNode, kDeb), False,
+                Me.Section.ProprietesPlastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, 1, zANP(iNode, kDeb), MplRd(iNode, kDeb),
                                                         Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
                                                         Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
 

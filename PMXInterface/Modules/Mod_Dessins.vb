@@ -5137,7 +5137,7 @@ Public Module Mod_Dessins
 
         '--> Dessin de la section acier
 
-        DessinProfileMetal(MyGr, section.ProfilA, myBrushG, MyParAff, zRef, Not MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire)
+        DessinProfileMetal(MyGr, section.ProfilA, myBrushG, MyParAff, zRef, Not MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, 0)
 
         '--> Cotation
 
@@ -5370,7 +5370,7 @@ Public Module Mod_Dessins
 
         '--> Dessin de la section acier
 
-        DessinProfileMetal(MyGr, section.ProfilA, myBrushG, MyParAff, zRef, Not MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire)
+        DessinProfileMetal(MyGr, section.ProfilA, myBrushG, MyParAff, zRef, Not MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, 0)
 
         '--> Cotation
 
@@ -5921,7 +5921,7 @@ Public Module Mod_Dessins
         ' Armatures
         Dim myBrushA As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurArma, CouleurArma)
 
-        '--> AffichageOptFeu
+        '--> Affichage
 
         DessinFrmCoupeStandard(MyGr, myBeam, myFont, iSelect, dCar, hMaxProfile, MyParAff, myBrushP, myBrushPSel, myBrushB, myBrushT, myBrushA)
 
@@ -5942,7 +5942,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   05/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu du plancher en coupe
+        '   Affichage du plancher en coupe
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Section à dessiner
@@ -5982,7 +5982,7 @@ Public Module Mod_Dessins
                 ZREF = 0
         End Select
 
-        '--> AffichageOptFeu de la dalle béton
+        '--> Affichage de la dalle béton
 
         If myBeam.lIntermediaire Then
             xo = -1.5 * myBeam.EntraxeD1
@@ -6018,25 +6018,23 @@ Public Module Mod_Dessins
             AddLigne(MyGr, MyPenContour, xo, yo, xo, ye, MyParaff1)
         End If
 
-        '--> AffichageOptFeu de la section principale
+        '--> Affichage de la section principale
 
         '# Dessin de béton d'enrobage
 
         If lEnrob Then _
         DessinEnrobagePartielBeton(MyGr, myBeam.Section, MyParaff1, myBrushB)
 
-        '# Dessin de la section acier
+        '# Dessin de la section acier principale
 
-        Dim lRepresentationPoutreExtremite As Boolean
+        Dim lDrawRive As Boolean = False
         If Not myBeam.lIntermediaire And myBeam.Section.lSlimFloor Then
-            lRepresentationPoutreExtremite = True
-        Else
-            lRepresentationPoutreExtremite = False
+            lDrawRive = True
         End If
 
-        DessinProfileMetal(MyGr, myBeam.Section.ProfilA, myBrushPSel, MyParaff1, ZREF, lRepresentationPoutreExtremite)
+        DessinProfileMetal(MyGr, myBeam.Section.ProfilA, myBrushPSel, MyParaff1, ZREF, lDrawRive, 0)
 
-        '--> AffichageOptFeu de la voisine à gauche
+        '--> Affichage de la voisine à gauche
 
         '# Dessin de béton d'enrobage
 
@@ -6047,11 +6045,11 @@ Public Module Mod_Dessins
 
             '# Dessin de la section acier
 
-            DessinProfileMetal(MyGr, myBeam.Section.ProfilA, myBrushP, MyParaff1, ZREF, -myBeam.EntraxeD1)
+            DessinProfileMetal(MyGr, myBeam.Section.ProfilA, myBrushP, MyParaff1, ZREF, False, -myBeam.EntraxeD1)
 
         End If
 
-        '--> AffichageOptFeu de la voisine à droite
+        '--> Affichage de la voisine à droite
 
         '# Dessin de béton d'enrobage
 
@@ -6060,7 +6058,7 @@ Public Module Mod_Dessins
 
         '# Dessin de la section acier
 
-        DessinProfileMetal(MyGr, myBeam.Section.ProfilA, myBrushP, MyParaff1, ZREF, myBeam.EntraxeD2)
+        DessinProfileMetal(MyGr, myBeam.Section.ProfilA, myBrushP, MyParaff1, ZREF, False, myBeam.EntraxeD2)
 
         '--> Représentation des trémies
 
@@ -6095,7 +6093,7 @@ Public Module Mod_Dessins
 
         End If
 
-        '--> AffichageOptFeu des cotes
+        '--> Affichage des cotes
 
         DessinFrmCoupeCotes(MyGr, myBeam, myFont, MyParaff1, iSelect, dCar, hMaxProfile)
 
@@ -6106,7 +6104,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   05/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu des cotes du plancher en coupe
+        '   Affichage des cotes du plancher en coupe
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Poutre à dessiner
@@ -6222,7 +6220,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   02/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu des travées dans la fenêtre portées
+        '   Affichage des travées dans la fenêtre portées
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Poutre à dessiner
@@ -12022,12 +12020,12 @@ Public Module Mod_Dessins
         '   zRef        [E] :   z de reférence (0 pour la fibre supérieure de la section acier)
         '---------------------------------------------------------------------------------------------------------------------------
 
-        DessinProfileMetal(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, False)
+        DessinProfileMetal(MyGr, MyProfil, MyBrush, MyParAffloc, zRef, False, 0)
 
     End Sub
 
     Private Sub DessinProfileMetal(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
-                                   zRef As Decimal, lRive As Boolean, Optional xPos As Decimal = 0)
+                                   zRef As Decimal, lRive As Boolean, xPos As Decimal)
         '---------------------------------------------------------------------------------------------------------------------------
         '   01/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------

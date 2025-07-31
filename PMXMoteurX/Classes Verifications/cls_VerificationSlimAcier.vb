@@ -176,7 +176,9 @@
 
         '# Classes de la section
 
-        ClasseP = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec)
+        Dim lBeton As Boolean = myBeam.Section.lSlimFloor And (Not lConstructionPhase)
+
+        ClasseP = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, True, lBeton, False, lGeneration1, False, False, lWEB, lRec)
         ' ClasseM = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec)
 
         '# Type de vérification pour les sections
@@ -336,6 +338,13 @@
 #Region " Calcul coefficient de réduction plat inférieur "
 
     Private Sub InitialiseCoeffReduc(NbCombi As Integer, NbNodes As Integer)
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   31/07/25 :  Reprise
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Initialisation des tableaux pour le calcul des coefficients de réduction
+        '   liés à la flexion transversale des semelles inférieures de slim
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------------------------------------
         ReDim Me.Psi_fi(NbCombi - 1, NbNodes - 1)
         ReDim Me.rho_t_fi(NbCombi - 1, NbNodes - 1)
         ReDim Me.Psi_y_fi(NbCombi - 1, NbNodes - 1)
@@ -345,71 +354,77 @@
         ReDim Me.Psi_y_spd(NbCombi - 1, NbNodes - 1)
     End Sub
 
-    Public Sub CalculCoefficiensReduction(iCombi As Integer, MyPoutre As cls_Poutre, QEd() As Decimal)
+    Public Sub CalculCoefficiensReduction(iCombi As Integer, myPoutre As cls_Poutre, QEd() As Decimal)
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   31/07/25 :  Reprise
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Calcul des coefficients de réduction liés à la flexion transversale des semelles inférieures de slim
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------------------------------------
 
         Dim iNode As Integer
         Dim iTravee, iDebT, iFinT As Integer
         Dim iDebN, iFinN As Integer
-        Dim deltaX As Decimal = MyPoutre.LongueurTotale / MyPoutre.Nodes.nbNodes
+        Dim deltaX As Decimal = myPoutre.LongueurTotale / myPoutre.Nodes.nbNodes
 
         Dim q, dapp, dbt, gammaM0 As Decimal
 
         '--> Déclaration
 
-        iDebT = MyPoutre.IndicePremiereTravee
-        iFinT = MyPoutre.IndiceDerniereTravee
+        iDebT = myPoutre.IndicePremiereTravee
+        iFinT = myPoutre.IndiceDerniereTravee
 
-        gammaM0 = MyPoutre.Param.Gamma.GammaM0
+        gammaM0 = myPoutre.Param.Gamma.GammaM0
 
         'calcul de dapp
         If Me.methodeReduction = MethodeReductionPlatSlimFloor.methode1_ReducAire Then
             dapp = 40 / 1000 '40 mm
         Else
-            If MyPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine Then
-                Select Case MyPoutre.Section.ProfilA.typeProfileAcier
+            If myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine Then
+                Select Case myPoutre.Section.ProfilA.typeProfileAcier
                     Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                        dapp = (MyPoutre.Section.ProfilA.Plat_b - MyPoutre.Section.ProfilA.Bfi) / 3
+                        dapp = (myPoutre.Section.ProfilA.Plat_b - myPoutre.Section.ProfilA.Bfi) / 3
                     Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                        dapp = (MyPoutre.Section.ProfilA.Plat_b - MyPoutre.Section.ProfilA.Bfs) / 3
+                        dapp = (myPoutre.Section.ProfilA.Plat_b - myPoutre.Section.ProfilA.Bfs) / 3
                     Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                        dapp = (MyPoutre.Section.ProfilA.Bfi - MyPoutre.Section.ProfilA.Plat_b) / 3
+                        dapp = (myPoutre.Section.ProfilA.Bfi - myPoutre.Section.ProfilA.Plat_b) / 3
                     Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                        dapp = (MyPoutre.Section.ProfilA.Bfi - MyPoutre.Section.ProfilA.Bfs) / 3
+                        dapp = (myPoutre.Section.ProfilA.Bfi - myPoutre.Section.ProfilA.Bfs) / 3
                 End Select
             Else
-                dapp = (2 / 3) * OptionsSlimFloor.bappmin
+                dapp = (2 / 3) * OptionsSlimFloor.Bappmin
             End If
         End If
 
         '--> Traitement
 
         For iTravee = iDebT To iFinT
-            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+            iDebN = myPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = myPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
             For iNode = iDebN To iFinN
 
-                With MyPoutre.Section.ProfilA
+                With myPoutre.Section.ProfilA
 
                     '== Suggestion pour DeltaX (POM)
                     If iNode = 0 Then
-                        deltaX = (MyPoutre.Nodes.xGlobal(iNode + 1) - MyPoutre.Nodes.xGlobal(iNode)) / 2
-                    ElseIf iNode = MyPoutre.Nodes.nbNodes - 1 Then
-                        deltaX = (MyPoutre.Nodes.xGlobal(iNode) - MyPoutre.Nodes.xGlobal(iNode - 1)) / 2
+                        deltaX = (myPoutre.Nodes.xGlobal(iNode + 1) - myPoutre.Nodes.xGlobal(iNode)) / 2
+                    ElseIf iNode = myPoutre.Nodes.nbNodes - 1 Then
+                        deltaX = (myPoutre.Nodes.xGlobal(iNode) - myPoutre.Nodes.xGlobal(iNode - 1)) / 2
                     Else
-                        deltaX = (MyPoutre.Nodes.xGlobal(iNode + 1) - MyPoutre.Nodes.xGlobal(iNode - 1)) / 2
+                        deltaX = (myPoutre.Nodes.xGlobal(iNode + 1) - myPoutre.Nodes.xGlobal(iNode - 1)) / 2
                     End If
                     '====
 
-                    q = QEd(iNode) / deltaX 'sauf erreur de ma part il s'agit d'une force répartie dans les formules de calcul des coefficients de réduction 
+                    q = QEd(iNode) / deltaX
 
                     Select Case .typeProfileAcier
                         Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
 
                             Select Case Me.methodeReduction
                                 Case MethodeReductionPlatSlimFloor.methode1_ReducAire
-                                    Psi_spd(iCombi, iNode) = CalculPsi(q, .Plat_b, .Plat_t, MyPoutre.Section.FySpd, .Plat_b - 2 * dapp, .Bfi, gammaM0)
-                                    Psi_fi(iCombi, iNode) = CalculPsi(q, .Bfi, .Tfi, MyPoutre.Section.FyInf, .Bfi, .Tw, gammaM0)
+                                    Psi_spd(iCombi, iNode) = CalculPsi(q, .Plat_b, .Plat_t, myPoutre.Section.FySpd, .Plat_b - 2 * dapp, .Bfi, gammaM0)
+                                    Psi_fi(iCombi, iNode) = CalculPsi(q, .Bfi, .Tfi, myPoutre.Section.FyInf, .Bfi, .Tw, gammaM0)
 
                                     rho_t_spd(iCombi, iNode) = 1
                                     rho_t_fi(iCombi, iNode) = 1
@@ -422,8 +437,8 @@
                                     Psi_spd(iCombi, iNode) = 1
                                     Psi_fi(iCombi, iNode) = 1
 
-                                    rho_t_spd(iCombi, iNode) = CalculRhot(q, (.Plat_b - .Bfi) / 2 - dapp, .Plat_t, MyPoutre.Section.FySpd, gammaM0)
-                                    rho_t_fi(iCombi, iNode) = CalculRhot(q, (.Bfi - .Tw - .Rci) / 2 - dapp, .Tfi, MyPoutre.Section.FyInf, gammaM0)
+                                    rho_t_spd(iCombi, iNode) = CalculRhot(q, (.Plat_b - .Bfi) / 2 - dapp, .Plat_t, myPoutre.Section.FySpd, gammaM0)
+                                    rho_t_fi(iCombi, iNode) = CalculRhot(q, (.Bfi - .Tw - .Rci) / 2 - dapp, .Tfi, myPoutre.Section.FyInf, gammaM0)
 
                                     Psi_y_spd(iCombi, iNode) = 1
                                     Psi_y_fi(iCombi, iNode) = 1
@@ -435,8 +450,8 @@
                                     rho_t_spd(iCombi, iNode) = 1
                                     rho_t_fi(iCombi, iNode) = 1
 
-                                    Psi_y_spd(iCombi, iNode) = CalculPsiY(q, (.Plat_b - .Bfi) / 2 - dapp, .Plat_t, MyPoutre.Section.FySpd, gammaM0)
-                                    Psi_y_fi(iCombi, iNode) = CalculPsiY(q, (.Bfi - .Tw - .Rci) / 2 - dapp, .Tfi, MyPoutre.Section.FyInf, gammaM0)
+                                    Psi_y_spd(iCombi, iNode) = CalculPsiY(q, (.Plat_b - .Bfi) / 2 - dapp, .Plat_t, myPoutre.Section.FySpd, gammaM0)
+                                    Psi_y_fi(iCombi, iNode) = CalculPsiY(q, (.Bfi - .Tw - .Rci) / 2 - dapp, .Tfi, myPoutre.Section.FyInf, gammaM0)
 
                             End Select
 
@@ -444,7 +459,7 @@
 
                             Select Case Me.methodeReduction
                                 Case MethodeReductionPlatSlimFloor.methode1_ReducAire
-                                    Psi_spd(iCombi, iNode) = CalculPsi(q, .Plat_b, .Plat_t, MyPoutre.Section.FySpd, .Plat_b - 2 * dapp, .Tw, gammaM0)
+                                    Psi_spd(iCombi, iNode) = CalculPsi(q, .Plat_b, .Plat_t, myPoutre.Section.FySpd, .Plat_b - 2 * dapp, .Tw, gammaM0)
                                     Psi_fi(iCombi, iNode) = 1
 
                                     rho_t_spd(iCombi, iNode) = 1
@@ -458,7 +473,7 @@
                                     Psi_spd(iCombi, iNode) = 1
                                     Psi_fi(iCombi, iNode) = 1
 
-                                    rho_t_spd(iCombi, iNode) = CalculRhot(q, (.Plat_b - .Tw) / 2 - dapp, .Plat_t, MyPoutre.Section.FySpd, gammaM0)
+                                    rho_t_spd(iCombi, iNode) = CalculRhot(q, (.Plat_b - .Tw) / 2 - dapp, .Plat_t, myPoutre.Section.FySpd, gammaM0)
                                     rho_t_fi(iCombi, iNode) = 1
 
                                     Psi_y_spd(iCombi, iNode) = 1
@@ -471,7 +486,7 @@
                                     rho_t_spd(iCombi, iNode) = 1
                                     rho_t_fi(iCombi, iNode) = 1
 
-                                    Psi_y_spd(iCombi, iNode) = CalculPsiY(q, (.Plat_b - .Tw) / 2 - dapp, .Plat_t, MyPoutre.Section.FySpd, gammaM0)
+                                    Psi_y_spd(iCombi, iNode) = CalculPsiY(q, (.Plat_b - .Tw) / 2 - dapp, .Plat_t, myPoutre.Section.FySpd, gammaM0)
                                     Psi_y_fi(iCombi, iNode) = 1
 
                             End Select
@@ -481,7 +496,7 @@
                             Select Case Me.methodeReduction
                                 Case MethodeReductionPlatSlimFloor.methode1_ReducAire
                                     Psi_spd(iCombi, iNode) = 1
-                                    Psi_fi(iCombi, iNode) = CalculPsi(q, .Bfi, .Tfi, MyPoutre.Section.FyInf, .Bfi - 2 * dapp, .Tw, gammaM0)
+                                    Psi_fi(iCombi, iNode) = CalculPsi(q, .Bfi, .Tfi, myPoutre.Section.FyInf, .Bfi - 2 * dapp, .Tw, gammaM0)
 
                                     rho_t_spd(iCombi, iNode) = 1
                                     rho_t_fi(iCombi, iNode) = 1
@@ -495,7 +510,7 @@
                                     Psi_fi(iCombi, iNode) = 1
 
                                     rho_t_spd(iCombi, iNode) = 1
-                                    rho_t_fi(iCombi, iNode) = CalculRhot(q, (.Bfi - .Tw - .Rci) / 2 - dapp, .Tfi, MyPoutre.Section.FyInf, gammaM0)
+                                    rho_t_fi(iCombi, iNode) = CalculRhot(q, (.Bfi - .Tw - .Rci) / 2 - dapp, .Tfi, myPoutre.Section.FyInf, gammaM0)
 
                                     Psi_y_spd(iCombi, iNode) = 1
                                     Psi_y_fi(iCombi, iNode) = 1
@@ -508,7 +523,7 @@
                                     rho_t_fi(iCombi, iNode) = 1
 
                                     Psi_y_spd(iCombi, iNode) = 1
-                                    Psi_y_fi(iCombi, iNode) = CalculPsiY(q, (.Bfi - .Tw - .Rci) / 2 - dapp, .Tfi, MyPoutre.Section.FyInf, gammaM0)
+                                    Psi_y_fi(iCombi, iNode) = CalculPsiY(q, (.Bfi - .Tw - .Rci) / 2 - dapp, .Tfi, myPoutre.Section.FyInf, gammaM0)
 
                             End Select
 
@@ -559,33 +574,69 @@
     ''' <param name="gammaM0">coefficient partiel gammaM0</param>
     ''' <returns></returns>
     Private Function CalculRhot(q As Decimal, dbt As Decimal, t As Decimal, fy As Decimal, gammaM0 As Decimal) As Decimal
+        '------------------------------------------------------------------------------------------------------------------
+        '   xx/xx/24 : Création - GuD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient de réduction de la limite d'élasticité du plat support de slim floor
+        '   d'après COSFB technical specifications
+        '------------------------------------------------------------------------------------------------------------------
+        '   q       [E] :   Charge sur le plat
+        '   dbt     [E] :   Bras de levier de la charge
+        '   t       [E] :   Epaisseur du plat
+        '   GammaM0 [E] :   GammaM0
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
         Dim mxbt_Ed, mxbt_Rd, eta_m, rho_t As Decimal
+
+        '--( Initialisation
 
         mxbt_Ed = q * dbt
         mxbt_Rd = 1.2 * t ^ 2 * fy / (6 * gammaM0)
 
-        eta_m = mxbt_Ed / mxbt_Rd
+        '--( Calcul
+
+        eta_m = Math.Min(Math.Abs(mxbt_Ed / mxbt_Rd), 1)
 
         rho_t = (1 / 2) * (1 + Math.Sqrt(1 - eta_m))
 
-        rho_t = Math.Max(rho_t, 0) 'minoration par 0 au cas où
-        rho_t = Math.Max(rho_t, 1) 'majoration par 1 au cas où
+        'rho_t = Math.Max(rho_t, 0) 'minoration par 0 au cas où
+        'rho_t = Math.Max(rho_t, 1) 'majoration par 1 au cas où
 
         Return rho_t
     End Function
 
     Private Function CalculPsiY(q As Decimal, dbt As Decimal, t As Decimal, fy As Decimal, gammaM0 As Decimal) As Decimal
+        '------------------------------------------------------------------------------------------------------------------
+        '   xx/xx/24 : Création - GuD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient de réduction de la limite d'élasticité du plat support de slim floor
+        '   d'après annexe I de l'EN 1994-1-1:2025
+        '------------------------------------------------------------------------------------------------------------------
+        '   q       [E] :   Charge sur le plat
+        '   dbt     [E] :   Bras de levier de la charge
+        '   t       [E] :   Epaisseur du plat
+        '   GammaM0 [E] :   GammaM0
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
         Dim mybt_Ed, mybt_Rd, eta_m, psiY As Decimal
+
+        '--( Initialisation
 
         mybt_Ed = q * dbt
         mybt_Rd = 1.2 * t ^ 2 * fy / (6 * gammaM0)
 
-        eta_m = mybt_Ed / mybt_Rd
+        '--( Calcul
+
+        eta_m = Math.Min(Math.Abs(mybt_Ed / mybt_Rd), 1)
 
         psiY = (eta_m - Math.Sqrt(eta_m ^ 2 - 16 * eta_m + 16)) / (2 * (eta_m - 2))
 
-        psiY = Math.Max(psiY, 0) 'minoration par 0 au cas où
-        psiY = Math.Min(psiY, 1) 'majoration par 1 au cas où
+        'psiY = Math.Max(psiY, 0) 'minoration par 0 au cas où
+        'psiY = Math.Min(psiY, 1) 'majoration par 1 au cas où
 
         Return psiY
 

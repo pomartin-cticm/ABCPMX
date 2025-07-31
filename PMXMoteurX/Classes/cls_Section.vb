@@ -1762,7 +1762,6 @@ Public Class cls_Section
     Public Function ClasseSection(zANP As Decimal, zANE As Decimal, lFlexionPositive As Boolean,
                                   lBetonSlimfloor As Boolean, lBetonEnrobage As Boolean, lG1_EN As Boolean, lCalculFeu As Boolean, lCompressionPure As Boolean, lWeb As Boolean, ByRef lReclasse As Boolean,
                                   Optional td As Decimal = 0) As Integer
-
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
         '----------------------------------------------------------------------------------------------------------
@@ -1771,6 +1770,8 @@ Public Class cls_Section
         '   zANP                [E] :   Position de l'ANP (compté algébriquement depuis la face inférieure de la dalle béton)
         '   zANE                [E] :   Position de l'ANE (compté algébriquement depuis la face inférieure de la dalle béton)
         '   lFlexionPositive    [E] :   Indique si le calcul se fait en considérant une flexion positive (True) ou non (False)
+        '   lBetonSlimfloor     [E] :   Indique si section slim floor, avec prise en compte du béton pour la classification
+        '   lBetonEnrobage      [E] :   Indique si section partiellement enrobée de béton, avec prise en compte du béton pour la classification
         '   lG1_EN              [E] :   Indique si le calcul de la classe se fait selon les Eurocodes actuels (True) ou selon la deuxieme génération d'Eurocodes (False)
         '   td                  [E] :   Epaisseur totale de la dalle (hors renformis)
         '   lCalculFeu          [E] :   Indique si calcul au feu
@@ -1804,19 +1805,25 @@ Public Class cls_Section
         '---------------------------------------------
         '---------------------------------------------
 
-        ' --> Initialisation des variables locales 
+        '--> Initialisation des variables locales 
 
-        calcul_cf_tf(cfsup, tfsup, cfinf, tfinf, cplat, tplat) 'calcul les différentes valeurs de c et t pour la semelle sup, inf et le plat soudé (le cas échéant)
+        '*** calcul les différentes valeurs de c et t pour la semelle sup, inf et le plat soudé (le cas échéant)
+
+        Me.Calcul_cf_tf(cfsup, tfsup, cfinf, tfinf, cplat, tplat)
 
         lReclasse = False
 
         ' --> Calcul classe semelle supérieure
 
-        lSemelleSupComprimeeLoc = lSemelleSupComprimee(lFlexionPositive, zANP) Or lCompressionPure 'On regarde si la semelle supérieure du profilé est comprimée ou non
-        classeSemellesSup = ClasseSemelle(lSemelleSupComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cfsup, tfsup, epsilon_fsup) 'calcul la classe de la semelle sup en fonction de si elle est comprimée et du ratio c/t
+        '*** On regarde si la semelle supérieure du profilé est comprimée ou non
+        lSemelleSupComprimeeLoc = lSemelleSupComprimee(lFlexionPositive, zANP) Or lCompressionPure
+        '*** calcul la classe de la semelle sup en fonction de si elle est comprimée et du ratio c/t
+        classeSemellesSup = ClasseSemelle(lSemelleSupComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cfsup, tfsup, epsilon_fsup)
 
-        If lBetonSlimfloor Then 'reduction possible dans le cas où on a une section slimfloor et où on prend en compte le béton
-            If Me.TypeSection = cls_Section.Enum_TypeSection.IFB_B Or Me.TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte Then
+        '*** reduction possible dans le cas où on a une section slimfloor et où on prend en compte le béton
+        If lBetonSlimfloor Then
+            If Me.lSlimFloor_IFB_B Then
+                'If Me.TypeSection = cls_Section.Enum_TypeSection.IFB_B Or Me.TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte Then
                 If td - hec >= Math.Max(50 / 1000, Me.ProfilA.Plat_b / 6) Then classeSemellesSup = Math.Min(classeSemellesSup, 2)
             Else
                 If td - hec >= Math.Max(50 / 1000, Me.ProfilA.Bfs / 6) Then classeSemellesSup = Math.Min(classeSemellesSup, 2)
@@ -1829,7 +1836,8 @@ Public Class cls_Section
         classeSemellesInf = ClasseSemelle(lSemelleInfComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cfinf, tfinf, epsilon_finf) 'calcul la classe de la semelle sup en fonction de si elle est comprimée et du ratio c/t
 
         ' --> Calcul classe semelle plat inférieur dans le cas d'un SFB
-        If Me.TypeSection = cls_Section.Enum_TypeSection.SFB Or Me.TypeSection = cls_Section.Enum_TypeSection.SFBmixte Then
+        If Me.lSlimFloor_SFB Then
+            'If Me.TypeSection = cls_Section.Enum_TypeSection.SFB Or Me.TypeSection = cls_Section.Enum_TypeSection.SFBmixte Then
             classePlatInfSFB = ClasseSemelle(lSemelleInfComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cplat, tplat, epsilon_platSFB) 'calcul la classe du plat soudé dans le cas des sections slimfloors en fonction de si elle est comprimée et du ratio c/t
         Else
             classePlatInfSFB = 0
@@ -1902,7 +1910,12 @@ Public Class cls_Section
     ''' <param name="tfinf">valeur de t pour la semelle inférieure (épaisseur ici)</param>
     ''' <param name="cplat">valeur de c pour le plat soudé, le cas échéant (sinon la valeur 0 lui sera affectée)</param>
     ''' <param name="tplat">valeur de t pour le plat soudé, le cas échéant (sinon la valeur 0 lui sera affectée)</param>
-    Public Sub calcul_cf_tf(ByRef cfsup As Decimal, ByRef tfsup As Decimal, ByRef cfinf As Decimal, ByRef tfinf As Decimal, ByRef cplat As Decimal, ByRef tplat As Decimal)
+    Public Sub Calcul_cf_tf(ByRef cfsup As Decimal, ByRef tfsup As Decimal, ByRef cfinf As Decimal, ByRef tfinf As Decimal, ByRef cplat As Decimal, ByRef tplat As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   10/10/23 :  Création - GUD
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul des largeurs et épaisseurs de paroi pour les classes
+        '----------------------------------------------------------------------------------------------------------
         With Me.ProfilA
             Select Case Me.TypeSection
                 Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
@@ -1988,10 +2001,12 @@ Public Class cls_Section
         '----------------------------------------------------------------------------------------------------------
         '   Calcul de la classe d'une semelle (paroi en console)
         '----------------------------------------------------------------------------------------------------------
-        '   lComprimee       [E] :   indique si la paroi est entierement comprimee (True) ou non (False)
-        '   c                [E] :   hauteur de la paroi en console
-        '   t                [E] :   epaisseur de la paroi en console
-        '   epsilon          [E] :   epsilon de la paroi en console 
+        '   lComprimee          [E] :   indique si la paroi est entierement comprimee (True) ou non (False)
+        '   lBetonSlimfloor     [E] :   indique si on prend en compte le béton dans le cas d'une section slimfloor
+        '   lBetonEnrobage      [E] :   indique si on prend en compte le béton dans le cas d'une section enrobée
+        '   c                   [E] :   hauteur de la paroi en console
+        '   t                   [E] :   epaisseur de la paroi en console
+        '   epsilon             [E] :   epsilon de la paroi en console 
         '----------------------------------------------------------------------------------------------------------
 
         If lComprimee Then
