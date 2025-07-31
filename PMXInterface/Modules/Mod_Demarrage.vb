@@ -956,7 +956,7 @@ Public Module Mod_Demarrage
         lLamine = Not ((myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym) _
                     Or (myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym))
 
-        '--( Traitement
+        '--( Récupération des dimensions des profilés et des courbes de réductions acier
 
         If lLamine Then
             TransfertProfileDeBase(myBeam.Section.ProfilA, myBeam.Section.ProfilA.Gamme, myBeam.Section.ProfilA.NomProfile, lOK)
@@ -964,6 +964,12 @@ Public Module Mod_Demarrage
         Else
             UpdateProfilPRS(myBeam.Section.ProfilA, MyCatalogue.nbStandard)
             AssocieAcierCompatible(myBeam, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve, True)
+        End If
+
+        '--( Si la section comporte un plat, récupération de l'acier du plat
+
+        If (myBeam.lSlimFloor And (Not myBeam.Section.lSlimFloor_SAB)) Or (myBeam.Section.ProfilA.lPlat) Then
+            InitialiseAcierPlats(myBeam.Section.AcierPlat, myBeam.Section.AcierPlat.Nuance, myBeam.Section.AcierPlat.Qualite, myBeam.Section.AcierPlat.Reduction)
         End If
 
     End Sub
@@ -1055,13 +1061,47 @@ Public Module Mod_Demarrage
         '--( Déclarations
 
         Dim Nuance, Qualite, Reduction As String
-        Dim iStd As Integer
 
         '--( Traitement
 
         Nuance = "S235"
         Qualite = "EC3"
         Reduction = "Table 3.1"
+
+        InitialiseAcierPlats(myAcier, Nuance, Qualite, Reduction)
+
+    End Sub
+
+    Public Sub InitialiseAcierPlats(ByRef myAcier As cls_Acier, Nuance As String, Qualite As String, Reduction As String)
+        '--------------------------------------------------------------------------------
+        '   24/09/24 :  Création - POM
+        '--------------------------------------------------------------------------------
+        '   Initialisation de l'acier pour les plats de slimfoors
+        '--------------------------------------------------------------------------------
+        '   myAcier     [S] :   Acier à initialiser
+        '   Nuance      [E] :   Nuance d'acier
+        '   Qualite     [E] :   Qualite
+        '   Reduction   [E] :   Reduction
+        '--------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim iStd As Integer
+        Dim lTrouve As Boolean
+
+        '--( On détecte si la nuance existe dans la base
+
+        lTrouve = SteelBase.Grades.ContainsKey(Nuance)
+        If lTrouve Then lTrouve = SteelBase.Grades(Nuance).Qualites.ContainsKey(Qualite)
+        If lTrouve Then lTrouve = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv.ContainsKey(Reduction)
+
+        If Not lTrouve Then
+            '== Gerer un warning
+            GestionErreur("Mod_Demarrage", "InitialiseAcierPlats", "Acier non trouvé dans la base de donnée " & Chr(13) & Nuance & "/" & Qualite & "/" & Reduction)
+            Exit Sub
+        End If
+
+        '--( Si oui
 
         myAcier.Nuance = Nuance
         myAcier.Qualite = Qualite

@@ -766,7 +766,6 @@ Public Module Mod_Declarations
     Public OptionsDiagrammesELF As struc_OptionsDiagrammes
     Public OptionsDiagrammesELS As struc_OptionsDiagrammes
 
-
     Public Sub InitialiseOptionsNdC()
         With OptionsNdC
             .lShowHivossCurve = My.Settings.lNdCCourbeHivoss
