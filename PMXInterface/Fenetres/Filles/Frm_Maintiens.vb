@@ -810,7 +810,7 @@ Public Class Frm_Maintiens
 
     Private Sub PublieInfoDegreConnex()
 
-        InfoW.Initialise()
+        InfoW.InitialiseInfo()
 
         InfoW.AddInfo(strInfoW_PoutreMixte)
 

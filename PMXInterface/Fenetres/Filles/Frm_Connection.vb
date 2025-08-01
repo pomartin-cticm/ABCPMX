@@ -1555,7 +1555,7 @@ Public Class Frm_Connection
 
     Private Sub PublieInfoDegreConnex()
 
-        InfoW.Initialise()
+        InfoW.InitialiseInfo()
         InfoW.AddInfo(strInfoW_DegreConnex)
         'InfoW_Add("Le degré de connexion est calculé à mi-travée de la poutre, en supposant que la poutre en entièrement sous moment positif")
 

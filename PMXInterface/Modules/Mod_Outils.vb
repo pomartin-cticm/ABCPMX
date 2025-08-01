@@ -1918,7 +1918,7 @@ Module Mod_Outils
         '   lError      [E] :   Indique si erreur ou notification
         '-------------------------------------------------------------------------------------------------------------
 
-        InfoW.Initialise()
+        InfoW.InitialiseErreur()
 
         If ModSource.Trim.Length > 0 Then
             InfoW.AddInfo("Module : " & ModSource)

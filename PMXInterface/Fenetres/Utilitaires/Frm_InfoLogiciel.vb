@@ -2,7 +2,7 @@
 
 #Region " Variables "
 
-
+    Dim CouleurBase As Color
 
 #End Region
 
@@ -16,7 +16,9 @@
 
     Private Sub GestionStyle()
 
-        Me.lbl_InfoW.BackColor = Me.pan_General.BackColor
+        CouleurBase = InfoW.CouleurBase
+        Me.lbl_InfoW.BackColor = CouleurBase
+        Me.pan_General.BackColor = CouleurBase
         Me.lbl_InfoW.ForeColor = CouleurForeBandeaux
         Me.rtb_Info.BorderStyle = BorderStyle.None
 
@@ -26,15 +28,24 @@
             Me.img_info.Image = imgList_Info.Images("Warning")
         End If
 
+        If InfoW.Mode = Cls_InfoW.enu_ModeW.Information Then
+            Me.TLPan_General.RowStyles(2).Height = 0
+        End If
+
     End Sub
 
     Private Sub GestionLangues()
 
-        If InfoW.linfo Then
-            Me.lbl_InfoW.Text = LogicielInfo.NomLogiciel & " - " & InfoW.BlocF("INFO")
-        Else
-            Me.lbl_InfoW.Text = LogicielInfo.NomLogiciel & " - " & InfoW.BlocF("WARNING")
-        End If
+        Dim Cle As String = "INFO"
+
+        Select Case InfoW.Mode
+            Case Cls_InfoW.enu_ModeW.Information : Cle = "INFO"
+            Case Cls_InfoW.enu_ModeW.Erreur : Cle = "ERROR"
+            Case Cls_InfoW.enu_ModeW.Avertissement : Cle = "WARNING"
+        End Select
+
+        Me.lbl_InfoW.Text = LogicielInfo.NomLogiciel & " - " & InfoW.BlocF(Cle)
+
 
         Me.lbl_ContactSupport.Text = InfoW.BlocF("CONTACT")
 
