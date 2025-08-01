@@ -6,6 +6,7 @@
 #Region " Attributs "
 
     Public CritereM As cls_Critere                  ' Resistance à la flexion
+    Public CritereMY As cls_Critere                 ' Resistance à la flexion transversale dans le cas d'un calcul élastique
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
     Public CritereMV As cls_Critere                 ' Résistance à l'interacion MV
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
@@ -22,20 +23,7 @@
     Public rho_t_spd As Decimal(,)                  ' Coefficient de réduction du plat soudé inférieur (épaisseur, méthode 2)
     Public Psi_y_spd As Decimal(,)                  ' Coefficient de réduction du plat soudé inférieur (limite d'élasticité, méthode 3)
 
-    Public methodeReduction As MethodeReductionPlatSlimFloor
-
-    Enum MethodeReductionPlatSlimFloor
-        methode1_ReducAire
-        methode2_ReducEpaisseur
-        methode3_ReducLimiteElasticite
-    End Enum
-
     Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
-
-    'Public AlphaCrLTB() As Decimal                  ' Alpha critique pour le déversement élastique
-    'Public McrLTB(,) As Decimal                     ' Moment critique pour le déversement (en travée)
-
-    'Public ShearB As strucShearBuckling             ' Paramètres du voilement par cisaillement
 
     '==( Classe pour le calcul des contraintes de cisaillement en calcul élastique imposé
 
@@ -48,13 +36,14 @@
     Public GorgesSoudures() As Decimal             ' Gorge des soudures ame semelles pour les sections PRS
     Public GorgesSouduresMini() As Decimal         ' Gorge mini des soudures ame semelles pour les sections PRS
 
+    '==( Tableaux pour le calcul des contraintes locales dans les supports de dalle
+
 #End Region
 
 #Region " Constructeurs "
 
     Public Sub New()
         lCalculPlastic = True
-        methodeReduction = MethodeReductionPlatSlimFloor.methode3_ReducLimiteElasticite
     End Sub
 
     Private Sub InitialiseCriteres(NbNodes As Integer, NbCombi As Integer, IndDerniereT As Integer, lElastic As Boolean, lElastiTau As Boolean)
@@ -75,7 +64,7 @@
         Me.CritereV = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
 
         If lElastic Then
-            Me.CritereSigmaA = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+            InitialiseCriteresVM(NbNodes, NbCombi, IndDerniereT)
         End If
 
         If lElastiTau Then
@@ -85,7 +74,7 @@
 
     End Sub
 
-    Private Sub InitialiseCriteresVM(NbNodes As Integer, lArma As Boolean, nbCombi As Integer, IndDerniereT As Integer)
+    Private Sub InitialiseCriteresVM(NbNodes As Integer, nbCombi As Integer, IndDerniereT As Integer)
         '-------------------------------------------------------------------
         '   25/10/23 :  Création - POM
         '-------------------------------------------------------------------
@@ -93,8 +82,118 @@
         '-------------------------------------------------------------------
 
         Me.CritereSigmaA = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        Me.CritereMY = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
 
     End Sub
+
+    Private Sub DimensionTableauxContraintesLocales(nbNodes As Integer, ByRef SigmaY(,) As Decimal, ByRef TauY(,) As Decimal)
+        '-------------------------------------------------------------------
+        '   31/07/25 :  Création - POM
+        '-------------------------------------------------------------------
+        '   Dimension des tableaux de contraintes locales dans les plats support de dalle
+        '-------------------------------------------------------------------
+
+        ReDim SigmaY(nbNodes - 1, 1)
+        ReDim TauY(nbNodes - 1, 1)
+
+    End Sub
+
+#End Region
+
+#Region " Calcul des contraintes de locales "
+
+    Private Sub ContraintesLocales(myBeam As cls_Poutre, QEd() As Decimal, ByRef SigmaY(,) As Decimal, ByRef TauY(,) As Decimal)
+        '-------------------------------------------------------------------
+        '   31/07/25 :  Création - POM
+        '-------------------------------------------------------------------
+        '   Calcul des contraintes locales dans les plats
+        '   support de la dalle
+        '-------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   QEd         [E] :   Charges locales aux noeuds
+        '   SigmaY      [S] :   Contrainte de flexion transversale dans les plats
+        '   TauY        [S] :   Contrainte de cisaillement transversale dans les plats
+        '-------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lRive As Boolean
+        Dim kQloc As Decimal
+        Dim iNode As Integer
+        Dim tFi, tPlat As Decimal
+        Dim WFi, WPlat As Decimal
+        Dim dbtFi, dbtPlat As Decimal
+        Dim dApp As Decimal
+        Dim kFi, kPlat As Decimal
+
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+
+        '--( Initialisation
+
+        iDebT = myBeam.IndicePremiereTravee
+        iFinT = myBeam.IndiceDerniereTravee
+
+        lRive = Not myBeam.lIntermediaire
+        If lRive Then kQloc = 1 Else kQloc = 1 / 2
+
+        dApp = Me.LargeurAppui(myBeam)
+        Me.BrasLevier(myBeam, dApp, dbtFi, dbtPlat)
+
+        tPlat = myBeam.Section.ProfilA.Plat_t
+        tFi = myBeam.Section.ProfilA.Tfi
+
+        WPlat = tPlat ^ 2 / 6
+        WFi = tFi ^ 2 / 6
+
+        Select Case myBeam.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.IFB_A
+                '** Contraintes dans la semelle inférieure
+                kFi = 0
+
+                '** Contraintes dans le plat
+                kPlat = 1
+
+            Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB
+                '** Contraintes dans la semelle inférieure
+                kFi = 1
+
+                '** Contraintes dans le plat
+                kPlat = 0
+
+            Case cls_Section.Enum_TypeSection.SFB
+
+                '** Contraintes dans la semelle inférieure
+                kFi = 1
+
+                '** Contraintes dans le plat
+                kPlat = 1
+
+        End Select
+
+        '--( Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+
+                '** Contraintes dans la semelle inférieure
+
+                SigmaY(iNode, 0) = kFi * kQloc * QEd(iNode) * dbtFi / WFi
+                TauY(iNode, 0) = kFi * 3 / 2 * kQloc * QEd(iNode) / tFi
+
+                '** Contraintes dans le plat
+
+                SigmaY(iNode, 0) = kPlat * kQloc * QEd(iNode) * dbtFi / WFi
+                TauY(iNode, 1) = kPlat * 3 / 2 * kQloc * QEd(iNode) / tPlat
+
+            Next
+        Next
+
+    End Sub
+
 
 #End Region
 
@@ -137,6 +236,13 @@
         Dim FluxCas(,,,) As Decimal = Nothing           ' Flux de cisaillement dans les soudures de PRS par cas de charges
         Dim FluxELU(,,) As Decimal = Nothing            ' Flux de cisaillement dans les soudures de PRS aux ELU
         Dim lSoudure As Boolean                         ' Indique si un calcul de soudure est nécessaire 
+
+        '**     **  Dans ces tableaux, indice 2 iNode, indice 3 0 pour la semelle, 1 pour le plat
+
+        Dim SigmaY(,) As Decimal = Nothing              ' Contraintes locale de flexion dans les plats supports de dalle
+        Dim TauY(,) As Decimal = Nothing                ' Contrainte locale de cisaillement dans les plats support de dalle
+
+
         Dim lRetraitElastique As Boolean = True
         Dim lVerifElastic As Boolean                    ' Indique si on doit effectuer une verification élastique des sections
         Const lWEB As Boolean = True
@@ -155,7 +261,6 @@
         End If
 
         Me.InitialiseCoeffReduc(nbCombiELU, myBeam.Nodes.nbNodes)
-        Me.InitialiseCriteresVM(myBeam.Nodes.nbNodes, myBeam.lEnrobage, nbCombiELU, myBeam.IndiceDerniereTravee)
         Me.InitialiseRhoV(nbCombiELU, myBeam.Nodes.nbNodes)
 
         '# Tranchant résistant
@@ -191,6 +296,12 @@
         'End If
         Me.lCalculPlastic = Not lVerifElastic
 
+        If lVerifElastic Then DimensionTableauxContraintesLocales(myBeam.Nodes.nbNodes, SigmaY, TauY)
+
+        '# Initialisation des critères dépendant du type de vérification
+
+        Me.InitialiseCriteres(myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee, lVerifElastic, myBeam.Param.lElasticDesignVM)
+
         '--> Boucle sur les combinaisons
 
         For iCombi = 0 To combiELU.nbCombi - 1
@@ -215,10 +326,6 @@
 
             myBeam.ProprietesVerifSlimFloorAcier(iCombi, myBeam, True, MplRd, zANP, MelRd, zANE,
                                                  Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
-
-            '# Initialisation des critères dépendant du type de vérification
-
-            Me.InitialiseCriteres(myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee, lVerifElastic, myBeam.Param.lElasticDesignVM)
 
             '# Contraintes normales
 
@@ -268,19 +375,24 @@
                 '( Contraintes normales
                 combiELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, myBeam.PtsSigma.zPos.Count, myBeam.Nodes.nbNodes,
                                                     myBeam.ChargesA, SigmaCas, lRetraitElastique, SigmaELU)
-                myBeam.PtsSigma.AjusteContraintes(myBeam, SigmaELU)
 
                 '( Contraintes de cisaillement
                 If myBeam.Param.lElasticDesignVM Then
                     combiELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, Me.Tau.MStatic.Count, myBeam.Nodes.nbNodes,
                                                         myBeam.ChargesA, TauCas, lRetraitElastique, TauELU)
                 End If
+
+                '( Contraintes locales dans les plats supports
+
+                ContraintesLocales(myBeam, QEd, SigmaY, TauY)
+
             End If
 
             '# Vérification sous moment fléchissant
 
             If lVerifElastic Then
                 RunCritereFlexionResistanceElastiqueVM(myBeam, iCombi, SigmaELU)
+                RunCritereResistanceElPlatY(myBeam, iCombi, SigmaELU, SigmaY, TauY)
             Else
                 Me.RunCritereFlexionAcier(myBeam, iCombi, MEd, MplRd, MelRd, ClasseP, ClasseM, lClasse4)
             End If
@@ -335,6 +447,74 @@
 
 #End Region
 
+#Region " Largeurs d'appui et bras de levier "
+
+    Private Function LargeurAppui(myBeam As cls_Poutre) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   31/07/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Renvoie la distance entre le centre des charges sur l'appui et le bord de l'appui
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim dApp As Decimal
+        Dim lDallePleine As Boolean = myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine
+
+        '--( Traitement
+
+        If myBeam.Param.MethodReducPlatSlim = cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire Then
+            dApp = 40 / 1000        '== 40 mm
+        Else
+            If lDallePleine Then
+                dApp = myBeam.Section.LargeurAppuiSlimDallePleine
+            Else
+                dApp = (2 / 3) * OptionsSlimFloor.Bappmin
+            End If
+        End If
+
+        Return dApp
+
+    End Function
+
+    Private Sub BrasLevier(myBeam As cls_Poutre, dApp As Decimal, ByRef dbtFi As Decimal, ByRef dbtPlat As Decimal)
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   31/07/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Calcul des bras de levier entre point d'application charge locale et point de calcul des contraintes
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre étudiée
+        '   dApp        [E] :   Largeur de l'appui de la dalle
+        '   dbtFi       [S] :   Bras de levier pour la semelle inférieure (le cas échéant)
+        '   dbtPlat     [S] :   Bras de levier pour le plat inférieur (le cas échéant)
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        With myBeam.Section
+            Select Case .TypeSection
+                Case cls_Section.Enum_TypeSection.IFB_A
+                    With .ProfilA
+                        dbtFi = 0
+                        dbtPlat = (.Plat_b - .Bfi) / 2 - dApp
+                    End With
+                Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB
+                    With .ProfilA
+                        dbtFi = (.Bfi - .Tw) / 2 - .Rci
+                        dbtPlat = 0
+                    End With
+                Case cls_Section.Enum_TypeSection.SFB
+                    With .ProfilA
+                        dbtFi = (.Bfi - .Tw) / 2 - .Rci
+                        dbtPlat = (.Plat_b - .Bfi) / 2 - dApp
+                    End With
+            End Select
+        End With
+
+    End Sub
+
+
+#End Region
+
 #Region " Calcul coefficient de réduction plat inférieur "
 
     Private Sub InitialiseCoeffReduc(NbCombi As Integer, NbNodes As Integer)
@@ -362,39 +542,30 @@
         '-----------------------------------------------------------------------------------------------------------------------------
         '-----------------------------------------------------------------------------------------------------------------------------
 
+        '--> Déclaration
+
         Dim iNode As Integer
         Dim iTravee, iDebT, iFinT As Integer
         Dim iDebN, iFinN As Integer
         Dim deltaX As Decimal = myPoutre.LongueurTotale / myPoutre.Nodes.nbNodes
 
-        Dim q, dapp, dbt, gammaM0 As Decimal
+        Dim q, dApp, gammaM0 As Decimal
+        Dim dbtFi, dbtPlat As Decimal
 
-        '--> Déclaration
+        Dim FyPlat, fyInf As Decimal
+
+        '--> Initialisation
 
         iDebT = myPoutre.IndicePremiereTravee
         iFinT = myPoutre.IndiceDerniereTravee
 
         gammaM0 = myPoutre.Param.Gamma.GammaM0
 
-        'calcul de dapp
-        If Me.methodeReduction = MethodeReductionPlatSlimFloor.methode1_ReducAire Then
-            dapp = 40 / 1000 '40 mm
-        Else
-            If myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine Then
-                Select Case myPoutre.Section.ProfilA.typeProfileAcier
-                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                        dapp = (myPoutre.Section.ProfilA.Plat_b - myPoutre.Section.ProfilA.Bfi) / 3
-                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                        dapp = (myPoutre.Section.ProfilA.Plat_b - myPoutre.Section.ProfilA.Bfs) / 3
-                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                        dapp = (myPoutre.Section.ProfilA.Bfi - myPoutre.Section.ProfilA.Plat_b) / 3
-                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                        dapp = (myPoutre.Section.ProfilA.Bfi - myPoutre.Section.ProfilA.Bfs) / 3
-                End Select
-            Else
-                dapp = (2 / 3) * OptionsSlimFloor.Bappmin
-            End If
-        End If
+        dApp = Me.LargeurAppui(myPoutre)
+        Me.BrasLevier(myPoutre, dApp, dbtFi, dbtplat)
+
+        FyPlat = myPoutre.Section.FySpd
+        fyInf = myPoutre.Section.FyInf
 
         '--> Traitement
 
@@ -421,10 +592,10 @@
                     Select Case .typeProfileAcier
                         Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
 
-                            Select Case Me.methodeReduction
-                                Case MethodeReductionPlatSlimFloor.methode1_ReducAire
-                                    Psi_spd(iCombi, iNode) = CalculPsi(q, .Plat_b, .Plat_t, myPoutre.Section.FySpd, .Plat_b - 2 * dapp, .Bfi, gammaM0)
-                                    Psi_fi(iCombi, iNode) = CalculPsi(q, .Bfi, .Tfi, myPoutre.Section.FyInf, .Bfi, .Tw, gammaM0)
+                            Select Case myPoutre.Param.MethodReducPlatSlim
+                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire
+                                    Psi_spd(iCombi, iNode) = CalculPsi(q, .Plat_b, .Plat_t, FyPlat, .Plat_b - 2 * dApp, .Bfi, gammaM0)
+                                    Psi_fi(iCombi, iNode) = CalculPsi(q, .Bfi, .Tfi, fyInf, .Bfi, .Tw, gammaM0)
 
                                     rho_t_spd(iCombi, iNode) = 1
                                     rho_t_fi(iCombi, iNode) = 1
@@ -432,34 +603,35 @@
                                     Psi_y_spd(iCombi, iNode) = 1
                                     Psi_y_fi(iCombi, iNode) = 1
 
-                                Case MethodeReductionPlatSlimFloor.methode2_ReducEpaisseur
+                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M2_ReducEpaisseur
 
                                     Psi_spd(iCombi, iNode) = 1
                                     Psi_fi(iCombi, iNode) = 1
 
-                                    rho_t_spd(iCombi, iNode) = CalculRhot(q, (.Plat_b - .Bfi) / 2 - dapp, .Plat_t, myPoutre.Section.FySpd, gammaM0)
-                                    rho_t_fi(iCombi, iNode) = CalculRhot(q, (.Bfi - .Tw - .Rci) / 2 - dapp, .Tfi, myPoutre.Section.FyInf, gammaM0)
+                                    rho_t_spd(iCombi, iNode) = CalculRhot(q, dbtPlat, .Plat_t, FyPlat, gammaM0)
+                                    rho_t_fi(iCombi, iNode) = CalculRhot(q, dbtFi, .Tfi, fyInf, gammaM0)
 
                                     Psi_y_spd(iCombi, iNode) = 1
                                     Psi_y_fi(iCombi, iNode) = 1
 
-                                Case MethodeReductionPlatSlimFloor.methode3_ReducLimiteElasticite
+                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M3_ReducLimiteElasticite
+
                                     Psi_spd(iCombi, iNode) = 1
                                     Psi_fi(iCombi, iNode) = 1
 
                                     rho_t_spd(iCombi, iNode) = 1
                                     rho_t_fi(iCombi, iNode) = 1
 
-                                    Psi_y_spd(iCombi, iNode) = CalculPsiY(q, (.Plat_b - .Bfi) / 2 - dapp, .Plat_t, myPoutre.Section.FySpd, gammaM0)
-                                    Psi_y_fi(iCombi, iNode) = CalculPsiY(q, (.Bfi - .Tw - .Rci) / 2 - dapp, .Tfi, myPoutre.Section.FyInf, gammaM0)
+                                    Psi_y_spd(iCombi, iNode) = CalculPsiY(q, dbtPlat, .Plat_t, FyPlat, gammaM0)
+                                    Psi_y_fi(iCombi, iNode) = CalculPsiY(q, dbtFi, .Tfi, fyInf, gammaM0)
 
                             End Select
 
                         Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
 
-                            Select Case Me.methodeReduction
-                                Case MethodeReductionPlatSlimFloor.methode1_ReducAire
-                                    Psi_spd(iCombi, iNode) = CalculPsi(q, .Plat_b, .Plat_t, myPoutre.Section.FySpd, .Plat_b - 2 * dapp, .Tw, gammaM0)
+                            Select Case myPoutre.Param.MethodReducPlatSlim
+                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire
+                                    Psi_spd(iCombi, iNode) = CalculPsi(q, .Plat_b, .Plat_t, FyPlat, .Plat_b - 2 * dApp, .Tw, gammaM0)
                                     Psi_fi(iCombi, iNode) = 1
 
                                     rho_t_spd(iCombi, iNode) = 1
@@ -468,35 +640,35 @@
                                     Psi_y_spd(iCombi, iNode) = 1
                                     Psi_y_fi(iCombi, iNode) = 1
 
-                                Case MethodeReductionPlatSlimFloor.methode2_ReducEpaisseur
+                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M2_ReducEpaisseur
 
                                     Psi_spd(iCombi, iNode) = 1
                                     Psi_fi(iCombi, iNode) = 1
 
-                                    rho_t_spd(iCombi, iNode) = CalculRhot(q, (.Plat_b - .Tw) / 2 - dapp, .Plat_t, myPoutre.Section.FySpd, gammaM0)
+                                    rho_t_spd(iCombi, iNode) = CalculRhot(q, dbtPlat, .Plat_t, FyPlat, gammaM0)
                                     rho_t_fi(iCombi, iNode) = 1
 
                                     Psi_y_spd(iCombi, iNode) = 1
                                     Psi_y_fi(iCombi, iNode) = 1
 
-                                Case MethodeReductionPlatSlimFloor.methode3_ReducLimiteElasticite
+                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M2_ReducEpaisseur
                                     Psi_spd(iCombi, iNode) = 1
                                     Psi_fi(iCombi, iNode) = 1
 
                                     rho_t_spd(iCombi, iNode) = 1
                                     rho_t_fi(iCombi, iNode) = 1
 
-                                    Psi_y_spd(iCombi, iNode) = CalculPsiY(q, (.Plat_b - .Tw) / 2 - dapp, .Plat_t, myPoutre.Section.FySpd, gammaM0)
+                                    Psi_y_spd(iCombi, iNode) = CalculPsiY(q, dbtPlat, .Plat_t, FyPlat, gammaM0)
                                     Psi_y_fi(iCombi, iNode) = 1
 
                             End Select
 
                         Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
 
-                            Select Case Me.methodeReduction
-                                Case MethodeReductionPlatSlimFloor.methode1_ReducAire
+                            Select Case myPoutre.Param.MethodReducPlatSlim
+                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire
                                     Psi_spd(iCombi, iNode) = 1
-                                    Psi_fi(iCombi, iNode) = CalculPsi(q, .Bfi, .Tfi, myPoutre.Section.FyInf, .Bfi - 2 * dapp, .Tw, gammaM0)
+                                    Psi_fi(iCombi, iNode) = CalculPsi(q, .Bfi, .Tfi, fyInf, .Bfi - 2 * dApp, .Tw, gammaM0)
 
                                     rho_t_spd(iCombi, iNode) = 1
                                     rho_t_fi(iCombi, iNode) = 1
@@ -504,18 +676,18 @@
                                     Psi_y_spd(iCombi, iNode) = 1
                                     Psi_y_fi(iCombi, iNode) = 1
 
-                                Case MethodeReductionPlatSlimFloor.methode2_ReducEpaisseur
+                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M2_ReducEpaisseur
 
                                     Psi_spd(iCombi, iNode) = 1
                                     Psi_fi(iCombi, iNode) = 1
 
                                     rho_t_spd(iCombi, iNode) = 1
-                                    rho_t_fi(iCombi, iNode) = CalculRhot(q, (.Bfi - .Tw - .Rci) / 2 - dapp, .Tfi, myPoutre.Section.FyInf, gammaM0)
+                                    rho_t_fi(iCombi, iNode) = CalculRhot(q, dbtFi, .Tfi, fyInf, gammaM0)
 
                                     Psi_y_spd(iCombi, iNode) = 1
                                     Psi_y_fi(iCombi, iNode) = 1
 
-                                Case MethodeReductionPlatSlimFloor.methode3_ReducLimiteElasticite
+                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M3_ReducLimiteElasticite
                                     Psi_spd(iCombi, iNode) = 1
                                     Psi_fi(iCombi, iNode) = 1
 
@@ -523,7 +695,7 @@
                                     rho_t_fi(iCombi, iNode) = 1
 
                                     Psi_y_spd(iCombi, iNode) = 1
-                                    Psi_y_fi(iCombi, iNode) = CalculPsiY(q, (.Bfi - .Tw - .Rci) / 2 - dapp, .Tfi, myPoutre.Section.FyInf, gammaM0)
+                                    Psi_y_fi(iCombi, iNode) = CalculPsiY(q, dbtFi, .Tfi, fyInf, gammaM0)
 
                             End Select
 
@@ -551,7 +723,7 @@
                                e1 As Decimal, e2 As Decimal, gammaM0 As Decimal) As Decimal
         Dim psi, mu, lambda As Decimal
 
-        mu = (e1 - e2) * q * gammaM0 / (t ^ 2 * fy)
+        mu = (e1 - e2) * q * gammaM0 / (t ^ 2 * fy * kConvMPaPa)
 
         lambda = 1 - Math.Sqrt(1 - mu)
 
@@ -652,15 +824,63 @@
 
 #Region " Vérification de la poutre acier "
 
+    Private Sub RunCritereResistanceElPlatY(myBeam As cls_Poutre, iCombi As Integer,
+                                            SigmaELU(,,) As Decimal, SigmaY(,) As Decimal, TauY(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   01/08/25 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance en VM des plats supports par les critères de VM
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   SigmaELU    [E] :   Contraintes normales aux ELU
+        '   SigmaY      [E] :   Contraintes flexion transversale
+        '   TauY        [E] :   Contrainte de cisaillement transversal
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim FydInf, FyInf As Decimal
+        Dim FydPlat, FyPlat As Decimal
+
+        Dim iPro0 As Integer = myBeam.PtsSigma.iProfile(0)
+
+        '--> Initialisation
+
+        FyInf = myBeam.Section.FyInf
+        FydInf = FyInf / myBeam.Param.Gamma.GammaM0
+
+        FyPlat = myBeam.Section.FySpd
+        FydPlat = FyPlat / myBeam.Param.Gamma.GammaM0
+        '--> Calculs
+
+        '# Contraintes dans le profilé
+
+        If (iPro0 > -1) Then
+
+            Select Case myBeam.Section.TypeSection
+                Case cls_Section.Enum_TypeSection.IFB_A '==================================================================
+                Case cls_Section.Enum_TypeSection.IFB_B '==================================================================
+                Case cls_Section.Enum_TypeSection.SAB   '==================================================================
+
+
+                Case cls_Section.Enum_TypeSection.SFB   '==================================================================
+
+
+            End Select
+        End If
+
+    End Sub
+
     Private Sub RunCritereFlexionResistanceElastiqueVM(myBeam As cls_Poutre, iCombi As Integer, SigmaELU(,,) As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   25/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance en flexion par les critères de VM
         '----------------------------------------------------------------------------------------------------------
-        '   myBeam[E] :   Poutre traitée
-        '   iCombi  [E] :   Indice de la combinaison
-        '   SigmaELU[E] :   Contraintes normales aux ELU
+        '   myBeam      [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   SigmaELU    [E] :   Contraintes normales aux ELU
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -668,14 +888,9 @@
         Dim FydSup, FySup As Decimal
         Dim FydW, FyW As Decimal
         Dim FydInf, FyInf As Decimal
-        Dim Fck, Fcd As Decimal
-        Dim Fsk, Fsd As Decimal
+        Dim FydPlat, FyPlat As Decimal
 
         Dim iPro0 As Integer = myBeam.PtsSigma.iProfile(0)
-        Dim iBetonE0 As Integer = myBeam.PtsSigma.iBetonEnrob(0)
-        Dim iArmaE0 As Integer = myBeam.PtsSigma.iArmaEnrob(0)
-
-        Dim lEnrob As Boolean = myBeam.lEnrobage
 
         '--> Initialisation
 
@@ -686,21 +901,42 @@
         FyInf = myBeam.Section.FyInf
         FydInf = FyInf / myBeam.Param.Gamma.GammaM0
 
+        FyPlat = myBeam.Section.FySpd
+        FydPlat = FyPlat / myBeam.Param.Gamma.GammaM0
+
         '--> Calculs
 
         '# Contraintes dans le profilé
 
         If (iPro0 > -1) Then
-            '( Contrainte face externe de la semelle supérieure
-            RunCritereFlexionVM(myBeam, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
-            '( Contrainte face interne de la semelle supérieure
-            RunCritereFlexionVM(myBeam, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
-            '( Contrainte CdG de la section
-            RunCritereFlexionVM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
-            '( Contrainte face interne de la semelle inférieure
-            RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydInf, FydW), Me.CritereSigmaA)
-            '( Contrainte face externe de la semelle inférieure
-            RunCritereFlexionVM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.CritereSigmaA)
+
+            Select Case myBeam.Section.TypeSection
+                Case cls_Section.Enum_TypeSection.IFB_A '==================================================================
+                Case cls_Section.Enum_TypeSection.IFB_B '==================================================================
+                Case cls_Section.Enum_TypeSection.SAB   '==================================================================
+
+
+                Case cls_Section.Enum_TypeSection.SFB   '==================================================================
+
+                    '( Point 1 - Contrainte face externe de la semelle supérieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
+
+                    '( Point 2 - Contrainte face interne de la semelle supérieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
+
+                    '( Point 3 - Contrainte CdG de la section
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
+
+                    '( Point 4 - Contrainte face interne de la semelle inférieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydInf, FydW), Me.CritereSigmaA)
+
+                    '( Point 5 - Contrainte face externe de la semelle inférieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.CritereSigmaA)
+
+                    '( Point 6 - Contrainte face externe du plat inférieur 
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 5, SigmaELU, FydInf, Me.CritereSigmaA)
+
+            End Select
 
         End If
 

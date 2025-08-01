@@ -18,6 +18,12 @@ Public Class cls_OptionsCalcul
         EurocodesG2
     End Enum
 
+    Enum Enu_MReducPlatSlim
+        M1_ReducAire
+        M2_ReducEpaisseur
+        M3_ReducLimiteElasticite
+    End Enum
+
 #End Region
 
 #Region " Attributs "
@@ -59,6 +65,8 @@ Public Class cls_OptionsCalcul
 
     Public lMaitriseFissuration As Boolean          ' Indique si on effectue le calcul de maitrise de la fissuration
     Public FissureWk As Decimal                     ' Valeur maxi d'ouverture des fissures, en cas de maitrise de la fissuration
+
+    Public MethodReducPlatSlim As Enu_MReducPlatSlim ' Méthode de reduction des propriétés du support de dalle dans une section slim floor, pour tenir compte de la flexion transversale
 
 #End Region
 
@@ -120,6 +128,8 @@ Public Class cls_OptionsCalcul
 
         Me.lEnrobProp = True
 
+        '-- Réduction des slim floor : par défaut, méthode de l'Annexe I des EN G2
+        Me.MethodReducPlatSlim = MethodeReducPlatSlimFloor.M3_ReducLimiteElasticite
     End Sub
 
 #End Region

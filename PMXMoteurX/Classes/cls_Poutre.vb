@@ -1,7 +1,8 @@
 ﻿Imports System.ComponentModel
-Imports CTICM_RDM
-Imports CTICM_DATA_DLLS
 Imports System.Security.Policy
+Imports CTICM_DATA_DLLS
+Imports CTICM_RDM
+Imports Microsoft.VisualBasic.Logging
 
 Public Class cls_Poutre
 
@@ -5714,6 +5715,117 @@ Public Class cls_Poutre
         End If
 
     End Sub
+
+    Public Function VerificationsELUDispo() As Boolean
+        '-------------------------------------------------------------------------------------
+        '   31/07/25 :  Création - Version 1.20 - POM
+        '-------------------------------------------------------------------------------------
+        '   Indique si les vérifications ont été effectuées et sont disponibles
+        '-------------------------------------------------------------------------------------
+
+        Dim lVerifOK As Boolean = False
+
+        Select Case Me.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
+                lVerifOK = VerificationELUDispoACIER()
+            Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                lVerifOK = VerificationELUDispoMIXTE()
+            Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SAB
+                lVerifOK = VerificationELUDispoSlimACIER()
+            Case cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SFBmixte, cls_Section.Enum_TypeSection.SABmixte
+
+        End Select
+
+        Return lVerifOK
+    End Function
+
+    Private Function VerificationELUDispoACIER() As Boolean
+        '-------------------------------------------------------------------------------------
+        '   31/07/25 :  Création - Version 1.20 - POM
+        '-------------------------------------------------------------------------------------
+        '   Indique si les vérifications ont été effectuées et sont disponibles
+        '   Pour une section acier
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lOK As Boolean = True
+
+        '--> Traitement
+
+        If Me.VerifAcier Is Nothing Then
+            lOK = False
+        Else
+            If Me.VerifAcier.GetUpperBound(0) < 0 Then
+                lOK = False
+            Else
+                If Me.VerifAcier(0) Is Nothing Then lOK = False
+            End If
+        End If
+
+        Return lOK
+    End Function
+
+    Private Function VerificationELUDispoMIXTE() As Boolean
+        '-------------------------------------------------------------------------------------
+        '   31/07/25 :  Création - Version 1.20 - POM
+        '-------------------------------------------------------------------------------------
+        '   Indique si les vérifications ont été effectuées et sont disponibles
+        '   Pour une section mixte
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lOK As Boolean = True
+
+        '--> Traitement
+
+        If Me.VerifMixte Is Nothing Then
+            lOK = False
+        Else
+            If Me.VerifMixte.GetUpperBound(0) < 0 Then
+                lOK = False
+            Else
+                If Me.VerifMixte(0) Is Nothing Then lOK = False
+            End If
+        End If
+
+        If lOK Then
+
+            lOK = Me.VerifMixte(0).CriteresInitialises
+
+        End If
+
+
+        Return lOK
+    End Function
+
+    Private Function VerificationELUDispoSlimACIER() As Boolean
+        '-------------------------------------------------------------------------------------
+        '   31/07/25 :  Création - Version 1.20 - POM
+        '-------------------------------------------------------------------------------------
+        '   Indique si les vérifications ont été effectuées et sont disponibles
+        '   Pour une section slim floor acier
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lOK As Boolean = True
+
+        '--> Traitement
+
+        If Me.VerifSlimAcier Is Nothing Then
+            lOK = False
+        Else
+            If Me.VerifSlimAcier.GetUpperBound(0) < 0 Then
+                lOK = False
+            Else
+                If Me.VerifSlimAcier(0) Is Nothing Then lOK = False
+            End If
+        End If
+
+        Return lOK
+    End Function
 
     Public Function VerificationsELUDispo(vlMixte As Boolean) As Boolean
         '-------------------------------------------------------------------------------------

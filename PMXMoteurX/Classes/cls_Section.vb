@@ -230,6 +230,41 @@ Public Class cls_Section
 
 #End Region
 
+#Region " Propriétés section slim floor "
+
+    Public ReadOnly Property LargeurAppuiSlimDallePleine As Decimal
+        '-------------------------------------------------------------------------------------------------------------------------------------
+        '   31/07/25 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------------------------
+        '   Renvoie la largeur d'appui sur le plat support de dalle d'une section slim floor,
+        '   Dans le cas d'une dalle pleine
+        '-------------------------------------------------------------------------------------------------------------------------------------
+        '-------------------------------------------------------------------------------------------------------------------------------------
+
+        Get
+
+            Dim dApp As Decimal
+
+            With Me.ProfilA
+                Select Case Me.ProfilA.typeProfileAcier
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                        dApp = (.Plat_b - .Bfi) / 3
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                        dApp = (.Plat_b - .Bfs) / 3
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                        dApp = (.Bfi - .Plat_b) / 3
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                        dApp = (.Bfi - .Bfs) / 3
+                End Select
+            End With
+
+            Return dApp
+        End Get
+    End Property
+
+
+#End Region
+
 #Region " Propriétés plastiques de la section "
 
     Public Sub ProprietesPlastiquesMyy_Usuel(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
