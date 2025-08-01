@@ -123,7 +123,6 @@
 
 #End Region
 
-
 #Region "    Gestion des boutons - Paint Overrides "
 
     Private Sub PomBoutonsClick(ByVal sender As System.Object, ByVal e As System.EventArgs) _
@@ -180,6 +179,5 @@
     End Sub
 
 #End Region
-
 
 End Class

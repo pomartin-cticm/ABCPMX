@@ -891,10 +891,9 @@ Public Module Mod_Declarations
 
 #End Region
 
-#Region " Gestion des langues et messages erreurs communs "
+#Region " Gestion des informations et messages erreurs communs "
 
-    'Public NomChargements() As String           ' Nom des cas de charge utilisateur
-    'Public NomChargesA() As String              ' Nom des cas de charge analyse
+    Public InfoW As New Cls_InfoW
 
     Public msgErreurs As New Dictionary(Of String, String)
 

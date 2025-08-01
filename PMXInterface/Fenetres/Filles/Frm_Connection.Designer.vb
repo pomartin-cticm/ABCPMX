@@ -37,9 +37,13 @@ Partial Class Frm_Connection
         Me.pan_ImgConnection = New System.Windows.Forms.Panel()
         Me.img_Connection = New System.Windows.Forms.PictureBox()
         Me.pan_SaisieConnection = New System.Windows.Forms.Panel()
+        Me.pan_Commandes = New System.Windows.Forms.Panel()
         Me.img_info = New System.Windows.Forms.PictureBox()
         Me.lbl_EtaSymbol = New System.Windows.Forms.Label()
         Me.lbl_DegreConnex = New System.Windows.Forms.Label()
+        Me.etq_Somme = New System.Windows.Forms.Label()
+        Me.btn_Supprimer = New System.Windows.Forms.Button()
+        Me.btn_Ajouter = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btn_Precedent = New System.Windows.Forms.Button()
         Me.btn_Suivant = New System.Windows.Forms.Button()
@@ -47,21 +51,19 @@ Partial Class Frm_Connection
         Me.cmb_Travee = New System.Windows.Forms.ComboBox()
         Me.chk_AutomaticDesign = New System.Windows.Forms.CheckBox()
         Me.txt_Portee = New System.Windows.Forms.TextBox()
-        Me.txt_EspLongi_I3 = New System.Windows.Forms.TextBox()
-        Me.txt_Largeur_I3 = New System.Windows.Forms.TextBox()
-        Me.txt_EspLongi_I2 = New System.Windows.Forms.TextBox()
-        Me.txt_Largeur_I2 = New System.Windows.Forms.TextBox()
-        Me.txt_EspLongi_I1 = New System.Windows.Forms.TextBox()
-        Me.txt_Largeur_I1 = New System.Windows.Forms.TextBox()
+        Me.pan_ObjetsConnexion = New System.Windows.Forms.Panel()
         Me.cmb_EspLongi_I3 = New System.Windows.Forms.ComboBox()
-        Me.cmb_NbRow_I3 = New System.Windows.Forms.ComboBox()
         Me.cmb_EspLongi_I2 = New System.Windows.Forms.ComboBox()
         Me.cmb_EspLongi_I1 = New System.Windows.Forms.ComboBox()
+        Me.txt_Largeur_I3 = New System.Windows.Forms.TextBox()
+        Me.txt_Largeur_I2 = New System.Windows.Forms.TextBox()
+        Me.txt_Largeur_I1 = New System.Windows.Forms.TextBox()
+        Me.cmb_NbRow_I3 = New System.Windows.Forms.ComboBox()
+        Me.txt_EspLongi_I3 = New System.Windows.Forms.TextBox()
+        Me.txt_EspLongi_I2 = New System.Windows.Forms.TextBox()
+        Me.txt_EspLongi_I1 = New System.Windows.Forms.TextBox()
         Me.cmb_NbRow_I2 = New System.Windows.Forms.ComboBox()
         Me.cmb_NbRow_I1 = New System.Windows.Forms.ComboBox()
-        Me.etq_Somme = New System.Windows.Forms.Label()
-        Me.btn_Supprimer = New System.Windows.Forms.Button()
-        Me.btn_Ajouter = New System.Windows.Forms.Button()
         Me.txt_EspacementLongi = New System.Windows.Forms.TextBox()
         Me.txt_NbRows = New System.Windows.Forms.TextBox()
         Me.txt_I3 = New System.Windows.Forms.TextBox()
@@ -89,8 +91,7 @@ Partial Class Frm_Connection
         Me.img_hsc = New System.Windows.Forms.PictureBox()
         Me.cmb_goujons = New System.Windows.Forms.ComboBox()
         Me.ErrorProvider_Frm_Connection = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.pan_ObjetsConnexion = New System.Windows.Forms.Panel()
-        Me.pan_Commandes = New System.Windows.Forms.Panel()
+        Me.img_TestError = New System.Windows.Forms.PictureBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -101,8 +102,10 @@ Partial Class Frm_Connection
         Me.pan_ImgConnection.SuspendLayout()
         CType(Me.img_Connection, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_SaisieConnection.SuspendLayout()
+        Me.pan_Commandes.SuspendLayout()
         CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
+        Me.pan_ObjetsConnexion.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
         CType(Me.img_Stud, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -112,8 +115,7 @@ Partial Class Frm_Connection
         CType(Me.img_d, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_hsc, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider_Frm_Connection, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_ObjetsConnexion.SuspendLayout()
-        Me.pan_Commandes.SuspendLayout()
+        CType(Me.img_TestError, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -277,6 +279,7 @@ Partial Class Frm_Connection
         '
         Me.pan_SaisieConnection.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieConnection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieConnection.Controls.Add(Me.img_TestError)
         Me.pan_SaisieConnection.Controls.Add(Me.pan_Commandes)
         Me.pan_SaisieConnection.Controls.Add(Me.Panel1)
         Me.pan_SaisieConnection.Controls.Add(Me.chk_AutomaticDesign)
@@ -288,6 +291,19 @@ Partial Class Frm_Connection
         Me.pan_SaisieConnection.Name = "pan_SaisieConnection"
         Me.pan_SaisieConnection.Size = New System.Drawing.Size(532, 195)
         Me.pan_SaisieConnection.TabIndex = 1
+        '
+        'pan_Commandes
+        '
+        Me.pan_Commandes.Controls.Add(Me.img_info)
+        Me.pan_Commandes.Controls.Add(Me.lbl_EtaSymbol)
+        Me.pan_Commandes.Controls.Add(Me.lbl_DegreConnex)
+        Me.pan_Commandes.Controls.Add(Me.etq_Somme)
+        Me.pan_Commandes.Controls.Add(Me.btn_Supprimer)
+        Me.pan_Commandes.Controls.Add(Me.btn_Ajouter)
+        Me.pan_Commandes.Location = New System.Drawing.Point(386, 80)
+        Me.pan_Commandes.Name = "pan_Commandes"
+        Me.pan_Commandes.Size = New System.Drawing.Size(133, 109)
+        Me.pan_Commandes.TabIndex = 82
         '
         'img_info
         '
@@ -318,6 +334,36 @@ Partial Class Frm_Connection
         Me.lbl_DegreConnex.TabIndex = 78
         Me.lbl_DegreConnex.Text = "lbl_DegreConnex"
         Me.lbl_DegreConnex.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'etq_Somme
+        '
+        Me.etq_Somme.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.etq_Somme.Location = New System.Drawing.Point(3, 6)
+        Me.etq_Somme.Name = "etq_Somme"
+        Me.etq_Somme.Size = New System.Drawing.Size(100, 14)
+        Me.etq_Somme.TabIndex = 60
+        Me.etq_Somme.Text = "etq_Somme"
+        Me.etq_Somme.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'btn_Supprimer
+        '
+        Me.btn_Supprimer.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_Supprimer.Location = New System.Drawing.Point(5, 76)
+        Me.btn_Supprimer.Name = "btn_Supprimer"
+        Me.btn_Supprimer.Size = New System.Drawing.Size(96, 24)
+        Me.btn_Supprimer.TabIndex = 59
+        Me.btn_Supprimer.Text = "btn_Supprimer"
+        Me.btn_Supprimer.UseVisualStyleBackColor = True
+        '
+        'btn_Ajouter
+        '
+        Me.btn_Ajouter.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_Ajouter.Location = New System.Drawing.Point(5, 46)
+        Me.btn_Ajouter.Name = "btn_Ajouter"
+        Me.btn_Ajouter.Size = New System.Drawing.Size(96, 24)
+        Me.btn_Ajouter.TabIndex = 58
+        Me.btn_Ajouter.Text = "btn_Ajouter"
+        Me.btn_Ajouter.UseVisualStyleBackColor = True
         '
         'Panel1
         '
@@ -394,53 +440,31 @@ Partial Class Frm_Connection
         Me.txt_Portee.Text = "txt_Portee"
         Me.txt_Portee.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
-        'txt_EspLongi_I3
+        'pan_ObjetsConnexion
         '
-        Me.txt_EspLongi_I3.Location = New System.Drawing.Point(287, 89)
-        Me.txt_EspLongi_I3.Name = "txt_EspLongi_I3"
-        Me.txt_EspLongi_I3.Size = New System.Drawing.Size(66, 20)
-        Me.txt_EspLongi_I3.TabIndex = 74
-        Me.txt_EspLongi_I3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'txt_Largeur_I3
-        '
-        Me.txt_Largeur_I3.Location = New System.Drawing.Point(287, 22)
-        Me.txt_Largeur_I3.Name = "txt_Largeur_I3"
-        Me.txt_Largeur_I3.Size = New System.Drawing.Size(66, 20)
-        Me.txt_Largeur_I3.TabIndex = 74
-        Me.txt_Largeur_I3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'txt_EspLongi_I2
-        '
-        Me.txt_EspLongi_I2.Location = New System.Drawing.Point(220, 89)
-        Me.txt_EspLongi_I2.Name = "txt_EspLongi_I2"
-        Me.txt_EspLongi_I2.Size = New System.Drawing.Size(66, 20)
-        Me.txt_EspLongi_I2.TabIndex = 74
-        Me.txt_EspLongi_I2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'txt_Largeur_I2
-        '
-        Me.txt_Largeur_I2.Location = New System.Drawing.Point(220, 22)
-        Me.txt_Largeur_I2.Name = "txt_Largeur_I2"
-        Me.txt_Largeur_I2.Size = New System.Drawing.Size(66, 20)
-        Me.txt_Largeur_I2.TabIndex = 74
-        Me.txt_Largeur_I2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'txt_EspLongi_I1
-        '
-        Me.txt_EspLongi_I1.Location = New System.Drawing.Point(153, 89)
-        Me.txt_EspLongi_I1.Name = "txt_EspLongi_I1"
-        Me.txt_EspLongi_I1.Size = New System.Drawing.Size(66, 20)
-        Me.txt_EspLongi_I1.TabIndex = 74
-        Me.txt_EspLongi_I1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'txt_Largeur_I1
-        '
-        Me.txt_Largeur_I1.Location = New System.Drawing.Point(153, 22)
-        Me.txt_Largeur_I1.Name = "txt_Largeur_I1"
-        Me.txt_Largeur_I1.Size = New System.Drawing.Size(66, 20)
-        Me.txt_Largeur_I1.TabIndex = 74
-        Me.txt_Largeur_I1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.pan_ObjetsConnexion.Controls.Add(Me.cmb_EspLongi_I3)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.cmb_EspLongi_I2)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.cmb_EspLongi_I1)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_Largeur_I3)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_Largeur_I2)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_Largeur_I1)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.cmb_NbRow_I3)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_EspLongi_I3)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_EspLongi_I2)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_EspLongi_I1)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.cmb_NbRow_I2)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.cmb_NbRow_I1)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_EspacementLongi)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_NbRows)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_I3)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_I2)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_I1)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_Largeur)
+        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_Indice)
+        Me.pan_ObjetsConnexion.Location = New System.Drawing.Point(19, 78)
+        Me.pan_ObjetsConnexion.Name = "pan_ObjetsConnexion"
+        Me.pan_ObjetsConnexion.Size = New System.Drawing.Size(364, 112)
+        Me.pan_ObjetsConnexion.TabIndex = 81
         '
         'cmb_EspLongi_I3
         '
@@ -450,15 +474,6 @@ Partial Class Frm_Connection
         Me.cmb_EspLongi_I3.Name = "cmb_EspLongi_I3"
         Me.cmb_EspLongi_I3.Size = New System.Drawing.Size(66, 21)
         Me.cmb_EspLongi_I3.TabIndex = 63
-        '
-        'cmb_NbRow_I3
-        '
-        Me.cmb_NbRow_I3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_NbRow_I3.FormattingEnabled = True
-        Me.cmb_NbRow_I3.Location = New System.Drawing.Point(288, 41)
-        Me.cmb_NbRow_I3.Name = "cmb_NbRow_I3"
-        Me.cmb_NbRow_I3.Size = New System.Drawing.Size(66, 21)
-        Me.cmb_NbRow_I3.TabIndex = 63
         '
         'cmb_EspLongi_I2
         '
@@ -478,6 +493,63 @@ Partial Class Frm_Connection
         Me.cmb_EspLongi_I1.Size = New System.Drawing.Size(66, 21)
         Me.cmb_EspLongi_I1.TabIndex = 61
         '
+        'txt_Largeur_I3
+        '
+        Me.txt_Largeur_I3.Location = New System.Drawing.Point(287, 22)
+        Me.txt_Largeur_I3.Name = "txt_Largeur_I3"
+        Me.txt_Largeur_I3.Size = New System.Drawing.Size(66, 20)
+        Me.txt_Largeur_I3.TabIndex = 74
+        Me.txt_Largeur_I3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_Largeur_I2
+        '
+        Me.txt_Largeur_I2.Location = New System.Drawing.Point(220, 22)
+        Me.txt_Largeur_I2.Name = "txt_Largeur_I2"
+        Me.txt_Largeur_I2.Size = New System.Drawing.Size(66, 20)
+        Me.txt_Largeur_I2.TabIndex = 74
+        Me.txt_Largeur_I2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_Largeur_I1
+        '
+        Me.txt_Largeur_I1.Location = New System.Drawing.Point(153, 22)
+        Me.txt_Largeur_I1.Name = "txt_Largeur_I1"
+        Me.txt_Largeur_I1.Size = New System.Drawing.Size(66, 20)
+        Me.txt_Largeur_I1.TabIndex = 74
+        Me.txt_Largeur_I1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'cmb_NbRow_I3
+        '
+        Me.cmb_NbRow_I3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_NbRow_I3.FormattingEnabled = True
+        Me.cmb_NbRow_I3.Location = New System.Drawing.Point(288, 41)
+        Me.cmb_NbRow_I3.Name = "cmb_NbRow_I3"
+        Me.cmb_NbRow_I3.Size = New System.Drawing.Size(66, 21)
+        Me.cmb_NbRow_I3.TabIndex = 63
+        '
+        'txt_EspLongi_I3
+        '
+        Me.txt_EspLongi_I3.Location = New System.Drawing.Point(287, 89)
+        Me.txt_EspLongi_I3.Name = "txt_EspLongi_I3"
+        Me.txt_EspLongi_I3.Size = New System.Drawing.Size(66, 20)
+        Me.txt_EspLongi_I3.TabIndex = 74
+        Me.txt_EspLongi_I3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_EspLongi_I2
+        '
+        Me.txt_EspLongi_I2.Location = New System.Drawing.Point(220, 89)
+        Me.txt_EspLongi_I2.Name = "txt_EspLongi_I2"
+        Me.txt_EspLongi_I2.Size = New System.Drawing.Size(66, 20)
+        Me.txt_EspLongi_I2.TabIndex = 74
+        Me.txt_EspLongi_I2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_EspLongi_I1
+        '
+        Me.txt_EspLongi_I1.Location = New System.Drawing.Point(153, 89)
+        Me.txt_EspLongi_I1.Name = "txt_EspLongi_I1"
+        Me.txt_EspLongi_I1.Size = New System.Drawing.Size(66, 20)
+        Me.txt_EspLongi_I1.TabIndex = 74
+        Me.txt_EspLongi_I1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
         'cmb_NbRow_I2
         '
         Me.cmb_NbRow_I2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
@@ -495,36 +567,6 @@ Partial Class Frm_Connection
         Me.cmb_NbRow_I1.Name = "cmb_NbRow_I1"
         Me.cmb_NbRow_I1.Size = New System.Drawing.Size(66, 21)
         Me.cmb_NbRow_I1.TabIndex = 61
-        '
-        'etq_Somme
-        '
-        Me.etq_Somme.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.etq_Somme.Location = New System.Drawing.Point(3, 6)
-        Me.etq_Somme.Name = "etq_Somme"
-        Me.etq_Somme.Size = New System.Drawing.Size(100, 14)
-        Me.etq_Somme.TabIndex = 60
-        Me.etq_Somme.Text = "etq_Somme"
-        Me.etq_Somme.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'btn_Supprimer
-        '
-        Me.btn_Supprimer.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn_Supprimer.Location = New System.Drawing.Point(5, 76)
-        Me.btn_Supprimer.Name = "btn_Supprimer"
-        Me.btn_Supprimer.Size = New System.Drawing.Size(96, 24)
-        Me.btn_Supprimer.TabIndex = 59
-        Me.btn_Supprimer.Text = "btn_Supprimer"
-        Me.btn_Supprimer.UseVisualStyleBackColor = True
-        '
-        'btn_Ajouter
-        '
-        Me.btn_Ajouter.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn_Ajouter.Location = New System.Drawing.Point(5, 46)
-        Me.btn_Ajouter.Name = "btn_Ajouter"
-        Me.btn_Ajouter.Size = New System.Drawing.Size(96, 24)
-        Me.btn_Ajouter.TabIndex = 58
-        Me.btn_Ajouter.Text = "btn_Ajouter"
-        Me.btn_Ajouter.UseVisualStyleBackColor = True
         '
         'txt_EspacementLongi
         '
@@ -818,44 +860,15 @@ Partial Class Frm_Connection
         '
         Me.ErrorProvider_Frm_Connection.ContainerControl = Me
         '
-        'pan_ObjetsConnexion
+        'img_TestError
         '
-        Me.pan_ObjetsConnexion.Controls.Add(Me.cmb_EspLongi_I3)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.cmb_EspLongi_I2)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.cmb_EspLongi_I1)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_Largeur_I3)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_Largeur_I2)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_Largeur_I1)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.cmb_NbRow_I3)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_EspLongi_I3)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_EspLongi_I2)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_EspLongi_I1)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.cmb_NbRow_I2)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.cmb_NbRow_I1)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_EspacementLongi)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_NbRows)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_I3)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_I2)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_I1)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_Largeur)
-        Me.pan_ObjetsConnexion.Controls.Add(Me.txt_Indice)
-        Me.pan_ObjetsConnexion.Location = New System.Drawing.Point(19, 78)
-        Me.pan_ObjetsConnexion.Name = "pan_ObjetsConnexion"
-        Me.pan_ObjetsConnexion.Size = New System.Drawing.Size(364, 112)
-        Me.pan_ObjetsConnexion.TabIndex = 81
-        '
-        'pan_Commandes
-        '
-        Me.pan_Commandes.Controls.Add(Me.img_info)
-        Me.pan_Commandes.Controls.Add(Me.lbl_EtaSymbol)
-        Me.pan_Commandes.Controls.Add(Me.lbl_DegreConnex)
-        Me.pan_Commandes.Controls.Add(Me.etq_Somme)
-        Me.pan_Commandes.Controls.Add(Me.btn_Supprimer)
-        Me.pan_Commandes.Controls.Add(Me.btn_Ajouter)
-        Me.pan_Commandes.Location = New System.Drawing.Point(386, 80)
-        Me.pan_Commandes.Name = "pan_Commandes"
-        Me.pan_Commandes.Size = New System.Drawing.Size(133, 109)
-        Me.pan_Commandes.TabIndex = 82
+        Me.img_TestError.Image = CType(resources.GetObject("img_TestError.Image"), System.Drawing.Image)
+        Me.img_TestError.Location = New System.Drawing.Point(490, 13)
+        Me.img_TestError.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_TestError.Name = "img_TestError"
+        Me.img_TestError.Size = New System.Drawing.Size(20, 20)
+        Me.img_TestError.TabIndex = 83
+        Me.img_TestError.TabStop = False
         '
         'Frm_Connection
         '
@@ -883,8 +896,11 @@ Partial Class Frm_Connection
         CType(Me.img_Connection, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_SaisieConnection.ResumeLayout(False)
         Me.pan_SaisieConnection.PerformLayout()
+        Me.pan_Commandes.ResumeLayout(False)
         CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
+        Me.pan_ObjetsConnexion.ResumeLayout(False)
+        Me.pan_ObjetsConnexion.PerformLayout()
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
@@ -896,9 +912,7 @@ Partial Class Frm_Connection
         CType(Me.img_d, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_hsc, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider_Frm_Connection, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_ObjetsConnexion.ResumeLayout(False)
-        Me.pan_ObjetsConnexion.PerformLayout()
-        Me.pan_Commandes.ResumeLayout(False)
+        CType(Me.img_TestError, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -970,4 +984,5 @@ Partial Class Frm_Connection
     Friend WithEvents lbl_Stud As Label
     Friend WithEvents pan_ObjetsConnexion As Panel
     Friend WithEvents pan_Commandes As Panel
+    Friend WithEvents img_TestError As PictureBox
 End Class

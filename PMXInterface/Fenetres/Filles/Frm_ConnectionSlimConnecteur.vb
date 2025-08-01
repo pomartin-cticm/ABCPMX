@@ -301,10 +301,10 @@ Public Class Frm_ConnectionSlimConnecteur
 
     Private Sub PublieInfoArmaConnex()
 
-        InfoW_Initialise()
-        InfoW_Add(strInfoW_ArmaConnex)
+        InfoW.Initialise()
+        InfoW.AddInfo(strInfoW_ArmaConnex)
 
-        InfosW_Publie()
+        InfoW.Publie()
 
     End Sub
 

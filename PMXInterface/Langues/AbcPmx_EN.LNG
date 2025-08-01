@@ -682,6 +682,11 @@ FIRELATER				= It will be released in a future version.
 CONFIRMBEAMREMOVE		= Confirm the removal of the beam $ from the project
 ERRMISSINGDECK			= Steel deck $ is missing in the database
 ERRMISSINGPSLAB			= Prefabricated slab $ is not recognized by the software 
+WCONTACT				= Contact
+WWARNING				= Warning
+WERROR					= Error
+WINFO					= Information
+WERRORLNG				= Language file error
 
 #FRM_MODULARRATIOTOOL
 TITLE					= Modular ratio tool

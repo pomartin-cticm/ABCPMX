@@ -1918,20 +1918,38 @@ Module Mod_Outils
         '   lError      [E] :   Indique si erreur ou notification
         '-------------------------------------------------------------------------------------------------------------
 
-        Dim mySource As String = ""
-        If ModSource <> "" Then mySource = ModSource
-        If Routine <> "" Then
-            If ModSource <> "" Then mySource += " | "
-            mySource += Routine
+        InfoW.Initialise()
+
+        If ModSource.Trim.Length > 0 Then
+            InfoW.AddInfo("Module : " & ModSource)
         End If
 
-        Frm_ErreursMessages.Source = mySource
-        Frm_ErreursMessages.Message = myMessage
+        If Routine.Trim.Length > 0 Then
+            InfoW.AddInfo("Sub : " & Routine)
+        End If
 
-        Frm_ErreursMessages.lError = lError
+        InfoW.AddInfo("ERROR : " & myMessage)
+        InfoW.linfo = False
 
-        Frm_ErreursMessages.ShowDialog()
-        Frm_ErreursMessages.Dispose()
+        InfoW.Publie()
+
+
+
+
+        'Dim mySource As String = ""
+        'If ModSource <> "" Then mySource = ModSource
+        'If Routine <> "" Then
+        '    If ModSource <> "" Then mySource += " | "
+        '    mySource += Routine
+        'End If
+
+        'Frm_ErreursMessages.Source = mySource
+        'Frm_ErreursMessages.Message = myMessage
+
+        'Frm_ErreursMessages.lError = lError
+
+        'Frm_ErreursMessages.ShowDialog()
+        'Frm_ErreursMessages.Dispose()
 
     End Sub
 
@@ -1947,11 +1965,13 @@ Module Mod_Outils
 
         Dim myMsg As String
 
-        If LogicielInfo.Maitre = EnuMaitre.CTICM Then
-            myMsg = "Erreur affichage du fichier langue :" & Chr(13) & " Contactez le support !"
-        Else
-            myMsg = "Error display language:" & Chr(13) & " Contact support "
-        End If
+        'If LogicielInfo.Maitre = EnuMaitre.CTICM Then
+        '    myMsg = "Erreur affichage du fichier langue :" & Chr(13) & " Contactez le support !"
+        'Else
+        '    myMsg = "Error display language:" & Chr(13) & " Contact support "
+        'End If
+
+        myMsg = InfoW.BlocF("ERRORLNG")
 
         GestionErrorsPMX(ModSource, Routine, myMsg, True)
 

@@ -333,6 +333,12 @@ Public Class Frm_PMX
                 msgErreurs.Add("BACABSENT", Bloc("ERRMISSINGDECK"))
                 msgErreurs.Add("COFRAABSENT", Bloc("ERRMISSINGPSLAB"))
 
+                InfoW.BlocF.Add("WARNING", Bloc("WWARNING"))
+                InfoW.BlocF.Add("INFO", Bloc("WINFO"))
+                InfoW.BlocF.Add("ERROR", Bloc("WERROR"))
+                InfoW.BlocF.Add("CONTACT", Bloc("WCONTACT"))
+                InfoW.BlocF.Add("ERRORLNG", Bloc("WERRORLNG"))
+
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangue")

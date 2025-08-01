@@ -684,6 +684,11 @@ FIRELATER				= Il sera fourni dans une future version.
 CONFIRMBEAMREMOVE		= Confirmer la suppression de la poutre $ du projet
 ERRMISSINGDECK			= Le profil $ n'est pas disponible dans la base de données
 ERRMISSINGPSLAB			= Le plancher préfabriqué $ n'est pas reconnu par le logiciel 
+WCONTACT				= Contact
+WWARNING				= Attention
+WERROR					= Erreur
+WINFO					= Information
+WERRORLNG				= Erreur d'affichage du fichier langue / fichier langue incomplet
 
 #FRM_MODULARRATIOTOOL
 TITLE					= Options coefficient d'équivalence 

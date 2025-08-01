@@ -297,6 +297,7 @@ Public Class Frm_Connection
                 strStud = Bloc("STUDS")
                 strRib = Bloc("RIB")
                 strRibs = Bloc("RIBS")
+                'strRibs = Bloc("RIBSF")
 
                 WarningMessage_CmbTravee = Bloc("WARNING_CMBTRAVEE")
 
@@ -448,6 +449,7 @@ Public Class Frm_Connection
         Me.txt_fy.BackColor = CouleurReadOnly
         Me.txt_fu.BackColor = CouleurReadOnly
 
+        Me.img_TestError.Visible = LogicielOptions.lExpert
     End Sub
 
     ''' <summary>
@@ -1539,9 +1541,6 @@ Public Class Frm_Connection
         Return lOk
     End Function
 
-
-
-
 #End Region
 
 #Region " Infos W "
@@ -1556,11 +1555,17 @@ Public Class Frm_Connection
 
     Private Sub PublieInfoDegreConnex()
 
-        InfoW_Initialise()
-        InfoW_Add(strInfoW_DegreConnex)
+        InfoW.Initialise()
+        InfoW.AddInfo(strInfoW_DegreConnex)
         'InfoW_Add("Le degré de connexion est calculé à mi-travée de la poutre, en supposant que la poutre en entièrement sous moment positif")
 
-        InfosW_Publie()
+        InfoW.Publie()
+
+    End Sub
+
+    Private Sub img_TestError_Click(sender As Object, e As EventArgs) Handles img_TestError.Click
+
+        GestionErrorsPMX("Frm_Connection", "Click", "Test erreur", True)
 
     End Sub
 
