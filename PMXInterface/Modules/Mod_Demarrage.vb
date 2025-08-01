@@ -606,7 +606,7 @@ Public Module Mod_Demarrage
                 Next
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                myDalle.Ep_td = 250 / 1000
+                myDalle.Ep_td = 270 / 1000
                 myDalle.Ep_th = 0 ' sécurité supplémentaire 
                 myDalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
                 myDalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu
@@ -615,7 +615,7 @@ Public Module Mod_Demarrage
                 Next
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                myDalle.Ep_td = 250 / 1000
+                myDalle.Ep_td = 270 / 1000
                 myDalle.Ep_th = 0 ' sécurité supplémentaire 
                 myDalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
                 myDalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu
@@ -642,7 +642,7 @@ Public Module Mod_Demarrage
         '--------------------------------------------------------------------------------
         '   Initialisation des paramètres de calcul d'une poutre (avant lancement des calculs)
         '--------------------------------------------------------------------------------
-        '   MyPoutre        [E] :   Poutre à initialiser
+        '   myBeam        [E] :   Poutre à initialiser
         '--------------------------------------------------------------------------------
 
         ' A COMPLETER
@@ -654,7 +654,7 @@ Public Module Mod_Demarrage
 
     End Sub
 
-    Public Sub InitialisePoutreDeBases(MyPoutre As cls_Poutre, ByRef lOK As Boolean)
+    Public Sub InitialisePoutreDeBases(myBeam As cls_Poutre, ByRef lOK As Boolean)
         '--------------------------------------------------------------------------------
         '   14/06/23 :  Création - POM - V1.00
         '--------------------------------------------------------------------------------
@@ -662,146 +662,103 @@ Public Module Mod_Demarrage
         '   Laminés : section et acier
         '   PRS :   acier
         '--------------------------------------------------------------------------------
-        '   MyPoutre        [E] :   Poutre à initialiser
-        '
+        '   myBeam          [E] :   Poutre à initialiser
         '   lOK             [S] :   Indique si on a pu trouver un acier compatible
         '--------------------------------------------------------------------------------
 
         '--> Déclaration
 
         Dim lTrouve As Boolean
+        Dim lSlim As Boolean = myBeam.lSlimFloor
+        Dim lSlimSAB As Boolean = myBeam.Section.lSlimFloor_SAB
 
         '--> Traitement
 
-        TransfertProfileDeBase(MyPoutre.Section.ProfilA, MyPoutre.Section.ProfilA.Gamme, MyPoutre.Section.ProfilA.NomProfile, lOK)
+        TransfertProfileDeBase(myBeam.Section.ProfilA, myBeam.Section.ProfilA.Gamme, myBeam.Section.ProfilA.NomProfile,
+                               lSlim, lSlimSAB, lOK)
 
-        'AJOUT GUD
-        ' --> Sécurité supplémentaire pour s'assurer que les valeurs qui n'ont pas de sens restent égales à 0
+        NettoieParametresProfile(myBeam.Section.ProfilA)
 
-        Dim ha_loc, hb_loc, bfs_loc, tfs_loc, rcs_loc, bfi_loc, tfi_loc, rci_loc, tw_loc, aw_loc, plat_b_loc, plat_t_loc As Decimal
-        With MyPoutre.Section.ProfilA
-            ha_loc = .ha
-            hb_loc = .hb
-            bfs_loc = .Bfs
-            tfs_loc = .Tfs
-            rcs_loc = .Rcs
-            bfi_loc = .Bfi
-            tfi_loc = .Tfi
-            rci_loc = .Rci
-            tw_loc = .Tw
-            aw_loc = .aW
-            plat_b_loc = .Plat_b
-            plat_t_loc = .Plat_t
-        End With
+        AssocieAcierCompatible(myBeam, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve)
+        If myBeam.lSlimFloor Then _
+        InitialiseAcierPlats(myBeam.Section.AcierPlat)
 
-        With MyPoutre.Section.ProfilA
+        myBeam.Dalle.ThetaRd = OptionsScope.ThetaH
+
+    End Sub
+
+    Private Sub NettoieParametresProfile(ByRef myProf As cls_ProfilA)
+        '----------------------------------------------------------------------------------------------
+        '   01/08/25 :  Création - POM - V1.20
+        '----------------------------------------------------------------------------------------------
+        '   On nettoie les paramètres de profilé pour s'assurer que les valeurs non pertinentes sont à zero
+        '----------------------------------------------------------------------------------------------
+        '   myProf      [E/S] : Profilé à nettoyer
+        '----------------------------------------------------------------------------------------------
+
+        With myProf
             Select Case .typeProfileAcier
                 Case cls_ProfilA.Enum_TypeSectionAcier.Lamine
-                    .ha = ha_loc
-                    .hb = hb_loc
-                    .Bfs = bfs_loc
-                    .Tfs = tfs_loc
-                    .Rcs = rcs_loc
-                    .Bfi = bfi_loc
-                    .Tfi = tfi_loc
-                    .Rci = rci_loc
-                    .Tw = tw_loc
+
                     .aW = 0
                     .Plat_b = 0
                     .Plat_t = 0
+
                 Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
-                    .ha = ha_loc
+
                     .hb = 0
-                    .Bfs = bfs_loc / 2
-                    .Tfs = tfs_loc
                     .Rcs = 0
-                    .Bfi = bfi_loc
-                    .Tfi = tfi_loc
                     .Rci = 0
-                    .Tw = tw_loc
-                    .aW = Math.Floor(tw_loc / 2)
+
+                    .aW = Math.Floor(.Tw / 2)
                     .Plat_b = 0
                     .Plat_t = 0
+
                 Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
-                    .ha = ha_loc
+
                     .hb = 0
-                    .Bfs = bfs_loc
-                    .Tfs = tfs_loc
+
                     .Rcs = 0
-                    .Bfi = bfi_loc
-                    .Tfi = tfi_loc
                     .Rci = 0
-                    .Tw = tw_loc
-                    .aW = Math.Floor(tw_loc / 2)
+
+                    .aW = Math.Floor(.Tw / 2)
                     .Plat_b = 0
                     .Plat_t = 0
+
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                    .ha = hb_loc + plat_t_loc
-                    .hb = hb_loc
-                    .Bfs = bfs_loc
-                    .Tfs = tfs_loc
-                    .Rcs = rcs_loc
-                    .Bfi = bfi_loc
-                    .Tfi = tfi_loc
-                    .Rci = rci_loc
-                    .Tw = tw_loc
+
+                    .ha = .hb + .Plat_t
                     .aW = 0
-                    .Plat_b = bfi_loc + 2 * 50 / 1000
-                    .Plat_t = plat_t_loc
+
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                    .ha = 0.7 * ha_loc
-                    .hb = hb_loc
-                    .Bfs = bfs_loc
-                    .Tfs = tfs_loc
-                    .Rcs = rcs_loc
+
                     .Bfi = 0
                     .Tfi = 0
                     .Rci = 0
-                    .Tw = tw_loc
-                    .aW = Math.Floor(tw_loc / 2)
-                    .Plat_b = bfi_loc + 2 * 50 / 1000
-                    .Plat_t = plat_t_loc
+                    .aW = Math.Floor(.Tw / 2)
+
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                    .ha = 0.7 * ha_loc
-                    .hb = hb_loc
+
                     .Bfs = 0
                     .Tfs = 0
                     .Rcs = 0
-                    .Bfi = bfi_loc
-                    .Tfi = tfi_loc
-                    .Rci = rci_loc
-                    .Tw = tw_loc
-                    .aW = Math.Floor(tw_loc / 2)
-                    .Plat_b = bfs_loc - 2 * 50 / 1000
-                    .Plat_t = 0.015
-                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB 'HEB300 pour celui-ci
-                    .ha = ha_loc
-                    .hb = hb_loc
-                    .Bfs = 0.2
-                    .Tfs = tfs_loc
-                    .Rcs = rcs_loc
-                    .Bfi = bfi_loc
-                    .Tfi = tfi_loc
-                    .Rci = rci_loc
-                    .Tw = tw_loc
+
+                    .aW = Math.Floor(.Tw / 2)
+
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+
                     .aW = 0
                     .Plat_b = 0
                     .Plat_t = 0
+
             End Select
 
         End With
 
-        'Fin Ajout GUD
-
-        AssocieAcierCompatible(MyPoutre, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve)
-        If MyPoutre.lSlimFloor Then _
-        InitialiseAcierPlats(MyPoutre.Section.AcierPlat)
-
-        MyPoutre.Dalle.ThetaRd = OptionsScope.ThetaH
 
     End Sub
 
-    Public Sub InitialiseGoujonDeBase(ByRef MyG As cls_GoujonSoude, ByRef lTrouve As Boolean)
+    Public Sub InitialiseGoujonDeBase(ByRef myG As cls_GoujonSoude, ByRef lTrouve As Boolean)
         '--------------------------------------------------------------------------------
         '   09/08/23 :  Création - POM - V1.00
         '--------------------------------------------------------------------------------
@@ -830,7 +787,7 @@ Public Module Mod_Demarrage
 
         Do While (Not lTrouve) And (iStud < nbStud - 1)
             iStud += 1
-            lTrouve = (BaseGoujons(iStud).nom = MyG.nom)
+            lTrouve = (BaseGoujons(iStud).nom = myG.nom)
         Loop
 
         '--> Traitement de la recherche
@@ -842,11 +799,11 @@ Public Module Mod_Demarrage
         End If
 
         If lTrouve Then
-            MyG.nom = BaseGoujons(iStud).nom
-            MyG.d = BaseGoujons(iStud).d
-            MyG.hsc = BaseGoujons(iStud).hsc
-            MyG.Fy = BaseGoujons(iStud).Fy
-            MyG.Fu = BaseGoujons(iStud).Fu
+            myG.nom = BaseGoujons(iStud).nom
+            myG.d = BaseGoujons(iStud).d
+            myG.hsc = BaseGoujons(iStud).hsc
+            myG.Fy = BaseGoujons(iStud).Fy
+            myG.Fu = BaseGoujons(iStud).Fu
         End If
     End Sub
 
@@ -902,26 +859,25 @@ Public Module Mod_Demarrage
 
     End Sub
 
-    Private Sub TransfertProfileDeBase(MyProfile As cls_ProfilA, ByVal Gamme As String, ByVal Profile As String, ByRef lOK As Boolean)
+    Private Sub TransfertProfileDeBase(MyProfile As cls_ProfilA, ByVal Gamme As String, ByVal Profile As String,
+                                       lSlim As Boolean, lSlimSAB As Boolean, ByRef lOK As Boolean)
         '----------------------------------------------------------------------------
-        '
         '   03/07/12 :  Création - Version 3.00
-        '
         '----------------------------------------------------------------------------
-        '
         '   Récupération d'un profilé dans la nouvelle base de données
-        '
         '----------------------------------------------------------------------------
-        '
         '   BaseFile    [E] :   Nom du fichier base de données
         '   Gamme       [E] :   Gamme du profilé
         '   Profile     [E] :   Nom du profile
+        '   lSlim       [E] :   Indique si profilé slim floor
+        '   lSlimSAB    [E] :   Indique si profilé slim floor SAB
         '   lOK         [S] :   Indique si récupération OK
-        '
         '----------------------------------------------------------------------------
 
+        If Not lSlim Then _
         MyProfile.ha = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
         MyProfile.hb = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
+        If Not lSlimSAB Then _
         MyProfile.Bfs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
         MyProfile.Bfi = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
         MyProfile.Tfs = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
@@ -950,16 +906,19 @@ Public Module Mod_Demarrage
 
         Dim lTrouve As Boolean
         Dim lLamine As Boolean
+        Dim lSlim, lSlimSAB As Boolean
 
         '--( Initialisation
 
         lLamine = Not ((myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym) _
                     Or (myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym))
+        lSlim = myBeam.lSlimFloor
+        lSlimSAB = myBeam.Section.lSlimFloor_SAB
 
         '--( Récupération des dimensions des profilés et des courbes de réductions acier
 
         If lLamine Then
-            TransfertProfileDeBase(myBeam.Section.ProfilA, myBeam.Section.ProfilA.Gamme, myBeam.Section.ProfilA.NomProfile, lOK)
+            TransfertProfileDeBase(myBeam.Section.ProfilA, myBeam.Section.ProfilA.Gamme, myBeam.Section.ProfilA.NomProfile, lSlim, lSlimSAB, lOK)
             AssocieAcierCompatible(myBeam, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve, True)
         Else
             UpdateProfilPRS(myBeam.Section.ProfilA, MyCatalogue.nbStandard)
@@ -986,7 +945,7 @@ Public Module Mod_Demarrage
         '
         '--------------------------------------------------------------------------------
         '
-        '   MyPoutre        [E] :   Poutre à initialiser
+        '   myBeam        [E] :   Poutre à initialiser
         '   FileSteels      [E] :   Nom du fichier binaire base de données de aciers
         '   FileProfiles    [E] :   Nom du fichier binaire base de données des profilés
         '

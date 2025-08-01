@@ -492,8 +492,10 @@ Public Class Frm_SectionSAB
 
     Private Sub img_Section_Paint(sender As Object, e As PaintEventArgs) Handles img_Section.Paint
 
-        DessinProfileAcier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
-                           FontBase, kAdjust, True, False, iSelect)
+        'DessinProfileAcier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
+        '                   FontBase, kAdjust, True, False, iSelect)
+        DessinProfileSAB_Acier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
+                               FontBase, kAdjust, True, False, iSelect)
 
     End Sub
 
@@ -501,9 +503,6 @@ Public Class Frm_SectionSAB
 
         DessinProprietesAcier(e.Graphics, Me.img_ReductionCurve.ClientRectangle.Height, Me.img_ReductionCurve.ClientRectangle.Width, True,
                               DrawProperty = EnuDrawProperty.Fy, MySectionLoc)
-
-
-        ' DessinPropAcier(e.Graphics, Me.img_ReductionCurve.ClientRectangle.Height, Me.img_ReductionCurve.ClientRectangle.Width, True)
 
     End Sub
 
@@ -911,7 +910,7 @@ Public Class Frm_SectionSAB
         Dim BFmin, BFmax As Decimal
 
         '--> Initialisation
-        BFmin = 10 * MySectionLoc.ProfilA.Tfs
+        BFmin = 2 * MySectionLoc.ProfilA.Rcs + MySectionLoc.ProfilA.Tw
 
         If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
             BFmax = MySectionLoc.ProfilA.Bfi - 2 * BAPPMIN
@@ -1613,6 +1612,28 @@ Public Class Frm_SectionSAB
         Next
 
     End Sub
+
+#End Region
+
+#Region " Gestion Enter/Leave TextBox "
+
+    Private Sub txt_bfs_Enter(sender As Object, e As EventArgs) Handles txt_bfs.Enter
+        If lBuild Then Exit Sub
+        Const iSELECT_BFS As Integer = 0
+
+        iSelect = iselect_bfs
+
+        Me.img_Section.Invalidate()
+    End Sub
+
+    Private Sub txt_bfs_Leave(sender As Object, e As EventArgs) Handles txt_bfs.Leave
+        If lBuild Then Exit Sub
+
+        iSelect = -1
+
+        Me.img_Section.Invalidate()
+    End Sub
+
 
 #End Region
 

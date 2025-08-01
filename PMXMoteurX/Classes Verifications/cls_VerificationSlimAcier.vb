@@ -181,13 +181,13 @@
 
                 '** Contraintes dans la semelle inférieure
 
-                SigmaY(iNode, 0) = kFi * kQloc * QEd(iNode) * dbtFi / WFi
-                TauY(iNode, 0) = kFi * 3 / 2 * kQloc * QEd(iNode) / tFi
+                SigmaY(iNode, 0) = kFi * kQloc * QEd(iNode) * dbtFi / WFi / kConvMPaPa
+                TauY(iNode, 0) = kFi * 3 / 2 * kQloc * QEd(iNode) / tFi / kConvMPaPa
 
                 '** Contraintes dans le plat
 
-                SigmaY(iNode, 0) = kPlat * kQloc * QEd(iNode) * dbtFi / WFi
-                TauY(iNode, 1) = kPlat * 3 / 2 * kQloc * QEd(iNode) / tPlat
+                SigmaY(iNode, 0) = kPlat * kQloc * QEd(iNode) * dbtFi / WFi / kConvMPaPa
+                TauY(iNode, 1) = kPlat * 3 / 2 * kQloc * QEd(iNode) / tPlat / kConvMPaPa
 
             Next
         Next
@@ -302,6 +302,48 @@
 
         Me.InitialiseCriteres(myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee, lVerifElastic, myBeam.Param.lElasticDesignVM)
 
+        '# Contraintes normales
+
+        If lVerifElastic Then
+            myBeam.PtsSigma.Initialise(myBeam)
+            myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaCas)
+        End If
+
+        '# Contraintes de cisaillement
+        If myBeam.Param.lElasticDesignVM Then
+            Me.Tau = New cls_Tau(myBeam.Section.TypeSection)
+            Me.Tau.Initialise(myBeam.Section.ProfilA)
+            Me.Tau.CalculContraintesCharges(myBeam, TauCas)
+        End If
+
+        '# Flux de cisaillement des PRS
+
+        With myBeam.Section.ProfilA
+
+            lSoudure = False
+
+            Select Case .typeProfileAcier
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                    lSoudure = True
+                    ReDim GorgesSouduresMini(1)
+                    ReDim GorgesSoudures(1)
+
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                    lSoudure = True
+                    ReDim GorgesSouduresMini(0)
+                    ReDim GorgesSoudures(0)
+
+            End Select
+
+            If lSoudure Then
+                myBeam.Section.ProfilA.InitialiseSoudureMini(Me.GorgesSouduresMini)
+                Me.FluxF = New cls_Flux
+                Me.FluxF.InitialiseCalculAcier(myBeam)
+                Me.FluxF.CalculFluxChargesACIER(myBeam, FluxCas)
+            End If
+
+        End With
+
         '--> Boucle sur les combinaisons
 
         For iCombi = 0 To combiELU.nbCombi - 1
@@ -326,48 +368,6 @@
 
             myBeam.ProprietesVerifSlimFloorAcier(iCombi, myBeam, True, MplRd, zANP, MelRd, zANE,
                                                  Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
-
-            '# Contraintes normales
-
-            If lVerifElastic Then
-                myBeam.PtsSigma.Initialise(myBeam)
-                myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaCas)
-            End If
-
-            '# Contraintes de cisaillement
-            If myBeam.Param.lElasticDesignVM Then
-                Me.Tau = New cls_Tau(myBeam.Section.TypeSection)
-                Me.Tau.Initialise(myBeam.Section.ProfilA)
-                Me.Tau.CalculContraintesCharges(myBeam, TauCas)
-            End If
-
-            '# Flux de cisaillement des PRS
-
-            With myBeam.Section.ProfilA
-
-                lSoudure = False
-
-                Select Case .typeProfileAcier
-                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                        lSoudure = True
-                        ReDim GorgesSouduresMini(1)
-                        ReDim GorgesSoudures(1)
-
-                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                        lSoudure = True
-                        ReDim GorgesSouduresMini(0)
-                        ReDim GorgesSoudures(0)
-
-                End Select
-
-                If lSoudure Then
-                    myBeam.Section.ProfilA.InitialiseSoudureMini(Me.GorgesSouduresMini)
-                    Me.FluxF = New cls_Flux
-                    Me.FluxF.InitialiseCalculAcier(myBeam)
-                    Me.FluxF.CalculFluxChargesACIER(myBeam, FluxCas)
-                End If
-
-            End With
 
             '# Combinaisons des contraintes
 
@@ -844,6 +844,8 @@
         Dim FydPlat, FyPlat As Decimal
 
         Dim iPro0 As Integer = myBeam.PtsSigma.iProfile(0)
+        Const iPLAT As Integer = 1
+        Const iFINF As Integer = 0
 
         '--> Initialisation
 
@@ -852,6 +854,7 @@
 
         FyPlat = myBeam.Section.FySpd
         FydPlat = FyPlat / myBeam.Param.Gamma.GammaM0
+
         '--> Calculs
 
         '# Contraintes dans le profilé
@@ -866,6 +869,29 @@
 
                 Case cls_Section.Enum_TypeSection.SFB   '==================================================================
 
+                    ' Face supérieure de la semelle inférieure
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 3, iPro0 + 3, 1, 0, iFINF, 1, 0,
+                                             SigmaELU, SigmaY, TauY, FydInf, Me.CritereMY)
+
+                    ' Mi épaisseur de la semelle inférieure
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 3, iPro0 + 4, 0.5, 0.5, iFINF, 0, 1.5,
+                                             SigmaELU, SigmaY, TauY, FydInf, Me.CritereMY)
+
+                    ' Face inférieure de la semelle inférieure
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 4, iPro0 + 4, 1, 0, iFINF, -1, 0,
+                                             SigmaELU, SigmaY, TauY, FydInf, Me.CritereMY)
+
+                    ' Face supérieure du plat
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 4, iPro0 + 4, 1, 0, iPLAT, 1, 0,
+                                             SigmaELU, SigmaY, TauY, FydPlat, Me.CritereMY)
+
+                    ' Mi épaisseur du plat
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 4, iPro0 + 5, 0.5, 0.5, iPLAT, 0, 1.5,
+                                             SigmaELU, SigmaY, TauY, FydPlat, Me.CritereMY)
+
+                    ' Face inférieure du plat
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 5, iPro0 + 5, 1, 0, iPLAT, -1, 0,
+                                             SigmaELU, SigmaY, TauY, FydPlat, Me.CritereMY)
 
             End Select
         End If
@@ -976,6 +1002,71 @@
 
     End Sub
 
+    Private Sub RunCritereFlexionTransVM(myBeam As cls_Poutre, iCombi As Integer,
+                                         iPoint1 As Integer, iPoint2 As Integer, kPoint1 As Decimal, kPoint2 As Decimal,
+                                         iPlat As Integer, kSigmaY As Decimal, kTauY As Decimal,
+                                         SigmaELU(,,) As Decimal, SigmaY(,) As Decimal, TauY(,) As Decimal,
+                                         SigmaU As Decimal, myCrit As cls_Critere)
+        '----------------------------------------------------------------------------------------------------------
+        '   01/08/25 :  Création - POM - V1.2
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la contrainte de VM locale dans les plats supports de dalle
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   
+        '   iCombi      [E] :   Indice de la combinaison
+        '   iPoint1     [E] :   Indice du point de calcul des contraintes (n°1)
+        '   iPoint2     [E] :   Indice du point de calcul des contraintes (n°2)
+        '   kPoint1     [E] :   Coef de pondération pour la contrainte du point de calcul n°1
+        '   kPoint2     [E] :   Coef de pondération pour la contrainte du point de calcul n°2
+        '   iPlat       [E] :   Indice du plat concerné (0 semelle inf, 1 plat)
+        '   kSigmaY     [E] :   Coef de pondération de la contrainte sigmaY dans le calcul de la contrainte de VM
+        '   kTauY       [E] :   Coef de pondération de la contrainte tauY dans le calcul de la contrainte de VM
+        '   SigmaELU    [E] :   Contraintes normales X aux ELU, pour la flexion principale
+        '   SigmaY      [E] :   Contraintes de flexion locale dans les plats supports
+        '   TauY        [E] :   Contraintes de cisaillement locale dans les plats supports
+        '   SigmaU      [E] :   Valeur ultime de la contrainte normale au point iPoint
+        '   myCrit      [E] :   Critere pour la contrainte equivalente
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+
+        Dim pTau, pSigmaX, pSigmaY As Decimal
+        Dim pSigmaEq As Decimal
+
+        '--> Déclaration
+
+        iDebT = myBeam.IndicePremiereTravee
+        iFinT = myBeam.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+                For k = iDebK To iFinK
+
+                    pSigmaX = kPoint1 * SigmaELU(iPoint1, iNode, k) + kPoint2 * SigmaELU(iPoint2, iNode, k)
+                    pSigmaY = kSigmaY * SigmaY(iNode, iPlat)
+                    pTau = kTauY * TauY(iNode, iPlat)
+
+                    pSigmaEq = Math.Sqrt(pSigmaX ^ 2 + pSigmaY ^ 2 - pSigmaX * pSigmaY + 3 * pTau ^ 2)
+
+                    myCrit.EnregistreCritere(iNode, iCombi, iTravee, pSigmaEq, SigmaU)
+
+                Next
+            Next
+            Next
+    End Sub
+
     Private Sub RunCritereFlexionVM(MyPoutre As cls_Poutre, iCombi As Integer, iPoint As Integer, SigmaELU(,,) As Decimal,
                                     SigmaU As Decimal, MyCritereM As cls_Critere)
         '----------------------------------------------------------------------------------------------------------
@@ -983,7 +1074,7 @@
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance en flexion par les critères de VonMises en un point de calcul de section
         '----------------------------------------------------------------------------------------------------------
-        '   myBeam[E] :   Poutre traitée
+        '   myBeam  [E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison
         '   iPoint  [E] :   Indice du point de calcul des contraintes
         '   SigmaELU[E] :   Contraintes normales aux ELU
@@ -1067,7 +1158,7 @@
 
                 For k = iDebK To iFinK
 
-                    If MEd(iNode, k) * SIGNEM > 0 Then
+                    If IsGreaterOrEqual(MEd(iNode, k) * SIGNEM, 0) Then
 
                         Select Case ClasseP
                             Case 1, 2
@@ -1081,6 +1172,7 @@
 
                     Else
 
+                        '*** Eliminer ce cas
                         Select Case ClasseM
                             Case 1, 2
                                 MRd = MplRd(iNode, k)

@@ -46,6 +46,7 @@ Partial Class Frm_SectionIFB
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Plat = New System.Windows.Forms.Panel()
+        Me.lbl_InfoFyWP = New System.Windows.Forms.Label()
         Me.cmb_NuancePlat = New System.Windows.Forms.ComboBox()
         Me.lbl_Width = New System.Windows.Forms.Label()
         Me.lbl_WPSteel = New System.Windows.Forms.Label()
@@ -73,7 +74,6 @@ Partial Class Frm_SectionIFB
         Me.lbl_ParentProfile = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Acier = New System.Windows.Forms.Panel()
-        Me.lbl_InfoFyWP = New System.Windows.Forms.Label()
         Me.btn_FyFu = New System.Windows.Forms.Button()
         Me.cmb_ReductionCurveWP = New System.Windows.Forms.ComboBox()
         Me.cmb_GradeWP = New System.Windows.Forms.ComboBox()
@@ -380,6 +380,15 @@ Partial Class Frm_SectionIFB
         Me.pan_Plat.Size = New System.Drawing.Size(353, 122)
         Me.pan_Plat.TabIndex = 7
         '
+        'lbl_InfoFyWP
+        '
+        Me.lbl_InfoFyWP.AutoSize = True
+        Me.lbl_InfoFyWP.Location = New System.Drawing.Point(192, 101)
+        Me.lbl_InfoFyWP.Name = "lbl_InfoFyWP"
+        Me.lbl_InfoFyWP.Size = New System.Drawing.Size(70, 13)
+        Me.lbl_InfoFyWP.TabIndex = 38
+        Me.lbl_InfoFyWP.Text = "lbl_InfoFyWP"
+        '
         'cmb_NuancePlat
         '
         Me.cmb_NuancePlat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -682,15 +691,6 @@ Partial Class Frm_SectionIFB
         Me.pan_Acier.Name = "pan_Acier"
         Me.pan_Acier.Size = New System.Drawing.Size(245, 235)
         Me.pan_Acier.TabIndex = 3
-        '
-        'lbl_InfoFyWP
-        '
-        Me.lbl_InfoFyWP.AutoSize = True
-        Me.lbl_InfoFyWP.Location = New System.Drawing.Point(192, 101)
-        Me.lbl_InfoFyWP.Name = "lbl_InfoFyWP"
-        Me.lbl_InfoFyWP.Size = New System.Drawing.Size(70, 13)
-        Me.lbl_InfoFyWP.TabIndex = 38
-        Me.lbl_InfoFyWP.Text = "lbl_InfoFyWP"
         '
         'btn_FyFu
         '

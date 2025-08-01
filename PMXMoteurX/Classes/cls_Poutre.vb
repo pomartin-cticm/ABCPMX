@@ -697,13 +697,13 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String,
+    Public Sub New(myTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String,
                    OptionsLogiciels As Struc_OptionsLogiciel, OptionsCalcul As Struc_OptionsCalcul, OptionsFeu As struc_OptionsFeu,
                    NomCasChargesU() As String)
 
-        Me.Section.TypeSection = MyTypeSection
+        Me.Section.TypeSection = myTypeSection
 
-        Select Case MyTypeSection
+        Select Case myTypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage,
                          cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
@@ -711,12 +711,17 @@ Public Class cls_Poutre
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
             Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                Me.Section.ProfilA.ha = 0.25
             Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
                 Me.Section.ProfilA.GenererProfileHEB300()
+                Me.Section.ProfilA.ha = 0.25
+                Me.Section.ProfilA.Plat_b = 0.15
+                Me.Section.ProfilA.Plat_t = 0.015
             Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
                 Me.Section.ProfilA.GenererProfileHEB300()
+                Me.Section.ProfilA.Bfs = 0.15
         End Select
 
         Me.BeamID = NomPoutre
@@ -734,9 +739,11 @@ Public Class cls_Poutre
         Me.Param.Gamma = OptionsLogiciels.Gamma.Clone()
         Me.TransfertOptionsCalculs(OptionsCalcul)
         Me.TransfertOptionsFeu(OptionsFeu)
+
     End Sub
 
     Private Sub ParametresGenerauxDefaut()
+
         Me.lDefautPortee = True
         Me.lDefautEtaiement = True
         Me.lDefautEnrobage = True
@@ -754,6 +761,7 @@ Public Class cls_Poutre
         Me.lTraveeConsoleDroite = False
         Me.lDalleContinueGauche = False
         Me.lDalleContinueDroite = False
+
     End Sub
 
     Private Sub PoutreDefautAcier()

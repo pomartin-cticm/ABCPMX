@@ -30,6 +30,11 @@ Public Class Frm_SectionIFB
         Fu
     End Enum
 
+    Const iSELECT_HA As Integer = 0
+    Const iSELECT_HW As Integer = 1
+    Const iSELECT_BP As Integer = 2
+    Const iSELECT_TP As Integer = 3
+
 #End Region
 
 #Region " Variables "
@@ -79,6 +84,7 @@ Public Class Frm_SectionIFB
     Private NuancesPlats() As String = {"S235", "S275", "S355"}
 
     Dim lIFB_A As Boolean
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -700,10 +706,10 @@ Public Class Frm_SectionIFB
     Private Sub img_Section_Paint(sender As Object, e As PaintEventArgs) Handles img_Section.Paint
         If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
             DessinProfileIFB_A_Acier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
-                           FontBase, kAdjust, True, False, iSelect)
+                                     FontBase, kAdjust, True, False, iSelect)
         ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
             DessinProfileIFB_B_Acier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
-                          FontBase, kAdjust, True, False, iSelect)
+                                     FontBase, kAdjust, True, False, iSelect)
         End If
     End Sub
 
@@ -2031,9 +2037,31 @@ Public Class Frm_SectionIFB
 
     End Sub
 
-    Private Sub Frm_SectionIFB_MdiChildActivate(sender As Object, e As EventArgs) Handles Me.MdiChildActivate
+#End Region
 
+#Region " Gestion du Enter/Leave sur les textbox => iSelect "
+
+    Private Sub txt_TextBoxEnter(sender As Object, e As EventArgs) Handles txt_tp.Enter, txt_hw.Enter, txt_ha.Enter, txt_bp.Enter
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case Me.txt_tp.Name : iSelect = iSELECT_TP
+            Case Me.txt_bp.Name : iSelect = iSELECT_BP
+            Case Me.txt_ha.Name : iSelect = iSELECT_HA
+            Case Me.txt_hw.Name : iSelect = iSELECT_HW
+        End Select
+
+        Me.img_Section.Invalidate()
     End Sub
+
+    Private Sub txt_TextBoxLeave(sender As Object, e As EventArgs) Handles txt_tp.Leave, txt_hw.Leave, txt_ha.Leave, txt_bp.Leave
+
+        If lBuild Then Exit Sub
+        iSelect = 0
+
+        Me.img_Section.Invalidate()
+    End Sub
+
 
 #End Region
 

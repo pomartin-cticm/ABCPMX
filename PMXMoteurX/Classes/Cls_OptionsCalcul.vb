@@ -129,7 +129,7 @@ Public Class cls_OptionsCalcul
         Me.lEnrobProp = True
 
         '-- Réduction des slim floor : par défaut, méthode de l'Annexe I des EN G2
-        Me.MethodReducPlatSlim = MethodeReducPlatSlimFloor.M3_ReducLimiteElasticite
+        Me.MethodReducPlatSlim = Enu_MReducPlatSlim.M3_ReducLimiteElasticite
     End Sub
 
 #End Region

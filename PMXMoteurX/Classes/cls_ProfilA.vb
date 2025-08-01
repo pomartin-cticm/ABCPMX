@@ -1370,6 +1370,7 @@ Public Class cls_ProfilA
         Me.ha = Me.hb + Me.Plat_t
 
         Me.lPlat = False
+
     End Sub
 
     Public Sub GenererProfileHEB300()

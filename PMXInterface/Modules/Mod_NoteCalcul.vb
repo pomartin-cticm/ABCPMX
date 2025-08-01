@@ -8470,6 +8470,7 @@ Module Mod_NoteCalcul
             '# Critères M et V
             AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)", lConstructionP)
             AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA") & " (2)", lConstructionP)
+            AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(iVerif).CritereMY, "\SG\s\-My\=", "Flexion locale" & " (3)", lConstructionP)
 
             SauteLigne()
             AddLigneNDC(TABW2 & "(1): " & BlocELU("ELASTICDESIGNCLASS3"))

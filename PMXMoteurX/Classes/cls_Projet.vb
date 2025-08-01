@@ -353,6 +353,8 @@ Public Class cls_Projet
         AjouteLigneFrmt(Lines, "RFsK", mySteelR.FsK)
         AjouteLigneFrmt(Lines, "REs", mySteelR.Es)
 
+        Lines.Add("")
+
     End Sub
 
     Private Sub SaveFileBlocArmaEnrob(LitArma() As cls_ArmatureEnrobage, mySteelR As cls_AcierArmature, ByRef Lines As List(Of String))
@@ -741,6 +743,9 @@ Public Class cls_Projet
             End Select
 
         End With
+
+        Lines.Add("")
+
     End Sub
 
     Private Sub SaveFileBlocOptions(myParam As cls_OptionsCalcul, ByRef Lines As List(Of String))

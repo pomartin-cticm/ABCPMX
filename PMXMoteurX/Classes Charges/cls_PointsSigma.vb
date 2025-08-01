@@ -245,43 +245,43 @@
 
 #Region " Calculs des contraintes "
 
-    Public Sub CalculContraintesCharges(MyPoutre As cls_Poutre, Signe As Decimal, ByRef Sigma(,,,) As Decimal)
+    Public Sub CalculContraintesCharges(myBeam As cls_Poutre, Signe As Decimal, ByRef Sigma(,,,) As Decimal)
         '-----------------------------------------------------------------------------------
         '   20/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------
         '   Calculs des contraintes normales issues de tous les cas de charges
         '-----------------------------------------------------------------------------------
         '-----------------------------------------------------------------------------------
-        '   MyPoutre    [E] :   Poutre traitée
+        '   myBeam      [E] :   Poutre traitée
         '   Signe       [E] :   Cas de charge traité (qui a été calculé par EF)
         '   Sigma       [S] :   Table des contraintes (icas, ipts,inode,0 ou 1)
         '-----------------------------------------------------------------------------------
 
         '--> Déclarations
 
-        Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim NbNodes As Integer = myBeam.Nodes.nbNodes
         Dim NbPts As Integer = Me.zPos.Count
-        Dim NbCas As Integer = MyPoutre.ChargesA.Count
+        Dim NbCas As Integer = myBeam.ChargesA.Count
         Dim lAcierNonEnrob As Boolean
         Dim iCas As Integer
+        Dim lSlimAcier As Boolean = myBeam.Section.lSlimFloor And Not myBeam.Section.lMixte
 
         '--> Initialisation
 
         ReDim Sigma(NbCas - 1, NbPts - 1, NbNodes - 1, 1)
 
-        lAcierNonEnrob = (MyPoutre.Section.typeSection = cls_Section.Enum_TypeSection.AcierSeul) '_
-        ' Or ((MyPoutre.Section.typeSection = cls_Section.Enum_TypeSection.Mixte) And (MyCas.EtatDalle = cls_CasDeCharge.EnuEtatDalle.Acier))
+        lAcierNonEnrob = (myBeam.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeul) Or lSlimAcier
 
         '--> Boucle sur tous les cas de charges
 
-        For icas = 0 To NbCas - 1
+        For iCas = 0 To NbCas - 1
 
-            If MyPoutre.ChargesA(iCas).lRunCalcul Then
+            If myBeam.ChargesA(iCas).lRunCalcul Then
 
                 If lAcierNonEnrob Then
-                    Me.CalculContraintesSectionsAcierNonEnrobees(MyPoutre, iCas, Sigma)
+                    Me.CalculContraintesSectionsAcierNonEnrobees(myBeam, iCas, Sigma)
                 Else
-                    Me.CalculContraintesGeneral(MyPoutre, Signe, iCas, Sigma)
+                    Me.CalculContraintesGeneral(myBeam, Signe, iCas, Sigma)
                 End If
 
             End If
