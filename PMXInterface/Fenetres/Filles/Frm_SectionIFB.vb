@@ -35,6 +35,7 @@ Public Class Frm_SectionIFB
     Const iSELECT_BP As Integer = 2
     Const iSELECT_TP As Integer = 3
 
+    Dim lInter As Boolean = MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire
 #End Region
 
 #Region " Variables "
@@ -85,6 +86,11 @@ Public Class Frm_SectionIFB
 
     Dim lIFB_A As Boolean
 
+
+
+    Dim myFontFrm As New Font(FontBase.Name, SizeFontFrm)
+
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -107,9 +113,12 @@ Public Class Frm_SectionIFB
     Private Sub GestionLangues()
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_IFBSECTIONS")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
 
@@ -173,7 +182,7 @@ Public Class Frm_SectionIFB
                 str_InfoH(1) = Bloc("AUTOMATICHA")
 
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
             Finally
                 Bloc.Clear()
@@ -705,11 +714,11 @@ Public Class Frm_SectionIFB
 
     Private Sub img_Section_Paint(sender As Object, e As PaintEventArgs) Handles img_Section.Paint
         If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-            DessinProfileIFB_A_Acier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
-                                     FontBase, kAdjust, True, False, iSelect)
+            DessinProfileIFB_A_Acier(e.Graphics, MySectionLoc, lInter, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
+                                     myFontFrm, kAdjust, True, False, iSelect)
         ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
             DessinProfileIFB_B_Acier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
-                                     FontBase, kAdjust, True, False, iSelect)
+                                     myFontFrm, kAdjust, True, False, iSelect)
         End If
     End Sub
 

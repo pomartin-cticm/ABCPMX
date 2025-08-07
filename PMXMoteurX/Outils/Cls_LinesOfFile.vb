@@ -48,10 +48,12 @@ Public Class Cls_LinesOfFile
 
 #Region " Outils "
 
-    Public Sub CreationBloc(ByRef Bloc As Dictionary(Of String, String))
-        '
+    Public Sub CreationBloc(ByRef Bloc As Dictionary(Of String, String), ByRef lastKey As String)
+        '-----------------------------------------------------------------------------
         '   Transfert des lignes d'un bloc vers un dictionnaire
-        '
+        '-----------------------------------------------------------------------------
+        '   Bloc        [S] :   Bloc à definir
+        '   lastKey     [S] :   dernière clé stockée (permet de gérer un éventuel bug)
         '-----------------------------------------------------------------------------
 
         Dim indEgal As Integer
@@ -61,11 +63,13 @@ Public Class Cls_LinesOfFile
         For i As Integer = 0 To Me.Lines.Count - 1
             indEgal = Me.Lines(i).IndexOf("=")
             If indEgal > 0 Then
-                Bloc.Add(Lines(i).Substring(0, indEgal - 1).Trim.ToUpper,
+                lastKey = Lines(i).Substring(0, indEgal - 1).Trim.ToUpper
+                Bloc.Add(lastKey,
                          Lines(i).Substring(indEgal + 1).Trim)
             End If
         Next
 
+        lastKey = ""
     End Sub
 
     Private Sub LoadFile(ByVal FileName As String, ByRef Lines As List(Of String))

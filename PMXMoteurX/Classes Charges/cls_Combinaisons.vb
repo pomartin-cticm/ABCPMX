@@ -286,7 +286,7 @@
 
     End Sub
 
-    Public Sub RecupererEffortsNodauxPonderees(nbNodes As Integer, Vz(,) As Decimal, ByRef Q() As Decimal)
+    Public Sub RecupererEffortsNodauxPonderees(myNodes As cls_Poutre.strucBeamNodes, Vz(,) As Decimal, ByRef Q() As Decimal, ByRef qLin() As Decimal)
         '-----------------------------------------------------------------------------------------------------------
         '   06/05/24 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------
@@ -300,29 +300,49 @@
         '--> Déclarations
 
         Dim Q_lin_gauche, Q_lin_droite, Q_ponctuel As Decimal
+        Dim DeltaX As Decimal
+        Dim nbNodes As Integer
 
         '--> Initialisation
 
+        nbNodes = myNodes.nbNodes
         ReDim Q(nbNodes - 1)
+        ReDim qLin(nbNodes - 1)
 
         '--> Calcul 
 
         For jNode = 0 To nbNodes - 1
-            If jNode = 0 Then
+            If (jNode = 0) Then
                 Q_lin_gauche = 0
+                Q_lin_droite = (Vz(jNode + 1, 0) - Vz(jNode, 1)) / 2
+                Q_ponctuel = 0
+                DeltaX = (myNodes.xGlobal(jNode + 1) - myNodes.xGlobal(jNode)) / 2
+            ElseIf (jNode = nbNodes - 1) Then
+                Q_lin_gauche = (Vz(jNode, 0) - Vz(jNode - 1, 1)) / 2
+                Q_lin_droite = 0
+                Q_ponctuel = 0
+                DeltaX = (myNodes.xGlobal(jNode) - myNodes.xGlobal(jNode - 1)) / 2
             Else
                 Q_lin_gauche = (Vz(jNode, 0) - Vz(jNode - 1, 1)) / 2
-            End If
-
-            Q_ponctuel = Vz(jNode, 1) - Vz(jNode, 0)
-
-            If jNode = nbNodes - 1 Then
-                Q_lin_droite = 0
-            Else
                 Q_lin_droite = (Vz(jNode + 1, 0) - Vz(jNode, 1)) / 2
+                Q_ponctuel = Vz(jNode, 1) - Vz(jNode, 0)
+                DeltaX = (myNodes.xGlobal(jNode + 1) - myNodes.xGlobal(jNode - 1)) / 2
             End If
+
+            'If (jNode = 0) Or (jNode = nbNodes - 1) Then
+            '    Q_ponctuel = 0
+            'Else
+            '    Q_ponctuel = Vz(jNode, 1) - Vz(jNode, 0)
+            'End If
+
+            'If jNode = nbNodes - 1 Then
+            '    Q_lin_droite = 0
+            'Else
+            '    Q_lin_droite = (Vz(jNode + 1, 0) - Vz(jNode, 1)) / 2
+            'End If
 
             Q(jNode) = Q_lin_gauche + Q_ponctuel + Q_lin_droite
+            qLin(jNode) = Q(jNode) / DeltaX
         Next
 
     End Sub

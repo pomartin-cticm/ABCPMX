@@ -102,7 +102,7 @@
 
 #Region " Calcul des contraintes de locales "
 
-    Private Sub ContraintesLocales(myBeam As cls_Poutre, QEd() As Decimal, ByRef SigmaY(,) As Decimal, ByRef TauY(,) As Decimal)
+    Private Sub ContraintesLocales(myBeam As cls_Poutre, QLinEd() As Decimal, ByRef SigmaY(,) As Decimal, ByRef TauY(,) As Decimal)
         '-------------------------------------------------------------------
         '   31/07/25 :  Création - POM
         '-------------------------------------------------------------------
@@ -110,7 +110,7 @@
         '   support de la dalle
         '-------------------------------------------------------------------
         '   myBeam      [E] :   Poutre traitée
-        '   QEd         [E] :   Charges locales aux noeuds
+        '   QLinEd      [E] :   Charges locales réparties aux noeuds
         '   SigmaY      [S] :   Contrainte de flexion transversale dans les plats
         '   TauY        [S] :   Contrainte de cisaillement transversale dans les plats
         '-------------------------------------------------------------------
@@ -181,13 +181,13 @@
 
                 '** Contraintes dans la semelle inférieure
 
-                SigmaY(iNode, 0) = kFi * kQloc * QEd(iNode) * dbtFi / WFi / kConvMPaPa
-                TauY(iNode, 0) = kFi * 3 / 2 * kQloc * QEd(iNode) / tFi / kConvMPaPa
+                SigmaY(iNode, 0) = kFi * kQloc * QLinEd(iNode) * dbtFi / WFi / kConvMPaPa
+                TauY(iNode, 0) = kFi * 3 / 2 * kQloc * QLinEd(iNode) / tFi / kConvMPaPa
 
                 '** Contraintes dans le plat
 
-                SigmaY(iNode, 0) = kPlat * kQloc * QEd(iNode) * dbtFi / WFi / kConvMPaPa
-                TauY(iNode, 1) = kPlat * 3 / 2 * kQloc * QEd(iNode) / tPlat / kConvMPaPa
+                SigmaY(iNode, 1) = kPlat * kQloc * QLinEd(iNode) * dbtPlat / WPlat / kConvMPaPa
+                TauY(iNode, 1) = kPlat * 3 / 2 * kQloc * QLinEd(iNode) / tPlat / kConvMPaPa
 
             Next
         Next
@@ -219,6 +219,7 @@
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
         Dim QEd() As Decimal = Nothing                  ' tableau des forces nodales
+        Dim QSupEd() As Decimal = Nothing               ' tableau des forces nodales / unité longueur
         Dim MplRd(,) As Decimal = Nothing
         Dim zANP(,) As Decimal = Nothing
         Dim MelRd(,) As Decimal = Nothing
@@ -358,7 +359,7 @@
 
             '# Recupération des efforts nodaux à partir des tranchants combinés
 
-            combiELU.RecupererEffortsNodauxPonderees(myBeam.Nodes.nbNodes, VEd, QEd)
+            combiELU.RecupererEffortsNodauxPonderees(myBeam.Nodes, VEd, QEd, qsupEd)
 
             '# Calcul des coefficients de réduction 
 
@@ -384,7 +385,7 @@
 
                 '( Contraintes locales dans les plats supports
 
-                ContraintesLocales(myBeam, QEd, SigmaY, TauY)
+                ContraintesLocales(myBeam, QSupEd, SigmaY, TauY)
 
             End If
 
@@ -651,7 +652,7 @@
                                     Psi_y_spd(iCombi, iNode) = 1
                                     Psi_y_fi(iCombi, iNode) = 1
 
-                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M2_ReducEpaisseur
+                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M3_ReducLimiteElasticite
                                     Psi_spd(iCombi, iNode) = 1
                                     Psi_fi(iCombi, iNode) = 1
 
@@ -765,7 +766,7 @@
         '--( Initialisation
 
         mxbt_Ed = q * dbt
-        mxbt_Rd = 1.2 * t ^ 2 * fy / (6 * gammaM0)
+        mxbt_Rd = 1.2 * t ^ 2 * fy / (6 * gammaM0) * kConvMPaPa
 
         '--( Calcul
 
@@ -799,7 +800,7 @@
         '--( Initialisation
 
         mybt_Ed = q * dbt
-        mybt_Rd = 1.2 * t ^ 2 * fy / (6 * gammaM0)
+        mybt_Rd = 1.2 * t ^ 2 * fy / (6 * gammaM0) * kConvMPaPa
 
         '--( Calcul
 
@@ -863,9 +864,47 @@
 
             Select Case myBeam.Section.TypeSection
                 Case cls_Section.Enum_TypeSection.IFB_A '==================================================================
+
+                    ' Face supérieure du plat inférieur
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 3, iPro0 + 3, 1, 0, iPLAT, 1, 0,
+                                             SigmaELU, SigmaY, TauY, FydInf, Me.CritereMY)
+
+                    ' Mi épaisseur du plat inférieur
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 3, iPro0 + 4, 0.5, 0.5, iPLAT, 0, 1.5,
+                                             SigmaELU, SigmaY, TauY, FydInf, Me.CritereMY)
+
+                    ' Face inférieure du plat inférieur
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 4, iPro0 + 4, 1, 0, iPLAT, -1, 0,
+                                             SigmaELU, SigmaY, TauY, FydInf, Me.CritereMY)
+
                 Case cls_Section.Enum_TypeSection.IFB_B '==================================================================
+
+                    ' Face supérieure de la semelle inférieure
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 3, iPro0 + 3, 1, 0, iFINF, 1, 0,
+                                             SigmaELU, SigmaY, TauY, FydInf, Me.CritereMY)
+
+                    ' Mi épaisseur de la semelle inférieure
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 3, iPro0 + 4, 0.5, 0.5, iFINF, 0, 1.5,
+                                             SigmaELU, SigmaY, TauY, FydInf, Me.CritereMY)
+
+                    ' Face inférieure de la semelle inférieure
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 4, iPro0 + 4, 1, 0, iFINF, -1, 0,
+                                             SigmaELU, SigmaY, TauY, FydInf, Me.CritereMY)
+
+
                 Case cls_Section.Enum_TypeSection.SAB   '==================================================================
 
+                    ' Face supérieure de la semelle inférieure
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 3, iPro0 + 3, 1, 0, iFINF, 1, 0,
+                                             SigmaELU, SigmaY, TauY, FydInf, Me.CritereMY)
+
+                    ' Mi épaisseur de la semelle inférieure
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 3, iPro0 + 4, 0.5, 0.5, iFINF, 0, 1.5,
+                                             SigmaELU, SigmaY, TauY, FydInf, Me.CritereMY)
+
+                    ' Face inférieure de la semelle inférieure
+                    RunCritereFlexionTransVM(myBeam, iCombi, iPro0 + 4, iPro0 + 4, 1, 0, iFINF, -1, 0,
+                                             SigmaELU, SigmaY, TauY, FydInf, Me.CritereMY)
 
                 Case cls_Section.Enum_TypeSection.SFB   '==================================================================
 
@@ -1064,7 +1103,7 @@
 
                 Next
             Next
-            Next
+        Next
     End Sub
 
     Private Sub RunCritereFlexionVM(MyPoutre As cls_Poutre, iCombi As Integer, iPoint As Integer, SigmaELU(,,) As Decimal,

@@ -87,9 +87,12 @@ Public Class Frm_PPVerifications
 
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_PPVERIFICATIONS")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
 
@@ -127,6 +130,7 @@ Public Class Frm_PPVerifications
                 strNoCritere = Bloc("NOCRITERIA")                    ' "No criterion"
 
             Catch ex As Exception
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
             End Try
         End If
 

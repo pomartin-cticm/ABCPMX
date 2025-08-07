@@ -48,8 +48,11 @@ Public Class Frm_Update
 
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_UPDATE")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
 
@@ -71,7 +74,7 @@ Public Class Frm_Update
 
 
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
 
             End Try
 

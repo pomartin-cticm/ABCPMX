@@ -15,6 +15,101 @@ Imports PMXMoteur2
 
 #End Region
 
+#Region " TU pour les slim floors acier "
+
+    <TestMethod()> Public Sub TestUnit_ProprietesSectionAcier_SFB()
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   10/07/23 :  Création POM
+        '----------------------------------------------------------------------------------------------------------------------------------
+        ' Test des propriétés élastiques et plastiques d'une section acier SFB 
+        '   Références : Test SFS01
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim mySection As New cls_Section
+        Dim myGamma As New cls_Gamma
+
+        Dim zANP, MplRd As Decimal
+        Dim zANE, MelRd As Decimal
+        Dim InertieY, InertieZ As Decimal
+        Dim Valeur, ValRef As Decimal
+
+        '--> Initialisations
+
+        '# IPE 300 et plat
+
+        mySection.ProfilA.GenereProfileIPE300()
+
+        mySection.ProfilA.Plat_b = 300 / 1000
+        mySection.ProfilA.Plat_t = 15 / 1000
+
+        mySection.ProfilA.ha = mySection.ProfilA.hb + mySection.ProfilA.Plat_t
+
+        '# Acier S355 EC3
+
+        mySection.Acier.InitialiseAcierS355EC3()
+        mySection.AcierPlat.InitialiseAcierS355EC3()
+
+        '# Gamma
+
+        myGamma.GammaM0 = 1
+
+        '# Types de la section
+
+        mySection.TypeSection = cls_Section.Enum_TypeSection.SFB
+        mySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+
+        '--> Tests des propriétés élastiques / axe YY
+
+        mySection.ProprietesElastiquesMyy_Slim(1, True, myGamma, zANE, InertieY, MelRd)
+
+        '# Position ANE
+
+        ValRef = +78.3 / 1000
+        Valeur = zANE
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+        '# Inertie Y
+
+        ValRef = 14443.7 * 10 ^ (-8)
+        Valeur = InertieY
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+        '# Moment élastique
+
+        ValRef = 231.3 * 1000
+        Valeur = MelRd
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+        '--> Tests des propriétés élastiques / axe ZZ
+
+        mySection.ProprietesElastiquesMzz(1, True, myGamma, 1, zANE, InertieZ, MelRd)
+
+        '# Position ANE
+
+        ValRef = 0
+        Valeur = zANE
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+        '# Inertie Z
+
+        ValRef = 3979 * 10 ^ (-8)
+        Valeur = InertieZ
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+        '--> Autres propriétés
+
+        Valeur = mySection.MassLineiqueProfilA
+        ValRef = 77.57
+
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+    End Sub
+
+
+#End Region
+
 #Region " TU pour les sections acier "
 
     <TestMethod()> Public Sub TestUnit_ProprietesSectionAcierLamine()

@@ -63,9 +63,12 @@ Public Class Frm_Catalogue
 
         '--> Chargement des blocs langues 
 
+        Dim strLoadedKey As String = ""
+        Const CLE As String = ""
+
         Dim Bloc As New Dictionary(Of String, String)
         Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRMCATALOGUE")
-        BlocLine.CreationBloc(Bloc)
+        BlocLine.CreationBloc(Bloc, strLoadedKey)
 
         Try
             'Titre + Bouton
@@ -140,7 +143,8 @@ Public Class Frm_Catalogue
             '****************************************************************************************
 
         Catch ex As Exception
-            MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+            'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+            GestionErreurAffichageLangue(Me.Name, "GestionLangue", CLE, strLoadedKey)
         Finally
             Bloc.Clear()
         End Try

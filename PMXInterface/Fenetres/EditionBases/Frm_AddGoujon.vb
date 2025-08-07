@@ -39,8 +39,10 @@ Public Class Frm_AddGoujon
         '--> Chargement des blocs langues
 
         Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRMADDSTUD")
+        Dim strLoadedKey As String = ""
+        Const CLE As String = ""
 
-        BlocLine.CreationBloc(Bloc)
+        BlocLine.CreationBloc(Bloc, strLoadedKey)
 
         Try
 
@@ -68,16 +70,22 @@ Public Class Frm_AddGoujon
             Me.etq_HauteurTete.Text = Bloc("DEPTHHEAD")
             Me.etq_Label.Text = Bloc("LABEL")
 
-            Me.etq_Unit_DiametreTete.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-            Me.etq_Unit_DiametreTige.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-            Me.etq_Unit_HauteurTete.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-            Me.etq_UnitHauteur.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-            Me.etq_UnitFU.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
-            Me.etq_UnitFY.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
 
         Catch ex As Exception
-            MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+            'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+            GestionErreurAffichageLangue(Me.Name, "GestionLangue", Cle, strLoadedKey)
         End Try
+
+    End Sub
+
+    Private Sub GestionUnites()
+
+        Me.etq_Unit_DiametreTete.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_Unit_DiametreTige.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_Unit_HauteurTete.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitHauteur.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitFU.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
+        Me.etq_UnitFY.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
 
     End Sub
 

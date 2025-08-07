@@ -1,0 +1,237 @@
+﻿'-----------------------------------------------'
+'PropMix software - CTICM - Version 1.20 beta 1
+'PROJECT USER FILE
+'-----------------------------------------------'
+'       /!\   Don't modify this file   /!\
+'       /!\ Ne pas modifier ce fichier /!\
+'-----------------------------------------------'
+
+BLOCK IDENTIFICATION
+   Utilisateur           = 
+   Entreprise            = 
+   NomProjet             = Validation
+
+BLOCK BEAM
+   BeaIden               = TEST SFS01
+   Comment               = 
+   LCantilever           = False
+   RCantilever           = False
+   LContSlab             = False
+   RContSlab             = False
+   LSlabOpen             = False
+   RSlabOpen             = False
+   NbSpan                = 1
+   SpanLengths           = {3/6/3}
+   SpanType              = {0/2/1}
+   Propping              = 0
+   LPropping             = False
+   RPropping             = False
+   NbPropping            = 0
+   TypeRestraint         = 0
+   LSpacing              = 2
+   RSpacing              = 2
+   LDSlOp                = 1
+   RDSlOp                = 1
+   Intermediate          = True
+   lDefSpan              = True
+   lDefEncas             = True
+   lDefProp              = True
+   lDefSlab              = False
+   ULSlComb              = {True/False/False/False/False/False}
+   ULSCoef               = {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1/1,5/1,05/0/0}+{1/1,05/1,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
+   SLSlComb              = {True/False/False/False/False/False}
+   SLSCoef               = {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
+   FLSlComb              = {True/False/False/False/False}
+   FLSCoef               = {1/0,5/0,3/0/0}+{1/0,7/0,3/0/0}+{1/0,3/0,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
+   CULSlComb             = {False/False}
+   CULSCoef              = {0/0/0/1,5/1,35}+{0/0/0/0/0}
+   CSLSlComb             = {False/False}
+   CSLSCoef              = {0/0/0/1/1}+{0/0/0/0/0}
+
+BLOCK MAINTIENS
+
+BLOCK SECTION
+   Name                  = Name
+   SlabDefined           = False
+   Database              = False
+   Type                  = 4
+   UserDefined           = False
+   f_y_fs                = 235
+   f_y_w                 = 235
+   f_y_fi                = 235
+
+BLOCK PROFIL
+   Serie                 = IPE
+   Name                  = IPE 300
+   Type                  = 6
+   ha                    = 0,315
+   hb                    = 0,300
+   bfs                   = 0,150
+   tfs                   = 0,0107
+   bfi                   = 0,150
+   tfi                   = 0,0107
+   rcs                   = 0,015
+   rci                   = 0,015
+   tw                    = 0,0071
+   Welda                 = 0
+   PlatB                 = 0,3
+   PlatT                 = 0,015
+   PlatR                 = False
+   Grade                 = S355
+   QualitY               = JR/J0/J2/K2
+   Reduction             = EN 10025-2
+   Standart              = EN 10025-2 : 2019
+   PlGrade               = S355
+   PlQualitY             = EC3
+   PlReduction           = Table 3.1
+   PlStandart            = EN 1993-1-1
+
+BLOCK SLAB
+   Type                  = 1
+   td                    = 0,35
+   th                    = 0
+   preDalle_ep           = 0,06
+   preDalle_tjoi         = 0,05
+
+BLOCK STEELDECK
+   Label                 = Cofraplus_60 1.00
+   Company               = ArcelorMittal
+   lDatabase             = True
+   h_rs                  = 0
+   h_p                   = 0,058
+   b_b                   = 0,062
+   b_t                   = 0,101
+   e_p                   = 0,207
+   tp                    = 0,001
+   Orientation           = 1
+   msurf                 = 11,37
+   Fyp                   = 350
+   Fup                   = 420
+   ModuleWidth           = 1,035
+   Ieff                  = 0,0000006008
+   lPunched              = True
+   AppuiT                = 0
+   AppuiL                = 0
+
+BLOCK SLABCONCRETE
+   LightC                = False
+   Classe                = C20/25
+   RhoC                  = 2500
+   lCrackLimit           = True
+   wk_max                = 0,0004
+
+BLOCK SLAB_REINFORCEMENT
+   NoBar                 = False
+   EspBar                = 0 0,2
+   PhiS                  = 0 0,012
+   z_s                   = 0 0,032
+   lActive               = 0 False
+   EspBar                = 1 0,2
+   PhiS                  = 1 0,012
+   z_s                   = 1 0,045
+   lActive               = 1 False
+   RClasse               = B500
+   RFsK                  = 500
+   REs                   = 210000
+
+BLOCK OPTIONS
+   RH                    = 50
+   Norme                 = 0
+   EtaW                  = 1
+   lLarEffSimp           = False
+   lCompArma             = False
+   dMaxNodes             = 1
+   SPnbMinNodes          = 20
+   CAnbMinNodes          = 5
+   epsSH                 = 0,000325
+   lShEncasement         = False
+   ReinfYoung            = 210000
+   Gravity               = 9,81
+   PsiLPerm              = 1,1
+   PsiLSH                = 0,55
+   T0G1_0                = 28
+   T0G1_1                = 56
+   T0G2_0                = 28
+   T0G2_1                = 56
+   T0SH_0                = 1
+   T0SH_1                = 1
+   AgeTCalc              = 18250
+   lElasticDesign        = False
+   lControlCrack         = False
+
+BLOCK FIRE_OPTIONS
+   FireDesign            = True
+   RootEncased           = True
+   DeltaT                = 5
+   Temp0                 = 20
+   FEpsilon              = 1
+   CEpsilon              = 1
+   AlphaC                = 25
+   SlabAlphaC            = 4
+   Slab085               = 1
+   Phi                   = 1
+   Moisture              = 0
+   FrenchAN              = True
+   VariableCDens         = False
+   CompressionReinf      = True
+   FilledVoids           = True
+   ColdFormReinf         = True
+   SlabFEM               = False
+   SlabTmax              = 0,01
+   ConcreteRedux         = True
+   ReinfTemp             = 1
+   Surface               = Steel
+
+BLOCK GAMMA
+   GammaM0               = 1
+   GammaM1               = 1
+   GammaM2               = 1,25
+   GammaC                = 1,5
+   GammaVs               = 1,25
+   GammaVc               = 1,25
+   lGammaVuni            = True
+   GammaS                = 1,15
+   GammaP                = 1
+   GammaM_fi             = 1
+   GammaS_fi             = 1
+   GammaV_fi             = 1
+   GammaC_fi             = 1
+
+   GammaG_sup            = 1,35
+   GammaG_inf            = 1
+   GammaQ                = 1,5
+   Psi0_Q1               = 0,7
+   Psi1_Q1               = 0,5
+   Psi2_Q1               = 0,3
+   Psi0_Q2               = 0,7
+   Psi1_Q2               = 0,5
+   Psi2_Q2               = 0,3
+
+BLOCK HIVOSS
+   lHivossMethod         = True
+   lMGeneNum             = True
+   RatioQ                = 0,1
+   VariableQ             = 0
+   FloorUse              = 4
+   lFreqSlab             = False
+   Furniture             = 0
+   Ceiling               = False
+   Screed                = False
+
+BLOCK LOADS_G1
+   QSurf                 = 0
+   qDist                 = 1 0 16426,709 6 16426,709
+ 
+BLOCK LOADS_G2
+   QSurf                 = 0
+ 
+BLOCK LOADS_Q1
+   QSurf                 = 0
+   qDist                 = 1 0 20000,000 6 20000,000
+ 
+BLOCK LOADS_Q2
+   QSurf                 = 0
+ 
+BLOCK LOADS_QC
+   QSurf                 = 0
+ 

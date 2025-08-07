@@ -792,7 +792,7 @@ Public Class cls_Projet
 
     End Sub
 
-    Private Sub SaveFileBlocProfile(myProfil As cls_ProfilA, mySteel As cls_Acier, mySteelPlat As cls_Acier, ByRef Lines As List(Of String))
+    Private Sub SaveFileBlocProfile(myProfil As cls_ProfilA, mySteel As cls_Acier, mySteelPlat As cls_Acier, lSlimF As Boolean, ByRef Lines As List(Of String))
         '-------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
         '-------------------------------------------------------------------------------------
@@ -834,7 +834,7 @@ Public Class cls_Projet
             AjouteLigneFrmt(Lines, "Standart", .NormeProduit)
         End With
 
-        If myProfil.lPlat Then
+        If myProfil.lPlat Or lSlimF Then
             With mySteelPlat
                 AjouteLigneFrmt(Lines, "PlGrade", .Nuance)
                 AjouteLigneFrmt(Lines, "PlQualitY", .Qualite)
@@ -947,7 +947,7 @@ Public Class cls_Projet
 
             '==[ Bloc ProfilA ]=================================================================
 
-            SaveFileBlocProfile(pTre.Section.ProfilA, pTre.Section.Acier, pTre.Section.AcierPlat, Lines)
+            SaveFileBlocProfile(pTre.Section.ProfilA, pTre.Section.Acier, pTre.Section.AcierPlat, pTre.lSlimFloor, Lines)
 
             '==[ Blocs relatifs à l'enrobage ]==================================================
 

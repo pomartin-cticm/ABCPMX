@@ -31,9 +31,12 @@ Public Class Frm_ErreursMessages
 
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_ERRORS")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
 

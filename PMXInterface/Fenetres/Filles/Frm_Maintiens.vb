@@ -141,9 +141,12 @@ Public Class Frm_Maintiens
     Private Sub GestionLangues()
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_LATERALRESTRAINTS")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
 
@@ -194,7 +197,7 @@ Public Class Frm_Maintiens
                 strInfoW_PoutreMixte = Bloc("INFOCOMPOSITE") ' "Pour les poutres mixtes, les maitiens latéraux ne sont pris en compte que dans la phase de construction, en l'absence d'étaiement"
 
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
             Finally
                 Bloc.Clear()

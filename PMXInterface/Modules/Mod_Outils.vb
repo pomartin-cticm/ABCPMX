@@ -1157,7 +1157,10 @@ Module Mod_Outils
             If File.Exists(LogicielFichiers.Langue) Then
                 Dim Bloc As New Dictionary(Of String, String)
                 Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_JURIDIQUE")
-                BlocLine.CreationBloc(Bloc)
+                Dim strLoadedKey As String = ""
+                Const CLE As String = ""
+
+                BlocLine.CreationBloc(Bloc, strLoadedKey)
 
                 Try
 
@@ -1167,7 +1170,8 @@ Module Mod_Outils
                     LastVersion = Bloc("LASTVERSION")
 
                 Catch ex As Exception
-                    MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Mod_Outils/VerifVersionLogiciel")
+                    'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Mod_Outils/VerifVersionLogiciel")
+                    GestionErreurAffichageLangue("Mod_Outils", "VerifVersionLogiciel", CLE, strLoadedKey)
                 Finally
                     Bloc.Clear()
                 End Try
@@ -1953,25 +1957,29 @@ Module Mod_Outils
 
     End Sub
 
-    Public Sub GestionErreurAffichageLangue(ModSource As String, Routine As String)
+    Public Sub GestionErreurAffichageLangue(ModSource As String, Routine As String, Optional strKey As String = "", Optional lastLoadingKey As String = "")
         '-------------------------------------------------------------------------------------------------------------
         '   12/08/24 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------
         '   Gestion de l'affichage des erreurs lors de l'affichage des fichiers langue
         '-------------------------------------------------------------------------------------------------------------
-        '   ModSource   [E] :   Module ou fenêtre à l'origine de l'appel
-        '   Routine     [E] :   Routine appelante
+        '   ModSource       [E] :   Module ou fenêtre à l'origine de l'appel
+        '   Routine         [E] :   Routine appelante
+        '   strKey          [E] :   Clé sur la quelle l'affichage bugue
+        '   lastLoadingKey  [E] :   Dernière clé avant plantage de lecture fichier
         '-------------------------------------------------------------------------------------------------------------
 
         Dim myMsg As String
 
-        'If LogicielInfo.Maitre = EnuMaitre.CTICM Then
-        '    myMsg = "Erreur affichage du fichier langue :" & Chr(13) & " Contactez le support !"
-        'Else
-        '    myMsg = "Error display language:" & Chr(13) & " Contact support "
-        'End If
-
         myMsg = InfoW.BlocF("ERRORLNG")
+
+        If strKey <> "" Then
+            myMsg = myMsg & Chr(13) & "KEY = " & strKey
+        End If
+
+        If lastLoadingKey <> "" Then
+            myMsg = myMsg & Chr(13) & "last loaded KEY = " & lastLoadingKey
+        End If
 
         GestionErrorsPMX(ModSource, Routine, myMsg, True)
 

@@ -135,9 +135,12 @@ Public Class Frm_PPCombinaison
 
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_PPCOMBINATIONS")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
                 Me.Text = Bloc("TITLE")                              ' "Combinations"
@@ -170,7 +173,7 @@ Public Class Frm_PPCombinaison
                 strNoCombiELF = Bloc("NOCOMBINATIONFORFLS")             ' "No defined combinations for fire limite state"
                 strNoCombiELS = Bloc("NOCOMBINATIONFORSLS")             ' "No defined combinations for serviceability limite state"
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
             End Try
 
         End If

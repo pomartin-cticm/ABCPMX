@@ -31,9 +31,12 @@ Public Class Frm_AjoutPoutreDeFichier
         If File.Exists(LogicielFichiers.Langue) Then
             Dim Bloc As New Dictionary(Of String, String)
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Try
                 Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_ADDBEAMFILE")
-                BlocLine.CreationBloc(Bloc)
+                BlocLine.CreationBloc(Bloc, strLoadedKey)
 
                 Me.Text = Bloc("TITLE")
                 Me.btn_OK.Text = Bloc("OK")
@@ -43,7 +46,7 @@ Public Class Frm_AjoutPoutreDeFichier
                 Me.lbl_ChoisirPoutre.Text = Bloc("ADDBEAM")
 
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
             Finally
                 Bloc.Clear()

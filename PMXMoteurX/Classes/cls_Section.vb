@@ -560,14 +560,14 @@ Public Class cls_Section
 
         Afs = Me.ProfilA.AireFs
         Afi = Me.ProfilA.AireFi
-        Aspd = Me.ProfilA.AirePlat 'Ajout GuD pour couvrir le cas des slimfloor qui possèdent un plat soudé
+        Aspd = Me.ProfilA.AirePlat
 
         '--> Calcul
 
         pNPro = Afs * Me.FySup
         pNPro += Afi * Me.FyInf
         pNPro += Aspd * Me.FySpd
-        pNPro += (Me.ProfilA.Aire - Afi - Afs) * Me.FyW
+        pNPro += (Me.ProfilA.Aire - Afi - Afs - Aspd) * Me.FyW
 
         '--> Fin
 
@@ -706,7 +706,8 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        MyModele.MaillageProfileUsuels_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd)
+        'MyModele.MaillageProfileUsuels_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd)
+        MyModele.MaillageProfileA_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd)
 
         '# Béton d'enrobage
 
@@ -1079,6 +1080,33 @@ Public Class cls_Section
         End Get
     End Property
 
+
+    Public Function xBordDalleRive(EntraxeD1 As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------
+        '   07/08/25 :  Création - POM
+        '--------------------------------------------------------------------------------------------------
+        '   Calcul de la position de la dalle à gauche, dans le cas d'une poutre de rive
+        '--------------------------------------------------------------------------------------------------
+        '   EntraxeD1   [E] :   Distance au bord de la dalle
+        '--------------------------------------------------------------------------------------------------
+
+
+        Dim xo As Decimal
+        Select Case ProfilA.typeProfileAcier
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                xo = -ProfilA.Bfi / 2
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                xo = -ProfilA.Bfs / 2
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                xo = -ProfilA.Bfi / 2
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                xo = -ProfilA.Bfi / 2
+            Case Else
+                xo = -EntraxeD1
+        End Select
+
+        Return xo
+    End Function
 
     ''' <summary>
     ''' Retourne la largeur du plat inférieur supportant la dalle, dans le cas d'un slimfloor

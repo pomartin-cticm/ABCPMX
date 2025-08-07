@@ -37,6 +37,7 @@ Partial Class Frm_InfoLogiciel
         Me.lbl_InfoW = New System.Windows.Forms.Label()
         Me.img_Close = New System.Windows.Forms.PictureBox()
         Me.imgList_Info = New System.Windows.Forms.ImageList(Me.components)
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.pan_G2.SuspendLayout()
         Me.TLPan_General.SuspendLayout()
@@ -79,6 +80,7 @@ Partial Class Frm_InfoLogiciel
         Me.TLPan_General.Controls.Add(Me.img_info, 0, 0)
         Me.TLPan_General.Controls.Add(Me.pan_Info, 1, 1)
         Me.TLPan_General.Controls.Add(Me.TableLayoutPanel1, 1, 0)
+        Me.TLPan_General.Controls.Add(Me.Label1, 0, 2)
         Me.TLPan_General.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_General.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_General.Name = "TLPan_General"
@@ -125,11 +127,10 @@ Partial Class Frm_InfoLogiciel
         'img_info
         '
         Me.img_info.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
-        Me.img_info.Location = New System.Drawing.Point(5, 5)
-        Me.img_info.Margin = New System.Windows.Forms.Padding(5)
+        Me.img_info.Location = New System.Drawing.Point(2, 2)
+        Me.img_info.Margin = New System.Windows.Forms.Padding(2)
         Me.img_info.Name = "img_info"
-        Me.img_info.Size = New System.Drawing.Size(20, 20)
+        Me.img_info.Size = New System.Drawing.Size(26, 26)
         Me.img_info.TabIndex = 81
         Me.img_info.TabStop = False
         '
@@ -204,6 +205,20 @@ Partial Class Frm_InfoLogiciel
         Me.imgList_Info.Images.SetKeyName(0, "Warning")
         Me.imgList_Info.Images.SetKeyName(1, "Info")
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label1.Font = New System.Drawing.Font("Arial Black", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(2, 151)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(26, 26)
+        Me.Label1.TabIndex = 85
+        Me.Label1.Text = "i"
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.Label1.Visible = False
+        '
         'Frm_InfoLogiciel
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -218,6 +233,7 @@ Partial Class Frm_InfoLogiciel
         Me.pan_General.ResumeLayout(False)
         Me.pan_G2.ResumeLayout(False)
         Me.TLPan_General.ResumeLayout(False)
+        Me.TLPan_General.PerformLayout()
         Me.pan_Lien.ResumeLayout(False)
         Me.pan_Lien.PerformLayout()
         CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
@@ -242,4 +258,5 @@ Partial Class Frm_InfoLogiciel
     Friend WithEvents pan_Lien As Panel
     Friend WithEvents lbl_ContactSupport As Label
     Friend WithEvents lbk_Support As LinkLabel
+    Friend WithEvents Label1 As Label
 End Class

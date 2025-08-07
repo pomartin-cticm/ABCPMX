@@ -227,9 +227,12 @@ Public Class Frm_Chargement
     Private Sub GestionLangues()
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_CHARGEMENT")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
                 '=== MENU PRINCIPAL ==============================================================='
@@ -304,8 +307,7 @@ Public Class Frm_Chargement
                 Me.lbl_UnitRightSupport.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
 
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
-                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
             Finally
                 Bloc.Clear()
             End Try

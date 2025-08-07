@@ -14,7 +14,6 @@ Imports PMXMoteur2
 
 #End Region
 
-
 #Region " Profiles laminés "
 
     <TestMethod()> Public Sub TestUnit_ProprietesProfileAcierLamine()
@@ -239,60 +238,62 @@ Imports PMXMoteur2
         '----------------------------------------------------------------------------------------------------------------------------------
         '   13/11/23 :  Création GUD
         '----------------------------------------------------------------------------------------------------------------------------------
-        ' Test des propriétés d'un profilé acier slimfloor SFB
-        '   Références : fichier Excel créé par Stéphan BARTHE 
+        '   Test des propriétés d'un profilé acier slimfloor SFB
+        '   Références : Cas Test SFS01 
         '----------------------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
-        Dim MyProfil As New cls_ProfilA
+        Dim myProfil As New cls_ProfilA
+        Dim Valeur, ValRef As Decimal
+        Dim zANE, zANP As Decimal
+        Dim InertieY As Decimal
+        Dim MelRd, MplRd As Decimal
 
         '--> Initialisation
 
-        '# Slimfloor IFB_A --> profilé issu d'un IPE 300
+        '# Slimfloor SFB = IPE 300 + plat 300x15
 
-        MyProfil.ha = 312 / 1000
-        MyProfil.hb = 300 / 1000
+        myProfil.GenereProfileIPE300()
+        myProfil.ha = 315 / 1000
+        myProfil.Plat_b = 300 / 1000
+        myProfil.Plat_t = 15 / 1000
 
-        MyProfil.Plat_b = 250 / 1000
-        MyProfil.Plat_t = 12 / 1000
+        myProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
 
-        MyProfil.Bfs = 150 / 1000
-        MyProfil.Tfs = 10.7 / 1000
+        myProfil.InitialiseProprietes()
 
-        MyProfil.Bfi = 150 / 1000
-        MyProfil.Tfi = 10.7 / 1000
-
-        MyProfil.Tw = 7.1 / 1000
-        MyProfil.Rci = 15 / 1000
-        MyProfil.Rcs = 15 / 1000
-        MyProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+        myProfil.ProprietesMyy(1, True, 1, zANE, InertieY, melrd, zanp, mplrd)
 
         '# Aire de cisaillement
 
-        'ValRef = 25.7 * 10 ^ (-4)
-        'DeltaV = (MyProfil.AireAv - ValRef) / ValRef
-        'Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        ValRef = 25.7 * 10 ^ (-4)
+        Valeur = myProfil.AireAv(1)
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
 
-        ''# Aire 
+        '# Aire 
 
-        'ValRef = 83.75 * 10 ^ (-4)
-        'DeltaV = (MyProfil.Aire - ValRef) / ValRef
-        'Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        ValRef = 98.81 * 10 ^ (-4)
+        Valeur = myProfil.Aire
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
 
-        ''# Inertie YY
+        '# Inertie YY
 
-        'MyProfil.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
+        ValRef = 14443 * 10 ^ (-8)
+        Valeur = myProfil.InertieY
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
 
-        'ValRef = 13051.554 * 10 ^ (-8)
-        'DeltaV = (InertieY - ValRef) / ValRef
-        'Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        Valeur = InertieY
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
 
-        ''# Position ANE
+        '# Position ANE
 
-        'ValRef = 94.27 * 10 ^ (-3)
-        'DeltaV = (zANE - ValRef) / ValRef
-        'Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        ValRef = 78.3 * 10 ^ (-3)
+        Valeur = zANE
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+        Valeur = myProfil.zG
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
 
         ''# module élastique flexion élastique selon l'axe YY
 

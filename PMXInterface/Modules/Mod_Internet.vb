@@ -151,8 +151,10 @@ Module Mod_Internet
                         Dim BlocLine As New Cls_LinesOfFile(FichierCible, True)
 
                         Dim Bloc As New Dictionary(Of String, String)
+                        Dim strLoadedKey As String = ""
+                        Const CLE As String = ""
 
-                        BlocLine.CreationBloc(Bloc)
+                        BlocLine.CreationBloc(Bloc, strLoadedKey)
 
                         If Not Bloc.ContainsKey("VERSION") Then
                             lOK = False
@@ -435,8 +437,10 @@ Module Mod_Internet
         '------------------------------------------------------------------------------------
 
         Dim BlocLine As New Cls_LinesOfFile(FichierCible, True)
+        Dim strLoadedKey As String = ""
+        Const CLE As String = ""
 
-        BlocLine.CreationBloc(BlocMAJ)
+        BlocLine.CreationBloc(BlocMAJ, strLoadedKey)
 
     End Sub
 

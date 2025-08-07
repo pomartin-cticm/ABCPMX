@@ -229,24 +229,11 @@ Public Class cls_ProfilA
                 '== LAMINES                                                                                         =
                 '====================================================================================================
                 Case Enum_TypeSectionAcier.Lamine
-                    Dim Bf As Decimal = Me.Bfs
-                    Dim Tf As Decimal = Me.Tfs
-                    Dim Tw As Decimal = Me.Tw
-                    Dim Rc As Decimal = Me.Rcs
-                    Dim Hw As Decimal = Me.HauteurAmeHw
 
-                    Dim Alpha1 As Decimal
-                    Dim DiaD1 As Decimal
-
-                    ''=== Formume Annexe B.2.2 de l apublication P385 du SCI (formule de Darwish)
-
-                    Alpha1 = -0.042 + 0.2204 * Tw / Tf + 0.1355 * Rc / Tf - 0.0865 * Rc * Tw / Tf ^ 2 - 0.0725 * (Tw / Tf) ^ 2
-
-                    DiaD1 = ((Tf + Rc) ^ 2 + (Rc + Tw / 2) ^ 2 - Rc ^ 2) / (2 * Rc + Tf)
-
-                    pInertieT = 2 / 3 * (Bf - 0.63 * Tf) * Tf ^ 3 _
-                              + 1 / 3 * Hw * Tw ^ 3 _
-                              + 2 * Alpha1 * DiaD1 ^ 4
+                    pInertieT = Me.InertieT_ProfileLamineSeul
+                    If Me.lPlatRenfort Then
+                        pInertieT += Me.InertieT_Plat
+                    End If
 
                 '====================================================================================================
                 '== PRS                                                                                             =
@@ -254,19 +241,17 @@ Public Class cls_ProfilA
 
                 Case Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
 
-                    '=== Formule du guide CTICM sur le déversement, Annexe A2
+                    pInertieT = Me.InertieT_ProfilePRS
 
-                    Dim Itfs, Itfi As Decimal
-                    Dim Itrs, Itri As Decimal
-                    Dim Itw As Decimal
 
-                    Itfs = 1 / 3 * (1 - 0.63 * Me.Tfs / Me.Bfs * (1 - Me.Tfs ^ 4 / 12 / Me.Bfs ^ 4)) * Me.Bfs * Me.Tfs ^ 3
-                    Itfi = 1 / 3 * (1 - 0.63 * Me.Tfi / Me.Bfi * (1 - Me.Tfi ^ 4 / 12 / Me.Bfi ^ 4)) * Me.Bfi * Me.Tfi ^ 3
-                    Itw = 1 / 3 * Me.HauteurAmeHw * Me.Tw ^ 3
-                    Itrs = Me.Tw / Me.Tfs * (0.1 * Me.Rcs / Me.Tfs + 0.15) * (((Me.Tfs + Me.Rcs) ^ 2 + Me.Tw * (Me.Rcs + Me.Tw / 4)) / (2 * Me.Rcs + Me.Tfs)) ^ 4
-                    Itri = Me.Tw / Me.Tfi * (0.1 * Me.Rci / Me.Tfi + 0.15) * (((Me.Tfi + Me.Rci) ^ 2 + Me.Tw * (Me.Rci + Me.Tw / 4)) / (2 * Me.Rci + Me.Tfi)) ^ 4
+                Case Enum_TypeSectionAcier.LamineSlimIFBA
 
-                    pInertieT = Itfs + Itfi + Itw + Itrs + Itri
+                Case Enum_TypeSectionAcier.LamineSlimIFBB
+
+                Case Enum_TypeSectionAcier.LamineSlimSAB
+                Case Enum_TypeSectionAcier.LamineSlimSFB
+
+                    pInertieT = Me.InertieT_ProfileLamineSeul + Me.InertieT_Plat
 
             End Select
 
@@ -286,6 +271,79 @@ Public Class cls_ProfilA
             ''          + 1 / 3 * Hw * Tw ^ 3 _
             ''          + 2 * Tw / Tf * (0.1 * Rc / Tf + 0.15) * (((Tf + Rc) ^ 2 + Tw * (Rc + Tw / 4)) / (2 * Rc + Tf)) ^ 4
 
+        End Get
+    End Property
+
+    Private ReadOnly Property InertieT_Plat As Decimal
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   12/07/23 :  Création POM
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   Inertie de torsion du plat associé à la section
+        '-------------------------------------------------------------------------------------------------------------------------------
+        Get
+            Dim pInertieT As Decimal
+            pInertieT = (Me.Plat_b * Me.Plat_t ^ 3) / 3
+            Return pInertieT
+        End Get
+    End Property
+
+    Private ReadOnly Property InertieT_ProfilePRS As Decimal
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   12/07/23 :  Création POM
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   Inertie de torsion du profilé, quand PRS seul
+        '-------------------------------------------------------------------------------------------------------------------------------
+        Get
+            Dim pInertieT As Decimal
+            '=== Formule du guide CTICM sur le déversement, Annexe A2
+
+            Dim Itfs, Itfi As Decimal
+            Dim Itrs, Itri As Decimal
+            Dim Itw As Decimal
+
+            Itfs = 1 / 3 * (1 - 0.63 * Me.Tfs / Me.Bfs * (1 - Me.Tfs ^ 4 / 12 / Me.Bfs ^ 4)) * Me.Bfs * Me.Tfs ^ 3
+            Itfi = 1 / 3 * (1 - 0.63 * Me.Tfi / Me.Bfi * (1 - Me.Tfi ^ 4 / 12 / Me.Bfi ^ 4)) * Me.Bfi * Me.Tfi ^ 3
+            Itw = 1 / 3 * Me.HauteurAmeHw * Me.Tw ^ 3
+            Itrs = Me.Tw / Me.Tfs * (0.1 * Me.Rcs / Me.Tfs + 0.15) * (((Me.Tfs + Me.Rcs) ^ 2 + Me.Tw * (Me.Rcs + Me.Tw / 4)) / (2 * Me.Rcs + Me.Tfs)) ^ 4
+            Itri = Me.Tw / Me.Tfi * (0.1 * Me.Rci / Me.Tfi + 0.15) * (((Me.Tfi + Me.Rci) ^ 2 + Me.Tw * (Me.Rci + Me.Tw / 4)) / (2 * Me.Rci + Me.Tfi)) ^ 4
+
+            pInertieT = Itfs + Itfi + Itw + Itrs + Itri
+
+            Return pInertieT
+
+        End Get
+    End Property
+
+    Private ReadOnly Property InertieT_ProfileLamineSeul As Decimal
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   12/07/23 :  Création POM
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   Inertie de torsion du profilé, quand laminé seul
+        '-------------------------------------------------------------------------------------------------------------------------------
+        Get
+
+            Dim pInertieT As Decimal
+
+            Dim Bf As Decimal = Me.Bfs
+            Dim Tf As Decimal = Me.Tfs
+            Dim Tw As Decimal = Me.Tw
+            Dim Rc As Decimal = Me.Rcs
+            Dim Hw As Decimal = Me.HauteurAmeHw
+
+            Dim Alpha1 As Decimal
+            Dim DiaD1 As Decimal
+
+            ''=== Formume Annexe B.2.2 de l apublication P385 du SCI (formule de Darwish)
+
+            Alpha1 = -0.042 + 0.2204 * Tw / Tf + 0.1355 * Rc / Tf - 0.0865 * Rc * Tw / Tf ^ 2 - 0.0725 * (Tw / Tf) ^ 2
+
+            DiaD1 = ((Tf + Rc) ^ 2 + (Rc + Tw / 2) ^ 2 - Rc ^ 2) / (2 * Rc + Tf)
+
+            pInertieT = 2 / 3 * (Bf - 0.63 * Tf) * Tf ^ 3 _
+                      + 1 / 3 * Hw * Tw ^ 3 _
+                      + 2 * Alpha1 * DiaD1 ^ 4
+
+            Return pInertieT
         End Get
     End Property
 

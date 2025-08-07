@@ -1207,10 +1207,35 @@ Public Class Cls_Rapport
 
                 Case "PROFIL_ACIER"
 
-                    If MyProjet.Poutres(MyProjet.IndEnCours).lSlimFloor Then
-                    Else
-                        DessinProfileAcierN(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, sWiImg, sHiImg, PoliceEnCours, 0.9, True, False, -1, xLeftImg, YPen)
-                    End If
+                    Const kADJ As Decimal = 0.9
+                    Const lCOTE As Boolean = True
+                    Const lAFFS As Boolean = False
+
+                    With MyProjet.Poutres(MyProjet.IndEnCours)
+                        If .lSlimFloor Then
+                            Select Case .Section.TypeSection
+                                Case PMXMoteur2.cls_Section.Enum_TypeSection.IFB_A, PMXMoteur2.cls_Section.Enum_TypeSection.IFB_Amixte
+                                    DessinProfileIFB_A_Acier(MyGr, .Section, .lIntermediaire, sWiImg, sHiImg, PoliceEnCours,
+                                                             kADJ, lCOTE, lAFFS, -1, xLeftImg, YPen)
+
+                                Case PMXMoteur2.cls_Section.Enum_TypeSection.IFB_B, PMXMoteur2.cls_Section.Enum_TypeSection.IFB_Bmixte
+                                    DessinProfileIFB_B_Acier(MyGr, .Section, sWiImg, sHiImg, PoliceEnCours,
+                                                             kADJ, lCOTE, lAFFS, -1, xLeftImg, YPen)
+
+                                Case PMXMoteur2.cls_Section.Enum_TypeSection.SAB, PMXMoteur2.cls_Section.Enum_TypeSection.SABmixte
+                                    DessinProfileSAB_Acier(MyGr, .Section, sWiImg, sHiImg, PoliceEnCours,
+                                                             kADJ, lCOTE, lAFFS, -1, xLeftImg, YPen)
+
+                                Case PMXMoteur2.cls_Section.Enum_TypeSection.SFB, PMXMoteur2.cls_Section.Enum_TypeSection.SFBmixte
+                                    DessinProfileSFBAcier(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, sWiImg, sHiImg,
+                                                          PoliceEnCours, kADJ, lCOTE, lAFFS, -1, xLeftImg, YPen)
+                            End Select
+                        Else
+                            DessinProfileAcierN(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, sWiImg, sHiImg,
+                                                PoliceEnCours, 0.9, True, False, -1, xLeftImg, YPen)
+                        End If
+                    End With
+
 
                 Case "PROFIL_ACIER_DATABASE"
 

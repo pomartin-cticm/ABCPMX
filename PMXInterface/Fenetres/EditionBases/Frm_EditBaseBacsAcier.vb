@@ -36,9 +36,12 @@ Public Class Frm_EditBaseBacsAcier
     Private Sub GestionLangues()
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_EDITSTEELSHEETINGS")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
 
@@ -47,7 +50,8 @@ Public Class Frm_EditBaseBacsAcier
                 Me.lbl_Base.Text = "Base"
 
             Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangue", CLE, strLoadedKey)
             Finally
                 Bloc.Clear()
             End Try

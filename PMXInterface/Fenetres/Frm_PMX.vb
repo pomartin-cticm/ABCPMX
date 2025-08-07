@@ -146,9 +146,12 @@ Public Class Frm_PMX
         '   Récupération des messages généraux dans le fichier langue
         '----------------------------------------------------------------------------------------
         If File.Exists(LogicielFichiers.Langue) Then
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#GENERAL")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
 
@@ -184,7 +187,8 @@ Public Class Frm_PMX
 
             Catch ex As Exception
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangueMessagesGeneraux")
-                GestionErreurAffichageLangue(Me.Name, "GestionLangueMessagesGeneraux")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangueMessagesGeneraux", CLE, strLoadedKey)
+
             End Try
         Else
             GestionFichierLangueAbsent(Me.Name, "GestionLangueMessagesGeneraux")
@@ -195,9 +199,12 @@ Public Class Frm_PMX
 
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_MAIN")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
 
@@ -340,7 +347,7 @@ Public Class Frm_PMX
                 InfoW.BlocF.Add("ERRORLNG", Bloc("WERRORLNG"))
 
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangue")
             Finally
                 Bloc.Clear()
@@ -2078,7 +2085,7 @@ Public Class Frm_PMX
         If Not MyProjet.Poutres.Count = 0 Then DessinFrmMain_Coupe(e.Graphics,
                                                                    Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height,
                                                                    MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation, lIdent,
-                                                                   MyProjet.Entreprise, MyProjet.Nom, strPRS, strPlat, FontFrm)
+                                                                   MyProjet.Entreprise, MyProjet.Nom, strPRS, strPlat, FontFrm, Me.img_Main.BackColor)
     End Sub
 
     Private Sub Frm_PMX_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
@@ -2134,7 +2141,7 @@ Public Class Frm_PMX
 
         If Not MyProjet.Poutres.Count = 0 Then DessinFrmMain_Coupe(MyGr, ImageSize.Width, ImageSize.Height,
                                                                    MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation, lIdent,
-                                                                   MyProjet.Entreprise, MyProjet.Nom, strPRS, strPlat, FontFrm)
+                                                                   MyProjet.Entreprise, MyProjet.Nom, strPRS, strPlat, FontFrm, System.Drawing.Color.White)
 
         My.Computer.Clipboard.SetImage(Image)
         MyGr.Dispose()

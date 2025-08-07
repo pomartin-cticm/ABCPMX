@@ -101,9 +101,12 @@ Public Class Frm_SectionAcierStandard
     Private Sub GestionLangues()
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_STEELSECTIONSUSUAL")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
 
@@ -154,8 +157,8 @@ Public Class Frm_SectionAcierStandard
                 strWarningA = Bloc("WARNINGRATIOAF")
 
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
-                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
+
             Finally
                 Bloc.Clear()
             End Try

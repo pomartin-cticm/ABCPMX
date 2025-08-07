@@ -61,6 +61,10 @@ Public Class Frm_SectionSAB
     Dim lNuancePossible As Boolean
     Dim NuancesExclues() As String = {"S235", "S275"}
 
+
+
+    Dim myFontFrm As New Font(FontBase.Name, SizeFontFrm)
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -82,9 +86,12 @@ Public Class Frm_SectionSAB
     Private Sub GestionLangues()
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_SABSECTIONS")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
 
@@ -100,10 +107,8 @@ Public Class Frm_SectionSAB
                 Me.lbl_Gamme.Text = Bloc("SERIAL")
                 Me.lbl_Profiles.Text = Bloc("PROFILE")
 
-
                 Me.lbl_SABSection.Text = Bloc("SABSECTION")
                 Me.lbl_Width.Text = Bloc("WIDTH")
-
 
                 '=== STEEL ===============================================================
 
@@ -116,7 +121,10 @@ Public Class Frm_SectionSAB
                 strDeliveryConditions = Bloc("DELIVERYCOND")
 
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                Dim strLastKey As String = ""
+                'If Bloc.Count > 0 Then strLastKey = Bloc.Last.Key
+
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", strLastKey, strLoadedKey)
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
             Finally
                 Bloc.Clear()
@@ -495,7 +503,7 @@ Public Class Frm_SectionSAB
         'DessinProfileAcier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
         '                   FontBase, kAdjust, True, False, iSelect)
         DessinProfileSAB_Acier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
-                               FontBase, kAdjust, True, False, iSelect)
+                               myFontFrm, kAdjust, True, False, iSelect)
 
     End Sub
 

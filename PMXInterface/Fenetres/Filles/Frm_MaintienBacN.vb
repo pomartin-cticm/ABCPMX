@@ -92,8 +92,12 @@ Public Class Frm_MaintienBacN
 
     Private Sub GestionLangues()
         If File.Exists(LogicielFichiers.Langue) Then
+
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_DECKRESTRAINT")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
 
@@ -108,7 +112,7 @@ Public Class Frm_MaintienBacN
                 Me.chk_Calculs.Text = Bloc("RESULTS")
 
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
             Finally
                 'Bloc.Clear()

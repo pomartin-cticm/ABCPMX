@@ -59,9 +59,12 @@ Public Class Frm_PPCasDeCharge
 
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_PPLOADCASE")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
                 Me.Text = Bloc("TITLE")                             ' "Load cases"
@@ -83,7 +86,7 @@ Public Class Frm_PPCasDeCharge
                 Me.btn_EditModel.Text = Bloc("EDITMODEL")           ' "Editer le modèle"
 
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
             End Try
         End If
 

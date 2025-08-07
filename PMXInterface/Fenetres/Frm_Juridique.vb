@@ -43,9 +43,12 @@ Public Class Frm_Juridique
         '--------------------------------------------------------------------
 
         If File.Exists(LogicielFichiers.Langue) Then
+            Dim strLoadedKey As String = ""
+            Const CLE As String = ""
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_JURIDIQUE")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
 
             Try
 
@@ -62,7 +65,7 @@ Public Class Frm_Juridique
                 Me.Label_InfoJuridique.Text += Chr(13) & Bloc("TEXT4")
 
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_Juridique/GestionLangue")
             Finally
                 Bloc.Clear()

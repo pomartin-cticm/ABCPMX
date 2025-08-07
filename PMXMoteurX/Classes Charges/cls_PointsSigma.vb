@@ -161,10 +161,6 @@
         '   Initialisation des points de calculs des contraintes normales dans le profilé
         '-----------------------------------------------------------------------------------
 
-        '--( Déclarations
-
-        Dim zSup As Decimal
-
         '--( Initialisations
 
         Me.iProfile(0) = -1
@@ -172,72 +168,208 @@
 
         '--( Traitement en fct du type de section
 
-        Select Case myBeam.Section.TypeSection
-            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage,
-                 cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+        Select Case myBeam.Section.ProfilA.typeProfileAcier
+            Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
 
-                '# Fibre supérieure de la semelle supérieure
+                InitialisePourProfileStandard(myBeam)
 
-                Me.zPos.Add(0)
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
 
-                '# Interface semelle sup / âme
+                InitialisePourProfileSlimIFBA(myBeam)
 
-                Me.zPos.Add(-myBeam.Section.ProfilA.Tfs)
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
 
-                '# CdG du profilé acier
+                InitialisePourProfileSlimIFBb(myBeam)
 
-                Me.zPos.Add(myBeam.Section.ProfilA.zCdG)
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
 
-                '# Interface semelle inf / âme
+                InitialisePourProfileSlimSAB(myBeam)
 
-                Me.zPos.Add(-myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi)
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
 
-                '# Fibre inférieure de la semelle inférieure
-
-                Me.zPos.Add(-myBeam.Section.ProfilA.ha)
-
-                Me.iProfile(0) = 0
-                Me.iProfile(1) = Me.zPos.Count - 1
-
-            Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
-
-                zSup = myBeam.Section.zSemSup
-
-                '# Fibre supérieure de la semelle supérieure
-
-                Me.zPos.Add(zSup)
-
-                '# Interface semelle sup / âme
-
-                Me.zPos.Add(zSup - myBeam.Section.ProfilA.Tfs)
-
-                '# CdG du profilé acier
-
-                Me.zPos.Add(myBeam.Section.ProfilA.zCdG)
-
-                '# Interface semelle inf / âme
-
-                Me.zPos.Add(zSup - myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi + myBeam.Section.ProfilA.Plat_t)
-
-                '# fibre inférieure semelle inf 
-
-                Me.zPos.Add(zSup - myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi)
-
-                '# fibre inférieure du plat 
-
-                Me.zPos.Add(zSup - myBeam.Section.ProfilA.ha)
-
-                '# Le reste
-
-                'Me.zPos.Add(zSup - myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi + myBeam.Section.ProfilA.Plat_t)
-                'Me.zPos.Add(zSup - myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi + myBeam.Section.ProfilA.Plat_t)
-                'Me.zPos.Add(zSup - myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi)
-                'Me.zPos.Add(zSup - myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi)
-
-                Me.iProfile(0) = 0
-                Me.iProfile(1) = Me.zPos.Count - 1
+                InitialisePourProfileSlimSFB(myBeam)
 
         End Select
+
+        Me.iProfile(0) = 0
+        Me.iProfile(1) = Me.zPos.Count - 1
+
+    End Sub
+
+    Private Sub InitialisePourProfileSlimIFBA(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------
+        '   08/08/25 :  Création - POM
+        '-----------------------------------------------------------------------------------
+        '   Initialisation des points de calculs des contraintes normales dans le profilé
+        '   Cas profilé slim IFB-A
+        '-----------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim zSup As Decimal
+
+        zSup = myBeam.Section.zSemSup
+
+        '# Fibre supérieure de la semelle supérieure
+
+        Me.zPos.Add(zSup)
+
+        '# Interface semelle sup / âme
+
+        Me.zPos.Add(zSup - myBeam.Section.ProfilA.Tfs)
+
+        '# CdG du profilé acier
+
+        Me.zPos.Add(myBeam.Section.ProfilA.zCdG)
+
+        '# Interface plat / âme
+
+        Me.zPos.Add(0)
+
+        '# fibre inférieure plat
+
+        Me.zPos.Add(-myBeam.Section.ProfilA.Plat_t)
+
+    End Sub
+
+    Private Sub InitialisePourProfileSlimIFBB(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------
+        '   08/08/25 :  Création - POM
+        '-----------------------------------------------------------------------------------
+        '   Initialisation des points de calculs des contraintes normales dans le profilé
+        '   Cas profilé slim IFB-B
+        '-----------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim zSup As Decimal
+
+        zSup = myBeam.Section.zSemSup
+
+        '# Fibre supérieure du plat supérieur
+
+        Me.zPos.Add(zSup)
+
+        '# Interface plat sup / âme
+
+        Me.zPos.Add(zSup - myBeam.Section.ProfilA.Plat_t)
+
+        '# CdG du profilé acier
+
+        Me.zPos.Add(myBeam.Section.ProfilA.zCdG)
+
+        '# Interface plat / âme
+
+        Me.zPos.Add(0)
+
+        '# fibre inférieure plat
+
+        Me.zPos.Add(-myBeam.Section.ProfilA.Tfi)
+
+    End Sub
+    Private Sub InitialisePourProfileSlimSAB(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------
+        '   08/08/25 :  Création - POM
+        '-----------------------------------------------------------------------------------
+        '   Initialisation des points de calculs des contraintes normales dans le profilé
+        '   Cas profilé slim SAB
+        '-----------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim zSup As Decimal
+
+        zSup = myBeam.Section.zSemSup
+
+        '# Fibre supérieure de la semelle supérieure
+
+        Me.zPos.Add(zSup)
+
+        '# Interface semelle sup / âme
+
+        Me.zPos.Add(zSup - myBeam.Section.ProfilA.Tfs)
+
+        '# CdG du profilé acier
+
+        Me.zPos.Add(myBeam.Section.ProfilA.zCdG)
+
+        '# Interface semelle inf / âme
+
+        Me.zPos.Add(0)
+
+        '# fibre inférieure semelle inf 
+
+        Me.zPos.Add(-myBeam.Section.ProfilA.Tfi)
+
+    End Sub
+
+    Private Sub InitialisePourProfileSlimSFB(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------
+        '   08/08/25 :  Création - POM
+        '-----------------------------------------------------------------------------------
+        '   Initialisation des points de calculs des contraintes normales dans le profilé
+        '   Cas profilé slim SFB
+        '-----------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim zSup As Decimal
+
+        zSup = myBeam.Section.zSemSup
+
+        '# Fibre supérieure de la semelle supérieure
+
+        Me.zPos.Add(zSup)
+
+        '# Interface semelle sup / âme
+
+        Me.zPos.Add(zSup - myBeam.Section.ProfilA.Tfs)
+
+        '# CdG du profilé acier
+
+        Me.zPos.Add(myBeam.Section.ProfilA.zCdG)
+
+        '# Interface semelle inf / âme
+
+        Me.zPos.Add(zSup - myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi + myBeam.Section.ProfilA.Plat_t)
+
+        '# fibre inférieure semelle inf 
+
+        Me.zPos.Add(zSup - myBeam.Section.ProfilA.hb)
+
+        '# fibre inférieure du plat 
+
+        Me.zPos.Add(zSup - myBeam.Section.ProfilA.ha)
+
+    End Sub
+
+    Private Sub InitialisePourProfileStandard(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------
+        '   08/08/25 :  Création - POM
+        '-----------------------------------------------------------------------------------
+        '   Initialisation des points de calculs des contraintes normales dans le profilé
+        '   Cas profilé standard
+        '-----------------------------------------------------------------------------------
+
+        '# Fibre supérieure de la semelle supérieure
+
+        Me.zPos.Add(0)
+
+        '# Interface semelle sup / âme
+
+        Me.zPos.Add(-myBeam.Section.ProfilA.Tfs)
+
+        '# CdG du profilé acier
+
+        Me.zPos.Add(myBeam.Section.ProfilA.zCdG)
+
+        '# Interface semelle inf / âme
+
+        Me.zPos.Add(-myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi)
+
+        '# Fibre inférieure de la semelle inférieure
+
+        Me.zPos.Add(-myBeam.Section.ProfilA.ha)
 
     End Sub
 

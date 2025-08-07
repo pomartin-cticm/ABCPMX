@@ -66,6 +66,9 @@ Public Class Frm_SectionSFB
     Dim AcierPlats As New List(Of strucAcierLocal)
     Private NuancesPlats() As String = {"S235", "S275", "S355"}
 
+
+    Dim myFontFrm As New Font(FontBase.Name, SizeFontFrm)
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -88,46 +91,75 @@ Public Class Frm_SectionSFB
     Private Sub GestionLangues()
         If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim strLoadedKey As String = ""
+
+
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_SFBSECTIONS")
-            BlocLine.CreationBloc(Bloc)
+            BlocLine.CreationBloc(Bloc, strLoadedKey)
+
+            Dim CLE As String = "NOKEY"
 
             Try
 
                 '=== GENERAL ===============================================================
 
-                Me.Text = Bloc("TITLE")
-                Me.btn_Annuler.Text = Bloc("CANCEL")
-                Me.btn_OK.Text = Bloc("OK")
+                CLE = "TITLE"
+                Me.Text = Bloc(CLE)
+
+                CLE = "CANCEL"
+                Me.btn_Annuler.Text = Bloc(CLE)
+
+                CLE = "OK"
+                Me.btn_OK.Text = Bloc(CLE)
 
                 '=== PROFILE ===============================================================
 
-                Me.lbl_ParentProfile.Text = Bloc("PROFILE")
-                Me.lbl_Gamme.Text = Bloc("SERIAL")
-                Me.lbl_Profiles.Text = Bloc("PROFILE")
+                CLE = "PROFILE"
+                Me.lbl_ParentProfile.Text = Bloc(CLE)
 
+                CLE = "SERIAL"
+                Me.lbl_Gamme.Text = Bloc(CLE)
 
-                Me.lbl_WeldedPlate.Text = Bloc("WELDPLATE")
-                Me.lbl_WidthSFB.Text = Bloc("WIDTH")
-                Me.lbl_ThicknessSFB.Text = Bloc("THICKNESS")
+                CLE = "PROFILE"
+                Me.lbl_Profiles.Text = Bloc(CLE)
 
+                CLE = "WELDPLATE"
+                Me.lbl_WeldedPlate.Text = Bloc(CLE)
+
+                CLE = "WIDTH"
+                Me.lbl_WidthSFB.Text = Bloc(CLE)
+
+                CLE = "THICKNESS"
+                Me.lbl_ThicknessSFB.Text = Bloc(CLE)
 
                 '=== STEEL ===============================================================
 
-                Me.lbl_Acier.Text = Bloc("STEEL")
-                Me.lbl_Grade.Text = Bloc("STEELGRADE")
-                Me.lbl_Qualite.Text = Bloc("QUALITY")
-                Me.lbl_ReductionCurve.Text = Bloc("REDUCTIONCURVE")
+                CLE = "STEEL"
+                Me.lbl_Acier.Text = Bloc(CLE)
 
-                Me.lbl_WPSteel.Text = Bloc("STEEL")
+                CLE = "STEELGRADE"
+                Me.lbl_Grade.Text = Bloc(CLE)
 
+                CLE = "QUALITY"
+                Me.lbl_Qualite.Text = Bloc(CLE)
+
+                CLE = "REDUCTIONCURVE"
+                Me.lbl_ReductionCurve.Text = Bloc(CLE)
+
+                CLE = "STEEL"
+                Me.lbl_WPSteel.Text = Bloc(CLE)
 
                 '=== CHAINES =============================================================
 
-                strDeliveryConditions = Bloc("DELIVERYCOND")
+                CLE = "DELIVERYCOND"
+                strDeliveryConditions = Bloc(CLE)
 
             Catch ex As Exception
-                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                Dim strLastKey As String = ""
+                'If Bloc.Count > 0 Then strLastKey = Bloc.Last.Key
+
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
             Finally
                 Bloc.Clear()
@@ -609,34 +641,6 @@ Public Class Frm_SectionSFB
             Next
         End If
 
-        With MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA ' --> Sécurité supplémentaire pour s'assurer que les valeurs qui n'ont pas de sens restent égales à 0
-            Select Case .typeProfileAcier
-                Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                    .hb = .ha
-                    .aW = 0
-                    .Plat_b = 0
-                    .Plat_t = 0
-                Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
-                    .hb = 0
-                    .Rcs = 0
-                    .Rci = 0
-                    .Plat_b = 0
-                    .Plat_t = 0
-                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                    .hb = .ha
-                    .aW = 0
-                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                    .Bfi = 0
-                    .Tfi = 0
-                    .Rci = 0
-                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                    .Bfs = 0
-                    .Tfs = 0
-                    .Rcs = 0
-            End Select
-
-        End With
-
     End Sub
 
 
@@ -648,7 +652,7 @@ Public Class Frm_SectionSFB
     Private Sub img_Section_Paint(sender As Object, e As PaintEventArgs) Handles img_Section.Paint
 
         DessinProfileSFBAcier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
-                              FontBase, kAdjust, True, False, iSelect)
+                              myFontFrm, kAdjust, True, False, iSelect)
 
     End Sub
 
