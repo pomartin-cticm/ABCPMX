@@ -109,6 +109,7 @@
     <Compile Include="Classes\cls_Poutre.vb" />
     <Compile Include="Classes\cls_ProfilA.vb" />
     <Compile Include="Classes\cls_Maintiens.vb" />
+    <Compile Include="Elements\cls_ArmaSlimFeu.vb" />
     <Compile Include="Elements\cls_ArmatureEnrobage.vb" />
     <Compile Include="Elements\cls_Cofradal.vb" />
     <Compile Include="Elements\Cls_ConnecteurArmature.vb" />

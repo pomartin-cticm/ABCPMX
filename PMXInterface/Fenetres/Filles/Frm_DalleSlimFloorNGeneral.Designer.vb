@@ -25,6 +25,7 @@ Partial Class Frm_DalleSlimFloorNGeneral
         Me.components = New System.ComponentModel.Container()
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
+        Me.lbl_Masses = New System.Windows.Forms.Label()
         Me.pan_Beton = New System.Windows.Forms.Panel()
         Me.chk_BetonLeger = New System.Windows.Forms.CheckBox()
         Me.txt_RhoC = New System.Windows.Forms.TextBox()
@@ -34,9 +35,12 @@ Partial Class Frm_DalleSlimFloorNGeneral
         Me.lbl_ClasseE = New System.Windows.Forms.Label()
         Me.lbl_Beton = New System.Windows.Forms.Label()
         Me.pan_Type = New System.Windows.Forms.Panel()
+        Me.pan_OptionRive = New System.Windows.Forms.Panel()
+        Me.chk_ChambreRivePleine = New System.Windows.Forms.CheckBox()
         Me.lbl_TypeDalle = New System.Windows.Forms.Label()
         Me.cmb_TypeDalle = New System.Windows.Forms.ComboBox()
         Me.lbl_General = New System.Windows.Forms.Label()
+        Me.pan_Masses = New System.Windows.Forms.Panel()
         Me.pan_EpaisseurMixte = New System.Windows.Forms.Panel()
         Me.rdb_EpPleine = New System.Windows.Forms.RadioButton()
         Me.rdb_EpTotale = New System.Windows.Forms.RadioButton()
@@ -75,13 +79,16 @@ Partial Class Frm_DalleSlimFloorNGeneral
         Me.etq_UnitDim13 = New System.Windows.Forms.Label()
         Me.lbl_Cofradal = New System.Windows.Forms.Label()
         Me.etq_UnitDim12 = New System.Windows.Forms.Label()
-        Me.pan_OptionRive = New System.Windows.Forms.Panel()
-        Me.chk_ChambreRivePleine = New System.Windows.Forms.CheckBox()
+        Me.txt_MassSurf = New System.Windows.Forms.TextBox()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitMassSurf = New System.Windows.Forms.Label()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Gauche.SuspendLayout()
         Me.pan_Beton.SuspendLayout()
         CType(Me.img_RhoC, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Type.SuspendLayout()
+        Me.pan_OptionRive.SuspendLayout()
+        Me.pan_Masses.SuspendLayout()
         Me.pan_EpaisseurMixte.SuspendLayout()
         CType(Me.img_Tc, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Td2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -94,7 +101,7 @@ Partial Class Frm_DalleSlimFloorNGeneral
         Me.pan_Cofradal.SuspendLayout()
         CType(Me.img_mupf, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_dp, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_OptionRive.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Main
@@ -109,21 +116,39 @@ Partial Class Frm_DalleSlimFloorNGeneral
         '
         Me.TLpan_Gauche.ColumnCount = 1
         Me.TLpan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_Gauche.Controls.Add(Me.lbl_Masses, 0, 4)
         Me.TLpan_Gauche.Controls.Add(Me.pan_Beton, 0, 3)
         Me.TLpan_Gauche.Controls.Add(Me.lbl_Beton, 0, 2)
         Me.TLpan_Gauche.Controls.Add(Me.pan_Type, 0, 1)
         Me.TLpan_Gauche.Controls.Add(Me.lbl_General, 0, 0)
+        Me.TLpan_Gauche.Controls.Add(Me.pan_Masses, 0, 5)
         Me.TLpan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLpan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_Gauche.Name = "TLpan_Gauche"
-        Me.TLpan_Gauche.RowCount = 4
+        Me.TLpan_Gauche.RowCount = 6
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 140.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_Gauche.Size = New System.Drawing.Size(357, 451)
         Me.TLpan_Gauche.TabIndex = 1
+        '
+        'lbl_Masses
+        '
+        Me.lbl_Masses.AutoSize = True
+        Me.lbl_Masses.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Masses.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Masses.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Masses.Location = New System.Drawing.Point(0, 290)
+        Me.lbl_Masses.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_Masses.Name = "lbl_Masses"
+        Me.lbl_Masses.Size = New System.Drawing.Size(357, 30)
+        Me.lbl_Masses.TabIndex = 10
+        Me.lbl_Masses.Text = "lbl_Masses"
+        Me.lbl_Masses.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_Beton
         '
@@ -139,7 +164,7 @@ Partial Class Frm_DalleSlimFloorNGeneral
         Me.pan_Beton.Location = New System.Drawing.Point(0, 200)
         Me.pan_Beton.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Beton.Name = "pan_Beton"
-        Me.pan_Beton.Size = New System.Drawing.Size(357, 250)
+        Me.pan_Beton.Size = New System.Drawing.Size(357, 89)
         Me.pan_Beton.TabIndex = 9
         '
         'chk_BetonLeger
@@ -230,6 +255,26 @@ Partial Class Frm_DalleSlimFloorNGeneral
         Me.pan_Type.Size = New System.Drawing.Size(357, 139)
         Me.pan_Type.TabIndex = 7
         '
+        'pan_OptionRive
+        '
+        Me.pan_OptionRive.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_OptionRive.Controls.Add(Me.chk_ChambreRivePleine)
+        Me.pan_OptionRive.Location = New System.Drawing.Point(16, 35)
+        Me.pan_OptionRive.Name = "pan_OptionRive"
+        Me.pan_OptionRive.Size = New System.Drawing.Size(329, 23)
+        Me.pan_OptionRive.TabIndex = 93
+        '
+        'chk_ChambreRivePleine
+        '
+        Me.chk_ChambreRivePleine.AutoSize = True
+        Me.chk_ChambreRivePleine.Location = New System.Drawing.Point(3, 3)
+        Me.chk_ChambreRivePleine.Name = "chk_ChambreRivePleine"
+        Me.chk_ChambreRivePleine.Size = New System.Drawing.Size(143, 17)
+        Me.chk_ChambreRivePleine.TabIndex = 65
+        Me.chk_ChambreRivePleine.Text = "chk_ChambreRivePleine"
+        Me.chk_ChambreRivePleine.UseVisualStyleBackColor = True
+        '
         'lbl_TypeDalle
         '
         Me.lbl_TypeDalle.AutoSize = True
@@ -266,6 +311,20 @@ Partial Class Frm_DalleSlimFloorNGeneral
         Me.lbl_General.TabIndex = 2
         Me.lbl_General.Text = "lbl_General"
         Me.lbl_General.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'pan_Masses
+        '
+        Me.pan_Masses.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Masses.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Masses.Controls.Add(Me.txt_MassSurf)
+        Me.pan_Masses.Controls.Add(Me.PictureBox1)
+        Me.pan_Masses.Controls.Add(Me.etq_UnitMassSurf)
+        Me.pan_Masses.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Masses.Location = New System.Drawing.Point(0, 320)
+        Me.pan_Masses.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Masses.Name = "pan_Masses"
+        Me.pan_Masses.Size = New System.Drawing.Size(357, 131)
+        Me.pan_Masses.TabIndex = 11
         '
         'pan_EpaisseurMixte
         '
@@ -641,25 +700,32 @@ Partial Class Frm_DalleSlimFloorNGeneral
         Me.etq_UnitDim12.TabIndex = 78
         Me.etq_UnitDim12.Text = "mm"
         '
-        'pan_OptionRive
+        'txt_MassSurf
         '
-        Me.pan_OptionRive.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pan_OptionRive.Controls.Add(Me.chk_ChambreRivePleine)
-        Me.pan_OptionRive.Location = New System.Drawing.Point(16, 35)
-        Me.pan_OptionRive.Name = "pan_OptionRive"
-        Me.pan_OptionRive.Size = New System.Drawing.Size(329, 23)
-        Me.pan_OptionRive.TabIndex = 93
+        Me.txt_MassSurf.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_MassSurf.Location = New System.Drawing.Point(234, 26)
+        Me.txt_MassSurf.Name = "txt_MassSurf"
+        Me.txt_MassSurf.Size = New System.Drawing.Size(58, 20)
+        Me.txt_MassSurf.TabIndex = 65
         '
-        'chk_ChambreRivePleine
+        'PictureBox1
         '
-        Me.chk_ChambreRivePleine.AutoSize = True
-        Me.chk_ChambreRivePleine.Location = New System.Drawing.Point(3, 3)
-        Me.chk_ChambreRivePleine.Name = "chk_ChambreRivePleine"
-        Me.chk_ChambreRivePleine.Size = New System.Drawing.Size(143, 17)
-        Me.chk_ChambreRivePleine.TabIndex = 65
-        Me.chk_ChambreRivePleine.Text = "chk_ChambreRivePleine"
-        Me.chk_ChambreRivePleine.UseVisualStyleBackColor = True
+        Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PictureBox1.Location = New System.Drawing.Point(189, 26)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(46, 20)
+        Me.PictureBox1.TabIndex = 66
+        Me.PictureBox1.TabStop = False
+        '
+        'etq_UnitMassSurf
+        '
+        Me.etq_UnitMassSurf.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitMassSurf.AutoSize = True
+        Me.etq_UnitMassSurf.Location = New System.Drawing.Point(298, 29)
+        Me.etq_UnitMassSurf.Name = "etq_UnitMassSurf"
+        Me.etq_UnitMassSurf.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitMassSurf.TabIndex = 64
+        Me.etq_UnitMassSurf.Text = "mm"
         '
         'Frm_DalleSlimFloorNGeneral
         '
@@ -682,6 +748,10 @@ Partial Class Frm_DalleSlimFloorNGeneral
         CType(Me.img_RhoC, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Type.ResumeLayout(False)
         Me.pan_Type.PerformLayout()
+        Me.pan_OptionRive.ResumeLayout(False)
+        Me.pan_OptionRive.PerformLayout()
+        Me.pan_Masses.ResumeLayout(False)
+        Me.pan_Masses.PerformLayout()
         Me.pan_EpaisseurMixte.ResumeLayout(False)
         Me.pan_EpaisseurMixte.PerformLayout()
         CType(Me.img_Tc, System.ComponentModel.ISupportInitialize).EndInit()
@@ -698,8 +768,7 @@ Partial Class Frm_DalleSlimFloorNGeneral
         Me.pan_Cofradal.PerformLayout()
         CType(Me.img_mupf, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_dp, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_OptionRive.ResumeLayout(False)
-        Me.pan_OptionRive.PerformLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -758,4 +827,9 @@ Partial Class Frm_DalleSlimFloorNGeneral
     Friend WithEvents etq_UnitDim12 As Label
     Friend WithEvents pan_OptionRive As Panel
     Friend WithEvents chk_ChambreRivePleine As CheckBox
+    Friend WithEvents lbl_Masses As Label
+    Friend WithEvents pan_Masses As Panel
+    Friend WithEvents txt_MassSurf As TextBox
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents etq_UnitMassSurf As Label
 End Class

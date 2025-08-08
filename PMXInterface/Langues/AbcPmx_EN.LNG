@@ -880,6 +880,12 @@ RDB_REINFORCEMENT		= Rebars
 RDB_SHEET				= Sheeting
 RDB_MAIN				= Main
 EDGECHAMBERFILLED		= Edge chamber filled with concrete
+FIREREBARS				= Use of reinforcement rebar for fire design
+FIREREB_NUMBER			= Number
+FIREREB_DIAMETER		= Diameter
+FIREREB_LOCATION		= Location
+FIREREBARSTITLE			= Reinforcement
+MASSES					= Masses
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam

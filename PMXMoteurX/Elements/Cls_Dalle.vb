@@ -90,6 +90,11 @@
     Public AcierArmatures As New cls_AcierArmature
 
     ''' <summary>
+    ''' Armatures longitudinales pour le calcul au feu des slim floors
+    ''' </summary>
+    Public ArmaSlimFeu As New cls_ArmaSlimFeu
+
+    ''' <summary>
     ''' Connecteur acier-béton entre dalle et profilé avec des goujons soudés
     ''' </summary>
     Public Goujons As New cls_GoujonSoude
@@ -207,7 +212,30 @@
     End Property
 
     ''' <summary>
-    '''  surface par unité de largeur (m²/m)
+    ''' Renvoie la masse surfacique de la dalle (béton + bac)
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function MasseSurfacique(lBac As Boolean) As Decimal
+        '----------------------------------------------------------------------
+        '   08/08/25 :  Création - POM
+        '----------------------------------------------------------------------
+
+
+        Dim pAire As Decimal
+        Dim mSurf As Decimal
+
+        pAire = Me.Aire(1, 1)
+        mSurf = pAire * Me.beton.RhoC
+
+        If lBac And Me.type = Enum_TypeDalle.Mixte Then
+            mSurf += Me.Bac.msurf
+        End If
+
+        Return mSurf
+    End Function
+
+    ''' <summary>
+    '''  Aire de la dalle
     ''' </summary>
     ''' <param name="dc">largeur de calcul de l'aire</param>
     ''' <param name="bfs">largeur de la semelle supérieure</param>

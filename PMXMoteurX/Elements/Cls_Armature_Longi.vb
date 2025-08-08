@@ -1,5 +1,11 @@
 ﻿Public Class Cls_Armatures_Longi
 
+#Region " Déclarations "
+
+    Public Shared TabDiametres() As Decimal = {0.006, 0.008, 0.01, 0.012, 0.014, 0.016, 0.02, 0.025, 0.032}
+
+#End Region
+
 #Region " Attributs "
 
     ''' <summary>
@@ -24,20 +30,13 @@
     Public n_s As Integer
 
     ''' <summary>
-    ''' Espace entre la barre et le bord de l'élément - Valeur pour l'interface
-    ''' </summary>
-    'Public c_s As Decimal
-
-    ''' <summary>
     ''' Indique si le lit d'armatures est activé
     ''' </summary>
     Public lActive As Boolean
 
 #End Region
 
-#Region " Propiétés "
-
-
+#Region " Propriétés "
 
     ''' <summary>
     ''' Aire d'armature par unité de largeur de dalle

@@ -135,6 +135,24 @@ Public Class cls_Section
     End Function
 
     ''' <summary>
+    ''' Renvoie l'épaisseur du plat qui sert de semelle supérieur
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property EpPlatSup As Decimal
+        Get
+            Dim pTf As Decimal
+
+            If Me.lSlimFloor_IFB_B Then
+                pTf = Me.ProfilA.Plat_t
+            Else
+                pTf = Me.ProfilA.Tfs
+            End If
+
+            Return pTf
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Retourne la masse linéique du profilé (/!\ valeur retournée en kg/m /!\)
     ''' </summary>
     ''' <returns></returns>

@@ -1019,7 +1019,7 @@ Module Mod_Outils
     ''' <param name="Valeur">   [E] Valeur à afficher   </param>
     ''' <param name="Type">     [E] Type d'unités       </param>
     ''' <returns></returns>
-    Public Function GetStringNoUnit(ByVal Valeur As Double, ByVal Type As Enu_TypeVariable) As String
+    Public Function GetStringNoUnit(ByVal Valeur As Double, ByVal Type As Enu_TypeVariable, Optional lSupZero As Boolean = False) As String
 
         Dim Chaine As String
         Dim kUnit As Decimal
@@ -1075,6 +1075,8 @@ Module Mod_Outils
 
         Fmt = GetFormatSignif(Valeur / kUnit, NbDigitMax)
         Chaine = Format(Valeur / kUnit, Fmt)
+
+        If lSupZero Then SupprimeZero(Chaine)
 
         Return Chaine
 

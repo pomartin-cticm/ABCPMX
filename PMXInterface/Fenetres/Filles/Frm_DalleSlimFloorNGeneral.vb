@@ -23,6 +23,11 @@ Public Class Frm_DalleSlimFloorNGeneral
     Dim iSelect As Integer = -1
 
     Dim lInter As Boolean
+    Private Enum Enu_DefEpMixte
+        Totale                  ' Définition d'une dalle mixte par son épaisseur totale
+        Pleine                  ' Définition d'une dalle mixte par son épaisseur au dessus du bac
+    End Enum
+    Dim DefEpMixte As Enu_DefEpMixte = Enu_DefEpMixte.Totale
 
 #End Region
 
@@ -61,6 +66,7 @@ Public Class Frm_DalleSlimFloorNGeneral
         Me.etq_UnitDim13.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "2"
 
         Me.etq_UnitRhoC.Text = "kg/m3"
+        Me.etq_UnitMassSurf.Text = "kg/m2"
         ' Me.etq_UnitSigma2.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
 
     End Sub
@@ -74,6 +80,9 @@ Public Class Frm_DalleSlimFloorNGeneral
 
         Me.lbl_Beton.BackColor = CouleurBackBandeaux
         Me.lbl_Beton.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_Masses.BackColor = CouleurBackBandeaux
+        Me.lbl_Masses.ForeColor = CouleurForeBandeaux
 
     End Sub
 
@@ -104,6 +113,11 @@ Public Class Frm_DalleSlimFloorNGeneral
 
             CLE = "CLASS" : Me.lbl_ClasseE.Text = myBloc(CLE)
             CLE = "LIGHTCONCRETE" : Me.chk_BetonLeger.Text = myBloc(CLE)
+
+            '=== MASSES ========================================================================
+
+            CLE = "MASSES" : Me.lbl_Masses.Text = myBloc(CLE)
+
 
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
@@ -139,6 +153,13 @@ Public Class Frm_DalleSlimFloorNGeneral
         Me.pan_Cofradal.Left = 5
         Me.pan_Cofradal.Top = yRef + 25        '  60
 
+        MAJI_SaisieEpMixte()
+        MAJI_MasseDalle()
+
+        Select Case DefEpMixte
+            Case Enu_DefEpMixte.Pleine : Me.rdb_EpPleine.Checked = True
+            Case Enu_DefEpMixte.Totale : Me.rdb_EpTotale.Checked = True
+        End Select
     End Sub
 
     Private Sub AfficheDalleEnCours()
@@ -271,6 +292,7 @@ Public Class Frm_DalleSlimFloorNGeneral
 
             End Select
 
+            MAJI_MasseDalle()
             Frm_DalleSlimFloorN.RedessineDalle()
 
         End If
@@ -397,6 +419,42 @@ Public Class Frm_DalleSlimFloorNGeneral
 
     End Sub
 
+    Private Sub SaisieRdBDefEpMixte(sender As Object, e As EventArgs) Handles rdb_EpTotale.CheckedChanged, rdb_EpPleine.CheckedChanged
+        If lBuild Then Exit Sub
+        If Me.rdb_EpPleine.Checked Then
+            DefEpMixte = Enu_DefEpMixte.Pleine
+        Else
+            DefEpMixte = Enu_DefEpMixte.Totale
+        End If
+        MAJI_SaisieEpMixte()
+
+    End Sub
+
+    Private Sub MAJI_SaisieEpMixte()
+
+        PrepareTextBoxDipo(Me.txt_Td2, DefEpMixte = Enu_DefEpMixte.Totale)
+        PrepareTextBoxDipo(Me.txt_Tc, DefEpMixte = Enu_DefEpMixte.Pleine)
+
+    End Sub
+
+    Private Sub cmb_TypeDalle_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_TypeDalle.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        Select Case Me.cmb_TypeDalle.SelectedIndex
+            Case 0 : Frm_DalleSlimFloorN.localDalle.type = cls_Dalle.Enum_TypeDalle.Pleine
+            Case 1 : Frm_DalleSlimFloorN.localDalle.type = cls_Dalle.Enum_TypeDalle.Mixte
+            Case 2 : Frm_DalleSlimFloorN.localDalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
+            Case 3 : Frm_DalleSlimFloorN.localDalle.type = cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
+        End Select
+
+        MAJI_TypeDalle()
+        'AfficherDalleEnCours()
+        Frm_DalleSlimFloorN.MAJI_RdbTypeDalle()
+
+        Frm_DalleSlimFloorN.RedessineDalle()
+
+    End Sub
+
 #End Region
 
 #Region " Gestion Enter Leave sur les objets "
@@ -513,23 +571,13 @@ Public Class Frm_DalleSlimFloorNGeneral
 
 #End Region
 
-#Region " Evènements saisie "
+#Region " Mise à jour de la masse de la dalle "
 
-    Private Sub cmb_TypeDalle_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_TypeDalle.SelectedIndexChanged
-        If lBuild Then Exit Sub
+    Private Sub MAJI_MasseDalle()
 
-        Select Case Me.cmb_TypeDalle.SelectedIndex
-            Case 0 : Frm_DalleSlimFloorN.localDalle.type = cls_Dalle.Enum_TypeDalle.Pleine
-            Case 1 : Frm_DalleSlimFloorN.localDalle.type = cls_Dalle.Enum_TypeDalle.Mixte
-            Case 2 : Frm_DalleSlimFloorN.localDalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
-            Case 3 : Frm_DalleSlimFloorN.localDalle.type = cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
-        End Select
+        Dim mSurf = Frm_DalleSlimFloorN.localDalle.MasseSurfacique(True)
 
-        MAJI_TypeDalle()
-        'AfficherDalleEnCours()
-        Frm_DalleSlimFloorN.MAJI_RdbTypeDalle()
-
-        Frm_DalleSlimFloorN.RedessineDalle()
+        Me.txt_MassSurf.Text = GetStringInUnitN(mSurf, Enu_TypeVariable.SansType, 4, 3, False, True)
 
     End Sub
 

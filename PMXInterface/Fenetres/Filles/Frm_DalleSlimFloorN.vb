@@ -175,8 +175,8 @@ Public Class Frm_DalleSlimFloorN
                 Me.pan_ContenuFille.Controls.Add(Frm_DalleSlimFloorNGeneral.pan_Main)
                 Frm_DalleSlimFloorNGeneral.InitialiseFenetre(Bloc, localBeam.lIntermediaire)
             Case Enu_AffParamSlim.Armatures
-                Me.pan_ContenuFille.Controls.Add(Frm_ConnectionSlimConnexion.pan_Main)
-                Frm_ConnectionSlimConnexion.InitialiseFenetre(Bloc)
+                Me.pan_ContenuFille.Controls.Add(Frm_DalleSlimFloorNArma.pan_Main)
+                Frm_DalleSlimFloorNArma.InitialiseFenetre(Bloc)
             Case Enu_AffParamSlim.Bac
         End Select
 

@@ -362,14 +362,14 @@ Public Class Frm_Dalle
 
         '--> Epaisseur
 
-        Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.Ep_td, Enu_TypeVariable.Dimension)
-        Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.Ep_td - MyDalleLoc.Bac.Hp, Enu_TypeVariable.Dimension)
+        Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.Ep_td, Enu_TypeVariable.Dimension, True)
+        Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.Ep_td - MyDalleLoc.Bac.Hp, Enu_TypeVariable.Dimension, True)
 
-        Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.Ep_td, Enu_TypeVariable.Dimension)
-        Me.txt_Hh.Text = GetStringNoUnit(MyDalleLoc.Ep_th, Enu_TypeVariable.Dimension)
+        Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.Ep_td, Enu_TypeVariable.Dimension, True)
+        Me.txt_Hh.Text = GetStringNoUnit(MyDalleLoc.Ep_th, Enu_TypeVariable.Dimension, True)
 
-        Me.txt_EpPredalle.Text = GetStringNoUnit(MyDalleLoc.preDalle_ep, Enu_TypeVariable.Dimension)
-        Me.txt_EpJoint.Text = GetStringNoUnit(MyDalleLoc.preDalle_tjoint, Enu_TypeVariable.Dimension)
+        Me.txt_EpPredalle.Text = GetStringNoUnit(MyDalleLoc.preDalle_ep, Enu_TypeVariable.Dimension, True)
+        Me.txt_EpJoint.Text = GetStringNoUnit(MyDalleLoc.preDalle_tjoint, Enu_TypeVariable.Dimension, True)
 
         '--> Béton
 
@@ -383,7 +383,7 @@ Public Class Frm_Dalle
             Me.cmb_ClasseBetonDalle.SelectedIndex = 0
         End If
 
-        Me.txt_RhoC.Text = GetStringInUnit(MyDalleLoc.beton.RhoC, Enu_TypeVariable.SansType, 3, 0, False)
+        Me.txt_RhoC.Text = GetStringInUnit(MyDalleLoc.beton.RhoC, Enu_TypeVariable.SansType, 3, 0, False, True)
         Me.chk_BetonLeger.Checked = MyDalleLoc.beton.lLeger
 
         MAJI_ProprietesBeton()

@@ -882,6 +882,12 @@ RDB_REINFORCEMENT		= Armatures
 RDB_SHEET				= Bac
 RDB_MAIN				= Général
 EDGECHAMBERFILLED		= Chambre de rive remplie de béton
+FIREREBARS				= Utilisation d'armatures longi pour le calcul incendie
+FIREREB_NUMBER			= Nombre
+FIREREB_DIAMETER		= Diamètre
+FIREREB_LOCATION		= Position
+FIREREBARSTITLE			= Armatures longitudinales
+MASSES					= Masses
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre

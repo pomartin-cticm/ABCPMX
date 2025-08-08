@@ -139,6 +139,18 @@
     <Compile Include="Fenetres\Filles\Frm_DalleSlimFloorN.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_DalleSlimFloorNArma.Designer.vb">
+      <DependentUpon>Frm_DalleSlimFloorNArma.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_DalleSlimFloorNArma.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_DalleSlimFloorNBac.Designer.vb">
+      <DependentUpon>Frm_DalleSlimFloorNBac.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_DalleSlimFloorNBac.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_DalleSlimFloorNGeneral.Designer.vb">
       <DependentUpon>Frm_DalleSlimFloorNGeneral.vb</DependentUpon>
     </Compile>
@@ -679,6 +691,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_DalleSlimFloorN.resx">
       <DependentUpon>Frm_DalleSlimFloorN.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_DalleSlimFloorNArma.resx">
+      <DependentUpon>Frm_DalleSlimFloorNArma.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_DalleSlimFloorNBac.resx">
+      <DependentUpon>Frm_DalleSlimFloorNBac.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_DalleSlimFloorNGeneral.resx">
       <DependentUpon>Frm_DalleSlimFloorNGeneral.vb</DependentUpon>
