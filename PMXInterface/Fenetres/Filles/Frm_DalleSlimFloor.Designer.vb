@@ -29,13 +29,11 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_Beton = New System.Windows.Forms.Panel()
         Me.chk_BetonLeger = New System.Windows.Forms.CheckBox()
         Me.txt_RhoC = New System.Windows.Forms.TextBox()
-        Me.img_RhoC = New System.Windows.Forms.PictureBox()
         Me.etq_UnitRhoC = New System.Windows.Forms.Label()
         Me.cmb_ClasseBetonDalle = New System.Windows.Forms.ComboBox()
         Me.lbl_ClasseE = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.txt_Fsk = New System.Windows.Forms.TextBox()
-        Me.img_Fy = New System.Windows.Forms.PictureBox()
         Me.etq_UnitSigma2 = New System.Windows.Forms.Label()
         Me.cmb_Acier = New System.Windows.Forms.ComboBox()
         Me.lbl_ClasseA = New System.Windows.Forms.Label()
@@ -48,8 +46,6 @@ Partial Class Frm_DalleSlimFloor
         Me.txt_Hp = New System.Windows.Forms.TextBox()
         Me.lbl_HauteurHp = New System.Windows.Forms.Label()
         Me.etq_UnitDim4 = New System.Windows.Forms.Label()
-        Me.img_Hp = New System.Windows.Forms.PictureBox()
-        Me.img_Bac = New System.Windows.Forms.PictureBox()
         Me.btn_ModifierBac = New System.Windows.Forms.Button()
         Me.lbl_BacNom = New System.Windows.Forms.Label()
         Me.txt_BacNom = New System.Windows.Forms.TextBox()
@@ -67,15 +63,12 @@ Partial Class Frm_DalleSlimFloor
         Me.txt_Tc = New System.Windows.Forms.TextBox()
         Me.etq_UnitDim11 = New System.Windows.Forms.Label()
         Me.txt_Td2 = New System.Windows.Forms.TextBox()
-        Me.img_Tc = New System.Windows.Forms.PictureBox()
         Me.lbl_EpaisseurM = New System.Windows.Forms.Label()
         Me.etq_UnitDim10 = New System.Windows.Forms.Label()
-        Me.img_Td2 = New System.Windows.Forms.PictureBox()
         Me.pan_Epaisseur = New System.Windows.Forms.Panel()
         Me.txt_Hd = New System.Windows.Forms.TextBox()
         Me.lbl_Epaisseur = New System.Windows.Forms.Label()
         Me.etq_UnitDim2 = New System.Windows.Forms.Label()
-        Me.Img_Hd = New System.Windows.Forms.PictureBox()
         Me.pan_Cofradal = New System.Windows.Forms.Panel()
         Me.cmb_Cofradal = New System.Windows.Forms.ComboBox()
         Me.txt_mupf = New System.Windows.Forms.TextBox()
@@ -83,22 +76,17 @@ Partial Class Frm_DalleSlimFloor
         Me.txt_dp = New System.Windows.Forms.TextBox()
         Me.lbl_mupf = New System.Windows.Forms.Label()
         Me.lbl_Name = New System.Windows.Forms.Label()
-        Me.img_mupf = New System.Windows.Forms.PictureBox()
         Me.lbl_dp = New System.Windows.Forms.Label()
-        Me.img_dp = New System.Windows.Forms.PictureBox()
         Me.etq_UnitDim13 = New System.Windows.Forms.Label()
         Me.lbl_Cofradal = New System.Windows.Forms.Label()
         Me.etq_UnitDim12 = New System.Windows.Forms.Label()
         Me.pan_Predalle = New System.Windows.Forms.Panel()
         Me.txt_EpJoint = New System.Windows.Forms.TextBox()
         Me.lbl_EpJoint = New System.Windows.Forms.Label()
-        Me.img_EpJoint = New System.Windows.Forms.PictureBox()
         Me.etq_UnitDim9 = New System.Windows.Forms.Label()
         Me.txt_EpPredalle = New System.Windows.Forms.TextBox()
         Me.lbl_EpPreDalle = New System.Windows.Forms.Label()
-        Me.img_EpPredalle = New System.Windows.Forms.PictureBox()
         Me.etq_UnitDim8 = New System.Windows.Forms.Label()
-        Me.img_Dalle = New System.Windows.Forms.PictureBox()
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.btn_OK = New System.Windows.Forms.Button()
         Me.btn_Annuler = New System.Windows.Forms.Button()
@@ -106,15 +94,23 @@ Partial Class Frm_DalleSlimFloor
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.imgList_BOArma = New System.Windows.Forms.ImageList(Me.components)
+        Me.img_Hp = New System.Windows.Forms.PictureBox()
+        Me.img_Bac = New System.Windows.Forms.PictureBox()
+        Me.img_Fy = New System.Windows.Forms.PictureBox()
+        Me.img_RhoC = New System.Windows.Forms.PictureBox()
+        Me.img_Tc = New System.Windows.Forms.PictureBox()
+        Me.img_Td2 = New System.Windows.Forms.PictureBox()
+        Me.Img_Hd = New System.Windows.Forms.PictureBox()
+        Me.img_mupf = New System.Windows.Forms.PictureBox()
+        Me.img_dp = New System.Windows.Forms.PictureBox()
+        Me.img_EpJoint = New System.Windows.Forms.PictureBox()
+        Me.img_EpPredalle = New System.Windows.Forms.PictureBox()
+        Me.img_Dalle = New System.Windows.Forms.PictureBox()
         Me.pan_Beton.SuspendLayout()
-        CType(Me.img_RhoC, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
-        CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Type.SuspendLayout()
         Me.pan_Bac.SuspendLayout()
-        CType(Me.img_Hp, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLpan_Milieu.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
         Me.TLpan_PartageV.SuspendLayout()
@@ -122,21 +118,25 @@ Partial Class Frm_DalleSlimFloor
         Me.TLPan_Dalle.SuspendLayout()
         Me.pan_Img.SuspendLayout()
         Me.pan_EpaisseurMixte.SuspendLayout()
-        CType(Me.img_Tc, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Td2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Epaisseur.SuspendLayout()
-        CType(Me.Img_Hd, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Cofradal.SuspendLayout()
-        CType(Me.img_mupf, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_dp, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Predalle.SuspendLayout()
-        CType(Me.img_EpJoint, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_EpPredalle, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.pan_General.SuspendLayout()
+        CType(Me.img_Hp, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_RhoC, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Tc, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Td2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.Img_Hd, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_mupf, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_dp, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_EpJoint, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_EpPredalle, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lbl_Beton
@@ -201,15 +201,6 @@ Partial Class Frm_DalleSlimFloor
         Me.txt_RhoC.Size = New System.Drawing.Size(58, 20)
         Me.txt_RhoC.TabIndex = 62
         '
-        'img_RhoC
-        '
-        Me.img_RhoC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_RhoC.Location = New System.Drawing.Point(83, 56)
-        Me.img_RhoC.Name = "img_RhoC"
-        Me.img_RhoC.Size = New System.Drawing.Size(46, 20)
-        Me.img_RhoC.TabIndex = 63
-        Me.img_RhoC.TabStop = False
-        '
         'etq_UnitRhoC
         '
         Me.etq_UnitRhoC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -266,15 +257,6 @@ Partial Class Frm_DalleSlimFloor
         Me.txt_Fsk.Name = "txt_Fsk"
         Me.txt_Fsk.Size = New System.Drawing.Size(58, 20)
         Me.txt_Fsk.TabIndex = 59
-        '
-        'img_Fy
-        '
-        Me.img_Fy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Fy.Location = New System.Drawing.Point(93, 38)
-        Me.img_Fy.Name = "img_Fy"
-        Me.img_Fy.Size = New System.Drawing.Size(57, 20)
-        Me.img_Fy.TabIndex = 60
-        Me.img_Fy.TabStop = False
         '
         'etq_UnitSigma2
         '
@@ -397,25 +379,6 @@ Partial Class Frm_DalleSlimFloor
         Me.etq_UnitDim4.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim4.TabIndex = 83
         Me.etq_UnitDim4.Text = "mm"
-        '
-        'img_Hp
-        '
-        Me.img_Hp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Hp.Location = New System.Drawing.Point(118, 141)
-        Me.img_Hp.Name = "img_Hp"
-        Me.img_Hp.Size = New System.Drawing.Size(37, 20)
-        Me.img_Hp.TabIndex = 85
-        Me.img_Hp.TabStop = False
-        '
-        'img_Bac
-        '
-        Me.img_Bac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Bac.Location = New System.Drawing.Point(3, 31)
-        Me.img_Bac.Name = "img_Bac"
-        Me.img_Bac.Size = New System.Drawing.Size(242, 104)
-        Me.img_Bac.TabIndex = 80
-        Me.img_Bac.TabStop = False
         '
         'btn_ModifierBac
         '
@@ -636,14 +599,6 @@ Partial Class Frm_DalleSlimFloor
         Me.txt_Td2.Size = New System.Drawing.Size(58, 20)
         Me.txt_Td2.TabIndex = 75
         '
-        'img_Tc
-        '
-        Me.img_Tc.Location = New System.Drawing.Point(109, 25)
-        Me.img_Tc.Name = "img_Tc"
-        Me.img_Tc.Size = New System.Drawing.Size(37, 20)
-        Me.img_Tc.TabIndex = 91
-        Me.img_Tc.TabStop = False
-        '
         'lbl_EpaisseurM
         '
         Me.lbl_EpaisseurM.AutoSize = True
@@ -664,14 +619,6 @@ Partial Class Frm_DalleSlimFloor
         Me.etq_UnitDim10.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim10.TabIndex = 74
         Me.etq_UnitDim10.Text = "mm"
-        '
-        'img_Td2
-        '
-        Me.img_Td2.Location = New System.Drawing.Point(109, 4)
-        Me.img_Td2.Name = "img_Td2"
-        Me.img_Td2.Size = New System.Drawing.Size(37, 20)
-        Me.img_Td2.TabIndex = 76
-        Me.img_Td2.TabStop = False
         '
         'pan_Epaisseur
         '
@@ -713,14 +660,6 @@ Partial Class Frm_DalleSlimFloor
         Me.etq_UnitDim2.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim2.TabIndex = 74
         Me.etq_UnitDim2.Text = "mm"
-        '
-        'Img_Hd
-        '
-        Me.Img_Hd.Location = New System.Drawing.Point(109, 2)
-        Me.Img_Hd.Name = "Img_Hd"
-        Me.Img_Hd.Size = New System.Drawing.Size(37, 20)
-        Me.Img_Hd.TabIndex = 76
-        Me.Img_Hd.TabStop = False
         '
         'pan_Cofradal
         '
@@ -797,14 +736,6 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_Name.Text = "lbl_Name"
         Me.lbl_Name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'img_mupf
-        '
-        Me.img_mupf.Location = New System.Drawing.Point(108, 86)
-        Me.img_mupf.Name = "img_mupf"
-        Me.img_mupf.Size = New System.Drawing.Size(37, 20)
-        Me.img_mupf.TabIndex = 80
-        Me.img_mupf.TabStop = False
-        '
         'lbl_dp
         '
         Me.lbl_dp.AutoSize = True
@@ -816,14 +747,6 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_dp.TabIndex = 77
         Me.lbl_dp.Text = "lbl_dp"
         Me.lbl_dp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'img_dp
-        '
-        Me.img_dp.Location = New System.Drawing.Point(108, 64)
-        Me.img_dp.Name = "img_dp"
-        Me.img_dp.Size = New System.Drawing.Size(37, 20)
-        Me.img_dp.TabIndex = 80
-        Me.img_dp.TabStop = False
         '
         'etq_UnitDim13
         '
@@ -892,14 +815,6 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_EpJoint.Text = "lbl_EpJoint"
         Me.lbl_EpJoint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'img_EpJoint
-        '
-        Me.img_EpJoint.Location = New System.Drawing.Point(110, 29)
-        Me.img_EpJoint.Name = "img_EpJoint"
-        Me.img_EpJoint.Size = New System.Drawing.Size(37, 20)
-        Me.img_EpJoint.TabIndex = 84
-        Me.img_EpJoint.TabStop = False
-        '
         'etq_UnitDim9
         '
         Me.etq_UnitDim9.AutoSize = True
@@ -928,14 +843,6 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_EpPreDalle.Text = "lbl_EpPreDalle"
         Me.lbl_EpPreDalle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'img_EpPredalle
-        '
-        Me.img_EpPredalle.Location = New System.Drawing.Point(110, 7)
-        Me.img_EpPredalle.Name = "img_EpPredalle"
-        Me.img_EpPredalle.Size = New System.Drawing.Size(37, 20)
-        Me.img_EpPredalle.TabIndex = 80
-        Me.img_EpPredalle.TabStop = False
-        '
         'etq_UnitDim8
         '
         Me.etq_UnitDim8.AutoSize = True
@@ -944,17 +851,6 @@ Partial Class Frm_DalleSlimFloor
         Me.etq_UnitDim8.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim8.TabIndex = 78
         Me.etq_UnitDim8.Text = "mm"
-        '
-        'img_Dalle
-        '
-        Me.img_Dalle.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_Dalle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Dalle.Location = New System.Drawing.Point(117, 10)
-        Me.img_Dalle.Margin = New System.Windows.Forms.Padding(1, 0, 0, 1)
-        Me.img_Dalle.Name = "img_Dalle"
-        Me.img_Dalle.Size = New System.Drawing.Size(100, 50)
-        Me.img_Dalle.TabIndex = 3
-        Me.img_Dalle.TabStop = False
         '
         'pan_Main
         '
@@ -1040,6 +936,110 @@ Partial Class Frm_DalleSlimFloor
         Me.imgList_BOArma.Images.SetKeyName(0, "Ajouter")
         Me.imgList_BOArma.Images.SetKeyName(1, "Supprimer")
         '
+        'img_Hp
+        '
+        Me.img_Hp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Hp.Location = New System.Drawing.Point(118, 141)
+        Me.img_Hp.Name = "img_Hp"
+        Me.img_Hp.Size = New System.Drawing.Size(37, 20)
+        Me.img_Hp.TabIndex = 85
+        Me.img_Hp.TabStop = False
+        '
+        'img_Bac
+        '
+        Me.img_Bac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Bac.Location = New System.Drawing.Point(3, 31)
+        Me.img_Bac.Name = "img_Bac"
+        Me.img_Bac.Size = New System.Drawing.Size(242, 104)
+        Me.img_Bac.TabIndex = 80
+        Me.img_Bac.TabStop = False
+        '
+        'img_Fy
+        '
+        Me.img_Fy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Fy.Location = New System.Drawing.Point(93, 38)
+        Me.img_Fy.Name = "img_Fy"
+        Me.img_Fy.Size = New System.Drawing.Size(57, 20)
+        Me.img_Fy.TabIndex = 60
+        Me.img_Fy.TabStop = False
+        '
+        'img_RhoC
+        '
+        Me.img_RhoC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_RhoC.Location = New System.Drawing.Point(83, 56)
+        Me.img_RhoC.Name = "img_RhoC"
+        Me.img_RhoC.Size = New System.Drawing.Size(46, 20)
+        Me.img_RhoC.TabIndex = 63
+        Me.img_RhoC.TabStop = False
+        '
+        'img_Tc
+        '
+        Me.img_Tc.Location = New System.Drawing.Point(109, 25)
+        Me.img_Tc.Name = "img_Tc"
+        Me.img_Tc.Size = New System.Drawing.Size(37, 20)
+        Me.img_Tc.TabIndex = 91
+        Me.img_Tc.TabStop = False
+        '
+        'img_Td2
+        '
+        Me.img_Td2.Location = New System.Drawing.Point(109, 4)
+        Me.img_Td2.Name = "img_Td2"
+        Me.img_Td2.Size = New System.Drawing.Size(37, 20)
+        Me.img_Td2.TabIndex = 76
+        Me.img_Td2.TabStop = False
+        '
+        'Img_Hd
+        '
+        Me.Img_Hd.Location = New System.Drawing.Point(109, 2)
+        Me.Img_Hd.Name = "Img_Hd"
+        Me.Img_Hd.Size = New System.Drawing.Size(37, 20)
+        Me.Img_Hd.TabIndex = 76
+        Me.Img_Hd.TabStop = False
+        '
+        'img_mupf
+        '
+        Me.img_mupf.Location = New System.Drawing.Point(108, 86)
+        Me.img_mupf.Name = "img_mupf"
+        Me.img_mupf.Size = New System.Drawing.Size(37, 20)
+        Me.img_mupf.TabIndex = 80
+        Me.img_mupf.TabStop = False
+        '
+        'img_dp
+        '
+        Me.img_dp.Location = New System.Drawing.Point(108, 64)
+        Me.img_dp.Name = "img_dp"
+        Me.img_dp.Size = New System.Drawing.Size(37, 20)
+        Me.img_dp.TabIndex = 80
+        Me.img_dp.TabStop = False
+        '
+        'img_EpJoint
+        '
+        Me.img_EpJoint.Location = New System.Drawing.Point(110, 29)
+        Me.img_EpJoint.Name = "img_EpJoint"
+        Me.img_EpJoint.Size = New System.Drawing.Size(37, 20)
+        Me.img_EpJoint.TabIndex = 84
+        Me.img_EpJoint.TabStop = False
+        '
+        'img_EpPredalle
+        '
+        Me.img_EpPredalle.Location = New System.Drawing.Point(110, 7)
+        Me.img_EpPredalle.Name = "img_EpPredalle"
+        Me.img_EpPredalle.Size = New System.Drawing.Size(37, 20)
+        Me.img_EpPredalle.TabIndex = 80
+        Me.img_EpPredalle.TabStop = False
+        '
+        'img_Dalle
+        '
+        Me.img_Dalle.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.img_Dalle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_Dalle.Location = New System.Drawing.Point(117, 10)
+        Me.img_Dalle.Margin = New System.Windows.Forms.Padding(1, 0, 0, 1)
+        Me.img_Dalle.Name = "img_Dalle"
+        Me.img_Dalle.Size = New System.Drawing.Size(100, 50)
+        Me.img_Dalle.TabIndex = 3
+        Me.img_Dalle.TabStop = False
+        '
         'Frm_DalleSlimFloor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1055,17 +1055,13 @@ Partial Class Frm_DalleSlimFloor
         Me.Text = "Frm_DalleSlimFloor"
         Me.pan_Beton.ResumeLayout(False)
         Me.pan_Beton.PerformLayout()
-        CType(Me.img_RhoC, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
-        CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Type.ResumeLayout(False)
         Me.pan_Type.PerformLayout()
         Me.pan_Bac.ResumeLayout(False)
         Me.pan_Bac.PerformLayout()
-        CType(Me.img_Hp, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TLpan_Milieu.ResumeLayout(False)
         Me.TLpan_Milieu.PerformLayout()
         Me.pan_Gauche.ResumeLayout(False)
@@ -1076,24 +1072,28 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_Img.ResumeLayout(False)
         Me.pan_EpaisseurMixte.ResumeLayout(False)
         Me.pan_EpaisseurMixte.PerformLayout()
-        CType(Me.img_Tc, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Td2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Epaisseur.ResumeLayout(False)
         Me.pan_Epaisseur.PerformLayout()
-        CType(Me.Img_Hd, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Cofradal.ResumeLayout(False)
         Me.pan_Cofradal.PerformLayout()
-        CType(Me.img_mupf, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_dp, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Predalle.ResumeLayout(False)
         Me.pan_Predalle.PerformLayout()
-        CType(Me.img_EpJoint, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_EpPredalle, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Main.ResumeLayout(False)
         Me.TLPan_PartieBasse.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)
         Me.pan_General.ResumeLayout(False)
+        CType(Me.img_Hp, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_RhoC, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Tc, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Td2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.Img_Hd, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_mupf, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_dp, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_EpJoint, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_EpPredalle, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

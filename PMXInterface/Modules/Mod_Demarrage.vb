@@ -283,6 +283,11 @@ Public Module Mod_Demarrage
 
             'LogicielOptions.EtaW = My.Settings.EtaW
 
+            '--> Taille Initiale de la fenêtre principale
+
+            Frm_PMX.InitSize = My.Settings.FrmMainSize
+            Frm_PMX.InitLoc = My.Settings.FrmMainLocation
+
         Catch ex As Exception
             MsgBox("Erreur intialisation parameters | Error when initialising parameters", MsgBoxStyle.Critical, "Mod_Demarrage/InitialiseLogiciel")
         End Try

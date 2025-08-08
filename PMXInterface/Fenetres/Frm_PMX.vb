@@ -45,6 +45,8 @@ Public Class Frm_PMX
 
     Dim FontFrm As Font
 
+    Public InitSize As System.Drawing.Size = Nothing
+    Public InitLoc As System.Drawing.Point = Nothing
 #End Region
 
 #Region " Variables locales pour btnPoutres "
@@ -136,6 +138,24 @@ Public Class Frm_PMX
         MAJI_BOBasse()
 
         Me.TSbtn_PostT.Visible = LogicielOptions.lDebug Or LogicielOptions.lExpert
+
+        PrepareFenetre()
+
+    End Sub
+
+    Private Sub PrepareFenetre()
+
+        If Not Me.InitSize.IsEmpty Then
+
+            Me.Size = Me.InitSize
+
+        End If
+
+        'If Not Me.InitLoc.IsEmpty Then
+
+        '    Me.InitLoc = Me.InitLoc
+
+        'End If
 
     End Sub
 
@@ -412,6 +432,7 @@ Public Class Frm_PMX
     End Function
 
 #End Region
+
 #Region " Provisoire "
 
     Private Sub PaintPanel(sender As Object, e As PaintEventArgs)
@@ -938,7 +959,8 @@ Public Class Frm_PMX
 
             Case EnuFenetres.DalleSlimFloor
 
-                Frm_DalleSlimFloor.ShowDialog()
+                ' Frm_DalleSlimFloor.ShowDialog()
+                Frm_DalleSlimFloorN.ShowDialog()
 
 
             Case EnuFenetres.SectionAcier
@@ -1322,8 +1344,25 @@ Public Class Frm_PMX
 
 #Region " Fonctions de sauvegarde et lecture "
 
-    Private Sub EnregistrerOptionsLogiciel(Optional lRecentFile As Boolean = False)
+    Private Sub EnregistrerEtatFenetre()
+        '----------------------------------------------------------------
+        '   08/08/25 :  Création - POM
+        '----------------------------------------------------------------
+        '   
+        '----------------------------------------------------------------
+        '----------------------------------------------------------------
 
+        My.Settings.FrmMainSize = Me.Size
+        My.Settings.FrmMainLocation = Me.Location
+
+    End Sub
+
+    Private Sub EnregistrerOptionsLogiciel(Optional lRecentFile As Boolean = False)
+        '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        '   lRecentFile     [E] :   
+        '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         '--( Mode expert 
 
         My.Settings.lExpertMode = LogicielOptions.lExpert
@@ -2130,6 +2169,8 @@ Public Class Frm_PMX
         '--( Enregistrement des paramètres d'environnement, y compris les fichiers récents
 
         EnregistrerOptionsLogiciel(True)
+        EnregistrerEtatFenetre()
+
     End Sub
 
     Private Sub TSbtn_CopieImage_Click(sender As Object, e As EventArgs) Handles TSbtn_CopieImage.Click

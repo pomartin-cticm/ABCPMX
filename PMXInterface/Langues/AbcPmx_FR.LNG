@@ -845,10 +845,10 @@ MODIFYSH				= Modifier le bac acier
 MSURF					= Poids surfacique 
 NAME					= Nom
 PARALLEL				= Parallèle
-PERPENDICULAR			= Perpendicular							   
-PRECASTSLAB				= Dalle partiellement préabriquée											 
+PERPENDICULAR			= Perpendiculaire							   
+PRECASTSLAB				= Dalle partiel. préfabriquée											 
 PREPUNCHED				= Bac prépercé								   
-PRESLAB					= Parti préfa.
+PRESLAB					= Partie préfa.
 REBARS					= Armatures longitudinales
 REBARSTEEL				= Acier des armatures								   
 REINFLAYER0				= Pas d'armature définie
@@ -878,6 +878,10 @@ ERRORCCOVER1			= Lit d'armature n°$
 ERRORCCOVER2			= L'épaisseur d'enrobage ($) devrait être supérieure à la valeur minimale requise pour l'adhérence ($)
 REINFRATIO				= Taux d'armature
 NOREINFORCEMENT			= Pour les poutres mixtes sans parties en console ou pour les poutres non mixtes, la définition des armatures longitudinales n'est pas requise
+RDB_REINFORCEMENT		= Armatures
+RDB_SHEET				= Bac
+RDB_MAIN				= Général
+EDGECHAMBERFILLED		= Chambre de rive remplie de béton
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre

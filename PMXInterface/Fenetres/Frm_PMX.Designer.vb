@@ -1383,7 +1383,9 @@ Partial Class Frm_PMX
         Me.ClientSize = New System.Drawing.Size(1123, 546)
         Me.Controls.Add(Me.TLPan_Main)
         Me.Controls.Add(Me.ToolStripContainer1)
+        Me.DataBindings.Add(New System.Windows.Forms.Binding("Location", Global.PMXInterface.My.MySettings.Default, "FrmMainLocation", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Location = Global.PMXInterface.My.MySettings.Default.FrmMainLocation
         Me.Name = "Frm_PMX"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Form1"

@@ -165,7 +165,6 @@ Public Class Frm_ConnectionSlimN
 
     End Sub
 
-
     Private Function ValideSaisie() As Boolean
 
         Return True

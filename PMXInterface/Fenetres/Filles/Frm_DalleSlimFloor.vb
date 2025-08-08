@@ -558,14 +558,6 @@ Public Class Frm_DalleSlimFloor
         Me.img_Dalle.Invalidate()
     End Sub
 
-    Private Sub ComboBox_Enter(sender As Object, e As EventArgs) Handles cmb_ClasseBetonDalle.Enter
-        If lBuild Then Exit Sub
-        Select Case sender.name
-            Case Me.cmb_ClasseBetonDalle.Name
-                iSelect = 1000
-        End Select
-        Me.img_Dalle.Invalidate()
-    End Sub
 
 
     Private Sub LeaveAcierArma(sender As Object, e As EventArgs) Handles cmb_Acier.Leave
@@ -582,6 +574,14 @@ Public Class Frm_DalleSlimFloor
         Me.img_Dalle.Invalidate()
     End Sub
 
+    Private Sub ComboBox_Enter(sender As Object, e As EventArgs) Handles cmb_ClasseBetonDalle.Enter
+        If lBuild Then Exit Sub
+        Select Case sender.name
+            Case Me.cmb_ClasseBetonDalle.Name
+                iSelect = 1000
+        End Select
+        Me.img_Dalle.Invalidate()
+    End Sub
     Private Sub ComboBox_Leave(sender As Object, e As EventArgs) Handles cmb_ClasseBetonDalle.Leave
         If lBuild Then Exit Sub
         iSelect = -1

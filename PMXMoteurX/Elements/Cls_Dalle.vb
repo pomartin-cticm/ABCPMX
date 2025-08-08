@@ -49,6 +49,11 @@
     ''' </summary>
     Public preDalle_tjoint As Decimal
 
+    ''' <summary>
+    ''' Indique pour les dalles de slim floor en rive si la chambre de rive est remplie de béton
+    ''' </summary>
+    Public lRiveRemplie As Boolean
+
 #End Region
 
 #Region " Elements de la dalle "
@@ -741,6 +746,7 @@
 
         Me.lNoArma = False
 
+        Me.lRiveRemplie = True
     End Sub
 
 #End Region
