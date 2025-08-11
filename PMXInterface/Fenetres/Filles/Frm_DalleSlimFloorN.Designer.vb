@@ -57,7 +57,7 @@ Partial Class Frm_DalleSlimFloorN
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(914, 472)
+        Me.pan_General.Size = New System.Drawing.Size(914, 507)
         Me.pan_General.TabIndex = 5
         '
         'TLpan_Main
@@ -72,7 +72,7 @@ Partial Class Frm_DalleSlimFloorN
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(914, 472)
+        Me.TLpan_Main.Size = New System.Drawing.Size(914, 507)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -86,7 +86,7 @@ Partial Class Frm_DalleSlimFloorN
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 435)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 470)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -124,7 +124,7 @@ Partial Class Frm_DalleSlimFloorN
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(908, 426)
+        Me.pan_Main.Size = New System.Drawing.Size(908, 461)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_Dalle
@@ -140,7 +140,7 @@ Partial Class Frm_DalleSlimFloorN
         Me.TLPan_Dalle.Name = "TLPan_Dalle"
         Me.TLPan_Dalle.RowCount = 1
         Me.TLPan_Dalle.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Dalle.Size = New System.Drawing.Size(908, 426)
+        Me.TLPan_Dalle.Size = New System.Drawing.Size(908, 461)
         Me.TLPan_Dalle.TabIndex = 0
         '
         'pan_Gauche
@@ -151,7 +151,7 @@ Partial Class Frm_DalleSlimFloorN
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(250, 426)
+        Me.pan_Gauche.Size = New System.Drawing.Size(250, 461)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLpan_Gauche
@@ -167,7 +167,7 @@ Partial Class Frm_DalleSlimFloorN
         Me.TLpan_Gauche.RowCount = 2
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Gauche.Size = New System.Drawing.Size(250, 426)
+        Me.TLpan_Gauche.Size = New System.Drawing.Size(250, 461)
         Me.TLpan_Gauche.TabIndex = 0
         '
         'pan_ContenuFille
@@ -176,7 +176,7 @@ Partial Class Frm_DalleSlimFloorN
         Me.pan_ContenuFille.Location = New System.Drawing.Point(0, 30)
         Me.pan_ContenuFille.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ContenuFille.Name = "pan_ContenuFille"
-        Me.pan_ContenuFille.Size = New System.Drawing.Size(250, 396)
+        Me.pan_ContenuFille.Size = New System.Drawing.Size(250, 431)
         Me.pan_ContenuFille.TabIndex = 3
         '
         'TLpan_Choix
@@ -246,7 +246,7 @@ Partial Class Frm_DalleSlimFloorN
         Me.pan_Img.Location = New System.Drawing.Point(251, 0)
         Me.pan_Img.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.pan_Img.Name = "pan_Img"
-        Me.pan_Img.Size = New System.Drawing.Size(657, 426)
+        Me.pan_Img.Size = New System.Drawing.Size(657, 461)
         Me.pan_Img.TabIndex = 1
         '
         'img_Dalle
@@ -264,7 +264,7 @@ Partial Class Frm_DalleSlimFloorN
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(914, 472)
+        Me.ClientSize = New System.Drawing.Size(914, 507)
         Me.Controls.Add(Me.pan_General)
         Me.MaximizeBox = False
         Me.MinimizeBox = False

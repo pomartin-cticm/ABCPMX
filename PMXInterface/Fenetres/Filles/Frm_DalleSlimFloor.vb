@@ -107,10 +107,10 @@ Public Class Frm_DalleSlimFloor
                 strType(2) = Bloc("PRECASTSLAB")
                 strType(3) = Bloc("FULLPRECAST")
 
-                ReDim strCofradal(Get_LenghtCofradalTable)
+                ReDim strCofradal(cls_Cofradal.TAB_CofraDal.Length)
                 strCofradal(0) = Bloc("USER")
 
-                Dim str_TableCofra() As String = Get_ListName_Cofradal()
+                Dim str_TableCofra() As String = cls_Cofradal.Get_ListName_Cofradal()
 
                 For i As Integer = 0 To str_TableCofra.Length - 1
                     strCofradal(i + 1) = str_TableCofra(i)
@@ -924,9 +924,15 @@ Public Class Frm_DalleSlimFloor
         Me.txt_mupf.Enabled = cmb_Cofradal.SelectedIndex = 0
 
         If Not cmb_Cofradal.SelectedIndex = 0 Then
-            If Not MyDalleLoc.Cofradal.AjouteCofradalBDD(cmb_Cofradal.Text) Then
+            Dim lOK As Boolean = True
+            MyDalleLoc.Cofradal.SetCofradalBDD(cmb_Cofradal.Text, lOK)
+
+            If Not lOK Then
                 MsgBox(strCofradalNotFound)
             End If
+            'If Not MyDalleLoc.Cofradal.AjouteCofradalBDD(cmb_Cofradal.Text) Then
+            '    MsgBox(strCofradalNotFound)
+            'End If
         End If
 
         MAJI_Cofradal()

@@ -11,12 +11,17 @@ Public Class Frm_DalleSlimFloorNGeneral
     Dim lBuild As Boolean
 
     Dim strType(3) As String
+    Dim strCofradal() As String                                             'contient les noms des cofradals à afficher dans le combobox
 
     Dim ClasseBeton() As String = cls_Beton.TabClasseBeton
     Dim ClasseBetonLeger() As String = cls_Beton.TabClasseBetonLeger
 
     Private Const TDMAXI As Decimal = 0.5
     Private Const HPMINI As Decimal = 0.04
+    Private Const DPMIN As Decimal = 0.05
+    Private Const DPMAX As Decimal = 0.5
+    Private Const MUPFMIN As Decimal = 100
+    Private Const MUPFMAX As Decimal = 5000
 
     Dim localSection As New cls_Section
 
@@ -28,6 +33,26 @@ Public Class Frm_DalleSlimFloorNGeneral
         Pleine                  ' Définition d'une dalle mixte par son épaisseur au dessus du bac
     End Enum
     Dim DefEpMixte As Enu_DefEpMixte = Enu_DefEpMixte.Totale
+
+    Dim strMasseAvecBac As String
+    Dim strMasseSansBac As String
+    Dim strMassePrefa As String
+    Dim strMassePreDal As String
+
+    Const SELECT_EPDALLED As Integer = 1
+    Const SELECT_EPDALLEC As Integer = 2
+    Const SELECT_EPPREDAL As Integer = 3
+    Const SELECT_EPPREJNT As Integer = 4
+    Const SELECT_EPPREFAB As Integer = 5
+    Const SELECT_NOMPREFAB As Integer = 6
+
+    Const SELECT_BETON As Integer = 1000
+
+    Dim nbCofraDal As Integer = cls_Cofradal.TAB_CofraDal.Length
+
+    Dim strCofradalNotFound As String
+
+    Dim AccelG As Decimal = MyProjet.Poutres(MyProjet.IndEnCours).Param.GraviteG
 
 #End Region
 
@@ -43,12 +68,11 @@ Public Class Frm_DalleSlimFloorNGeneral
         GestionUnites()
         InitialiseVariablesLocales()
 
-        PrepareFenetre()
-
         RemplirComboClasseBeton()
         RemplirComboAvecTableau(Me.cmb_TypeDalle, strType)
+        RemplirComboCofra()
 
-        MAJI_TypeDalle()
+        PrepareFenetre()
 
         AfficheDalleEnCours()
 
@@ -107,6 +131,15 @@ Public Class Frm_DalleSlimFloorNGeneral
             CLE = "PRESLAB" : Me.lbl_EpPreDalle.Text = myBloc(CLE)
             CLE = "JOINT" : Me.lbl_EpJoint.Text = myBloc(CLE)
 
+            CLE = "COFRADAL" : Me.lbl_Cofradal.Text = myBloc(CLE)
+            CLE = "NAME" : Me.lbl_Name.Text = myBloc(CLE)
+            CLE = "PRESLAB" : Me.lbl_dp.Text = myBloc(CLE)
+            CLE = "MSURF" : Me.lbl_mupf.Text = myBloc(CLE)
+
+            ReDim strCofradal(nbCofraDal)
+            CLE = "USER" : strCofradal(0) = myBloc(CLE)
+            CLE = "COFRANOTFOUND" : strCofradalNotFound = myBloc(CLE)
+
             '=== BETON ========================================================================
 
             CLE = "CONCRETE" : Me.lbl_Beton.Text = myBloc(CLE)
@@ -117,12 +150,14 @@ Public Class Frm_DalleSlimFloorNGeneral
             '=== MASSES ========================================================================
 
             CLE = "MASSES" : Me.lbl_Masses.Text = myBloc(CLE)
-
+            CLE = "INFOMASSESSHEET" : strMasseAvecBac = myBloc(CLE)
+            CLE = "INFOMASSESNOSHEET" : strMasseSansBac = myBloc(CLE)
+            CLE = "INFOMASSESPRESLAB" : strMassePreDal = myBloc(CLE)
+            CLE = "INFOMASSESPREFAB" : strMassePrefa = myBloc(CLE)
 
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
         End Try
-
 
     End Sub
 
@@ -160,6 +195,23 @@ Public Class Frm_DalleSlimFloorNGeneral
             Case Enu_DefEpMixte.Pleine : Me.rdb_EpPleine.Checked = True
             Case Enu_DefEpMixte.Totale : Me.rdb_EpTotale.Checked = True
         End Select
+
+        MAJI_TypeDalle()
+
+    End Sub
+
+    Private Sub RemplirComboCofra()
+
+        Dim str_TableCofra() As String = cls_Cofradal.Get_ListName_Cofradal()
+
+        Me.cmb_Cofradal.Items.Clear()
+
+        Me.cmb_Cofradal.Items.Add(strCofradal(0))
+
+        For i As Integer = 1 To nbCofraDal
+            Me.cmb_Cofradal.Items.Add(str_TableCofra(i - 1))
+        Next
+
     End Sub
 
     Private Sub AfficheDalleEnCours()
@@ -210,6 +262,20 @@ Public Class Frm_DalleSlimFloorNGeneral
 
         Frm_DalleSlimFloorN.MAJI_ProprietesBeton()
 
+        '--( Cofradalle
+
+        If Frm_DalleSlimFloorN.localDalle.Cofradal.lCustom Then
+            Me.cmb_Cofradal.SelectedIndex = 0
+        Else
+            Me.cmb_Cofradal.SelectedItem = Frm_DalleSlimFloorN.localDalle.Cofradal.Nom
+        End If
+
+        Me.txt_dp.Enabled = Frm_DalleSlimFloorN.localDalle.Cofradal.lCustom
+        Me.txt_mupf.Enabled = Frm_DalleSlimFloorN.localDalle.Cofradal.lCustom
+
+        MAJI_Cofradal()
+        MAJI_CofradalEnCours()
+
     End Sub
 
     Private Sub RemplirComboAvecTableau(MyCombo As ComboBox, tabValeurs() As String)
@@ -248,9 +314,18 @@ Public Class Frm_DalleSlimFloorNGeneral
 
 #Region " Evenements sur les textbox "
 
+    Private Sub txt_NameCustomCofra_TextChanged(sender As Object, e As EventArgs) Handles txt_NameCustomCofra.TextChanged
+        If lBuild Then Exit Sub
+
+        Frm_DalleSlimFloorN.localDalle.Cofradal.Nom = Me.txt_NameCustomCofra.Text
+
+        Frm_DalleSlimFloorN.RedessineDalle()
+    End Sub
+
+
     Private Sub SaisieTextChanged(sender As Object, e As EventArgs) _
         Handles txt_RhoC.TextChanged, txt_Td2.TextChanged, txt_Tc.TextChanged, txt_Hd.TextChanged, txt_EpPredalle.TextChanged,
-        txt_EpJoint.TextChanged ', txt_dp.TextChanged, txt_mupf.TextChanged
+        txt_EpJoint.TextChanged, txt_mupf.TextChanged, txt_dp.TextChanged ', txt_dp.TextChanged, txt_mupf.TextChanged
 
         If lBuild Then Exit Sub
         'lBuild = True
@@ -284,11 +359,11 @@ Public Class Frm_DalleSlimFloorNGeneral
                     Me.txt_Td2.Text = GetStringNoUnit(Frm_DalleSlimFloorN.localDalle.Ep_td, Enu_TypeVariable.Dimension)
                     'lBuild = False
 
-                    'Case Me.txt_dp.Name
-                    '    If cmb_Cofradal.SelectedIndex = 0 Then Frm_DalleSlimFloorN.localDalle.Cofradal.dp = Valeur
+                Case Me.txt_dp.Name
+                    If cmb_Cofradal.SelectedIndex = 0 Then Frm_DalleSlimFloorN.localDalle.Cofradal.dp = Valeur
 
-                    'Case Me.txt_mupf.Name
-                    '    If cmb_Cofradal.SelectedIndex = 0 Then Frm_DalleSlimFloorN.localDalle.Cofradal.mSurf = Valeur
+                Case Me.txt_mupf.Name
+                    If cmb_Cofradal.SelectedIndex = 0 Then Frm_DalleSlimFloorN.localDalle.Cofradal.mSurf = Valeur
 
             End Select
 
@@ -351,14 +426,14 @@ Public Class Frm_DalleSlimFloorNGeneral
                 ValMax = 0
                 lValMax = False
 
-                'Case Me.txt_dp.Name
-                '    ValMin = DPMIN / kUnit '50 mm
-                '    ValMax = Math.Min(MySectionLoc.hec, DPMAX) / kUnit '500 mm
+            Case Me.txt_dp.Name
+                ValMin = DPMIN / kUnit '50 mm
+                ValMax = Math.Min(Frm_DalleSlimFloorN.LocalSectionHec, DPMAX) / kUnit '500 mm
 
-                'Case Me.txt_mupf.Name 'kN/m2
-                '    kUnit = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2
-                '    ValMin = MUPFMIN / kUnit '0.1 kN/m2
-                '    ValMax = MUPFMAX / kUnit '5 kN/m2
+            Case Me.txt_mupf.Name 'kN/m2
+                kUnit = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2
+                ValMin = MUPFMIN / kUnit '0.1 kN/m2
+                ValMax = MUPFMAX / kUnit '5 kN/m2
 
         End Select
 
@@ -380,6 +455,63 @@ Public Class Frm_DalleSlimFloorNGeneral
 #End Region
 
 #Region " Autres evenements de saisie "
+
+    Private Sub cmb_Name_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Cofradal.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        Me.txt_dp.Enabled = cmb_Cofradal.SelectedIndex = 0
+        Me.txt_mupf.Enabled = cmb_Cofradal.SelectedIndex = 0
+
+
+
+        If cmb_Cofradal.SelectedIndex = 0 Then
+
+            Frm_DalleSlimFloorN.localDalle.Cofradal.lCustom = True
+
+        Else
+
+
+            Dim lOK As Boolean = True
+
+            Frm_DalleSlimFloorN.localDalle.Cofradal.SetCofradalBDD(Me.cmb_Cofradal.Text, lOK)
+
+            If Not lOK Then
+                GestionErrorsPMX(Me.Name, "", strCofradalNotFound, True)
+            End If
+
+        End If
+
+        MAJI_Cofradal()
+        MAJI_CofradalEnCours()
+
+        MAJI_MasseDalle()
+        Frm_DalleSlimFloorN.RedessineDalle()
+
+    End Sub
+
+    Private Sub MAJI_CofradalEnCours()
+
+        Me.txt_NameCustomCofra.Text = Frm_DalleSlimFloorN.localDalle.Cofradal.Nom
+        Me.txt_dp.Text = GetStringInUnitN(Frm_DalleSlimFloorN.localDalle.Cofradal.dp, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_mupf.Text = GetStringInUnitN(Frm_DalleSlimFloorN.localDalle.Cofradal.mSurf, Enu_TypeVariable.ChargeSurfacique, 4, 3, NON_U, True)
+
+    End Sub
+
+
+    Private Sub MAJI_Cofradal()
+
+        If cmb_Cofradal.SelectedIndex = 0 Then 'Cofradal Utilisateur
+
+            Me.txt_NameCustomCofra.Visible = True
+            Me.lbl_Name.Visible = True
+
+        Else
+            Me.txt_NameCustomCofra.Visible = False
+            Me.lbl_Name.Visible = False
+
+        End If
+
+    End Sub
 
     Private Sub chk_ChambreRivePleine_CheckedChanged(sender As Object, e As EventArgs) Handles chk_ChambreRivePleine.CheckedChanged
         If lBuild Then Exit Sub
@@ -448,6 +580,7 @@ Public Class Frm_DalleSlimFloorNGeneral
         End Select
 
         MAJI_TypeDalle()
+        MAJI_MasseDalle()
         'AfficherDalleEnCours()
         Frm_DalleSlimFloorN.MAJI_RdbTypeDalle()
 
@@ -463,7 +596,7 @@ Public Class Frm_DalleSlimFloorNGeneral
         If lBuild Then Exit Sub
         Select Case sender.name
             Case Me.cmb_ClasseBetonDalle.Name
-                iSelect = 1000
+                iSelect = SELECT_BETON
         End Select
         Frm_DalleSlimFloorN.Gestion_iSelect(iSelect)
     End Sub
@@ -476,7 +609,7 @@ Public Class Frm_DalleSlimFloorNGeneral
     Private Sub chk_BetonLeger_Enter(sender As Object, e As EventArgs) Handles chk_BetonLeger.Enter
         If lBuild Then Exit Sub
 
-        iSelect = 1000
+        iSelect = SELECT_BETON
 
         Frm_DalleSlimFloorN.Gestion_iSelect(iSelect)
     End Sub
@@ -506,16 +639,23 @@ Public Class Frm_DalleSlimFloorNGeneral
         If lBuild Then Exit Sub
         Select Case sender.name
             Case Me.txt_Hd.Name, Me.txt_Td2.Name
-                iSelect = 0
+                iSelect = SELECT_EPDALLED
             Case Me.txt_Tc.Name
-                iSelect = 2
+                iSelect = SELECT_EPDALLEC
             Case Me.txt_EpPredalle.Name
-                iSelect = 10
+                iSelect = SELECT_EPPREDAL
             Case Me.txt_EpJoint.Name
-                iSelect = 11
+                iSelect = SELECT_EPPREJNT
+            Case Me.txt_dp.Name
+                iSelect = SELECT_EPPREFAB
+
+            Case Me.txt_NameCustomCofra.Name
+                iSelect = SELECT_NOMPREFAB
+
 
             Case Me.txt_RhoC.Name
-                iSelect = 1000
+                iSelect = SELECT_BETON
+
         End Select
 
         Frm_DalleSlimFloorN.Gestion_iSelect(iSelect)
@@ -534,6 +674,8 @@ Public Class Frm_DalleSlimFloorNGeneral
         '------------------------------------------------------------------------------------
         '------------------------------------------------------------------------------------
 
+        Dim ChaineM As String = ""
+
         Select Case Frm_DalleSlimFloorN.localDalle.type
             Case cls_Dalle.Enum_TypeDalle.Pleine
                 ' Me.pan_Bac.Enabled = False
@@ -542,6 +684,7 @@ Public Class Frm_DalleSlimFloorNGeneral
                 Me.pan_EpaisseurMixte.Visible = False
                 Me.pan_Epaisseur.Visible = True
                 Me.pan_Cofradal.Visible = False
+                ChaineM = strMasseSansBac
 
             Case cls_Dalle.Enum_TypeDalle.Mixte
 
@@ -549,6 +692,7 @@ Public Class Frm_DalleSlimFloorNGeneral
                 Me.pan_EpaisseurMixte.Visible = True
                 Me.pan_Epaisseur.Visible = False
                 Me.pan_Cofradal.Visible = False
+                ChaineM = strMasseAvecBac
 
             Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
 
@@ -556,6 +700,7 @@ Public Class Frm_DalleSlimFloorNGeneral
                 Me.pan_EpaisseurMixte.Visible = False
                 Me.pan_Epaisseur.Visible = True
                 Me.pan_Cofradal.Visible = False
+                ChaineM = strMassePreDal
 
             Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
 
@@ -563,9 +708,11 @@ Public Class Frm_DalleSlimFloorNGeneral
                 Me.pan_EpaisseurMixte.Visible = False
                 Me.pan_Epaisseur.Visible = True
                 Me.pan_Cofradal.Visible = True
+                ChaineM = strMassePrefa
 
         End Select
 
+        Me.lbl_InfoMassUs.Text = ChaineM
 
     End Sub
 
@@ -575,9 +722,9 @@ Public Class Frm_DalleSlimFloorNGeneral
 
     Private Sub MAJI_MasseDalle()
 
-        Dim mSurf = Frm_DalleSlimFloorN.localDalle.MasseSurfacique(True)
+        Dim mSurf = Frm_DalleSlimFloorN.localDalle.MasseSurfacique(True, True, accelg)
 
-        Me.txt_MassSurf.Text = GetStringInUnitN(mSurf, Enu_TypeVariable.SansType, 4, 3, False, True)
+        Me.txt_MassSurf.Text = GetStringInUnitN(mSurf, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
 
     End Sub
 

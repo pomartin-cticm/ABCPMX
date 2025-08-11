@@ -886,6 +886,10 @@ FIREREB_DIAMETER		= Diameter
 FIREREB_LOCATION		= Location
 FIREREBARSTITLE			= Reinforcement
 MASSES					= Masses
+INFOMASSESSHEET			= Mass per surface unit of the concrete and the sheeting
+INFOMASSESNOSHEET		= Mass per surface unit of the concrete
+INFOMASSESPRESLAB		= Mass per surface unit of the concrete, including the prefabricated part
+INFOMASSESPREFAB		= Mass per surface unit of the concrete and the prefabricated part
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam

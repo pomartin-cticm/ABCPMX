@@ -696,6 +696,7 @@ Public Module Mod_Declarations
     Public CouleurTremieNormal As Color = Color.White
     Public CouleurArmaNormal As Color = Color.LightSlateGray
     Public CouleurArmaSelect As Color = Color.DarkOrange
+    Public CouleurCofraDal As Color = Color.PowderBlue
 
     Public CouleurConnecteurNormal As Color = Color.DarkOrange
 

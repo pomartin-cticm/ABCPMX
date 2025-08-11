@@ -560,7 +560,7 @@ Public Class cls_Projet
 
     End Sub
 
-    Private Sub SaveFileBlocDalle(myDalle As cls_Dalle, ByRef Lines As List(Of String))
+    Private Sub SaveFileBlocDalle(myDalle As cls_Dalle, ByRef Lines As List(Of String), lSlimF As Boolean)
         '-------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
         '-------------------------------------------------------------------------------------
@@ -576,6 +576,15 @@ Public Class cls_Projet
             AjouteLigneFrmt(Lines, "th", .Ep_th)
             AjouteLigneFrmt(Lines, "preDalle_ep", .preDalle_ep)
             AjouteLigneFrmt(Lines, "preDalle_tjoi", .preDalle_tjoint)
+
+            If lSlimF Then
+                AjouteLigneFrmt(Lines, "Filled_edge", .lRiveRemplie)
+                AjouteLigneFrmt(Lines, "RFIRE", .ArmaSlimFeu.lBarre)
+                AjouteLigneFrmt(Lines, "RNumber", .ArmaSlimFeu.NbBarres)
+                AjouteLigneFrmt(Lines, "RDiameter", .ArmaSlimFeu.Diametre)
+                AjouteLigneFrmt(Lines, "RXPos", .ArmaSlimFeu.xPos)
+                AjouteLigneFrmt(Lines, "RZPos", .ArmaSlimFeu.zPos)
+            End If
         End With
 
         Lines.Add("")
@@ -959,7 +968,7 @@ Public Class cls_Projet
 
             '==[ Classe Dalle ]=================================================================
 
-            SaveFileBlocDalle(pTre.Dalle, Lines)
+            SaveFileBlocDalle(pTre.Dalle, Lines, pTre.lSlimFloor)
 
             '==[ Classe Bac Dalle ]=================================================================
 
@@ -2230,12 +2239,23 @@ Public Class cls_Projet
                         'Case "LARMSUP" : .lArma_Sup = Mots(nbMots)
                         Case "PREDALLE_E" : .preDalle_ep = CDec(TraiteReal(Mots(nbMots)))
                         Case "PREDALLE_T" : .preDalle_tjoint = CDec(TraiteReal(Mots(nbMots)))
-                        Case Else : MsgBox("BLOC " & BkDALLE & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+
+                        Case "FILLED_EDG" : .lRiveRemplie = CBool(Mots(nbMots))
+
+                        Case "RFIRE" : .ArmaSlimFeu.lBarre = CBool(Mots(nbMots))
+                        Case "RNUMBER" : .ArmaSlimFeu.NbBarres = CInt(TraiteReal(Mots(nbMots)))
+                        Case "RDIAMETER" : .ArmaSlimFeu.Diametre = CDec(TraiteReal(Mots(nbMots)))
+                        Case "RXPOS" : .ArmaSlimFeu.xPos = CDec(TraiteReal(Mots(nbMots)))
+                        Case "RZPOS" : .ArmaSlimFeu.zPos = CDec(TraiteReal(Mots(nbMots)))
+
+                        Case Else
+                            MsgBox("BLOC " & BkDALLE & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End With
 
             End If
         Next
+
     End Sub
 
     Private Sub ReadBlocBeton(myBeton As cls_Beton, ByVal Lignes As List(Of String),

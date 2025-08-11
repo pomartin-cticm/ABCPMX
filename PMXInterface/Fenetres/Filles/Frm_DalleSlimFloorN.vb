@@ -121,7 +121,7 @@ Public Class Frm_DalleSlimFloorN
                 CLE = "OK" : Me.btn_OK.Text = Bloc(CLE)
                 CLE = "CANCEL" : Me.btn_Annuler.Text = Bloc(CLE)
 
-                Dim str_TableCofra() As String = Get_ListName_Cofradal()
+                Dim str_TableCofra() As String = cls_Cofradal.Get_ListName_Cofradal()
 
                 CLE = "RDB_REINFORCEMENT" : Me.rdb_Arma.Text = Bloc(CLE)
                 CLE = "RDB_SHEET" : Me.rdb_Bac.Text = Bloc(CLE)
@@ -143,6 +143,17 @@ Public Class Frm_DalleSlimFloorN
         End If
 
     End Sub
+
+#End Region
+
+#Region " Outils "
+
+    Public Function LocalSectionHec() As Decimal
+
+        Return localBeam.Section.hec
+
+    End Function
+
 #End Region
 
 #Region " Events gestion des boutons "

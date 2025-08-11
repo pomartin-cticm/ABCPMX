@@ -2071,8 +2071,10 @@ Module Mod_Outils
         '--------------------------------------------------------------------------------------------------------
 
         If Not mySlab.lCustom Then
+            Dim lOK As Boolean
+            mySlab.SetCofradalBDD(mySlab.Nom, lOK)
 
-            If Not mySlab.AjouteCofradalBDD(mySlab.Nom) Then
+            If lOK Then
                 GestionErrorsPMX("", "", RemplaceDollar(msgErreurs("COFRAABSENT"), mySlab.Nom), False)
             End If
 

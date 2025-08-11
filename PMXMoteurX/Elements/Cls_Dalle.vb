@@ -215,11 +215,15 @@
     ''' Renvoie la masse surfacique de la dalle (béton + bac)
     ''' </summary>
     ''' <returns></returns>
-    Public Function MasseSurfacique(lBac As Boolean) As Decimal
+    Public Function MasseSurfacique(lBac As Boolean, lPrefab As Boolean, AccelG As Decimal) As Decimal
         '----------------------------------------------------------------------
         '   08/08/25 :  Création - POM
         '----------------------------------------------------------------------
-
+        '   Calcul de la masse surfacique de la dalle (masse de béton)
+        '----------------------------------------------------------------------
+        '   lBac        [E] :   Indique si on ajoute la masse du bac
+        '   lPrefab     [E] :   Indique si on ajoute la masse de la partie préfabriquée
+        '----------------------------------------------------------------------
 
         Dim pAire As Decimal
         Dim mSurf As Decimal
@@ -229,6 +233,10 @@
 
         If lBac And Me.type = Enum_TypeDalle.Mixte Then
             mSurf += Me.Bac.msurf
+        End If
+
+        If lPrefab And Me.type = Enum_TypeDalle.PlancherPrefabrique Then
+            mSurf += Me.Cofradal.mSurf / AccelG
         End If
 
         Return mSurf
@@ -493,6 +501,23 @@
         End Get
     End Property
 
+    ''' <summary>
+    ''' Indique si la dalle est partiel prefab
+    ''' </summary>
+    Public ReadOnly Property lPrefaPredalle As Boolean
+        Get
+            Return (Me.type = Enum_TypeDalle.PartiellementPrefabriquee)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Indique si la dalle prefabriquée
+    ''' </summary>
+    Public ReadOnly Property lPlancherPrefabriquee As Boolean
+        Get
+            Return (Me.type = Enum_TypeDalle.PlancherPrefabrique)
+        End Get
+    End Property
 
     ''' <summary>
     ''' Retourne la largeur d'appui d'une prédalle sur la semelle

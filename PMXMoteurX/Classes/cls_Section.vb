@@ -135,7 +135,7 @@ Public Class cls_Section
     End Function
 
     ''' <summary>
-    ''' Renvoie l'épaisseur du plat qui sert de semelle supérieur
+    ''' Renvoie l'épaisseur du plat qui sert de semelle supérieure
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property EpPlatSup As Decimal
@@ -147,6 +147,25 @@ Public Class cls_Section
             Else
                 pTf = Me.ProfilA.Tfs
             End If
+
+            Return pTf
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Renvoie l'épaisseur du plat inférieur sur lequel repose la charge de la dalle
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property EpPlatInf As Decimal
+        Get
+            Dim pTf As Decimal
+
+            Select Case Me.ProfilA.typeProfileAcier
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                    pTf = Me.ProfilA.Plat_t
+                Case Else
+                    pTf = Me.ProfilA.Tfi
+            End Select
 
             Return pTf
         End Get
@@ -280,6 +299,45 @@ Public Class cls_Section
         End Get
     End Property
 
+
+    Public Function PositionXgaucheSlim(lInter As Boolean) As Decimal
+        '-------------------------------------------------------------------------
+        '   11/08/25 :  Création - POM
+        '-------------------------------------------------------------------------
+        '   Renvoie la position de la fibre à gauche de la section
+        '   Pour une slim floor
+        '-------------------------------------------------------------------------
+        '   lInter      [E] :   Indique si section intermédiaire
+        '-------------------------------------------------------------------------
+
+        Dim xPos As Decimal = 0
+
+
+        With Me.ProfilA
+                Select Case .typeProfileAcier
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                    xPos = .Bfi / 2
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                    xPos = .Plat_b / 2
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                    If lInter Then
+                        xPos = .Plat_b / 2
+                    Else
+                        xPos = .Bfi / 2
+                    End If
+                Case Else
+                        xPos = Math.Max(.Bfi, .Bfs) / 2
+                        If .lPlat Then
+                            xPos = Math.Max(xPos, .Plat_b / 2)
+                        End If
+                End Select
+            End With
+
+
+
+        Return -xPos
+
+    End Function
 
 #End Region
 
