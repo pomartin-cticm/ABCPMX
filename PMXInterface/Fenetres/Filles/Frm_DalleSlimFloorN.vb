@@ -36,7 +36,7 @@ Public Class Frm_DalleSlimFloorN
 
     Dim iSelect As Integer = -1
 
-    Dim FontFrm As Font
+    Dim myFontFrm As New Font(FontBase.Name, SizeFontFrm)
 
 #End Region
 
@@ -68,7 +68,6 @@ Public Class Frm_DalleSlimFloorN
 
         Me.Icon = Frm_PMX.Icon
         Me.img_Dalle.Dock = DockStyle.Fill
-        FontFrm = New Font(FontBase.Name, SizeFontFrm)
 
     End Sub
 
@@ -178,6 +177,9 @@ Public Class Frm_DalleSlimFloorN
                 Me.pan_ContenuFille.Controls.Add(Frm_DalleSlimFloorNArma.pan_Main)
                 Frm_DalleSlimFloorNArma.InitialiseFenetre(Bloc)
             Case Enu_AffParamSlim.Bac
+                Me.pan_ContenuFille.Controls.Add(Frm_DalleSlimFloorNBac.pan_Main)
+                Frm_DalleSlimFloorNBac.InitialiseFenetre(Bloc)
+
         End Select
 
     End Sub
@@ -198,8 +200,11 @@ Public Class Frm_DalleSlimFloorN
 
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
 
-        DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
-                     localBeam, FontFrm, localBeam.lIntermediaire, iSelect, msgDessin, lCote)
+        DessineDalleFrmDalleSlimFloor(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
+                                      localBeam, myFontFrm, localBeam.lIntermediaire, iSelect, msgDessin, lCote)
+
+        'DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
+        '             localBeam, myFontFrm, localBeam.lIntermediaire, iSelect, msgDessin, lCote)
 
     End Sub
 

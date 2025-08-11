@@ -2,8 +2,10 @@
 
 Imports System.Collections.Specialized.BitVector32
 Imports System.Drawing.Drawing2D
+Imports System.Reflection
 Imports System.Windows
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Tab
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip
 Imports PMXInterface.Cls_Rapport
 'Imports PMXInterface.Mod_MethodeHivoss
 Imports PMXMoteur2
@@ -2264,6 +2266,351 @@ Public Module Mod_Dessins
 
     End Sub
 
+    Public Sub DessineDalleFrmDalleSlimFloor _
+                           (ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, myBeam As cls_Poutre, myFont As Font,
+                            lIntermediaire As Boolean, iSelect As Integer, strMsg() As String, ByVal lCote As Boolean,
+                            ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   11/08/25 :  Version 1.20
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin de la dalle dans la fenêtre Frm_DalleSlimFloorN
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   myBeam      [E] :   Poutre dont la dalle est à dessiner
+        '   myFont      [E] :   Police pour les cotes
+        '   iSelect     [E] :   Indice de la cote selectionnée
+        '   strMsg      [E] :   Messages issus du fichier langue
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Declarations
+
+        Dim MyParAff As Struc_Affichage
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim dCar As Double
+        Dim lMixte, lLamine As Boolean
+        Dim Beff As Decimal
+        Dim BeffG, BeffD As Decimal
+
+        Dim ColorLocalEtriers As Color = CouleurArmaNormal
+        Dim ColorLocalArma(2) As Color
+        Dim CouleurBeton As Color = CouleurBetonNormal
+        Dim CouleurCofradal As Color = Color.Linen
+        Dim CouleurAcier As Color = CouleurAcierNormal
+        'Dim pColorLocalArma(2, 2) As Color
+        Dim ColorArmatures(1) As Color
+        Const kADJUST As Decimal = 0.95
+        Dim zREF As Decimal = 0
+        Dim Ha, Bfs As Decimal
+        'Dim lCote As Boolean = True
+        Dim lCofraplus220 As Boolean
+        Dim LargeurProfil As Decimal
+
+        '--> Initialisation
+
+        lMixte = myBeam.Section.lMixte
+        lLamine = True
+        lCofraplus220 = myBeam.Dalle.Bac.lCofraplus220
+
+        Beff = LargeurDalleDessin(myBeam.Section.ProfilA)
+        BeffG = Beff / 2
+        BeffD = Beff / 2
+
+        Ha = myBeam.Section.ProfilA.ha
+
+        If lIntermediaire Or Not myBeam.Section.lSlimFloor Then
+            Bfs = myBeam.Section.ProfilA.Bfs
+            LargeurProfil = Bfs
+        Else
+            Select Case myBeam.Section.ProfilA.typeProfileAcier
+                Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
+                    Bfs = myBeam.Section.ProfilA.Bfs
+                    LargeurProfil = Bfs
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                    Bfs = myBeam.Section.ProfilA.Bfs
+                    LargeurProfil = myBeam.Section.ProfilA.Plat_b - Bfs / 2
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                    Bfs = myBeam.Section.ProfilA.Bfs
+                    LargeurProfil = myBeam.Section.ProfilA.Plat_b - Bfs / 2
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                    Bfs = myBeam.Section.ProfilA.Bfi
+                    LargeurProfil = Bfs / 2
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                    Bfs = myBeam.Section.ProfilA.Bfi
+                    LargeurProfil = Bfs / 2
+            End Select
+        End If
+
+        '--> Preparation de la zone d'affichage - Calcul de ParAff
+        dCar = Math.Sqrt(Beff ^ 2 + (Ha + myBeam.Dalle.zTop) ^ 2) / 10
+
+        If lIntermediaire Or Not myBeam.Section.lSlimFloor Then
+            xMin = -Beff / 2 - 2 * dCar
+            xMax = -xMin
+        Else
+            xMin = -Bfs / 2 - 2 * dCar
+            xMax = Beff / 2 + 2 * dCar
+        End If
+
+        If lIntermediaire Then
+            yMin = -myBeam.Section.ProfilA.Plat_t
+            yMax = myBeam.Dalle.zTop + dCar
+        Else
+            yMin = -myBeam.Section.ProfilA.Plat_t - 0.8 * dCar
+            yMax = myBeam.Dalle.zTop + 0.8 * dCar
+        End If
+
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+
+        '--> Préparation des Pinceaux utilisés dans le dessin
+
+        '* Profilé
+        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurAcier, CouleurAcier)
+        '* Béton
+        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurBeton, CouleurBeton)
+        '* Béton prefabriqué
+        Dim myBrushPref As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurBeton, CouleurBeton)
+        '* Cofradal
+        Dim myBrushCofra As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurCofradal, CouleurCofradal)
+
+        '--> Dessin de la dalle
+
+        '# Dalle béton
+
+        DessineDalleDalle(myGr, myBeam, MyParAff, myBrushB, myBrushPref, myBrushCofra, Beff, Bfs)
+
+        '# Armatures
+
+        DessinArmaFeuDalle(myGr, myBeam, FontBase, strMsg, lIntermediaire, iSelect, MyParAff, dCar, CouleurArmaNormal, CouleurArmaSelect)
+
+        '--> Dessin de la mySection acier
+
+        Dim lDessinRive As Boolean = (Not lIntermediaire) And myBeam.Section.lSlimFloor
+
+        DessinProfileMetal(myGr, myBeam.Section.ProfilA, myBrushP, MyParAff, zREF, lDessinRive, 0)
+
+        '--( Cotes 
+
+        If lCote Then DessineDalleFrmSlim_Cote(myGr, myBeam, myFont, strMsg, lIntermediaire, iSelect, MyParAff, dCar,
+                                               CouleurArmaNormal, CouleurArmaSelect)
+
+        '--( 
+
+        myBrushP.Dispose()
+        myBrushB.Dispose()
+        myBrushPref.Dispose()
+        myBrushCofra.Dispose()
+
+    End Sub
+
+    Private Sub DessineDalleFrmSlim_Cote(ByRef MyGr As Graphics, myBeam As cls_Poutre, myFont As Font, strMsg() As String,
+                                         lIntermediaire As Boolean, iSelect As Integer,
+                                         myParAffA As Struc_Affichage, dCar As Decimal, ColorArma As Color, ColorArmaSel As Color)
+        '-----------------------------------------------------------------------------------------------
+        '   08/08/25 :  Version 1.20
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin des cotes pour la dalle des slmi floors
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre dont la dalle est à dessiner
+        '   myFont      [E] :   Police pour les cotes
+        '   strMsg      [E] :   Messages d'information dans le fichier langue
+        '   iSelect     [E] :   Indice de la cote selectionnée
+        '   MyParAffA   [E] :   Paramètres d'affichage
+        '   dCar        [E] :   Dimension pour l'affichage
+        '   ColorArma   [E] :   Couleur pour les armatures
+        '   ColorArmaSel[E] :   Couleur pour les armatures sélectionnées
+        '-----------------------------------------------------------------------------------------------
+
+
+
+        '--( Déclarations
+
+        Const SELECT_RFEUXPOS As Integer = 101
+        Const SELECT_RFEUYPOS As Integer = 102
+        Const SELECT_RFEUDIA As Integer = 103
+        Const SELECT_RFEUNB As Integer = 104
+        Const SELECT_RFEUFSK As Integer = 1001
+
+        Dim MyPen As New Pen(Color.Black, 1)
+        Dim MyColor As Color
+        Dim Chaine As String
+        Dim lContour As Boolean = lCONTOURCOTE
+        Dim xe, ye As Decimal
+        Dim xo, yo As Decimal
+
+        Dim xRef As Decimal = myBeam.Section.ProfilA.Tw / 2
+
+        '--( Dessin des cotes pour les armatures
+
+        '** Diamètre
+
+        If (iSelect = SELECT_RFEUDIA) Then
+
+            Dim xc, yc As Decimal
+            Dim R2S2 As Decimal = Math.Sqrt(2) / 2
+            Dim Dia As Decimal = myBeam.Dalle.ArmaSlimFeu.Diametre
+            Dim dFlec As Decimal = dCar / 4
+
+            MyColor = StyleCouleur(iSelect, SELECT_RFEUDIA)
+            MyPen.Color = MyColor
+
+            xc = xRef + myBeam.Dalle.ArmaSlimFeu.xPos
+            yc = myBeam.Dalle.ArmaSlimFeu.zPos
+
+            xo = xc + Dia * R2S2 / 2
+            yo = yc + Dia * R2S2 / 2
+
+            xe = xo + dFlec
+            ye = yo + dFlec
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, myParAffA, True, False)
+
+            Chaine = GetStringNoUnit(myBeam.Dalle.ArmaSlimFeu.Diametre, Enu_TypeVariable.Dimension)
+            'AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, myFont, xe, (yo + ye) / 2, myParAffA, HorizontalAlignment.Right, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, xe, ye, myParAffA, HorizontalAlignment.Left, VerticalAlignement.Top, False, MyPen)
+
+            xo = xc - Dia * R2S2 / 2
+            yo = yc - Dia * R2S2 / 2
+
+            xe = xo - dFlec
+            ye = yo - dFlec
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, myParAffA, True, False)
+
+        End If
+
+        '** Position X
+
+        If (iSelect = SELECT_RFEUXPOS) Or (iSelect = SELECT_RFEUYPOS) Then
+
+            MyColor = StyleCouleur(iSelect, SELECT_RFEUXPOS)
+            MyPen.Color = MyColor
+
+            xo = xRef
+            yo = myBeam.Dalle.ArmaSlimFeu.zPos
+
+            xe = xo + myBeam.Dalle.ArmaSlimFeu.xPos
+            ye = yo
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, myParAffA, True, True)
+
+            xo = xe
+            xe += dCar / 3
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, myParAffA, False, False)
+
+            Chaine = GetStringNoUnit(myBeam.Dalle.ArmaSlimFeu.xPos, Enu_TypeVariable.Dimension)
+            'AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, myFont, xe, (yo + ye) / 2, myParAffA, HorizontalAlignment.Right, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, xe, (yo + ye) / 2, myParAffA, HorizontalAlignment.Left, VerticalAlignement.Middle, False, MyPen)
+
+        End If
+
+        '** Position Y
+
+        If (iSelect = SELECT_RFEUXPOS) Or (iSelect = SELECT_RFEUYPOS) Then
+
+            MyColor = StyleCouleur(iSelect, SELECT_RFEUYPOS)
+            MyPen.Color = MyColor
+
+            xo = xRef + myBeam.Dalle.ArmaSlimFeu.xPos
+            ye = myBeam.Dalle.ArmaSlimFeu.zPos
+
+            xe = xo
+            yo = 0
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, myParAffA, True, True)
+
+            yo = ye
+            ye += dCar / 3
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, myParAffA, False, False)
+
+            Chaine = GetStringNoUnit(myBeam.Dalle.ArmaSlimFeu.zPos, Enu_TypeVariable.Dimension)
+            'AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, myFont, xe, (yo + ye) / 2, myParAffA, HorizontalAlignment.Right, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, xe, ye, myParAffA, HorizontalAlignment.Center, VerticalAlignement.Top, False, MyPen)
+
+        End If
+
+        '# Acier d'armature
+
+        If iSelect = SELECT_RFEUFSK Then
+
+            Dim xPos, yPos As Decimal
+            xPos = xRef + myBeam.Dalle.ArmaSlimFeu.xPos + 2 * myBeam.Dalle.ArmaSlimFeu.Diametre
+            yPos = myBeam.Dalle.ArmaSlimFeu.zPos
+
+            AfficheInfoAcierArma(MyGr, myParAffA, strMsg, myBeam.Dalle.AcierArmatures, myFont, xPos, yPos)
+        End If
+
+
+    End Sub
+
+    Private Sub DessineDalleDalle(myGr As Graphics, myBeam As cls_Poutre, myParafD As Struc_Affichage,
+                                  myBrushB As Brush, myBrushPref As Brush, myBrushCofra As Brush, Beff As Decimal, Bfs As Decimal)
+        '-----------------------------------------------------------------------------------------------
+        '   11/08/25 :  Version 1.20
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin de la dalle dans la fenêtre Frm_DalleSlimFloorN
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre dont la dalle est à dessiner
+        '   myFont      [E] :   Police pour les cotes
+        '   myParafD    [E] :   Parametres d'affichage
+        '   myBrushB    [E] :   Pinceau pour le béton
+        '   myBrushPref [E] :   Pinceau pour les parties préfa en béton
+        '   myBrushCofra[E] :   Pinceau pour les bacs cofraplus220
+        '   Beff        [E] :   Largeur d'affichage
+        '   
+        '-----------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclaration Initialisation
+
+        Dim lIntermediaire As Boolean = myBeam.lIntermediaire
+        Dim Ha As Decimal
+        Ha = myBeam.Section.ProfilA.ha
+        Dim lCofraplus220 As Boolean = myBeam.Dalle.Bac.lCofraplus220
+
+        '--( Traitement
+
+        Select Case myBeam.Dalle.type
+            Case cls_Dalle.Enum_TypeDalle.Pleine
+
+                DessinDallePleine(myGr, myBeam, lIntermediaire, Ha, Bfs, myParafD, myBrushB, Beff)
+
+            Case cls_Dalle.Enum_TypeDalle.Mixte
+                Select Case myBeam.Dalle.Bac.Orientation
+                    Case cls_Bac.Enum_Orientation.Parallele
+
+                        DessineDalleMixteParallele(myGr, myBeam.Dalle, Ha, Bfs, myParafD, myBrushB, Beff)
+
+                    Case cls_Bac.Enum_Orientation.Perpendiculaire
+                        If lCofraplus220 Then
+
+                            DessineDalleMixtePerpendiculaireCfp220(myGr, myBeam, myParafD, myBrushB, Beff)
+
+                        Else
+
+                            DessineDalleMixtePerpendiculaire(myGr, myBeam, lIntermediaire, Ha, Bfs, myParafD, myBrushB, Beff)
+
+                        End If
+                End Select
+
+            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
+
+                DessinDallePreFab(myGr, myBeam, lIntermediaire, Ha, Bfs, myParafD, myBrushB, myBrushPref, Beff)
+
+            Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
+
+                DessinDalleCompletementPrefa(myGr, myBeam, lIntermediaire, Ha, Bfs, myParafD, myBrushB, myBrushCofra, Beff)
+
+        End Select
+
+    End Sub
+
     Public Sub DessineDalle(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, myBeam As cls_Poutre, myFont As Font,
                             lIntermediaire As Boolean, iSelect As Integer, strMsg() As String, ByVal lCote As Boolean,
                             ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
@@ -2411,45 +2758,47 @@ Public Module Mod_Dessins
 
         '# Dalle béton
 
-        Select Case myBeam.Dalle.type
-            Case cls_Dalle.Enum_TypeDalle.Pleine
+        DessineDalleDalle(myGr, myBeam, MyParAff, myBrushB, myBrushPref, myBrushCofra, Beff, Bfs)
 
-                DessinDallePleine(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, Beff)
+        'Select Case myBeam.Dalle.type
+        '    Case cls_Dalle.Enum_TypeDalle.Pleine
 
-            Case cls_Dalle.Enum_TypeDalle.Mixte
-                Select Case myBeam.Dalle.Bac.Orientation
-                    Case cls_Bac.Enum_Orientation.Parallele
+        '        DessinDallePleine(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, Beff)
 
-                        DessineDalleMixteParallele(myGr, myBeam.Dalle, Ha, Bfs, MyParAff, myBrushB, Beff)
+        '    Case cls_Dalle.Enum_TypeDalle.Mixte
+        '        Select Case myBeam.Dalle.Bac.Orientation
+        '            Case cls_Bac.Enum_Orientation.Parallele
 
-                    Case cls_Bac.Enum_Orientation.Perpendiculaire
-                        If lCofraplus220 Then
+        '                DessineDalleMixteParallele(myGr, myBeam.Dalle, Ha, Bfs, MyParAff, myBrushB, Beff)
 
-                            DessineDalleMixtePerpendiculaireCfp220(myGr, myBeam, MyParAff, myBrushB, Beff)
+        '            Case cls_Bac.Enum_Orientation.Perpendiculaire
+        '                If lCofraplus220 Then
 
-                        Else
+        '                    DessineDalleMixtePerpendiculaireCfp220(myGr, myBeam, MyParAff, myBrushB, Beff)
 
-                            DessineDalleMixtePerpendiculaire(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, Beff)
+        '                Else
 
-                        End If
-                End Select
+        '                    DessineDalleMixtePerpendiculaire(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, Beff)
 
-            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
+        '                End If
+        '        End Select
 
-                DessinDallePreFab(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
+        '    Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
 
-            Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
+        '        DessinDallePreFab(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
 
-                DessinDalleCompletementPrefa(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushCofra, Beff)
+        '    Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
 
-        End Select
+        '        DessinDalleCompletementPrefa(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushCofra, Beff)
+
+        'End Select
 
         '# Armatures
 
         DessinLitArmaDalle(myGr, myBeam.Dalle, Beff, 0, myBeam.Section.ProfilA.ha, iSelect, MyParAff, myBrushA(0))
         DessinLitArmaDalle(myGr, myBeam.Dalle, Beff, 1, myBeam.Section.ProfilA.ha, iSelect, MyParAff, myBrushA(1))
 
-        DessinArmaFeuDalle(myGr, myBeam, FontBase, lIntermediaire, iSelect, MyParAff, dCar, CouleurArmaNormal)
+        ' DessinArmaFeuDalle(myGr, myBeam, FontBase, lIntermediaire, iSelect, MyParAff, dCar, CouleurArmaNormal, CouleurArmaSelect)
 
         'End If
 
@@ -2472,9 +2821,9 @@ Public Module Mod_Dessins
         End If
     End Sub
 
-    Private Sub DessinArmaFeuDalle(ByRef MyGr As Graphics, myBeam As cls_Poutre, myFont As Font,
+    Private Sub DessinArmaFeuDalle(ByRef MyGr As Graphics, myBeam As cls_Poutre, myFont As Font, strMsg() As String,
                                    lIntermediaire As Boolean, iSelect As Integer,
-                                   myParAffA As Struc_Affichage, dCar As Decimal, ColorArma As Color)
+                                   myParAffA As Struc_Affichage, dCar As Decimal, ColorArma As Color, ColorArmaSel As Color)
         '-----------------------------------------------------------------------------------------------
         '   08/08/25 :  Version 1.20
         '-----------------------------------------------------------------------------------------------
@@ -2483,37 +2832,67 @@ Public Module Mod_Dessins
         '   myGr        [E] :   Graphics dans lequel on dessine
         '   myBeam      [E] :   Poutre dont la dalle est à dessiner
         '   myFont      [E] :   Police pour les cotes
+        '   strMsg      [E] :   Messages d'information dans le fichier langue
         '   iSelect     [E] :   Indice de la cote selectionnée
         '   MyParAffA   [E] :   Paramètres d'affichage
         '   dCar        [E] :   Dimension pour l'affichage
         '   ColorArma   [E] :   Couleur pour les armatures
+        '   ColorArmaSel[E] :   Couleur pour les armatures sélectionnées
         '-----------------------------------------------------------------------------------------------
 
         '--( Déclarations
 
-        Dim myBrushA As New SolidBrush(ColorArma)
+        Dim myBrushA As SolidBrush                  'New SolidBrush(ColorArma)
         Dim kCote() As Decimal = {1, -1}
+        Const lCOTE As Boolean = True
 
-        '--( Pour les slims floors
+        Const SELECT_RFEUXPOS As Integer = 101
+        Const SELECT_RFEUYPOS As Integer = 102
+        Const SELECT_RFEUDIA As Integer = 103
+        Const SELECT_RFEUNB As Integer = 104
+        Const SELECT_RFEUFSK As Integer = 1001
+
+        Dim ColorA As Color = ColorArma
+        Dim MyPen As New Pen(Color.Black, 1)
+        Dim MyColor As Color
+        Dim Chaine As String
+        Dim lContour As Boolean = lCONTOURCOTE
+        Dim xe, ye As Decimal
+        Dim xo, yo As Decimal
+
+        Dim xRef As Decimal = myBeam.Section.ProfilA.Tw / 2
+
+        '--( 
 
         If myBeam.lSlimFloor And myBeam.Dalle.ArmaSlimFeu.lBarre Then
+
+            '--( Initialisation
+
+            If (iSelect = SELECT_RFEUXPOS) Or (iSelect = SELECT_RFEUDIA) _
+            Or (iSelect = SELECT_RFEUYPOS) Or (iSelect = SELECT_RFEUNB) Then
+                ColorA = ColorArmaSel
+            End If
+            myBrushA = New SolidBrush(ColorA)
+
+            '--( Dessin des armatures
 
             With myBeam.Dalle.ArmaSlimFeu
                 For iBarre As Integer = 1 To myBeam.Dalle.ArmaSlimFeu.NbBarres
 
                     For jCote As Integer = 0 To 1
 
-                        AddCerclePlein(MyGr, myBrushA, kCote(jCote) * (.xPos + (iBarre - 1) * .Diametre), .zPos, .Diametre, myParAffA, True)
+                        AddCerclePlein(MyGr, myBrushA, kCote(jCote) * (xRef + .xPos + (iBarre - 1) * .Diametre), .zPos, .Diametre, myParAffA, True)
 
                     Next
 
                 Next
             End With
 
+            '--( Fin
 
+            myBrushA.Dispose()
+            MyPen.Dispose()
         End If
-
-        myBrushA.Dispose()
     End Sub
 
     Private Sub DessinCoteFrmDalle(ByRef MyGr As Graphics, myBeam As cls_Poutre, myFont As Font,
@@ -2787,24 +3166,70 @@ Public Module Mod_Dessins
 
         If iSelect = 1001 Then
 
-            MyColor = StyleCouleur(iSelect, 1001)
-            MyPen.Color = MyColor
+            'MyColor = StyleCouleur(iSelect, 1001)
+            'MyPen.Color = MyColor
 
-            Dim lsChaine As New List(Of String)
-            Dim strRebar As String = strMsg(1).Trim & " "       ' "Steel reinforcement "
+            'Dim lsChaine As New List(Of String)
+            'Dim strRebar As String = strMsg(1).Trim & " "       ' "Steel reinforcement "
 
-            lsChaine.Clear()
-            lsChaine.Add(strRebar & myBeam.Dalle.AcierArmatures.Classe)
-            lsChaine.Add("fsk" & " = " & GetStringInUnit(myBeam.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 3, 1, True))
-            lsChaine.Add("Es" & " = " & GetStringInUnit(myBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.ModuleY, 3, 1, True))
+            'lsChaine.Clear()
+            'lsChaine.Add(strRebar & myBeam.Dalle.AcierArmatures.Classe)
+            'lsChaine.Add("fsk" & " = " & GetStringInUnit(myBeam.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 3, 1, True))
+            'lsChaine.Add("Es" & " = " & GetStringInUnit(myBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.ModuleY, 3, 1, True))
 
-            xo = 0
-            yo = myBeam.Dalle.zTop - myBeam.Dalle.LitArma(0).z_s - 1.5 * myBeam.Dalle.LitArma(0).PhiS
+            'xo = 0
+            'yo = myBeam.Dalle.zTop - myBeam.Dalle.LitArma(0).z_s - 1.5 * myBeam.Dalle.LitArma(0).PhiS
 
-            AddTabTextFond(MyGr, New SolidBrush(MyColor), lsChaine, MyFontNormal, xo, yo, myParAffA, HorizontalAlignment.Center, HorizontalAlignment.Left, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen)
+            'AddTabTextFond(MyGr, New SolidBrush(MyColor), lsChaine, MyFontNormal, xo, yo, myParAffA, HorizontalAlignment.Center, HorizontalAlignment.Left, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen)
 
+            Dim xPos, yPos As Decimal
+            xPos = 0
+            yPos = myBeam.Dalle.zTop - myBeam.Dalle.LitArma(0).z_s - 1.5 * myBeam.Dalle.LitArma(0).PhiS
 
+            AfficheInfoAcierArma(MyGr, myParAffA, strMsg, myBeam.Dalle.AcierArmatures, myFont, xPos, ypos)
         End If
+
+    End Sub
+
+    Private Sub AfficheInfoAcierArma(myGr As Graphics, myParaffI As Struc_Affichage, strMsg() As String,
+                                     myAcierA As cls_AcierArmature, myFont As Font, xPos As Decimal, yPos As Decimal)
+        '---------------------------------------------------------------------------------------------------------------------
+        '   11/08/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------------------
+        '   Affichage des informations relative à l'acier des armatures dans un dessin de dalle
+        '---------------------------------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics
+        '   myParaffI   [E] :   Paramètres d'affichage
+        '   strMsg      [E] :   messages
+        '   myAcierA    [E] :   Acier d'armature dont on affiche les infos
+        '   myFont      [E] :
+        '   xPos,yPos   [E] :   Position du message d'info dans le dessin
+        '---------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim MyPen As New Pen(Color.Black, 1)
+        Dim MyColor As Color
+        Dim xo, yo As Decimal
+
+        '--(
+
+        MyColor = StyleCouleur(1, 1)
+        MyPen.Color = MyColor
+
+        Dim lsChaine As New List(Of String)
+        Dim strRebar As String = strMsg(1).Trim & " "       ' "Steel reinforcement "
+
+        lsChaine.Clear()
+        lsChaine.Add(strRebar & myAcierA.Classe)
+        lsChaine.Add("fsk" & " = " & GetStringInUnit(myAcierA.FsK, Enu_TypeVariable.Contrainte, 3, 1, True))
+        lsChaine.Add("Es" & " = " & GetStringInUnit(myAcierA.Es, Enu_TypeVariable.ModuleY, 3, 1, True))
+
+        xo = xPos
+        yo = yPos
+
+        AddTabTextFond(myGr, New SolidBrush(MyColor), lsChaine, myFont, xo, yo, myParaffI, HorizontalAlignment.Center, HorizontalAlignment.Left, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen)
+
 
     End Sub
 
@@ -5540,9 +5965,9 @@ Public Module Mod_Dessins
                 xo = -mySection.ProfilA.Plat_b / 2
             Else
                 xo = -mySection.ProfilA.Bfs / 2
-                    End If
+            End If
 
-                    xe = xo + mySection.ProfilA.Plat_b
+            xe = xo + mySection.ProfilA.Plat_b
 
             ye = yo
 
@@ -6046,17 +6471,13 @@ Public Module Mod_Dessins
             xo = mySection.ProfilA.Bfi / 2
 
             ye = yo
-                xe = -xo
+            xe = -xo
 
-                If lAffSymbol Then
-                    If lLam Then
-                        Chaine = "b"
+            If lAffSymbol Then
+                Chaine = "b"
 
-                    Else
-                        Chaine = "bfi"
-                    End If
-                Else
-                Chaine = GetStringNoUnit(mySection.ProfilA.Bfi, Enu_TypeVariable.Dimension)
+            Else
+            Chaine = GetStringNoUnit(mySection.ProfilA.Bfi, Enu_TypeVariable.Dimension)
             End If
 
                 AddFleche(myGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)

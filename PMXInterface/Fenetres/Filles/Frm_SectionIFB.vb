@@ -86,8 +86,6 @@ Public Class Frm_SectionIFB
 
     Dim lIFB_A As Boolean
 
-
-
     Dim myFontFrm As New Font(FontBase.Name, SizeFontFrm)
 
 

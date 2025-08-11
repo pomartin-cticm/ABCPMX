@@ -22,6 +22,7 @@ Partial Class Frm_DalleSlimFloorNArma
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel2 = New System.Windows.Forms.Panel()
@@ -33,6 +34,8 @@ Partial Class Frm_DalleSlimFloorNArma
         Me.lbl_Acier = New System.Windows.Forms.Label()
         Me.lbl_Arma = New System.Windows.Forms.Label()
         Me.pan_Arma = New System.Windows.Forms.Panel()
+        Me.pan_Option = New System.Windows.Forms.Panel()
+        Me.chk_Rebars = New System.Windows.Forms.CheckBox()
         Me.etq_UnitDim3 = New System.Windows.Forms.Label()
         Me.txt_ArmaY = New System.Windows.Forms.TextBox()
         Me.etq_UnitDim2 = New System.Windows.Forms.Label()
@@ -45,17 +48,17 @@ Partial Class Frm_DalleSlimFloorNArma
         Me.cmb_Diametre = New System.Windows.Forms.ComboBox()
         Me.lbl_Number = New System.Windows.Forms.Label()
         Me.cmb_Nombre = New System.Windows.Forms.ComboBox()
-        Me.chk_Rebars = New System.Windows.Forms.CheckBox()
         Me.lbl_Avertissement = New System.Windows.Forms.Label()
-        Me.pan_Option = New System.Windows.Forms.Panel()
+        Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Arma.SuspendLayout()
+        Me.pan_Option.SuspendLayout()
         CType(Me.img_ArmaY, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_ArmaX, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_Option.SuspendLayout()
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Main
@@ -204,6 +207,29 @@ Partial Class Frm_DalleSlimFloorNArma
         Me.pan_Arma.Size = New System.Drawing.Size(359, 290)
         Me.pan_Arma.TabIndex = 5
         '
+        'pan_Option
+        '
+        Me.pan_Option.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Option.Controls.Add(Me.chk_Rebars)
+        Me.pan_Option.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Option.Name = "pan_Option"
+        Me.pan_Option.Size = New System.Drawing.Size(351, 52)
+        Me.pan_Option.TabIndex = 93
+        '
+        'chk_Rebars
+        '
+        Me.chk_Rebars.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chk_Rebars.CheckAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.chk_Rebars.Location = New System.Drawing.Point(3, 3)
+        Me.chk_Rebars.Name = "chk_Rebars"
+        Me.chk_Rebars.Size = New System.Drawing.Size(339, 42)
+        Me.chk_Rebars.TabIndex = 1
+        Me.chk_Rebars.Text = "chk_Rebars"
+        Me.chk_Rebars.TextAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.chk_Rebars.UseVisualStyleBackColor = True
+        '
         'etq_UnitDim3
         '
         Me.etq_UnitDim3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -298,9 +324,9 @@ Partial Class Frm_DalleSlimFloorNArma
         Me.cmb_Diametre.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_Diametre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_Diametre.FormattingEnabled = True
-        Me.cmb_Diametre.Location = New System.Drawing.Point(222, 93)
+        Me.cmb_Diametre.Location = New System.Drawing.Point(244, 93)
         Me.cmb_Diametre.Name = "cmb_Diametre"
-        Me.cmb_Diametre.Size = New System.Drawing.Size(93, 21)
+        Me.cmb_Diametre.Size = New System.Drawing.Size(71, 21)
         Me.cmb_Diametre.TabIndex = 60
         '
         'lbl_Number
@@ -320,23 +346,10 @@ Partial Class Frm_DalleSlimFloorNArma
         Me.cmb_Nombre.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_Nombre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_Nombre.FormattingEnabled = True
-        Me.cmb_Nombre.Location = New System.Drawing.Point(222, 66)
+        Me.cmb_Nombre.Location = New System.Drawing.Point(244, 66)
         Me.cmb_Nombre.Name = "cmb_Nombre"
-        Me.cmb_Nombre.Size = New System.Drawing.Size(93, 21)
+        Me.cmb_Nombre.Size = New System.Drawing.Size(71, 21)
         Me.cmb_Nombre.TabIndex = 58
-        '
-        'chk_Rebars
-        '
-        Me.chk_Rebars.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.chk_Rebars.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.chk_Rebars.Location = New System.Drawing.Point(3, 3)
-        Me.chk_Rebars.Name = "chk_Rebars"
-        Me.chk_Rebars.Size = New System.Drawing.Size(339, 42)
-        Me.chk_Rebars.TabIndex = 1
-        Me.chk_Rebars.Text = "chk_Rebars"
-        Me.chk_Rebars.TextAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.chk_Rebars.UseVisualStyleBackColor = True
         '
         'lbl_Avertissement
         '
@@ -347,15 +360,9 @@ Partial Class Frm_DalleSlimFloorNArma
         Me.lbl_Avertissement.TabIndex = 0
         Me.lbl_Avertissement.Text = "lbl_Avertissement"
         '
-        'pan_Option
+        'ErrorProvider
         '
-        Me.pan_Option.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pan_Option.Controls.Add(Me.chk_Rebars)
-        Me.pan_Option.Location = New System.Drawing.Point(3, 3)
-        Me.pan_Option.Name = "pan_Option"
-        Me.pan_Option.Size = New System.Drawing.Size(351, 52)
-        Me.pan_Option.TabIndex = 93
+        Me.ErrorProvider.ContainerControl = Me
         '
         'Frm_DalleSlimFloorNArma
         '
@@ -374,9 +381,10 @@ Partial Class Frm_DalleSlimFloorNArma
         CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Arma.ResumeLayout(False)
         Me.pan_Arma.PerformLayout()
+        Me.pan_Option.ResumeLayout(False)
         CType(Me.img_ArmaY, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_ArmaX, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_Option.ResumeLayout(False)
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -407,4 +415,5 @@ Partial Class Frm_DalleSlimFloorNArma
     Friend WithEvents img_ArmaX As PictureBox
     Friend WithEvents etq_UnitDim3 As Label
     Friend WithEvents pan_Option As Panel
+    Friend WithEvents ErrorProvider As ErrorProvider
 End Class

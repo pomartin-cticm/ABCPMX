@@ -272,11 +272,13 @@ Public Class Frm_Dalle
 
         'Me.txt_RhoC.Enabled = False
         'Me.txt_RhoC.BackColor = CouleurReadOnly
-        Me.txt_Fsk.Enabled = False
-        Me.txt_Fsk.BackColor = CouleurReadOnly
+        'Me.txt_Fsk.Enabled = False
+        'Me.txt_Fsk.BackColor = CouleurReadOnly
+        PrepareTextBoxDipo(txt_Fsk, False)
 
-        Me.txt_Hp.Enabled = False
-        Me.txt_Hp.BackColor = CouleurReadOnly
+        'Me.txt_Hp.Enabled = False
+        'Me.txt_Hp.BackColor = CouleurReadOnly
+        PrepareTextBoxDipo(txt_Hp, False)
 
         Me.img_Bac.BorderStyle = BorderStyle.FixedSingle
 

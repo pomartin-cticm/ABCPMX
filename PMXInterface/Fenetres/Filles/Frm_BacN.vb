@@ -347,8 +347,10 @@ Public Class Frm_BacN
         Dim lModif As Boolean = False
         If ValideSaisieFenetre() Then
 
-            If iFrmAppel = EnuFenetres.Dalle Then 'GUD: /!\ A VERIFIER /!\
+            If iFrmAppel = EnuFenetres.Dalle Then
                 TransfertSaisie(Frm_Dalle.MyDalleLoc.Bac, lModif)
+            ElseIf iFrmAppel = EnuFenetres.DalleSlimFloor Then
+                TransfertSaisie(Frm_DalleSlimFloorN.localDalle.Bac, lModif)
             Else
                 TransfertSaisie(MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, lModif)
             End If
