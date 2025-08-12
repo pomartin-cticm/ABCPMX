@@ -13,6 +13,11 @@ Public Class Frm_ConnectionSlimConnecteur
     Dim strStud, strArma As String
     Dim strInfoW_ArmaConnex As String
 
+    Dim tabLabelGoujons() As String
+
+    Dim strGoujonsEnrobageMini As String
+    Dim strGoujonsDepasseDalle As String
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -24,6 +29,8 @@ Public Class Frm_ConnectionSlimConnecteur
         GestionLangues(Bloc)
         GestionStyle()
         GestionUnites()
+
+        InitialiseVariablesLocales()
 
         PrepareFenetre()
         AfficheConnecteurEnCours()
@@ -62,25 +69,42 @@ Public Class Frm_ConnectionSlimConnecteur
 
     End Sub
 
+    Private Sub InitialiseVariablesLocales()
+
+        Dim nbStuds As Integer = BaseGoujons.Count
+        ReDim tabLabelGoujons(nbStuds - 1)
+
+        For iStud As Integer = 0 To nbStuds - 1
+            tabLabelGoujons(iStud) = BaseGoujons(iStud).nom
+        Next
+
+    End Sub
+
     Private Sub GestionLangues(Bloc As Dictionary(Of String, String))
+        Dim strLoadedKey As String = ""
+        Dim CLE As String = ""
+
         Try
 
-            Me.lbl_Type.Text = Bloc("CONNECTORSTYPE")
+            CLE = "CONNECTORSTYPE" : Me.lbl_Type.Text = Bloc(CLE)
 
-            Me.rdb_Armatures.Text = Bloc("WEB_REINF")
-            Me.rdb_GoujonAme.Text = Bloc("WEB_STUD")
-            Me.rdb_GoujonSemSup.Text = Bloc("FLANGE_STUD")
+            CLE = "WEB_REINF" : Me.rdb_Armatures.Text = Bloc(CLE)
+            CLE = "WEB_STUD" : Me.rdb_GoujonAme.Text = Bloc(CLE)
+            CLE = "FLANGE_STUD" : Me.rdb_GoujonSemSup.Text = Bloc(CLE)
 
-            Me.lbl_Stud.Text = Bloc("STUDS")
+            CLE = "STUDS" : Me.lbl_Stud.Text = Bloc(CLE)
 
-            strStud = Bloc("WSTUDS")
-            strArma = Bloc("WEB_REINF")
+            CLE = "WSTUDS" : strStud = Bloc(CLE)
+            CLE = "WEB_REINF" : strArma = Bloc(CLE)
 
-            strInfoW_ArmaConnex = Bloc("INFOREINF")
+            CLE = "INFOREINF" : strInfoW_ArmaConnex = Bloc(CLE)
 
-            'Me.lbl_Connecteur.Text = Bloc("CONNECTEUR")
+            CLE = "W_MINIMUMCOVERAGE" : strGoujonsEnrobageMini = Bloc(CLE)
+            CLE = "W_STUDABOVESLAB" : strGoujonsDepasseDalle = Bloc(CLE)
 
         Catch ex As Exception
+
+            GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
 
         End Try
     End Sub
@@ -98,7 +122,11 @@ Public Class Frm_ConnectionSlimConnecteur
                 Me.rdb_GoujonSemSup.Checked = True
         End Select
 
+        Me.cmb_goujons.SelectedIndex = Array.IndexOf(tabLabelGoujons, Frm_ConnectionSlimN.localBeam.Dalle.Goujons.nom)
+
         MAJ_DimensionsConnecteur()
+
+        MAJI_Avertissement()
 
     End Sub
 
@@ -152,6 +180,7 @@ Public Class Frm_ConnectionSlimConnecteur
         For iStud As Integer = 0 To nbStuds - 1
 
             Me.cmb_goujons.Items.Add(PrefixeG & BaseGoujons(iStud).nom)
+
         Next
 
         Me.cmb_goujons.SelectedIndex = 0
@@ -172,10 +201,12 @@ Public Class Frm_ConnectionSlimConnecteur
                 ' Goujons soudés sur les âmes
                 Frm_ConnectionSlimN.localBeam.Dalle.typeConnecteur = PMXMoteur2.cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme
                 MAJAfficheConnecteurEnCours()
+                MAJI_Avertissement()
             Case Me.rdb_GoujonSemSup.Checked
                 ' Goujons soudés sur la semelle supérieure
                 Frm_ConnectionSlimN.localBeam.Dalle.typeConnecteur = PMXMoteur2.cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup
                 MAJAfficheConnecteurEnCours()
+                MAJI_Avertissement()
         End Select
 
         Me.img_Stud.Invalidate()
@@ -185,7 +216,6 @@ Public Class Frm_ConnectionSlimConnecteur
 #End Region
 
 #Region " Evènements saisie "
-
 
     Private Sub cmb_goujons_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_goujons.SelectedIndexChanged
         If lBuild Then Exit Sub
@@ -199,6 +229,7 @@ Public Class Frm_ConnectionSlimConnecteur
         Frm_ConnectionSlimN.localBeam.Dalle.Goujons.Fu = BaseGoujons(iStud).Fu
 
         MAJ_DimensionsConnecteur()
+        MAJI_Avertissement()
         img_Stud.Invalidate()
 
         'MAJ_Valeurs_Limites()
@@ -210,6 +241,48 @@ Public Class Frm_ConnectionSlimConnecteur
         Me.txt_d.Text = GetStringInUnit(Frm_ConnectionSlimN.localBeam.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 0, False)
         Me.txt_fy.Text = GetStringInUnit(Frm_ConnectionSlimN.localBeam.Dalle.Goujons.Fy, Enu_TypeVariable.Contrainte, 4, 0, False)
         Me.txt_fu.Text = GetStringInUnit(Frm_ConnectionSlimN.localBeam.Dalle.Goujons.Fu, Enu_TypeVariable.Contrainte, 4, 0, False)
+
+    End Sub
+
+    Private Sub MAJI_Avertissement()
+
+        ' 1 Vérification pour un goulon sur semelle sup
+
+        If Frm_ConnectionSlimN.localBeam.Dalle.typeConnecteur = PMXMoteur2.cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup Then
+
+            ' 2 Est ce que le conneteur dépasse au dessus de la dalle
+
+            Dim zTopD, zTopG As Decimal
+
+            zTopD = Frm_ConnectionSlimN.localBeam.Dalle.zTop
+            zTopG = Frm_ConnectionSlimN.localBeam.Section.zSemSup + Frm_ConnectionSlimN.localBeam.Dalle.Goujons.hsc
+
+            If IsGreater(zTopG, zTopD) Then
+
+                Me.lbl_Avertissement.Text = strGoujonsDepasseDalle
+                Me.pan_Avertissement.Visible = True
+
+            ElseIf IsGreater(zTopG + Goujons_EnrobageMini(), zTopD) Then
+
+                Dim Enrobage As Decimal = zTopD - zTopG
+                Dim valMin As Decimal = Goujons_EnrobageMini()
+                Dim strEnrobage As String = GetStringInUnitN(Enrobage, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True)
+                Dim strvalmin As String = GetStringInUnitN(valMin, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiNdC, True)
+
+                Me.lbl_Avertissement.Text = RemplaceDollar(RemplaceDollar(strGoujonsEnrobageMini, strEnrobage), strvalmin)
+                Me.pan_Avertissement.Visible = True
+
+            Else
+
+                Me.pan_Avertissement.Visible = False
+
+            End If
+
+        Else
+
+            Me.pan_Avertissement.Visible = False
+
+        End If
 
     End Sub
 

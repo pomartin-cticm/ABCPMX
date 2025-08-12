@@ -290,6 +290,8 @@ SPACING					= Longitudinal spacing
 ROW_NUMBER				= Number of rows
 WIDTH					= Length
 INFOREINF				= Composite dowels are not available for IFB-B sections nor for webs whose thickness is less than 7,5 mm
+W_MINIMUMCOVERAGE		= Warning : the concrete coverage of the stud ($) is lower than the minimum required value ($).
+W_STUDABOVESLAB			= Warning : the head of the stud is above the outer face of concrete
 
 #FRM_DECKRESTRAINT
 TITLE					= Restraint of the beam by the steel deck (construction phase only)

@@ -31,6 +31,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.lbl_Connecteur = New System.Windows.Forms.Label()
         Me.lbl_Type = New System.Windows.Forms.Label()
         Me.pan_TypeConnecteur = New System.Windows.Forms.Panel()
+        Me.img_info = New System.Windows.Forms.PictureBox()
         Me.rdb_Armatures = New System.Windows.Forms.RadioButton()
         Me.rdb_GoujonAme = New System.Windows.Forms.RadioButton()
         Me.rdb_GoujonSemSup = New System.Windows.Forms.RadioButton()
@@ -62,13 +63,16 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.img_info = New System.Windows.Forms.PictureBox()
+        Me.pan_Avertissement = New System.Windows.Forms.Panel()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.lbl_Avertissement = New System.Windows.Forms.Label()
         Me.pan_Main.SuspendLayout()
         Me.TLPan_Main.SuspendLayout()
         Me.pan_Image.SuspendLayout()
         CType(Me.img_Stud, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLPan_Saisies.SuspendLayout()
         Me.pan_TypeConnecteur.SuspendLayout()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_SaisieGoujons.SuspendLayout()
         CType(Me.img_fu, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_fy, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -78,7 +82,8 @@ Partial Class Frm_ConnectionSlimConnecteur
         CType(Me.img_Fsk, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Avertissement.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Main
@@ -187,6 +192,16 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.pan_TypeConnecteur.Size = New System.Drawing.Size(250, 89)
         Me.pan_TypeConnecteur.TabIndex = 2
         '
+        'img_info
+        '
+        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
+        Me.img_info.Location = New System.Drawing.Point(226, 58)
+        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_info.Name = "img_info"
+        Me.img_info.Size = New System.Drawing.Size(20, 20)
+        Me.img_info.TabIndex = 81
+        Me.img_info.TabStop = False
+        '
         'rdb_Armatures
         '
         Me.rdb_Armatures.AutoSize = True
@@ -233,6 +248,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         '
         Me.pan_SaisieGoujons.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieGoujons.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieGoujons.Controls.Add(Me.pan_Avertissement)
         Me.pan_SaisieGoujons.Controls.Add(Me.lbl_Stud)
         Me.pan_SaisieGoujons.Controls.Add(Me.etq_UnitFu)
         Me.pan_SaisieGoujons.Controls.Add(Me.etq_UnitFy)
@@ -250,7 +266,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.pan_SaisieGoujons.Location = New System.Drawing.Point(665, 37)
         Me.pan_SaisieGoujons.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_SaisieGoujons.Name = "pan_SaisieGoujons"
-        Me.pan_SaisieGoujons.Size = New System.Drawing.Size(270, 169)
+        Me.pan_SaisieGoujons.Size = New System.Drawing.Size(270, 244)
         Me.pan_SaisieGoujons.TabIndex = 2
         '
         'lbl_Stud
@@ -394,7 +410,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.pan_SaisieArmature.Controls.Add(Me.Label1)
         Me.pan_SaisieArmature.Controls.Add(Me.TextBox1)
         Me.pan_SaisieArmature.Controls.Add(Me.PictureBox1)
-        Me.pan_SaisieArmature.Location = New System.Drawing.Point(665, 252)
+        Me.pan_SaisieArmature.Location = New System.Drawing.Point(665, 356)
         Me.pan_SaisieArmature.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_SaisieArmature.Name = "pan_SaisieArmature"
         Me.pan_SaisieArmature.Size = New System.Drawing.Size(270, 119)
@@ -500,15 +516,38 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.PictureBox1.TabIndex = 74
         Me.PictureBox1.TabStop = False
         '
-        'img_info
+        'pan_Avertissement
         '
-        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
-        Me.img_info.Location = New System.Drawing.Point(226, 58)
-        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
-        Me.img_info.Name = "img_info"
-        Me.img_info.Size = New System.Drawing.Size(20, 20)
-        Me.img_info.TabIndex = 81
-        Me.img_info.TabStop = False
+        Me.pan_Avertissement.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Avertissement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Avertissement.Controls.Add(Me.lbl_Avertissement)
+        Me.pan_Avertissement.Controls.Add(Me.PictureBox2)
+        Me.pan_Avertissement.Location = New System.Drawing.Point(6, 161)
+        Me.pan_Avertissement.Name = "pan_Avertissement"
+        Me.pan_Avertissement.Size = New System.Drawing.Size(253, 78)
+        Me.pan_Avertissement.TabIndex = 78
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
+        Me.PictureBox2.Location = New System.Drawing.Point(3, 3)
+        Me.PictureBox2.Margin = New System.Windows.Forms.Padding(0)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(20, 20)
+        Me.PictureBox2.TabIndex = 82
+        Me.PictureBox2.TabStop = False
+        '
+        'lbl_Avertissement
+        '
+        Me.lbl_Avertissement.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Avertissement.Location = New System.Drawing.Point(26, 3)
+        Me.lbl_Avertissement.Name = "lbl_Avertissement"
+        Me.lbl_Avertissement.Size = New System.Drawing.Size(213, 64)
+        Me.lbl_Avertissement.TabIndex = 83
+        Me.lbl_Avertissement.Text = "lbl_Avertissement"
         '
         'Frm_ConnectionSlimConnecteur
         '
@@ -529,6 +568,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.TLPan_Saisies.PerformLayout()
         Me.pan_TypeConnecteur.ResumeLayout(False)
         Me.pan_TypeConnecteur.PerformLayout()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_SaisieGoujons.ResumeLayout(False)
         Me.pan_SaisieGoujons.PerformLayout()
         CType(Me.img_fu, System.ComponentModel.ISupportInitialize).EndInit()
@@ -540,7 +580,8 @@ Partial Class Frm_ConnectionSlimConnecteur
         CType(Me.img_Fsk, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Avertissement.ResumeLayout(False)
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -585,4 +626,7 @@ Partial Class Frm_ConnectionSlimConnecteur
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents lbl_Stud As Label
     Friend WithEvents img_info As PictureBox
+    Friend WithEvents pan_Avertissement As Panel
+    Friend WithEvents PictureBox2 As PictureBox
+    Friend WithEvents lbl_Avertissement As Label
 End Class

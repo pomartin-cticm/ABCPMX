@@ -11,15 +11,15 @@ Public Class Frm_ConnectionSlimConnexion
     Dim Nb_Zones_MAX As Integer
     Dim Longueur_Zone_MIN As Decimal
     Dim Longueur_Zone_MAX As Decimal
-    Dim Espacement_Longi_MIN As Decimal     'sxi,min dans les ST
-    Dim Espacement_Longi_MAX As Decimal     'sxi,max dans les ST
+    Dim Espacement_Longi_MIN As Decimal         'sxi,min dans les ST
+    Dim Espacement_Longi_MAX As Decimal         'sxi,max dans les ST
 
-    Dim Nb_TransV_Row_MIN As Integer
+    Dim Nb_TransV_Row_MIN As Integer = 1
     Dim Nb_TransV_Row_MAX As Integer
     Dim Espacement_Trans_MIN As Decimal
-    Dim Pince_Trans_MIN As Decimal          'Correspond à eD,min dans les Specifications Techniques 
+    Dim Pince_Trans_MIN As Decimal              'Correspond à eD,min dans les Specifications Techniques 
 
-    Const traveeEnCours As Integer = 1           ' Poutre slim floor : 1 seule travée
+    Const traveeEnCours As Integer = 1          ' Poutre slim floor : 1 seule travée
 
     Dim lBtnAjouterSupprimer As Boolean         ' Indique si l'on est en train d'ajouter ou de supprimer une zone de connection
 
@@ -42,8 +42,8 @@ Public Class Frm_ConnectionSlimConnexion
         GestionStyle()
         GestionUnites()
 
-        PrepareFenetre()
         ValeursLimites()
+        PrepareFenetre()
         AfficheConnectionEnCours()
 
         lBuild = False
@@ -52,9 +52,6 @@ Public Class Frm_ConnectionSlimConnexion
 
     Private Sub PrepareFenetre()
 
-        lSemSup = (Frm_ConnectionSlimN.localBeam.Dalle.lConnexSemSup)
-        lAme = (Frm_ConnectionSlimN.localBeam.Dalle.lConnexAme)
-        lGoujons = lSemSup Or lAme
 
         Me.cmb_NbRow_I1.Visible = lGoujons
         Me.txt_NbRows.Visible = lGoujons
@@ -64,6 +61,10 @@ Public Class Frm_ConnectionSlimConnexion
     End Sub
 
     Private Sub ValeursLimites()
+
+        lSemSup = (Frm_ConnectionSlimN.localBeam.Dalle.lConnexSemSup)
+        lAme = (Frm_ConnectionSlimN.localBeam.Dalle.lConnexAme)
+        lGoujons = lSemSup Or lAme
 
         'Définition des valeurs limites pour les caractéristiques longitudinales
         Longueur_Zone_MIN = Math.Min(1, Frm_ConnectionSlimN.localBeam.LongueurTravee(traveeEnCours))
@@ -301,6 +302,24 @@ Public Class Frm_ConnectionSlimConnexion
 #End Region
 
 #Region " Evènements de saisie "
+
+    Private Sub cmb_NbRow_I1_I2_I3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbRow_I1.SelectedIndexChanged, cmb_NbRow_I2.SelectedIndexChanged, cmb_NbRow_I3.SelectedIndexChanged
+        If lBuild Then Exit Sub 'Or lMAJAffichage Then Exit Sub
+
+        Select Case sender.name
+            Case cmb_NbRow_I1.Name
+                Frm_ConnectionSlimN.localBeam.NrTransZone(traveeEnCours, 0) = cmb_NbRow_I1.SelectedIndex + 1
+            Case cmb_NbRow_I2.Name
+                Frm_ConnectionSlimN.localBeam.NrTransZone(traveeEnCours, 1) = cmb_NbRow_I2.SelectedIndex + 1
+            Case cmb_NbRow_I3.Name
+                Frm_ConnectionSlimN.localBeam.NrTransZone(traveeEnCours, 2) = cmb_NbRow_I3.SelectedIndex + 1
+        End Select
+
+        MAJI_SommeGoujons()
+        'MAJ_affichage_txt_cmb_connection()
+        Me.img_Connexion.Invalidate()
+    End Sub
+
 
     Private Sub txt_Largeur_I1_I2_I3_TextChanged(sender As Object, e As EventArgs) Handles txt_Largeur_I1.TextChanged, txt_Largeur_I2.TextChanged, txt_Largeur_I3.TextChanged
         If lBuild Then Exit Sub

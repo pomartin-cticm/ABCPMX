@@ -113,6 +113,20 @@ Public Class cls_Section
     End Function
 
     ''' <summary>
+    ''' Retourne la position z des goujons d'âme pour les sections slim floor mixtes
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function zGoujonsAmeSlim() As Decimal
+
+        Dim zGouj As Decimal
+
+        zGouj = (Me.ProfilA.ha - Me.EpPlatInf) / 2
+
+        Return zGouj
+
+    End Function
+
+    ''' <summary>
     ''' Retourne la somme de l'épaisseur semelle sup+congés sup
     ''' </summary>
     ''' <returns></returns>
@@ -153,7 +167,7 @@ Public Class cls_Section
     End Property
 
     ''' <summary>
-    ''' Renvoie l'épaisseur du plat inférieur sur lequel repose la charge de la dalle
+    ''' Renvoie l'épaisseur du plat inférieur sur lequel repose la charge de la dalle (pour les slim floor)
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property EpPlatInf As Decimal

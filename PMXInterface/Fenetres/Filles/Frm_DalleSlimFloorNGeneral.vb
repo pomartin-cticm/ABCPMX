@@ -16,7 +16,7 @@ Public Class Frm_DalleSlimFloorNGeneral
     Dim ClasseBeton() As String = cls_Beton.TabClasseBeton
     Dim ClasseBetonLeger() As String = cls_Beton.TabClasseBetonLeger
 
-    Private Const TDMAXI As Decimal = 0.5
+    Dim TDMAXI As Decimal = 0.5
     Private Const HPMINI As Decimal = 0.04
     Private Const DPMIN As Decimal = 0.05
     Private Const DPMAX As Decimal = 0.5
@@ -308,6 +308,8 @@ Public Class Frm_DalleSlimFloorNGeneral
             ReDim Preserve ClasseBetonLeger(nbClasse)
 
         End If
+
+        TDMAXI = MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.ha + 0.3
     End Sub
 
 #End Region

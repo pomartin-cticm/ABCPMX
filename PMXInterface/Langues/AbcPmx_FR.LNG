@@ -292,6 +292,8 @@ SPACING					= Espacement longitudinal
 ROW_NUMBER				= Nombre de files
 WIDTH					= Longueur
 INFOREINF				= La connexion par les armatures n'est pas disponible pour les sections IFB-B ni pour les âmes d'épaisseur inférieure à 7,5 mm
+W_MINIMUMCOVERAGE		= Attention : l'enrobage du goujon ($) est inférieur à la valeur minimale requise ($).
+W_STUDABOVESLAB			= Attention : la tête du goujon dépasse la surface du béton
 
 #FRM_DECKRESTRAINT
 TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)
