@@ -793,6 +793,7 @@ Public Class cls_Projet
             AjouteLigneFrmt(Lines, "AgeTCalc", .AgeT)
 
             AjouteLigneFrmt(Lines, "lElasticDesign", .lElasticDesignVM)
+            AjouteLigneFrmt(Lines, "Psi2LongTerm", .lPsi2LongTerm)
             AjouteLigneFrmt(Lines, "lControlCrack", .lMaitriseFissuration)
 
         End With
@@ -2729,7 +2730,9 @@ Public Class cls_Projet
                         Case "AGETCA" : .AgeT = CDec(TraiteReal(Mots(nbMots)))
                         Case "LELAST" : .lElasticDesignVM = Mots(nbMots)
                         Case "LCONTR" : .lMaitriseFissuration = Mots(nbMots)
+                        Case "PSI2LO" : .lPsi2LongTerm = Mots(nbMots)
                         Case Else : MsgBox("BLOC " & BkOPTIONS & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+
                     End Select
                 End With
 

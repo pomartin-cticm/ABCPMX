@@ -124,6 +124,7 @@ CONTROLCRACKW			= Maîtrise de la fissuration
 CRACKWIDTH				= Limite d'ouverture des fissures
 WARNINGCOMPREINF1		= Les armatures en compression ne peuvent pas être prises en compte pour une dalle avec un seul lit d'armatures
 WARNINGCOMPREINF2		= Quand les armatures en compression sont prises en compte dans les calculs de la poutre, les exigences de l'EN 1992-1-1:2005, clause 9.2.1.2 (3) doivent être satisfaites, pour éviter un flambement prématuré des barres.
+PSI2LONGTERM			= La fraction quasi permanente des charges d'exploitation est considéré comme effet de long terme
 
 #FRM_CALCULATIONSHEET
 TITLE					= Note de calculs

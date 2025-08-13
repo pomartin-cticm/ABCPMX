@@ -270,7 +270,6 @@ Public Class Frm_ConnectionSlimConnecteur
 
 #Region " Evènements saisie "
 
-
     Private Sub cmb_Diametre_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Diametre.SelectedIndexChanged
 
         If lBuild Then Exit Sub
@@ -287,6 +286,7 @@ Public Class Frm_ConnectionSlimConnecteur
         Frm_ConnectionSlimN.localBeam.Dalle.ConnecteurArmature.Acier.Classe = cls_AcierArmature.tabClasseAcierArma(Me.cmb_Acier.SelectedIndex)
         MAJI_ProprietesAcier()
         MAJI_PRdArma()
+
     End Sub
 
     Private Sub cmb_goujons_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_goujons.SelectedIndexChanged

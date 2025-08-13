@@ -45,7 +45,7 @@ Public Class Frm_OptionsCalculPoutre
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim strLoadedKey As String = ""
-            Const CLE As String = ""
+            Dim CLE As String = ""
 
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_BEAMOPTIONS")
@@ -99,6 +99,7 @@ Public Class Frm_OptionsCalculPoutre
                 Me.lbl_CadreParametres.Text = Bloc("TPARAMETERS")
                 Me.lbl_GraviteG.Text = Bloc("GFORCE")
 
+                CLE = "PSI2LONGTERM" : Me.chk_Psi2LongTerme.Text = Bloc(CLE)
 
                 '--( Messages
 
@@ -107,7 +108,6 @@ Public Class Frm_OptionsCalculPoutre
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
-                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
             Finally
                 Bloc.Clear()
             End Try
@@ -234,6 +234,7 @@ Public Class Frm_OptionsCalculPoutre
 
         '==> Options ELS
 
+        Me.chk_Psi2LongTerme.Checked = MyParam.lPsi2LongTerm
         Me.chk_FlechesETA.Checked = MyParam.lFlechesETA
         Me.txt_Se.Text = GetStringInUnit(MyParam.DeltaD, Enu_TypeVariable.Dimension, 4, 3, False)
 
@@ -340,6 +341,7 @@ Public Class Frm_OptionsCalculPoutre
 
         GereTransfertValeur(MyParam.GraviteG, MyProjet.Poutres(MyProjet.IndEnCours).Param.GraviteG, lModif)
 
+        GereTransfertValeur(Me.chk_Psi2LongTerme.Checked, MyProjet.Poutres(MyProjet.IndEnCours).Param.lPsi2LongTerm, lModif)
         GereTransfertValeur(Me.chk_FlechesETA.Checked, MyProjet.Poutres(MyProjet.IndEnCours).Param.lFlechesETA, lModif)
         GereTransfertValeur(MyParam.DeltaD, MyProjet.Poutres(MyProjet.IndEnCours).Param.DeltaD, lModif)
 
@@ -571,7 +573,6 @@ Public Class Frm_OptionsCalculPoutre
                     FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
-
 
 #End Region
 

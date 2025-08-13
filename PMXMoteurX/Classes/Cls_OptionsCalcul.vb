@@ -49,6 +49,7 @@ Public Class cls_OptionsCalcul
 
     Public GraviteG As Decimal                      ' Accélération gravité
 
+    Public lPsi2LongTerm As Boolean                 ' Indique si on considère la fraction Psi2 des charges d'exploitation comme un effet de long terme
     Public PsiLPermanent As Decimal                 ' Coefficient de fluage pour les charges permanentes
     Public PsiLRetrait As Decimal                   ' Coefficient de fluage pour les charges de retrait
     Public AgeT0G1() As Decimal                     ' Age au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage
@@ -104,6 +105,8 @@ Public Class cls_OptionsCalcul
         Me.ArmaYoung = 210000
 
         Me.GraviteG = tabGraviteG(0)
+
+        Me.lPsi2LongTerm = True
 
         Me.PsiLPermanent = 1.1
         Me.PsiLRetrait = 0.55
