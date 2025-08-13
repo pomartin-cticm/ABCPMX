@@ -132,11 +132,11 @@ Partial Class Frm_ChargementN
         Me.txt_Indice_Lineique = New System.Windows.Forms.TextBox()
         Me.lbl_ChargesLineiques = New System.Windows.Forms.Label()
         Me.pan_ChargesSurfaciques = New System.Windows.Forms.Panel()
+        Me.lbl_UnitUniformLoad = New System.Windows.Forms.Label()
         Me.lbl_ResultingForce = New System.Windows.Forms.Label()
         Me.lbl_UniformLoad = New System.Windows.Forms.Label()
         Me.lbl_WidthApplication = New System.Windows.Forms.Label()
         Me.lbl_UnitResultingForce = New System.Windows.Forms.Label()
-        Me.lbl_UnitUniformLoad = New System.Windows.Forms.Label()
         Me.lbl_UnitWidthApplication = New System.Windows.Forms.Label()
         Me.txt_ResultingForce = New System.Windows.Forms.TextBox()
         Me.txt_UniformLoad = New System.Windows.Forms.TextBox()
@@ -145,6 +145,13 @@ Partial Class Frm_ChargementN
         Me.lbl_ChargesSurfaciques = New System.Windows.Forms.Label()
         Me.ErrorProvider_Frm_Chargement = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
+        Me.pan_Psi = New System.Windows.Forms.Panel()
+        Me.txt_Psi2 = New System.Windows.Forms.TextBox()
+        Me.img_Psi2 = New System.Windows.Forms.PictureBox()
+        Me.img_Psi0 = New System.Windows.Forms.PictureBox()
+        Me.txt_Psi0 = New System.Windows.Forms.TextBox()
+        Me.img_Psi1 = New System.Windows.Forms.PictureBox()
+        Me.txt_Psi1 = New System.Windows.Forms.TextBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -168,6 +175,10 @@ Partial Class Frm_ChargementN
         Me.pan_ChargesLineiques.SuspendLayout()
         Me.pan_ChargesSurfaciques.SuspendLayout()
         CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Psi.SuspendLayout()
+        CType(Me.img_Psi2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Psi0, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Psi1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -283,7 +294,7 @@ Partial Class Frm_ChargementN
         Me.TLpan_PanneauGauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_PanneauGauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55.0!))
         Me.TLpan_PanneauGauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_PanneauGauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 105.0!))
+        Me.TLpan_PanneauGauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65.0!))
         Me.TLpan_PanneauGauche.Size = New System.Drawing.Size(250, 501)
         Me.TLpan_PanneauGauche.TabIndex = 0
         '
@@ -298,15 +309,15 @@ Partial Class Frm_ChargementN
         Me.pan_ReactionsAppuis.Controls.Add(Me.lbl_UnitLeftSupport)
         Me.pan_ReactionsAppuis.Controls.Add(Me.txt_LeftSupport)
         Me.pan_ReactionsAppuis.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_ReactionsAppuis.Location = New System.Drawing.Point(0, 396)
+        Me.pan_ReactionsAppuis.Location = New System.Drawing.Point(0, 436)
         Me.pan_ReactionsAppuis.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ReactionsAppuis.Name = "pan_ReactionsAppuis"
-        Me.pan_ReactionsAppuis.Size = New System.Drawing.Size(250, 105)
+        Me.pan_ReactionsAppuis.Size = New System.Drawing.Size(250, 65)
         Me.pan_ReactionsAppuis.TabIndex = 6
         '
         'lbl_RightSupport
         '
-        Me.lbl_RightSupport.Location = New System.Drawing.Point(9, 56)
+        Me.lbl_RightSupport.Location = New System.Drawing.Point(9, 39)
         Me.lbl_RightSupport.Name = "lbl_RightSupport"
         Me.lbl_RightSupport.Size = New System.Drawing.Size(85, 13)
         Me.lbl_RightSupport.TabIndex = 83
@@ -315,7 +326,7 @@ Partial Class Frm_ChargementN
         '
         'lbl_LeftSupport
         '
-        Me.lbl_LeftSupport.Location = New System.Drawing.Point(19, 27)
+        Me.lbl_LeftSupport.Location = New System.Drawing.Point(19, 10)
         Me.lbl_LeftSupport.Name = "lbl_LeftSupport"
         Me.lbl_LeftSupport.Size = New System.Drawing.Size(78, 13)
         Me.lbl_LeftSupport.TabIndex = 83
@@ -325,7 +336,7 @@ Partial Class Frm_ChargementN
         'lbl_UnitRightSupport
         '
         Me.lbl_UnitRightSupport.AutoSize = True
-        Me.lbl_UnitRightSupport.Location = New System.Drawing.Point(167, 53)
+        Me.lbl_UnitRightSupport.Location = New System.Drawing.Point(167, 36)
         Me.lbl_UnitRightSupport.Name = "lbl_UnitRightSupport"
         Me.lbl_UnitRightSupport.Size = New System.Drawing.Size(21, 13)
         Me.lbl_UnitRightSupport.TabIndex = 82
@@ -334,7 +345,7 @@ Partial Class Frm_ChargementN
         'txt_RightSupport
         '
         Me.txt_RightSupport.BackColor = System.Drawing.Color.LightGray
-        Me.txt_RightSupport.Location = New System.Drawing.Point(100, 49)
+        Me.txt_RightSupport.Location = New System.Drawing.Point(100, 32)
         Me.txt_RightSupport.Name = "txt_RightSupport"
         Me.txt_RightSupport.ReadOnly = True
         Me.txt_RightSupport.Size = New System.Drawing.Size(58, 20)
@@ -344,7 +355,7 @@ Partial Class Frm_ChargementN
         'lbl_UnitLeftSupport
         '
         Me.lbl_UnitLeftSupport.AutoSize = True
-        Me.lbl_UnitLeftSupport.Location = New System.Drawing.Point(167, 27)
+        Me.lbl_UnitLeftSupport.Location = New System.Drawing.Point(167, 10)
         Me.lbl_UnitLeftSupport.Name = "lbl_UnitLeftSupport"
         Me.lbl_UnitLeftSupport.Size = New System.Drawing.Size(21, 13)
         Me.lbl_UnitLeftSupport.TabIndex = 82
@@ -353,7 +364,7 @@ Partial Class Frm_ChargementN
         'txt_LeftSupport
         '
         Me.txt_LeftSupport.BackColor = System.Drawing.Color.LightGray
-        Me.txt_LeftSupport.Location = New System.Drawing.Point(100, 23)
+        Me.txt_LeftSupport.Location = New System.Drawing.Point(100, 6)
         Me.txt_LeftSupport.Name = "txt_LeftSupport"
         Me.txt_LeftSupport.ReadOnly = True
         Me.txt_LeftSupport.Size = New System.Drawing.Size(58, 20)
@@ -366,7 +377,7 @@ Partial Class Frm_ChargementN
         Me.lbl_Span.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_Span.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Span.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Span.Location = New System.Drawing.Point(0, 281)
+        Me.lbl_Span.Location = New System.Drawing.Point(0, 321)
         Me.lbl_Span.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Span.Name = "lbl_Span"
         Me.lbl_Span.Size = New System.Drawing.Size(250, 30)
@@ -380,7 +391,7 @@ Partial Class Frm_ChargementN
         Me.lbl_ReactionsAppuis.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_ReactionsAppuis.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_ReactionsAppuis.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_ReactionsAppuis.Location = New System.Drawing.Point(0, 366)
+        Me.lbl_ReactionsAppuis.Location = New System.Drawing.Point(0, 406)
         Me.lbl_ReactionsAppuis.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_ReactionsAppuis.Name = "lbl_ReactionsAppuis"
         Me.lbl_ReactionsAppuis.Size = New System.Drawing.Size(250, 30)
@@ -392,6 +403,7 @@ Partial Class Frm_ChargementN
         '
         Me.pan_ChoixCharges.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_ChoixCharges.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ChoixCharges.Controls.Add(Me.pan_Psi)
         Me.pan_ChoixCharges.Controls.Add(Me.pan_CoefEquivalence)
         Me.pan_ChoixCharges.Controls.Add(Me.pan_Parametres)
         Me.pan_ChoixCharges.Controls.Add(Me.pan_ChoixCas)
@@ -401,7 +413,7 @@ Partial Class Frm_ChargementN
         Me.pan_ChoixCharges.Location = New System.Drawing.Point(0, 30)
         Me.pan_ChoixCharges.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_ChoixCharges.Name = "pan_ChoixCharges"
-        Me.pan_ChoixCharges.Size = New System.Drawing.Size(250, 250)
+        Me.pan_ChoixCharges.Size = New System.Drawing.Size(250, 290)
         Me.pan_ChoixCharges.TabIndex = 2
         '
         'pan_CoefEquivalence
@@ -613,7 +625,7 @@ Partial Class Frm_ChargementN
         Me.pan_Span.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pan_Span.Controls.Add(Me.Panel1)
         Me.pan_Span.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Span.Location = New System.Drawing.Point(0, 311)
+        Me.pan_Span.Location = New System.Drawing.Point(0, 351)
         Me.pan_Span.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Span.Name = "pan_Span"
         Me.pan_Span.Size = New System.Drawing.Size(250, 54)
@@ -1431,6 +1443,15 @@ Partial Class Frm_ChargementN
         Me.pan_ChargesSurfaciques.Size = New System.Drawing.Size(453, 69)
         Me.pan_ChargesSurfaciques.TabIndex = 3
         '
+        'lbl_UnitUniformLoad
+        '
+        Me.lbl_UnitUniformLoad.AutoSize = True
+        Me.lbl_UnitUniformLoad.Location = New System.Drawing.Point(194, 38)
+        Me.lbl_UnitUniformLoad.Name = "lbl_UnitUniformLoad"
+        Me.lbl_UnitUniformLoad.Size = New System.Drawing.Size(21, 13)
+        Me.lbl_UnitUniformLoad.TabIndex = 78
+        Me.lbl_UnitUniformLoad.Text = "kN"
+        '
         'lbl_ResultingForce
         '
         Me.lbl_ResultingForce.Location = New System.Drawing.Point(229, 38)
@@ -1466,15 +1487,6 @@ Partial Class Frm_ChargementN
         Me.lbl_UnitResultingForce.Size = New System.Drawing.Size(21, 13)
         Me.lbl_UnitResultingForce.TabIndex = 78
         Me.lbl_UnitResultingForce.Text = "kN"
-        '
-        'lbl_UnitUniformLoad
-        '
-        Me.lbl_UnitUniformLoad.AutoSize = True
-        Me.lbl_UnitUniformLoad.Location = New System.Drawing.Point(194, 38)
-        Me.lbl_UnitUniformLoad.Name = "lbl_UnitUniformLoad"
-        Me.lbl_UnitUniformLoad.Size = New System.Drawing.Size(21, 13)
-        Me.lbl_UnitUniformLoad.TabIndex = 78
-        Me.lbl_UnitUniformLoad.Text = "kN"
         '
         'lbl_UnitWidthApplication
         '
@@ -1554,6 +1566,74 @@ Partial Class Frm_ChargementN
         Me.imgList_Navigation.Images.SetKeyName(2, "Suivant")
         Me.imgList_Navigation.Images.SetKeyName(3, "SuivantNonDispo")
         '
+        'pan_Psi
+        '
+        Me.pan_Psi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Psi.Controls.Add(Me.img_Psi1)
+        Me.pan_Psi.Controls.Add(Me.txt_Psi1)
+        Me.pan_Psi.Controls.Add(Me.img_Psi0)
+        Me.pan_Psi.Controls.Add(Me.txt_Psi0)
+        Me.pan_Psi.Controls.Add(Me.img_Psi2)
+        Me.pan_Psi.Controls.Add(Me.txt_Psi2)
+        Me.pan_Psi.Location = New System.Drawing.Point(3, 245)
+        Me.pan_Psi.Name = "pan_Psi"
+        Me.pan_Psi.Size = New System.Drawing.Size(242, 36)
+        Me.pan_Psi.TabIndex = 81
+        '
+        'txt_Psi2
+        '
+        Me.txt_Psi2.BackColor = System.Drawing.Color.LightGray
+        Me.txt_Psi2.Location = New System.Drawing.Point(192, 5)
+        Me.txt_Psi2.Name = "txt_Psi2"
+        Me.txt_Psi2.ReadOnly = True
+        Me.txt_Psi2.Size = New System.Drawing.Size(36, 20)
+        Me.txt_Psi2.TabIndex = 85
+        '
+        'img_Psi2
+        '
+        Me.img_Psi2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Psi2.Location = New System.Drawing.Point(159, 5)
+        Me.img_Psi2.Name = "img_Psi2"
+        Me.img_Psi2.Size = New System.Drawing.Size(33, 20)
+        Me.img_Psi2.TabIndex = 86
+        Me.img_Psi2.TabStop = False
+        '
+        'img_Psi0
+        '
+        Me.img_Psi0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Psi0.Location = New System.Drawing.Point(6, 5)
+        Me.img_Psi0.Name = "img_Psi0"
+        Me.img_Psi0.Size = New System.Drawing.Size(33, 20)
+        Me.img_Psi0.TabIndex = 88
+        Me.img_Psi0.TabStop = False
+        '
+        'txt_Psi0
+        '
+        Me.txt_Psi0.BackColor = System.Drawing.Color.LightGray
+        Me.txt_Psi0.Location = New System.Drawing.Point(39, 5)
+        Me.txt_Psi0.Name = "txt_Psi0"
+        Me.txt_Psi0.ReadOnly = True
+        Me.txt_Psi0.Size = New System.Drawing.Size(36, 20)
+        Me.txt_Psi0.TabIndex = 87
+        '
+        'img_Psi1
+        '
+        Me.img_Psi1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Psi1.Location = New System.Drawing.Point(83, 5)
+        Me.img_Psi1.Name = "img_Psi1"
+        Me.img_Psi1.Size = New System.Drawing.Size(33, 20)
+        Me.img_Psi1.TabIndex = 90
+        Me.img_Psi1.TabStop = False
+        '
+        'txt_Psi1
+        '
+        Me.txt_Psi1.BackColor = System.Drawing.Color.LightGray
+        Me.txt_Psi1.Location = New System.Drawing.Point(116, 5)
+        Me.txt_Psi1.Name = "txt_Psi1"
+        Me.txt_Psi1.ReadOnly = True
+        Me.txt_Psi1.Size = New System.Drawing.Size(36, 20)
+        Me.txt_Psi1.TabIndex = 89
+        '
         'Frm_ChargementN
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1599,6 +1679,11 @@ Partial Class Frm_ChargementN
         Me.pan_ChargesSurfaciques.ResumeLayout(False)
         Me.pan_ChargesSurfaciques.PerformLayout()
         CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Psi.ResumeLayout(False)
+        Me.pan_Psi.PerformLayout()
+        CType(Me.img_Psi2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Psi0, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Psi1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1724,4 +1809,11 @@ Partial Class Frm_ChargementN
     Friend WithEvents txt_Ndalle As TextBox
     Friend WithEvents pan_CoefEquivalence As Panel
     Friend WithEvents lbl_Etaiement As Label
+    Friend WithEvents pan_Psi As Panel
+    Friend WithEvents txt_Psi2 As TextBox
+    Friend WithEvents img_Psi2 As PictureBox
+    Friend WithEvents img_Psi1 As PictureBox
+    Friend WithEvents txt_Psi1 As TextBox
+    Friend WithEvents img_Psi0 As PictureBox
+    Friend WithEvents txt_Psi0 As TextBox
 End Class

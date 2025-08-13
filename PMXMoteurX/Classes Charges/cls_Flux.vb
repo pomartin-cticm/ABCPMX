@@ -113,11 +113,13 @@
         Dim MomStat As Decimal
         Dim zANE As Decimal
         Dim lCasMixte As Boolean
+        Dim IndElts As Integer           ' Indice du tableau des propriétés à considérer pour le calcul
 
         '-> Initialisation
 
-        nEqDalle = myBeam.Elements(myBeam.ChargesA(iCas).IndElts).nEqDalle
-        lCasMixte = myBeam.Elements(myBeam.ChargesA(iCas).IndElts).lMixte
+        IndElts = myBeam.ChargesA(iCas).IndElts(0)
+        nEqDalle = myBeam.Elements(IndElts).nEqDalle
+        lCasMixte = myBeam.Elements(IndElts).lMixte
 
         '--> Traitement
 
@@ -135,8 +137,8 @@
                     If iPts = iDeb And Not lCasMixte Then
                         FluxF(iCas, iPts, iNode, k) = 0 'dans le cas non mixte, il n'y a pas de flux de cisaillement dans les connecteurs mais il y en a quand même au droit des soudures
                     Else
-                        InertieY = myBeam.Elements(myBeam.ChargesA(iCas).IndElts).InertieY(iElt)
-                        zANE = myBeam.Elements(myBeam.ChargesA(iCas).IndElts).zANE(iElt)
+                        InertieY = myBeam.Elements(IndElts).InertieY(iElt)
+                        zANE = myBeam.Elements(IndElts).zANE(iElt)
 
 
                         MomStat = Me.MomentStatiqueMixte(myBeam, iPts, nEqDalle, bEff(iNode), zANE)

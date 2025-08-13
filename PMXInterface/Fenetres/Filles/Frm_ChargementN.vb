@@ -680,6 +680,8 @@ Public Class Frm_ChargementN
         Dim H0Dalle As Decimal = MyPoutreLoc.Dalle.NotionalSizeH0(MyPoutreLoc)
         Dim H0Enrob As Decimal = MyPoutreLoc.Section.NotionalSizeEnrobage
         Dim lConstruction As Boolean
+        Dim Psi(2) As Decimal
+        Dim lPsi As Boolean = False
 
         '--( Initialisation
 
@@ -784,6 +786,8 @@ Public Class Frm_ChargementN
                 If lNEnrob Then
                     nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalenceCT(lGeneration1)
                 End If
+                lPsi = True
+                Psi = {MyPoutreLoc.Param.Gamma.Psi0_Q1, MyPoutreLoc.Param.Gamma.Psi1_Q1, MyPoutreLoc.Param.Gamma.Psi2_Q1}
             Case rad_Q2.Checked
                 Me.lbl_EtatDalle.Text = strCasNormal
                 lNDalle = lMixte
@@ -794,6 +798,8 @@ Public Class Frm_ChargementN
                 If lNEnrob Then
                     nEnrob = MyPoutreLoc.Section.Enrobage.Beton.CoefficientEquivalenceCT(lGeneration1)
                 End If
+                lPsi = True
+                Psi = {MyPoutreLoc.Param.Gamma.Psi0_Q2, MyPoutreLoc.Param.Gamma.Psi1_Q2, MyPoutreLoc.Param.Gamma.Psi2_Q2}
 
         End Select
 
@@ -811,6 +817,13 @@ Public Class Frm_ChargementN
 
         Me.lbl_NCoef.Visible = lNEnrob Or lNDalle
         Me.pan_CoefEquivalence.Visible = lNEnrob Or lNDalle
+
+        Me.pan_Psi.Visible = lPsi
+        If lPsi Then
+            Me.txt_Psi0.Text = GetStringInUnitN(Psi(0), Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+        Me.txt_Psi1.Text = GetStringInUnitN(Psi(1), Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+            Me.txt_Psi2.Text = GetStringInUnitN(Psi(2), Enu_TypeVariable.SansType, 4, 3, NON_U, True)
+        End If
     End Sub
 
     Private Sub MAJI_InfoCharges()
@@ -1489,6 +1502,7 @@ Public Class Frm_ChargementN
 
     End Sub
 
+
     Private Sub img_Chargement_MouseUp(sender As Object, e As MouseEventArgs) Handles img_Chargement.MouseUp
 
         '--> Gestion de la selection d'une travée par la souris
@@ -1497,6 +1511,55 @@ Public Class Frm_ChargementN
             Me.cmb_Travee.SelectedIndex = traveeMouse - MyPoutreLoc.IndicePremiereTravee
 
         End If
+
+    End Sub
+
+#End Region
+
+#Region " Symboles "
+
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Psi2.Paint, img_Psi1.Paint, img_Psi0.Paint
+        '--> Déclarations
+
+        Dim sWI As Single = sender.Width
+        Dim sHI As Single = sender.Height
+        Dim xStart As Single = sWI * 0.95
+
+        Dim strIndice As String = Nothing
+        Dim strSymbol As String = Nothing
+        Dim lGrec, lIndice, lEgal As Boolean
+        Dim xPen As Single = xStart
+        Dim hCar As Single = e.Graphics.MeasureString("X", FontSymbolNormal).Height
+        Dim hIndice As Single = hCar / 2
+        Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
+
+        '--> Initialisation
+
+        lIndice = True
+        lGrec = True
+        lEgal = True
+
+        Select Case sender.name
+            Case Me.img_Psi0.Name
+
+                strSymbol = "y"
+                strIndice = "0"
+
+            Case Me.img_Psi1.Name
+
+                strSymbol = "y"
+                strIndice = "1"
+
+            Case Me.img_Psi2.Name
+
+                strSymbol = "y"
+                strIndice = "2"
+        End Select
+
+        '--> Dessin
+
+        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_AlignementH.Droite,
+                   FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
 

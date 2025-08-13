@@ -4027,7 +4027,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Private Sub InitialiseChargesRetraitDalle(ByRef MyCas As cls_CasDeCharge)
+    Private Sub InitialiseChargesRetraitDalle(ByRef myCas As cls_CasDeCharge)
         '-------------------------------------------------------------------------------------------
         '   09/09/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -4045,10 +4045,11 @@ Public Class cls_Poutre
         Dim iTravDern As Integer = Me.IndiceDerniereTravee
         Dim xGauche, xDroite As Decimal
         Dim xApp As Decimal
+        Dim indTabElt As Integer = myCas.IndElts(0)
 
         '--> Initialisation
 
-        nEqSH = Me.Elements(MyCas.IndElts).nEqDalle
+        nEqSH = Me.Elements(indTabElt).nEqDalle
 
         '--> Préparation du cas de charge
 
@@ -4069,8 +4070,8 @@ Public Class cls_Poutre
                 xDroite = 0.85 * Me.LongueurTravee(iTrav)
             End If
 
-            MyCas.Moments(iTrav).Add(New cls_Moment(xGauche, SIGNESH * Msh, xApp))
-            MyCas.Moments(iTrav).Add(New cls_Moment(xDroite, -SIGNESH * Msh, xApp))
+            myCas.Moments(iTrav).Add(New cls_Moment(xGauche, SIGNESH * Msh, xApp))
+            myCas.Moments(iTrav).Add(New cls_Moment(xDroite, -SIGNESH * Msh, xApp))
 
         Next
 
@@ -4326,6 +4327,8 @@ Public Class cls_Poutre
 
         Dim LabelQ() As String = {symbQ1, symbQ2, symbQC}
         Dim IndQ() As Integer = {IndiceQ, IndiceQ, IndiceQc}
+        Dim IndQLT() As Integer = {IndiceG2, IndiceG2}
+        Dim Psi2Q() As Integer = {Me.Param.Gamma.Psi2_Q1, Me.Param.Gamma.Psi2_Q1}
         Dim lMultiT As Boolean
         Dim ChaineEx As String
         Me.lMultiQ = {False, False, False}
@@ -4336,20 +4339,41 @@ Public Class cls_Poutre
         'Le cas de charge de construction n'est pris en compte que si poutre mixte non totalement étayée
 
         For iq As Integer = 0 To iQFin
+
             lMultiT = Me.ChargesU(LabelQ(iq)).EstMultiTravee(Me.IndicePremiereTravee, Me.IndiceDerniereTravee)
             Me.lMultiQ(iq) = lMultiT
             ChaineEx = strExploitation & " " & CStr(iq + 1)
-            If (Me.NbTravees = 1) Or (Not lMultiT) Then
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
-                InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
+
+            If lMixte And iQFin < 2 Then
+                '--( Cas de charges d'exploitation comportant deux coefficients d'équivalence
+                If (Me.NbTravees = 1) Or (Not lMultiT) Then
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
+                Else
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 1", LabelQ(iq) & "#1", IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 2", LabelQ(iq) & "#2", IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesCentrale)
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 3", LabelQ(iq) & "#3", IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesConsoles)
+                End If
             Else
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 1", LabelQ(iq) & "#1", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
-                InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 2", LabelQ(iq) & "#2", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
-                InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesCentrale)
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 3", LabelQ(iq) & "#3", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
-                InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesConsoles)
+                '--( Cas de charges d'exploitation comportant un seul coefficient d'équivalence
+                If (Me.NbTravees = 1) Or (Not lMultiT) Then
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
+                Else
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 1", LabelQ(iq) & "#1", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 2", LabelQ(iq) & "#2", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesCentrale)
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 3", LabelQ(iq) & "#3", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesConsoles)
+                End If
             End If
+
+
+
         Next
 
         '--> Retrait
@@ -4362,17 +4386,6 @@ Public Class cls_Poutre
             InitialiseChargesRetraitDalle(Me.ChargesA(Me.ChargesA.Count - 1))
             Me.indiceCasRetrait = Me.ChargesA.Count - 1
         End If
-
-        'If lEnrob And Me.Param.lRetraitEnrobage Then
-        '    Me.ChargesA.Add(New cls_CasDeCharge(strRetraitEnrob, "SHE", IndiceSH, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Retrait, pEtatDalle))
-        'End If
-
-        ''--> Charges de construction
-
-        'If lMixte And (Not lEtaitComplet) Then
-        '    Me.ChargesA.Add(New cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Construction, pEtatDalleNonMixte))
-        '    InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("QC"), TraveesTous)
-        'End If
 
         '--> Préparation des cas de charges shadow pour les poutres mixtes
 
@@ -4412,7 +4425,7 @@ Public Class cls_Poutre
 
             For iCas = 0 To nbCas - 1
 
-                indiceElt = Me.ChargesA(iCas).IndElts
+                indiceElt = Me.ChargesA(iCas).IndElts(0)
                 lCasMixte = Me.Elements(indiceElt).lMixte
                 lDefini = Me.ChargesA(iCas).EstNonNul(iTrav0, iTrav1)
 
@@ -4668,6 +4681,7 @@ Public Class cls_Poutre
         Dim IndEltPrec As Integer = -1
         Dim lAppuisEtais As Boolean
         Dim lAppuisEtaisPrec As Boolean
+        Dim indTabElt As Integer
 
         '--> Initialisation
 
@@ -4683,10 +4697,11 @@ Public Class cls_Poutre
         For jCdc = 0 To Me.ChargesA.Count - 1
             If (Me.ChargesA(jCdc).EstNonNul(iTravP, iTravD) Or Me.ChargesA(jCdc).lShadow) Then
 
+                indTabElt = Me.ChargesA(jCdc).IndElts(0)
                 '# Préparation des propriétés des éléments
-                If (IndEltPrec <> Me.ChargesA(jCdc).IndElts) Then
-                    Me.Analyse.AttribueProprietesElements(Me.Elements(Me.ChargesA(jCdc).IndElts).Aire, Me.Elements(Me.ChargesA(jCdc).IndElts).InertieY)
-                    IndEltPrec = Me.ChargesA(jCdc).IndElts
+                If (IndEltPrec <> indTabElt) Then
+                    Me.Analyse.AttribueProprietesElements(Me.Elements(indTabElt).Aire, Me.Elements(indTabElt).InertieY)
+                    IndEltPrec = indTabElt
                 End If
 
                 '# Transfert du chargement

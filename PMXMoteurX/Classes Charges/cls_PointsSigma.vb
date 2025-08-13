@@ -456,7 +456,7 @@
 
         '--> Initialisation
 
-        IndexElts = MyPoutre.ChargesA(iCas).IndElts
+        IndexElts = MyPoutre.ChargesA(iCas).IndElts(0)
         nEqDalle = MyPoutre.Elements(IndexElts).nEqDalle
         nEqEnrob = MyPoutre.Elements(IndexElts).nEqEnrob
         lDalle = (MyPoutre.ChargesA(iCas).EtatDalle = cls_CasDeCharge.EnuEtatDalle.Mixte) And MyPoutre.lMixte
@@ -581,6 +581,7 @@
         Dim DeltaI() As Integer = {-1, 0}
         Dim DeltaZ, zCdG As Decimal
         Dim MEd, InertieY As Decimal
+        Dim indTabElt As Integer = MyPoutre.ChargesA(iCas).IndElts(0)
 
         '--> Traitement
 
@@ -592,14 +593,14 @@
             For k = kDeb To kFin
 
                 iElt = iNode + DeltaI(k)
-                zCdG = MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).zANE(iElt)
+                zCdG = MyPoutre.Elements(indTabElt).zANE(iElt)
 
-                If Not IsSmaller(MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).InertieY(iElt) * 10 ^ 8, 0) Then
+                If Not IsSmaller(MyPoutre.Elements(indTabElt).InertieY(iElt) * 10 ^ 8, 0) Then
                     For iPts = Me.iProfile(0) To Me.iProfile(1)
 
                         DeltaZ = zCdG - Me.zPos(iPts)
                         MEd = MyPoutre.ChargesA(iCas).MYY(iNode, k)
-                        InertieY = MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).InertieY(iElt)
+                        InertieY = MyPoutre.Elements(indTabElt).InertieY(iElt)
 
                         Sigma(iCas, iPts, iNode, k) = MEd / InertieY * DeltaZ / kConvMPaPa
 
@@ -642,7 +643,7 @@
         End If
     End Sub
 
-    Private Sub CalculContraintesSectionsAcierNonEnrobees(MyPoutre As cls_Poutre, MyCas As cls_CasDeCharge, ByRef Sigma(,,) As Decimal)
+    Private Sub CalculContraintesSectionsAcierNonEnrobees(myPoutre As cls_Poutre, myCas As cls_CasDeCharge, ByRef Sigma(,,) As Decimal)
         '-----------------------------------------------------------------------------------
         '   20/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------
@@ -657,12 +658,13 @@
 
         '--> Déclaration
 
-        Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim NbNodes As Integer = myPoutre.Nodes.nbNodes
         Dim NbPts As Integer = Me.zPos.Count
         Dim iNode, iPts, k As Integer
         Dim kDeb, kFin, iElt As Integer
         Dim DeltaI() As Integer = {-1, 0}
         Dim DeltaZ, zCdG As Decimal
+        Dim indTabElt As Integer = myCas.IndElts(0)
 
         '--> Initialisation
 
@@ -675,17 +677,17 @@
             If iNode = 0 Then kDeb = 1 Else kDeb = 0
             If iNode = NbNodes - 1 Then kFin = 0 Else kFin = 1
 
-            For k = kdeb To kFin
+            For k = kDeb To kFin
 
                 iElt = iNode + DeltaI(k)
-                zCdG = MyPoutre.Elements(MyCas.IndElts).zANE(iElt)
+                zCdG = myPoutre.Elements(indTabElt).zANE(iElt)
 
-                If Not IsSmaller(MyPoutre.Elements(MyCas.IndElts).InertieY(iElt) * 10 ^ 8, 0) Then
+                If Not IsSmaller(myPoutre.Elements(indTabElt).InertieY(iElt) * 10 ^ 8, 0) Then
                     For iPts = Me.iProfile(0) To Me.iProfile(1)
 
-                        DeltaZ = zcdg - Me.zPos(iPts)
+                        DeltaZ = zCdG - Me.zPos(iPts)
 
-                        Sigma(iPts, iNode, k) = MyCas.MYY(iNode, k) / MyPoutre.Elements(MyCas.IndElts).InertieY(iElt) * DeltaZ
+                        Sigma(iPts, iNode, k) = myCas.MYY(iNode, k) / myPoutre.Elements(indTabElt).InertieY(iElt) * DeltaZ
 
                     Next
                 End If

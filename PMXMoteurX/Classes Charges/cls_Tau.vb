@@ -107,6 +107,7 @@
         Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
         Dim NbCas As Integer = MyPoutre.ChargesA.Count
         Dim lCasMixte As Boolean
+        Dim indTabElt As Integer = MyPoutre.ChargesA(iCas).IndElts(0)
 
         '--( Initialisation
 
@@ -117,7 +118,7 @@
 
         For iCas = 0 To NbCas - 1
 
-            lCasMixte = MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).lMixte
+            lCasMixte = MyPoutre.Elements(indTabElt).lMixte
 
             'If MyPoutre.ChargesA(iCas).lRunCalcul And lCasMixte Then
             If MyPoutre.ChargesA(iCas).lRunCalcul Then
@@ -130,7 +131,7 @@
 
     End Sub
 
-    Private Sub CalculContraintesSectionsMIXTE(MyPoutre As cls_Poutre, iCas As Integer, ByRef Tau(,,,) As Decimal)
+    Private Sub CalculContraintesSectionsMIXTE(myPoutre As cls_Poutre, iCas As Integer, ByRef Tau(,,,) As Decimal)
         '-----------------------------------------------------------------------------------
         '   20/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------
@@ -143,13 +144,14 @@
 
         '--> Déclaration
 
-        Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim NbNodes As Integer = myPoutre.Nodes.nbNodes
         ' Dim NbPts As Integer = Me.MStatic.Count
         Dim iNode, iPts, k As Integer
         Dim kDeb, kFin, iElt As Integer
         Dim VEd, InertieY, zANE As Decimal
         Dim MomStat As Decimal
-        Dim nEqDalle As Decimal = MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).nEqDalle
+        Dim indTabElt As Integer = myPoutre.ChargesA(iCas).IndElts(0)
+        Dim nEqDalle As Decimal = myPoutre.Elements(indTabElt).nEqDalle
 
         '--> Traitement
 
@@ -164,12 +166,12 @@
 
                 For iPts = 0 To NbPts - 1
 
-                    InertieY = MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).InertieY(iElt)
-                    zANE = MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).zANE(iElt)
+                    InertieY = myPoutre.Elements(indTabElt).InertieY(iElt)
+                    zANE = myPoutre.Elements(indTabElt).zANE(iElt)
 
-                    VEd = MyPoutre.ChargesA(iCas).VZ(iNode, k)
+                    VEd = myPoutre.ChargesA(iCas).VZ(iNode, k)
 
-                    MomStat = Me.MomentStatiqueMixte(MyPoutre, iPts, nEqDalle, zANE)
+                    MomStat = Me.MomentStatiqueMixte(myPoutre, iPts, nEqDalle, zANE)
 
                     Tau(iCas, iPts, iNode, k) = VEd * MomStat / (InertieY * Me.pTw) / kConvMPaPa
 
@@ -302,6 +304,7 @@
         Dim iNode, iPts, k As Integer
         Dim kDeb, kFin, iElt As Integer
         Dim VEd, InertieY As Decimal
+        Dim indTabElt As Integer = MyPoutre.ChargesA(iCas).IndElts(0)
 
         '--> Traitement
 
@@ -316,7 +319,7 @@
 
                 For iPts = 0 To NbPts - 1
 
-                    InertieY = MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).InertieY(iElt)
+                    InertieY = MyPoutre.Elements(indTabElt).InertieY(iElt)
 
                     VEd = MyPoutre.ChargesA(iCas).VZ(iNode, k)
                     Tau(iCas, iPts, iNode, k) = VEd * Me.MStatic(iPts) / (Me.pInertieY * Me.pTw) / kConvMPaPa

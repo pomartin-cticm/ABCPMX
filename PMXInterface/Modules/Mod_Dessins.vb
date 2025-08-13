@@ -11364,7 +11364,7 @@ Public Module Mod_Dessins
 
         '--> Initialisation
 
-        iElts = MyPoutre.ChargesA(iCas).IndElts
+        iElts = MyPoutre.ChargesA(iCas).IndElts(0)
 
         InertieMax = MyPoutre.Elements(iElts).InertieY(0) * kUnitI
 

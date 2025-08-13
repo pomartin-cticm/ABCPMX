@@ -23,7 +23,10 @@
 
     '--> Paramètres de modélisation
 
-    Public IndElts As Integer                           ' Indice de la table BeamElements contenant les propriétés des barres
+    Public IndElts(1) As Integer                        ' Indices de la table BeamElements contenant les propriétés des barres
+    Public lMultiInd As Boolean                         ' Indique si le cas de charge comprend plusieurs indices IndElts
+    Public Fraction1 As Decimal                         ' Fraction du cas de charge associée au premier indice, dans le cas d'un chargement multi-indice
+
     Public Type As EnuType                              ' Type de chargement
     Public EtatDalle As EnuEtatDalle                    ' Indique l'état de la dalle pour le cas de charge (acier = pas de mixité avec la dalle)
 
@@ -75,8 +78,43 @@
         Me.Symbol = pSymbol
 
         Me.lShadow = True
-        Me.IndElts = IndEltShadow
+        Me.IndElts(0) = IndEltShadow
         Me.iShadow = IndShadow
+
+        Me.UZEta = Nothing
+
+        Me.lMultiInd = False
+    End Sub
+
+    Public Sub New(pNom As String, pSymbol As String, Ind_1 As Integer, Ind_2 As Integer, FractionI1 As Decimal, iTrav0 As Integer, NbTrav As Integer,
+                   pType As EnuType, pEtatDalle As EnuEtatDalle)
+
+        Me.Nom = pNom
+        Me.Symbol = pSymbol
+
+        Me.IndElts(0) = Ind_1
+        Me.IndElts(1) = Ind_2
+        Me.lMultiInd = True
+        Me.Fraction1 = FractionI1
+
+        ReDim Me.QSurf(NbTrav + iTrav0 - 1)
+        ReDim Me.Forces(NbTrav + iTrav0 - 1)
+        ReDim Me.Moments(NbTrav + iTrav0 - 1)
+        ReDim Me.FReparties(NbTrav + iTrav0 - 1)
+
+        For i As Integer = iTrav0 To iTrav0 + NbTrav - 1
+            Me.Forces(i) = New List(Of cls_Force)
+            Me.Moments(i) = New List(Of cls_Moment)
+            Me.FReparties(i) = New List(Of cls_ForceRepartie)
+        Next
+
+        Me.lRunCalcul = False
+
+        Me.Type = pType
+        Me.EtatDalle = pEtatDalle
+
+        Me.lShadow = False
+        Me.iShadow = -1
 
         Me.UZEta = Nothing
 
@@ -101,7 +139,9 @@
         Me.Nom = pNom
         Me.Symbol = pSymbol
 
-        Me.IndElts = IndiceElts
+        Me.IndElts(0) = IndiceElts
+        Me.lMultiInd = False
+        Me.Fraction1 = 1
 
         ReDim Me.QSurf(NbTrav + iTrav0 - 1)
         ReDim Me.Forces(NbTrav + iTrav0 - 1)

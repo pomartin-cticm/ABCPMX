@@ -4725,7 +4725,7 @@ Module Mod_NoteCalcul
 
                 '# Phase
 
-                iTab = myPoutre.ChargesA(iCas).IndElts
+                iTab = myPoutre.ChargesA(iCas).IndElts(0)
 
                 If lMixte Or lEnrob Then
 

@@ -207,7 +207,7 @@ Public Class Frm_PPCasDeCharge
 
         Me.lbl_Name.Text = MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(Me.cmb_Symbols.SelectedIndex).Nom
 
-        Dim IndexElts As Integer = MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(Me.cmb_Symbols.SelectedIndex).IndElts
+        Dim IndexElts As Integer = MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(Me.cmb_Symbols.SelectedIndex).IndElts(0)
         Dim lMixte As Boolean = MyProjet.Poutres(MyProjet.IndEnCours).Elements(IndexElts).lMixte
         Dim nEqDalle As Decimal = MyProjet.Poutres(MyProjet.IndEnCours).Elements(IndexElts).nEqDalle
         Dim nEqEnrob As Decimal = MyProjet.Poutres(MyProjet.IndEnCours).Elements(IndexElts).nEqEnrob
@@ -716,7 +716,7 @@ Public Class Frm_PPCasDeCharge
 
         '--> Initialisation
 
-        iElts = MyPoutre.ChargesA(iCas).IndElts
+        iElts = MyPoutre.ChargesA(iCas).IndElts(0)
 
         InertieMax = MyPoutre.Elements(iElts).InertieY(0) * kUnitI
 
@@ -1136,7 +1136,7 @@ Public Class Frm_PPCasDeCharge
     End Sub
 
     Private Sub btn_EditModel_Click(sender As Object, e As EventArgs) Handles btn_EditModel.Click
-        ABB_EditeModeleCalcul(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(Me.cmb_Symbols.SelectedIndex).IndElts)
+        ABB_EditeModeleCalcul(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(Me.cmb_Symbols.SelectedIndex).IndElts(0))
     End Sub
 
     Private Sub chk_LocalEchelle_CheckedChanged(sender As Object, e As EventArgs) Handles chk_LocalEchelle.CheckedChanged
