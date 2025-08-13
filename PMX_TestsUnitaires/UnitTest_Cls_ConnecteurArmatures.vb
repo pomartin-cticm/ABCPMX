@@ -32,7 +32,7 @@ Imports PMXMoteur2
             .Dalle.beton.Classe = "C25/30"
             .Dalle.beton.Calcul_Proprietes(True)
 
-            .Dalle.ConnecteurArmature.ds = 23 / 1000
+            .Dalle.ConnecteurArmature.Diametre = 23 / 1000
 
         End With
 
@@ -252,16 +252,13 @@ Imports PMXMoteur2
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
 
-
-
-
         '---------------------------------------------------------
         '---------------------------------------------------------
         '--> Calcul de la résistance selon l'annexe I de la prEN 1994-1-1
         '---------------------------------------------------------
         '---------------------------------------------------------
 
-        PRd = poutre.Dalle.ConnecteurArmature.PRdAnnexI(poutre)
+        PRd = poutre.Dalle.ConnecteurArmature.PRdAnnexI(poutre.Param.Gamma.GammaVs)
 
         ValRef = 95950
 

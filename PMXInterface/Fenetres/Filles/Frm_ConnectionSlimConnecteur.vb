@@ -18,6 +18,9 @@ Public Class Frm_ConnectionSlimConnecteur
     Dim strGoujonsEnrobageMini As String
     Dim strGoujonsDepasseDalle As String
 
+    Dim ClasseAcierArma() As String = cls_AcierArmature.tabClasseAcierArma
+
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -52,6 +55,13 @@ Public Class Frm_ConnectionSlimConnecteur
         Me.lbl_Type.BackColor = CouleurBackBandeaux
         Me.lbl_Type.ForeColor = CouleurForeBandeaux
 
+        PrepareTextBoxDipo(txt_Fsk, False)
+        PrepareTextBoxDipo(txt_d, False)
+        PrepareTextBoxDipo(txt_fu, False)
+        PrepareTextBoxDipo(txt_hsc, False)
+        PrepareTextBoxDipo(txt_PRd, False)
+        PrepareTextBoxDipo(txt_PRdarma, False)
+
     End Sub
 
     Private Sub GestionUnites()
@@ -59,9 +69,8 @@ Public Class Frm_ConnectionSlimConnecteur
         '--> Etiquettes unités partie goujons soudés
         Me.etq_UnitD.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitHsc.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-        Me.etq_UnitFy.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
         Me.etq_UnitFu.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
-
+        Me.etq_UnitPRd.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
 
         '--> Etiquettes unités partie armatures 
         Me.etq_UnitPhiS.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
@@ -102,6 +111,10 @@ Public Class Frm_ConnectionSlimConnecteur
             CLE = "W_MINIMUMCOVERAGE" : strGoujonsEnrobageMini = Bloc(CLE)
             CLE = "W_STUDABOVESLAB" : strGoujonsDepasseDalle = Bloc(CLE)
 
+
+            CLE = "DIAMETER" : Me.lbl_Diameter.Text = Bloc(CLE)
+            CLE = "CLASS" : Me.lbl_ClasseA.Text = Bloc(CLE)
+
         Catch ex As Exception
 
             GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
@@ -124,10 +137,27 @@ Public Class Frm_ConnectionSlimConnecteur
 
         Me.cmb_goujons.SelectedIndex = Array.IndexOf(tabLabelGoujons, Frm_ConnectionSlimN.localBeam.Dalle.Goujons.nom)
 
+        '--( Affichage armature
+
+        Dim Chaine As String
+        With Frm_ConnectionSlimN.localBeam.Dalle.ConnecteurArmature
+            Me.cmb_Diametre.SelectedIndex = Array.IndexOf(Cls_Armatures_Longi.TabDiametres, .Diametre)
+            Chaine = .Acier.Classe
+            If Me.ClasseAcierArma.Contains(Chaine) Then
+                Me.cmb_Acier.SelectedIndex = Array.IndexOf(Me.ClasseAcierArma, Chaine)
+            Else
+                Me.cmb_Acier.SelectedIndex = 0
+            End If
+
+        End With
+
         MAJ_DimensionsConnecteur()
 
         MAJI_Avertissement()
+        MAJI_ProprietesAcier()
 
+        MAJI_PRd()
+        MAJI_PRdArma()
     End Sub
 
     Private Sub MAJAfficheConnecteurEnCours()
@@ -162,6 +192,8 @@ Public Class Frm_ConnectionSlimConnecteur
     Private Sub PrepareFenetre()
 
         RemplirComboGoujons()
+        RemplirComboDiametreArma()
+        RemplirComboAvecTableau(Me.cmb_Acier, ClasseAcierArma)
 
         lArmaDispo = IsGreaterOrEqual(Frm_ConnectionSlimN.localBeam.Section.ProfilA.Tw, OptionsSlimFloor.Twcdmin) _
                  And (Not Frm_ConnectionSlimN.localBeam.Section.lSlimFloor_IFB_B)
@@ -186,6 +218,25 @@ Public Class Frm_ConnectionSlimConnecteur
         Me.cmb_goujons.SelectedIndex = 0
     End Sub
 
+    Private Sub RemplirComboDiametreArma()
+
+        Me.cmb_Diametre.Items.Clear()
+
+        For i As Integer = 0 To Cls_Armatures_Longi.TabDiametres.Count - 1
+            Me.cmb_Diametre.Items.Add(GetStringInUnitN(Cls_Armatures_Longi.TabDiametres(i), Enu_TypeVariable.Dimension, 4, 3, True, True))
+        Next
+
+        Me.cmb_Diametre.SelectedItem = 0
+
+    End Sub
+
+    Private Sub RemplirComboAvecTableau(MyCombo As ComboBox, tabValeurs() As String)
+
+        MyCombo.Items.Clear()
+        MyCombo.Items.AddRange(tabValeurs)
+
+    End Sub
+
 #End Region
 
 #Region " Evenements rdb "
@@ -202,11 +253,13 @@ Public Class Frm_ConnectionSlimConnecteur
                 Frm_ConnectionSlimN.localBeam.Dalle.typeConnecteur = PMXMoteur2.cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme
                 MAJAfficheConnecteurEnCours()
                 MAJI_Avertissement()
+                MAJI_PRd()
             Case Me.rdb_GoujonSemSup.Checked
                 ' Goujons soudés sur la semelle supérieure
                 Frm_ConnectionSlimN.localBeam.Dalle.typeConnecteur = PMXMoteur2.cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup
                 MAJAfficheConnecteurEnCours()
                 MAJI_Avertissement()
+                MAJI_PRd()
         End Select
 
         Me.img_Stud.Invalidate()
@@ -216,6 +269,25 @@ Public Class Frm_ConnectionSlimConnecteur
 #End Region
 
 #Region " Evènements saisie "
+
+
+    Private Sub cmb_Diametre_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Diametre.SelectedIndexChanged
+
+        If lBuild Then Exit Sub
+
+        Frm_ConnectionSlimN.localBeam.Dalle.ConnecteurArmature.Diametre = Cls_Armatures_Longi.TabDiametres(Me.cmb_Diametre.SelectedIndex)
+        MAJI_PRdArma()
+        img_Stud.Invalidate()
+
+    End Sub
+
+    Private Sub cmb_Acier_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Acier.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        Frm_ConnectionSlimN.localBeam.Dalle.ConnecteurArmature.Acier.Classe = cls_AcierArmature.tabClasseAcierArma(Me.cmb_Acier.SelectedIndex)
+        MAJI_ProprietesAcier()
+        MAJI_PRdArma()
+    End Sub
 
     Private Sub cmb_goujons_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_goujons.SelectedIndexChanged
         If lBuild Then Exit Sub
@@ -230,6 +302,7 @@ Public Class Frm_ConnectionSlimConnecteur
 
         MAJ_DimensionsConnecteur()
         MAJI_Avertissement()
+        MAJI_PRd()
         img_Stud.Invalidate()
 
         'MAJ_Valeurs_Limites()
@@ -239,8 +312,42 @@ Public Class Frm_ConnectionSlimConnecteur
 
         Me.txt_hsc.Text = GetStringInUnit(Frm_ConnectionSlimN.localBeam.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 0, False)
         Me.txt_d.Text = GetStringInUnit(Frm_ConnectionSlimN.localBeam.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 0, False)
-        Me.txt_fy.Text = GetStringInUnit(Frm_ConnectionSlimN.localBeam.Dalle.Goujons.Fy, Enu_TypeVariable.Contrainte, 4, 0, False)
         Me.txt_fu.Text = GetStringInUnit(Frm_ConnectionSlimN.localBeam.Dalle.Goujons.Fu, Enu_TypeVariable.Contrainte, 4, 0, False)
+
+    End Sub
+
+    Private Sub MAJI_PRdArma()
+
+        Dim PRd As Decimal
+        Dim GammaVs As Decimal = Frm_ConnectionSlimN.localBeam.Param.Gamma.GammaVs
+        Dim Ha As Decimal = Frm_ConnectionSlimN.localBeam.Section.ProfilA.ha
+        Dim Tw As Decimal = Frm_ConnectionSlimN.localBeam.Section.ProfilA.Tw
+        Dim Nuance As String = Frm_ConnectionSlimN.localBeam.Section.Acier.Nuance
+
+        PRd = Frm_ConnectionSlimN.localBeam.Dalle.ConnecteurArmature.PRd(GammaVs, nuance, tw, ha)
+
+        Me.txt_PRdArma.Text = GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 4, 3, NON_U, True)
+
+    End Sub
+
+    Private Sub MAJI_PRd()
+
+        Dim PRd As Decimal
+        Dim lGeneration1 As Boolean = Frm_ConnectionSlimN.localBeam.Param.lGeneration1
+        Dim lDalleP As Boolean = True
+        Dim lPerp As Boolean = True
+        Dim lPerpPRd As Boolean = True
+        Dim lCofra220 As Boolean = False
+        Dim FcK As Decimal = Frm_ConnectionSlimN.localBeam.Dalle.beton.Fck
+        Dim Fctk_005 As Decimal = Frm_ConnectionSlimN.localBeam.Dalle.beton.Fctk_005
+        Dim GammaVs As Decimal = Frm_ConnectionSlimN.localBeam.Param.Gamma.GammaVs
+        Dim GammaVc As Decimal = Frm_ConnectionSlimN.localBeam.Param.Gamma.GammaVc
+        Dim Ecm As Decimal = Frm_ConnectionSlimN.localBeam.Dalle.beton.Ecm
+        Dim Nr As Integer = Frm_ConnectionSlimN.localBeam.NrTransZone(1, 0)
+
+        PRd = Frm_ConnectionSlimN.localBeam.Dalle.Goujons.ResistancePRd(lGeneration1, lDalleP, lPerp, lCofra220, Frm_ConnectionSlimN.localBeam.Dalle.Bac, Nr, FcK, Ecm, Fctk_005, GammaVs, GammaVc)
+
+        Me.txt_PRd.Text = GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 4, 3, NON_U, True)
 
     End Sub
 
@@ -286,11 +393,16 @@ Public Class Frm_ConnectionSlimConnecteur
 
     End Sub
 
+    Private Sub MAJI_ProprietesAcier()
+        Frm_ConnectionSlimN.localBeam.Dalle.ConnecteurArmature.Acier.MAJProprietes()
+        Me.txt_Fsk.Text = GetStringNoUnit(Frm_ConnectionSlimN.localBeam.Dalle.ConnecteurArmature.Acier.FsK, Enu_TypeVariable.Contrainte)
+    End Sub
+
 #End Region
 
 #Region " Dessins "
 
-    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_d.Paint, img_hsc.Paint, img_fy.Paint, img_fu.Paint, img_PhiS.Paint, img_Fsk.Paint
+    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_d.Paint, img_hsc.Paint, img_fu.Paint, img_PhiS.Paint, img_Fsk.Paint, img_PRd.Paint, img_PRd2.Paint
 
         '--> Déclarations
 
@@ -323,11 +435,10 @@ Public Class Frm_ConnectionSlimConnecteur
                 strSymbol = "d"
                 strIndice = "  "
 
+            Case Me.img_PRd.Name, Me.img_PRd2.Name
 
-            Case Me.img_fy.Name
-
-                strSymbol = "f"
-                strIndice = "y "
+                strSymbol = "P"
+                strIndice = "Rd "
 
             Case Me.img_fu.Name
 
@@ -371,6 +482,7 @@ Public Class Frm_ConnectionSlimConnecteur
         PublieInfoArmaConnex()
 
     End Sub
+
 
     Private Sub PublieInfoArmaConnex()
 

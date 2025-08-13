@@ -995,10 +995,15 @@ Public Class Frm_PMX
             Case EnuFenetres.ConnexionSlimfloor
 
                 'Frm_ConnectionSlimFloor.ShowDialog()
+
+                'If Me.chk_NewF.Checked Then
                 Frm_ConnectionSlimN.ShowDialog()
+                'Else
+                '    Frm_ConnectionSlimFloor.ShowDialog()
+                'End If
 
 
-            Case EnuFenetres.Maintiens
+                    Case EnuFenetres.Maintiens
 
                 Frm_Maintiens.ShowDialog()
 

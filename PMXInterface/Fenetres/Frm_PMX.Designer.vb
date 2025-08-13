@@ -789,6 +789,8 @@ Partial Class Frm_PMX
         'chk_NewF
         '
         Me.chk_NewF.AutoSize = True
+        Me.chk_NewF.Checked = True
+        Me.chk_NewF.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_NewF.Location = New System.Drawing.Point(3, 390)
         Me.chk_NewF.Name = "chk_NewF"
         Me.chk_NewF.Size = New System.Drawing.Size(107, 17)

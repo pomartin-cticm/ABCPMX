@@ -9,7 +9,7 @@
     ''' <summary>
     ''' Diamètre de l'armature
     ''' </summary>
-    Public ds As Decimal
+    Public Diametre As Decimal
 
     '''' <summary>
     '''' Diametre du trou pratiqué dans l'ame de la poutre
@@ -32,7 +32,7 @@
 
 #Region " Constructeurs "
     Sub New()
-        Me.ds = 25 / 1000
+        Me.Diametre = 25 / 1000
         Acier = New cls_AcierArmature
     End Sub
 #End Region
@@ -49,7 +49,7 @@
 
 #End Region
 
-#Region " Résistance au cisaillement du conneteur "
+#Region " Résistance au cisaillement de l'armature utilisée comme conneteur "
 
     ''' <summary>
     ''' Résistance au cisaillement selon "German Zulassung"
@@ -100,15 +100,88 @@
     ''' <summary>
     ''' Résistance au cisaillement selon l'annexe I de la prEN1994-1-1
     ''' </summary>
-    ''' <param name="MyBeam"></param>
+    ''' <param name="GammaVs">Coefficient partiel</param>
     ''' <returns></returns>
-    Public Function PRdAnnexI(MyBeam As cls_Poutre)
+    Public Function PRdAnnexI(GammaVs As Decimal)
+        '--------------------------------------------------------------------------------------------
+        '   xx/xx/24 :  Création - GuD
+        '--------------------------------------------------------------------------------------------
+        '   Calcul du PRd d'une armature selon Annexe I de la prEN 1994-1-1:2025
+        '--------------------------------------------------------------------------------------------
+        '   GammaVs     [E] :   Coefficient partiel
+        '--------------------------------------------------------------------------------------------
         Dim PRd As Decimal
 
-        PRd = Math.PI * Me.ds ^ 2 * Me.Acier.FsK / (MyBeam.Param.Gamma.GammaVs * 4 * Math.Sqrt(3)) * kConvMPaPa
+        PRd = Math.PI * Me.Diametre ^ 2 * Me.Acier.FsK / (GammaVs * 4 * Math.Sqrt(3)) * kConvMPaPa
 
         Return PRd
+
     End Function
+
+    Public Function PRd(GammaVs As Decimal, Nuance As String, Tw As Decimal, Ha As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------
+        '   13/08/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------
+        '   Calcul du PRd d'une armature 
+        '   Soit selon Annex I
+        '   Soit selon TS/EN 1994-1-102
+        '--------------------------------------------------------------------------------------------
+        '   GammaVs     [E] :   Coefficient partiel
+        '   Nuance      [E] :   Nuance d'acier du profilé dans lequel passe l'armature
+        '   Tw          [E] :   Epaisseur de l'âme
+        '   Ha          [E] :   Hauteur du profilé
+        '--------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lAnnexI As Boolean = False
+        Dim pPRd As Decimal
+        Dim iNuance As Integer = Me.ExtraitNombreNuance(Nuance)
+
+        If IsSmaller(Tw, 7.5 / 1000) Then lAnnexI = True
+        If IsGreater(Ha, 0.65) Then lAnnexI = True
+        If iNuance < 355 Then lAnnexI = True
+
+        If lAnnexI Then
+            pPRd = Me.PRdAnnexI(GammaVs)
+        Else
+            pPRd = 122 * 1000 / GammaVs
+        End If
+
+        Return pPRd
+
+    End Function
+
+    Private Function ExtraitNombreNuance(Nuance As String) As Integer
+        '--------------------------------------------------------------------------------------------
+        '   13/08/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------
+        '   On recherche la valeur numérique incluse dans la nuance
+        '--------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lTrouve As Boolean = False
+        Dim pIndN As Integer
+        Dim iCar As Integer = -1
+        Dim nbCar As Integer = Nuance.Length
+
+        Do While (Not lTrouve) And (iCar < nbCar - 1)
+            iCar += 1
+
+            lTrouve = IsNumeric(Nuance.Substring(iCar, 1))
+
+        Loop
+
+        If lTrouve Then
+            pIndN = Nuance.Substring(iCar, 3)
+        End If
+
+        Return pIndN
+
+    End Function
+
+
 #End Region
 
 End Class

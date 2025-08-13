@@ -135,6 +135,9 @@ Public Class Frm_Connection
 
     Dim lMultiSpan As Boolean
 
+    Dim ZoneEnCours As Integer = 0
+    Dim strZoneEnCours(2) As String
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -153,8 +156,11 @@ Public Class Frm_Connection
         PrepareFlechesNavigation()
         MAJI_BtnNavigation()
         AfficherPoutreEnCours()
-        MAJ_Nb_Zone()
-        MAJ_SommeGoujons()
+        MAJI_Nb_Zone()
+        MAJI_SommeGoujons()
+        MAJI_PRd()
+        MAJI_InfoPRd()
+        MAJI_ZoneEnCours()
         MAJ_affichage_txt_connecteurs()
         MAJ_affichage_txt_cmb_connection()
         MAJ_AutomaticDesign()
@@ -253,7 +259,7 @@ Public Class Frm_Connection
     Private Sub GestionLangues()
         If File.Exists(LogicielFichiers.Langue) Then
             Dim strLoadedKey As String = ""
-            Const CLE As String = ""
+            Dim CLE As String = ""
 
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_CONNECTION")
@@ -273,6 +279,9 @@ Public Class Frm_Connection
 
                 strValMaxConseillee = Bloc("RECMAXVALUE")
 
+                CLE = "ZONE1" : strZoneEnCours(0) = Bloc(CLE)
+                CLE = "ZONE2" : strZoneEnCours(1) = Bloc(CLE)
+                CLE = "ZONE3" : strZoneEnCours(2) = Bloc(CLE)
 
                 '=== MENU CONNECTION ==============================================================='
 
@@ -326,8 +335,9 @@ Public Class Frm_Connection
 
         Me.etq_UnitD.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitHsc.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-        Me.etq_UnitFy.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
         Me.etq_UnitFu.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
+
+        Me.etq_UnitPRd.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
 
     End Sub
 
@@ -443,11 +453,11 @@ Public Class Frm_Connection
 
         Me.txt_hsc.ReadOnly = True
         Me.txt_d.ReadOnly = True
-        Me.txt_fy.ReadOnly = True
+        Me.txt_PRd.ReadOnly = True
         Me.txt_fu.ReadOnly = True
         Me.txt_hsc.BackColor = CouleurReadOnly
         Me.txt_d.BackColor = CouleurReadOnly
-        Me.txt_fy.BackColor = CouleurReadOnly
+        Me.txt_PRd.BackColor = CouleurReadOnly
         Me.txt_fu.BackColor = CouleurReadOnly
 
         Me.img_TestError.Visible = LogicielOptions.lExpert
@@ -741,7 +751,7 @@ Public Class Frm_Connection
 
 #Region " Dessins "
 
-    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_d.Paint, img_hsc.Paint, img_fy.Paint, img_fu.Paint
+    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_d.Paint, img_hsc.Paint, img_PRd.Paint, img_fu.Paint
 
         '--> Déclarations
 
@@ -774,12 +784,10 @@ Public Class Frm_Connection
                 strSymbol = "d"
                 strIndice = "  "
 
+            Case Me.img_PRd.Name
 
-
-            Case Me.img_fy.Name
-
-                strSymbol = "f"
-                strIndice = "y "
+                strSymbol = "P"
+                strIndice = "Rd "
 
             Case Me.img_fu.Name
 
@@ -954,7 +962,7 @@ Public Class Frm_Connection
         Me.cmb_goujons.SelectedIndex = Array.IndexOf(tabLabelGoujons, myBeamLoc.Dalle.Goujons.nom)
         Me.txt_hsc.Text = GetStringInUnitN(myBeamLoc.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 3, NON, True)
         Me.txt_d.Text = GetStringInUnitN(myBeamLoc.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 3, NON, True)
-        Me.txt_fy.Text = GetStringInUnitN(myBeamLoc.Dalle.Goujons.Fy, Enu_TypeVariable.Contrainte, 4, 3, NON, True)
+        'Me.txt_PRd.Text = GetStringInUnitN(myBeamLoc.Dalle.Goujons.Fy, Enu_TypeVariable.Contrainte, 4, 3, NON, True)
         Me.txt_fu.Text = GetStringInUnitN(myBeamLoc.Dalle.Goujons.Fu, Enu_TypeVariable.Contrainte, 4, 3, NON, True)
     End Sub
 
@@ -1048,9 +1056,10 @@ Public Class Frm_Connection
         If myBeamLoc.NombreZones(traveeEnCours) <= Nb_Zones_MAX - 1 Then myBeamLoc.NombreZones(traveeEnCours) += 1
         Me.btn_Ajouter.Enabled = Not myBeamLoc.NombreZones(traveeEnCours) = Nb_Zones_MAX
         Me.btn_Supprimer.Enabled = Not myBeamLoc.NombreZones(traveeEnCours) = Nb_Zones_MIN
-        MAJ_Nb_Zone()
-        MAJ_SommeGoujons()
+        MAJI_Nb_Zone()
+        MAJI_SommeGoujons()
         MAJ_affichage_txt_cmb_connection()
+        MAJI_InfoPRd()
 
         ValideSaisieFenetre()
 
@@ -1065,16 +1074,57 @@ Public Class Frm_Connection
         If myBeamLoc.NombreZones(traveeEnCours) >= Nb_Zones_MIN + 1 Then myBeamLoc.NombreZones(traveeEnCours) -= 1
         Me.btn_Ajouter.Enabled = Not myBeamLoc.NombreZones(traveeEnCours) = Nb_Zones_MAX
         Me.btn_Supprimer.Enabled = Not myBeamLoc.NombreZones(traveeEnCours) = Nb_Zones_MIN
-        MAJ_Nb_Zone()
-        MAJ_SommeGoujons()
+        MAJI_Nb_Zone()
+        MAJI_SommeGoujons()
         MAJ_affichage_txt_cmb_connection()
+        MAJI_InfoPRd()
+        If ZoneEnCours > myBeamLoc.NombreZones(traveeEnCours) - 1 Then
+            ZoneEnCours = myBeamLoc.NombreZones(traveeEnCours) - 1
+            MAJI_PRd()
+            MAJI_ZoneEnCours()
+        End If
 
         ValideSaisieFenetre()
 
         lBtnAjouterSupprimer = False
     End Sub
 
-    Sub MAJ_Nb_Zone()
+    Private Sub MAJI_PRd()
+
+        Dim PRd As Decimal
+        Dim lGeneration1 As Boolean = myBeamLoc.Param.lGeneration1
+        Dim lDalleP As Boolean = (myBeamLoc.Dalle.lPleineOuPrefa)
+        Dim lPerp As Boolean = myBeamLoc.Dalle.Bac.lPerpendiculaire
+        Dim lPerpPRd As Boolean = myBeamLoc.Dalle.Bac.lPerpendiculairePRd
+        Dim lCofra220 As Boolean = (Not lDalleP) And lPerp And myBeamLoc.Dalle.Bac.lCofraplus220
+        Dim FcK As Decimal = myBeamLoc.Dalle.beton.Fck
+        Dim Fctk_005 As Decimal = myBeamLoc.Dalle.beton.Fctk_005
+        Dim GammaVs As Decimal = myBeamLoc.Param.Gamma.GammaVs
+        Dim GammaVc As Decimal = myBeamLoc.Param.Gamma.GammaVc
+        Dim Ecm As Decimal = myBeamLoc.Dalle.beton.Ecm
+        Dim Nr As Integer = myBeamLoc.NrTransZone(traveeEnCours, ZoneEnCours)
+
+
+        PRd = myBeamLoc.Dalle.Goujons.ResistancePRd(lGeneration1, lDalleP, lPerp, lCofra220, myBeamLoc.Dalle.Bac, Nr, FcK, Ecm, Fctk_005, GammaVs, GammaVc)
+
+        Me.txt_PRd.Text = GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 4, 3, NON_U, True)
+
+    End Sub
+
+    Private Sub MAJI_InfoPRd()
+
+        Me.lbl_Zone1.Visible = (myBeamLoc.NombreZones(traveeEnCours) > 1) And Not myBeamLoc.Dalle.lPleineOuPrefa
+
+    End Sub
+
+    Private Sub MAJI_ZoneEnCours()
+
+        Me.lbl_Zone1.Text = strZoneEnCours(ZoneEnCours)
+
+    End Sub
+
+
+    Sub MAJI_Nb_Zone()
 
         'MAJ des longueurs de zone suite à un clique Ajouter ou Supprimer
         If lBuild Then Exit Sub
@@ -1096,19 +1146,19 @@ Public Class Frm_Connection
 
     End Sub
 
-    Private Sub MAJ_SommeGoujons()
+    Private Sub MAJI_SommeGoujons()
         'MAJ du calcul de la somme des goujons après les modifications des valeurs
 
 
         Me.etq_Somme.Text = myBeamLoc.NombreGoujonTot(traveeEnCours) & " " & strStud
 
-            Me.img_Connection.Invalidate()
+        Me.img_Connection.Invalidate()
 
-            MAJ_DegreConnexion()
+        MAJI_DegreConnexion()
 
     End Sub
 
-    Private Sub MAJ_DegreConnexion()
+    Private Sub MAJI_DegreConnexion()
         '-----------------------------------------------------------------------------------------
         '   24/07/25 : Création - V1.20 - POM
         '-----------------------------------------------------------------------------------------
@@ -1149,7 +1199,7 @@ Public Class Frm_Connection
 
         '--( Initialisation
 
-        NProfile = myBeamLoc.Section.ResistanceTractionProfile(gammaM0)
+        NProfile = myBeamLoc.Section.ResistanceTractionProfile(GammaM0)
         If myBeamLoc.Section.lEnrobage Then
             NEnrobage = myBeamLoc.Section.NResistanceCompressionEnrobage(GammaC)
             NArmaEnrobage = myBeamLoc.Section.NResistanceArmaturesEnrobage(GammaS)
@@ -1215,7 +1265,7 @@ Public Class Frm_Connection
                     myBeamLoc.LongueurZone(traveeEnCours, 2) = ValeurUI
                     myBeamLoc.LongueurZone(traveeEnCours, 0) = myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 1) - myBeamLoc.LongueurZone(traveeEnCours, 2)
             End Select
-            MAJ_SommeGoujons()
+            MAJI_SommeGoujons()
             MAJ_affichage_txt_cmb_connection()
 
         End If
@@ -1233,7 +1283,8 @@ Public Class Frm_Connection
                 myBeamLoc.NrTransZone(traveeEnCours, 2) = cmb_NbRow_I3.SelectedIndex + 1
         End Select
 
-        MAJ_SommeGoujons()
+        MAJI_SommeGoujons()
+        MAJI_PRd()
         MAJ_affichage_txt_cmb_connection()
     End Sub
 
@@ -1252,7 +1303,7 @@ Public Class Frm_Connection
                 myBeamLoc.Espacement_Bac_TransZone(traveeEnCours, 2) = cmb_EspLongi_I3.SelectedIndex + 1
                 myBeamLoc.EspacementZone(traveeEnCours, 2) = myBeamLoc.Esp_longi_bac * myBeamLoc.Espacement_Bac_TransZone(traveeEnCours, 2)
         End Select
-        MAJ_SommeGoujons()
+        MAJI_SommeGoujons()
         MAJ_affichage_txt_cmb_connection()
     End Sub
 
@@ -1271,7 +1322,7 @@ Public Class Frm_Connection
                 Case txt_EspLongi_I3.Name
                     myBeamLoc.EspacementZone(traveeEnCours, 2) = ValeurUI
             End Select
-            MAJ_SommeGoujons()
+            MAJI_SommeGoujons()
 
         End If
     End Sub
@@ -1356,7 +1407,7 @@ Public Class Frm_Connection
         img_Stud.Invalidate()
 
         MAJ_Valeurs_Limites()
-
+        MAJI_PRd()
 
         VerifDiametreGoujons(myBeamLoc.Dalle.Goujons.d)
 
@@ -1430,6 +1481,15 @@ Public Class Frm_Connection
             Me.cmb_EspLongi_I3.SelectedIndex = myBeamLoc.Espacement_Bac_TransZone(traveeEnCours, 2) - 1
         End If
 
+    End Sub
+
+
+    Private Sub lbl_Zone1_Click(sender As Object, e As EventArgs) Handles lbl_Zone1.Click
+
+        ZoneEnCours += 1
+        If ZoneEnCours > myBeamLoc.NombreZones(traveeEnCours) - 1 Then ZoneEnCours = 0
+        MAJI_PRd()
+        MAJI_ZoneEnCours()
 
     End Sub
 
@@ -1452,6 +1512,7 @@ Public Class Frm_Connection
                 Case strTypeTravee_ConsoleDroite
                     traveeEnCours = myBeamLoc.IndiceTraveeConsoleDroite
             End Select
+            ZoneEnCours = 0
 
             'Réinitialise les boutons Ajouter/Supprimer
 
@@ -1460,10 +1521,12 @@ Public Class Frm_Connection
             Me.btn_Ajouter.Enabled = Not myBeamLoc.NombreZones(traveeEnCours) = Nb_Zones_MAX
             Me.btn_Supprimer.Enabled = Not myBeamLoc.NombreZones(traveeEnCours) = Nb_Zones_MIN
 
-            MAJ_SommeGoujons()
+            MAJI_SommeGoujons()
             MAJ_affichage_txt_cmb_connection()
             MAJI_BtnNavigation()
-
+            MAJI_InfoPRd()
+            MAJI_PRd()
+            MAJI_ZoneEnCours()
         Else
 
             If Not cmb_Travee.SelectedIndex = Old_SelectedIndex_cmbTravee Then MsgBox(WarningMessage_CmbTravee)
@@ -1569,6 +1632,7 @@ Public Class Frm_Connection
         GestionErrorsPMX("Frm_Connection", "Click", "Test erreur", True)
 
     End Sub
+
 
 #End Region
 

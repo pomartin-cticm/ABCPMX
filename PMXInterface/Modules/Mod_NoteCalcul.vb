@@ -2520,7 +2520,7 @@ Module Mod_NoteCalcul
         Else
 
             With MyBeam.Dalle.ConnecteurArmature
-                AddLigneNDC(TABW2 & BlocG("D_ARMA") & TABAFF & "d " & TABEGAL & GetStringInUnitN(.ds, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
+                AddLigneNDC(TABW2 & BlocG("D_ARMA") & TABAFF & "d " & TABEGAL & GetStringInUnitN(.Diametre, Enu_TypeVariable.Dimension, 4, 0, OUI, False))
 
                 Dim lDallePleine, lPerp As Boolean 'Déclaration des variables locales qui serviront dans la fonction ResistancePRd
 

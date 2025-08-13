@@ -272,6 +272,9 @@ STUDCONCRETECOVER		= The concrete converage of studs ($) is lower than the minim
 STUDPREPUNCHED			= The diameter of studs with prepunched steel profiled sheeting should not be greater than 22 mm or smaller than 19 mm.
 STUDWELDEDTHROUGH		= The diameter of studs welded trough the steel profiled sheeting should be greater than 20 mm.
 INFOW_SHEARCONNECTION	= The degree of shear connection is assessed at mid-span, assuming the beam is fully under positive bending moments
+ZONE1 					= First zone
+ZONE2 					= Second zone
+ZONE3 					= Third zone
 
 #FRM_CONNECTIONSLIM
 TITLE					= Definition of the connection
@@ -292,6 +295,8 @@ WIDTH					= Length
 INFOREINF				= Composite dowels are not available for IFB-B sections nor for webs whose thickness is less than 7,5 mm
 W_MINIMUMCOVERAGE		= Warning : the concrete coverage of the stud ($) is lower than the minimum required value ($).
 W_STUDABOVESLAB			= Warning : the head of the stud is above the outer face of concrete
+CLASS					= Class
+DIAMETER				= Diameter
 
 #FRM_DECKRESTRAINT
 TITLE					= Restraint of the beam by the steel deck (construction phase only)

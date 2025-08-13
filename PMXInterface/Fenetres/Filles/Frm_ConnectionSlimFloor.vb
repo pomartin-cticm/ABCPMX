@@ -314,7 +314,7 @@ Public Class Frm_ConnectionSlimFloor
                 cmb_TypeConnection.SelectedItem = strArmatureAme
         End Select
 
-        Me.txt_PhiS.Text = GetStringInUnit(MyPoutreLoc.Dalle.ConnecteurArmature.ds, Enu_TypeVariable.Dimension, 3, 0, False)
+        Me.txt_PhiS.Text = GetStringInUnit(MyPoutreLoc.Dalle.ConnecteurArmature.Diametre, Enu_TypeVariable.Dimension, 3, 0, False)
 
         'Classe de l'acier
         If Me.ClasseAcierArma.Contains(MyPoutreLoc.Dalle.ConnecteurArmature.Acier.Classe) Then
@@ -408,7 +408,7 @@ Public Class Frm_ConnectionSlimFloor
                 GereTransfertValeur(MyPoutreLoc.Dalle.Goujons.Fy, .Dalle.Goujons.Fy, lModif)
                 GereTransfertValeur(MyPoutreLoc.Dalle.Goujons.Fu, .Dalle.Goujons.Fu, lModif)
             Else
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurArmature.ds, .Dalle.ConnecteurArmature.ds, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurArmature.Diametre, .Dalle.ConnecteurArmature.Diametre, lModif)
                 GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurArmature.Acier.Classe, .Dalle.ConnecteurArmature.Acier.Classe, lModif)
                 GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurArmature.Acier.FsK, .Dalle.ConnecteurArmature.Acier.FsK, lModif)
             End If
@@ -707,7 +707,7 @@ Public Class Frm_ConnectionSlimFloor
         Dim ValeurUI As Decimal
 
         If VerificationSaisie(sender, ValeurUI) Then
-            MyPoutreLoc.Dalle.ConnecteurArmature.ds = ValeurUI
+            MyPoutreLoc.Dalle.ConnecteurArmature.Diametre = ValeurUI
         End If
     End Sub
 

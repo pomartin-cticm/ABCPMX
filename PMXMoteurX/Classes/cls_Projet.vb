@@ -305,7 +305,7 @@ Public Class cls_Projet
         '==[ Classe Connecteur Armature Dalle ]=================================================================
         With myArma
             Lines.Add("BLOCK " & BkARMACONNEX)
-            AjouteLigneFrmt(Lines, "ds", .ds)
+            AjouteLigneFrmt(Lines, "ds", .Diametre)
 
         End With
 
@@ -2616,7 +2616,7 @@ Public Class cls_Projet
                 MotCle = Mots(1).Substring(0, Math.Min(NBCAR, Mots(1).Length)).ToUpper
 
                 Select Case MotCle
-                    Case "DS" : myArma.ds = CDec(TraiteReal(Mots(nbMots)))
+                    Case "DS" : myArma.Diametre = CDec(TraiteReal(Mots(nbMots)))
                     Case "CLASSE" : myArma.Acier.Classe = Mots(nbMots)
                     Case "FSK" : myArma.Acier.FsK = CDec(TraiteReal(Mots(nbMots)))
                     Case "ES" : myArma.Acier.Es = CDec(TraiteReal(Mots(nbMots)))

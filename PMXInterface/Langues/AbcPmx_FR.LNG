@@ -272,6 +272,9 @@ STUDCONCRETECOVER		= L'épaisseur d'enrobage des goujons ($) est inférieure à 
 STUDPREPUNCHED			= Le diamètre des goujons avec bac prépercé ne doit pas être inférieur à 19 mm ni supérieur à 22 mm.
 STUDWELDEDTHROUGH		= Le diamètre des goujons soudé à travers le bac ne doit pas excéder 20 mm.
 INFOW_SHEARCONNECTION	= Le degré de connexion est calculé à mi-travée de la poutre, en supposant que la poutre en entièrement sous moment positif
+ZONE1					= Première zone
+ZONE2					= Deuxième zone
+ZONE3					= Troisième zone
 
 #FRM_CONNECTIONSLIM
 TITLE					= Definition of the connection
@@ -294,6 +297,8 @@ WIDTH					= Longueur
 INFOREINF				= La connexion par les armatures n'est pas disponible pour les sections IFB-B ni pour les âmes d'épaisseur inférieure à 7,5 mm
 W_MINIMUMCOVERAGE		= Attention : l'enrobage du goujon ($) est inférieur à la valeur minimale requise ($).
 W_STUDABOVESLAB			= Attention : la tête du goujon dépasse la surface du béton
+CLASS					= Classe
+DIAMETER				= Diamètre
 
 #FRM_DECKRESTRAINT
 TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)

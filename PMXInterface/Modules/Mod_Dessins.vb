@@ -2011,7 +2011,7 @@ Public Module Mod_Dessins
 
         '--( Initialisation
 
-        PhiS = myBeam.Dalle.ConnecteurArmature.ds
+        PhiS = myBeam.Dalle.ConnecteurArmature.Diametre
         aHv = myBeam.Section.EpSemSupPlusCongesSup * 1.2 + PhiS / 2
         Ls = (EntraxeD1 + EntraxeD2) / 2
         tw = myBeam.Section.ProfilA.Tw
@@ -2142,7 +2142,7 @@ Public Module Mod_Dessins
         Dim PhiS As Decimal
 
         If lGauche Then kGauche = -1
-        PhiS = myStud.ds
+        PhiS = myStud.Diametre
 
         '--( Dessin
 
@@ -8525,7 +8525,8 @@ Public Module Mod_Dessins
 
                 For iSigne As Integer = -1 To 1 Step 2
                     'Dessin de l'armature
-                    AddRectanglePlein(myGr, myBrushArmatures, MyPenContour, iSigne * xGoujon, yGoujon - MyPoutre.Dalle.ConnecteurArmature.ds / 2, iSigne * (xGoujon + 1.5 * LargeurProfil), yGoujon + MyPoutre.Dalle.ConnecteurArmature.ds / 2, MyParAff, True, True)
+                    AddRectanglePlein(myGr, myBrushArmatures, MyPenContour, iSigne * xGoujon, yGoujon - MyPoutre.Dalle.ConnecteurArmature.Diametre / 2,
+                                                                            iSigne * (xGoujon + 1.5 * LargeurProfil), yGoujon + MyPoutre.Dalle.ConnecteurArmature.Diametre / 2, MyParAff, True, True)
                 Next
 
         End Select
