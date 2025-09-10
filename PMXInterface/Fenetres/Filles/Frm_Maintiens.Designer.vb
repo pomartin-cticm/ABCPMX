@@ -35,6 +35,7 @@ Partial Class Frm_Maintiens
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Maintiens = New System.Windows.Forms.Label()
         Me.pan_Maintiens = New System.Windows.Forms.Panel()
+        Me.img_info = New System.Windows.Forms.PictureBox()
         Me.btn_Delete = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btn_Precedent = New System.Windows.Forms.Button()
@@ -49,7 +50,6 @@ Partial Class Frm_Maintiens
         Me.pan_Img_Maintiens = New System.Windows.Forms.Panel()
         Me.txt_Cotations = New System.Windows.Forms.TextBox()
         Me.img_Maintiens = New System.Windows.Forms.PictureBox()
-        Me.img_info = New System.Windows.Forms.PictureBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -58,10 +58,10 @@ Partial Class Frm_Maintiens
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
         Me.pan_Maintiens.SuspendLayout()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.pan_Img_Maintiens.SuspendLayout()
         CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -218,6 +218,16 @@ Partial Class Frm_Maintiens
         Me.pan_Maintiens.Size = New System.Drawing.Size(250, 272)
         Me.pan_Maintiens.TabIndex = 1
         '
+        'img_info
+        '
+        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
+        Me.img_info.Location = New System.Drawing.Point(222, 5)
+        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_info.Name = "img_info"
+        Me.img_info.Size = New System.Drawing.Size(20, 20)
+        Me.img_info.TabIndex = 81
+        Me.img_info.TabStop = False
+        '
         'btn_Delete
         '
         Me.btn_Delete.Location = New System.Drawing.Point(33, 200)
@@ -363,16 +373,6 @@ Partial Class Frm_Maintiens
         Me.img_Maintiens.TabIndex = 1
         Me.img_Maintiens.TabStop = False
         '
-        'img_info
-        '
-        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
-        Me.img_info.Location = New System.Drawing.Point(222, 5)
-        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
-        Me.img_info.Name = "img_info"
-        Me.img_info.Size = New System.Drawing.Size(20, 20)
-        Me.img_info.TabIndex = 81
-        Me.img_info.TabStop = False
-        '
         'Frm_Maintiens
         '
         Me.AcceptButton = Me.btn_OK
@@ -397,11 +397,11 @@ Partial Class Frm_Maintiens
         Me.TLPan_Gauche.PerformLayout()
         Me.pan_Maintiens.ResumeLayout(False)
         Me.pan_Maintiens.PerformLayout()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.pan_Img_Maintiens.ResumeLayout(False)
         Me.pan_Img_Maintiens.PerformLayout()
         CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

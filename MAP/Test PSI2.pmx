@@ -48,7 +48,7 @@ BLOCK BEAM
    SLSlComb              = {True/False/False/False/False/False}
    SLSCoef               = {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    FLSlComb              = {True/False/False/False/False}
-   FLSCoef               = {1/0,5/0,3/0/0}+{1/0,7/0,3/0/0}+{1/0,3/0,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
+   FLSCoef               = {1/0,5/0,3/0/0}+{1/0,7/0,3/0/0}+{1/0/0,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    CULSlComb             = {True/False}
    CULSCoef              = {0/0/0/1,5/1,35}+{0/0/0/0/0}
    CSLSlComb             = {True/False}
@@ -70,7 +70,7 @@ BLOCK DECKRESTRAINT
    lDeckRestraint        = False
    lTheta                = False
 BLOCK SECTION
-   Name                  = 
+   Name                  = Name
    SlabDefined           = False
    Database              = False
    Type                  = 2
@@ -147,7 +147,7 @@ BLOCK SLAB_REINFORCEMENT
    lActive               = 1 False
    RClasse               = B500
    RFsK                  = 500
-   REs                   = 200000
+   REs                   = 210000
 
 BLOCK STUD
    Label                 = 19-100
@@ -179,7 +179,7 @@ BLOCK OPTIONS
    T0SH_1                = 1
    AgeTCalc              = 18250
    lElasticDesign        = False
-   Psi2LongTerm          = False
+   Psi2LongTerm          = True
    lControlCrack         = False
 
 BLOCK FIRE_OPTIONS
@@ -225,7 +225,7 @@ BLOCK GAMMA
    GammaQ                = 1,5
    Psi0_Q1               = 0,7
    Psi1_Q1               = 0,5
-   Psi2_Q1               = 0,3
+   Psi2_Q1               = 0
    Psi0_Q2               = 0,7
    Psi1_Q2               = 0,5
    Psi2_Q2               = 0,3
@@ -247,9 +247,11 @@ BLOCK LOADS_G1
  
 BLOCK LOADS_G2
    QSurf                 = 0
+   qDist                 = 1 0 10000,000 10 10000,000
  
 BLOCK LOADS_Q1
    QSurf                 = 0
+   qDist                 = 1 0 10000,000 10 10000,000
  
 BLOCK LOADS_Q2
    QSurf                 = 0

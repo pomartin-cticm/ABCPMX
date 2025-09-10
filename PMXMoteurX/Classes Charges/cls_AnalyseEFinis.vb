@@ -16,7 +16,6 @@ Public Class cls_AnalyseEFinis
 
 #End Region
 
-
 #Region " Constructeurs "
 
     Public Sub New(EYoung As Decimal, GraviteG As Decimal, Nodes As cls_Poutre.strucBeamNodes)

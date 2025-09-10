@@ -1060,7 +1060,7 @@ Public Module Mod_Dessins
                 xo = -profilA.Bfi / 2
         End Select
 
-        '--> AffichageOptFeu de la dalle pleine (nécessairement sans renformis)
+        '--> Affichage de la dalle pleine (nécessairement sans renformis)
 
         If lIntermediaire Then xo = -EntraxeD1 - dCar
 
@@ -1068,7 +1068,7 @@ Public Module Mod_Dessins
 
         AddRectanglePlein(MyGr, MyBrushDP, MyPen, xo, 0, xe, Td, MyParAffA, True, False)
 
-        '--> AffichageOptFeu des prédalles
+        '--> Affichage des prédalles
 
         If lIntermediaire Then
 
@@ -1212,7 +1212,7 @@ Public Module Mod_Dessins
                 xo = -profilA.Bfi / 2
         End Select
 
-        '--> AffichageOptFeu de la dalle pleine (nécessairement sans renformis)
+        '--> Affichage de la dalle pleine (nécessairement sans renformis)
 
         If lIntermediaire Then xo = -EntraxeD1 - dCar
 
@@ -1220,7 +1220,7 @@ Public Module Mod_Dessins
 
         AddRectanglePlein(MyGr, MyBrushDP, MyPen, xo, 0, xe, Td, MyParAffA, True, False)
 
-        '--> AffichageOptFeu des prédalles
+        '--> Affichage des prédalles
 
         If lIntermediaire Then
 
@@ -2246,7 +2246,7 @@ Public Module Mod_Dessins
         '   lCotation   [E] :   Indique si on met les cotations sur le dessin
         '   lCotEpTot   [E] :   Indique si cotation epaisseur bac+dalle
         '   lTitre      [E] :   Indique si affichage du titre du bac
-        '   ParAff      [S] :   Paramètres d'AffichageOptFeu
+        '   ParAff      [S] :   Paramètres d'Affichage
         '   lMemb       [E] :   Indique si on représente la semelle sup de la memb sup
         '   tfSup       [E] :   Epasseur semelle de la membrure superieure
         '   hMax        [E] :   Epaisseur maximale à considérer pour le dessin de la dalle
@@ -4250,7 +4250,7 @@ Public Module Mod_Dessins
         Rc = section.ProfilA.Rcs
         Tf = section.ProfilA.Tfs
 
-        '--> AffichageOptFeu des cotes
+        '--> Affichage des cotes
 
         '# Bc
 
@@ -4409,7 +4409,7 @@ Public Module Mod_Dessins
         '---------------------------------------------------------------------------------------------------------------------------
         '   20/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu des étriers dans le béton de l'enrobage partiel
+        '   Affichage des étriers dans le béton de l'enrobage partiel
         '---------------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   
         '   profile     [E] :   profilé
@@ -4436,7 +4436,7 @@ Public Module Mod_Dessins
         '---------------------------------------------------------------------------------------------------------------------------
         '   20/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu des étriers dans le béton de l'enrobage partiel
+        '   Affichage des étriers dans le béton de l'enrobage partiel
         '---------------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   
         '   profile     [E] :   profilé
@@ -4483,7 +4483,7 @@ Public Module Mod_Dessins
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu des étriers dans le béton de l'enrobage partiel
+        '   Affichage des étriers dans le béton de l'enrobage partiel
         '---------------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   
         '   profile     [E] :   profilé
@@ -6907,7 +6907,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   05/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu du plancher en coupe
+        '   Affichage du plancher en coupe
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Poutre à dessiner
@@ -8545,7 +8545,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   21/06/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu des travées dans la fenêtre maintiens latéraux
+        '   Affichage des travées dans la fenêtre maintiens latéraux
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Poutre à dessiner
@@ -9176,13 +9176,12 @@ Public Module Mod_Dessins
                                 ByVal pWi As Decimal, ByVal pHi As Decimal,
                                 kAdjust As Double, iSelect As Integer, indiceTravee As Integer, Optional xSouris As Decimal = 0,
                                 ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
-
         '------------------------------------------------------------------------------------------------------------------
         '   26/06/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu des travées dans la fenêtre maintiens latéraux
+        '   Affichage des travées dans la fenêtre maintiens latéraux
         '------------------------------------------------------------------------------------------------------------------
-        '   myBeam    [E] :   Poutre à dessiner
+        '   myBeam      [E] :   Poutre à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   xSouris     [E] :   Abscisse de la souris dans l'image
@@ -9196,97 +9195,102 @@ Public Module Mod_Dessins
         '               99 : console droite
         '------------------------------------------------------------------------------------------------------------------
 
-        If MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne).lMaintienSelectionne Then
+        '== R25-002
+        If (MyPoutre.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.PointRestrained) _
+        And (MyPoutre.Maintiens(indiceTravee).Count > 0) Then
 
-            '-->Déclaration
+            If MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne).lMaintienSelectionne Then
 
-            Dim xMin, xMax As Decimal
-            Dim yMin, yMax As Decimal
-            Dim dCar, dCarApp As Decimal
-            Dim MyParAff As Struc_Affichage
-            Dim LongueurPoutre, LongueurTravee, LongueurConsoleGauche, LongueurConsoleDroite, HauteurPoutre, EpaisseurSemelle, RayonConge As Decimal
+                '-->Déclaration
 
-            '--> Initialisations
+                Dim xMin, xMax As Decimal
+                Dim yMin, yMax As Decimal
+                Dim dCar, dCarApp As Decimal
+                Dim MyParAff As Struc_Affichage
+                Dim LongueurPoutre, LongueurTravee, LongueurConsoleGauche, LongueurConsoleDroite, HauteurPoutre, EpaisseurSemelle, RayonConge As Decimal
 
-            LongueurPoutre = MyPoutre.LongueurTotale
-            LongueurTravee = cls_Poutre.PORTEEDEFAUT / 1.5
-            If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee / 2
-            If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee / 2
-            HauteurPoutre = MyPoutre.HauteurTotale
-            EpaisseurSemelle = HauteurPoutre / 10
-            RayonConge = EpaisseurSemelle / 2
-            'LongueurDalle = myBeam.LongueurTotale
-            'HauteurDalle = myBeam.Dalle.Ep_td
-            dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
-            dCarApp = HauteurPoutre / 2
+                '--> Initialisations
 
-            '--> Initialisation des paramètres d'affichage
+                LongueurPoutre = MyPoutre.LongueurTotale
+                LongueurTravee = cls_Poutre.PORTEEDEFAUT / 1.5
+                If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee / 2
+                If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee / 2
+                HauteurPoutre = MyPoutre.HauteurTotale
+                EpaisseurSemelle = HauteurPoutre / 10
+                RayonConge = EpaisseurSemelle / 2
+                'LongueurDalle = myBeam.LongueurTotale
+                'HauteurDalle = myBeam.Dalle.Ep_td
+                dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
+                dCarApp = HauteurPoutre / 2
 
-            Select Case iSelect
-                Case 0
-                    xMin = 0
-                    xMax = LongueurConsoleGauche
+                '--> Initialisation des paramètres d'affichage
 
-                Case 99
-                    xMin = LongueurConsoleGauche
-                    For i As Integer = 1 To MyPoutre.IndiceDerniereTravee - 1
-                        xMin += LongueurTravee
-                    Next
-                    xMax = xMin + LongueurConsoleDroite
+                Select Case iSelect
+                    Case 0
+                        xMin = 0
+                        xMax = LongueurConsoleGauche
 
-                Case Else
-                    xMin = LongueurConsoleGauche
-                    For i As Integer = 1 To iSelect - 1
-                        xMin += LongueurTravee
-                    Next
-                    xMax = xMin + LongueurTravee
+                    Case 99
+                        xMin = LongueurConsoleGauche
+                        For i As Integer = 1 To MyPoutre.IndiceDerniereTravee - 1
+                            xMin += LongueurTravee
+                        Next
+                        xMax = xMin + LongueurConsoleDroite
 
-            End Select
+                    Case Else
+                        xMin = LongueurConsoleGauche
+                        For i As Integer = 1 To iSelect - 1
+                            xMin += LongueurTravee
+                        Next
+                        xMax = xMin + LongueurTravee
 
-            yMin = -dCar - dCarApp
-            yMax = HauteurPoutre + dCar
+                End Select
 
-            'If myBeam.NbTravees > 1 Then yMin -= dCar
-            ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+                yMin = -dCar - dCarApp
+                yMax = HauteurPoutre + dCar
 
-
-            'Distance de la souris, par rapport à l'appui gauche, dans l'univers de la poutre 
-            Dim xSourisUnivers As Decimal = Mod_OutilsGraph.XUnivers(MyParAff, xSouris) - xMin
+                'If myBeam.NbTravees > 1 Then yMin -= dCar
+                ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
 
-            'Permet de modifier si une semelle est maintenue ou non; ou de sélectionner un maintien pour le déplacer
-            'La modification opère si on clique dans la zone du maintien dessiné
+                'Distance de la souris, par rapport à l'appui gauche, dans l'univers de la poutre 
+                Dim xSourisUnivers As Decimal = Mod_OutilsGraph.XUnivers(MyParAff, xSouris) - xMin
 
-            Dim x_Loc_min As Decimal
-            Dim x_Loc_max As Decimal
-            Dim x_Loc_local As Decimal
 
-            Select Case iSelect
-                Case 0
-                    x_Loc_local = xSourisUnivers * MyPoutre.LongueurTravee(indiceTravee) / LongueurConsoleGauche
-                Case 99
-                    x_Loc_local = xSourisUnivers * MyPoutre.LongueurTravee(indiceTravee) / LongueurConsoleDroite
-                Case Else
-                    x_Loc_local = xSourisUnivers * MyPoutre.LongueurTravee(indiceTravee) / LongueurTravee
-            End Select
+                'Permet de modifier si une semelle est maintenue ou non; ou de sélectionner un maintien pour le déplacer
+                'La modification opère si on clique dans la zone du maintien dessiné
 
-            If MyPoutre.pIndiceMaintienSelectionne = 0 Then
-                x_Loc_min = 0 + EpaisseurSemelle
-            Else
-                x_Loc_min = MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne - 1).x_Loc + EpaisseurSemelle
+                Dim x_Loc_min As Decimal
+                Dim x_Loc_max As Decimal
+                Dim x_Loc_local As Decimal
+
+                Select Case iSelect
+                    Case 0
+                        x_Loc_local = xSourisUnivers * MyPoutre.LongueurTravee(indiceTravee) / LongueurConsoleGauche
+                    Case 99
+                        x_Loc_local = xSourisUnivers * MyPoutre.LongueurTravee(indiceTravee) / LongueurConsoleDroite
+                    Case Else
+                        x_Loc_local = xSourisUnivers * MyPoutre.LongueurTravee(indiceTravee) / LongueurTravee
+                End Select
+
+                If MyPoutre.pIndiceMaintienSelectionne = 0 Then
+                    x_Loc_min = 0 + EpaisseurSemelle
+                Else
+                    x_Loc_min = MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne - 1).x_Loc + EpaisseurSemelle
+                End If
+
+                If MyPoutre.pIndiceMaintienSelectionne = MyPoutre.Maintiens(indiceTravee).Count - 1 Then
+                    x_Loc_max = MyPoutre.LongueurTravee(indiceTravee) - EpaisseurSemelle
+                Else
+                    x_Loc_max = MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne + 1).x_Loc - EpaisseurSemelle
+                End If
+
+                x_Loc_local = Math.Max(x_Loc_local, x_Loc_min)
+                x_Loc_local = Math.Min(x_Loc_local, x_Loc_max)
+
+                MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne).x_Loc = x_Loc_local
+
             End If
-
-            If MyPoutre.pIndiceMaintienSelectionne = MyPoutre.Maintiens(indiceTravee).Count - 1 Then
-                x_Loc_max = MyPoutre.LongueurTravee(indiceTravee) - EpaisseurSemelle
-            Else
-                x_Loc_max = MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne + 1).x_Loc - EpaisseurSemelle
-            End If
-
-            x_Loc_local = Math.Max(x_Loc_local, x_Loc_min)
-            x_Loc_local = Math.Min(x_Loc_local, x_Loc_max)
-
-            MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne).x_Loc = x_Loc_local
-
         End If
 
     End Sub
@@ -9302,7 +9306,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   08/06/23 :  Création - GuD
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu du plancher en longitudinal
+        '   Affichage du plancher en longitudinal
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam      [E] :   Poutre à dessiner
@@ -9583,10 +9587,10 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   21/06/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu des travées dans la fenêtre maintiens latéraux
+        '   Affichage des travées dans la fenêtre maintiens latéraux
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
-        '   myBeam    [E] :   Poutre à dessiner
+        '   myBeam      [E] :   Poutre à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   xSouris     [E] :   Abscisse de la souris dans l'image
@@ -9880,7 +9884,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   21/06/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu des travées dans la fenêtre maintiens latéraux
+        '   Affichage des travées dans la fenêtre maintiens latéraux
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   myBeam    [E] :   Poutre à dessiner
@@ -10267,10 +10271,10 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu du type de mySection dans la fenêtre choix de type de mySection
+        '   Affichage du type de mySection dans la fenêtre choix de type de mySection
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
-        '   mySection     [E] :   Section à dessiner
+        '   mySection   [E] :   Section à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   MyFont      [E] :   
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
@@ -10386,7 +10390,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   09/06/23 :  Création - FuD
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu du type de mySection dans la fenêtre choix de type de mySection
+        '   Affichage du type de mySection dans la fenêtre choix de type de mySection
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   MySection   [E] :   Section à dessiner
@@ -10420,7 +10424,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu du type de mySection dans la fenêtre choix de type de mySection
+        '   Affichage du type de mySection dans la fenêtre choix de type de mySection
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   MySection   [E] :   Section à dessiner
@@ -10457,7 +10461,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu du type de mySection dans la fenêtre choix de type de mySection
+        '   Affichage du type de mySection dans la fenêtre choix de type de mySection
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   MySection   [E] :   Section à dessiner
@@ -10494,7 +10498,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu du type de mySection dans la fenêtre choix de type de mySection
+        '   Affichage du type de mySection dans la fenêtre choix de type de mySection
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   MySection   [E] :   Section à dessiner
@@ -10532,7 +10536,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
-        '   AffichageOptFeu du type de mySection dans la fenêtre choix de type de mySection
+        '   Affichage du type de mySection dans la fenêtre choix de type de mySection
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   MySection   [E] :   Section à dessiner
@@ -10683,11 +10687,11 @@ Public Module Mod_Dessins
         With MyPoutre.ChargesA(iCas)
 
 
-            '--> AffichageOptFeu de la poutre
+            '--> Affichage de la poutre
 
             AddLigne(myGr, MyPenPoutre, 0, 0, Longueur, 0, MyParAff)
 
-            '--> AffichageOptFeu des noeuds
+            '--> Affichage des noeuds
 
             For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
                 MyPen = MyPenPoutre
@@ -10698,7 +10702,7 @@ Public Module Mod_Dessins
                 End If
             Next
 
-            '--> AffichageOptFeu des appuis
+            '--> Affichage des appuis
 
             Dim indAppuis() As Integer = Nothing
             Dim NbApp As Integer
@@ -10709,7 +10713,7 @@ Public Module Mod_Dessins
                 DessineAppui(myGr, MyPoutre.Nodes.xGlobal(indAppuis(iApp)), dApp, MyParAff)
             Next
 
-            '--> AffichageOptFeu légende couleurs V et M
+            '--> Affichage légende couleurs V et M
 
             If OptionsDiagrammesCDC.lDessMoment Or OptionsDiagrammesCDC.lDessEffortT Then
                 Dim longueurRectangle, hauteurRectangle As Decimal
@@ -10943,11 +10947,11 @@ Public Module Mod_Dessins
 
 
 
-        '--> AffichageOptFeu de la poutre
+        '--> Affichage de la poutre
 
         AddLigne(myGr, MyPenPoutre, 0, 0, Longueur, 0, MyParAff)
 
-        '--> AffichageOptFeu des noeuds
+        '--> Affichage des noeuds
 
         For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
             If iNode = iNodeMax Then
@@ -10962,7 +10966,7 @@ Public Module Mod_Dessins
             End If
         Next
 
-        '--> AffichageOptFeu des appuis
+        '--> Affichage des appuis
 
         Dim indAppuis() As Integer = Nothing
         Dim NbApp As Integer
@@ -10972,7 +10976,7 @@ Public Module Mod_Dessins
             DessineAppui(myGr, MyPoutre.Nodes.xGlobal(indAppuis(iApp)), dApp, MyParAff)
         Next
 
-        '--> AffichageOptFeu légende couleurs V et M
+        '--> Affichage légende couleurs V et M
 
         If OptionsDiagrammes.lDessMoment Or OptionsDiagrammes.lDessEffortT Then
             Dim longueurRectangle, hauteurRectangle As Decimal
@@ -11161,7 +11165,7 @@ Public Module Mod_Dessins
     '    Dim xo, xe, yo, ye As Decimal
     '    Dim myPenC As New Pen(CouleurC, 1.5)
 
-    '    '--> AffichageOptFeu
+    '    '--> Affichage
 
     '    xo = 0
     '    xe = 0
@@ -11303,7 +11307,7 @@ Public Module Mod_Dessins
         Const EPSX As Decimal = 0.5
         Dim qR As Decimal
 
-        '--> AffichageOptFeu
+        '--> Affichage
 
         xo = xPos(0)
         xe = xo
@@ -12549,7 +12553,7 @@ Public Module Mod_Dessins
         End If
         If lDalleRed Then BeffDes = BeffRed
 
-        '--> AffichageOptFeu de la dalle pleine (nécessairement sans renformis)
+        '--> Affichage de la dalle pleine (nécessairement sans renformis)
 
         If lIntermediaire Or Not MyPoutre.Section.lSlimFloor Then
             xo = -BeffDes / 2
@@ -12560,7 +12564,7 @@ Public Module Mod_Dessins
         End If
         AddRectanglePlein(MyGr, MyBrushDP, MyPen, xo, 0, xe, Td, MyParAffA, True, False)
 
-        '--> AffichageOptFeu des deux prédalles
+        '--> Affichage des deux prédalles
 
         If lIntermediaire Or Not MyPoutre.Section.lSlimFloor Then
             xe = -LargeurProfilA / 2 + wApp
@@ -14020,7 +14024,7 @@ Public Module Mod_Dessins
         Dim MyPenB As New SolidBrush(Color.Gray)
         Dim MyFontNum As New Font("Arial", 7)
 
-        '--> AffichageOptFeu
+        '--> Affichage
 
         xo = 0
         xe = 0
@@ -14237,7 +14241,7 @@ Public Module Mod_Dessins
         '----------------------------------------------------------------------------------------
         '   03/11/23 :  Création - LeT (créé pour le logiciel TORSION)
         '----------------------------------------------------------------------------------------
-        '   AffichageOptFeu d'une expréssion complète contenant plusieurs indices
+        '   Affichage d'une expréssion complète contenant plusieurs indices
         '   Les indices sont encadrés par des "\-"
         '   Les fractions sont encadrés par des "\f"
         '   Le numérateur et le dénominateur des fractions sont séparés par "\d"
@@ -14336,7 +14340,7 @@ Public Module Mod_Dessins
         '----------------------------------------------------------------------------------
         '   04/12/23 :  Creation - POM - Version 1.00
         '----------------------------------------------------------------------------------
-        '   AffichageOptFeu d'une expression
+        '   Affichage d'une expression
         '----------------------------------------------------------------------------------
         '   Expression  [E] :   Ligne à afficher
         '   MyGr        [E] :   Graphics dans lequel on affiche
@@ -15761,9 +15765,7 @@ Public Module Mod_Dessins
         '----------------------------------------------------------------------------------------------
         '   22/07/25 :  Création - Version 1.20 - POM
         '----------------------------------------------------------------------------------------------
-        '
-        '   AffichageOptFeu de l'épaisseur max et de fy calcul
-        '
+        '   Affichage de l'épaisseur max et de fy calcul
         '----------------------------------------------------------------------------------------------
         '
         '   MyGr        [E] :   Graphics dans lequel on dessine
@@ -15861,7 +15863,7 @@ Public Module Mod_Dessins
         '   22/07/25 :  Création - Version 1.20 - POM
         '----------------------------------------------------------------------------------------------
         '
-        '   AffichageOptFeu de l'épaisseur max et de fy calcul
+        '   Affichage de l'épaisseur max et de fy calcul
         '
         '----------------------------------------------------------------------------------------------
         '

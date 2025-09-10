@@ -86,8 +86,50 @@
         Me.lMultiInd = False
     End Sub
 
+    Public Sub New(pNom As String, pSymbol As String, IndShadow As Integer,
+                   IndEltShadow1 As Integer, indEltShadow2 As Integer, FractionI1 As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   03/02/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Initialisation d'un cas de charge shadow à deux indices
+        '-----------------------------------------------------------------------------------------------------------
+        '   pNom        [E] :   Nom du cas de charge (selon langue interface)
+        '   pSymbol     [E] :   Symbol du cas de charge (indépendant de la langue)
+        '   IndShadow   [E] :   Indice du cas de charge dédoublé
+        '   IndEltShadow[E] :   Indice de la table de propriétés des éléments associées au cas de charge
+        '-----------------------------------------------------------------------------------------------------------
+
+        Me.Nom = pNom
+        Me.Symbol = pSymbol
+
+        Me.lShadow = True
+        Me.IndElts(0) = IndEltShadow1
+        Me.IndElts(1) = indEltShadow2
+        Me.Fraction1 = FractionI1
+        Me.iShadow = IndShadow
+
+        Me.UZEta = Nothing
+
+        Me.lMultiInd = True
+    End Sub
+
     Public Sub New(pNom As String, pSymbol As String, Ind_1 As Integer, Ind_2 As Integer, FractionI1 As Decimal, iTrav0 As Integer, NbTrav As Integer,
                    pType As EnuType, pEtatDalle As EnuEtatDalle)
+        '-----------------------------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Initialisation d'un cas de charge normal comportant deux indices d'éléments
+        '-----------------------------------------------------------------------------------------------------------
+        '   pNom        [E] :   Nom du cas de charge (selon langue interface)
+        '   pSymbol     [E] :   Symbol du cas de charge (indépendant de la langue)
+        '   Ind_1       [E] :   Indice no 1 de la table de propriétés des éléments associées au cas de charge
+        '   Ind_2       [E] :   Indice no 2 de la table de propriétés des éléments associées au cas de charge
+        '   FractionI1  [E] :   Fraction du cas de charge associée au premier indice
+        '   NbTrav      [E] :   Nombre de travées dans la poutre (pour le dimensionnement des tableaux)
+        '   iTrav0      [E] :   Indice de la première travée
+        '   pType       [E] :   Type du chargement
+        '   pEtatDalle  [E] :   Etat de la dalle pour le chargement
+        '-----------------------------------------------------------------------------------------------------------
 
         Me.Nom = pNom
         Me.Symbol = pSymbol
@@ -228,6 +270,175 @@
 
     End Sub
 
+    Public Sub RecupereFlecheEtaMulti(myUz() As Decimal, lPrem As Boolean, FractionI1 As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   10/09/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Stocke les flèches dépendant de la connexion, issues du calcul EF
+        '   Ce cas gère les charges d'exploitation en calcul mixte avec calculs long terme et calcul court terme
+        '-----------------------------------------------------------------------------------------------------------
+        '   myUz        [E] :   Flèches de la poutre (prenant en compte la raideurs des connecteurs
+        '   lPrem       [E] :   Indique si premier ou second calcul, pour la fraction 1 ou la fraction 2
+        '   FractionI1  [E] :   Fraction du cas de charge associée au premier indice
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim FractionLoc As Decimal
+
+        '--( Initialisations
+
+        If lPrem Then
+            FractionLoc = FractionI1
+        Else
+            FractionLoc = 1 - FractionI1
+        End If
+
+        '--( Transferts
+
+        TransTab1DFraction(Me.UZEta, myUz, FractionLoc, lPrem)
+
+    End Sub
+
+    Public Sub RecupereResultatsMulti(myVz(,) As Decimal, myMy(,) As Decimal, myUz() As Decimal, myRotY() As Decimal, myRz() As Decimal,
+                                      lPrem As Boolean, FractionI1 As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Stocke les résultats issus du calcul EF, dans le cas d'un double calcul (deux indices)
+        '   Ce cas gère les charges d'exploitation en calcul mixte avec calculs long terme et calcul court terme
+        '-----------------------------------------------------------------------------------------------------------
+        '   myVz        [E] :   Efforts tranchants
+        '   myMy        [E] :   Moments fléchissants
+        '   myUz        [E] :   Flèches de la poutre
+        '   myRotY      [E] :   Rotations des noeuds
+        '   myRz        [E] :   Réactions aux appuis
+        '   lPrem       [E] :   Indique si premier ou second calcul, pour la fraction 1 ou la fraction 2
+        '   FractionI1  [E] :   Fraction du cas de charge associée au premier indice
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim FractionLoc As Decimal
+
+        '--( Initialisations
+
+        If lPrem Then
+            FractionLoc = FractionI1
+        Else
+            FractionLoc = 1 - FractionI1
+        End If
+
+        '--( Transferts
+
+        TransTab2DFraction(Me.VZ, myVz, FractionLoc, lPrem)
+        TransTab2DFraction(Me.MYY, myMy, FractionLoc, lPrem)
+        TransTab1DFraction(Me.UZ, myUz, FractionLoc, lPrem)
+        TransTab1DFraction(Me.ROTY, myRotY, FractionLoc, lPrem)
+        TransTab1DFraction(Me.RZ, myRz, FractionLoc, lPrem)
+
+        Me.lRunCalcul = True
+
+        Exit Sub
+
+        ''--( Traitement
+        '  Dim iNode, j, iApp As Integer
+
+        'If lPrem Then
+
+        '    '** Résultats pour le premier indice : on copie les résultats pondérés par la fraction
+
+        '    ReDim Me.VZ(NbNodes - 2, 1)
+        '    ReDim Me.MYY(NbNodes - 2, 1)
+        '    ReDim Me.UZ(NbNodes - 1)
+        '    ReDim Me.ROTY(NbNodes - 1)
+        '    ReDim Me.RZ(NbApp - 1)
+
+        '    For iNode = 0 To NbNodes - 2
+        '        For j = 0 To 1
+        '            Me.VZ(iNode, j) = FractionI1 * myVz(iNode, j)
+        '            Me.MYY(iNode, j) = FractionI1 * myMy(iNode, j)
+        '        Next
+        '    Next
+        '    For iNode = 0 To NbNodes - 1
+        '        Me.UZ(iNode) = FractionI1 * myUz(iNode)
+        '        Me.ROTY(iNode) = FractionI1 * myRotY(iNode)
+        '    Next
+        '    For iApp = 0 To NbApp - 1
+        '        Me.RZ(iApp) = FractionI1 * myRz(iApp)
+        '    Next
+        'Else
+
+        '    '** Résultats pour le second indice : on ajoute les résultats pondérés par la (1-fraction) aux résultats précédents
+
+        '    For iNode = 0 To NbNodes - 2
+        '        For j = 0 To 1
+        '            Me.VZ(iNode, j) += (1 - FractionI1) * myVz(iNode, j)
+        '            Me.MYY(iNode, j) += (1 - FractionI1) * myMy(iNode, j)
+        '        Next
+        '    Next
+        '    For iNode = 0 To NbNodes - 1
+        '        Me.UZ(iNode) += (1 - FractionI1) * myUz(iNode)
+        '        Me.ROTY(iNode) += (1 - FractionI1) * myRotY(iNode)
+        '    Next
+
+        '    For iApp = 0 To NbApp - 1
+        '        Me.RZ(iApp) += (1 - FractionI1) * myRz(iApp)
+        '    Next
+
+        'End If
+
+
+    End Sub
+
+    Private Sub TransTab2DFraction(ByRef Cible(,) As Decimal, Source(,) As Decimal, Fraction As Decimal, lPrem As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   10/09/25 :  Création - POM  
+        '-----------------------------------------------------------------------------------------------------------
+        '   Transfère les valeurs d'un tableau 2D dans un autre, en appliquant une fraction seulement
+        '-----------------------------------------------------------------------------------------------------------
+        '   Cible       [S] :   Tableau cible
+        '   Source      [E] :   Tableau source
+        '   Fraction    [E] :   Fraction à appliquer
+        '   lPrem       [E] :   Indique si premier ou second calcul, pour la fraction 1 ou la fraction 2
+        '-----------------------------------------------------------------------------------------------------------
+
+        Dim nDim1 As Integer = Source.GetUpperBound(0)
+
+        If lPrem Then ReDim Cible(nDim1, 1)
+
+        For i As Integer = 0 To nDim1
+            For j As Integer = 0 To 1
+                Cible(i, j) += Fraction * Source(i, j)
+            Next
+        Next
+
+    End Sub
+
+    Private Sub TransTab1DFraction(ByRef Cible() As Decimal, Source() As Decimal, Fraction As Decimal, lPrem As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   10/09/25 :  Création - POM  
+        '-----------------------------------------------------------------------------------------------------------
+        '   Transfère les valeurs d'un tableau 1D dans un autre, en appliquant une fraction seulement
+        '-----------------------------------------------------------------------------------------------------------
+        '   Cible       [S] :   Tableau cible
+        '   Source      [E] :   Tableau source
+        '   Fraction    [E] :   Fraction à appliquer
+        '   lPrem       [E] :   Indique si premier ou second calcul, pour la fraction 1 ou la fraction 2
+        '-----------------------------------------------------------------------------------------------------------
+
+        Dim nDim1 As Integer = Source.GetUpperBound(0)
+
+        If lPrem Then ReDim Cible(nDim1)
+
+        For i As Integer = 0 To nDim1
+
+            Cible(i) += Fraction * Source(i)
+
+        Next
+
+    End Sub
+
     Public Sub RecupereResultats(myVz(,) As Decimal, myMy(,) As Decimal, myUz() As Decimal, myRotY() As Decimal, myRz() As Decimal)
         '-----------------------------------------------------------------------------------------------------------
         '   04/11/23 :  Création - POM
@@ -241,11 +452,16 @@
         '   myRz        [E] :   Réactions aux appuis
         '-----------------------------------------------------------------------------------------------------------
 
-        Me.VZ = myVz.Clone
-        Me.MYY = myMy.Clone
-        Me.ROTY = myRotY.Clone
-        Me.UZ = myUz.Clone
-        Me.RZ = myRz.Clone
+        'Me.VZ = myVz.Clone
+        'Me.MYY = myMy.Clone
+        'Me.ROTY = myRotY.Clone
+        'Me.UZ = myUz.Clone
+        'Me.RZ = myRz.Clone
+        Me.VZ = CType(myVz.Clone, Decimal(,))
+        Me.MYY = CType(myMy.Clone, Decimal(,))
+        Me.ROTY = CType(myRotY.Clone, Decimal())
+        Me.UZ = CType(myUz.Clone, Decimal())
+        Me.RZ = CType(myRz.Clone, Decimal())
 
         Me.lRunCalcul = True
 

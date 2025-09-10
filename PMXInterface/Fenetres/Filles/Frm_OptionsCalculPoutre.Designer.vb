@@ -45,6 +45,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_CadreSections = New System.Windows.Forms.Label()
         Me.lbl_CadreBeton = New System.Windows.Forms.Label()
         Me.pan_OptionsELS = New System.Windows.Forms.Panel()
+        Me.chk_Psi2LongTerme = New System.Windows.Forms.CheckBox()
         Me.etq_UnitLargeurF = New System.Windows.Forms.Label()
         Me.cmb_Wk = New System.Windows.Forms.ComboBox()
         Me.img_Wk = New System.Windows.Forms.PictureBox()
@@ -110,7 +111,6 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_RH = New System.Windows.Forms.Label()
         Me.lbl_BetonMessage = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.chk_Psi2LongTerme = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -438,6 +438,19 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_OptionsELS.Name = "pan_OptionsELS"
         Me.pan_OptionsELS.Size = New System.Drawing.Size(442, 169)
         Me.pan_OptionsELS.TabIndex = 5
+        '
+        'chk_Psi2LongTerme
+        '
+        Me.chk_Psi2LongTerme.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chk_Psi2LongTerme.CheckAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.chk_Psi2LongTerme.Location = New System.Drawing.Point(12, 9)
+        Me.chk_Psi2LongTerme.Name = "chk_Psi2LongTerme"
+        Me.chk_Psi2LongTerme.Size = New System.Drawing.Size(414, 38)
+        Me.chk_Psi2LongTerme.TabIndex = 128
+        Me.chk_Psi2LongTerme.Text = "chk_Psi2LongTerme"
+        Me.chk_Psi2LongTerme.TextAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.chk_Psi2LongTerme.UseVisualStyleBackColor = True
         '
         'etq_UnitLargeurF
         '
@@ -1112,19 +1125,6 @@ Partial Class Frm_OptionsCalculPoutre
         'ErrorProvider
         '
         Me.ErrorProvider.ContainerControl = Me
-        '
-        'chk_Psi2LongTerme
-        '
-        Me.chk_Psi2LongTerme.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.chk_Psi2LongTerme.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.chk_Psi2LongTerme.Location = New System.Drawing.Point(12, 9)
-        Me.chk_Psi2LongTerme.Name = "chk_Psi2LongTerme"
-        Me.chk_Psi2LongTerme.Size = New System.Drawing.Size(414, 38)
-        Me.chk_Psi2LongTerme.TabIndex = 128
-        Me.chk_Psi2LongTerme.Text = "chk_Psi2LongTerme"
-        Me.chk_Psi2LongTerme.TextAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.chk_Psi2LongTerme.UseVisualStyleBackColor = True
         '
         'Frm_OptionsCalculPoutre
         '

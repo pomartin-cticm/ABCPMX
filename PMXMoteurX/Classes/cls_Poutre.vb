@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Security.Policy
+Imports System.Windows
 Imports CTICM_DATA_DLLS
 Imports CTICM_RDM
 Imports Microsoft.VisualBasic.Logging
@@ -4328,7 +4329,7 @@ Public Class cls_Poutre
         Dim LabelQ() As String = {symbQ1, symbQ2, symbQC}
         Dim IndQ() As Integer = {IndiceQ, IndiceQ, IndiceQc}
         Dim IndQLT() As Integer = {IndiceG2, IndiceG2}
-        Dim Psi2Q() As Integer = {Me.Param.Gamma.Psi2_Q1, Me.Param.Gamma.Psi2_Q1}
+        Dim Psi2Q() As Decimal = {Me.Param.Gamma.Psi2_Q1, Me.Param.Gamma.Psi2_Q2}
         Dim lMultiT As Boolean
         Dim ChaineEx As String
         Me.lMultiQ = {False, False, False}
@@ -4336,7 +4337,7 @@ Public Class cls_Poutre
         Dim iQFin As Integer
         'If lMixte Then iQFin = 2 Else iQFin = 1
         If lChargeQc Then iQFin = 2 Else iQFin = 1
-        'Le cas de charge de construction n'est pris en compte que si poutre mixte non totalement étayée
+        '** Le cas de charge de construction n'est pris en compte que si poutre mixte non totalement étayée
 
         For iq As Integer = 0 To iQFin
 
@@ -4344,7 +4345,7 @@ Public Class cls_Poutre
             Me.lMultiQ(iq) = lMultiT
             ChaineEx = strExploitation & " " & CStr(iq + 1)
 
-            If lMixte And iQFin < 2 Then
+            If lMixte And (iq < 2) And Me.Param.lPsi2LongTerm Then
                 '--( Cas de charges d'exploitation comportant deux coefficients d'équivalence
                 If (Me.NbTravees = 1) Or (Not lMultiT) Then
                     Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
@@ -4371,8 +4372,6 @@ Public Class cls_Poutre
                     InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesConsoles)
                 End If
             End If
-
-
 
         Next
 
@@ -4413,6 +4412,8 @@ Public Class cls_Poutre
         Dim nbCas As Integer = Me.ChargesA.Count
         Dim lDefini As Boolean
         Dim iTrav0, iTrav1 As Decimal
+        Dim lMultiInd As Boolean
+        Dim indLT As Integer = -1
 
         '--( Initialisation
 
@@ -4428,6 +4429,7 @@ Public Class cls_Poutre
                 indiceElt = Me.ChargesA(iCas).IndElts(0)
                 lCasMixte = Me.Elements(indiceElt).lMixte
                 lDefini = Me.ChargesA(iCas).EstNonNul(iTrav0, iTrav1)
+                lMultiInd = Me.ChargesA(iCas).lMultiInd
 
                 '--( On ne dédouble que les cas mixtes et défini
 
@@ -4438,7 +4440,13 @@ Public Class cls_Poutre
 
                     indEltShadow = Me.IndiceTabElts(lMixte, nEqDalle, nEqEnrob, True)
 
-                    Me.ChargesA.Add(New cls_CasDeCharge(Me.ChargesA(iCas).Nom, Me.ChargesA(iCas).Symbol, iCas, indEltShadow))
+                    If Me.ChargesA(iCas).Symbol = symbG2 Then indLT = indEltShadow
+
+                    If lMultiInd Then
+                        Me.ChargesA.Add(New cls_CasDeCharge(Me.ChargesA(iCas).Nom, Me.ChargesA(iCas).Symbol, iCas, indEltShadow, indLT, Me.ChargesA(iCas).Fraction1))
+                    Else
+                        Me.ChargesA.Add(New cls_CasDeCharge(Me.ChargesA(iCas).Nom, Me.ChargesA(iCas).Symbol, iCas, indEltShadow))
+                    End If
 
                 End If
 
@@ -4682,6 +4690,10 @@ Public Class cls_Poutre
         Dim lAppuisEtais As Boolean
         Dim lAppuisEtaisPrec As Boolean
         Dim indTabElt As Integer
+        Dim k, kFin As Integer
+        Dim lMultiInd As Boolean
+        'Dim nbNodes As Integer = Me.Nodes.nbNodes
+        'Dim nbApps As Integer = Me.Nodes.NbAppuis
 
         '--> Initialisation
 
@@ -4697,50 +4709,71 @@ Public Class cls_Poutre
         For jCdc = 0 To Me.ChargesA.Count - 1
             If (Me.ChargesA(jCdc).EstNonNul(iTravP, iTravD) Or Me.ChargesA(jCdc).lShadow) Then
 
-                indTabElt = Me.ChargesA(jCdc).IndElts(0)
-                '# Préparation des propriétés des éléments
-                If (IndEltPrec <> indTabElt) Then
-                    Me.Analyse.AttribueProprietesElements(Me.Elements(indTabElt).Aire, Me.Elements(indTabElt).InertieY)
-                    IndEltPrec = indTabElt
-                End If
+                lMultiInd = Me.ChargesA(jCdc).lMultiInd
 
-                '# Transfert du chargement
-                If Me.ChargesA(jCdc).lShadow Then jCasTransfert = Me.ChargesA(jCdc).iShadow Else jCasTransfert = jCdc
-                Me.Analyse.TransfertChargementA(Me.ChargesA(jCasTransfert), iTravP, iTravD, Me.LongueurTravee, Me.LargeurInfluence)
+                If lmultiind Then kFin = 1 Else kFin = 0
 
-                '# Préparation des appuis (dans le cas des étais ponctuels)
-                lAppuisEtais = (Me.ChargesA(jCdc).Symbol = symbG1PP)
+                For k = 0 To kFin
 
-                If lPrem Then
-                    Me.Analyse.Appuis(Me.Nodes, lAppuisEtais)
-                    lAppuisEtaisPrec = lAppuisEtais
-                    lPrem = False
-                Else
-                    If Not (lAppuisEtaisPrec = lAppuisEtais) Then
+                    indTabElt = Me.ChargesA(jCdc).IndElts(k)
+                    '# Préparation des propriétés des éléments
+                    If (IndEltPrec <> indTabElt) Then
+                        Me.Analyse.AttribueProprietesElements(Me.Elements(indTabElt).Aire, Me.Elements(indTabElt).InertieY)
+                        IndEltPrec = indTabElt
+                    End If
+
+                    '# Transfert du chargement
+                    If k = 0 Then
+                        If Me.ChargesA(jCdc).lShadow Then jCasTransfert = Me.ChargesA(jCdc).iShadow Else jCasTransfert = jCdc
+                        Me.Analyse.TransfertChargementA(Me.ChargesA(jCasTransfert), iTravP, iTravD, Me.LongueurTravee, Me.LargeurInfluence)
+                    End If
+
+                    '# Préparation des appuis (dans le cas des étais ponctuels)
+                    lAppuisEtais = (Me.ChargesA(jCdc).Symbol = symbG1PP)
+
+                    If lPrem Then
                         Me.Analyse.Appuis(Me.Nodes, lAppuisEtais)
                         lAppuisEtaisPrec = lAppuisEtais
-                    End If
-                End If
-
-                '=== LANCER LE CALCUL ===
-                Me.Analyse.RunRDM(lOK)
-
-                '== Récupération des résultats
-                '# Récupération des réactions aux étais pour préparer le cas de charge G1C
-                If (Me.ChargesA(jCdc).Symbol = symbG1PP) And (Not Me.ChargesA(jCdc).lShadow) Then
-                    Me.InitialiseChargeEtais(Me.ChargesA(Me.IndiceCasG1C), Me.Analyse.Reactions)
-                End If
-
-                If lOK Then
-                    If Me.ChargesA(jCdc).lShadow Then
-                        Me.ChargesA(Me.ChargesA(jCdc).iShadow).RecupereFlecheEta(Me.Analyse.Fleches)
+                        lPrem = False
                     Else
-                        Me.ChargesA(jCdc).RecupereResultats(Me.Analyse.Tranchants, Me.Analyse.Moments, Me.Analyse.Fleches, Me.Analyse.Rotations, Me.Analyse.Reactions)
+                        If Not (lAppuisEtaisPrec = lAppuisEtais) Then
+                            Me.Analyse.Appuis(Me.Nodes, lAppuisEtais)
+                            lAppuisEtaisPrec = lAppuisEtais
+                        End If
                     End If
-                Else
-                    MsgBox("Error calculation of " & Me.ChargesA(jCdc).Nom, MsgBoxStyle.Critical, "cls_Poutre/AAA_CalculMNVInternesN")
-                End If
 
+                    '=== LANCER LE CALCUL ===
+                    Me.Analyse.RunRDM(lOK)
+
+                    '== Récupération des résultats
+                    '# Récupération des réactions aux étais pour préparer le cas de charge G1C
+                    If (Me.ChargesA(jCdc).Symbol = symbG1PP) And (Not Me.ChargesA(jCdc).lShadow) Then
+                        Me.InitialiseChargeEtais(Me.ChargesA(Me.IndiceCasG1C), Me.Analyse.Reactions)
+                    End If
+
+                    If lOK Then
+                        If Me.ChargesA(jCdc).lShadow Then
+                            If lMultiInd Then
+                                Me.ChargesA(Me.ChargesA(jCdc).iShadow).RecupereFlecheEtaMulti(Me.Analyse.Fleches, k = 0, Me.ChargesA(jCdc).Fraction1)
+                            Else
+                                Me.ChargesA(Me.ChargesA(jCdc).iShadow).RecupereFlecheEta(Me.Analyse.Fleches)
+                            End If
+                        Else
+                            If lMultiInd Then
+                                Me.ChargesA(jCdc).RecupereResultatsMulti(Me.Analyse.Tranchants, Me.Analyse.Moments, Me.Analyse.Fleches,
+                                                                         Me.Analyse.Rotations, Me.Analyse.Reactions,
+                                                                         k = 0, Me.ChargesA(jCdc).Fraction1)
+                            Else
+                                Me.ChargesA(jCdc).RecupereResultats(Me.Analyse.Tranchants, Me.Analyse.Moments, Me.Analyse.Fleches, Me.Analyse.Rotations, Me.Analyse.Reactions)
+                            End If
+                        End If
+                    Else
+
+                        MsgBox("Error calculation of " & Me.ChargesA(jCdc).Nom, MsgBoxStyle.Critical, "cls_Poutre/AAA_CalculMNVInternesN")
+
+                    End If
+
+                Next
             End If
         Next
 
