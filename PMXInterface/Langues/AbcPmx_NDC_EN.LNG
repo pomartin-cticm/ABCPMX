@@ -530,6 +530,8 @@ ENCASEMENTC				= Concrete encasement
 ENCREINFORCEMENTS		= Encasement reinforcements	
 ASSMPOS					= With properties for positive bending moments
 ASSMNEG					= With properties for negative bending moments
+FRACTION 				= Ratio
+LONGTERMPSI2			= According to EN 1990:2004, 4.1.3 (1) c), the ratio $ of live loads is considered as a long term effect
 
 #NDC_VERIFICATIONSULS
 ULS_CHECKS				= Ultimate Limit States

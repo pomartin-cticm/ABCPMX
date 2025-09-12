@@ -41,6 +41,8 @@ Imports PMXMoteur2
 
 #Region " Renseignement des paramètres de la poutre "
 
+        Dim Psi2 As Decimal = 0.3
+
         'GEOMETRIE
         myPoutre.lTraveeConsoleGauche = False
         myPoutre.lTraveeConsoleDroite = False
@@ -110,8 +112,10 @@ Imports PMXMoteur2
             .lGammaV_unique = True
             .GammaVc = 1.25
             .GammaVs = 1.25
+            .Psi2_Q1 = Psi2
         End With
         myPoutre.Param.EtaW = 1
+        myPoutre.Param.lPsi2LongTerm = True
 
 #End Region
 
@@ -568,7 +572,8 @@ Imports PMXMoteur2
 
         Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
         myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(2).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        ValRef = 5 * 7.5 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 106571 * 10 ^ (-8)) * 1000
+        ValRef = (1 - Psi2) * 5 * 7.5 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 106571 * 10 ^ (-8)) * 1000
+        ValRef += Psi2 * 5 * 7.5 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 74467 * 10 ^ (-8)) * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
         '--> Fleche due au retrait 

@@ -4636,7 +4636,12 @@ Module Mod_NoteCalcul
 
         '--> Déclaration
 
-        Dim pLC() As Single = {40, 20, 12, 12}
+        Dim pLC() As Single = {38, 16, 8, 11, 11}
+        Const iTITRE As Integer = 0
+        Const iPHASE As Integer = 1
+        Const iFRACT As Integer = 2
+        Const iDALLE As Integer = 3
+        Const iENROB As Integer = 4
         Dim NCOL As Integer
         Dim lMixte As Boolean = myPoutre.lMixte
         Dim lEnrob As Boolean = myPoutre.lEnrobage
@@ -4651,8 +4656,18 @@ Module Mod_NoteCalcul
         Dim iLastCase, iCas, nbCas As Integer
         Dim lNoteConfig As Boolean = False
         Dim SymbolConfig() As String = {"Q1#1", "Q1#2", "Q1#3", "Q2#1", "Q2#2", "Q2#3"}
+        Dim lPsi2 As Boolean = myPoutre.Param.lPsi2LongTerm
+        Dim lChargeQ(1) As Boolean
+        Dim lChargeFract As Boolean
+        Dim strFract As String
+        Dim Psi2 As Decimal
+        Dim nEqDalleG2 As Decimal
+        Dim nEqEnrobG2 As Decimal
+        Dim lNoteFract As Boolean = False
 
         '--> Initialisation
+
+        If (lMixte Or lEnrob) Then ExtraireNeqG2(myPoutre, nEqDalleG2, nEqEnrobG2)
 
         If lMixte And lEnrob Then
             NCOL = 4
@@ -4661,6 +4676,8 @@ Module Mod_NoteCalcul
         Else
             NCOL = 1
         End If
+        If (lMixte Or lEnrob) And lPsi2 Then NCOL += 1
+
         nbCas = 0
         ReDim lAffiche(myPoutre.ChargesA.Count - 1)
         For iCas = 0 To myPoutre.ChargesA.Count - 1
@@ -4683,28 +4700,34 @@ Module Mod_NoteCalcul
 
         InitialiseLigneTableau(NCOL, HLIGNE)
 
-        AddCelluleFond(pLC(0), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, BlocAnalyse("LOADCASES"))
+        AddCelluleFond(pLC(iTITRE), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, BlocAnalyse("LOADCASES"))
         If lMixte Or lEnrob Then
-            AddCelluleFond(pLC(1), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, BlocAnalyse("PHASE"))
+            AddCelluleFond(pLC(iPHASE), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, BlocAnalyse("PHASE"))
+        End If
+        If lPsi2 And (lMixte Or lEnrob) Then
+            AddCelluleFond(pLC(iFRACT), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, BlocAnalyse("FRACTION"))
         End If
         If lMixte Then
-            AddCelluleFond(pLC(2), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
+            AddCelluleFond(pLC(iDALLE), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
         End If
         If lEnrob Then
-            AddCelluleFond(pLC(3), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
+            AddCelluleFond(pLC(iENROB), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
         End If
 
         InitialiseLigneTableau(NCOL, HLIGNE)
 
-        AddCelluleFond(pLC(0), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
+        AddCelluleFond(pLC(iTITRE), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
         If lMixte Or lEnrob Then
-            AddCelluleFond(pLC(1), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
+            AddCelluleFond(pLC(iPHASE), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
+        End If
+        If lPsi2 Then
+            AddCelluleFond(pLC(iFRACT), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
         End If
         If lMixte Then
-            AddCelluleFond(pLC(2), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, BlocAnalyse("SLAB"))
+            AddCelluleFond(pLC(iDALLE), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, BlocAnalyse("SLAB"))
         End If
         If lEnrob Then
-            AddCelluleFond(pLC(3), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, BlocAnalyse("ENCASEMENT"))
+            AddCelluleFond(pLC(iENROB), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, BlocAnalyse("ENCASEMENT"))
         End If
 
         '--> Boucles sur les cas de charges
@@ -4719,7 +4742,19 @@ Module Mod_NoteCalcul
                 '# Titre du cas de charge
 
                 Titre = GetTitreFromSymbole(myPoutre.ChargesA(iCas).Symbol)
-                AddCellule(pLC(0), pBordures, PositionTexteInCell.Gauche, myPoutre.ChargesA(iCas).Symbol & " " & Titre)
+
+                lChargeQ(0) = (myPoutre.ChargesA(iCas).Symbol = cls_Poutre.SymboleQ1)
+                lChargeQ(1) = (myPoutre.ChargesA(iCas).Symbol = cls_Poutre.SymboleQ2)
+                If lChargeQ(0) Then
+                    Psi2 = myPoutre.Param.Gamma.Psi2_Q1
+                ElseIf lChargeQ(0) Then
+                    Psi2 = myPoutre.Param.Gamma.Psi2_Q2
+                End If
+                '-- Détection d'une charge d'exploitation avec fraction long terme
+                lChargeFract = (lChargeQ(0) Or lChargeQ(1)) And lPsi2 And (lMixte Or lEnrob)
+                If lChargeFract Then lNoteFract = True
+
+                AddCellule(pLC(iTITRE), pBordures, PositionTexteInCell.Gauche, myPoutre.ChargesA(iCas).Symbol & " " & Titre)
 
                 If SymbolConfig.Contains(myPoutre.ChargesA(iCas).Symbol) Then lNoteConfig = True
 
@@ -4745,23 +4780,67 @@ Module Mod_NoteCalcul
                         Phase = BlocAnalyse("STEELENCASED")
                     End If
 
-                    AddCellule(pLC(1), pBordures, PositionTexteInCell.Gauche, Phase)
+                    AddCellule(pLC(iPHASE), pBordures, PositionTexteInCell.Gauche, Phase)
+                End If
+
+                '# Fraction
+
+                If lPsi2 And (lMixte Or lEnrob) Then
+
+                    If lChargeFract Then
+                        strFract = GetStringInUnitN((1 - Psi2), Enu_TypeVariable.SansType, 4, 3, Enu_AfficheUnite.Non, True)
+                    Else
+                        strFract = ""
+                    End If
+
+                    AddCellule(pLC(iFRACT), pBordures, PositionTexteInCell.Centre, strFract)
+
                 End If
 
                 '# Coefficient d'équivalence dalle
 
                 If lMixte Then
                     If lDalle Then
-                        AddCellule(pLC(2), pBordures, PositionTexteInCell.Centre, GetStringInUnit(myPoutre.Elements(iTab).nEqDalle, Enu_TypeVariable.SansType, 3, 2, False))
+                        AddCellule(pLC(iDALLE), pBordures, PositionTexteInCell.Centre, GetStringInUnit(myPoutre.Elements(iTab).nEqDalle, Enu_TypeVariable.SansType, 3, 2, False))
                     Else
-                        AddCellule(pLC(2), pBordures, PositionTexteInCell.Centre, "-")
+                        AddCellule(pLC(iDALLE), pBordures, PositionTexteInCell.Centre, "-")
                     End If
                 End If
 
                 '# Coefficient d'équivalence enrobage
 
                 If lEnrob Then
-                    AddCellule(pLC(3), pBordures, PositionTexteInCell.Centre, GetStringInUnit(myPoutre.Elements(iTab).nEqEnrob, Enu_TypeVariable.SansType, 3, 2, False))
+                    AddCellule(pLC(iENROB), pBordures, PositionTexteInCell.Centre, GetStringInUnit(myPoutre.Elements(iTab).nEqEnrob, Enu_TypeVariable.SansType, 3, 2, False))
+                End If
+
+                '==== Affichage de la partie long terme des charges d'exploitation ====
+
+                If lChargeFract Then
+
+                    InitialiseLigneTableau(NCOL, HLIGNE)
+                    '# Titre du cas de charge => Pas d'affichage
+                    AddCellule(pLC(iTITRE), pBordures, PositionTexteInCell.Gauche, "")
+                    '# Phase
+                    If lMixte Or lEnrob Then
+                        AddCellule(pLC(iPHASE), pBordures, PositionTexteInCell.Gauche, "")
+                    End If
+                    '# Fraction
+                    If lPsi2 And (lMixte Or lEnrob) Then
+                        strFract = GetStringInUnitN((Psi2), Enu_TypeVariable.SansType, 4, 3, Enu_AfficheUnite.Non, True)
+                        AddCellule(pLC(iFRACT), pBordures, PositionTexteInCell.Centre, strFract)
+                    End If
+                    '# Coefficient d'équivalence dalle
+                    If lMixte Then
+                        If lDalle Then
+                            AddCellule(pLC(iDALLE), pBordures, PositionTexteInCell.Centre, GetStringInUnit(nEqDalleG2, Enu_TypeVariable.SansType, 3, 2, False))
+                        Else
+                            AddCellule(pLC(iDALLE), pBordures, PositionTexteInCell.Centre, "-")
+                        End If
+                    End If
+                    '# Coefficient d'équivalence enrobage
+                    If lEnrob Then
+                        AddCellule(pLC(iENROB), pBordures, PositionTexteInCell.Centre, GetStringInUnit(nEqEnrobG2, Enu_TypeVariable.SansType, 3, 2, False))
+                    End If
                 End If
 
             End If
@@ -4777,6 +4856,11 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & "n / " & BlocAnalyse("ENCASEMENT") & ": \T30" & BlocAnalyse("NENCASEMENT"))
         End If
 
+        If lNoteFract Then
+            Dim SymbolPsi2 As String = "\Sy\s\-2\="
+            AddLigneNDC(TABW2 & RemplaceDollar(BlocAnalyse("LONGTERMPSI2"), SymbolPsi2))
+        End If
+
         '--> Note sur les configurations
 
         Dim strFormatNoteFin As String = "\i"
@@ -4788,6 +4872,37 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW3 & strPuce & BlocAnalyse("CONFIGURATION1"))
             AddLigneNDC(TABW3 & strPuce & BlocAnalyse("CONFIGURATION2"))
             AddLigneNDC(TABW3 & strPuce & BlocAnalyse("CONFIGURATION3") & strFormatNoteFin)
+        End If
+
+    End Sub
+
+    Private Sub ExtraireNeqG2(myBeam As cls_Poutre, ByRef nEqDalleG2 As Decimal, ByRef nEqEnrobG2 As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   12/09/25 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Extrait les coefficients d'équivalence G2 pour une poutre
+        '-------------------------------------------------------------------------------------------
+        '   myBeam          [E] :   Poutre  
+        '   nEqDalleG2      [S] :   Coefficient d'équivalence dalle G2
+        '   nEqEnrobG2      [S] :   Coefficient d'équivalence enrobage G2
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim RH As Decimal = myBeam.Param.RH
+        Dim TimeT As Decimal = myBeam.Param.AgeT
+        Dim H0Dalle As Decimal = myBeam.Dalle.NotionalSizeH0(myBeam)
+        Dim H0Enrob As Decimal = myBeam.Section.NotionalSizeEnrobage
+        Dim lGene1 As Boolean = myBeam.Param.lGeneration1
+
+        '--( Calculs 
+
+        If myBeam.lMixte Then
+            nEqDalleG2 = myBeam.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, myBeam.Param.AgeT0G2(0), myBeam.Param.PsiLPermanent, lGene1)
+        End If
+
+        If myBeam.lEnrobage Then
+            nEqEnrobG2 = myBeam.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, myBeam.Param.AgeT0G2(1), myBeam.Param.PsiLPermanent, lGene1)
         End If
 
     End Sub

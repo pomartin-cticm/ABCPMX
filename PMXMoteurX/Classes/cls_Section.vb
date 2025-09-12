@@ -645,12 +645,19 @@ Public Class cls_Section
 
         Dim pNPro As Decimal = 0
         Dim Afs, Afi, Aspd As Decimal
+        Dim plLam As Boolean = (Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
+
+        Dim lSlimPlat As Boolean = Me.lSlimFloor And Not Me.lSlimFloor_SAB
 
         '--> Initialisation
 
         Afs = Me.ProfilA.AireFs
         Afi = Me.ProfilA.AireFi
-        Aspd = Me.ProfilA.AirePlat
+        If (Me.ProfilA.lPlat And plLam) Or lSlimPlat Then
+            Aspd = Me.ProfilA.AirePlat
+        Else
+            Aspd = 0
+        End If
 
         '--> Calcul
 

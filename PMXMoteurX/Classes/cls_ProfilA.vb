@@ -151,7 +151,10 @@ Public Class cls_ProfilA
             Dim pAire As Decimal
 
             Select Case Me.typeProfileAcier
-                Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.LamineSlimSAB
+                Case Enum_TypeSectionAcier.Lamine
+                    pAire = Me.AireFi + Me.AireFs + Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rci ^ 2 + Me.Rcs ^ 2) / 2
+                    If Me.lPlat Then pAire += Me.Plat_b * Me.Plat_t
+                Case Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.LamineSlimSAB
                     pAire = Me.AireFi + Me.AireFs + Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rci ^ 2 + Me.Rcs ^ 2) / 2
                 Case Enum_TypeSectionAcier.LamineSlimSFB
                     pAire = Me.AireFi + Me.AireFs + Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rci ^ 2 + Me.Rcs ^ 2) / 2 + Me.Plat_b * Me.Plat_t

@@ -542,6 +542,16 @@ Public Class cls_Poutre
 
 #Region " Propriétés "
 
+    Public Shared ReadOnly Property SymboleQ1 As String
+        Get
+            Return symbQ1
+        End Get
+    End Property
+    Public Shared ReadOnly Property SymboleQ2 As String
+        Get
+            Return symbQ2
+        End Get
+    End Property
     ''' <summary>
     ''' Renvoi la masse totale de la poutre en cours 
     ''' </summary>
@@ -4388,11 +4398,12 @@ Public Class cls_Poutre
 
         '--> Préparation des cas de charges shadow pour les poutres mixtes
 
-        If lMixte And Me.Param.lFlechesETA Then Me.InitialiseCasdeChargesCalculShadow()
+        If lMixte And Me.Param.lFlechesETA Then Me.InitialiseCasdeChargesCalculShadow(nEqDalleG2, nEqEnrobG2)
+
 
     End Sub
 
-    Private Sub InitialiseCasdeChargesCalculShadow()
+    Private Sub InitialiseCasdeChargesCalculShadow(nEqDalleG2 As Decimal, nEqEnrobG2 As Decimal)
         '-------------------------------------------------------------------------------------------
         '   03/02/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -4401,6 +4412,9 @@ Public Class cls_Poutre
         '   Chaque cas est la doublure d'un cas réel
         '   Il permet de calculer la flèche de la poutre mixte en prenant en compte la rigidité de la connexion
         '   Les cas de charges shadow sont supprimés après l'analyse globale
+        '-------------------------------------------------------------------------------------------
+        '   nEqDalleG2      [E] :           Coefficient d'équivalence pour le béton de la dalle dans le cas G2
+        '   nEqEnrobG2      [E] :           Coefficient d'équivalence pour le béton de l'enrobage dans le cas G2    
         '-------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -4424,6 +4438,8 @@ Public Class cls_Poutre
 
         If Me.lMixte Then
 
+            indLT = Me.IndiceTabElts(lMixte, nEqDalleG2, nEqEnrobG2, True)
+
             For iCas = 0 To nbCas - 1
 
                 indiceElt = Me.ChargesA(iCas).IndElts(0)
@@ -4439,8 +4455,6 @@ Public Class cls_Poutre
                     nEqEnrob = Me.Elements(indiceElt).nEqEnrob
 
                     indEltShadow = Me.IndiceTabElts(lMixte, nEqDalle, nEqEnrob, True)
-
-                    If Me.ChargesA(iCas).Symbol = symbG2 Then indLT = indEltShadow
 
                     If lMultiInd Then
                         Me.ChargesA.Add(New cls_CasDeCharge(Me.ChargesA(iCas).Nom, Me.ChargesA(iCas).Symbol, iCas, indEltShadow, indLT, Me.ChargesA(iCas).Fraction1))

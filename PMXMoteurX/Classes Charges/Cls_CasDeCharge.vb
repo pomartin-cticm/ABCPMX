@@ -84,6 +84,7 @@
         Me.UZEta = Nothing
 
         Me.lMultiInd = False
+
     End Sub
 
     Public Sub New(pNom As String, pSymbol As String, IndShadow As Integer,

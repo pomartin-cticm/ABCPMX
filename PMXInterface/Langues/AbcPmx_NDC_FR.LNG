@@ -530,6 +530,8 @@ ENCASEMENTC				= Enrobage béton
 ENCREINFORCEMENTS		= Armatures enrobage
 ASSMPOS					= Avec les propriétés sous moment positif
 ASSMNEG					= Avec les propriétés sous moment négatif
+FRACTION 				= Ratio
+LONGTERMPSI2			= La fraction $ des charges variables est considérée comme un effet de long terme (EN 1990:2004, 4.1.3 (1) c))
 
 #NDC_VERIFICATIONSULS
 ULS_CHECKS				= États Limites Ultimes
