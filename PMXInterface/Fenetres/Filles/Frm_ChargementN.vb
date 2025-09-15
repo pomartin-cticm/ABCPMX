@@ -86,6 +86,11 @@ Public Class Frm_ChargementN
     Dim strPoutreAcierEnrob As String = "Poutre acier partiellement enrobée"
     Dim strPoutreAcier As String = "Poutre acier"
 
+    Dim strEtaiementSans As String = "Sans étaiement"
+    Dim strEtaiementTotal As String = "Étaiement complet"
+    Dim strEtaiementPoints As String = "Étaiements ponctuels"
+    Dim strReference As String
+
     Dim lGeneration1 As Boolean = MyProjet.Poutres(MyProjet.IndEnCours).Param.lGeneration1
 #End Region
 
@@ -233,9 +238,11 @@ Public Class Frm_ChargementN
     End Sub
 
     Private Sub GestionLangues()
+
         If File.Exists(LogicielFichiers.Langue) Then
+
             Dim strLoadedKey As String = ""
-            Const CLE As String = ""
+            Dim CLE As String = ""
 
             Dim Bloc As New Dictionary(Of String, String)
             Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_CHARGEMENT")
@@ -244,14 +251,14 @@ Public Class Frm_ChargementN
             Try
                 '=== MENU PRINCIPAL ==============================================================='
 
-                Me.Text = Bloc("TITLE")
-                Me.btn_OK.Text = Bloc("OK")
-                Me.btn_Annuler.Text = Bloc("CANCEL")
+                CLE = Bloc("TITLE") : Me.Text = CLE                     ' Bloc("TITLE")
+                CLE = Bloc("OK") : Me.btn_OK.Text = CLE                 '  Bloc("OK")
+                CLE = Bloc("CANCEL") : Me.btn_Annuler.Text = CLE        '  Bloc("CANCEL")
 
                 '=== CHOIX DE LA CHARGE ==============================================================='
 
-                Me.lbl_ChoixCharges.Text = Bloc("LOADCASE")
-                Me.lbl_ChoixCharge.Text = Bloc("LOADCASE")
+                CLE = Bloc("LOADCASE") : Me.lbl_ChoixCharges.Text = CLE    '  Bloc("LOADCASE")
+                CLE = Bloc("LOADCASE") : Me.lbl_ChoixCharge.Text = CLE     '  Bloc("LOADCASE")
 
                 Me.rad_G1.Text = "G1"
                 Me.rad_G2.Text = "G2"
@@ -259,72 +266,76 @@ Public Class Frm_ChargementN
                 Me.rad_Q2.Text = "Q2"
                 Me.rad_Qc.Text = "QC"
 
-                Me.lbl_Span.Text = Bloc("SPAN")
-                strTypeTravee_ConsoleGauche = Bloc("LEFTCANT")
-                strTypeTravee_TraveeCentrale = Bloc("MAINSPAN")
-                strTypeTravee_ConsoleDroite = Bloc("RIGHTCANT")
-                strSpan = Bloc("SPAN")
+                CLE = Bloc("SPAN") : Me.lbl_Span.Text = CLE                     '  Bloc("SPAN")
+                CLE = Bloc("LEFTCANT") : strTypeTravee_ConsoleGauche = CLE      '  Bloc("LEFTCANT")
+                CLE = Bloc("MAINSPAN") : strTypeTravee_TraveeCentrale = CLE     '  Bloc("MAINSPAN")
+                CLE = Bloc("RIGHTCANT") : strTypeTravee_ConsoleDroite = CLE     '  Bloc("RIGHTCANT")
+                CLE = Bloc("SPAN") : strSpan = CLE                              '  Bloc("SPAN")
 
-                WarningMessage_CmbTravee = Bloc("WARNING_CMBTRAVEE")
+                CLE = Bloc("WARNING_CMBTRAVEE") : WarningMessage_CmbTravee = CLE      ' Bloc("WARNING_CMBTRAVEE")
 
-                strInfoG = Bloc("INFO_G")
-                strInfoG1 = Bloc("INFO_G1")
-                strInfoG2 = Bloc("INFO_G2")
-                strInfoQ1 = Bloc("INFO_Q1")
-                strInfoQ2 = Bloc("INFO_Q2")
-                strInfoQc = Bloc("INFO_QC")
+                CLE = Bloc("INFO_G") : strInfoG = CLE                           ' Bloc("INFO_G")
+                CLE = Bloc("INFO_G1") : strInfoG1 = CLE                         ' Bloc("INFO_G1")
+                CLE = Bloc("INFO_G2") : strInfoG2 = CLE                         ' Bloc("INFO_G2")
+                CLE = Bloc("INFO_Q1") : strInfoQ1 = CLE                         ' Bloc("INFO_Q1")
+                CLE = Bloc("INFO_Q2") : strInfoQ2 = CLE                         ' Bloc("INFO_Q2")
+                CLE = Bloc("INFO_QC") : strInfoQc = CLE                         ' Bloc("INFO_QC")
 
                 '=== FORCE SURFACIQUE ==============================================================='
-                Me.lbl_ChargesSurfaciques.Text = Bloc("SURFACELOAD")
-                Me.lbl_WidthApplication.Text = Bloc("WIDTHAPPLICATION")
-                Me.lbl_UniformLoad.Text = Bloc("UNIFORMLOAD")
-                Me.lbl_ResultingForce.Text = Bloc("RESULTINGFORCE")
-
-                Me.lbl_UnitWidthApplication.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
-                Me.lbl_UnitUniformLoad.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "²"
-                Me.lbl_UnitResultingForce.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+                CLE = Bloc("SURFACELOAD") : Me.lbl_ChargesSurfaciques.Text = CLE        ' Bloc("SURFACELOAD")
+                CLE = Bloc("WIDTHAPPLICATION") : Me.lbl_WidthApplication.Text = CLE     ' Bloc("WIDTHAPPLICATION")
+                CLE = Bloc("UNIFORMLOAD") : Me.lbl_UniformLoad.Text = CLE               ' Bloc("UNIFORMLOAD")
+                CLE = Bloc("RESULTINGFORCE") : Me.lbl_ResultingForce.Text = CLE         ' Bloc("RESULTINGFORCE")
 
                 'Me.lbl_ResultingForce.Location = New Point(257, 38)
 
                 '=== FORCE LINEIQUE ==============================================================='
-                Me.lbl_ChargesLineiques.Text = Bloc("DISTRIBUTEDLOAD")
-                Me.btn_AjouterLineique.Text = Bloc("ADD")
-                Me.btn_SupprimerLineique.Text = Bloc("DELETE")
-                Me.btn_InfoPP.Text = Bloc("INFORMATION")
-
-                Me.txt_x1_Lineique.Text = "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
-                Me.txt_F1_Lineique.Text = "q (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
-                Me.txt_x2_Lineique.Text = "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
-                Me.txt_F2_Lineique.Text = "q (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+                CLE = Bloc("DISTRIBUTEDLOAD") : Me.lbl_ChargesLineiques.Text = CLE      ' Bloc("DISTRIBUTEDLOAD")
+                CLE = Bloc("ADD") : Me.btn_AjouterLineique.Text = CLE                   '  Bloc("ADD")
+                CLE = Bloc("DELETE") : Me.btn_SupprimerLineique.Text = CLE              ' Bloc("DELETE")
+                CLE = Bloc("INFORMATION") : Me.btn_InfoPP.Text = CLE                    ' Bloc("INFORMATION")
 
                 '=== FORCE PONCTUELLE ==============================================================='
-                Me.lbl_ChargesPonctuelles.Text = Bloc("CONCENTRATEDLOAD")
-                Me.btn_AjouterPonctuelle.Text = Bloc("ADD")
-                Me.btn_SupprimerPonctuelle.Text = Bloc("DELETE")
-
-                Me.txt_x_Ponctuelle.Text = "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
-                Me.txt_F_Ponctuelle.Text = "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")"
+                CLE = Bloc("CONCENTRATEDLOAD") : Me.lbl_ChargesPonctuelles.Text = CLE   ' Bloc("CONCENTRATEDLOAD")
+                CLE = Bloc("ADD") : Me.btn_AjouterPonctuelle.Text = CLE                 ' Bloc("ADD")
+                CLE = Bloc("DELETE") : Me.btn_SupprimerPonctuelle.Text = CLE            ' Bloc("DELETE")
 
                 '=== REACTIONS D'APPUIS ==============================================================='
-                Me.lbl_ReactionsAppuis.Text = Bloc("FORCEENDSUPPORT")
-                Me.lbl_LeftSupport.Text = Bloc("LEFTSUPPORT")
-                Me.lbl_RightSupport.Text = Bloc("RIGHTSUPPORT")
-
-                Me.lbl_UnitLeftSupport.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
-                Me.lbl_UnitRightSupport.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
-
+                CLE = Bloc("FORCEENDSUPPORT") : Me.lbl_ReactionsAppuis.Text = CLE       ' Bloc("FORCEENDSUPPORT")
+                CLE = Bloc("LEFTSUPPORT") : Me.lbl_LeftSupport.Text = CLE               ' Bloc("LEFTSUPPORT")
+                CLE = Bloc("RIGHTSUPPORT") : Me.lbl_RightSupport.Text = CLE             ' Bloc("RIGHTSUPPORT")
 
                 '=== Etat de la dalle
 
-                strPoutreMixte = Bloc("COMPOSITEBEAM")
-                strPoutreAcier = Bloc("STEELBEAM")
-                strPoutreAcierEnrob = Bloc("STEELENCASEDBEAM")
-                Me.lbl_NCoef.Text = Bloc("MODULAR")
-                Me.lbl_Ndalle.Text = Bloc("SLAB")
-                Me.lbl_Nenrob.Text = Bloc("ENCASEMENT")
+                CLE = Bloc("COMPOSITEBEAM") : strPoutreMixte = CLE              '  Bloc("COMPOSITEBEAM")
+                CLE = Bloc("STEELBEAM") : strPoutreAcier = CLE                  '  Bloc("STEELBEAM")
+                CLE = Bloc("STEELENCASEDBEAM") : strPoutreAcierEnrob = CLE      '  Bloc("STEELENCASEDBEAM")
+                CLE = Bloc("MODULAR") : Me.lbl_NCoef.Text = CLE                 '  Bloc("MODULAR")
+                CLE = Bloc("SLAB") : Me.lbl_Ndalle.Text = CLE                   '  Bloc("SLAB")
+                CLE = Bloc("ENCASEMENT") : Me.lbl_Nenrob.Text = CLE             '  Bloc("ENCASEMENT")
+
+                CLE = Bloc("NOPROP") : strEtaiementSans = CLE                   ' "Sans étaiement"
+                CLE = Bloc("FULLPROP") : strEtaiementTotal = CLE                ' "Étaiement complet"
+                CLE = Bloc("POINTPROP") : strEtaiementPoints = CLE              ' "Étaiements ponctuels"
+                CLE = Bloc("REFERENCELTPSI2") : strReference = CLE
+
+                '=== CT LT ==============================================================='
+
+                If (LogicielInfo.ListeLangue(LogicielOptions.IndLangue) = FRANCAIS) Then
+                    Me.lbl_CT.Text = "CT"
+                    Me.lbl_LT.Text = "LT"
+                Else
+                    Me.lbl_CT.Text = "ST"
+                    Me.lbl_LT.Text = "LT"
+                End If
+
+                CLE = Bloc("SHORTTERM") : Me.ToolTip1.SetToolTip(Me.lbl_CT, CLE)
+                CLE = Bloc("LONGTERM") : Me.ToolTip1.SetToolTip(Me.lbl_LT, CLE)
 
             Catch ex As Exception
+
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
+
             Finally
                 Bloc.Clear()
             End Try
@@ -337,6 +348,22 @@ Public Class Frm_ChargementN
     End Sub
 
     Private Sub GestionUnites()
+
+        Me.lbl_UnitWidthApplication.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+        Me.lbl_UnitUniformLoad.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "²"
+        Me.lbl_UnitResultingForce.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+
+        Me.txt_x1_Lineique.Text = "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+        Me.txt_F1_Lineique.Text = "q (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+        Me.txt_x2_Lineique.Text = "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+        Me.txt_F2_Lineique.Text = "q (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+
+
+        Me.txt_x_Ponctuelle.Text = "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+        Me.txt_F_Ponctuelle.Text = "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")"
+
+        Me.lbl_UnitLeftSupport.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+        Me.lbl_UnitRightSupport.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
 
     End Sub
 
@@ -671,8 +698,8 @@ Public Class Frm_ChargementN
         Dim strCasNormal As String
         Dim lNDalle As Boolean = False
         Dim lNEnrob As Boolean = False
-        Dim nDalle As Decimal
-        Dim nEnrob As Decimal
+        Dim nDalle, nDalleLT As Decimal
+        Dim nEnrob, nEnrobLT As Decimal
         Dim RH As Decimal
         Dim t0 As Decimal
         Dim PsiL As Decimal
@@ -682,6 +709,8 @@ Public Class Frm_ChargementN
         Dim lConstruction As Boolean
         Dim Psi(2) As Decimal
         Dim lPsi As Boolean = False
+        Dim lChargeQ As Boolean = False
+        Dim lDoubleN As Boolean
 
         '--( Initialisation
 
@@ -709,9 +738,6 @@ Public Class Frm_ChargementN
 
         '=== MISE A JOUR DU TYPE DE CHARGE ==================================================================================
 
-        Dim strEtaiementSans As String = "Sans étaiement"
-        Dim strEtaiementTotal As String = "Étaiement complet"
-        Dim strEtaiementPoints As String = "Étaiements ponctuels"
 
         Me.lbl_Etaiement.Text = ""
 
@@ -788,6 +814,7 @@ Public Class Frm_ChargementN
                 End If
                 lPsi = True
                 Psi = {MyPoutreLoc.Param.Gamma.Psi0_Q1, MyPoutreLoc.Param.Gamma.Psi1_Q1, MyPoutreLoc.Param.Gamma.Psi2_Q1}
+                lChargeQ = True
             Case rad_Q2.Checked
                 Me.lbl_EtatDalle.Text = strCasNormal
                 lNDalle = lMixte
@@ -800,19 +827,44 @@ Public Class Frm_ChargementN
                 End If
                 lPsi = True
                 Psi = {MyPoutreLoc.Param.Gamma.Psi0_Q2, MyPoutreLoc.Param.Gamma.Psi1_Q2, MyPoutreLoc.Param.Gamma.Psi2_Q2}
-
+                lChargeQ = True
         End Select
 
         '=== MISE A JOUR DES COEFFICIENTS EQUIVALENCE ACIER BETON ===========================================================
 
+        '***( indentification des cas avec double coefficient d'équivalence
+
+        lDoubleN = lChargeQ And MyPoutreLoc.Param.lPsi2LongTerm And (MyPoutreLoc.lMixte Or MyPoutreLoc.lEnrobage)
+
+        Me.pan_DoubleN.Visible = lDoubleN
+        Me.txt_NDalleLTPsi2.Visible = lDoubleN
+        Me.txt_NenrobLTPsi2.Visible = lDoubleN
+        Me.img_info.Visible = lDoubleN
+
+        '***( Coefficient de base
+
+        Dim lGene1 As Boolean = MyPoutreLoc.Param.lGeneration1
+
         Me.pan_Ndalle.Visible = lNDalle
         If lNDalle Then
             Me.txt_Ndalle.Text = GetStringInUnitN(nDalle, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True)
+
+            If lDoubleN Then
+                nDalleLT = MyPoutreLoc.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, MyPoutreLoc.Param.AgeT0G2(0), MyPoutreLoc.Param.PsiLPermanent, lGene1)
+
+                Me.txt_NDalleLTPsi2.Text = GetStringInUnitN(nDalleLT, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True)
+            End If
+
         End If
 
         Me.pan_Nenrob.Visible = lNEnrob
         If lNEnrob Then
             Me.txt_Nenrob.Text = GetStringInUnitN(nEnrob, Enu_TypeVariable.SansType, 3, 2, Enu_AfficheUnite.Non, True)
+
+            If lDoubleN Then
+                ' nEqEnrobG2 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.AgeT0G2(1), Me.Param.PsiLPermanent, lGene1)
+
+            End If
         End If
 
         Me.lbl_NCoef.Visible = lNEnrob Or lNDalle
@@ -850,8 +902,6 @@ Public Class Frm_ChargementN
         If lBuild Or Not sender.checked Then Exit Sub
 
         Dim OldChargeEnCours As String = chargeEnCours
-
-
 
         If ValideSaisieFenetre() Then
 
@@ -1564,5 +1614,39 @@ Public Class Frm_ChargementN
     End Sub
 
 #End Region
+
+
+#Region " Infos W "
+
+    Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
+        'If InfoW_lVisible Then
+        '    InfoW_Fermer()
+        'Else
+        PublieInfoPsi2
+        'End If
+    End Sub
+
+    Private Sub PublieInfoPsi2()
+
+        Dim strMessage As String
+        Dim RefEN As String = ""
+
+        If MyPoutreLoc.Param.lGeneration1 Then
+            RefEN = "EN1990:2003, 4.1.3(1) c)"
+        Else
+            RefEN = "EN1990:xxx, yyyyy"
+        End If
+
+        strMessage = RemplaceDollar(strReference, RefEN)
+
+        InfoW.InitialiseInfo()
+        InfoW.AddInfo(strMessage)
+
+        InfoW.Publie()
+
+    End Sub
+
+#End Region
+
 
 End Class

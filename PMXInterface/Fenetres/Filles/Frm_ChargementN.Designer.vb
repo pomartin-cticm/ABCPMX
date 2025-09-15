@@ -42,12 +42,25 @@ Partial Class Frm_ChargementN
         Me.lbl_Span = New System.Windows.Forms.Label()
         Me.lbl_ReactionsAppuis = New System.Windows.Forms.Label()
         Me.pan_ChoixCharges = New System.Windows.Forms.Panel()
+        Me.pan_Psi = New System.Windows.Forms.Panel()
+        Me.img_Psi1 = New System.Windows.Forms.PictureBox()
+        Me.txt_Psi1 = New System.Windows.Forms.TextBox()
+        Me.img_Psi0 = New System.Windows.Forms.PictureBox()
+        Me.txt_Psi0 = New System.Windows.Forms.TextBox()
+        Me.img_Psi2 = New System.Windows.Forms.PictureBox()
+        Me.txt_Psi2 = New System.Windows.Forms.TextBox()
         Me.pan_CoefEquivalence = New System.Windows.Forms.Panel()
+        Me.img_info = New System.Windows.Forms.PictureBox()
+        Me.pan_DoubleN = New System.Windows.Forms.Panel()
+        Me.lbl_LT = New System.Windows.Forms.Label()
+        Me.lbl_CT = New System.Windows.Forms.Label()
         Me.pan_Nenrob = New System.Windows.Forms.Panel()
+        Me.txt_NenrobLTPsi2 = New System.Windows.Forms.TextBox()
         Me.lbl_Nenrob = New System.Windows.Forms.Label()
         Me.txt_Nenrob = New System.Windows.Forms.TextBox()
         Me.lbl_NCoef = New System.Windows.Forms.Label()
         Me.pan_Ndalle = New System.Windows.Forms.Panel()
+        Me.txt_NDalleLTPsi2 = New System.Windows.Forms.TextBox()
         Me.lbl_Ndalle = New System.Windows.Forms.Label()
         Me.txt_Ndalle = New System.Windows.Forms.TextBox()
         Me.pan_Parametres = New System.Windows.Forms.Panel()
@@ -145,13 +158,7 @@ Partial Class Frm_ChargementN
         Me.lbl_ChargesSurfaciques = New System.Windows.Forms.Label()
         Me.ErrorProvider_Frm_Chargement = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
-        Me.pan_Psi = New System.Windows.Forms.Panel()
-        Me.txt_Psi2 = New System.Windows.Forms.TextBox()
-        Me.img_Psi2 = New System.Windows.Forms.PictureBox()
-        Me.img_Psi0 = New System.Windows.Forms.PictureBox()
-        Me.txt_Psi0 = New System.Windows.Forms.TextBox()
-        Me.img_Psi1 = New System.Windows.Forms.PictureBox()
-        Me.txt_Psi1 = New System.Windows.Forms.TextBox()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -160,7 +167,13 @@ Partial Class Frm_ChargementN
         Me.TLpan_PanneauGauche.SuspendLayout()
         Me.pan_ReactionsAppuis.SuspendLayout()
         Me.pan_ChoixCharges.SuspendLayout()
+        Me.pan_Psi.SuspendLayout()
+        CType(Me.img_Psi1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Psi0, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Psi2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_CoefEquivalence.SuspendLayout()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_DoubleN.SuspendLayout()
         Me.pan_Nenrob.SuspendLayout()
         Me.pan_Ndalle.SuspendLayout()
         Me.pan_Parametres.SuspendLayout()
@@ -175,10 +188,6 @@ Partial Class Frm_ChargementN
         Me.pan_ChargesLineiques.SuspendLayout()
         Me.pan_ChargesSurfaciques.SuspendLayout()
         CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_Psi.SuspendLayout()
-        CType(Me.img_Psi2, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Psi0, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Psi1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -416,9 +425,79 @@ Partial Class Frm_ChargementN
         Me.pan_ChoixCharges.Size = New System.Drawing.Size(250, 290)
         Me.pan_ChoixCharges.TabIndex = 2
         '
+        'pan_Psi
+        '
+        Me.pan_Psi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Psi.Controls.Add(Me.img_Psi1)
+        Me.pan_Psi.Controls.Add(Me.txt_Psi1)
+        Me.pan_Psi.Controls.Add(Me.img_Psi0)
+        Me.pan_Psi.Controls.Add(Me.txt_Psi0)
+        Me.pan_Psi.Controls.Add(Me.img_Psi2)
+        Me.pan_Psi.Controls.Add(Me.txt_Psi2)
+        Me.pan_Psi.Location = New System.Drawing.Point(3, 245)
+        Me.pan_Psi.Name = "pan_Psi"
+        Me.pan_Psi.Size = New System.Drawing.Size(242, 36)
+        Me.pan_Psi.TabIndex = 81
+        '
+        'img_Psi1
+        '
+        Me.img_Psi1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Psi1.Location = New System.Drawing.Point(83, 5)
+        Me.img_Psi1.Name = "img_Psi1"
+        Me.img_Psi1.Size = New System.Drawing.Size(33, 20)
+        Me.img_Psi1.TabIndex = 90
+        Me.img_Psi1.TabStop = False
+        '
+        'txt_Psi1
+        '
+        Me.txt_Psi1.BackColor = System.Drawing.Color.LightGray
+        Me.txt_Psi1.Location = New System.Drawing.Point(116, 5)
+        Me.txt_Psi1.Name = "txt_Psi1"
+        Me.txt_Psi1.ReadOnly = True
+        Me.txt_Psi1.Size = New System.Drawing.Size(36, 20)
+        Me.txt_Psi1.TabIndex = 89
+        '
+        'img_Psi0
+        '
+        Me.img_Psi0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Psi0.Location = New System.Drawing.Point(6, 5)
+        Me.img_Psi0.Name = "img_Psi0"
+        Me.img_Psi0.Size = New System.Drawing.Size(33, 20)
+        Me.img_Psi0.TabIndex = 88
+        Me.img_Psi0.TabStop = False
+        '
+        'txt_Psi0
+        '
+        Me.txt_Psi0.BackColor = System.Drawing.Color.LightGray
+        Me.txt_Psi0.Location = New System.Drawing.Point(39, 5)
+        Me.txt_Psi0.Name = "txt_Psi0"
+        Me.txt_Psi0.ReadOnly = True
+        Me.txt_Psi0.Size = New System.Drawing.Size(36, 20)
+        Me.txt_Psi0.TabIndex = 87
+        '
+        'img_Psi2
+        '
+        Me.img_Psi2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Psi2.Location = New System.Drawing.Point(159, 5)
+        Me.img_Psi2.Name = "img_Psi2"
+        Me.img_Psi2.Size = New System.Drawing.Size(33, 20)
+        Me.img_Psi2.TabIndex = 86
+        Me.img_Psi2.TabStop = False
+        '
+        'txt_Psi2
+        '
+        Me.txt_Psi2.BackColor = System.Drawing.Color.LightGray
+        Me.txt_Psi2.Location = New System.Drawing.Point(192, 5)
+        Me.txt_Psi2.Name = "txt_Psi2"
+        Me.txt_Psi2.ReadOnly = True
+        Me.txt_Psi2.Size = New System.Drawing.Size(36, 20)
+        Me.txt_Psi2.TabIndex = 85
+        '
         'pan_CoefEquivalence
         '
         Me.pan_CoefEquivalence.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_CoefEquivalence.Controls.Add(Me.img_info)
+        Me.pan_CoefEquivalence.Controls.Add(Me.pan_DoubleN)
         Me.pan_CoefEquivalence.Controls.Add(Me.pan_Nenrob)
         Me.pan_CoefEquivalence.Controls.Add(Me.lbl_NCoef)
         Me.pan_CoefEquivalence.Controls.Add(Me.pan_Ndalle)
@@ -427,68 +506,138 @@ Partial Class Frm_ChargementN
         Me.pan_CoefEquivalence.Size = New System.Drawing.Size(242, 72)
         Me.pan_CoefEquivalence.TabIndex = 78
         '
+        'img_info
+        '
+        Me.img_info.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
+        Me.img_info.Location = New System.Drawing.Point(2, 34)
+        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_info.Name = "img_info"
+        Me.img_info.Size = New System.Drawing.Size(20, 20)
+        Me.img_info.TabIndex = 81
+        Me.img_info.TabStop = False
+        '
+        'pan_DoubleN
+        '
+        Me.pan_DoubleN.Controls.Add(Me.lbl_LT)
+        Me.pan_DoubleN.Controls.Add(Me.lbl_CT)
+        Me.pan_DoubleN.Location = New System.Drawing.Point(132, 0)
+        Me.pan_DoubleN.Name = "pan_DoubleN"
+        Me.pan_DoubleN.Size = New System.Drawing.Size(113, 21)
+        Me.pan_DoubleN.TabIndex = 78
+        '
+        'lbl_LT
+        '
+        Me.lbl_LT.AutoSize = True
+        Me.lbl_LT.Location = New System.Drawing.Point(57, 4)
+        Me.lbl_LT.Name = "lbl_LT"
+        Me.lbl_LT.Size = New System.Drawing.Size(36, 13)
+        Me.lbl_LT.TabIndex = 1
+        Me.lbl_LT.Text = "lbl_LT"
+        '
+        'lbl_CT
+        '
+        Me.lbl_CT.AutoSize = True
+        Me.lbl_CT.Location = New System.Drawing.Point(6, 4)
+        Me.lbl_CT.Name = "lbl_CT"
+        Me.lbl_CT.Size = New System.Drawing.Size(37, 13)
+        Me.lbl_CT.TabIndex = 0
+        Me.lbl_CT.Text = "lbl_CT"
+        '
         'pan_Nenrob
         '
+        Me.pan_Nenrob.Controls.Add(Me.txt_NenrobLTPsi2)
         Me.pan_Nenrob.Controls.Add(Me.lbl_Nenrob)
         Me.pan_Nenrob.Controls.Add(Me.txt_Nenrob)
-        Me.pan_Nenrob.Location = New System.Drawing.Point(0, 43)
+        Me.pan_Nenrob.Location = New System.Drawing.Point(25, 43)
         Me.pan_Nenrob.Name = "pan_Nenrob"
-        Me.pan_Nenrob.Size = New System.Drawing.Size(234, 24)
+        Me.pan_Nenrob.Size = New System.Drawing.Size(209, 24)
         Me.pan_Nenrob.TabIndex = 2
+        '
+        'txt_NenrobLTPsi2
+        '
+        Me.txt_NenrobLTPsi2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_NenrobLTPsi2.BackColor = System.Drawing.Color.LightGray
+        Me.txt_NenrobLTPsi2.Location = New System.Drawing.Point(155, 2)
+        Me.txt_NenrobLTPsi2.Name = "txt_NenrobLTPsi2"
+        Me.txt_NenrobLTPsi2.ReadOnly = True
+        Me.txt_NenrobLTPsi2.Size = New System.Drawing.Size(48, 20)
+        Me.txt_NenrobLTPsi2.TabIndex = 86
+        Me.txt_NenrobLTPsi2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lbl_Nenrob
         '
+        Me.lbl_Nenrob.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_Nenrob.Location = New System.Drawing.Point(5, 5)
         Me.lbl_Nenrob.Name = "lbl_Nenrob"
-        Me.lbl_Nenrob.Size = New System.Drawing.Size(165, 13)
+        Me.lbl_Nenrob.Size = New System.Drawing.Size(95, 13)
         Me.lbl_Nenrob.TabIndex = 85
         Me.lbl_Nenrob.Text = "lbl_Nenrob"
         Me.lbl_Nenrob.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txt_Nenrob
         '
+        Me.txt_Nenrob.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_Nenrob.BackColor = System.Drawing.Color.LightGray
-        Me.txt_Nenrob.Location = New System.Drawing.Point(173, 1)
+        Me.txt_Nenrob.Location = New System.Drawing.Point(107, 2)
         Me.txt_Nenrob.Name = "txt_Nenrob"
         Me.txt_Nenrob.ReadOnly = True
-        Me.txt_Nenrob.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Nenrob.Size = New System.Drawing.Size(48, 20)
         Me.txt_Nenrob.TabIndex = 84
+        Me.txt_Nenrob.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lbl_NCoef
         '
         Me.lbl_NCoef.Location = New System.Drawing.Point(1, 0)
         Me.lbl_NCoef.Name = "lbl_NCoef"
-        Me.lbl_NCoef.Size = New System.Drawing.Size(232, 16)
+        Me.lbl_NCoef.Size = New System.Drawing.Size(131, 16)
         Me.lbl_NCoef.TabIndex = 3
         Me.lbl_NCoef.Text = "lbl_NCoef"
         Me.lbl_NCoef.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'pan_Ndalle
         '
+        Me.pan_Ndalle.Controls.Add(Me.txt_NDalleLTPsi2)
         Me.pan_Ndalle.Controls.Add(Me.lbl_Ndalle)
         Me.pan_Ndalle.Controls.Add(Me.txt_Ndalle)
-        Me.pan_Ndalle.Location = New System.Drawing.Point(0, 19)
+        Me.pan_Ndalle.Location = New System.Drawing.Point(25, 19)
         Me.pan_Ndalle.Name = "pan_Ndalle"
-        Me.pan_Ndalle.Size = New System.Drawing.Size(234, 24)
+        Me.pan_Ndalle.Size = New System.Drawing.Size(209, 24)
         Me.pan_Ndalle.TabIndex = 1
+        '
+        'txt_NDalleLTPsi2
+        '
+        Me.txt_NDalleLTPsi2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_NDalleLTPsi2.BackColor = System.Drawing.Color.LightGray
+        Me.txt_NDalleLTPsi2.Location = New System.Drawing.Point(155, 2)
+        Me.txt_NDalleLTPsi2.Name = "txt_NDalleLTPsi2"
+        Me.txt_NDalleLTPsi2.ReadOnly = True
+        Me.txt_NDalleLTPsi2.Size = New System.Drawing.Size(48, 20)
+        Me.txt_NDalleLTPsi2.TabIndex = 86
+        Me.txt_NDalleLTPsi2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lbl_Ndalle
         '
-        Me.lbl_Ndalle.Location = New System.Drawing.Point(5, 5)
+        Me.lbl_Ndalle.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Ndalle.Location = New System.Drawing.Point(5, 6)
         Me.lbl_Ndalle.Name = "lbl_Ndalle"
-        Me.lbl_Ndalle.Size = New System.Drawing.Size(165, 13)
+        Me.lbl_Ndalle.Size = New System.Drawing.Size(95, 13)
         Me.lbl_Ndalle.TabIndex = 85
         Me.lbl_Ndalle.Text = "lbl_Ndalle"
         Me.lbl_Ndalle.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txt_Ndalle
         '
+        Me.txt_Ndalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_Ndalle.BackColor = System.Drawing.Color.LightGray
-        Me.txt_Ndalle.Location = New System.Drawing.Point(173, 1)
+        Me.txt_Ndalle.Location = New System.Drawing.Point(107, 2)
         Me.txt_Ndalle.Name = "txt_Ndalle"
         Me.txt_Ndalle.ReadOnly = True
-        Me.txt_Ndalle.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Ndalle.Size = New System.Drawing.Size(48, 20)
         Me.txt_Ndalle.TabIndex = 84
+        Me.txt_Ndalle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'pan_Parametres
         '
@@ -1566,74 +1715,6 @@ Partial Class Frm_ChargementN
         Me.imgList_Navigation.Images.SetKeyName(2, "Suivant")
         Me.imgList_Navigation.Images.SetKeyName(3, "SuivantNonDispo")
         '
-        'pan_Psi
-        '
-        Me.pan_Psi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Psi.Controls.Add(Me.img_Psi1)
-        Me.pan_Psi.Controls.Add(Me.txt_Psi1)
-        Me.pan_Psi.Controls.Add(Me.img_Psi0)
-        Me.pan_Psi.Controls.Add(Me.txt_Psi0)
-        Me.pan_Psi.Controls.Add(Me.img_Psi2)
-        Me.pan_Psi.Controls.Add(Me.txt_Psi2)
-        Me.pan_Psi.Location = New System.Drawing.Point(3, 245)
-        Me.pan_Psi.Name = "pan_Psi"
-        Me.pan_Psi.Size = New System.Drawing.Size(242, 36)
-        Me.pan_Psi.TabIndex = 81
-        '
-        'txt_Psi2
-        '
-        Me.txt_Psi2.BackColor = System.Drawing.Color.LightGray
-        Me.txt_Psi2.Location = New System.Drawing.Point(192, 5)
-        Me.txt_Psi2.Name = "txt_Psi2"
-        Me.txt_Psi2.ReadOnly = True
-        Me.txt_Psi2.Size = New System.Drawing.Size(36, 20)
-        Me.txt_Psi2.TabIndex = 85
-        '
-        'img_Psi2
-        '
-        Me.img_Psi2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Psi2.Location = New System.Drawing.Point(159, 5)
-        Me.img_Psi2.Name = "img_Psi2"
-        Me.img_Psi2.Size = New System.Drawing.Size(33, 20)
-        Me.img_Psi2.TabIndex = 86
-        Me.img_Psi2.TabStop = False
-        '
-        'img_Psi0
-        '
-        Me.img_Psi0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Psi0.Location = New System.Drawing.Point(6, 5)
-        Me.img_Psi0.Name = "img_Psi0"
-        Me.img_Psi0.Size = New System.Drawing.Size(33, 20)
-        Me.img_Psi0.TabIndex = 88
-        Me.img_Psi0.TabStop = False
-        '
-        'txt_Psi0
-        '
-        Me.txt_Psi0.BackColor = System.Drawing.Color.LightGray
-        Me.txt_Psi0.Location = New System.Drawing.Point(39, 5)
-        Me.txt_Psi0.Name = "txt_Psi0"
-        Me.txt_Psi0.ReadOnly = True
-        Me.txt_Psi0.Size = New System.Drawing.Size(36, 20)
-        Me.txt_Psi0.TabIndex = 87
-        '
-        'img_Psi1
-        '
-        Me.img_Psi1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Psi1.Location = New System.Drawing.Point(83, 5)
-        Me.img_Psi1.Name = "img_Psi1"
-        Me.img_Psi1.Size = New System.Drawing.Size(33, 20)
-        Me.img_Psi1.TabIndex = 90
-        Me.img_Psi1.TabStop = False
-        '
-        'txt_Psi1
-        '
-        Me.txt_Psi1.BackColor = System.Drawing.Color.LightGray
-        Me.txt_Psi1.Location = New System.Drawing.Point(116, 5)
-        Me.txt_Psi1.Name = "txt_Psi1"
-        Me.txt_Psi1.ReadOnly = True
-        Me.txt_Psi1.Size = New System.Drawing.Size(36, 20)
-        Me.txt_Psi1.TabIndex = 89
-        '
         'Frm_ChargementN
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1657,7 +1738,15 @@ Partial Class Frm_ChargementN
         Me.pan_ReactionsAppuis.PerformLayout()
         Me.pan_ChoixCharges.ResumeLayout(False)
         Me.pan_ChoixCharges.PerformLayout()
+        Me.pan_Psi.ResumeLayout(False)
+        Me.pan_Psi.PerformLayout()
+        CType(Me.img_Psi1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Psi0, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Psi2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_CoefEquivalence.ResumeLayout(False)
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_DoubleN.ResumeLayout(False)
+        Me.pan_DoubleN.PerformLayout()
         Me.pan_Nenrob.ResumeLayout(False)
         Me.pan_Nenrob.PerformLayout()
         Me.pan_Ndalle.ResumeLayout(False)
@@ -1679,11 +1768,6 @@ Partial Class Frm_ChargementN
         Me.pan_ChargesSurfaciques.ResumeLayout(False)
         Me.pan_ChargesSurfaciques.PerformLayout()
         CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_Psi.ResumeLayout(False)
-        Me.pan_Psi.PerformLayout()
-        CType(Me.img_Psi2, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Psi0, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Psi1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1816,4 +1900,11 @@ Partial Class Frm_ChargementN
     Friend WithEvents txt_Psi1 As TextBox
     Friend WithEvents img_Psi0 As PictureBox
     Friend WithEvents txt_Psi0 As TextBox
+    Friend WithEvents txt_NDalleLTPsi2 As TextBox
+    Friend WithEvents txt_NenrobLTPsi2 As TextBox
+    Friend WithEvents pan_DoubleN As Panel
+    Friend WithEvents lbl_LT As Label
+    Friend WithEvents lbl_CT As Label
+    Friend WithEvents img_info As PictureBox
+    Friend WithEvents ToolTip1 As ToolTip
 End Class

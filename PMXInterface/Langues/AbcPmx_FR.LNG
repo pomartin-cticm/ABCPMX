@@ -213,6 +213,12 @@ STEELENCASEDBEAM		= Poutre acier partiellement enrobée
 MODULAR					= Coefficient d'équivalence
 SLAB					= Dalle
 ENCASEMENT				= Enrobage
+NOPROP					= Sans étaiement
+FULLPROP				= Étaiement complet
+POINTPROP				= Étaiements ponctuels
+SHORTTERM				= Effets à court terme
+LONGTERM				= Effets à long terme
+REFERENCELTPSI2			= Conformément à $, la fraction psi2 des charges variables est considérée comme un effet de long terme
 
 #FRM_COMBINATIONS
 TITLE					= Combinaisons

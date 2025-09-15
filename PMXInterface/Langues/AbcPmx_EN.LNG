@@ -188,7 +188,7 @@ LEFTCANT				= Left cantilever span
 MAINSPAN				= Main span
 RIGHTCANT				= Right cantilever span
 SPAN					= Span
-WARNING_CMBTRAVEE			= All the input data must be correct to select an other the span
+WARNING_CMBTRAVEE		= All the input data must be correct to select an other the span
 SURFACELOAD				= Surface load
 WIDTHAPPLICATION		= Width of application
 UNIFORMLOAD				= Uniform load
@@ -213,6 +213,12 @@ STEELENCASEDBEAM		= Partially encased steel beam
 MODULAR					= Modular ratio
 SLAB					= Slab
 ENCASEMENT				= Encasement
+NOPROP					= No propping
+FULLPROP				= Full propping
+POINTPROP				= Point propping
+SHORTTERM				= Short term effects
+LONGTERM				= Long term effects
+REFERENCELTPSI2			= According to $, the ratio psi2 of live loads is assumed to be a long term effect
 
 #FRM_COMBINATIONS
 TITLE					= Combinations
