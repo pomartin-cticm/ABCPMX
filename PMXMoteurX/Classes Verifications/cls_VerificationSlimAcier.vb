@@ -62,6 +62,7 @@
         Me.CritereM = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         Me.CritereMV = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         Me.CritereV = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+        Me.CritereMY = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
 
         If lElastic Then
             InitialiseCriteresVM(NbNodes, NbCombi, IndDerniereT)
@@ -82,7 +83,6 @@
         '-------------------------------------------------------------------
 
         Me.CritereSigmaA = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
-        Me.CritereMY = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
 
     End Sub
 
@@ -363,7 +363,7 @@
 
             '# Calcul des coefficients de réduction 
 
-            CalculCoefficiensReduction(iCombi, myBeam, QEd) 'GUD: penser à faire la différence en fonction des largeurs participantes 
+            CalculCoefficientsReduction(iCombi, myBeam, QEd) 'GUD: penser à faire la différence en fonction des largeurs participantes 
 
             '# Propriétés réduites
 
@@ -393,9 +393,10 @@
 
             If lVerifElastic Then
                 RunCritereFlexionResistanceElastiqueVM(myBeam, iCombi, SigmaELU)
-                RunCritereResistanceElPlatY(myBeam, iCombi, SigmaELU, SigmaY, TauY)
+                RunCritereResistanceElastiquePlatY(myBeam, iCombi, SigmaELU, SigmaY, TauY)
             Else
                 Me.RunCritereFlexionAcier(myBeam, iCombi, MEd, MplRd, MelRd, ClasseP, ClasseM, lClasse4)
+                Me.RunCritereResistancePlastiquePlatY(myBeam, iCombi, QEd)
             End If
 
             If myBeam.Param.lElasticDesignVM Then 'calcul élastique imposé 
@@ -535,12 +536,15 @@
         ReDim Me.Psi_y_spd(NbCombi - 1, NbNodes - 1)
     End Sub
 
-    Public Sub CalculCoefficiensReduction(iCombi As Integer, myPoutre As cls_Poutre, QEd() As Decimal)
+    Public Sub CalculCoefficientsReduction(iCombi As Integer, myPoutre As cls_Poutre, QEd() As Decimal)
         '-----------------------------------------------------------------------------------------------------------------------------
         '   31/07/25 :  Reprise
         '-----------------------------------------------------------------------------------------------------------------------------
         '   Calcul des coefficients de réduction liés à la flexion transversale des semelles inférieures de slim
         '-----------------------------------------------------------------------------------------------------------------------------
+        '   iCombi      [E] :   Indice de la combinaison
+        '   myPoutre    [E] :   Poutre étudiée
+        '   QEd         [E] :   Efforts nodaux de la poutre
         '-----------------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -550,7 +554,7 @@
         Dim iDebN, iFinN As Integer
         Dim deltaX As Decimal = myPoutre.LongueurTotale / myPoutre.Nodes.nbNodes
 
-        Dim q, dApp, gammaM0 As Decimal
+        Dim q, dApp, GammaM0 As Decimal
         Dim dbtFi, dbtPlat As Decimal
 
         Dim FyPlat, fyInf As Decimal
@@ -563,7 +567,7 @@
         gammaM0 = myPoutre.Param.Gamma.GammaM0
 
         dApp = Me.LargeurAppui(myPoutre)
-        Me.BrasLevier(myPoutre, dApp, dbtFi, dbtplat)
+        Me.BrasLevier(myPoutre, dApp, dbtFi, dbtPlat)
 
         FyPlat = myPoutre.Section.FySpd
         fyInf = myPoutre.Section.FyInf
@@ -825,12 +829,112 @@
 
 #Region " Vérification de la poutre acier "
 
-    Private Sub RunCritereResistanceElPlatY(myBeam As cls_Poutre, iCombi As Integer,
-                                            SigmaELU(,,) As Decimal, SigmaY(,) As Decimal, TauY(,) As Decimal)
+    Private Sub RunCritereResistancePlastiquePlatY(myBeam As cls_Poutre, iCombi As Integer, QEd() As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   01/08/25 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance en VM des plats supports par les critères de VM
+        '   Vérification aux ELU de la résistance élasto-plastique des plats supports
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   QEd         [E] :   Efforts nodaux de la poutre
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iTravee, iNode As Integer
+        Dim iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim DeltaX As Decimal
+        Dim qLin As Decimal
+        Dim myFiEd, myFiRd As Decimal
+        Dim myPlEd, myPlRd As Decimal
+        Dim GammaM0 As Decimal
+        Dim FyPlat, FyInf As Decimal
+        Dim dApp, dbtFi, dbtPlat As Decimal
+        Const kPlast As Decimal = 1.2
+        Dim tPl, tFi As Decimal
+
+        '--( Initialisation
+
+        GammaM0 = myBeam.Param.Gamma.GammaM0
+
+        dApp = Me.LargeurAppui(myBeam)
+        Me.BrasLevier(myBeam, dApp, dbtFi, dbtPlat)
+
+        FyPlat = myBeam.Section.FySpd
+        FyInf = myBeam.Section.FyInf
+
+        tFi = myBeam.Section.ProfilA.Tfi
+        tPl = myBeam.Section.ProfilA.Plat_t
+
+        iDebT = myBeam.IndicePremiereTravee
+        iFinT = myBeam.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+
+                With myBeam.Section.ProfilA
+
+                    '== Calcul de DeltaX
+                    If iNode = 0 Then
+                        DeltaX = (myBeam.Nodes.xGlobal(iNode + 1) - myBeam.Nodes.xGlobal(iNode)) / 2
+                    ElseIf iNode = myBeam.Nodes.nbNodes - 1 Then
+                        DeltaX = (myBeam.Nodes.xGlobal(iNode) - myBeam.Nodes.xGlobal(iNode - 1)) / 2
+                    Else
+                        DeltaX = (myBeam.Nodes.xGlobal(iNode + 1) - myBeam.Nodes.xGlobal(iNode - 1)) / 2
+                    End If
+                    '====
+
+                    qLin = QEd(iNode) / DeltaX
+
+                    Select Case .typeProfileAcier
+                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+
+                            myFiEd = qLin * dbtFi
+                            myFiRd = kPlast * tFi ^ 2 * FyInf * kConvMPaPa / (6 * GammaM0)
+
+                            Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myFiEd, myFiRd)
+
+                            myPlEd = qLin * dbtPlat
+                            myPlRd = kPlast * tPl ^ 2 * FyPlat * kConvMPaPa / (6 * GammaM0)
+
+                            Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myPlEd, myPlRd)
+
+                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+
+                            myPlEd = qLin * dbtPlat
+                            myPlRd = kPlast * tPl ^ 2 * FyPlat * kConvMPaPa / (6 * GammaM0)
+
+                            Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myPlEd, myPlRd)
+
+                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+
+                            myFiEd = qLin * dbtFi
+                            myFiRd = kPlast * tFi ^ 2 * FyInf * kConvMPaPa / (6 * GammaM0)
+
+                            Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myFiEd, myFiRd)
+
+                    End Select
+
+                End With
+
+            Next
+        Next
+
+    End Sub
+
+    Private Sub RunCritereResistanceElastiquePlatY(myBeam As cls_Poutre, iCombi As Integer,
+                                                   SigmaELU(,,) As Decimal, SigmaY(,) As Decimal, TauY(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   01/08/25 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance élastique VM des plats supports par les critères de VM
         '----------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre traitée
         '   iCombi      [E] :   Indice de la combinaison
@@ -1156,7 +1260,7 @@
         '----------------------------------------------------------------------------------------------------------
         '   20/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance au moment fléchissant d'une poutre acier sans enrobage
+        '   Vérification aux ELU de la résistance au moment fléchissant d'une poutre acier
         '----------------------------------------------------------------------------------------------------------
         '   myBeam[E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison

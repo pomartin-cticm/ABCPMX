@@ -68,6 +68,12 @@ Public Class cls_ProfilA
 
 #Region " Propriétés "
 
+    Public ReadOnly Property lLamine As Boolean
+        Get
+            Return Not ((Me.typeProfileAcier = Enum_TypeSectionAcier.PRS_Bi_Sym) Or (Me.typeProfileAcier = Enum_TypeSectionAcier.PRS_Mono_Sym))
+        End Get
+    End Property
+
     Public ReadOnly Property lPlatRenfort As Boolean
         Get
             Return Me.lPlat And IsGreater(Me.Plat_b, 0) And IsGreater(Me.Plat_t, 0)
@@ -1448,6 +1454,28 @@ Public Class cls_ProfilA
 
         Me.Gamme = "HE"
         Me.NomProfile = "HE 300 B"
+
+        Me.Plat_b = 0
+        Me.Plat_t = 0
+
+        Me.ha = Me.hb + Me.Plat_t
+    End Sub
+
+    Public Sub GenererProfileHEB400()
+
+        Me.hb = 0.4
+        'Me.h_w = 0.27
+        Me.Tw = 0.0135
+        Me.Bfi = 0.3
+        Me.Bfs = 0.3
+        Me.Tfi = 0.024
+        Me.Tfs = 0.024
+        Me.Rcs = 0.027
+        Me.Rci = 0.027
+        Me.aW = 0.01
+
+        Me.Gamme = "HE"
+        Me.NomProfile = "HE 400 B"
 
         Me.Plat_b = 0
         Me.Plat_t = 0

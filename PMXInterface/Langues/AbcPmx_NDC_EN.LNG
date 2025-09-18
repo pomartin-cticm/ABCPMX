@@ -568,6 +568,7 @@ MINVALUE				= Minimum value
 MVBINTERACTION			= MV interaction according to EN 1993-1-5 § 7.1
 MVB_CRITERIA			= Resistance to MVb interaction
 MV_CRITERIA				= Resistance to MV interaction
+MY_CRITERIA				= Resistance to local transverse bending
 M_CRITERIA				= Resistance to bending moment
 NBTRANSVERSELAYER		= Number of transverse reinforcement layers
 NORMALS_INCONCRETE		= Normal compression stresses in the concrete slab

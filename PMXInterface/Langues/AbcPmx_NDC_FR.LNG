@@ -568,6 +568,7 @@ MINVALUE				= Valeur minimum
 MVBINTERACTION			= Interaction MV d'après l'EN 1993-1-5 § 7.1
 MVB_CRITERIA			= Résistance à l'interaction MVb
 MV_CRITERIA				= Résistance à l'interaction MV
+MY_CRITERIA				= Résistance à la flexion locale
 M_CRITERIA				= Résistance à la flexion
 NBTRANSVERSELAYER		= Nombre de lits d'armatures transversales
 NORMALS_INCONCRETE		= Contraintes normales de compresion dans la dalle béton

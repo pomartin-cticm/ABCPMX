@@ -10,6 +10,7 @@ Public Class cls_Poutre
 #Region " Enumérations et constantes "
 
     Public Const PORTEEDEFAUT As Decimal = 10
+    Public Const PORTEEDEFAUTSLIM As Decimal = 8
     Const PORTEECONSOLEDEFAUT As Decimal = 3
     Const ENTRAXEDEFAUT As Decimal = 2
     Const DISTANCETREMIEDEFAUT As Decimal = ENTRAXEDEFAUT / 2
@@ -701,7 +702,7 @@ Public Class cls_Poutre
 
         Me.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
         ParametresGenerauxDefaut()
-        PoutreDefautAcier()
+        PoutreDefautAcier(False)
         InitialiseChargements(NomChargesU)
         InitialiseTablesCombi()
         InitialisePoidsPropres()
@@ -712,6 +713,7 @@ Public Class cls_Poutre
                    OptionsLogiciels As Struc_OptionsLogiciel, OptionsCalcul As Struc_OptionsCalcul, OptionsFeu As struc_OptionsFeu,
                    NomCasChargesU() As String)
 
+        Dim lSlim As Boolean = False
         Me.Section.TypeSection = myTypeSection
 
         Select Case myTypeSection
@@ -720,19 +722,27 @@ Public Class cls_Poutre
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
             Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                lSlim = True
             Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
                 Me.Section.ProfilA.ha = 0.25
+                Me.Section.ProfilA.GenererProfileHEB400()
+                Me.Section.ProfilA.Plat_b = 0.5
+                Me.Section.ProfilA.Plat_t = 0.02
+                Me.Section.ProfilA.ha = 0.24
+                lSlim = True
             Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
                 Me.Section.ProfilA.GenererProfileHEB300()
                 Me.Section.ProfilA.ha = 0.25
                 Me.Section.ProfilA.Plat_b = 0.15
                 Me.Section.ProfilA.Plat_t = 0.015
+                lSlim = True
             Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
                 Me.Section.ProfilA.GenererProfileHEB300()
                 Me.Section.ProfilA.Bfs = 0.15
+                lSlim = True
         End Select
 
         Me.BeamID = NomPoutre
@@ -740,7 +750,7 @@ Public Class cls_Poutre
 
         '--> Poutre par défaut
 
-        PoutreDefautAcier()
+        PoutreDefautAcier(lSlim)
 
         InitialiseChargements(NomCasChargesU)
         InitialiseTablesCombi()
@@ -775,7 +785,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Private Sub PoutreDefautAcier()
+    Private Sub PoutreDefautAcier(lSlim As Boolean)
         pNbTravees = 1
         ReDim LongueurTravee(IndiceTraveeConsoleDroite)
         ReDim TypTravee(IndiceTraveeConsoleDroite)
@@ -803,8 +813,11 @@ Public Class cls_Poutre
         lTremieGauche = False
         lTremieDroite = False
 
-
-        LongueurTravee(1) = PORTEEDEFAUT
+        If lSlim Then
+            LongueurTravee(1) = PORTEEDEFAUTSLIM
+        Else
+            LongueurTravee(1) = PORTEEDEFAUT
+        End If
         TypTravee(1) = EnuTypeTravee.DeuxAppuis
 
         LongueurTravee(0) = PORTEECONSOLEDEFAUT
@@ -3523,12 +3536,12 @@ Public Class cls_Poutre
 
         Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
         Dim iTravee As Integer
-        Dim iTravDeb, iTravFin As Integer 'je le laisse au cas où mais théoriquement, on s'étais dis qu'il n'y a qu'une travée iso pour les slimfloors
+        Dim iTravDeb, iTravFin As Integer       ' Par principe, en fait toutes les poutres sont sans consoles
         Dim iNode As Integer
         Dim iNodeDeb, iNodeFin As Integer
         Dim kDeb, kfin As Integer
         Dim InertieY As Decimal
-        'Dim rhoVLoc As Decimal
+        Const rhoVLoc As Decimal = 0            ' Pas d'interaction MV
 
         '--> Initialisation
 
@@ -3550,11 +3563,11 @@ Public Class cls_Poutre
                 If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
                 If iNode = iNodeFin Then kfin = 0 Else kfin = 1
 
-                Me.Section.ProprietesElastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, zANE(iNode, kDeb), InertieY, MelRd(iNode, iCombi),
+                Me.Section.ProprietesElastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, zANE(iNode, kDeb), InertieY, MelRd(iNode, kDeb),
                                                         Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
                                                         Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
 
-                Me.Section.ProprietesPlastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, 1, zANP(iNode, kDeb), MplRd(iNode, kDeb),
+                Me.Section.ProprietesPlastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, rhoVLoc, zANP(iNode, kDeb), MplRd(iNode, kDeb),
                                                         Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
                                                         Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
 
@@ -4399,7 +4412,6 @@ Public Class cls_Poutre
         '--> Préparation des cas de charges shadow pour les poutres mixtes
 
         If lMixte And Me.Param.lFlechesETA Then Me.InitialiseCasdeChargesCalculShadow(nEqDalleG2, nEqEnrobG2)
-
 
     End Sub
 

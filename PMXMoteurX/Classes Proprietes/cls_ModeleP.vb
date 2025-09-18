@@ -667,7 +667,7 @@ Public Class cls_ModeleP
 
         Afi = PsiAfi * MyProfil.AireFi
         pTfi = RhoTfi * MyProfil.Tfi
-        pFy_fi = PsiYspd * FyInf
+        pFy_fi = PsiYfi * FyInf
 
         'plat soudé
         Aspd = PsiAspd * MyProfil.AirePlat

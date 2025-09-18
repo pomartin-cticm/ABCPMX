@@ -1,4 +1,5 @@
-﻿Imports System.Text
+﻿Imports System.Security.Policy
+Imports System.Text
 Imports Microsoft.VisualStudio.TestTools.UnitTesting
 'Imports PMXInterface.Mod_Declarations
 Imports PMXMoteur2
@@ -1563,6 +1564,7 @@ Imports PMXMoteur2
             .lGammaV_unique = True
             .GammaVc = 1.25
             .GammaVs = 1.25
+            .Psi2_Q1 = 0
         End With
         myBeam.Param.EtaW = 1
 #End Region
@@ -3071,6 +3073,7 @@ Imports PMXMoteur2
             .lGammaV_unique = True
             .GammaVc = 1.25
             .GammaVs = 1.25
+            .Psi2_Q1 = 0.4
         End With
         myPoutre.Param.EtaW = 1
 
@@ -3278,6 +3281,30 @@ Imports PMXMoteur2
 
 #End Region
 
+
+#Region " VALIDATION : Calcul des fleches (ELS)"
+
+        '--> Fleches due à G1
+
+        Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
+        ValRef = 16.2
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 0.002))
+
+        '--> Fleches due à G2
+
+        Valeur = myPoutre.ChargesA(1).FlecheMax * 1000
+        'myBeam.Section.ProprietesElastiquesMixteMyy(1, True, myBeam.Param.Gamma, 0, myBeam.Elements(0).nEqDalle, Beff, myBeam.Dalle, zANE, InertieY, Mel)
+        ValRef = 7.71
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+        '--> Fleches due à Q
+
+        Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
+        ValRef = 25.4
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+#End Region
+
     End Sub
 
 
@@ -3371,6 +3398,7 @@ Imports PMXMoteur2
             .lGammaV_unique = True
             .GammaVc = 1.25
             .GammaVs = 1.25
+            .Psi2_Q1 = 0
         End With
         myPoutre.Param.EtaW = 1
 

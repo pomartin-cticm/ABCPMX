@@ -78,6 +78,7 @@ Public Module Mod_BasesDonneesBinaires
 #End Region
 
 #Region "   MAIN "
+
     Public Sub InitDatabase_Aciers()
         '--> Fichier
         If Not File.Exists(LogicielFichiers.Base_Aciers) Then

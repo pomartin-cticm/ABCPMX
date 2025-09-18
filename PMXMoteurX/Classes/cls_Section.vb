@@ -453,13 +453,13 @@ Public Class cls_Section
         '--> Déclarations
 
         Dim MyModele As New cls_ModeleP
-        Dim Hw As Decimal
-        Dim lLamine As Boolean = Me.lLamine
-        Dim nEqEc As Decimal = 1 'on applique 1 car calcul plastique 
+        'Dim Hw As Decimal
+        'Dim lLamine As Boolean = Me.lLamine
+        'Dim nEqEc As Decimal = 1 'on applique 1 car calcul plastique 
 
         '--> Initialisation
 
-        Hw = Me.ProfilA.HauteurAmeHw
+        ' Hw = Me.ProfilA.HauteurAmeHw
 
         '--> Modélisation du profilé acier
 
@@ -1585,13 +1585,13 @@ Public Class cls_Section
                 MyFy = Me.f_y.fs
 
             Else '--[ Acier de la base de donnée : Recherche dans les plages
-                If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                ' If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                If Me.ProfilA.lLamine Then
                     MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfs, Me.ProfilA.Tw))
                 Else
                     MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tfs)
                 End If
             End If
-
 
             Return MyFy
         End Get
@@ -1610,7 +1610,8 @@ Public Class cls_Section
                 MyFy = Me.f_y.fi
 
             Else '--[ Acier de la base de donnée : Recherche dans les plages
-                If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                'If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                If Me.ProfilA.lLamine Then
                     MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfi, Me.ProfilA.Tw))
                 Else
                     MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tfi)
@@ -1633,9 +1634,10 @@ Public Class cls_Section
                 MyFy = Me.f_y.w
 
             Else '--[ Acier de la base de donnée : Recherche dans les plages
-                If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                'If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                If Me.ProfilA.lLamine Then
                     MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfs, Me.ProfilA.Tw))
-                Else '--[ Acier de la base de donnée : Recherche dans les plages
+                Else
                     MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tw)
                 End If
             End If

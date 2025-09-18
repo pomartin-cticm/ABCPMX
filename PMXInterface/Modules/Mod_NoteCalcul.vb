@@ -1670,7 +1670,7 @@ Module Mod_NoteCalcul
         '# Acier du profilé ### -----------------------------------------------------------------------------------------------------
         '----------------------------------------------------------------------------------------------------------------------------
 
-        If nbLignes + 8 > MAXLIGNEPPAG Then SautePage()
+        If nbLignes + 9 > MAXLIGNEPPAG Then SautePage()
 
         AddTitreNdC(3, BlocG("MATERIAL_PROFILE"))
         If myBeam.Section.lUser Then
@@ -1680,7 +1680,7 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & BlocG("STANDARD_PROFILE") & TABAFF & myBeam.Section.Acier.Reduction)
         End If
 
-        If lLamine Then
+        If lLamine Or lSlim Then
             AddLigneNDC(TABW2 & BlocG("FY_PROFILE") & TABAFF & "f\-y\=" & TABEGAL & GetStringInUnitN(myBeam.Section.FySup, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
             AddLigneNDC(TABW2 & BlocG("FU_PROFILE") & TABAFF & "f\-u\=" & TABEGAL & GetStringInUnitN(myBeam.Section.FuSup, Enu_TypeVariable.Contrainte, 4, 0, OUI, False))
         Else
@@ -1780,6 +1780,10 @@ Module Mod_NoteCalcul
         '   myBeam      [E] :   Poutre
         '---------------------------------------------------------------------------------------------------------------
 
+        '--( Déclaration
+
+        Dim lSlim As Boolean = myBeam.lSlimFloor
+
         '--( Traitement
 
         AddTitreNdC(3, BlocG("CHAR_PROFILE"))
@@ -1799,6 +1803,7 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & BlocG("WEL_Y_PROFILE") & TABAFF & "W\-el,y\=" & TABEGAL & GetStringInUnitN(.ModuleWelY, Enu_TypeVariable.WModule, 4, 1, OUI, False))
             AddLigneNDC(TABW2 & BlocG("WEL_Z_PROFILE") & TABAFF & "W\-el,z\=" & TABEGAL & GetStringInUnitN(.ModuleWelZ, Enu_TypeVariable.WModule, 4, 1, OUI, False))
 
+            If Not lSlim Then _
             AddLigneNDC(TABW2 & BlocG("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnitN(.InertieT, Enu_TypeVariable.Inertie, 4, 2, OUI, False))
             ' AddLigneNDC(TABW2 & BlocG("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnitN(.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, OUI, False))
 
@@ -7126,16 +7131,19 @@ Module Mod_NoteCalcul
 
         Dim lMixte As Boolean = MyBeam.lMixte
         Const NbREQ As Integer = 9
+        Dim lSlim As Boolean = MyBeam.lSlimFloor
 
         '--( Initialisation
 
-        If nbLignes + NbREQ > MAXLIGNEPPAG Then SautePage()
+        If Not lSlim Then
+            If nbLignes + NbREQ > MAXLIGNEPPAG Then SautePage()
 
-        AddTitreNdC(2, BlocELU("ADDPARAM"))
+            AddTitreNdC(2, BlocELU("ADDPARAM"))
+        End If
 
         '--( Paramètres du voilement par cisaillement
 
-        If MyBeam.lSlimFloor Then
+        If lSlim Then
         Else
             If lMixte And (Not lConstruction) Then
                 EditionVerifELUAdditionelShearB(MyBeam, MyBeam.VerifMixte(0).ShearB)
@@ -7447,7 +7455,7 @@ Module Mod_NoteCalcul
 
         iNodeM = Critere.CritereCombiN(iCombi, iTravee) + 1
 
-        '--> AffichageOptFeu
+        '--> Affichage
 
         'AddCellule(LC3, vBordure, PositionTexteInCell.Centre, StyleG & GetStringInUnit(ValCrit, Enu_TypeVariable.SansType, 3, 2, False) & " (N" & CStr(iNodeM) & ")" & StyleGFin)
         AffichageCritereELU_N(ValCrit, Critere.CritereMax, iNodeM, vBordure)
@@ -7458,7 +7466,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   AffichageOptFeu de la valeur d'un critère sur une travée dans le tableau correspondant
+        '   Affichage de la valeur d'un critère sur une travée dans le tableau correspondant
         '-------------------------------------------------------------------------------------------
         '   valCritereCombiT    [E] :   Critère affiché dans la cellule
         '   valCritereEnveloppe [E] :   Indice de la travée
@@ -7481,7 +7489,7 @@ Module Mod_NoteCalcul
             StyleGFin = "\g"
         End If
 
-        '--> AffichageOptFeu
+        '--> Affichage
 
         AddCellule(LC3, vBordure, PositionTexteInCell.Centre, StyleG & GetStringInUnit(valCritereCombiT, Enu_TypeVariable.SansType, 4, 3, False) & " (N" & CStr(iNodeM) & ")" & StyleGFin)
 
@@ -7529,7 +7537,10 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
 
         If MyBeam.lSlimFloor Then
-
+            If MyBeam.lMixte And Not lConstructionP Then
+            Else
+                EditionVerificationsELUCombiSLIMACIER(MyBeam, iVerif, lConstructionP)
+            End If
         Else
             If MyBeam.lMixte And Not lConstructionP Then
                 EditionVerificationsELUCombiMIXTE(MyBeam, iVerif)
@@ -7653,6 +7664,7 @@ Module Mod_NoteCalcul
 
         '--> Titre
 
+        Exit Sub
         AddTitreNdC(2, BlocELUd("TITLE"))
 
         '--( Vérification de la flexion
@@ -8692,6 +8704,7 @@ Module Mod_NoteCalcul
             '# Critères M et V
             AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(0).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)", lConstructionP)
             AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(0).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA") & " (2)", lConstructionP)
+            AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(iVerif).CritereMY, "\SG\s\-My\=", BlocELU("MY_CRITERIA"), lConstructionP)
 
             SauteLigne()
             AddLigneNDC(TABW2 & "(1): " & BlocELU("PLASTICDESIGNCLASS12"))
@@ -8707,7 +8720,7 @@ Module Mod_NoteCalcul
             '# Critères M et V
             AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)", lConstructionP)
             AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA") & " (2)", lConstructionP)
-            AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(iVerif).CritereMY, "\SG\s\-My\=", "Flexion locale" & " (3)", lConstructionP)
+            AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(iVerif).CritereMY, "\SG\s\-My\=", BlocELU("MY_CRITERIA"), lConstructionP)
 
             SauteLigne()
             AddLigneNDC(TABW2 & "(1): " & BlocELU("ELASTICDESIGNCLASS3"))
@@ -8715,13 +8728,195 @@ Module Mod_NoteCalcul
 
         End If
 
-
-        ' End If
     End Sub
 
+    Private Sub EditionVerificationsELUCombiSLIMACIER(MyBeam As cls_Poutre, iVerif As Integer, lConstructionP As Boolean)
+        '-------------------------------------------------------------------------------------------
+        '   17/09/25 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage détaillé des critères ELU par combinaison
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam          [E] :   Poutre
+        '   iVerif          [E] :   
+        '   lConstructionP  [E] :   Indique si phase de construction, pour les poutres mixtes
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim nbMinCombi As Decimal = 5.1 + 1.3 * MyBeam.CombiA_ELU.nbCombi + 1
+        Dim nbCombi As Integer
+        Dim lElastic As Boolean = MyBeam.Param.lElasticDesignVM
+
+        '--> Initialisation
+
+        If lConstructionP Then
+            nbCombi = MyBeam.CombiA_ELCU.nbCombi
+        Else
+            nbCombi = MyBeam.CombiA_ELU.nbCombi
+        End If
+
+        If nbLignes + nbMinCombi > MAXLIGNEPPAG Then SautePage()
+
+        AddTitreNdC(2, BlocELU("ULS_COMBI_CHECK"))
+
+        '--> Tableau des critères de résistance / combinaison
+
+        If lElastic Then
+            'TableauCritereCombiELU_AcierElasticVM(MyBeam, iVerif, nbCombi, lConstructionP)
+        Else
+            TableauCritereCombiELU_SlimAcierPlasticOuClass3(MyBeam, iVerif, nbCombi, lConstructionP)
+        End If
+
+    End Sub
+    Private Sub TableauCritereCombiELU_SlimAcierPlasticOuClass3(MyBeam As cls_Poutre, iVerif As Integer, nbCombi As Integer, lConstructionP As Boolean)
+        '-------------------------------------------------------------------------------------------
+        '   14/03/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage détaillé des critères ELU par combinaison et par travée (le cas échéant)
+        '   Cas d'une poutre slim floor acier, en calcul plastique ou élastique classe 3
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam          [E] :   Poutre
+        '   iVerif          [E] :   
+        '   nbCombi         [E] :   Nombre de combinaisons traitée
+        '   lConstructionP  [E] :   Indique si phase de construction, pour les poutres mixtes
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim NCOL As Integer
+        Dim iCombi As Integer
+        Dim NbTravees As Integer
+
+        '--( Initialisation
+
+        NbTravees = MyBeam.NbTravees
+
+        '--( Entete du tableau
+
+        EnteteTableauCriteresELU_SLIMACIER_PlasticOuClass3(MyBeam, iVerif, NCOL)
+
+        '--( Boucle sur les combinaisons
+
+        For iCombi = 0 To nbCombi - 1
+
+            If nbLignes + NbTravees > MAXLIGNEPPAG Then
+                FinTableau()
+                SautePage()
+                EnteteTableauCriteresELU_SLIMACIER_PlasticOuClass3(MyBeam, iVerif, NCOL)
+            End If
+
+            LigneTableauCriteresELU_SlimAcierPlasticOuClass3(MyBeam, NCOL, iCombi, iVerif, lConstructionP)
+
+        Next
+
+        FinTableau()
+    End Sub
+
+    Private Sub LigneTableauCriteresELU_SlimAcierPlasticOuClass3(MyBeam As cls_Poutre, ByRef NCOL As Integer,
+                                                                 iCombi As Integer, iVerif As Integer, lConstructionP As Boolean)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
+        '   Cas d'une poutre acier en calcul plastique ou élastique classe 3
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam          [E] :   Poutre traitée
+        '   NCOL            [E] :   Nombre de colonnes du tableau
+        '   iCombi          [E] :   Indice de la combinaison
+        '   iVerif          [E] :   Indice du bloc de vérification
+        '   lConstructionP  [E] :   Indique si phase de construction, pour les poutres mixtes
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iTraveeDeb As Integer = MyBeam.IndicePremiereTravee
+        Dim iTraveeFin As Integer = MyBeam.IndiceDerniereTravee
+        Dim MyBordures(iTraveeFin) As Integer
+        Dim i As Integer
+        Dim lElastic As Boolean = MyBeam.Param.lElasticDesignVM
+        Dim iNodeD, iNodeF As Integer
+        Dim lMixte As Boolean = MyBeam.lMixte
+        Dim lEnrob As Boolean = MyBeam.lEnrobage
+        Dim ChaineU As String = ""
+
+        '--> Initialisation
+
+        For i = iTraveeDeb To iTraveeFin
+            MyBordures(i) = Bordures.Gauche + Bordures.Droite
+        Next
+        MyBordures(0) += Bordures.Haut
+        MyBordures(MyBordures.GetUpperBound(0)) += Bordures.Bas
+
+        '--> Traitement
+
+        For i = iTraveeDeb To iTraveeFin
+            iNodeD = MyBeam.Nodes.iNodeExtTrav(i, 0)
+            iNodeF = MyBeam.Nodes.iNodeExtTrav(i, 1)
+
+            InitialiseLigne(NCOL, HLIGNE, False)
+
+            If i = iTraveeDeb Then
+                If lConstructionP Then
+                    ChaineU = MyBeam.CombiA_ELCU.Symbole(iCombi)
+                Else
+                    ChaineU = MyBeam.CombiA_ELU.Symbole(iCombi)
+                End If
+                AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, ChaineU)
+            Else
+                AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, "")
+            End If
+
+            '==( Affichage de GammaM
+            AffichageCritereELU_N(MyBeam.VerifSlimAcier(iVerif).CritereM, i, iCombi, MyBordures(i))
+
+            '==( Affichage de GammaV
+            AffichageCritereELU_N(MyBeam.VerifSlimAcier(iVerif).CritereV, i, iCombi, MyBordures(i))
+
+            '==( Affichage de GammaMy
+            AffichageCritereELU_N(MyBeam.VerifSlimAcier(iVerif).CritereMY, i, iCombi, MyBordures(i))
+            'AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, "")
+
+        Next
+
+    End Sub
+
+    Private Sub EnteteTableauCriteresELU_SLIMACIER_PlasticOuClass3(MyBeam As cls_Poutre, iVerif As Integer, ByRef NCOL As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Entête du tableau des critères ELU par combinaison pour une vérification acier
+        '   cela peut concerner une poutre mixte en phase de construction
+        '   Configuration d'un tableau pour un calcul EN 1993 CLasse 1, 2 ou 3, non élastique VM
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :   Poutre traitée
+        '   iVerif      [E] :   Indice du bloc de vérification
+        '   NCOL        [E] :   
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim PostTab As Integer = POSTABELU
+        Dim lMultiSpan As Boolean = False
+
+        '--> Initialisation
+
+        NCOL = 4                        ' Pour GammaM, GammaV et GammaMy)
+
+        AddLigneNDC("\TABLEAU " & CStr(PostTab))
+
+        '--> Entête
+
+        InitialiseLigne(NCOL, HLIGNEENTETE, False)
+
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "Combi")
+
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-My\=")
+
+    End Sub
 
 #End Region
-
 
 #Region "***Edition vérifications ELU pour les poutres ACIER***"
 
@@ -8952,7 +9147,6 @@ Module Mod_NoteCalcul
 
         End If
 
-
     End Sub
 
     Private Sub TableauCritereCombiELU_AcierElasticVM(MyBeam As cls_Poutre, iVerif As Integer, nbCombi As Integer, lConstructionP As Boolean)
@@ -9005,7 +9199,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   14/03/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   AffichageOptFeu détaillé des critères ELU par combinaison et par travée (le cas échéant)
+        '   Affichage détaillé des critères ELU par combinaison et par travée (le cas échéant)
         '   Cas d'une poutre acier, en calcul plastique ou élastique classe 3
         '-------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre

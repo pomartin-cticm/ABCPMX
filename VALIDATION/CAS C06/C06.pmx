@@ -1,5 +1,5 @@
 ﻿'-----------------------------------------------'
-'PropMix software - CTICM - Version 1.00 beta 2
+'PropMix software - CTICM - Version 1.20 beta 1
 'PROJECT USER FILE
 '-----------------------------------------------'
 '       /!\   Don't modify this file   /!\
@@ -48,7 +48,7 @@ BLOCK BEAM
    SLSlComb              = {True/False/False/False/False/False}
    SLSCoef               = {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    FLSlComb              = {False/False/False/False/False}
-   FLSCoef               = {1/0,5/0,3/0/0}+{1/0,7/0,3/0/0}+{1/0,3/0,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
+   FLSCoef               = {1/0,5/0,3/0/0}+{1/0,7/0,3/0/0}+{1/0,4/0,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    CULSlComb             = {True/False}
    CULSCoef              = {0/0/0/1,5/1,35}+{0/0/0/0/0}
    CSLSlComb             = {True/False}
@@ -62,8 +62,11 @@ BLOCK DECKRESTRAINT
    Transition            = 1
    ModFixTrough          = 0
    TypFixTrough          = 2
+   DiaFix                = 0,004
    EC                    = 0,5
+   Tpr                   = 0
    FixCoutureType        = 0
+   DiaSeam               = 0,0048
    lDeckRestraint        = False
    lTheta                = False
 BLOCK SECTION
@@ -113,6 +116,7 @@ BLOCK SLABCONCRETE
    wk_max                = 0,0004
 
 BLOCK SLAB_REINFORCEMENT
+   NoBar                 = False
    EspBar                = 0 0,2
    PhiS                  = 0 0,012
    z_s                   = 0 0,032
@@ -124,6 +128,7 @@ BLOCK SLAB_REINFORCEMENT
    RClasse               = B500
    RFsK                  = 500
    REs                   = 210000
+
 BLOCK STUD
    Label                 = 22-125
    Height                = 0,125
@@ -154,6 +159,7 @@ BLOCK OPTIONS
    T0SH_1                = 1
    AgeTCalc              = 18250
    lElasticDesign        = False
+   Psi2LongTerm          = True
    lControlCrack         = False
 
 BLOCK FIRE_OPTIONS
@@ -171,12 +177,14 @@ BLOCK FIRE_OPTIONS
    FrenchAN              = True
    VariableCDens         = False
    CompressionReinf      = True
+   FilledVoids           = True
    ColdFormReinf         = True
    SlabFEM               = False
    SlabTmax              = 0,01
    ConcreteRedux         = False
    ReinfTemp             = 1
    Surface               = Steel
+
 BLOCK GAMMA
    GammaM0               = 1,00
    GammaM1               = 1,0
@@ -197,7 +205,7 @@ BLOCK GAMMA
    GammaQ                = 1,5
    Psi0_Q1               = 0,7
    Psi1_Q1               = 0,5
-   Psi2_Q1               = 0,3
+   Psi2_Q1               = 0,4
    Psi0_Q2               = 0,7
    Psi1_Q2               = 0,5
    Psi2_Q2               = 0,3

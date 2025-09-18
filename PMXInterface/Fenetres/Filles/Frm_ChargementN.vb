@@ -1634,7 +1634,7 @@ Public Class Frm_ChargementN
         If MyPoutreLoc.Param.lGeneration1 Then
             RefEN = "EN1990:2003, 4.1.3(1) c)"
         Else
-            RefEN = "EN1990:xxx, yyyyy"
+            RefEN = "EN1990:2023, 6.1.2.3(3) Note 4"
         End If
 
         strMessage = RemplaceDollar(strReference, RefEN)

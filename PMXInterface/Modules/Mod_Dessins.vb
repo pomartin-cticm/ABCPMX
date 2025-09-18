@@ -6172,7 +6172,7 @@ Public Module Mod_Dessins
 
         Dim zRef As Decimal = 0
 
-        Dim MyParAff As Struc_Affichage
+        Dim myParAff As Struc_Affichage
         Dim lContour As Boolean = lCONTOURCOTE
 
         Dim zCote As Decimal = mySection.ProfilA.ha - mySection.ProfilA.Plat_t
@@ -6199,7 +6199,6 @@ Public Module Mod_Dessins
             xMax = mySection.ProfilA.Plat_b - mySection.ProfilA.Bfs / 2
         End If
 
-
         yMin = -mySection.ProfilA.Plat_t
         yMax = mySection.ProfilA.ha - mySection.ProfilA.Plat_t
 
@@ -6207,13 +6206,12 @@ Public Module Mod_Dessins
         yMax += dCar
         xMax += dCar
         xMin -= dCar
-        'End If
 
-        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, sHi, sWi, xLeft, yTop, kAdjust)
+        ParametresAffichage(myParAff, xMin, yMin, xMax - xMin, yMax - yMin, sWi, sHi, xLeft, yTop, kAdjust)
 
         '--> Dessin de la mySection acier
 
-        DessinProfileMetal(myGr, mySection.ProfilA, myBrushG, MyParAff, zRef, Not lInter, 0)
+        DessinProfileMetal(myGr, mySection.ProfilA, myBrushG, myParAff, zRef, Not lInter, 0)
 
         '--> Cotation
 
@@ -6471,7 +6469,6 @@ Public Module Mod_Dessins
         yMax += dCar
         xMax += dCar
         xMin -= dCar
-        'End If
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, Width, Height, xLeft, yTop, kAdjust)
 
@@ -10355,6 +10352,7 @@ Public Module Mod_Dessins
                 DessinFrmTypeIFB_B(MyGr, MyPoutre, MyParAff, myBrushP, myBrushB, myBrushA)
 
             Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
+
                 DessinFrmTypeSAB(MyGr, MyPoutre, MyParAff, myBrushP, myBrushB, myBrushA)
 
         End Select
@@ -13272,7 +13270,6 @@ Public Module Mod_Dessins
         '--( Dessin
 
         PrepareContourIFB_A(myProfil, xPts, yPts, nbPts)
-        DecalePts(yPts, nbPts, zRef + myProfil.ha - myProfil.Plat_t)
         If Math.Abs(xPos) > 0 Then
             DecalePts(xPts, nbPts, xPos)
         End If
@@ -13641,12 +13638,12 @@ Public Module Mod_Dessins
     End Sub
 
     Private Sub PrepareContourIFB_A(myProfil As cls_ProfilA, ByRef xPts() As Single, ByRef yPts() As Single,
-                                     ByRef nbPts As Integer)
+                                    ByRef nbPts As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   01/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
         '   Prépare le contour d'un profilé laminé
-        '   Coordonnées y : par rapport à la fibre supérieure
+        '   Coordonnées y : par rapport à la fibre supérieure du plat
         '---------------------------------------------------------------------------------------------------------------------------        
         '   myProfil    [E] :   Profilé affiché
         '   xPts, yPts  [S] :   Coordonnées du contour
@@ -13658,7 +13655,6 @@ Public Module Mod_Dessins
         ReDim xPts(17)
         ReDim yPts(17)
         nbPts = 18
-
 
         '--> Contour
 
@@ -13686,6 +13682,8 @@ Public Module Mod_Dessins
             Next
 
         End With
+
+        DecalePts(yPts, nbPts, myProfil.ha - myProfil.Plat_t)
 
     End Sub
 
@@ -15558,7 +15556,7 @@ Public Module Mod_Dessins
 
         Dim RCParAff As Struc_Affichage
         Dim xMin, xMax, yMin, yMax As Double
-        Dim Nuance, Norme, Qualite As String
+        Dim Nuance, Norme, Qualite, Reduc As String
         'Dim iSteel As Integer
         Dim EpMin, EpMax, VMax As Double
         Dim kFact As Double
@@ -15643,6 +15641,7 @@ Public Module Mod_Dessins
         Nuance = mySection.Acier.Nuance
         Qualite = mySection.Acier.Qualite
         Norme = mySection.Acier.NormeProduit
+        Reduc = mySection.Acier.Reduction
 
         ExtraitValeursEnveloppeAciers(Nuance, lFy, EpMin, EpMax, VMax)
 
@@ -15696,7 +15695,8 @@ Public Module Mod_Dessins
             For Each kvpSteel As KeyValuePair(Of String, strucReduction) In kvpQualite.Value.ReductionCurv
 
                 'If Qualite = kvpQualite.Key And Norme = kvpSteel.Key Then
-                If Qualite = kvpQualite.Key And Norme.Contains(kvpSteel.Key) Then
+                'If Qualite = kvpQualite.Key And Norme.Contains(kvpSteel.Key) Then
+                If Qualite = kvpQualite.Key And Reduc.Contains(kvpSteel.Key) Then
                     MyColor = ColorSelect
                     iEp = iEPSELECT
                     lSelect = True
