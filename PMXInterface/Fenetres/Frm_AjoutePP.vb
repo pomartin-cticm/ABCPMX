@@ -37,7 +37,8 @@ Public Class Frm_AjoutePP
 
     Public lOuverture As Boolean = False            ' Indique si appel depuis la fenêtre ouverture (démarrage du programme)
 
-    Dim lSlimDispo As Boolean = lSLIM Or LogicielOptions.lExpert
+    Dim lSlimAcierDispo As Boolean = lSLIMAcier Or LogicielOptions.lExpert
+    Dim lSlimMixteDispo As Boolean = lSLIMMixte Or LogicielOptions.lExpert
 
     Dim strNonDispo As String = ""
 
@@ -413,7 +414,8 @@ Public Class Frm_AjoutePP
         Const kAdjust As Single = 0.9
         Const kAdjustMixte As Single = 0.95
         Dim MyFont As New Font(FontBase.Name, 8)
-        Dim lAfficheSlim As Boolean = lSlimDispo Or LogicielOptions.lExpert
+        Dim lAfficheSlimAcier As Boolean = lSlimAcierDispo Or LogicielOptions.lExpert
+        Dim lAfficheSlimMixte As Boolean = lSlimMixteDispo Or LogicielOptions.lExpert
 
         Select Case sender.name
             Case Me.chk_SectionAcier.Name
@@ -434,35 +436,35 @@ Public Class Frm_AjoutePP
 
             Case Me.chk_SFBAcier.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreSFB, MyPoutreSFB.lIntermediaire, Me.chk_SFBAcier.ClientRectangle.Width, Me.chk_SFBAcier.Height,
-                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFB, lAfficheSlim, strNonDispo)
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFB, lAfficheSlimAcier, strNonDispo)
 
             Case Me.chk_SFBMixte.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreSFBmixte, MyPoutreSFBmixte.lIntermediaire, Me.chk_SFBMixte.ClientRectangle.Width, Me.chk_SFBMixte.Height,
-                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.SFBmixte, lAfficheSlim, strNonDispo)
+                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.SFBmixte, lAfficheSlimMixte, strNonDispo)
 
             Case Me.chk_IFB_A_Acier.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreIFB_A, MyPoutreIFB_A.lIntermediaire, Me.chk_IFB_A_Acier.ClientRectangle.Width, Me.chk_IFB_A_Acier.Height,
-                MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.IFB_A, lAfficheSlim, strNonDispo)
+                MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.IFB_A, lAfficheSlimAcier, strNonDispo)
 
             Case Me.chk_IFB_A_Mixte.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreIFB_Amixte, MyPoutreIFB_Amixte.lIntermediaire, Me.chk_IFB_A_Mixte.ClientRectangle.Width, Me.chk_IFB_A_Mixte.Height,
-                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.IFB_Amixte, lAfficheSlim, strNonDispo)
+                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.IFB_Amixte, lAfficheSlimMixte, strNonDispo)
 
             Case Me.chk_IFB_B_Acier.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreIFB_B, MyPoutreIFB_B.lIntermediaire, Me.chk_IFB_B_Acier.ClientRectangle.Width, Me.chk_IFB_B_Acier.Height,
-                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.IFB_B, lAfficheSlim, strNonDispo)
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.IFB_B, lAfficheSlimAcier, strNonDispo)
 
             Case Me.chk_IFB_B_Mixte.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreIFB_Bmixte, MyPoutreIFB_Bmixte.lIntermediaire, Me.chk_IFB_B_Mixte.ClientRectangle.Width, Me.chk_IFB_B_Mixte.Height,
-                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte, lAfficheSlim, strNonDispo)
+                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte, lAfficheSlimMixte, strNonDispo)
 
             Case Me.chk_SABAcier.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreSAB, MyPoutreSAB.lIntermediaire, Me.chk_SABAcier.ClientRectangle.Width, Me.chk_SABAcier.Height,
-                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SAB, lAfficheSlim, strNonDispo)
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SAB, lAfficheSlimAcier, strNonDispo)
 
             Case Me.chk_SABMixte.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreSABmixte, MyPoutreSABmixte.lIntermediaire, Me.chk_SABMixte.ClientRectangle.Width, Me.chk_SABMixte.Height,
-                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.SABmixte, lAfficheSlim, strNonDispo)
+                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.SABmixte, lAfficheSlimMixte, strNonDispo)
 
         End Select
 
@@ -576,57 +578,57 @@ Public Class Frm_AjoutePP
             End If
 
             If Me.chk_SFBAcier.Checked Then
-                lOKPoutre = lSlimDispo
-                lAjout = lSlimDispo
+                lOKPoutre = lSlimAcierDispo
+                lAjout = lSlimAcierDispo
                 TypeSection = cls_Section.Enum_TypeSection.SFB
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
             End If
 
             If Me.chk_SFBMixte.Checked Then
-                lOKPoutre = lSlimDispo
-                lAjout = lSlimDispo
+                lOKPoutre = lSlimMixteDispo
+                lAjout = lSlimMixteDispo
                 TypeSection = cls_Section.Enum_TypeSection.SFBmixte
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
             End If
 
             If Me.chk_IFB_A_Acier.Checked Then
-                lOKPoutre = lSlimDispo
-                lAjout = lSlimDispo
+                lOKPoutre = lSlimAcierDispo
+                lAjout = lSlimAcierDispo
                 TypeSection = cls_Section.Enum_TypeSection.IFB_A
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
             End If
 
             If Me.chk_IFB_A_Mixte.Checked Then
-                lOKPoutre = lSlimDispo
-                lAjout = lSlimDispo
+                lOKPoutre = lSlimMixteDispo
+                lAjout = lSlimMixteDispo
                 TypeSection = cls_Section.Enum_TypeSection.IFB_Amixte
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
             End If
 
             If Me.chk_IFB_B_Acier.Checked Then
-                lOKPoutre = lSlimDispo
-                lAjout = lSlimDispo
+                lOKPoutre = lSlimAcierDispo
+                lAjout = lSlimAcierDispo
                 TypeSection = cls_Section.Enum_TypeSection.IFB_B
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
             End If
 
             If Me.chk_IFB_B_Mixte.Checked Then
-                lOKPoutre = lSlimDispo
-                lAjout = lSlimDispo
+                lOKPoutre = lSlimMixteDispo
+                lAjout = lSlimMixteDispo
                 TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
             End If
 
             If Me.chk_SABAcier.Checked Then
-                lOKPoutre = lSlimDispo
-                lAjout = lSlimDispo
+                lOKPoutre = lSlimAcierDispo
+                lAjout = lSlimAcierDispo
                 TypeSection = cls_Section.Enum_TypeSection.SAB
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
             End If
 
             If Me.chk_SABMixte.Checked Then
-                lOKPoutre = lSlimDispo
-                lAjout = lSlimDispo
+                lOKPoutre = lSlimMixteDispo
+                lAjout = lSlimMixteDispo
                 TypeSection = cls_Section.Enum_TypeSection.SABmixte
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
             End If

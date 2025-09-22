@@ -4,7 +4,8 @@ Public Module Mod_Declarations
 
 #Region " Gestion des fonctionnalités avec les versions "
 
-    Public lSLIM As Boolean                         ' Indique si les sections slim floors sont disponibles dans le logiciel
+    Public lSLIMAcier As Boolean                            ' Indique si les sections slim floors en acier sont disponibles dans le logiciel
+    Public lSLIMMixte As Boolean                            ' Indique si les sections slim floors mixtes sont disponibles dans le logiciel
 
 #End Region
 

@@ -48,7 +48,8 @@ Public Module Mod_Demarrage
         LogicielReglages.lFrenchOnly = (LogicielInfo.Maitre = EnuMaitre.CTICM)
         'LogicielReglages.lFrenchOnly = False
 
-        lSLIM = True
+        lSLIMAcier = True
+        lSLIMMixte = False
         LogicielReglages.lFIRE = True
 
         LogicielReglages.lCreuxO = (LogicielInfo.Maitre = EnuMaitre.CTICM)

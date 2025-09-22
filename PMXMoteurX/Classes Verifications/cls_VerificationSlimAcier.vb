@@ -1081,6 +1081,22 @@
 
             Select Case myBeam.Section.TypeSection
                 Case cls_Section.Enum_TypeSection.IFB_A '==================================================================
+
+                    '( Point 1 - Contrainte face externe de la semelle supérieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
+
+                    '( Point 2 - Contrainte face interne de la semelle supérieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
+
+                    '( Point 3 - Contrainte CdG de la section
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
+
+                    '( Point 4 - Contrainte face interne de la semelle inférieure (ici un plat)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydPlat, FydW), Me.CritereSigmaA)
+
+                    '( Point 5 - Contrainte face externe de la semelle inférieure (ici un plat)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydPlat, Me.CritereSigmaA)
+
                 Case cls_Section.Enum_TypeSection.IFB_B '==================================================================
                 Case cls_Section.Enum_TypeSection.SAB   '==================================================================
 
