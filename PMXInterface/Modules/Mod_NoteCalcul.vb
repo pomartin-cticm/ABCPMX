@@ -8947,6 +8947,7 @@ Module Mod_NoteCalcul
 
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
+        '   06/10/25 :  Modification - POM  => R25-007 - Pas de deversement si maintien continu
         '-------------------------------------------------------------------------------------------
         '   Synthèse des critères ELU pour une poutre acier (avec ou sans enrobage)
         '-------------------------------------------------------------------------------------------
@@ -9049,18 +9050,22 @@ Module Mod_NoteCalcul
 
         End If
 
-        '==( Déversement pour tous les cas
+        '==( Déversement pour tous les cas - Sauf si maintien continu
 
-        AddTitreNdC(3, BlocELU("BEAMR"))
+        Dim lDeversement As Boolean = Not (myBeam.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.FullyRestrained)
 
-        AfficheSyntheseCritereLT(myBeam.VerifAcier(iVerif).CritereLTB, "\SG\s\-LT\=", BlocELU("LTB_CRITERIA"))
+        If lDeversement Then
+            AddTitreNdC(3, BlocELU("BEAMR"))
 
-        '==( Maitien par le bac en phase de construction
+            AfficheSyntheseCritereLT(myBeam.VerifAcier(iVerif).CritereLTB, "\SG\s\-LT\=", BlocELU("LTB_CRITERIA"))
 
-        If lConstructionP And myBeam.MaintienBac.lMaintienBac Then
-            If myBeam.VerifAcier(iVerif).CritereBacLTB.lDefini Then _
-            AfficheSyntheseCritere(myBeam, myBeam.VerifAcier(iVerif).CritereBacLTB, "\SG\s\-pm\=", BlocELU("SHEET_CRITERIA"), lConstructionP)
-            AddLigneNDC(TABW3 & RemplaceDollar(BlocELU("REFSHEETCRITERIA"), "§ " & NumTitreMaintienBac))
+            '==( Maitien par le bac en phase de construction
+
+            If lConstructionP And myBeam.MaintienBac.lMaintienBac Then
+                If myBeam.VerifAcier(iVerif).CritereBacLTB.lDefini Then _
+                AfficheSyntheseCritere(myBeam, myBeam.VerifAcier(iVerif).CritereBacLTB, "\SG\s\-pm\=", BlocELU("SHEET_CRITERIA"), lConstructionP)
+                AddLigneNDC(TABW3 & RemplaceDollar(BlocELU("REFSHEETCRITERIA"), "§ " & NumTitreMaintienBac))
+            End If
         End If
 
         '==( Calcul des soudures pour les PRS
@@ -9267,6 +9272,7 @@ Module Mod_NoteCalcul
                                                              iCombi As Integer, iVerif As Integer, lConstructionP As Boolean)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
+        '   06/10/25 :  Modification - POM => R25-007 - pas de déversement si maintien continu
         '-------------------------------------------------------------------------------------------
         '   AffichageOptFeu d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
         '   Cas d'une poutre acier en calcul plastique ou élastique classe 3
@@ -9291,6 +9297,7 @@ Module Mod_NoteCalcul
         Dim lEnrob As Boolean = MyBeam.lEnrobage
         Dim lInterMV, lShearB, lInterMVb As Boolean
         Dim ChaineU As String = ""
+        Dim lDeversement As Boolean = Not (MyBeam.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.FullyRestrained)
 
         '--> Initialisation
 
@@ -9327,26 +9334,28 @@ Module Mod_NoteCalcul
                 AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
             End If
 
-            '==( AffichageOptFeu de GammaM
+            '==( Affichage de GammaM
             AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereM, i, iCombi, MyBordures(i))
 
-            '==( AffichageOptFeu de GammaV
+            '==( Affichage de GammaV
             AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereV, i, iCombi, MyBordures(i))
 
-            '==( AffichageOptFeu de GammaMV
+            '==( Affichage de GammaMV
             If lInterMV Then
                 AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereMV, i, iCombi, MyBordures(i))
             End If
 
-            '==( AffichageOptFeu du voilement par cisaillement 
+            '==( Affichage du voilement par cisaillement 
             If lShearB Then
                 AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereVb, i, iCombi, MyBordures(i))
                 If lInterMVb Then _
                 AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereMVb, i, iCombi, MyBordures(i))
             End If
 
-            '==( AffichageOptFeu du déversement
-            AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereLTB, i, iCombi, MyBordures(i))
+            '==( Affichage du déversement
+            If lDeversement Then
+                AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereLTB, i, iCombi, MyBordures(i))
+            End If
 
         Next
 
@@ -9356,8 +9365,9 @@ Module Mod_NoteCalcul
                                                        iCombi As Integer, iVerif As Integer, lConstructionP As Boolean)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
+        '   06/10/25 :  Modification - POM => R25-007 - pas de déversement si maintien continu
         '-------------------------------------------------------------------------------------------
-        '   AffichageOptFeu d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
+        '   Affichage d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
         '   Cas d'une poutre acier en calcul elastique VM
         '-------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre traitée
@@ -9379,6 +9389,7 @@ Module Mod_NoteCalcul
         Dim lMixte As Boolean = MyBeam.lMixte
         Dim lEnrob As Boolean = MyBeam.lEnrobage
         Dim ChaineU As String = ""
+        Dim lDeversement As Boolean = Not (MyBeam.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.FullyRestrained)
 
         '--> Initialisation
 
@@ -9409,17 +9420,17 @@ Module Mod_NoteCalcul
                 AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
             End If
 
-            '==( AffichageOptFeu du critère de résistance élastique du profilé acier - Contraintes normales
+            '==( Affichage du critère de résistance élastique du profilé acier - Contraintes normales
 
             AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereSigmaA, i, iCombi, MyBordures(i))
 
-            '==( AffichageOptFeu du critère de résistance élastique du profilé acier - Contraintes de cisaillement
+            '==( Affichage du critère de résistance élastique du profilé acier - Contraintes de cisaillement
             AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereTauA, i, iCombi, MyBordures(i))
 
-            '==( AffichageOptFeu du critère de résistance élastique du profilé acier - Contraintes équivalentes de Von Mises
+            '==( Affichage du critère de résistance élastique du profilé acier - Contraintes équivalentes de Von Mises
             AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereSigmaVM, i, iCombi, MyBordures(i))
 
-            '==( AffichageOptFeu des critère de résistance élastique pour l'enrobage, béton et armatures
+            '==( Affichage des critère de résistance élastique pour l'enrobage, béton et armatures
             If lEnrob Then
                 '# Contraintes béton enrobage
                 AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereSigmaE, i, iCombi, MyBordures(i))
@@ -9429,8 +9440,10 @@ Module Mod_NoteCalcul
 
             End If
 
-            '==( AffichageOptFeu du déversement
-            AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereLTB, i, iCombi, MyBordures(i))
+            '==( Affichage du déversement
+            If lDeversement Then
+                AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereLTB, i, iCombi, MyBordures(i))
+            End If
         Next
 
     End Sub
@@ -9438,6 +9451,7 @@ Module Mod_NoteCalcul
     Private Sub EnteteTableauCriteresELU_ACIER_ElasticVM(MyBeam As cls_Poutre, iVerif As Integer, ByRef NCOL As Integer)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
+        '   06/10/25 :  Modification - POM => R25-007 - pas de déversement si maintien continu
         '-------------------------------------------------------------------------------------------
         '   Entête du tableau des critères ELU par combinaison pour une vérification acier
         '   cela peut concerner une poutre mixte en phase de construction
@@ -9454,6 +9468,7 @@ Module Mod_NoteCalcul
         Dim lMultiSpan As Boolean = (MyBeam.NbTravees > 1)
         Dim lElastic As Boolean = (MyBeam.Param.lElasticDesignVM)
         Dim lShearB As Boolean
+        Dim lDeversement As Boolean = Not (MyBeam.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.FullyRestrained)
 
         '--> Initialisation
 
@@ -9465,6 +9480,8 @@ Module Mod_NoteCalcul
         If MyBeam.lEnrobage Then NCOL += 2  ' GammaSigmaE, GammaSigamCE
 
         NCOL += 1                           ' GammaSigmaEq tout le temps affiché
+
+        If Not lDeversement Then NCOL -= 1  ' Colonne GammaLT
 
         AddLigneNDC("\TABLEAU " & CStr(PostTab))
 
@@ -9490,13 +9507,15 @@ Module Mod_NoteCalcul
             AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-s\s,se\=")
         End If
 
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LTb\=")
-
+        If lDeversement Then
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LTb\=")
+        End If
     End Sub
 
     Private Sub EnteteTableauCriteresELU_ACIER_PlasticOuClass3(MyBeam As cls_Poutre, iVerif As Integer, ByRef NCOL As Integer)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
+        '   06/10/25 :  Modification - POM => R25-007 - pas de déversement si maintien continu
         '-------------------------------------------------------------------------------------------
         '   Entête du tableau des critères ELU par combinaison pour une vérification acier
         '   cela peut concerner une poutre mixte en phase de construction
@@ -9514,6 +9533,7 @@ Module Mod_NoteCalcul
         Dim lShearB As Boolean
         Dim lInterMV, lInterMVb As Boolean
         Dim lMixte As Boolean = MyBeam.lMixte
+        Dim lDeversement As Boolean = Not (MyBeam.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.FullyRestrained)
 
         '--> Initialisation
 
@@ -9531,6 +9551,8 @@ Module Mod_NoteCalcul
             NCOL += 1                   ' Colonne GammaVb 
             If lInterMVb Then NCOL += 1 ' Colonne GammaMVb
         End If
+
+        If Not lDeversement Then NCOL -= 1 ' Pas de colonne GammaLT si pas de déversement
 
         AddLigneNDC("\TABLEAU " & CStr(PostTab))
 
@@ -9553,7 +9575,9 @@ Module Mod_NoteCalcul
             If lInterMVb Then _
             AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MVb\=")
         End If
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LTb\=")
+        If lDeversement Then
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LTb\=")
+        End If
 
     End Sub
 
