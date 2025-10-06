@@ -194,6 +194,7 @@ Public Class Frm_Connection
 
         Me.lbl_EtaSymbol.Visible = Not lMultiSpan
         Me.lbl_DegreConnex.Visible = Not lMultiSpan
+        Me.img_info.Visible = Not lMultiSpan
 
         'Par défaut on affiche la première travée sur deux appuis
         traveeEnCours = 1
@@ -304,6 +305,8 @@ Public Class Frm_Connection
 
                 Me.btn_Ajouter.Text = Bloc("ADD")
                 Me.btn_Supprimer.Text = Bloc("DELETE")
+
+                Me.chk_ConfigSym.Text = Bloc("SYMMETRICALCONFIG")
 
                 strStud = Bloc("STUDS")
                 strRib = Bloc("RIB")
@@ -439,6 +442,8 @@ Public Class Frm_Connection
     Private Sub GestionStyle()
         Me.Icon = Frm_PMX.Icon
 
+        Me.TLPan_Gauche.RowStyles(3).Height = 0
+
         FontFrm = New Font(FontBase.Name, SizeFontFrm)
 
         Me.lbl_Connecteurs.BackColor = CouleurBackBandeaux
@@ -499,6 +504,8 @@ Public Class Frm_Connection
         With myBeamLoc
 
             Me.chk_AutomaticDesign.Checked = .lAutomaticDesign
+            Me.chk_ConfigSym.Checked = .lConfigConnexSym
+            Me.chk_ConfigSym.Visible = (.NombreZones(traveeEnCours) = 3)
 
             If .NombreZones(traveeEnCours) >= 1 Then
                 Me.txt_Largeur_I1.Text = GetStringInUnit(.LongueurZone(traveeEnCours, 0), Enu_TypeVariable.Longueur, 4, 2, False)
@@ -814,6 +821,59 @@ Public Class Frm_Connection
 #End Region
 
 #Region " Evènements "
+
+    Private Sub chk_ConfigSym_CheckedChanged(sender As Object, e As EventArgs) Handles chk_ConfigSym.CheckedChanged
+        If lBuild Then Exit Sub
+
+        myBeamLoc.lConfigConnexSym = Me.chk_ConfigSym.Checked
+
+        If myBeamLoc.lConfigConnexSym Then SymetrisationConnexion()
+    End Sub
+
+    Private Sub SymetrisationConnexion()
+        '----------------------------------------------------------------------------------------------
+        '   06/10/25 :  Création - POM
+        '----------------------------------------------------------------------------------------------
+        '   
+        '----------------------------------------------------------------------------------------------
+
+        lBuild = True
+
+        With myBeamLoc
+
+            If (.NombreZones(traveeEnCours) = 3) Then
+
+                '** Symétrisation des longueurs de zones 1 et 3
+
+                MAJ_LongueurZones(1)
+                Me.txt_Largeur_I1.Text = GetStringInUnit(.LongueurZone(traveeEnCours, 0), Enu_TypeVariable.Longueur, 4, 2, False)
+                Me.txt_Largeur_I3.Text = GetStringInUnit(.LongueurZone(traveeEnCours, 2), Enu_TypeVariable.Longueur, 4, 2, False)
+
+                '** Symétrisation du nombre de rangées transversales 1 et 3
+
+                .NrTransZone(traveeEnCours, 2) = .NrTransZone(traveeEnCours, 0)
+                cmb_NbRow_I3.SelectedIndex = cmb_NbRow_I1.SelectedIndex
+
+                If myBeamLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And lBacTransv Then
+                    '** Symétrisation de l'espacement longitudinal 1 et 3
+                    .Espacement_Bac_TransZone(traveeEnCours, 2) = .Espacement_Bac_TransZone(traveeEnCours, 0)
+                    Me.cmb_EspLongi_I3.SelectedIndex = Me.cmb_EspLongi_I1.SelectedIndex
+                    .EspacementZone(traveeEnCours, 2) = .Esp_longi_bac * .Espacement_Bac_TransZone(traveeEnCours, 2)
+
+                Else
+                    '** Symétrisation de l'espacement longitudinal 1 et 3
+                    .EspacementZone(traveeEnCours, 2) = .EspacementZone(traveeEnCours, 0)
+                    Me.txt_EspLongi_I3.Text = GetStringInUnit(.EspacementZone(traveeEnCours, 2), Enu_TypeVariable.Dimension, 4, 0, False)
+                End If
+            End If
+
+            MAJI_SommeGoujons()
+            Me.img_Connection.Invalidate()
+        End With
+
+        lBuild = False
+    End Sub
+
     ''' <summary>
     ''' Met à jour les valeurs limites en fonction des données renseignées
     ''' </summary>
@@ -1143,7 +1203,7 @@ Public Class Frm_Connection
                 myBeamLoc.LongueurZone(traveeEnCours, 2) = myBeamLoc.LongueurTravee(traveeEnCours) / 3
         End Select
 
-
+        Me.chk_ConfigSym.Visible = (myBeamLoc.NombreZones(traveeEnCours) = 3)
     End Sub
 
     Private Sub MAJI_SommeGoujons()
@@ -1237,38 +1297,115 @@ Public Class Frm_Connection
                     If Not ltxt_Largeur_I1Enter Then Exit Sub
                     myBeamLoc.LongueurZone(traveeEnCours, 0) = ValeurUI
 
-                    Select Case myBeamLoc.NombreZones(traveeEnCours)
-                        Case 1
-                            myBeamLoc.LongueurZone(traveeEnCours, 1) = 0
-                            myBeamLoc.LongueurZone(traveeEnCours, 2) = 0
-                        Case 2
-                            myBeamLoc.LongueurZone(traveeEnCours, 1) = myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 0)
-                            myBeamLoc.LongueurZone(traveeEnCours, 2) = 0
-                        Case 3
-                            myBeamLoc.LongueurZone(traveeEnCours, 1) = (myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 0)) / 2
-                            myBeamLoc.LongueurZone(traveeEnCours, 2) = (myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 0)) / 2
-                    End Select
+                    MAJ_LongueurZones(0)
+                    'Select Case myBeamLoc.NombreZones(traveeEnCours)
+                    '    Case 1
+                    '        myBeamLoc.LongueurZone(traveeEnCours, 1) = 0
+                    '        myBeamLoc.LongueurZone(traveeEnCours, 2) = 0
+                    '    Case 2
+                    '        myBeamLoc.LongueurZone(traveeEnCours, 1) = myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 0)
+                    '        myBeamLoc.LongueurZone(traveeEnCours, 2) = 0
+                    '    Case 3
+                    '        myBeamLoc.LongueurZone(traveeEnCours, 1) = (myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 0)) / 2
+                    '        myBeamLoc.LongueurZone(traveeEnCours, 2) = (myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 0)) / 2
+                    'End Select
 
                 Case txt_Largeur_I2.Name
                     If Not ltxt_Largeur_I2Enter Then Exit Sub
                     myBeamLoc.LongueurZone(traveeEnCours, 1) = ValeurUI
 
-                    If myBeamLoc.NombreZones(traveeEnCours) = 2 Then
-                        myBeamLoc.LongueurZone(traveeEnCours, 0) = myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 1)
-                        myBeamLoc.LongueurZone(traveeEnCours, 2) = 0
-                    Else '3 zones
-                        myBeamLoc.LongueurZone(traveeEnCours, 2) = myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 0) - myBeamLoc.LongueurZone(traveeEnCours, 1)
-                    End If
+                    MAJ_LongueurZones(1)
+                    'If myBeamLoc.NombreZones(traveeEnCours) = 2 Then
+                    '    myBeamLoc.LongueurZone(traveeEnCours, 0) = myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 1)
+                    '    myBeamLoc.LongueurZone(traveeEnCours, 2) = 0
+                    'Else '3 zones
+                    '    myBeamLoc.LongueurZone(traveeEnCours, 2) = myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 0) - myBeamLoc.LongueurZone(traveeEnCours, 1)
+                    'End If
 
                 Case txt_Largeur_I3.Name
                     If Not ltxt_Largeur_I3Enter Then Exit Sub
                     myBeamLoc.LongueurZone(traveeEnCours, 2) = ValeurUI
-                    myBeamLoc.LongueurZone(traveeEnCours, 0) = myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 1) - myBeamLoc.LongueurZone(traveeEnCours, 2)
+                    MAJ_LongueurZones(2)
+                    'myBeamLoc.LongueurZone(traveeEnCours, 0) = myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 1) - myBeamLoc.LongueurZone(traveeEnCours, 2)
             End Select
             MAJI_SommeGoujons()
             MAJ_affichage_txt_cmb_connection()
 
         End If
+    End Sub
+
+    Private Sub MAJ_LongueurZones(iMod As Integer)
+        '---------------------------------------------------------------------------------------------------------------------------------
+        '   06/10/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------------
+        '   Mise à jour des longueurs de zones après modification de la longueur de l'une d'entre elles
+        '---------------------------------------------------------------------------------------------------------------------------------
+        '   iMod        [E] :   Indice de la zone modifiée (0, 1 ou 2)
+        '---------------------------------------------------------------------------------------------------------------------------------
+
+        With myBeamLoc
+
+            Select Case iMod
+                Case 0          ' CAS DE LA ZONE 1 MODIFIEE==========================================================
+                    Select Case .NombreZones(traveeEnCours)
+                        Case 1
+                            .LongueurZone(traveeEnCours, 1) = 0
+                            myBeamLoc.LongueurZone(traveeEnCours, 2) = 0
+                        Case 2
+                            .LongueurZone(traveeEnCours, 1) = .LongueurTravee(traveeEnCours) - .LongueurZone(traveeEnCours, 0)
+                            .LongueurZone(traveeEnCours, 2) = 0
+                        Case 3
+
+                            If .lConfigConnexSym Then
+                                '** Configuration symétrique
+                                .LongueurZone(traveeEnCours, 1) = (.LongueurTravee(traveeEnCours) - 2 * .LongueurZone(traveeEnCours, 0))
+                                .LongueurZone(traveeEnCours, 2) = .LongueurZone(traveeEnCours, 0)
+
+                            Else
+                                '** Standart
+                                .LongueurZone(traveeEnCours, 1) = (.LongueurTravee(traveeEnCours) - .LongueurZone(traveeEnCours, 0)) / 2
+                                .LongueurZone(traveeEnCours, 2) = (.LongueurTravee(traveeEnCours) - .LongueurZone(traveeEnCours, 0)) / 2
+
+                            End If
+
+
+                    End Select
+
+                Case 1          ' CAS DE LA ZONE 2 MODIFIEE==========================================================
+
+                    If .NombreZones(traveeEnCours) = 2 Then
+                        .LongueurZone(traveeEnCours, 0) = .LongueurTravee(traveeEnCours) - .LongueurZone(traveeEnCours, 1)
+                        .LongueurZone(traveeEnCours, 2) = 0
+                    Else '3 zones
+
+                        If .lConfigConnexSym Then
+                            '** Configuration symétrique
+                            .LongueurZone(traveeEnCours, 0) = (.LongueurTravee(traveeEnCours) - .LongueurZone(traveeEnCours, 1)) / 2
+                            .LongueurZone(traveeEnCours, 2) = .LongueurZone(traveeEnCours, 0)
+
+                        Else
+                            '** Standart
+                            myBeamLoc.LongueurZone(traveeEnCours, 2) = myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 0) - myBeamLoc.LongueurZone(traveeEnCours, 1)
+                        End If
+
+                    End If
+
+                Case 2          ' CAS DE LA ZONE 3 MODIFIEE==========================================================
+
+                    If .lConfigConnexSym Then
+                        '** Configuration symétrique
+                        .LongueurZone(traveeEnCours, 1) = (.LongueurTravee(traveeEnCours) - 2 * .LongueurZone(traveeEnCours, 2))
+                        .LongueurZone(traveeEnCours, 0) = .LongueurZone(traveeEnCours, 2)
+
+                    Else
+                        '** Standart
+                        myBeamLoc.LongueurZone(traveeEnCours, 2) = myBeamLoc.LongueurTravee(traveeEnCours) - myBeamLoc.LongueurZone(traveeEnCours, 0) - myBeamLoc.LongueurZone(traveeEnCours, 1)
+                    End If
+
+            End Select
+
+        End With
+
     End Sub
 
     Private Sub cmb_NbRow_I1_I2_I3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbRow_I1.SelectedIndexChanged, cmb_NbRow_I2.SelectedIndexChanged, cmb_NbRow_I3.SelectedIndexChanged
@@ -1277,10 +1414,12 @@ Public Class Frm_Connection
         Select Case sender.name
             Case cmb_NbRow_I1.Name
                 myBeamLoc.NrTransZone(traveeEnCours, 0) = cmb_NbRow_I1.SelectedIndex + 1
+                SymetriseNbRow(0)
             Case cmb_NbRow_I2.Name
                 myBeamLoc.NrTransZone(traveeEnCours, 1) = cmb_NbRow_I2.SelectedIndex + 1
             Case cmb_NbRow_I3.Name
                 myBeamLoc.NrTransZone(traveeEnCours, 2) = cmb_NbRow_I3.SelectedIndex + 1
+                SymetriseNbRow(2)
         End Select
 
         MAJI_SommeGoujons()
@@ -1288,7 +1427,50 @@ Public Class Frm_Connection
         MAJ_affichage_txt_cmb_connection()
     End Sub
 
+    Private Sub SymetriseNbRow(iZoneMod As Integer)
 
+        If (myBeamLoc.NombreZones(traveeEnCours) = 3) And myBeamLoc.lConfigConnexSym Then
+            lBuild = True
+            Select Case iZoneMod
+                Case 0
+                    myBeamLoc.NrTransZone(traveeEnCours, 2) = myBeamLoc.NrTransZone(traveeEnCours, 0)
+                    cmb_NbRow_I3.SelectedIndex = cmb_NbRow_I1.SelectedIndex
+
+                Case 2
+                    myBeamLoc.NrTransZone(traveeEnCours, 0) = myBeamLoc.NrTransZone(traveeEnCours, 2)
+                    cmb_NbRow_I1.SelectedIndex = cmb_NbRow_I3.SelectedIndex
+            End Select
+            lBuild = False
+
+        End If
+    End Sub
+
+    Private Sub SymetriseEspLongi(iZoneMod As Integer)
+        Dim lMixte As Boolean = myBeamLoc.Dalle.lMixte And myBeamLoc.Dalle.Bac.lPerpendiculaire
+
+        If (myBeamLoc.NombreZones(traveeEnCours) = 3) And myBeamLoc.lConfigConnexSym Then
+            lBuild = True
+
+            If lMixte Then
+                myBeamLoc.Espacement_Bac_TransZone(traveeEnCours, 2 - iZoneMod) = myBeamLoc.Espacement_Bac_TransZone(traveeEnCours, iZoneMod)
+                myBeamLoc.EspacementZone(traveeEnCours, 2 - iZoneMod) = myBeamLoc.Esp_longi_bac * myBeamLoc.Espacement_Bac_TransZone(traveeEnCours, 2 - iZoneMod)
+            Else
+                myBeamLoc.EspacementZone(traveeEnCours, 2 - iZoneMod) = myBeamLoc.EspacementZone(traveeEnCours, iZoneMod)
+            End If
+            Select Case iZoneMod
+                Case 0
+                    If lMixte Then Me.cmb_EspLongi_I3.SelectedIndex = Me.cmb_EspLongi_I1.SelectedIndex
+                    Me.txt_EspLongi_I3.Text = Me.txt_EspLongi_I1.Text
+                Case 2
+                    If lMixte Then Me.cmb_EspLongi_I1.SelectedIndex = Me.cmb_EspLongi_I3.SelectedIndex
+                    Me.txt_EspLongi_I1.Text = Me.txt_EspLongi_I3.Text
+            End Select
+
+            lBuild = False
+
+        End If
+
+    End Sub
 
     Private Sub cmb_EspLongi_I1_I2_I3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_EspLongi_I1.SelectedIndexChanged, cmb_EspLongi_I2.SelectedIndexChanged, cmb_EspLongi_I3.SelectedIndexChanged
         If lBuild Or lMAJAffichage Then Exit Sub
@@ -1296,12 +1478,14 @@ Public Class Frm_Connection
             Case cmb_EspLongi_I1.Name
                 myBeamLoc.Espacement_Bac_TransZone(traveeEnCours, 0) = cmb_EspLongi_I1.SelectedIndex + 1
                 myBeamLoc.EspacementZone(traveeEnCours, 0) = myBeamLoc.Esp_longi_bac * myBeamLoc.Espacement_Bac_TransZone(traveeEnCours, 0)
+                SymetriseEspLongi(0)
             Case cmb_EspLongi_I2.Name
                 myBeamLoc.Espacement_Bac_TransZone(traveeEnCours, 1) = cmb_EspLongi_I2.SelectedIndex + 1
                 myBeamLoc.EspacementZone(traveeEnCours, 1) = myBeamLoc.Esp_longi_bac * myBeamLoc.Espacement_Bac_TransZone(traveeEnCours, 1)
             Case cmb_EspLongi_I3.Name
                 myBeamLoc.Espacement_Bac_TransZone(traveeEnCours, 2) = cmb_EspLongi_I3.SelectedIndex + 1
                 myBeamLoc.EspacementZone(traveeEnCours, 2) = myBeamLoc.Esp_longi_bac * myBeamLoc.Espacement_Bac_TransZone(traveeEnCours, 2)
+                SymetriseEspLongi(2)
         End Select
         MAJI_SommeGoujons()
         MAJ_affichage_txt_cmb_connection()
@@ -1317,10 +1501,12 @@ Public Class Frm_Connection
             Select Case sender.name
                 Case txt_EspLongi_I1.Name
                     myBeamLoc.EspacementZone(traveeEnCours, 0) = ValeurUI
+                    SymetriseEspLongi(0)
                 Case txt_EspLongi_I2.Name
                     myBeamLoc.EspacementZone(traveeEnCours, 1) = ValeurUI
                 Case txt_EspLongi_I3.Name
                     myBeamLoc.EspacementZone(traveeEnCours, 2) = ValeurUI
+                    SymetriseEspLongi(2)
             End Select
             MAJI_SommeGoujons()
 
@@ -1482,7 +1668,6 @@ Public Class Frm_Connection
         End If
 
     End Sub
-
 
     Private Sub lbl_Zone1_Click(sender As Object, e As EventArgs) Handles lbl_Zone1.Click
 

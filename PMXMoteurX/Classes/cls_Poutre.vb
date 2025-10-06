@@ -217,8 +217,10 @@ Public Class cls_Poutre
     ''' </summary>
     Public DensiteConnexionZone(,) As Decimal
 
-
-
+    ''' <summary>
+    ''' Indique si la configuration de la connexion est symétrique par rapport à l'axe de la poutre
+    ''' </summary>
+    Public lConfigConnexSym As Boolean
 
 #End Region
 
@@ -783,6 +785,7 @@ Public Class cls_Poutre
         Me.lDalleContinueGauche = False
         Me.lDalleContinueDroite = False
 
+        Me.lConfigConnexSym = True
     End Sub
 
     Private Sub PoutreDefautAcier(lSlim As Boolean)
@@ -4550,7 +4553,7 @@ Public Class cls_Poutre
             End If
 
             '# Dalle
-            .qPP_DalleBeton = Me.Dalle.Aire(dc, Me.Section.ProfilA.Bfs) * Me.Dalle.beton.RhoC * G
+            .qPP_DalleBeton = Me.Dalle.Aire(dc, Me.Section.ProfilA.Bfs, Me.lSlimFloor) * Me.Dalle.beton.RhoC * G
 
             '# Bac acier
             If Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then

@@ -473,26 +473,30 @@ Public Module Mod_Dessins
 
         If lSlimfloor Then
 
-            Select Case myBeam.Section.TypeSection
-                Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte,
-                     cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Bmixte
+            Dim myAlignV As VerticalAlignement = VerticalAlignement.Top
 
-                    Chaine = strPlat & " (" &
+            Chaine = strPlat & " (" &
                          GetStringInUnitN(myBeam.Section.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 3, NON_U, True) & " x " &
                          GetStringInUnitN(myBeam.Section.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 3, NON_U, True) & ")"
 
-                    xo_cotes = myBeam.Section.LargeurPlatInfSlim / 2
-                    If lZoomPlus Then
-                        xo_cotes += dCar / 10
-                    Else
-                        xo_cotes += dCar / 8
-                    End If
+            xo_cotes = myBeam.Section.LargeurPlatInfSlim / 2
+            If lZoomPlus Then
+                xo_cotes += dCar / 10
+            Else
+                xo_cotes += dCar / 8
+            End If
 
+            Select Case myBeam.Section.TypeSection
+                Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte,
+                     cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
                     yo_cotes = myBeam.Section.zInf + myBeam.Section.ProfilA.Plat_t / 2
 
-                    AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xo_cotes, yo_cotes, myParAff, horAlignement, VerticalAlignement.Top, New SolidBrush(Color.Transparent), myPen, lContour)
-
+                Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
+                    yo_cotes = myBeam.Section.zSemSup - myBeam.Section.ProfilA.Plat_t / 2
+                    myAlignV = VerticalAlignement.Middle
             End Select
+
+            AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xo_cotes, yo_cotes, myParAff, horAlignement, myAlignV, New SolidBrush(Color.Transparent), myPen, lContour)
 
         Else
 

@@ -360,6 +360,7 @@ Public Class Frm_PMX
                 msgErreurs.Add("BACABSENT", Bloc("ERRMISSINGDECK"))
                 msgErreurs.Add("COFRAABSENT", Bloc("ERRMISSINGPSLAB"))
 
+                InfoW.BlocF.Clear()
                 InfoW.BlocF.Add("WARNING", Bloc("WWARNING"))
                 InfoW.BlocF.Add("INFO", Bloc("WINFO"))
                 InfoW.BlocF.Add("ERROR", Bloc("WERROR"))

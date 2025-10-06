@@ -724,7 +724,11 @@ Public Class Frm_DalleSlimFloorNGeneral
 
     Private Sub MAJI_MasseDalle()
 
-        Dim mSurf = Frm_DalleSlimFloorN.localDalle.MasseSurfacique(True, True, accelg)
+        Const lSlimF As Boolean = True
+        Dim bFs As Decimal = 1
+        Const Dc As Decimal = 1
+
+        Dim mSurf = Frm_DalleSlimFloorN.localDalle.MasseSurfacique(True, True, AccelG, dc, bfs, lslimF)
 
         Me.txt_MassSurf.Text = GetStringInUnitN(mSurf, Enu_TypeVariable.SansType, 4, 3, NON_U, True)
 

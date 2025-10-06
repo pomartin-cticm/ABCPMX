@@ -359,7 +359,7 @@
 
             '# Recupération des efforts nodaux à partir des tranchants combinés
 
-            combiELU.RecupererEffortsNodauxPonderees(myBeam.Nodes, VEd, QEd, qsupEd)
+            combiELU.RecupererEffortsNodauxPonderees(myBeam.Nodes, VEd, QEd, QSupEd)
 
             '# Calcul des coefficients de réduction 
 
@@ -396,7 +396,8 @@
                 RunCritereResistanceElastiquePlatY(myBeam, iCombi, SigmaELU, SigmaY, TauY)
             Else
                 Me.RunCritereFlexionAcier(myBeam, iCombi, MEd, MplRd, MelRd, ClasseP, ClasseM, lClasse4)
-                Me.RunCritereResistancePlastiquePlatY(myBeam, iCombi, QEd)
+                Me.RunCritereResistancePlastiquePlatY_N(myBeam, iCombi, QSupEd)
+                'Me.RunCritereResistancePlastiquePlatY(myBeam, iCombi, QEd)
             End If
 
             If myBeam.Param.lElasticDesignVM Then 'calcul élastique imposé 
@@ -497,11 +498,11 @@
                 Case cls_Section.Enum_TypeSection.IFB_A
                     With .ProfilA
                         dbtFi = 0
-                        dbtPlat = (.Plat_b - .Bfi) / 2 - dApp
+                        dbtPlat = (.Plat_b - .Tw) / 2 - dApp
                     End With
                 Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB
                     With .ProfilA
-                        dbtFi = (.Bfi - .Tw) / 2 - .Rci
+                        dbtFi = (.Bfi - .Tw) / 2 - .Rci - dApp
                         dbtPlat = 0
                     End With
                 Case cls_Section.Enum_TypeSection.SFB
@@ -828,6 +829,107 @@
 #End Region
 
 #Region " Vérification de la poutre acier "
+
+    Private Sub RunCritereResistancePlastiquePlatY_N(myBeam As cls_Poutre, iCombi As Integer, qsupEd() As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   01/08/25 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance élasto-plastique des plats supports
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   qsupEd      [E] :   Charge répartie linéique agissant DES 2 COTES
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iTravee, iNode As Integer
+        Dim iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        'Dim DeltaX As Decimal
+        Dim qLin As Decimal
+        Dim myFiEd, myFiRd As Decimal
+        Dim myPlEd, myPlRd As Decimal
+        Dim GammaM0 As Decimal
+        Dim FyPlat, FyInf As Decimal
+        Dim dApp, dbtFi, dbtPlat As Decimal
+        Const kPlast As Decimal = 1.2
+        Dim tPl, tFi As Decimal
+        Dim dGauche, dDroite As Decimal
+        Dim kCote As Decimal
+
+        '--( Initialisation
+
+        GammaM0 = myBeam.Param.Gamma.GammaM0
+
+        dApp = Me.LargeurAppui(myBeam)
+        Me.BrasLevier(myBeam, dApp, dbtFi, dbtPlat)
+
+        FyPlat = myBeam.Section.FySpd
+        FyInf = myBeam.Section.FyInf
+
+        tFi = myBeam.Section.ProfilA.Tfi
+        tPl = myBeam.Section.ProfilA.Plat_t
+
+        iDebT = myBeam.IndicePremiereTravee
+        iFinT = myBeam.IndiceDerniereTravee
+
+        dGauche = myBeam.EntraxeD1
+        dDroite = myBeam.EntraxeD2
+        If myBeam.lIntermediaire Then
+            kCote = Math.Max(dGauche, dDroite) / (dGauche + dDroite)
+        Else
+            kCote = Math.Max(2 * dGauche, dDroite) / (2 * dGauche + dDroite)
+        End If
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+
+                With myBeam.Section.ProfilA
+
+                    qLin = qsupEd(iNode) * kCote
+
+                    Select Case .typeProfileAcier
+                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+
+                            myFiEd = qLin * dbtFi
+                            myFiRd = kPlast * tFi ^ 2 * FyInf * kConvMPaPa / (6 * GammaM0)
+
+                            Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myFiEd, myFiRd)
+
+                            myPlEd = qLin * dbtPlat
+                            myPlRd = kPlast * tPl ^ 2 * FyPlat * kConvMPaPa / (6 * GammaM0)
+
+                            Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myPlEd, myPlRd)
+
+                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+
+                            myPlEd = qLin * dbtPlat
+                            myPlRd = kPlast * tPl ^ 2 * FyPlat * kConvMPaPa / (6 * GammaM0)
+
+                            Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myPlEd, myPlRd)
+
+                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+
+                            myFiEd = qLin * dbtFi
+                            myFiRd = kPlast * tFi ^ 2 * FyInf * kConvMPaPa / (6 * GammaM0)
+
+                            Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myFiEd, myFiRd)
+
+                    End Select
+
+                End With
+
+            Next
+        Next
+
+    End Sub
+
 
     Private Sub RunCritereResistancePlastiquePlatY(myBeam As cls_Poutre, iCombi As Integer, QEd() As Decimal)
         '----------------------------------------------------------------------------------------------------------

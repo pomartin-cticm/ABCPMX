@@ -1596,8 +1596,21 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & BlocG("STYPE") & TABAFF & BlocG("PRS_MONO_SYM"))
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                AddLigneNDC(TABW2 & BlocG("STYPE") & TABAFF & BlocG("SLIM_IFBA"))
+                AddLigneNDC(TABW2 & BlocG("COMPOSEDWITH") & TABAFF & BlocG("HOTROLLEDPROFILE") & " (" & myBeam.Section.ProfilA.NomProfile & ")")
+                AddLigneNDC(TABAFF & BlocG("STEELPLATE") & " (" & GetStringInUnitN(myBeam.Section.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 3, False, True) _
+                                                        & " x " & GetStringInUnitN(myBeam.Section.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 3, True, True) & ")")
+
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                AddLigneNDC(TABW2 & BlocG("STYPE") & TABAFF & BlocG("SLIM_IFBB"))
+                AddLigneNDC(TABW2 & BlocG("COMPOSEDWITH") & TABAFF & BlocG("HOTROLLEDPROFILE") & " (" & myBeam.Section.ProfilA.NomProfile & ")")
+                AddLigneNDC(TABAFF & BlocG("STEELPLATE") & " (" & GetStringInUnitN(myBeam.Section.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 3, False, True) _
+                                                        & " x " & GetStringInUnitN(myBeam.Section.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 3, True, True) & ")")
+
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                AddLigneNDC(TABW2 & BlocG("STYPE") & TABAFF & BlocG("SLIM_SAB"))
+                AddLigneNDC(TABW2 & BlocG("COMPOSEDWITH") & TABAFF & BlocG("HOTROLLEDPROFILE") & " (" & myBeam.Section.ProfilA.NomProfile & ")")
+
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
                 AddLigneNDC(TABW2 & BlocG("STYPE") & TABAFF & BlocG("SLIM_SFB"))
                 AddLigneNDC(TABW2 & BlocG("COMPOSEDWITH") & TABAFF & BlocG("HOTROLLEDPROFILE") & " (" & myBeam.Section.ProfilA.NomProfile & ")")
@@ -1616,6 +1629,16 @@ Module Mod_NoteCalcul
         If lLamine Then
             AddLigneNDC(TABW2 & BlocG("BF_PROFILE") & TABAFF & "b\-f\=" & TABEGAL & GetStringInUnitN(myBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
             AddLigneNDC(TABW2 & BlocG("TF_PROFILE") & TABAFF & "t\-f\=" & TABEGAL & GetStringInUnitN(myBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+        ElseIf lSlim Then
+            If lSAB Then
+                AddLigneNDC(TABW2 & BlocG("BFS_PROFILE") & TABAFF & "b\-fs\=" & TABEGAL & GetStringInUnitN(myBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+                AddLigneNDC(TABW2 & BlocG("TFS_PROFILE") & TABAFF & "t\-fs\=" & TABEGAL & GetStringInUnitN(myBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+                AddLigneNDC(TABW2 & BlocG("BFI_PROFILE") & TABAFF & "b\-fi\=" & TABEGAL & GetStringInUnitN(myBeam.Section.ProfilA.Bfi, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+                AddLigneNDC(TABW2 & BlocG("TFI_PROFILE") & TABAFF & "t\-fi\=" & TABEGAL & GetStringInUnitN(myBeam.Section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+            Else
+                AddLigneNDC(TABW2 & BlocG("BF_PROFILE") & TABAFF & "b\-f\=" & TABEGAL & GetStringInUnitN(myBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+                AddLigneNDC(TABW2 & BlocG("TF_PROFILE") & TABAFF & "t\-f\=" & TABEGAL & GetStringInUnitN(myBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, OUI, True))
+            End If
         Else
             If lPRSSym Then
                 AddLigneNDC(TABW2 & BlocG("BF_PROFILE") & TABAFF & "b\-fs\==b\-fi\=" & TABEGAL & GetStringInUnitN(myBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 0, OUI, True))
@@ -1670,7 +1693,7 @@ Module Mod_NoteCalcul
         '# Acier du profilé ### -----------------------------------------------------------------------------------------------------
         '----------------------------------------------------------------------------------------------------------------------------
 
-        If nbLignes + 9 > MAXLIGNEPPAG Then SautePage()
+        If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
 
         AddTitreNdC(3, BlocG("MATERIAL_PROFILE"))
         If myBeam.Section.lUser Then
@@ -2213,7 +2236,7 @@ Module Mod_NoteCalcul
 
         '# béton
 
-        mBeton = myBeam.Dalle.Aire(dC, myBeam.Section.ProfilA.Bfs) * myBeam.Dalle.beton.RhoC
+        mBeton = myBeam.Dalle.Aire(dC, myBeam.Section.ProfilA.Bfs, myBeam.lSlimFloor) * myBeam.Dalle.beton.RhoC
 
         AddLigneNDC(TABW2 & BlocG("M_CONCRETE") & TABAFF & "m\-c\=" & TABEGAL & GetStringInUnitN(mBeton, Enu_TypeVariable.SansType, 4, 3, NON, True) & " kg/m")
 

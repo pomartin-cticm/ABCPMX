@@ -282,6 +282,7 @@ INFOW_SHEARCONNECTION	= The degree of shear connection is assessed at mid-span, 
 ZONE1 					= First zone
 ZONE2 					= Second zone
 ZONE3 					= Third zone
+SYMMETRICALCONFIG		= Symetrical configuration
 
 #FRM_CONNECTIONSLIM
 TITLE					= Definition of the connection

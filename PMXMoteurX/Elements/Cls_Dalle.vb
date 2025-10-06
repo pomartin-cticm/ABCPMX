@@ -215,7 +215,7 @@
     ''' Renvoie la masse surfacique de la dalle (béton + bac)
     ''' </summary>
     ''' <returns></returns>
-    Public Function MasseSurfacique(lBac As Boolean, lPrefab As Boolean, AccelG As Decimal) As Decimal
+    Public Function MasseSurfacique(lBac As Boolean, lPrefab As Boolean, AccelG As Decimal, dc As Decimal, Bfs As Decimal, lSlimF As Boolean) As Decimal
         '----------------------------------------------------------------------
         '   08/08/25 :  Création - POM
         '----------------------------------------------------------------------
@@ -223,13 +223,17 @@
         '----------------------------------------------------------------------
         '   lBac        [E] :   Indique si on ajoute la masse du bac
         '   lPrefab     [E] :   Indique si on ajoute la masse de la partie préfabriquée
+        '   AccelG      [E] :   Accélération de la pesanteur
+        '   dC          [E] :   largeur de calcul de l'aire
+        '   bFs         [E] :   largeur de la semelle supérieure
+        '   lSlimF      [E] :   Indique si partie d'une poutre slimfloor
         '----------------------------------------------------------------------
 
         Dim pAire As Decimal
         Dim mSurf As Decimal
 
-        pAire = Me.Aire(1, 1)
-        mSurf = pAire * Me.beton.RhoC
+        pAire = Me.Aire(dc, Bfs, lSlimF)
+        mSurf = pAire * Me.beton.RhoC / dc
 
         If lBac And Me.type = Enum_TypeDalle.Mixte Then
             mSurf += Me.Bac.msurf
@@ -247,18 +251,26 @@
     ''' </summary>
     ''' <param name="dc">largeur de calcul de l'aire</param>
     ''' <param name="bfs">largeur de la semelle supérieure</param>
+    ''' <param name="lSlimF">indique si partie d'une poutre slimfloor</param>
     ''' <returns></returns>
-    Public Function Aire(dc As Decimal, bfs As Decimal) As Decimal
+    Public Function Aire(dc As Decimal, bfs As Decimal, lSlimF As Boolean) As Decimal
         Dim Ac As Decimal
 
-        If Me.type = cls_Dalle.Enum_TypeDalle.Mixte Then
+        If Me.lMixte Then
+            '==== Cas d'une dalle mixte
+            'If Me.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             Dim tc As Decimal
             tc = Me.Ep_td - Me.Bac.Hp
             Ac = dc * tc * (1 + Me.Bac.LargeurBmoyenne * Me.Bac.Hp / (Me.Bac.Ep * tc))
 
-        ElseIf Me.type = Enum_TypeDalle.PartiellementPrefabriquee Or Me.type = Enum_TypeDalle.PlancherPrefabrique Then
+        ElseIf ((Me.type = Enum_TypeDalle.PartiellementPrefabriquee) Or (Me.type = Enum_TypeDalle.PlancherPrefabrique)) Then
+            '=== dalle partiellement préfa ou plancher préfa
+            Ac = dc * Ep_td
+        ElseIf lSlimF Then
+            '=== dalle pleine dans le cas d'une poutre slimfloor
             Ac = dc * Ep_td
         Else
+            '=== dalle pleine dans le cas d'une poutre classique
             'dalle pleine, avec ou sans dalle préfa
             Ac = dc * Ep_td + Ep_th * (bfs + Ep_th * Math.Tan(ThetaRd) / 2)
 

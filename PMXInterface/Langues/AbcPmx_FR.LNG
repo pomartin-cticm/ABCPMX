@@ -282,6 +282,7 @@ INFOW_SHEARCONNECTION	= Le degré de connexion est calculé à mi-travée de la 
 ZONE1					= Première zone
 ZONE2					= Deuxième zone
 ZONE3					= Troisième zone
+SYMMETRICALCONFIG		= Configuration symétrique
 
 #FRM_CONNECTIONSLIM
 TITLE					= Definition of the connection

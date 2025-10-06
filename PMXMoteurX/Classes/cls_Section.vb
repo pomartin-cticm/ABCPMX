@@ -1309,7 +1309,9 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property lLamine As Boolean
         Get
-            Return (Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine) Or (Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB) Or (Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB)
+            Return (Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine) _
+                Or (Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB) Or (Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB) ' _
+            'Or Me.lSlimFloor
         End Get
     End Property
 

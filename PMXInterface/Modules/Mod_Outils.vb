@@ -848,9 +848,9 @@ Module Mod_Outils
 
                 kUnitU = LogicielInfo.Transfert_Inerties(LogicielOptions.IndUnitInerties)
                 If lNdC Then
-                    Unite = SEP & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties)
-                Else
                     Unite = SEP & LogicielInfo.Unit_Inerties_NdC(LogicielOptions.IndUnitInerties)
+                Else
+                    Unite = SEP & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties)
                 End If
 
             Case Enu_TypeVariable.InertieCM4
