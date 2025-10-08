@@ -1956,7 +1956,7 @@ Public Class cls_Section
         ' Dim alpha, psi As Decimal
         Dim classeSectionTotaleR As Integer
 
-        If Me.lSlimFloor Then epsilon_platSFB = Me.Epsilon_Spd
+        If Me.lSlimFloor And (Not lSlimFloor_SAB) Then epsilon_platSFB = Me.Epsilon_Spd
         If lCalculFeu Then
             epsilon_fsup *= 0.85
             epsilon_finf *= 0.85

@@ -113,7 +113,7 @@ Partial Class Frm_ConnectionSlimFloor
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(270, 498)
+        Me.pan_Gauche.Size = New System.Drawing.Size(360, 613)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLPan_Gauche
@@ -131,13 +131,13 @@ Partial Class Frm_ConnectionSlimFloor
         Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
         Me.TLPan_Gauche.RowCount = 6
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 209.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 148.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(270, 498)
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(360, 613)
         Me.TLPan_Gauche.TabIndex = 0
         '
         'lbl_Connecteurs
@@ -149,7 +149,7 @@ Partial Class Frm_ConnectionSlimFloor
         Me.lbl_Connecteurs.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Connecteurs.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Connecteurs.Name = "lbl_Connecteurs"
-        Me.lbl_Connecteurs.Size = New System.Drawing.Size(270, 30)
+        Me.lbl_Connecteurs.Size = New System.Drawing.Size(360, 37)
         Me.lbl_Connecteurs.TabIndex = 0
         Me.lbl_Connecteurs.Text = "lbl_Connecteurs"
         Me.lbl_Connecteurs.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -163,45 +163,49 @@ Partial Class Frm_ConnectionSlimFloor
         Me.pan_SaisieTypeArma.Controls.Add(Me.PictureBox2)
         Me.pan_SaisieTypeArma.Controls.Add(Me.cmb_TypeConnection)
         Me.pan_SaisieTypeArma.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieTypeArma.Location = New System.Drawing.Point(0, 30)
+        Me.pan_SaisieTypeArma.Location = New System.Drawing.Point(0, 37)
         Me.pan_SaisieTypeArma.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_SaisieTypeArma.Name = "pan_SaisieTypeArma"
-        Me.pan_SaisieTypeArma.Size = New System.Drawing.Size(270, 49)
+        Me.pan_SaisieTypeArma.Size = New System.Drawing.Size(360, 61)
         Me.pan_SaisieTypeArma.TabIndex = 3
         '
         'Label2
         '
         Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(162, 156)
+        Me.Label2.Location = New System.Drawing.Point(217, 192)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(21, 13)
+        Me.Label2.Size = New System.Drawing.Size(24, 16)
         Me.Label2.TabIndex = 75
         Me.Label2.Text = "kN"
         '
         'TextBox2
         '
         Me.TextBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox2.Location = New System.Drawing.Point(98, 152)
+        Me.TextBox2.Location = New System.Drawing.Point(132, 187)
+        Me.TextBox2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(58, 20)
+        Me.TextBox2.Size = New System.Drawing.Size(76, 22)
         Me.TextBox2.TabIndex = 73
         '
         'PictureBox2
         '
         Me.PictureBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox2.Location = New System.Drawing.Point(53, 152)
+        Me.PictureBox2.Location = New System.Drawing.Point(72, 187)
+        Me.PictureBox2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(46, 20)
+        Me.PictureBox2.Size = New System.Drawing.Size(61, 25)
         Me.PictureBox2.TabIndex = 74
         Me.PictureBox2.TabStop = False
         '
         'cmb_TypeConnection
         '
         Me.cmb_TypeConnection.FormattingEnabled = True
-        Me.cmb_TypeConnection.Location = New System.Drawing.Point(38, 13)
+        Me.cmb_TypeConnection.Location = New System.Drawing.Point(51, 16)
+        Me.cmb_TypeConnection.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cmb_TypeConnection.Name = "cmb_TypeConnection"
-        Me.cmb_TypeConnection.Size = New System.Drawing.Size(211, 21)
+        Me.cmb_TypeConnection.Size = New System.Drawing.Size(280, 24)
         Me.cmb_TypeConnection.TabIndex = 76
         '
         'pan_SaisieGoujons
@@ -222,19 +226,20 @@ Partial Class Frm_ConnectionSlimFloor
         Me.pan_SaisieGoujons.Controls.Add(Me.img_hsc)
         Me.pan_SaisieGoujons.Controls.Add(Me.cmb_goujons)
         Me.pan_SaisieGoujons.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieGoujons.Location = New System.Drawing.Point(0, 80)
+        Me.pan_SaisieGoujons.Location = New System.Drawing.Point(0, 99)
         Me.pan_SaisieGoujons.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_SaisieGoujons.Name = "pan_SaisieGoujons"
-        Me.pan_SaisieGoujons.Size = New System.Drawing.Size(270, 169)
+        Me.pan_SaisieGoujons.Size = New System.Drawing.Size(360, 208)
         Me.pan_SaisieGoujons.TabIndex = 1
         '
         'etq_UnitFu
         '
         Me.etq_UnitFu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitFu.AutoSize = True
-        Me.etq_UnitFu.Location = New System.Drawing.Point(162, 127)
+        Me.etq_UnitFu.Location = New System.Drawing.Point(217, 156)
+        Me.etq_UnitFu.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitFu.Name = "etq_UnitFu"
-        Me.etq_UnitFu.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitFu.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitFu.TabIndex = 75
         Me.etq_UnitFu.Text = "kN"
         '
@@ -242,9 +247,10 @@ Partial Class Frm_ConnectionSlimFloor
         '
         Me.etq_UnitFy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitFy.AutoSize = True
-        Me.etq_UnitFy.Location = New System.Drawing.Point(162, 101)
+        Me.etq_UnitFy.Location = New System.Drawing.Point(217, 124)
+        Me.etq_UnitFy.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitFy.Name = "etq_UnitFy"
-        Me.etq_UnitFy.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitFy.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitFy.TabIndex = 75
         Me.etq_UnitFy.Text = "kN"
         '
@@ -252,9 +258,10 @@ Partial Class Frm_ConnectionSlimFloor
         '
         Me.etq_UnitD.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitD.AutoSize = True
-        Me.etq_UnitD.Location = New System.Drawing.Point(162, 75)
+        Me.etq_UnitD.Location = New System.Drawing.Point(217, 92)
+        Me.etq_UnitD.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitD.Name = "etq_UnitD"
-        Me.etq_UnitD.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitD.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitD.TabIndex = 75
         Me.etq_UnitD.Text = "kN"
         '
@@ -262,77 +269,86 @@ Partial Class Frm_ConnectionSlimFloor
         '
         Me.etq_UnitHsc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitHsc.AutoSize = True
-        Me.etq_UnitHsc.Location = New System.Drawing.Point(162, 49)
+        Me.etq_UnitHsc.Location = New System.Drawing.Point(217, 60)
+        Me.etq_UnitHsc.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitHsc.Name = "etq_UnitHsc"
-        Me.etq_UnitHsc.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitHsc.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitHsc.TabIndex = 75
         Me.etq_UnitHsc.Text = "kN"
         '
         'txt_fu
         '
         Me.txt_fu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_fu.Location = New System.Drawing.Point(98, 123)
+        Me.txt_fu.Location = New System.Drawing.Point(132, 151)
+        Me.txt_fu.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_fu.Name = "txt_fu"
-        Me.txt_fu.Size = New System.Drawing.Size(58, 20)
+        Me.txt_fu.Size = New System.Drawing.Size(76, 22)
         Me.txt_fu.TabIndex = 73
         '
         'txt_fy
         '
         Me.txt_fy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_fy.Location = New System.Drawing.Point(98, 97)
+        Me.txt_fy.Location = New System.Drawing.Point(132, 119)
+        Me.txt_fy.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_fy.Name = "txt_fy"
-        Me.txt_fy.Size = New System.Drawing.Size(58, 20)
+        Me.txt_fy.Size = New System.Drawing.Size(76, 22)
         Me.txt_fy.TabIndex = 73
         '
         'txt_d
         '
         Me.txt_d.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_d.Location = New System.Drawing.Point(98, 71)
+        Me.txt_d.Location = New System.Drawing.Point(132, 87)
+        Me.txt_d.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_d.Name = "txt_d"
-        Me.txt_d.Size = New System.Drawing.Size(58, 20)
+        Me.txt_d.Size = New System.Drawing.Size(76, 22)
         Me.txt_d.TabIndex = 73
         '
         'txt_hsc
         '
         Me.txt_hsc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_hsc.Location = New System.Drawing.Point(98, 45)
+        Me.txt_hsc.Location = New System.Drawing.Point(132, 55)
+        Me.txt_hsc.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_hsc.Name = "txt_hsc"
-        Me.txt_hsc.Size = New System.Drawing.Size(58, 20)
+        Me.txt_hsc.Size = New System.Drawing.Size(76, 22)
         Me.txt_hsc.TabIndex = 73
         '
         'img_fu
         '
         Me.img_fu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_fu.Location = New System.Drawing.Point(53, 123)
+        Me.img_fu.Location = New System.Drawing.Point(72, 151)
+        Me.img_fu.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_fu.Name = "img_fu"
-        Me.img_fu.Size = New System.Drawing.Size(46, 20)
+        Me.img_fu.Size = New System.Drawing.Size(61, 25)
         Me.img_fu.TabIndex = 74
         Me.img_fu.TabStop = False
         '
         'img_fy
         '
         Me.img_fy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_fy.Location = New System.Drawing.Point(53, 97)
+        Me.img_fy.Location = New System.Drawing.Point(72, 119)
+        Me.img_fy.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_fy.Name = "img_fy"
-        Me.img_fy.Size = New System.Drawing.Size(46, 20)
+        Me.img_fy.Size = New System.Drawing.Size(61, 25)
         Me.img_fy.TabIndex = 74
         Me.img_fy.TabStop = False
         '
         'img_d
         '
         Me.img_d.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_d.Location = New System.Drawing.Point(53, 71)
+        Me.img_d.Location = New System.Drawing.Point(72, 87)
+        Me.img_d.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_d.Name = "img_d"
-        Me.img_d.Size = New System.Drawing.Size(46, 20)
+        Me.img_d.Size = New System.Drawing.Size(61, 25)
         Me.img_d.TabIndex = 74
         Me.img_d.TabStop = False
         '
         'img_hsc
         '
         Me.img_hsc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_hsc.Location = New System.Drawing.Point(53, 45)
+        Me.img_hsc.Location = New System.Drawing.Point(72, 55)
+        Me.img_hsc.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_hsc.Name = "img_hsc"
-        Me.img_hsc.Size = New System.Drawing.Size(46, 20)
+        Me.img_hsc.Size = New System.Drawing.Size(61, 25)
         Me.img_hsc.TabIndex = 74
         Me.img_hsc.TabStop = False
         '
@@ -340,9 +356,10 @@ Partial Class Frm_ConnectionSlimFloor
         '
         Me.cmb_goujons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_goujons.FormattingEnabled = True
-        Me.cmb_goujons.Location = New System.Drawing.Point(53, 16)
+        Me.cmb_goujons.Location = New System.Drawing.Point(71, 20)
+        Me.cmb_goujons.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cmb_goujons.Name = "cmb_goujons"
-        Me.cmb_goujons.Size = New System.Drawing.Size(141, 21)
+        Me.cmb_goujons.Size = New System.Drawing.Size(187, 24)
         Me.cmb_goujons.TabIndex = 0
         '
         'pan_SaisieArmature
@@ -361,17 +378,18 @@ Partial Class Frm_ConnectionSlimFloor
         Me.pan_SaisieArmature.Controls.Add(Me.TextBox1)
         Me.pan_SaisieArmature.Controls.Add(Me.PictureBox1)
         Me.pan_SaisieArmature.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieArmature.Location = New System.Drawing.Point(0, 250)
+        Me.pan_SaisieArmature.Location = New System.Drawing.Point(0, 308)
         Me.pan_SaisieArmature.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_SaisieArmature.Name = "pan_SaisieArmature"
-        Me.pan_SaisieArmature.Size = New System.Drawing.Size(270, 119)
+        Me.pan_SaisieArmature.Size = New System.Drawing.Size(360, 147)
         Me.pan_SaisieArmature.TabIndex = 2
         '
         'lbl_ClasseA
         '
-        Me.lbl_ClasseA.Location = New System.Drawing.Point(16, 56)
+        Me.lbl_ClasseA.Location = New System.Drawing.Point(21, 69)
+        Me.lbl_ClasseA.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_ClasseA.Name = "lbl_ClasseA"
-        Me.lbl_ClasseA.Size = New System.Drawing.Size(76, 18)
+        Me.lbl_ClasseA.Size = New System.Drawing.Size(101, 22)
         Me.lbl_ClasseA.TabIndex = 85
         Me.lbl_ClasseA.Text = "lbl_ClasseA"
         Me.lbl_ClasseA.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -380,18 +398,20 @@ Partial Class Frm_ConnectionSlimFloor
         '
         Me.cmb_Acier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_Acier.FormattingEnabled = True
-        Me.cmb_Acier.Location = New System.Drawing.Point(98, 56)
+        Me.cmb_Acier.Location = New System.Drawing.Point(131, 69)
+        Me.cmb_Acier.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cmb_Acier.Name = "cmb_Acier"
-        Me.cmb_Acier.Size = New System.Drawing.Size(85, 21)
+        Me.cmb_Acier.Size = New System.Drawing.Size(112, 24)
         Me.cmb_Acier.TabIndex = 84
         '
         'etq_UnitFsk
         '
         Me.etq_UnitFsk.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitFsk.AutoSize = True
-        Me.etq_UnitFsk.Location = New System.Drawing.Point(162, 86)
+        Me.etq_UnitFsk.Location = New System.Drawing.Point(217, 106)
+        Me.etq_UnitFsk.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitFsk.Name = "etq_UnitFsk"
-        Me.etq_UnitFsk.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitFsk.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitFsk.TabIndex = 83
         Me.etq_UnitFsk.Text = "kN"
         '
@@ -399,44 +419,49 @@ Partial Class Frm_ConnectionSlimFloor
         '
         Me.etq_UnitPhiS.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitPhiS.AutoSize = True
-        Me.etq_UnitPhiS.Location = New System.Drawing.Point(162, 21)
+        Me.etq_UnitPhiS.Location = New System.Drawing.Point(217, 26)
+        Me.etq_UnitPhiS.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitPhiS.Name = "etq_UnitPhiS"
-        Me.etq_UnitPhiS.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitPhiS.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitPhiS.TabIndex = 83
         Me.etq_UnitPhiS.Text = "kN"
         '
         'txt_Fsk
         '
         Me.txt_Fsk.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Fsk.Location = New System.Drawing.Point(98, 82)
+        Me.txt_Fsk.Location = New System.Drawing.Point(132, 101)
+        Me.txt_Fsk.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Fsk.Name = "txt_Fsk"
         Me.txt_Fsk.ReadOnly = True
-        Me.txt_Fsk.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Fsk.Size = New System.Drawing.Size(76, 22)
         Me.txt_Fsk.TabIndex = 81
         '
         'img_Fsk
         '
         Me.img_Fsk.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Fsk.Location = New System.Drawing.Point(53, 82)
+        Me.img_Fsk.Location = New System.Drawing.Point(72, 101)
+        Me.img_Fsk.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_Fsk.Name = "img_Fsk"
-        Me.img_Fsk.Size = New System.Drawing.Size(46, 20)
+        Me.img_Fsk.Size = New System.Drawing.Size(61, 25)
         Me.img_Fsk.TabIndex = 82
         Me.img_Fsk.TabStop = False
         '
         'txt_PhiS
         '
         Me.txt_PhiS.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_PhiS.Location = New System.Drawing.Point(98, 17)
+        Me.txt_PhiS.Location = New System.Drawing.Point(132, 21)
+        Me.txt_PhiS.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_PhiS.Name = "txt_PhiS"
-        Me.txt_PhiS.Size = New System.Drawing.Size(58, 20)
+        Me.txt_PhiS.Size = New System.Drawing.Size(76, 22)
         Me.txt_PhiS.TabIndex = 81
         '
         'img_PhiS
         '
         Me.img_PhiS.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_PhiS.Location = New System.Drawing.Point(53, 17)
+        Me.img_PhiS.Location = New System.Drawing.Point(72, 21)
+        Me.img_PhiS.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_PhiS.Name = "img_PhiS"
-        Me.img_PhiS.Size = New System.Drawing.Size(46, 20)
+        Me.img_PhiS.Size = New System.Drawing.Size(61, 25)
         Me.img_PhiS.TabIndex = 82
         Me.img_PhiS.TabStop = False
         '
@@ -444,26 +469,29 @@ Partial Class Frm_ConnectionSlimFloor
         '
         Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(162, 156)
+        Me.Label1.Location = New System.Drawing.Point(217, 192)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(21, 13)
+        Me.Label1.Size = New System.Drawing.Size(24, 16)
         Me.Label1.TabIndex = 75
         Me.Label1.Text = "kN"
         '
         'TextBox1
         '
         Me.TextBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox1.Location = New System.Drawing.Point(98, 152)
+        Me.TextBox1.Location = New System.Drawing.Point(132, 187)
+        Me.TextBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(58, 20)
+        Me.TextBox1.Size = New System.Drawing.Size(76, 22)
         Me.TextBox1.TabIndex = 73
         '
         'PictureBox1
         '
         Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Location = New System.Drawing.Point(53, 152)
+        Me.PictureBox1.Location = New System.Drawing.Point(72, 187)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(46, 20)
+        Me.PictureBox1.Size = New System.Drawing.Size(61, 25)
         Me.PictureBox1.TabIndex = 74
         Me.PictureBox1.TabStop = False
         '
@@ -473,10 +501,10 @@ Partial Class Frm_ConnectionSlimFloor
         Me.lbl_Connection.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_Connection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Connection.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Connection.Location = New System.Drawing.Point(0, 370)
+        Me.lbl_Connection.Location = New System.Drawing.Point(0, 456)
         Me.lbl_Connection.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Connection.Name = "lbl_Connection"
-        Me.lbl_Connection.Size = New System.Drawing.Size(270, 30)
+        Me.lbl_Connection.Size = New System.Drawing.Size(360, 37)
         Me.lbl_Connection.TabIndex = 0
         Me.lbl_Connection.Text = "lbl_Connection"
         Me.lbl_Connection.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -491,51 +519,56 @@ Partial Class Frm_ConnectionSlimFloor
         Me.pan_SaisieConnection.Controls.Add(Me.cmb_NbRow_I1)
         Me.pan_SaisieConnection.Controls.Add(Me.etq_Somme)
         Me.pan_SaisieConnection.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieConnection.Location = New System.Drawing.Point(0, 401)
+        Me.pan_SaisieConnection.Location = New System.Drawing.Point(0, 494)
         Me.pan_SaisieConnection.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.pan_SaisieConnection.Name = "pan_SaisieConnection"
-        Me.pan_SaisieConnection.Size = New System.Drawing.Size(270, 97)
+        Me.pan_SaisieConnection.Size = New System.Drawing.Size(360, 119)
         Me.pan_SaisieConnection.TabIndex = 1
         '
         'lbl_EspacementLongi
         '
-        Me.lbl_EspacementLongi.Location = New System.Drawing.Point(13, 42)
+        Me.lbl_EspacementLongi.Location = New System.Drawing.Point(17, 52)
+        Me.lbl_EspacementLongi.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_EspacementLongi.Name = "lbl_EspacementLongi"
-        Me.lbl_EspacementLongi.Size = New System.Drawing.Size(150, 13)
+        Me.lbl_EspacementLongi.Size = New System.Drawing.Size(200, 16)
         Me.lbl_EspacementLongi.TabIndex = 75
         Me.lbl_EspacementLongi.Text = "lbl_EspacementLongi"
         Me.lbl_EspacementLongi.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'lbl_NbRows
         '
-        Me.lbl_NbRows.Location = New System.Drawing.Point(13, 20)
+        Me.lbl_NbRows.Location = New System.Drawing.Point(17, 25)
+        Me.lbl_NbRows.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_NbRows.Name = "lbl_NbRows"
-        Me.lbl_NbRows.Size = New System.Drawing.Size(150, 13)
+        Me.lbl_NbRows.Size = New System.Drawing.Size(200, 16)
         Me.lbl_NbRows.TabIndex = 75
         Me.lbl_NbRows.Text = "lbl_NbRows"
         Me.lbl_NbRows.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txt_EspLongi_I1
         '
-        Me.txt_EspLongi_I1.Location = New System.Drawing.Point(167, 40)
+        Me.txt_EspLongi_I1.Location = New System.Drawing.Point(223, 49)
+        Me.txt_EspLongi_I1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_EspLongi_I1.Name = "txt_EspLongi_I1"
-        Me.txt_EspLongi_I1.Size = New System.Drawing.Size(67, 20)
+        Me.txt_EspLongi_I1.Size = New System.Drawing.Size(88, 22)
         Me.txt_EspLongi_I1.TabIndex = 74
         '
         'cmb_NbRow_I1
         '
         Me.cmb_NbRow_I1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NbRow_I1.FormattingEnabled = True
-        Me.cmb_NbRow_I1.Location = New System.Drawing.Point(168, 17)
+        Me.cmb_NbRow_I1.Location = New System.Drawing.Point(224, 21)
+        Me.cmb_NbRow_I1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cmb_NbRow_I1.Name = "cmb_NbRow_I1"
-        Me.cmb_NbRow_I1.Size = New System.Drawing.Size(66, 21)
+        Me.cmb_NbRow_I1.Size = New System.Drawing.Size(87, 24)
         Me.cmb_NbRow_I1.TabIndex = 61
         '
         'etq_Somme
         '
         Me.etq_Somme.AutoSize = True
         Me.etq_Somme.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.etq_Somme.Location = New System.Drawing.Point(35, 71)
+        Me.etq_Somme.Location = New System.Drawing.Point(47, 87)
+        Me.etq_Somme.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_Somme.Name = "etq_Somme"
         Me.etq_Somme.Size = New System.Drawing.Size(72, 13)
         Me.etq_Somme.TabIndex = 60
@@ -548,7 +581,7 @@ Partial Class Frm_ConnectionSlimFloor
         Me.img_Stud.Location = New System.Drawing.Point(0, 0)
         Me.img_Stud.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.img_Stud.Name = "img_Stud"
-        Me.img_Stud.Size = New System.Drawing.Size(392, 496)
+        Me.img_Stud.Size = New System.Drawing.Size(524, 611)
         Me.img_Stud.TabIndex = 76
         Me.img_Stud.TabStop = False
         '
@@ -572,7 +605,7 @@ Partial Class Frm_ConnectionSlimFloor
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(671, 544)
+        Me.pan_General.Size = New System.Drawing.Size(895, 670)
         Me.pan_General.TabIndex = 4
         '
         'TLpan_Main
@@ -583,40 +616,43 @@ Partial Class Frm_ConnectionSlimFloor
         Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(671, 544)
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49.0!))
+        Me.TLpan_Main.Size = New System.Drawing.Size(895, 670)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
         '
         Me.TLPan_PartieBasse.ColumnCount = 5
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 507)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(4, 625)
+        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(665, 34)
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(887, 41)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(345, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(461, 4)
+        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
+        Me.btn_OK.Size = New System.Drawing.Size(152, 33)
         Me.btn_OK.TabIndex = 1
         Me.btn_OK.Text = "btn_OK"
         Me.btn_OK.UseVisualStyleBackColor = True
@@ -625,9 +661,10 @@ Partial Class Frm_ConnectionSlimFloor
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(205, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(274, 4)
+        Me.btn_Annuler.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_Annuler.Name = "btn_Annuler"
-        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Annuler.Size = New System.Drawing.Size(152, 33)
         Me.btn_Annuler.TabIndex = 0
         Me.btn_Annuler.Text = "btn_Annuler"
         Me.btn_Annuler.UseVisualStyleBackColor = True
@@ -637,15 +674,16 @@ Partial Class Frm_ConnectionSlimFloor
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLPan_PartieHaute)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Main.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Main.Location = New System.Drawing.Point(4, 4)
+        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(665, 498)
+        Me.pan_Main.Size = New System.Drawing.Size(887, 613)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_PartieHaute
         '
         Me.TLPan_PartieHaute.ColumnCount = 2
-        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 270.0!))
+        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 360.0!))
         Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_PartieHaute.Controls.Add(Me.pan_Droite, 0, 0)
         Me.TLPan_PartieHaute.Controls.Add(Me.pan_Gauche, 0, 0)
@@ -655,7 +693,7 @@ Partial Class Frm_ConnectionSlimFloor
         Me.TLPan_PartieHaute.Name = "TLPan_PartieHaute"
         Me.TLPan_PartieHaute.RowCount = 1
         Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(665, 498)
+        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(887, 613)
         Me.TLPan_PartieHaute.TabIndex = 0
         '
         'pan_Droite
@@ -663,10 +701,10 @@ Partial Class Frm_ConnectionSlimFloor
         Me.pan_Droite.AutoScroll = True
         Me.pan_Droite.Controls.Add(Me.TLPan_Droite)
         Me.pan_Droite.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Droite.Location = New System.Drawing.Point(271, 0)
+        Me.pan_Droite.Location = New System.Drawing.Point(361, 0)
         Me.pan_Droite.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.pan_Droite.Name = "pan_Droite"
-        Me.pan_Droite.Size = New System.Drawing.Size(394, 498)
+        Me.pan_Droite.Size = New System.Drawing.Size(526, 613)
         Me.pan_Droite.TabIndex = 1
         '
         'TLPan_Droite
@@ -680,7 +718,7 @@ Partial Class Frm_ConnectionSlimFloor
         Me.TLPan_Droite.Name = "TLPan_Droite"
         Me.TLPan_Droite.RowCount = 1
         Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Droite.Size = New System.Drawing.Size(394, 498)
+        Me.TLPan_Droite.Size = New System.Drawing.Size(526, 613)
         Me.TLPan_Droite.TabIndex = 0
         '
         'Panel1
@@ -692,19 +730,21 @@ Partial Class Frm_ConnectionSlimFloor
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(394, 498)
+        Me.Panel1.Size = New System.Drawing.Size(526, 613)
         Me.Panel1.TabIndex = 77
         '
         'Frm_ConnectionSlimFloor
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(671, 544)
+        Me.ClientSize = New System.Drawing.Size(895, 670)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_ConnectionSlimFloor"
+        Me.ShowInTaskbar = False
         Me.Text = "Frm_ConnectionSlimFloor"
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)

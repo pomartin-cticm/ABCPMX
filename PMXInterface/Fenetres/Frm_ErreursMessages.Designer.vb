@@ -55,7 +55,7 @@ Partial Class Frm_ErreursMessages
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(529, 302)
+        Me.pan_General.Size = New System.Drawing.Size(705, 372)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -66,36 +66,39 @@ Partial Class Frm_ErreursMessages
         Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(529, 302)
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49.0!))
+        Me.TLpan_Main.Size = New System.Drawing.Size(705, 372)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
         '
         Me.TLPan_PartieBasse.ColumnCount = 3
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 265)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(4, 327)
+        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(523, 34)
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(697, 41)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(204, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(272, 4)
+        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
+        Me.btn_OK.Size = New System.Drawing.Size(152, 33)
         Me.btn_OK.TabIndex = 1
         Me.btn_OK.Text = "btn_OK"
         Me.btn_OK.UseVisualStyleBackColor = True
@@ -104,9 +107,10 @@ Partial Class Frm_ErreursMessages
         '
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLpan_Affichage)
-        Me.pan_Main.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Main.Location = New System.Drawing.Point(4, 4)
+        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(509, 202)
+        Me.pan_Main.Size = New System.Drawing.Size(679, 249)
         Me.pan_Main.TabIndex = 1
         '
         'TLpan_Affichage
@@ -118,12 +122,13 @@ Partial Class Frm_ErreursMessages
         Me.TLpan_Affichage.Controls.Add(Me.lbl_General, 0, 0)
         Me.TLpan_Affichage.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Affichage.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Affichage.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLpan_Affichage.Name = "TLpan_Affichage"
         Me.TLpan_Affichage.RowCount = 3
-        Me.TLpan_Affichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_Affichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.TLpan_Affichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Affichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
-        Me.TLpan_Affichage.Size = New System.Drawing.Size(509, 202)
+        Me.TLpan_Affichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 74.0!))
+        Me.TLpan_Affichage.Size = New System.Drawing.Size(679, 249)
         Me.TLpan_Affichage.TabIndex = 1
         '
         'pan_Lien
@@ -133,18 +138,19 @@ Partial Class Frm_ErreursMessages
         Me.pan_Lien.Controls.Add(Me.lbl_ContactSupport)
         Me.pan_Lien.Controls.Add(Me.lbk_Support)
         Me.pan_Lien.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Lien.Location = New System.Drawing.Point(0, 143)
+        Me.pan_Lien.Location = New System.Drawing.Point(0, 176)
         Me.pan_Lien.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.pan_Lien.Name = "pan_Lien"
-        Me.pan_Lien.Size = New System.Drawing.Size(509, 59)
+        Me.pan_Lien.Size = New System.Drawing.Size(679, 73)
         Me.pan_Lien.TabIndex = 2
         '
         'lbl_ContactSupport
         '
         Me.lbl_ContactSupport.AutoSize = True
-        Me.lbl_ContactSupport.Location = New System.Drawing.Point(8, 23)
+        Me.lbl_ContactSupport.Location = New System.Drawing.Point(11, 28)
+        Me.lbl_ContactSupport.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_ContactSupport.Name = "lbl_ContactSupport"
-        Me.lbl_ContactSupport.Size = New System.Drawing.Size(97, 13)
+        Me.lbl_ContactSupport.Size = New System.Drawing.Size(120, 16)
         Me.lbl_ContactSupport.TabIndex = 18
         Me.lbl_ContactSupport.Text = "lbl_ContactSupport"
         '
@@ -152,7 +158,8 @@ Partial Class Frm_ErreursMessages
         '
         Me.lbk_Support.AutoSize = True
         Me.lbk_Support.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbk_Support.Location = New System.Drawing.Point(173, 23)
+        Me.lbk_Support.Location = New System.Drawing.Point(231, 28)
+        Me.lbk_Support.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbk_Support.Name = "lbk_Support"
         Me.lbk_Support.Size = New System.Drawing.Size(144, 14)
         Me.lbk_Support.TabIndex = 17
@@ -166,10 +173,10 @@ Partial Class Frm_ErreursMessages
         Me.pan_Affichage.Controls.Add(Me.pan_Message)
         Me.pan_Affichage.Controls.Add(Me.pan_Source)
         Me.pan_Affichage.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Affichage.Location = New System.Drawing.Point(0, 30)
+        Me.pan_Affichage.Location = New System.Drawing.Point(0, 37)
         Me.pan_Affichage.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Affichage.Name = "pan_Affichage"
-        Me.pan_Affichage.Size = New System.Drawing.Size(509, 112)
+        Me.pan_Affichage.Size = New System.Drawing.Size(679, 138)
         Me.pan_Affichage.TabIndex = 1
         '
         'pan_Message
@@ -178,9 +185,10 @@ Partial Class Frm_ErreursMessages
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pan_Message.Controls.Add(Me.rtxt_Message)
-        Me.pan_Message.Location = New System.Drawing.Point(2, 49)
+        Me.pan_Message.Location = New System.Drawing.Point(3, 60)
+        Me.pan_Message.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Message.Name = "pan_Message"
-        Me.pan_Message.Size = New System.Drawing.Size(502, 58)
+        Me.pan_Message.Size = New System.Drawing.Size(670, 72)
         Me.pan_Message.TabIndex = 1
         '
         'rtxt_Message
@@ -189,9 +197,10 @@ Partial Class Frm_ErreursMessages
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.rtxt_Message.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.rtxt_Message.Location = New System.Drawing.Point(3, 3)
+        Me.rtxt_Message.Location = New System.Drawing.Point(4, 4)
+        Me.rtxt_Message.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rtxt_Message.Name = "rtxt_Message"
-        Me.rtxt_Message.Size = New System.Drawing.Size(496, 52)
+        Me.rtxt_Message.Size = New System.Drawing.Size(662, 65)
         Me.rtxt_Message.TabIndex = 0
         Me.rtxt_Message.Text = ""
         '
@@ -200,17 +209,19 @@ Partial Class Frm_ErreursMessages
         Me.pan_Source.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pan_Source.Controls.Add(Me.lbl_Source)
-        Me.pan_Source.Location = New System.Drawing.Point(2, 3)
+        Me.pan_Source.Location = New System.Drawing.Point(3, 4)
+        Me.pan_Source.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Source.Name = "pan_Source"
-        Me.pan_Source.Size = New System.Drawing.Size(502, 43)
+        Me.pan_Source.Size = New System.Drawing.Size(670, 53)
         Me.pan_Source.TabIndex = 0
         '
         'lbl_Source
         '
         Me.lbl_Source.AutoSize = True
-        Me.lbl_Source.Location = New System.Drawing.Point(6, 15)
+        Me.lbl_Source.Location = New System.Drawing.Point(8, 18)
+        Me.lbl_Source.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_Source.Name = "lbl_Source"
-        Me.lbl_Source.Size = New System.Drawing.Size(57, 13)
+        Me.lbl_Source.Size = New System.Drawing.Size(71, 16)
         Me.lbl_Source.TabIndex = 0
         Me.lbl_Source.Text = "lbl_Source"
         '
@@ -224,21 +235,23 @@ Partial Class Frm_ErreursMessages
         Me.lbl_General.Location = New System.Drawing.Point(0, 0)
         Me.lbl_General.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_General.Name = "lbl_General"
-        Me.lbl_General.Size = New System.Drawing.Size(509, 30)
+        Me.lbl_General.Size = New System.Drawing.Size(679, 37)
         Me.lbl_General.TabIndex = 0
         Me.lbl_General.Text = "lbl_General"
         Me.lbl_General.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Frm_ErreursMessages
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(529, 302)
+        Me.ClientSize = New System.Drawing.Size(705, 372)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_ErreursMessages"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Frm_ErreursMessages"
         Me.pan_General.ResumeLayout(False)

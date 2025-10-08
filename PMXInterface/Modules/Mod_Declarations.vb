@@ -4,8 +4,6 @@ Public Module Mod_Declarations
 
 #Region " Gestion des fonctionnalités avec les versions "
 
-    Public lSLIMAcier As Boolean                            ' Indique si les sections slim floors en acier sont disponibles dans le logiciel
-    Public lSLIMMixte As Boolean                            ' Indique si les sections slim floors mixtes sont disponibles dans le logiciel
 
 #End Region
 
@@ -276,8 +274,12 @@ Public Module Mod_Declarations
         Public lFrenchOnly As Boolean           ' Indique si interface en français uniquement (mode normal)
         Public lEC3 As Boolean                  ' Indique si on affiche les aciers avec les propriétés de la table 3.1 de l'EN 1993-1-1 (en plus de la norme produit)
         Public lFIRE As Boolean                 ' Indique si le calcul au feu est disponible dans le logiciel
+        Public lFIRESLIMAcier As Boolean        ' Indique si le calcul au feu est disponible dans le logiciel pour les slim floor acier
+        Public lFIRESLIMMixte As Boolean        ' Indique si le calcul au feu est disponible dans le logiciel pour les slim floor mixte
         Public lCreuxO As Boolean               ' Indique si gestion creux d'ondes
         Public lHISTAR As Boolean               ' Indique si on affiche les aciers HISTAR
+        Public lSLIMAcier As Boolean            ' Indique si les sections slim floors en acier sont disponibles dans le logiciel
+        Public lSLIMMixte As Boolean            ' Indique si les sections slim floors mixtes sont disponibles dans le logiciel
     End Structure
 
     Public Enum Enu_Normes

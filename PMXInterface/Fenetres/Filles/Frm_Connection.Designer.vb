@@ -53,6 +53,7 @@ Partial Class Frm_Connection
         Me.chk_AutomaticDesign = New System.Windows.Forms.CheckBox()
         Me.txt_Portee = New System.Windows.Forms.TextBox()
         Me.pan_ObjetsConnexion = New System.Windows.Forms.Panel()
+        Me.chk_ConfigSym = New System.Windows.Forms.CheckBox()
         Me.cmb_EspLongi_I3 = New System.Windows.Forms.ComboBox()
         Me.cmb_EspLongi_I2 = New System.Windows.Forms.ComboBox()
         Me.cmb_EspLongi_I1 = New System.Windows.Forms.ComboBox()
@@ -93,7 +94,6 @@ Partial Class Frm_Connection
         Me.img_hsc = New System.Windows.Forms.PictureBox()
         Me.cmb_goujons = New System.Windows.Forms.ComboBox()
         Me.ErrorProvider_Frm_Connection = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.chk_ConfigSym = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -138,7 +138,7 @@ Partial Class Frm_Connection
         Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
-        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -158,13 +158,13 @@ Partial Class Frm_Connection
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_PartieBasse.Location = New System.Drawing.Point(4, 487)
-        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
         Me.TLPan_PartieBasse.Size = New System.Drawing.Size(1044, 41)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
@@ -172,7 +172,7 @@ Partial Class Frm_Connection
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btn_OK.Location = New System.Drawing.Point(539, 4)
-        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_OK.Name = "btn_OK"
         Me.btn_OK.Size = New System.Drawing.Size(152, 33)
         Me.btn_OK.TabIndex = 1
@@ -184,7 +184,7 @@ Partial Class Frm_Connection
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btn_Annuler.Location = New System.Drawing.Point(352, 4)
-        Me.btn_Annuler.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btn_Annuler.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_Annuler.Name = "btn_Annuler"
         Me.btn_Annuler.Size = New System.Drawing.Size(152, 33)
         Me.btn_Annuler.TabIndex = 0
@@ -197,7 +197,7 @@ Partial Class Frm_Connection
         Me.pan_Main.Controls.Add(Me.TLPan_PartieHaute)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(4, 4)
-        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4)
         Me.pan_Main.Name = "pan_Main"
         Me.pan_Main.Size = New System.Drawing.Size(1044, 475)
         Me.pan_Main.TabIndex = 1
@@ -318,7 +318,7 @@ Partial Class Frm_Connection
         Me.pan_Commandes.Controls.Add(Me.btn_Supprimer)
         Me.pan_Commandes.Controls.Add(Me.btn_Ajouter)
         Me.pan_Commandes.Location = New System.Drawing.Point(515, 98)
-        Me.pan_Commandes.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.pan_Commandes.Margin = New System.Windows.Forms.Padding(4)
         Me.pan_Commandes.Name = "pan_Commandes"
         Me.pan_Commandes.Size = New System.Drawing.Size(177, 134)
         Me.pan_Commandes.TabIndex = 82
@@ -370,7 +370,7 @@ Partial Class Frm_Connection
         '
         Me.btn_Supprimer.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btn_Supprimer.Location = New System.Drawing.Point(7, 94)
-        Me.btn_Supprimer.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btn_Supprimer.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_Supprimer.Name = "btn_Supprimer"
         Me.btn_Supprimer.Size = New System.Drawing.Size(128, 30)
         Me.btn_Supprimer.TabIndex = 59
@@ -381,7 +381,7 @@ Partial Class Frm_Connection
         '
         Me.btn_Ajouter.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btn_Ajouter.Location = New System.Drawing.Point(7, 57)
-        Me.btn_Ajouter.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btn_Ajouter.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_Ajouter.Name = "btn_Ajouter"
         Me.btn_Ajouter.Size = New System.Drawing.Size(128, 30)
         Me.btn_Ajouter.TabIndex = 58
@@ -395,7 +395,7 @@ Partial Class Frm_Connection
         Me.Panel1.Controls.Add(Me.btn_Suivant)
         Me.Panel1.Controls.Add(Me.cmb_Travee)
         Me.Panel1.Location = New System.Drawing.Point(232, 55)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(265, 34)
         Me.Panel1.TabIndex = 76
@@ -437,7 +437,7 @@ Partial Class Frm_Connection
         Me.cmb_Travee.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_Travee.FormattingEnabled = True
         Me.cmb_Travee.Location = New System.Drawing.Point(33, 4)
-        Me.cmb_Travee.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cmb_Travee.Margin = New System.Windows.Forms.Padding(4)
         Me.cmb_Travee.Name = "cmb_Travee"
         Me.cmb_Travee.Size = New System.Drawing.Size(176, 24)
         Me.cmb_Travee.TabIndex = 75
@@ -446,7 +446,7 @@ Partial Class Frm_Connection
         '
         Me.chk_AutomaticDesign.AutoSize = True
         Me.chk_AutomaticDesign.Location = New System.Drawing.Point(27, 20)
-        Me.chk_AutomaticDesign.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.chk_AutomaticDesign.Margin = New System.Windows.Forms.Padding(4)
         Me.chk_AutomaticDesign.Name = "chk_AutomaticDesign"
         Me.chk_AutomaticDesign.Size = New System.Drawing.Size(156, 20)
         Me.chk_AutomaticDesign.TabIndex = 77
@@ -458,7 +458,7 @@ Partial Class Frm_Connection
         '
         Me.txt_Portee.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Portee.Location = New System.Drawing.Point(33, 59)
-        Me.txt_Portee.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_Portee.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_Portee.Name = "txt_Portee"
         Me.txt_Portee.ReadOnly = True
         Me.txt_Portee.Size = New System.Drawing.Size(195, 22)
@@ -490,17 +490,27 @@ Partial Class Frm_Connection
         Me.pan_ObjetsConnexion.Controls.Add(Me.txt_Largeur)
         Me.pan_ObjetsConnexion.Controls.Add(Me.txt_Indice)
         Me.pan_ObjetsConnexion.Location = New System.Drawing.Point(25, 96)
-        Me.pan_ObjetsConnexion.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.pan_ObjetsConnexion.Margin = New System.Windows.Forms.Padding(4)
         Me.pan_ObjetsConnexion.Name = "pan_ObjetsConnexion"
         Me.pan_ObjetsConnexion.Size = New System.Drawing.Size(485, 138)
         Me.pan_ObjetsConnexion.TabIndex = 81
+        '
+        'chk_ConfigSym
+        '
+        Me.chk_ConfigSym.AutoSize = True
+        Me.chk_ConfigSym.Location = New System.Drawing.Point(8, 112)
+        Me.chk_ConfigSym.Name = "chk_ConfigSym"
+        Me.chk_ConfigSym.Size = New System.Drawing.Size(119, 20)
+        Me.chk_ConfigSym.TabIndex = 75
+        Me.chk_ConfigSym.Text = "chk_ConfigSym"
+        Me.chk_ConfigSym.UseVisualStyleBackColor = True
         '
         'cmb_EspLongi_I3
         '
         Me.cmb_EspLongi_I3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_EspLongi_I3.FormattingEnabled = True
         Me.cmb_EspLongi_I3.Location = New System.Drawing.Point(384, 78)
-        Me.cmb_EspLongi_I3.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cmb_EspLongi_I3.Margin = New System.Windows.Forms.Padding(4)
         Me.cmb_EspLongi_I3.Name = "cmb_EspLongi_I3"
         Me.cmb_EspLongi_I3.Size = New System.Drawing.Size(87, 24)
         Me.cmb_EspLongi_I3.TabIndex = 63
@@ -510,7 +520,7 @@ Partial Class Frm_Connection
         Me.cmb_EspLongi_I2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_EspLongi_I2.FormattingEnabled = True
         Me.cmb_EspLongi_I2.Location = New System.Drawing.Point(295, 78)
-        Me.cmb_EspLongi_I2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cmb_EspLongi_I2.Margin = New System.Windows.Forms.Padding(4)
         Me.cmb_EspLongi_I2.Name = "cmb_EspLongi_I2"
         Me.cmb_EspLongi_I2.Size = New System.Drawing.Size(87, 24)
         Me.cmb_EspLongi_I2.TabIndex = 62
@@ -520,7 +530,7 @@ Partial Class Frm_Connection
         Me.cmb_EspLongi_I1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_EspLongi_I1.FormattingEnabled = True
         Me.cmb_EspLongi_I1.Location = New System.Drawing.Point(205, 78)
-        Me.cmb_EspLongi_I1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cmb_EspLongi_I1.Margin = New System.Windows.Forms.Padding(4)
         Me.cmb_EspLongi_I1.Name = "cmb_EspLongi_I1"
         Me.cmb_EspLongi_I1.Size = New System.Drawing.Size(87, 24)
         Me.cmb_EspLongi_I1.TabIndex = 61
@@ -528,7 +538,7 @@ Partial Class Frm_Connection
         'txt_Largeur_I3
         '
         Me.txt_Largeur_I3.Location = New System.Drawing.Point(383, 27)
-        Me.txt_Largeur_I3.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_Largeur_I3.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_Largeur_I3.Name = "txt_Largeur_I3"
         Me.txt_Largeur_I3.Size = New System.Drawing.Size(87, 22)
         Me.txt_Largeur_I3.TabIndex = 74
@@ -537,7 +547,7 @@ Partial Class Frm_Connection
         'txt_Largeur_I2
         '
         Me.txt_Largeur_I2.Location = New System.Drawing.Point(293, 27)
-        Me.txt_Largeur_I2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_Largeur_I2.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_Largeur_I2.Name = "txt_Largeur_I2"
         Me.txt_Largeur_I2.Size = New System.Drawing.Size(87, 22)
         Me.txt_Largeur_I2.TabIndex = 74
@@ -546,7 +556,7 @@ Partial Class Frm_Connection
         'txt_Largeur_I1
         '
         Me.txt_Largeur_I1.Location = New System.Drawing.Point(204, 27)
-        Me.txt_Largeur_I1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_Largeur_I1.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_Largeur_I1.Name = "txt_Largeur_I1"
         Me.txt_Largeur_I1.Size = New System.Drawing.Size(87, 22)
         Me.txt_Largeur_I1.TabIndex = 74
@@ -557,7 +567,7 @@ Partial Class Frm_Connection
         Me.cmb_NbRow_I3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NbRow_I3.FormattingEnabled = True
         Me.cmb_NbRow_I3.Location = New System.Drawing.Point(384, 50)
-        Me.cmb_NbRow_I3.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cmb_NbRow_I3.Margin = New System.Windows.Forms.Padding(4)
         Me.cmb_NbRow_I3.Name = "cmb_NbRow_I3"
         Me.cmb_NbRow_I3.Size = New System.Drawing.Size(87, 24)
         Me.cmb_NbRow_I3.TabIndex = 63
@@ -565,7 +575,7 @@ Partial Class Frm_Connection
         'txt_EspLongi_I3
         '
         Me.txt_EspLongi_I3.Location = New System.Drawing.Point(383, 110)
-        Me.txt_EspLongi_I3.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_EspLongi_I3.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_EspLongi_I3.Name = "txt_EspLongi_I3"
         Me.txt_EspLongi_I3.Size = New System.Drawing.Size(87, 22)
         Me.txt_EspLongi_I3.TabIndex = 74
@@ -574,7 +584,7 @@ Partial Class Frm_Connection
         'txt_EspLongi_I2
         '
         Me.txt_EspLongi_I2.Location = New System.Drawing.Point(293, 110)
-        Me.txt_EspLongi_I2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_EspLongi_I2.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_EspLongi_I2.Name = "txt_EspLongi_I2"
         Me.txt_EspLongi_I2.Size = New System.Drawing.Size(87, 22)
         Me.txt_EspLongi_I2.TabIndex = 74
@@ -583,7 +593,7 @@ Partial Class Frm_Connection
         'txt_EspLongi_I1
         '
         Me.txt_EspLongi_I1.Location = New System.Drawing.Point(204, 110)
-        Me.txt_EspLongi_I1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_EspLongi_I1.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_EspLongi_I1.Name = "txt_EspLongi_I1"
         Me.txt_EspLongi_I1.Size = New System.Drawing.Size(87, 22)
         Me.txt_EspLongi_I1.TabIndex = 74
@@ -594,7 +604,7 @@ Partial Class Frm_Connection
         Me.cmb_NbRow_I2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NbRow_I2.FormattingEnabled = True
         Me.cmb_NbRow_I2.Location = New System.Drawing.Point(295, 50)
-        Me.cmb_NbRow_I2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cmb_NbRow_I2.Margin = New System.Windows.Forms.Padding(4)
         Me.cmb_NbRow_I2.Name = "cmb_NbRow_I2"
         Me.cmb_NbRow_I2.Size = New System.Drawing.Size(87, 24)
         Me.cmb_NbRow_I2.TabIndex = 62
@@ -604,7 +614,7 @@ Partial Class Frm_Connection
         Me.cmb_NbRow_I1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NbRow_I1.FormattingEnabled = True
         Me.cmb_NbRow_I1.Location = New System.Drawing.Point(205, 50)
-        Me.cmb_NbRow_I1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cmb_NbRow_I1.Margin = New System.Windows.Forms.Padding(4)
         Me.cmb_NbRow_I1.Name = "cmb_NbRow_I1"
         Me.cmb_NbRow_I1.Size = New System.Drawing.Size(87, 24)
         Me.cmb_NbRow_I1.TabIndex = 61
@@ -613,7 +623,7 @@ Partial Class Frm_Connection
         '
         Me.txt_EspacementLongi.BackColor = System.Drawing.SystemColors.Window
         Me.txt_EspacementLongi.Location = New System.Drawing.Point(8, 79)
-        Me.txt_EspacementLongi.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_EspacementLongi.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_EspacementLongi.Name = "txt_EspacementLongi"
         Me.txt_EspacementLongi.ReadOnly = True
         Me.txt_EspacementLongi.Size = New System.Drawing.Size(195, 22)
@@ -626,7 +636,7 @@ Partial Class Frm_Connection
         '
         Me.txt_NbRows.BackColor = System.Drawing.SystemColors.Window
         Me.txt_NbRows.Location = New System.Drawing.Point(8, 53)
-        Me.txt_NbRows.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_NbRows.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_NbRows.Name = "txt_NbRows"
         Me.txt_NbRows.ReadOnly = True
         Me.txt_NbRows.Size = New System.Drawing.Size(195, 22)
@@ -639,7 +649,7 @@ Partial Class Frm_Connection
         '
         Me.txt_I3.BackColor = System.Drawing.SystemColors.Window
         Me.txt_I3.Location = New System.Drawing.Point(384, 1)
-        Me.txt_I3.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_I3.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_I3.Name = "txt_I3"
         Me.txt_I3.ReadOnly = True
         Me.txt_I3.Size = New System.Drawing.Size(87, 22)
@@ -652,7 +662,7 @@ Partial Class Frm_Connection
         '
         Me.txt_I2.BackColor = System.Drawing.SystemColors.Window
         Me.txt_I2.Location = New System.Drawing.Point(295, 1)
-        Me.txt_I2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_I2.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_I2.Name = "txt_I2"
         Me.txt_I2.ReadOnly = True
         Me.txt_I2.Size = New System.Drawing.Size(87, 22)
@@ -665,7 +675,7 @@ Partial Class Frm_Connection
         '
         Me.txt_I1.BackColor = System.Drawing.SystemColors.Window
         Me.txt_I1.Location = New System.Drawing.Point(205, 1)
-        Me.txt_I1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_I1.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_I1.Name = "txt_I1"
         Me.txt_I1.ReadOnly = True
         Me.txt_I1.Size = New System.Drawing.Size(87, 22)
@@ -678,7 +688,7 @@ Partial Class Frm_Connection
         '
         Me.txt_Largeur.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Largeur.Location = New System.Drawing.Point(8, 27)
-        Me.txt_Largeur.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_Largeur.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_Largeur.Name = "txt_Largeur"
         Me.txt_Largeur.ReadOnly = True
         Me.txt_Largeur.Size = New System.Drawing.Size(195, 22)
@@ -691,7 +701,7 @@ Partial Class Frm_Connection
         '
         Me.txt_Indice.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice.Location = New System.Drawing.Point(168, 1)
-        Me.txt_Indice.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_Indice.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_Indice.Name = "txt_Indice"
         Me.txt_Indice.ReadOnly = True
         Me.txt_Indice.Size = New System.Drawing.Size(35, 22)
@@ -849,7 +859,7 @@ Partial Class Frm_Connection
         '
         Me.txt_fu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_fu.Location = New System.Drawing.Point(140, 124)
-        Me.txt_fu.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_fu.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_fu.Name = "txt_fu"
         Me.txt_fu.Size = New System.Drawing.Size(76, 22)
         Me.txt_fu.TabIndex = 73
@@ -859,7 +869,7 @@ Partial Class Frm_Connection
         Me.txt_PRd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_PRd.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txt_PRd.Location = New System.Drawing.Point(140, 171)
-        Me.txt_PRd.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_PRd.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_PRd.Name = "txt_PRd"
         Me.txt_PRd.Size = New System.Drawing.Size(76, 20)
         Me.txt_PRd.TabIndex = 73
@@ -868,7 +878,7 @@ Partial Class Frm_Connection
         '
         Me.txt_d.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_d.Location = New System.Drawing.Point(140, 92)
-        Me.txt_d.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_d.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_d.Name = "txt_d"
         Me.txt_d.Size = New System.Drawing.Size(76, 22)
         Me.txt_d.TabIndex = 73
@@ -877,7 +887,7 @@ Partial Class Frm_Connection
         '
         Me.txt_hsc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_hsc.Location = New System.Drawing.Point(140, 60)
-        Me.txt_hsc.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txt_hsc.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_hsc.Name = "txt_hsc"
         Me.txt_hsc.Size = New System.Drawing.Size(76, 22)
         Me.txt_hsc.TabIndex = 73
@@ -886,7 +896,7 @@ Partial Class Frm_Connection
         '
         Me.img_fu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.img_fu.Location = New System.Drawing.Point(80, 124)
-        Me.img_fu.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.img_fu.Margin = New System.Windows.Forms.Padding(4)
         Me.img_fu.Name = "img_fu"
         Me.img_fu.Size = New System.Drawing.Size(61, 25)
         Me.img_fu.TabIndex = 74
@@ -896,7 +906,7 @@ Partial Class Frm_Connection
         '
         Me.img_PRd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.img_PRd.Location = New System.Drawing.Point(80, 171)
-        Me.img_PRd.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.img_PRd.Margin = New System.Windows.Forms.Padding(4)
         Me.img_PRd.Name = "img_PRd"
         Me.img_PRd.Size = New System.Drawing.Size(61, 25)
         Me.img_PRd.TabIndex = 74
@@ -906,7 +916,7 @@ Partial Class Frm_Connection
         '
         Me.img_d.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.img_d.Location = New System.Drawing.Point(80, 92)
-        Me.img_d.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.img_d.Margin = New System.Windows.Forms.Padding(4)
         Me.img_d.Name = "img_d"
         Me.img_d.Size = New System.Drawing.Size(61, 25)
         Me.img_d.TabIndex = 74
@@ -916,7 +926,7 @@ Partial Class Frm_Connection
         '
         Me.img_hsc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.img_hsc.Location = New System.Drawing.Point(80, 60)
-        Me.img_hsc.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.img_hsc.Margin = New System.Windows.Forms.Padding(4)
         Me.img_hsc.Name = "img_hsc"
         Me.img_hsc.Size = New System.Drawing.Size(61, 25)
         Me.img_hsc.TabIndex = 74
@@ -927,7 +937,7 @@ Partial Class Frm_Connection
         Me.cmb_goujons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_goujons.FormattingEnabled = True
         Me.cmb_goujons.Location = New System.Drawing.Point(140, 18)
-        Me.cmb_goujons.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cmb_goujons.Margin = New System.Windows.Forms.Padding(4)
         Me.cmb_goujons.Name = "cmb_goujons"
         Me.cmb_goujons.Size = New System.Drawing.Size(156, 24)
         Me.cmb_goujons.TabIndex = 0
@@ -935,16 +945,6 @@ Partial Class Frm_Connection
         'ErrorProvider_Frm_Connection
         '
         Me.ErrorProvider_Frm_Connection.ContainerControl = Me
-        '
-        'chk_ConfigSym
-        '
-        Me.chk_ConfigSym.AutoSize = True
-        Me.chk_ConfigSym.Location = New System.Drawing.Point(8, 112)
-        Me.chk_ConfigSym.Name = "chk_ConfigSym"
-        Me.chk_ConfigSym.Size = New System.Drawing.Size(119, 20)
-        Me.chk_ConfigSym.TabIndex = 75
-        Me.chk_ConfigSym.Text = "chk_ConfigSym"
-        Me.chk_ConfigSym.UseVisualStyleBackColor = True
         '
         'Frm_Connection
         '
@@ -955,10 +955,11 @@ Partial Class Frm_Connection
         Me.ClientSize = New System.Drawing.Size(1052, 532)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_Connection"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Connection"
         Me.pan_General.ResumeLayout(False)

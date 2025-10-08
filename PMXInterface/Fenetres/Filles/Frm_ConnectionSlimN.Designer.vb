@@ -48,7 +48,7 @@ Partial Class Frm_ConnectionSlimN
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(631, 469)
+        Me.pan_General.Size = New System.Drawing.Size(841, 577)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -59,40 +59,43 @@ Partial Class Frm_ConnectionSlimN
         Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(631, 469)
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49.0!))
+        Me.TLpan_Main.Size = New System.Drawing.Size(841, 577)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
         '
         Me.TLPan_PartieBasse.ColumnCount = 5
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 432)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(4, 532)
+        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(625, 34)
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(833, 41)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(325, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(434, 4)
+        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
+        Me.btn_OK.Size = New System.Drawing.Size(152, 33)
         Me.btn_OK.TabIndex = 1
         Me.btn_OK.Text = "btn_OK"
         Me.btn_OK.UseVisualStyleBackColor = True
@@ -101,9 +104,10 @@ Partial Class Frm_ConnectionSlimN
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(185, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(247, 4)
+        Me.btn_Annuler.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_Annuler.Name = "btn_Annuler"
-        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Annuler.Size = New System.Drawing.Size(152, 33)
         Me.btn_Annuler.TabIndex = 0
         Me.btn_Annuler.Text = "btn_Annuler"
         Me.btn_Annuler.UseVisualStyleBackColor = True
@@ -113,9 +117,10 @@ Partial Class Frm_ConnectionSlimN
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLpan_Gauche)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Main.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Main.Location = New System.Drawing.Point(4, 4)
+        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(625, 423)
+        Me.pan_Main.Size = New System.Drawing.Size(833, 520)
         Me.pan_Main.TabIndex = 1
         '
         'TLpan_Gauche
@@ -129,9 +134,9 @@ Partial Class Frm_ConnectionSlimN
         Me.TLpan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_Gauche.Name = "TLpan_Gauche"
         Me.TLpan_Gauche.RowCount = 2
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Gauche.Size = New System.Drawing.Size(625, 423)
+        Me.TLpan_Gauche.Size = New System.Drawing.Size(833, 520)
         Me.TLpan_Gauche.TabIndex = 2
         '
         'TLpan_Choix
@@ -147,7 +152,7 @@ Partial Class Frm_ConnectionSlimN
         Me.TLpan_Choix.Name = "TLpan_Choix"
         Me.TLpan_Choix.RowCount = 1
         Me.TLpan_Choix.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Choix.Size = New System.Drawing.Size(625, 30)
+        Me.TLpan_Choix.Size = New System.Drawing.Size(833, 37)
         Me.TLpan_Choix.TabIndex = 1
         '
         'rdb_Connexion
@@ -155,10 +160,10 @@ Partial Class Frm_ConnectionSlimN
         Me.rdb_Connexion.Appearance = System.Windows.Forms.Appearance.Button
         Me.rdb_Connexion.AutoSize = True
         Me.rdb_Connexion.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rdb_Connexion.Location = New System.Drawing.Point(312, 0)
+        Me.rdb_Connexion.Location = New System.Drawing.Point(416, 0)
         Me.rdb_Connexion.Margin = New System.Windows.Forms.Padding(0)
         Me.rdb_Connexion.Name = "rdb_Connexion"
-        Me.rdb_Connexion.Size = New System.Drawing.Size(313, 30)
+        Me.rdb_Connexion.Size = New System.Drawing.Size(417, 37)
         Me.rdb_Connexion.TabIndex = 3
         Me.rdb_Connexion.Text = "rdb_Connexion"
         Me.rdb_Connexion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -172,7 +177,7 @@ Partial Class Frm_ConnectionSlimN
         Me.rdb_Connecteurs.Location = New System.Drawing.Point(0, 0)
         Me.rdb_Connecteurs.Margin = New System.Windows.Forms.Padding(0)
         Me.rdb_Connecteurs.Name = "rdb_Connecteurs"
-        Me.rdb_Connecteurs.Size = New System.Drawing.Size(312, 30)
+        Me.rdb_Connecteurs.Size = New System.Drawing.Size(416, 37)
         Me.rdb_Connecteurs.TabIndex = 2
         Me.rdb_Connecteurs.Text = "rdb_Connecteurs"
         Me.rdb_Connecteurs.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -181,21 +186,23 @@ Partial Class Frm_ConnectionSlimN
         'pan_ContenuFille
         '
         Me.pan_ContenuFille.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_ContenuFille.Location = New System.Drawing.Point(0, 30)
+        Me.pan_ContenuFille.Location = New System.Drawing.Point(0, 37)
         Me.pan_ContenuFille.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ContenuFille.Name = "pan_ContenuFille"
-        Me.pan_ContenuFille.Size = New System.Drawing.Size(625, 393)
+        Me.pan_ContenuFille.Size = New System.Drawing.Size(833, 483)
         Me.pan_ContenuFille.TabIndex = 2
         '
         'Frm_ConnectionSlimN
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(631, 469)
+        Me.ClientSize = New System.Drawing.Size(841, 577)
         Me.Controls.Add(Me.pan_General)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_ConnectionSlimN"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_ConnectionSlimN"
         Me.pan_General.ResumeLayout(False)

@@ -56,7 +56,7 @@ Partial Class Frm_Identification
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(444, 247)
+        Me.pan_General.Size = New System.Drawing.Size(592, 304)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -67,40 +67,43 @@ Partial Class Frm_Identification
         Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(444, 247)
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49.0!))
+        Me.TLpan_Main.Size = New System.Drawing.Size(592, 304)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
         '
         Me.TLPan_PartieBasse.ColumnCount = 5
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 210)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(4, 259)
+        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(438, 34)
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(584, 41)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(232, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(309, 4)
+        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
+        Me.btn_OK.Size = New System.Drawing.Size(152, 33)
         Me.btn_OK.TabIndex = 1
         Me.btn_OK.Text = "btn_OK"
         Me.btn_OK.UseVisualStyleBackColor = True
@@ -109,9 +112,10 @@ Partial Class Frm_Identification
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(92, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(122, 4)
+        Me.btn_Annuler.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_Annuler.Name = "btn_Annuler"
-        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Annuler.Size = New System.Drawing.Size(152, 33)
         Me.btn_Annuler.TabIndex = 0
         Me.btn_Annuler.Text = "btn_Annuler"
         Me.btn_Annuler.UseVisualStyleBackColor = True
@@ -121,9 +125,10 @@ Partial Class Frm_Identification
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLPan_Gauche)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Main.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Main.Location = New System.Drawing.Point(4, 4)
+        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(438, 201)
+        Me.pan_Main.Size = New System.Drawing.Size(584, 247)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_Gauche
@@ -137,9 +142,9 @@ Partial Class Frm_Identification
         Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
         Me.TLPan_Gauche.RowCount = 2
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(438, 201)
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 209.0!))
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(584, 247)
         Me.TLPan_Gauche.TabIndex = 0
         '
         'lbl_Identification
@@ -151,7 +156,7 @@ Partial Class Frm_Identification
         Me.lbl_Identification.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Identification.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Identification.Name = "lbl_Identification"
-        Me.lbl_Identification.Size = New System.Drawing.Size(438, 30)
+        Me.lbl_Identification.Size = New System.Drawing.Size(584, 37)
         Me.lbl_Identification.TabIndex = 0
         Me.lbl_Identification.Text = "lbl_Identification"
         Me.lbl_Identification.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -171,53 +176,58 @@ Partial Class Frm_Identification
         Me.pan_SaisiePortee.Controls.Add(Me.txt_Company)
         Me.pan_SaisiePortee.Controls.Add(Me.txt_User)
         Me.pan_SaisiePortee.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 31)
+        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 38)
         Me.pan_SaisiePortee.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.pan_SaisiePortee.Name = "pan_SaisiePortee"
-        Me.pan_SaisiePortee.Size = New System.Drawing.Size(438, 170)
+        Me.pan_SaisiePortee.Size = New System.Drawing.Size(584, 209)
         Me.pan_SaisiePortee.TabIndex = 1
         '
         'lbl_Comment
         '
-        Me.lbl_Comment.Location = New System.Drawing.Point(8, 123)
+        Me.lbl_Comment.Location = New System.Drawing.Point(11, 151)
+        Me.lbl_Comment.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_Comment.Name = "lbl_Comment"
-        Me.lbl_Comment.Size = New System.Drawing.Size(111, 17)
+        Me.lbl_Comment.Size = New System.Drawing.Size(148, 21)
         Me.lbl_Comment.TabIndex = 78
         Me.lbl_Comment.Text = "lbl_Comment"
         Me.lbl_Comment.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'lbl_BeamID
         '
-        Me.lbl_BeamID.Location = New System.Drawing.Point(8, 97)
+        Me.lbl_BeamID.Location = New System.Drawing.Point(11, 119)
+        Me.lbl_BeamID.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_BeamID.Name = "lbl_BeamID"
-        Me.lbl_BeamID.Size = New System.Drawing.Size(111, 17)
+        Me.lbl_BeamID.Size = New System.Drawing.Size(148, 21)
         Me.lbl_BeamID.TabIndex = 78
         Me.lbl_BeamID.Text = "lbl_BeamID"
         Me.lbl_BeamID.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'lbl_Project
         '
-        Me.lbl_Project.Location = New System.Drawing.Point(8, 71)
+        Me.lbl_Project.Location = New System.Drawing.Point(11, 87)
+        Me.lbl_Project.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_Project.Name = "lbl_Project"
-        Me.lbl_Project.Size = New System.Drawing.Size(111, 17)
+        Me.lbl_Project.Size = New System.Drawing.Size(148, 21)
         Me.lbl_Project.TabIndex = 78
         Me.lbl_Project.Text = "lbl_Project"
         Me.lbl_Project.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'lbl_Company
         '
-        Me.lbl_Company.Location = New System.Drawing.Point(8, 45)
+        Me.lbl_Company.Location = New System.Drawing.Point(11, 55)
+        Me.lbl_Company.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_Company.Name = "lbl_Company"
-        Me.lbl_Company.Size = New System.Drawing.Size(111, 17)
+        Me.lbl_Company.Size = New System.Drawing.Size(148, 21)
         Me.lbl_Company.TabIndex = 78
         Me.lbl_Company.Text = "lbl_Company"
         Me.lbl_Company.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'lbl_User
         '
-        Me.lbl_User.Location = New System.Drawing.Point(8, 19)
+        Me.lbl_User.Location = New System.Drawing.Point(11, 23)
+        Me.lbl_User.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_User.Name = "lbl_User"
-        Me.lbl_User.Size = New System.Drawing.Size(111, 17)
+        Me.lbl_User.Size = New System.Drawing.Size(148, 21)
         Me.lbl_User.TabIndex = 78
         Me.lbl_User.Text = "lbl_User"
         Me.lbl_User.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -226,59 +236,66 @@ Partial Class Frm_Identification
         '
         Me.txt_Comment.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Comment.Location = New System.Drawing.Point(138, 123)
+        Me.txt_Comment.Location = New System.Drawing.Point(184, 151)
+        Me.txt_Comment.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Comment.Name = "txt_Comment"
-        Me.txt_Comment.Size = New System.Drawing.Size(264, 20)
+        Me.txt_Comment.Size = New System.Drawing.Size(352, 22)
         Me.txt_Comment.TabIndex = 80
         '
         'txt_BeamID
         '
         Me.txt_BeamID.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_BeamID.Location = New System.Drawing.Point(138, 97)
+        Me.txt_BeamID.Location = New System.Drawing.Point(184, 119)
+        Me.txt_BeamID.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_BeamID.Name = "txt_BeamID"
-        Me.txt_BeamID.Size = New System.Drawing.Size(264, 20)
+        Me.txt_BeamID.Size = New System.Drawing.Size(352, 22)
         Me.txt_BeamID.TabIndex = 79
         '
         'txt_Project
         '
         Me.txt_Project.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Project.Location = New System.Drawing.Point(138, 71)
+        Me.txt_Project.Location = New System.Drawing.Point(184, 87)
+        Me.txt_Project.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Project.Name = "txt_Project"
-        Me.txt_Project.Size = New System.Drawing.Size(264, 20)
+        Me.txt_Project.Size = New System.Drawing.Size(352, 22)
         Me.txt_Project.TabIndex = 78
         '
         'txt_Company
         '
         Me.txt_Company.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Company.Location = New System.Drawing.Point(138, 45)
+        Me.txt_Company.Location = New System.Drawing.Point(184, 55)
+        Me.txt_Company.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Company.Name = "txt_Company"
-        Me.txt_Company.Size = New System.Drawing.Size(264, 20)
+        Me.txt_Company.Size = New System.Drawing.Size(352, 22)
         Me.txt_Company.TabIndex = 77
         '
         'txt_User
         '
         Me.txt_User.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_User.Location = New System.Drawing.Point(138, 19)
+        Me.txt_User.Location = New System.Drawing.Point(184, 23)
+        Me.txt_User.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_User.Name = "txt_User"
-        Me.txt_User.Size = New System.Drawing.Size(264, 20)
+        Me.txt_User.Size = New System.Drawing.Size(352, 22)
         Me.txt_User.TabIndex = 76
         '
         'Frm_Identification
         '
         Me.AcceptButton = Me.btn_OK
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Annuler
-        Me.ClientSize = New System.Drawing.Size(444, 247)
+        Me.ClientSize = New System.Drawing.Size(592, 304)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_Identification"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Frm_Identification"
         Me.pan_General.ResumeLayout(False)

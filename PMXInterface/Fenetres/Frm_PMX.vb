@@ -906,8 +906,20 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.Hivoss
 
             Case Me.TSbtn_OptionsIncendie.Name
-                'FilleEnCours = EnuFenetres.Incendie
-                If LogicielReglages.lFIRE Then
+
+                Dim lFireDispo As Boolean
+
+                If MyProjet.Poutres(MyProjet.IndEnCours).lSlimFloor Then
+                    If MyProjet.Poutres(MyProjet.IndEnCours).lMixte Then
+                        lFireDispo = LogicielReglages.lFIRESLIMMixte
+                    Else
+                        lFireDispo = LogicielReglages.lFIRESLIMAcier
+                    End If
+                Else
+                    lFireDispo = LogicielReglages.lFIRE
+                End If
+
+                If lFireDispo Then
 
                     FilleEnCours = EnuFenetres.Incendie
 

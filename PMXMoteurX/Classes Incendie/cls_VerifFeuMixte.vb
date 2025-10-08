@@ -171,6 +171,7 @@
         Dim lMulti As Boolean = myBeam.lMultiSpan
         Dim nbArma As Integer = myBeam.Dalle.LitArma.Count
         Dim iArma As Integer
+        Dim lSlimF As Boolean = myBeam.lSlimFloor
 
         '--( Paramètres pour la discrétisation de la dalle
 
@@ -268,7 +269,7 @@
         Else
             EN_Feu.PrepareMaillageDalleTabulee(EpDalle, myBeam.Param.lGeneration1, NbTranches, EpTranche, zTranche)
         End If
-        If lMulti Then InitialiseCalculTempArma(myBeam.Dalle, NbTranches, EpTranche)
+        If lMulti Then InitialiseCalculTempArma(myBeam.Dalle, NbTranches, EpTranche, lSlimF)
 
         If myBeam.ParamFeu.lDalleFEM Then
             ReDim TempCTranche(NbTranches - 1)
@@ -633,7 +634,8 @@
                     Else
 
                         Me.MomentPlastiqueMoins(myBeam.Section, myBeam.Dalle, myBeam.ParamFeu, myBeam.Param.Gamma,
-                                                Beff(iNode, k), kReducYFs, kReducYW, kReducYFi, kReducS, MplRd(iNode, k), zANP(iNode, k))
+                                                Beff(iNode, k), kReducYFs, kReducYW, kReducYFi, kReducS,
+                                                MplRd(iNode, k), zANP(iNode, k))
 
                     End If
 
@@ -894,7 +896,7 @@
 
     End Function
 
-    Private Sub InitialiseCalculTempArma(myDalle As cls_Dalle, nbTranches As Integer, eTran() As Decimal)
+    Private Sub InitialiseCalculTempArma(myDalle As cls_Dalle, nbTranches As Integer, eTran() As Decimal, lSlimF As Boolean)
         '-----------------------------------------------------------------------------------------------------------
         '   08/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------

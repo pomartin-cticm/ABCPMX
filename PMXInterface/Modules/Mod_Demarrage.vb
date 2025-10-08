@@ -48,9 +48,11 @@ Public Module Mod_Demarrage
         LogicielReglages.lFrenchOnly = (LogicielInfo.Maitre = EnuMaitre.CTICM)
         'LogicielReglages.lFrenchOnly = False
 
-        lSLIMAcier = True
-        lSLIMMixte = False
+        LogicielReglages.lSLIMAcier = True
+        LogicielReglages.lSLIMMixte = False
         LogicielReglages.lFIRE = True
+        LogicielReglages.lFIRESLIMAcier = False
+        LogicielReglages.lFIRESLIMMixte = False
 
         LogicielReglages.lCreuxO = (LogicielInfo.Maitre = EnuMaitre.CTICM)
 
@@ -936,6 +938,10 @@ Public Module Mod_Demarrage
         If (myBeam.lSlimFloor And (Not myBeam.Section.lSlimFloor_SAB)) Or (myBeam.Section.ProfilA.lPlat) Then
             InitialiseAcierPlats(myBeam.Section.AcierPlat, myBeam.Section.AcierPlat.Nuance, myBeam.Section.AcierPlat.Qualite, myBeam.Section.AcierPlat.Reduction)
         End If
+
+        '--( Dalle
+
+        myBeam.Dalle.lSlimFloor = myBeam.lSlimFloor
 
     End Sub
 

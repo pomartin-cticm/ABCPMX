@@ -33,10 +33,11 @@
 
     Dim FluxF As cls_Flux
 
-    Public GorgesSoudures() As Decimal             ' Gorge des soudures ame semelles pour les sections PRS
-    Public GorgesSouduresMini() As Decimal         ' Gorge mini des soudures ame semelles pour les sections PRS
-
     '==( Tableaux pour le calcul des contraintes locales dans les supports de dalle
+
+    '==( Gorge de la soudure plat / section
+
+    Public aWPlat As Decimal
 
 #End Region
 
@@ -317,33 +318,33 @@
             Me.Tau.CalculContraintesCharges(myBeam, TauCas)
         End If
 
-        '# Flux de cisaillement des PRS
+        ''# Flux de cisaillement des PRS
 
-        With myBeam.Section.ProfilA
+        'With myBeam.Section.ProfilA
 
-            lSoudure = False
+        '    lSoudure = False
 
-            Select Case .typeProfileAcier
-                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                    lSoudure = True
-                    ReDim GorgesSouduresMini(1)
-                    ReDim GorgesSoudures(1)
+        '    Select Case .typeProfileAcier
+        '        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+        '            lSoudure = True
+        '            ReDim GorgesSouduresMini(1)
+        '            ReDim GorgesSoudures(1)
 
-                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                    lSoudure = True
-                    ReDim GorgesSouduresMini(0)
-                    ReDim GorgesSoudures(0)
+        '        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+        '            lSoudure = True
+        '            ReDim GorgesSouduresMini(0)
+        '            ReDim GorgesSoudures(0)
 
-            End Select
+        '    End Select
 
-            If lSoudure Then
-                myBeam.Section.ProfilA.InitialiseSoudureMini(Me.GorgesSouduresMini)
-                Me.FluxF = New cls_Flux
-                Me.FluxF.InitialiseCalculAcier(myBeam)
-                Me.FluxF.CalculFluxChargesACIER(myBeam, FluxCas)
-            End If
+        '    If lSoudure Then
+        '        myBeam.Section.ProfilA.InitialiseSoudureMini(Me.GorgesSouduresMini)
+        '        Me.FluxF = New cls_Flux
+        '        Me.FluxF.InitialiseCalculAcier(myBeam)
+        '        Me.FluxF.CalculFluxChargesACIER(myBeam, FluxCas)
+        '    End If
 
-        End With
+        'End With
 
         '--> Boucle sur les combinaisons
 
@@ -438,11 +439,9 @@
 
             'Sans objet
 
-            '# Dimensionnement des soudures de PRS
+            '# Dimensionnement des soudures plat / section
 
-            If lSoudure Then
-                'Me.RunDimensionSouduresAmeSemelle(myBeam, iCombi, FluxELU, Me.GorgesSoudures)
-            End If
+            Me.CalculSoudures(myBeam, iCombi, QSupEd, VEd, zANE_SectionBrute, InertieY_SectionBrute)
 
         Next
 
@@ -824,7 +823,256 @@
 
 #Region " Calcul des soudures "
 
-    '--> A COMPLETER
+    Private Sub CalculSoudures(myBeam As cls_Poutre, iCombi As Integer, qLinEd() As Decimal, VEd(,) As Decimal, zANE As Decimal, InertieY As Decimal)
+        '-----------------------------------------------------------------------------------
+        '   08/10/25 : Création - POM - V1.2
+        '-----------------------------------------------------------------------------------
+        '   Calcul des soudures plats / section
+        '-----------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   iCombi      [E] :   Indice de la combinaison traitée
+        '   qLinEd      [E] :   Effort linéique agissant DES 2 COTES sur les plats
+        '   VEd         [E] :   Efforts tranchants  le long de la poutre
+        '   zANE        [E] :   Position AN elastique de la section
+        '   InertieY    [E] :   Inertie de la section
+        '-----------------------------------------------------------------------------------
+
+        '--( Traitement en fonction du type de section
+
+        Select Case True
+            Case myBeam.Section.lSlimFloor_SFB
+                Me.CalculSouduresSFB(myBeam, iCombi, qLinEd, VEd, zANE, InertieY)
+            Case myBeam.Section.lSlimFloor_IFB_A
+                Me.CalculSouduresIFB_A(myBeam, iCombi, qLinEd, VEd, zANE, InertieY)
+            Case myBeam.Section.lSlimFloor_IFB_B
+                Me.CalculSouduresIFB_B(myBeam, iCombi, qLinEd, VEd, zANE, InertieY)
+        End Select
+
+    End Sub
+
+    Private Sub CalculSouduresIFB_A(myBeam As cls_Poutre, iCombi As Integer, qWLinEd() As Decimal, VEd(,) As Decimal,
+                                    zANE As Decimal, InertieY As Decimal)
+        '-----------------------------------------------------------------------------------
+        '   08/10/25 : Création - POM - V1.2
+        '-----------------------------------------------------------------------------------
+        '   Calcul des soudures plats / section pour une slim IFB_A
+        '-----------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   iCombi      [E] :   Indice de la combinaison traitée
+        '   qLinEd      [E] :   Effort linéique agissant DES 2 COTES sur les plats
+        '   VEd         [E] :   Efforts tranchants  le long de la poutre
+        '   zANE        [E] :   Position AN elastique de la section
+        '   InertieY    [E] :   Inertie de la section
+        '-----------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim nbNodes As Integer = myBeam.Nodes.nbNodes
+        Dim GammaM2 As Decimal = myBeam.Param.Gamma.GammaM2
+        Dim Fu As Decimal
+        Dim BetaW As Decimal
+        Dim tPl, tW As Decimal
+        Dim e1, e2p As Decimal
+        Dim kW2 As Decimal
+        Dim qLEd As Decimal
+        Const kUnitMM As Decimal = 1 / 1000
+        Dim tMax As Decimal
+        Dim MomSp As Decimal
+
+        '--( Initialisation
+
+        tPl = myBeam.Section.ProfilA.Plat_t
+        tW = myBeam.Section.ProfilA.Tw
+
+        Fu = Math.Min(myBeam.Section.Acier.LimiteFu(tW), myBeam.Section.AcierPlat.LimiteFu(tPl))
+        BetaW = Math.Max(myBeam.Section.Acier.BetaW, myBeam.Section.AcierPlat.BetaW)
+
+        e1 = myBeam.Section.ProfilA.Plat_b
+        e2p = myBeam.Section.ProfilA.Tw
+
+        If myBeam.lIntermediaire Then
+            kW2 = myBeam.EntraxeD2 / (myBeam.EntraxeD1 + myBeam.EntraxeD2)
+        Else
+            kW2 = 1
+        End If
+
+        MomSp = myBeam.Section.ProfilA.AirePlat * (zANE + tPl / 2)
+
+        '--( Calcul
+
+        tMax = Math.Max(tW, tPl)
+
+        Me.aWPlat = Math.Max(3 * kUnitMM, (Math.Sqrt(tMax / kUnitMM) - 0.5) * kUnitMM)
+
+        For i As Integer = 0 To nbNodes - 1
+            qLEd = Math.Max(Math.Abs(VEd(i, 0)), Math.Abs(VEd(i, 1))) * MomSp / InertieY
+            Me.aWPlat = Math.Max(Me.aWPlat, CalculSoudureSlimFloor(BetaW, Fu, GammaM2, qWLinEd(iCombi), qLEd, e1, e2p, kW2))
+        Next
+    End Sub
+
+    Private Sub CalculSouduresIFB_B(myBeam As cls_Poutre, iCombi As Integer, qWLinEd() As Decimal, VEd(,) As Decimal,
+                                    zANE As Decimal, InertieY As Decimal)
+        '-----------------------------------------------------------------------------------
+        '   08/10/25 : Création - POM - V1.2
+        '-----------------------------------------------------------------------------------
+        '   Calcul des soudures plats / section pour une slim IFB_B
+        '-----------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   iCombi      [E] :   Indice de la combinaison traitée
+        '   qLinEd      [E] :   Effort linéique agissant DES 2 COTES sur les plats
+        '   VEd         [E] :   Efforts tranchants  le long de la poutre
+        '   zANE        [E] :   Position AN elastique de la section
+        '   InertieY    [E] :   Inertie de la section
+        '-----------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim nbNodes As Integer = myBeam.Nodes.nbNodes
+        Dim GammaM2 As Decimal = myBeam.Param.Gamma.GammaM2
+        Dim Fu As Decimal
+        Dim BetaW As Decimal
+        Dim tPl, tW As Decimal
+        Dim e1, e2p As Decimal
+        Dim kW2 As Decimal
+        Dim qLEd As Decimal
+        Const kUnitMM As Decimal = 1 / 1000
+        Dim tMax As Decimal
+        Dim MomSp As Decimal
+
+        '--( Initialisation
+
+        tPl = myBeam.Section.ProfilA.Plat_t
+        tW = myBeam.Section.ProfilA.Tw
+
+        Fu = Math.Min(myBeam.Section.Acier.LimiteFu(tW), myBeam.Section.AcierPlat.LimiteFu(tPl))
+        BetaW = Math.Max(myBeam.Section.Acier.BetaW, myBeam.Section.AcierPlat.BetaW)
+
+        e1 = myBeam.Section.ProfilA.Plat_b
+        e2p = myBeam.Section.ProfilA.Tw
+
+        If myBeam.lIntermediaire Then
+            kW2 = myBeam.EntraxeD2 / (myBeam.EntraxeD1 + myBeam.EntraxeD2)
+        Else
+            kW2 = 1
+        End If
+
+        MomSp = myBeam.Section.ProfilA.AirePlat * (myBeam.Section.zSemSup - tPl / 2 - zANE)
+
+        '--( Calcul
+
+        tMax = Math.Max(tW, tPl)
+
+        Me.aWPlat = Math.Max(3 * kUnitMM, (Math.Sqrt(tMax / kUnitMM) - 0.5) * kUnitMM)
+
+        For i As Integer = 0 To nbNodes - 1
+            qLEd = Math.Max(Math.Abs(VEd(i, 0)), Math.Abs(VEd(i, 1))) * MomSp / InertieY
+            Me.aWPlat = Math.Max(Me.aWPlat, CalculSoudureSlimFloor(BetaW, Fu, GammaM2, 0, qLEd, e1, e2p, kW2))
+        Next
+
+    End Sub
+
+    Private Sub CalculSouduresSFB(myBeam As cls_Poutre, iCombi As Integer, qWLinEd() As Decimal, VEd(,) As Decimal,
+                                  zANE As Decimal, InertieY As Decimal)
+        '-----------------------------------------------------------------------------------
+        '   08/10/25 : Création - POM - V1.2
+        '-----------------------------------------------------------------------------------
+        '   Calcul des soudures plats / section pour une slim SFB
+        '-----------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   iCombi      [E] :   Indice de la combinaison traitée
+        '   qLinEd      [E] :   Effort linéique agissant DES 2 COTES sur les plats
+        '   VEd         [E] :   Efforts tranchants  le long de la poutre
+        '   zANE        [E] :   Position AN elastique de la section
+        '   InertieY    [E] :   Inertie de la section
+        '-----------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim nbNodes As Integer = myBeam.Nodes.nbNodes
+        Dim GammaM2 As Decimal = myBeam.Param.Gamma.GammaM2
+        Dim Fu As Decimal
+        Dim BetaW As Decimal
+        Dim tPl, tFi As Decimal
+        Dim e1, e2p As Decimal
+        Dim kW2 As Decimal
+        Dim qLEd As Decimal
+        Const kUnitMM As Decimal = 1 / 1000
+        Dim tMax As Decimal
+        Dim MomSp As Decimal
+
+        '--( Initialisation
+
+        tPl = myBeam.Section.ProfilA.Plat_t
+        tFi = myBeam.Section.ProfilA.Tfi
+
+        Fu = Math.Min(myBeam.Section.Acier.LimiteFu(tFi), myBeam.Section.AcierPlat.LimiteFu(tPl))
+        BetaW = Math.Max(myBeam.Section.Acier.BetaW, myBeam.Section.AcierPlat.BetaW)
+
+        e1 = myBeam.Section.ProfilA.Plat_b
+        e2p = myBeam.Section.ProfilA.Bfi
+
+        If myBeam.lIntermediaire Then
+            kW2 = myBeam.EntraxeD2 / (myBeam.EntraxeD1 + myBeam.EntraxeD2)
+        Else
+            kW2 = 1
+        End If
+
+        MomSp = myBeam.Section.ProfilA.AirePlat * (zANE + tPl / 2)
+
+        '--( Calcul
+
+        tMax = Math.Max(tFi, tPl)
+
+        Me.aWPlat = Math.Max(3 * kUnitMM, (Math.Sqrt(tMax / kUnitMM) - 0.5) * kUnitMM)
+
+        For i As Integer = 0 To nbNodes - 1
+            qLEd = Math.Max(Math.Abs(VEd(i, 0)), Math.Abs(VEd(i, 1))) * MomSp / InertieY
+            Me.aWPlat = Math.Max(Me.aWPlat, CalculSoudureSlimFloor(BetaW, Fu, GammaM2, qWLinEd(iCombi), qLEd, e1, e2p, kW2))
+        Next
+
+    End Sub
+
+    Private Function CalculSoudureSlimFloor(BetaW As Decimal, Fu As Decimal, GammaM2 As Decimal,
+                                            qWEd As Decimal, qLEd As Decimal, e1 As Decimal, e2p As Decimal, kW2 As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------
+        '   08/10/25 : Création - POM - V1.2
+        '-----------------------------------------------------------------------------------
+        '   Calcul des soudures plats / section pour une slim floor (formule générale commune)
+        '-----------------------------------------------------------------------------------
+        '   BetaW       [E] :   Coefficient de calcul des soudures
+        '   Fu          [E] :   Limite ultime de la nuance d'acier
+        '   GammaM2     [E] :   Coefficient partiel de sécurité pour les soudures
+        '   qWEd        [E] :   Efforts linéiques agissant de part et d'autre de la section
+        '   qLEd        [E] :   Flux de cisaillement dans la soudure
+        '   e1          [E] :   Distance entre les charges appliquées
+        '   e2p         [E] :   Distance entre les appuis (soudures)
+        '   kW2         [E] :   Par des efforts qW qui passe sur le côté 2 (droite)
+        '-----------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim aW As Decimal
+        Dim Rac2 As Decimal = Math.Sqrt(2)
+        Dim qW1, qW2 As Decimal
+        Dim q1, q2 As Decimal
+        Dim qL As Decimal = qLEd
+        Dim qW As Decimal
+
+        '--( Calcul des charges
+
+        q2 = kW2 * qWEd
+        q1 = qWEd - q2
+        qW1 = 0.5 * (q1 * (e1 + e2p) + q2 * (e1 - e2p)) / e2p
+        qW2 = qWEd - qW1
+        qW = Math.Max(qW1, qW2)
+
+        '--( Calcul de la soudure
+
+        aW = BetaW * GammaM2 / (Fu * kConvMPaPa * Rac2) * Math.Sqrt(qW ^ 2 + 3 * (qW + Rac2 * qL) ^ 2)
+
+        Return aW
+
+    End Function
 
 #End Region
 
@@ -1774,6 +2022,5 @@
     End Sub
 
 #End Region
-
 
 End Class

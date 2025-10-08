@@ -551,7 +551,8 @@ Public Class cls_VerifFeuEnrobe
 
     End Sub
 
-    Private Sub MaillageDalleMPlus(myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma, Bfs As Decimal, Beff As Decimal, Time As Decimal, ByRef myModele As cls_ModeleP)
+    Private Sub MaillageDalleMPlus(myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma,
+                                   Bfs As Decimal, Beff As Decimal, Time As Decimal, ByRef myModele As cls_ModeleP)
         '--------------------------------------------------------------------------------------------------------------------------
         '   18/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------
@@ -842,7 +843,9 @@ Public Class cls_VerifFeuEnrobe
         End If
     End Sub
 
-    Private Sub MaillageArmaturesDalleMMoins(myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma, Bfs As Decimal, Bfi As Decimal, Beff As Decimal, Time As Decimal, ByRef myModele As cls_ModeleP)
+    Private Sub MaillageArmaturesDalleMMoins(myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma,
+                                             Bfs As Decimal, Bfi As Decimal, Beff As Decimal, Time As Decimal,
+                                             ByRef myModele As cls_ModeleP)
         '--------------------------------------------------------------------------------------------------------------------------
         '   18/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------

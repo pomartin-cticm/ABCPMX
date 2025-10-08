@@ -54,6 +54,11 @@
     ''' </summary>
     Public lRiveRemplie As Boolean
 
+    ''' <summary>
+    ''' Indique si la dalle fait partie d'une poutre slim floor
+    ''' </summary>
+    Public lSlimFloor As Boolean
+
 #End Region
 
 #Region " Elements de la dalle "
@@ -580,7 +585,7 @@
             MyzTop = Me.EpRenformis + Me.Ep_td
 
             If (Me.type = Enum_TypeDalle.Mixte) Then
-                If (Me.Bac.lCofraplus220) Then MyzTop -= Me.Bac.Hp
+                If (Me.Bac.lCofraplus220) And (Not Me.lSlimFloor) Then MyzTop -= Me.Bac.Hp
             End If
 
             Return MyzTop

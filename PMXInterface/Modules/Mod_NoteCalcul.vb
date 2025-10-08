@@ -3876,7 +3876,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionProprietesSectionPoutreMixteN(MyBeam As cls_Poutre)
+    Private Sub EditionProprietesSectionPoutreMixteN(myBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
         '   15/12/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -3890,8 +3890,8 @@ Module Mod_NoteCalcul
         Dim NeqEnrob() As Decimal = Nothing
         Dim strFormatNoteFin As String = "\i"
         Dim strFormatNote As String = "\I"
-        Dim lMultiSpan As Boolean = MyBeam.lMultiSpan
-        Dim lEnrob As Boolean = MyBeam.lEnrobage
+        Dim lMultiSpan As Boolean = myBeam.lMultiSpan
+        Dim lEnrob As Boolean = myBeam.lEnrobage
         Dim bEff As Decimal
         Dim zANP, MplRd As Decimal
         Dim zANPk, MplRk As Decimal
@@ -3901,10 +3901,11 @@ Module Mod_NoteCalcul
         Dim Reference As String
         Dim zSurH As Decimal
         Dim zSurHLim As Decimal
+        Dim lSlimF As Boolean = myBeam.lSlimFloor
 
         '--> Récupération des coeff d'équivalence et état de la dalle
 
-        MyBeam.ExtraireListeNeqDalleEnrobage(lDalle, NeqDalle, NeqEnrob)
+        myBeam.ExtraireListeNeqDalleEnrobage(lDalle, NeqDalle, NeqEnrob)
 
         '--> Propriétés élastiques
 
@@ -3921,30 +3922,30 @@ Module Mod_NoteCalcul
 
         '# Largeur efficace
 
-        bEff = MyBeam.BeffDalle(MyBeam.LongueurTravee(1) / 2, 1, OptionsCalcul.lLargeurEfficaceSimplifiee, False)
+        bEff = myBeam.BeffDalle(myBeam.LongueurTravee(1) / 2, 1, OptionsCalcul.lLargeurEfficaceSimplifiee, False)
         AddLigneNDC(TABW2 & BlocSP("EFFECTIVEW") & TABAFF & "b\-eff\=" & TABEGAL & GetStringInUnit(bEff, Enu_TypeVariable.Longueur, 3, 2, True))
 
         '# Propriétés élastiques
 
         AddTitreNdC(3, BlocSP("EPROPERTIES"))
 
-        EditionProprietesElastiquesSectionMixtePositiveB(MyBeam, bEff, lDalle.GetUpperBound(0) + 1, lDalle, NeqDalle, NeqEnrob)
+        EditionProprietesElastiquesSectionMixtePositiveB(myBeam, bEff, lDalle.GetUpperBound(0) + 1, lDalle, NeqDalle, NeqEnrob)
 
         '# Propriétés plastiques
 
         AddTitreNdC(3, BlocSP("PPROPERTIES"))
 
-        MyBeam.Section.ProprietesPlastiquesMixteMyy(1, True, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zANP, MplRd)
-        MyBeam.Section.ProprietesPlastiquesMixteMyy(1, False, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zANPk, MplRk)
+        myBeam.Section.ProprietesPlastiquesMixteMyy(1, True, myBeam.Param.Gamma, 0, bEff, myBeam.Dalle, zANP, MplRd)
+        myBeam.Section.ProprietesPlastiquesMixteMyy(1, False, myBeam.Param.Gamma, 0, bEff, myBeam.Dalle, zANPk, MplRk)
 
-        BetaM = EN1994.ReductionFactorBeta(MyBeam.Dalle.zTop - zANP, MyBeam.HauteurTotaleSectionMixte, MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1, lOK)
-        BetaMk = EN1994.ReductionFactorBeta(MyBeam.Dalle.zTop - zANPk, MyBeam.HauteurTotaleSectionMixte, MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1, lOK)
-        lAppBeta = EN1994.IsBetaApplicable(MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1)
+        BetaM = EN1994.ReductionFactorBeta(myBeam.Dalle.zTop - zANP, myBeam.HauteurTotaleSectionMixte, myBeam.Section.Acier.Nuance, myBeam.Param.lGeneration1, lOK)
+        BetaMk = EN1994.ReductionFactorBeta(myBeam.Dalle.zTop - zANPk, myBeam.HauteurTotaleSectionMixte, myBeam.Section.Acier.Nuance, myBeam.Param.lGeneration1, lOK)
+        lAppBeta = EN1994.IsBetaApplicable(myBeam.Section.Acier.Nuance, myBeam.Param.lGeneration1)
 
         AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(BetaM * MplRd, Enu_TypeVariable.Moment, 4, 0, True))
         If lAppBeta Then
             '--| AffichageOptFeu de la valeur de beta, le cas échéant
-            zSurH = (MyBeam.Dalle.zTop - zANP) / MyBeam.HauteurTotaleSectionMixte
+            zSurH = (myBeam.Dalle.zTop - zANP) / myBeam.HauteurTotaleSectionMixte
             If lOK Then
                 '--| Cas du ratio z/h dans les limites du calcul plastique
                 AddLigneNDC(TABW2 & BlocSP("BETAMPLASTIC") & TABAFF & "\Sb\s" & TABEGAL & GetStringInUnitN(BetaM, Enu_TypeVariable.SansType, 4, 3, NON, True))
@@ -3952,13 +3953,13 @@ Module Mod_NoteCalcul
 
             Else
 
-                zSurHLim = EN1994.LimiteZsurHplastic(MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1)
+                zSurHLim = EN1994.LimiteZsurHplastic(myBeam.Section.Acier.Nuance, myBeam.Param.lGeneration1)
                 '--| Cas du ratio z/h en dehors des limites du calcul plastique
                 AddLigneNDC(TABW2 & RemplaceDollar(BlocSP("RATIOZHABOVELIMIT"), GetStringInUnitN(zSurH, Enu_TypeVariable.SansType, 4, 3, NON, True)))
                 AddLigneNDC(TABW2 & BlocSP("RATIOZHLIM") & TABAFF & "z/H <" & TABEGAL & GetStringInUnitN(zSurHLim, Enu_TypeVariable.SansType, 4, 3, NON, True))
             End If
             '--| Références
-            If MyBeam.Param.lGeneration1 Then
+            If myBeam.Param.lGeneration1 Then
                 Reference = BlocSP("REFEN1994G1")
             Else
                 Reference = BlocSP("REFEN1994G2")
@@ -3970,21 +3971,21 @@ Module Mod_NoteCalcul
 
         '--> Propriétés console gauche
 
-        If MyBeam.lTraveeConsoleGauche Then
+        If myBeam.lTraveeConsoleGauche Then
 
             AddTitreNdC(2, BlocSP("PROPERTIESLCANTILEVER"))
 
-            EditionProprietesElastiquesSectionConsoleMixte(MyBeam, True, lDalle.GetUpperBound(0), lDalle, NeqEnrob)
+            EditionProprietesElastiquesSectionConsoleMixte(myBeam, True, lDalle.GetUpperBound(0), lDalle, NeqEnrob)
 
         End If
 
         '--> Propriétés console droite
 
-        If MyBeam.lTraveeConsoleDroite Then
+        If myBeam.lTraveeConsoleDroite Then
 
             AddTitreNdC(2, BlocSP("PROPERTIESRCANTILEVER"))
 
-            EditionProprietesElastiquesSectionConsoleMixte(MyBeam, False, lDalle.GetUpperBound(0), lDalle, NeqEnrob)
+            EditionProprietesElastiquesSectionConsoleMixte(myBeam, False, lDalle.GetUpperBound(0), lDalle, NeqEnrob)
 
         End If
 
@@ -8751,6 +8752,12 @@ Module Mod_NoteCalcul
 
         End If
 
+        '==( Calcul des soudures pour les slim floor (hors SAB)
+
+        If myBeam.lSlimFloor And (Not myBeam.Section.lSlimFloor_SAB) Then
+            EditionGorgesSouduresSlim(myBeam)
+        End If
+
     End Sub
 
     Private Sub EditionVerificationsELUCombiSLIMACIER(MyBeam As cls_Poutre, iVerif As Integer, lConstructionP As Boolean)
@@ -9078,6 +9085,28 @@ Module Mod_NoteCalcul
 
     End Sub
 
+    Private Sub EditionGorgesSouduresSlim(myBeam As cls_Poutre)
+        '---------------------------------------------------------------------------------------------------------------------
+        '   08/10/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------------------
+        '   Edition des gorges de soudures pour les slim floor
+        '---------------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre à traiter    
+        '---------------------------------------------------------------------------------------------------------------------
+
+        Dim Symbol As String = "awp"
+        Const TabVALEUR As String = "\T15"
+
+        Const TABSUPEGAL As String = "\T55" & ChrW(8805) & "\T60"
+
+
+        AddTitreNdC(3, BlocELU("WPLATE"))
+
+        AddLigneNDC(TabVALEUR & BlocELU("DESIGNVALUE") & TABAFF &
+                    Symbol & TABSUPEGAL & GetStringInUnit(myBeam.VerifSlimAcier(0).aWPlat, Enu_TypeVariable.Dimension, 3, 2, True))
+
+    End Sub
+
     Private Sub EditionGorgesSoudures(GorgesSoudures() As Decimal, GorgesSouduresMini() As Decimal)
         '---------------------------------------------------------------------------------------------------------------------
         '   15/03/24 :  Création - POM
@@ -9088,8 +9117,7 @@ Module Mod_NoteCalcul
         '   GorgesSouduresMini  [E] :   Valeurs minimale
         '---------------------------------------------------------------------------------------------------------------------
 
-
-        Dim Symbol As String = "aws"
+        Dim Symbol As String = "awp"
         Const TabVALEUR As String = "\T20"
 
         AddTitreNdC(3, BlocELU("WTOFWEBS"))

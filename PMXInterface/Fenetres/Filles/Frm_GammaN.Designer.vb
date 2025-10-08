@@ -32,43 +32,43 @@ Partial Class Frm_GammaN
         Me.TLPan_PartieHaute = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Resistance = New System.Windows.Forms.Panel()
         Me.TLPan_Resistance = New System.Windows.Forms.TableLayoutPanel()
+        Me.TLpan_ChoixResistance = New System.Windows.Forms.TableLayoutPanel()
+        Me.rdb_Feu = New System.Windows.Forms.RadioButton()
+        Me.rdb_Beton = New System.Windows.Forms.RadioButton()
+        Me.rdb_Acier = New System.Windows.Forms.RadioButton()
         Me.lbl_Resistance = New System.Windows.Forms.Label()
         Me.pan_SaisieResistance = New System.Windows.Forms.Panel()
         Me.pan_Accompagnement = New System.Windows.Forms.Panel()
         Me.TLPan_Accompagnement = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Accompagnement = New System.Windows.Forms.Label()
         Me.pan_SaisieAccompagnement = New System.Windows.Forms.Panel()
+        Me.img_Q2 = New System.Windows.Forms.PictureBox()
+        Me.img_Q1 = New System.Windows.Forms.PictureBox()
         Me.lbl_Q2 = New System.Windows.Forms.Label()
         Me.lbl_Q1 = New System.Windows.Forms.Label()
         Me.txt_Psi2_Q2 = New System.Windows.Forms.TextBox()
         Me.txt_Psi2_Q1 = New System.Windows.Forms.TextBox()
+        Me.img_Psi2 = New System.Windows.Forms.PictureBox()
         Me.txt_Psi1_Q2 = New System.Windows.Forms.TextBox()
         Me.txt_Psi1_Q1 = New System.Windows.Forms.TextBox()
         Me.txt_Psi0_Q2 = New System.Windows.Forms.TextBox()
         Me.txt_Psi0_Q1 = New System.Windows.Forms.TextBox()
+        Me.img_Psi1 = New System.Windows.Forms.PictureBox()
+        Me.img_Psi0 = New System.Windows.Forms.PictureBox()
         Me.pan_Chargement = New System.Windows.Forms.Panel()
         Me.TLPan_Chargement = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Reset = New System.Windows.Forms.Label()
         Me.lbl_Chargement = New System.Windows.Forms.Label()
         Me.pan_SaisieChargement = New System.Windows.Forms.Panel()
         Me.txt_GammaQ = New System.Windows.Forms.TextBox()
+        Me.img_GammaQ = New System.Windows.Forms.PictureBox()
         Me.txt_GammaGinf = New System.Windows.Forms.TextBox()
+        Me.img_GammaGinf = New System.Windows.Forms.PictureBox()
         Me.txt_GammaGsup = New System.Windows.Forms.TextBox()
+        Me.img_GammaGsup = New System.Windows.Forms.PictureBox()
         Me.pan_Reset = New System.Windows.Forms.Panel()
         Me.btn_Reini = New System.Windows.Forms.Button()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.TLpan_ChoixResistance = New System.Windows.Forms.TableLayoutPanel()
-        Me.rdb_Acier = New System.Windows.Forms.RadioButton()
-        Me.rdb_Beton = New System.Windows.Forms.RadioButton()
-        Me.rdb_Feu = New System.Windows.Forms.RadioButton()
-        Me.img_Q2 = New System.Windows.Forms.PictureBox()
-        Me.img_Q1 = New System.Windows.Forms.PictureBox()
-        Me.img_Psi2 = New System.Windows.Forms.PictureBox()
-        Me.img_Psi1 = New System.Windows.Forms.PictureBox()
-        Me.img_Psi0 = New System.Windows.Forms.PictureBox()
-        Me.img_GammaQ = New System.Windows.Forms.PictureBox()
-        Me.img_GammaGinf = New System.Windows.Forms.PictureBox()
-        Me.img_GammaGsup = New System.Windows.Forms.PictureBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -76,23 +76,23 @@ Partial Class Frm_GammaN
         Me.TLPan_PartieHaute.SuspendLayout()
         Me.pan_Resistance.SuspendLayout()
         Me.TLPan_Resistance.SuspendLayout()
+        Me.TLpan_ChoixResistance.SuspendLayout()
         Me.pan_Accompagnement.SuspendLayout()
         Me.TLPan_Accompagnement.SuspendLayout()
         Me.pan_SaisieAccompagnement.SuspendLayout()
-        Me.pan_Chargement.SuspendLayout()
-        Me.TLPan_Chargement.SuspendLayout()
-        Me.pan_SaisieChargement.SuspendLayout()
-        Me.pan_Reset.SuspendLayout()
-        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TLpan_ChoixResistance.SuspendLayout()
         CType(Me.img_Q2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Q1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Psi2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Psi1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Psi0, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Chargement.SuspendLayout()
+        Me.TLPan_Chargement.SuspendLayout()
+        Me.pan_SaisieChargement.SuspendLayout()
         CType(Me.img_GammaQ, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_GammaGinf, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_GammaGsup, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Reset.SuspendLayout()
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -102,7 +102,7 @@ Partial Class Frm_GammaN
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(624, 285)
+        Me.pan_General.Size = New System.Drawing.Size(832, 351)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -113,40 +113,43 @@ Partial Class Frm_GammaN
         Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(624, 285)
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49.0!))
+        Me.TLpan_Main.Size = New System.Drawing.Size(832, 351)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
         '
         Me.TLPan_PartieBasse.ColumnCount = 5
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 248)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(4, 306)
+        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(618, 34)
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(824, 41)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(322, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(429, 4)
+        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
+        Me.btn_OK.Size = New System.Drawing.Size(152, 33)
         Me.btn_OK.TabIndex = 1
         Me.btn_OK.Text = "btn_OK"
         Me.btn_OK.UseVisualStyleBackColor = True
@@ -155,9 +158,10 @@ Partial Class Frm_GammaN
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(182, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(242, 4)
+        Me.btn_Annuler.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_Annuler.Name = "btn_Annuler"
-        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Annuler.Size = New System.Drawing.Size(152, 33)
         Me.btn_Annuler.TabIndex = 0
         Me.btn_Annuler.Text = "btn_Annuler"
         Me.btn_Annuler.UseVisualStyleBackColor = True
@@ -167,9 +171,10 @@ Partial Class Frm_GammaN
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLPan_PartieHaute)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Main.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Main.Location = New System.Drawing.Point(4, 4)
+        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(618, 239)
+        Me.pan_Main.Size = New System.Drawing.Size(824, 294)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_PartieHaute
@@ -187,7 +192,7 @@ Partial Class Frm_GammaN
         Me.TLPan_PartieHaute.Name = "TLPan_PartieHaute"
         Me.TLPan_PartieHaute.RowCount = 1
         Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(618, 239)
+        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(824, 294)
         Me.TLPan_PartieHaute.TabIndex = 0
         '
         'pan_Resistance
@@ -195,10 +200,10 @@ Partial Class Frm_GammaN
         Me.pan_Resistance.AutoScroll = True
         Me.pan_Resistance.Controls.Add(Me.TLPan_Resistance)
         Me.pan_Resistance.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Resistance.Location = New System.Drawing.Point(410, 0)
+        Me.pan_Resistance.Location = New System.Drawing.Point(548, 0)
         Me.pan_Resistance.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Resistance.Name = "pan_Resistance"
-        Me.pan_Resistance.Size = New System.Drawing.Size(208, 239)
+        Me.pan_Resistance.Size = New System.Drawing.Size(276, 294)
         Me.pan_Resistance.TabIndex = 2
         '
         'TLPan_Resistance
@@ -213,11 +218,71 @@ Partial Class Frm_GammaN
         Me.TLPan_Resistance.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Resistance.Name = "TLPan_Resistance"
         Me.TLPan_Resistance.RowCount = 3
-        Me.TLPan_Resistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Resistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Resistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Resistance.Size = New System.Drawing.Size(208, 239)
+        Me.TLPan_Resistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLPan_Resistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLPan_Resistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 209.0!))
+        Me.TLPan_Resistance.Size = New System.Drawing.Size(276, 294)
         Me.TLPan_Resistance.TabIndex = 0
+        '
+        'TLpan_ChoixResistance
+        '
+        Me.TLpan_ChoixResistance.ColumnCount = 3
+        Me.TLpan_ChoixResistance.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TLpan_ChoixResistance.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TLpan_ChoixResistance.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TLpan_ChoixResistance.Controls.Add(Me.rdb_Feu, 2, 0)
+        Me.TLpan_ChoixResistance.Controls.Add(Me.rdb_Beton, 1, 0)
+        Me.TLpan_ChoixResistance.Controls.Add(Me.rdb_Acier, 0, 0)
+        Me.TLpan_ChoixResistance.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLpan_ChoixResistance.Location = New System.Drawing.Point(0, 37)
+        Me.TLpan_ChoixResistance.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLpan_ChoixResistance.Name = "TLpan_ChoixResistance"
+        Me.TLpan_ChoixResistance.RowCount = 1
+        Me.TLpan_ChoixResistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_ChoixResistance.Size = New System.Drawing.Size(276, 37)
+        Me.TLpan_ChoixResistance.TabIndex = 0
+        '
+        'rdb_Feu
+        '
+        Me.rdb_Feu.Appearance = System.Windows.Forms.Appearance.Button
+        Me.rdb_Feu.AutoSize = True
+        Me.rdb_Feu.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.rdb_Feu.Location = New System.Drawing.Point(184, 0)
+        Me.rdb_Feu.Margin = New System.Windows.Forms.Padding(0)
+        Me.rdb_Feu.Name = "rdb_Feu"
+        Me.rdb_Feu.Size = New System.Drawing.Size(92, 37)
+        Me.rdb_Feu.TabIndex = 4
+        Me.rdb_Feu.Text = "rdb_Feu"
+        Me.rdb_Feu.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.rdb_Feu.UseVisualStyleBackColor = True
+        '
+        'rdb_Beton
+        '
+        Me.rdb_Beton.Appearance = System.Windows.Forms.Appearance.Button
+        Me.rdb_Beton.AutoSize = True
+        Me.rdb_Beton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.rdb_Beton.Location = New System.Drawing.Point(92, 0)
+        Me.rdb_Beton.Margin = New System.Windows.Forms.Padding(0)
+        Me.rdb_Beton.Name = "rdb_Beton"
+        Me.rdb_Beton.Size = New System.Drawing.Size(92, 37)
+        Me.rdb_Beton.TabIndex = 3
+        Me.rdb_Beton.Text = "rdb_Beton"
+        Me.rdb_Beton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.rdb_Beton.UseVisualStyleBackColor = True
+        '
+        'rdb_Acier
+        '
+        Me.rdb_Acier.Appearance = System.Windows.Forms.Appearance.Button
+        Me.rdb_Acier.AutoSize = True
+        Me.rdb_Acier.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.rdb_Acier.Location = New System.Drawing.Point(0, 0)
+        Me.rdb_Acier.Margin = New System.Windows.Forms.Padding(0)
+        Me.rdb_Acier.Name = "rdb_Acier"
+        Me.rdb_Acier.Size = New System.Drawing.Size(92, 37)
+        Me.rdb_Acier.TabIndex = 2
+        Me.rdb_Acier.Text = "rdb_Acier"
+        Me.rdb_Acier.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.rdb_Acier.UseVisualStyleBackColor = True
         '
         'lbl_Resistance
         '
@@ -228,7 +293,7 @@ Partial Class Frm_GammaN
         Me.lbl_Resistance.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Resistance.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Resistance.Name = "lbl_Resistance"
-        Me.lbl_Resistance.Size = New System.Drawing.Size(208, 30)
+        Me.lbl_Resistance.Size = New System.Drawing.Size(276, 37)
         Me.lbl_Resistance.TabIndex = 0
         Me.lbl_Resistance.Text = "lbl_Resistance"
         Me.lbl_Resistance.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -237,10 +302,10 @@ Partial Class Frm_GammaN
         '
         Me.pan_SaisieResistance.BackColor = System.Drawing.SystemColors.Control
         Me.pan_SaisieResistance.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieResistance.Location = New System.Drawing.Point(0, 60)
+        Me.pan_SaisieResistance.Location = New System.Drawing.Point(0, 74)
         Me.pan_SaisieResistance.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieResistance.Name = "pan_SaisieResistance"
-        Me.pan_SaisieResistance.Size = New System.Drawing.Size(208, 179)
+        Me.pan_SaisieResistance.Size = New System.Drawing.Size(276, 220)
         Me.pan_SaisieResistance.TabIndex = 1
         '
         'pan_Accompagnement
@@ -248,10 +313,10 @@ Partial Class Frm_GammaN
         Me.pan_Accompagnement.AutoScroll = True
         Me.pan_Accompagnement.Controls.Add(Me.TLPan_Accompagnement)
         Me.pan_Accompagnement.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Accompagnement.Location = New System.Drawing.Point(206, 0)
+        Me.pan_Accompagnement.Location = New System.Drawing.Point(275, 0)
         Me.pan_Accompagnement.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
         Me.pan_Accompagnement.Name = "pan_Accompagnement"
-        Me.pan_Accompagnement.Size = New System.Drawing.Size(203, 239)
+        Me.pan_Accompagnement.Size = New System.Drawing.Size(272, 294)
         Me.pan_Accompagnement.TabIndex = 1
         '
         'TLPan_Accompagnement
@@ -265,10 +330,10 @@ Partial Class Frm_GammaN
         Me.TLPan_Accompagnement.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Accompagnement.Name = "TLPan_Accompagnement"
         Me.TLPan_Accompagnement.RowCount = 2
-        Me.TLPan_Accompagnement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Accompagnement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Accompagnement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Accompagnement.Size = New System.Drawing.Size(203, 239)
+        Me.TLPan_Accompagnement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLPan_Accompagnement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 209.0!))
+        Me.TLPan_Accompagnement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+        Me.TLPan_Accompagnement.Size = New System.Drawing.Size(272, 294)
         Me.TLPan_Accompagnement.TabIndex = 0
         '
         'lbl_Accompagnement
@@ -280,7 +345,7 @@ Partial Class Frm_GammaN
         Me.lbl_Accompagnement.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Accompagnement.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Accompagnement.Name = "lbl_Accompagnement"
-        Me.lbl_Accompagnement.Size = New System.Drawing.Size(203, 30)
+        Me.lbl_Accompagnement.Size = New System.Drawing.Size(272, 37)
         Me.lbl_Accompagnement.TabIndex = 0
         Me.lbl_Accompagnement.Text = "lbl_Accompagnement"
         Me.lbl_Accompagnement.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -303,77 +368,135 @@ Partial Class Frm_GammaN
         Me.pan_SaisieAccompagnement.Controls.Add(Me.img_Psi1)
         Me.pan_SaisieAccompagnement.Controls.Add(Me.img_Psi0)
         Me.pan_SaisieAccompagnement.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieAccompagnement.Location = New System.Drawing.Point(0, 30)
+        Me.pan_SaisieAccompagnement.Location = New System.Drawing.Point(0, 37)
         Me.pan_SaisieAccompagnement.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieAccompagnement.Name = "pan_SaisieAccompagnement"
-        Me.pan_SaisieAccompagnement.Size = New System.Drawing.Size(203, 209)
+        Me.pan_SaisieAccompagnement.Size = New System.Drawing.Size(272, 257)
         Me.pan_SaisieAccompagnement.TabIndex = 1
+        '
+        'img_Q2
+        '
+        Me.img_Q2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Q2.Location = New System.Drawing.Point(170, 31)
+        Me.img_Q2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.img_Q2.Name = "img_Q2"
+        Me.img_Q2.Size = New System.Drawing.Size(77, 25)
+        Me.img_Q2.TabIndex = 94
+        Me.img_Q2.TabStop = False
+        '
+        'img_Q1
+        '
+        Me.img_Q1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Q1.Location = New System.Drawing.Point(85, 31)
+        Me.img_Q1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.img_Q1.Name = "img_Q1"
+        Me.img_Q1.Size = New System.Drawing.Size(77, 25)
+        Me.img_Q1.TabIndex = 93
+        Me.img_Q1.TabStop = False
         '
         'lbl_Q2
         '
         Me.lbl_Q2.AutoSize = True
-        Me.lbl_Q2.Location = New System.Drawing.Point(11, 172)
+        Me.lbl_Q2.Location = New System.Drawing.Point(15, 212)
+        Me.lbl_Q2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_Q2.Name = "lbl_Q2"
-        Me.lbl_Q2.Size = New System.Drawing.Size(37, 13)
+        Me.lbl_Q2.Size = New System.Drawing.Size(45, 16)
         Me.lbl_Q2.TabIndex = 92
         Me.lbl_Q2.Text = "lbl_Q2"
         '
         'lbl_Q1
         '
         Me.lbl_Q1.AutoSize = True
-        Me.lbl_Q1.Location = New System.Drawing.Point(11, 146)
+        Me.lbl_Q1.Location = New System.Drawing.Point(15, 180)
+        Me.lbl_Q1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_Q1.Name = "lbl_Q1"
-        Me.lbl_Q1.Size = New System.Drawing.Size(37, 13)
+        Me.lbl_Q1.Size = New System.Drawing.Size(45, 16)
         Me.lbl_Q1.TabIndex = 91
         Me.lbl_Q1.Text = "lbl_Q1"
         '
         'txt_Psi2_Q2
         '
         Me.txt_Psi2_Q2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Psi2_Q2.Location = New System.Drawing.Point(126, 103)
+        Me.txt_Psi2_Q2.Location = New System.Drawing.Point(170, 127)
+        Me.txt_Psi2_Q2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Psi2_Q2.Name = "txt_Psi2_Q2"
-        Me.txt_Psi2_Q2.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Psi2_Q2.Size = New System.Drawing.Size(76, 22)
         Me.txt_Psi2_Q2.TabIndex = 90
         '
         'txt_Psi2_Q1
         '
         Me.txt_Psi2_Q1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Psi2_Q1.Location = New System.Drawing.Point(62, 103)
+        Me.txt_Psi2_Q1.Location = New System.Drawing.Point(85, 127)
+        Me.txt_Psi2_Q1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Psi2_Q1.Name = "txt_Psi2_Q1"
-        Me.txt_Psi2_Q1.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Psi2_Q1.Size = New System.Drawing.Size(76, 22)
         Me.txt_Psi2_Q1.TabIndex = 89
+        '
+        'img_Psi2
+        '
+        Me.img_Psi2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Psi2.Location = New System.Drawing.Point(15, 127)
+        Me.img_Psi2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.img_Psi2.Name = "img_Psi2"
+        Me.img_Psi2.Size = New System.Drawing.Size(61, 25)
+        Me.img_Psi2.TabIndex = 88
+        Me.img_Psi2.TabStop = False
         '
         'txt_Psi1_Q2
         '
         Me.txt_Psi1_Q2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Psi1_Q2.Location = New System.Drawing.Point(126, 77)
+        Me.txt_Psi1_Q2.Location = New System.Drawing.Point(170, 95)
+        Me.txt_Psi1_Q2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Psi1_Q2.Name = "txt_Psi1_Q2"
-        Me.txt_Psi1_Q2.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Psi1_Q2.Size = New System.Drawing.Size(76, 22)
         Me.txt_Psi1_Q2.TabIndex = 85
         '
         'txt_Psi1_Q1
         '
         Me.txt_Psi1_Q1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Psi1_Q1.Location = New System.Drawing.Point(62, 77)
+        Me.txt_Psi1_Q1.Location = New System.Drawing.Point(85, 95)
+        Me.txt_Psi1_Q1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Psi1_Q1.Name = "txt_Psi1_Q1"
-        Me.txt_Psi1_Q1.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Psi1_Q1.Size = New System.Drawing.Size(76, 22)
         Me.txt_Psi1_Q1.TabIndex = 84
         '
         'txt_Psi0_Q2
         '
         Me.txt_Psi0_Q2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Psi0_Q2.Location = New System.Drawing.Point(126, 51)
+        Me.txt_Psi0_Q2.Location = New System.Drawing.Point(170, 63)
+        Me.txt_Psi0_Q2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Psi0_Q2.Name = "txt_Psi0_Q2"
-        Me.txt_Psi0_Q2.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Psi0_Q2.Size = New System.Drawing.Size(76, 22)
         Me.txt_Psi0_Q2.TabIndex = 83
         '
         'txt_Psi0_Q1
         '
         Me.txt_Psi0_Q1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Psi0_Q1.Location = New System.Drawing.Point(62, 51)
+        Me.txt_Psi0_Q1.Location = New System.Drawing.Point(85, 63)
+        Me.txt_Psi0_Q1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Psi0_Q1.Name = "txt_Psi0_Q1"
-        Me.txt_Psi0_Q1.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Psi0_Q1.Size = New System.Drawing.Size(76, 22)
         Me.txt_Psi0_Q1.TabIndex = 82
+        '
+        'img_Psi1
+        '
+        Me.img_Psi1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Psi1.Location = New System.Drawing.Point(15, 95)
+        Me.img_Psi1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.img_Psi1.Name = "img_Psi1"
+        Me.img_Psi1.Size = New System.Drawing.Size(61, 25)
+        Me.img_Psi1.TabIndex = 81
+        Me.img_Psi1.TabStop = False
+        '
+        'img_Psi0
+        '
+        Me.img_Psi0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Psi0.Location = New System.Drawing.Point(15, 63)
+        Me.img_Psi0.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.img_Psi0.Name = "img_Psi0"
+        Me.img_Psi0.Size = New System.Drawing.Size(61, 25)
+        Me.img_Psi0.TabIndex = 80
+        Me.img_Psi0.TabStop = False
         '
         'pan_Chargement
         '
@@ -383,7 +506,7 @@ Partial Class Frm_GammaN
         Me.pan_Chargement.Location = New System.Drawing.Point(0, 0)
         Me.pan_Chargement.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Chargement.Name = "pan_Chargement"
-        Me.pan_Chargement.Size = New System.Drawing.Size(205, 239)
+        Me.pan_Chargement.Size = New System.Drawing.Size(274, 294)
         Me.pan_Chargement.TabIndex = 0
         '
         'TLPan_Chargement
@@ -399,11 +522,11 @@ Partial Class Frm_GammaN
         Me.TLPan_Chargement.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Chargement.Name = "TLPan_Chargement"
         Me.TLPan_Chargement.RowCount = 4
-        Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 130.0!))
-        Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
+        Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Chargement.Size = New System.Drawing.Size(205, 239)
+        Me.TLPan_Chargement.Size = New System.Drawing.Size(274, 294)
         Me.TLPan_Chargement.TabIndex = 0
         '
         'lbl_Reset
@@ -412,10 +535,10 @@ Partial Class Frm_GammaN
         Me.lbl_Reset.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_Reset.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Reset.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Reset.Location = New System.Drawing.Point(0, 160)
+        Me.lbl_Reset.Location = New System.Drawing.Point(0, 197)
         Me.lbl_Reset.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Reset.Name = "lbl_Reset"
-        Me.lbl_Reset.Size = New System.Drawing.Size(205, 30)
+        Me.lbl_Reset.Size = New System.Drawing.Size(274, 37)
         Me.lbl_Reset.TabIndex = 2
         Me.lbl_Reset.Text = "lbl_Reset"
         Me.lbl_Reset.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -429,7 +552,7 @@ Partial Class Frm_GammaN
         Me.lbl_Chargement.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Chargement.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Chargement.Name = "lbl_Chargement"
-        Me.lbl_Chargement.Size = New System.Drawing.Size(205, 30)
+        Me.lbl_Chargement.Size = New System.Drawing.Size(274, 37)
         Me.lbl_Chargement.TabIndex = 0
         Me.lbl_Chargement.Text = "lbl_Chargement"
         Me.lbl_Chargement.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -445,35 +568,68 @@ Partial Class Frm_GammaN
         Me.pan_SaisieChargement.Controls.Add(Me.txt_GammaGsup)
         Me.pan_SaisieChargement.Controls.Add(Me.img_GammaGsup)
         Me.pan_SaisieChargement.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieChargement.Location = New System.Drawing.Point(0, 30)
+        Me.pan_SaisieChargement.Location = New System.Drawing.Point(0, 37)
         Me.pan_SaisieChargement.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_SaisieChargement.Name = "pan_SaisieChargement"
-        Me.pan_SaisieChargement.Size = New System.Drawing.Size(205, 129)
+        Me.pan_SaisieChargement.Size = New System.Drawing.Size(274, 159)
         Me.pan_SaisieChargement.TabIndex = 1
         '
         'txt_GammaQ
         '
         Me.txt_GammaQ.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaQ.Location = New System.Drawing.Point(90, 77)
+        Me.txt_GammaQ.Location = New System.Drawing.Point(121, 95)
+        Me.txt_GammaQ.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_GammaQ.Name = "txt_GammaQ"
-        Me.txt_GammaQ.Size = New System.Drawing.Size(58, 20)
+        Me.txt_GammaQ.Size = New System.Drawing.Size(76, 22)
         Me.txt_GammaQ.TabIndex = 77
+        '
+        'img_GammaQ
+        '
+        Me.img_GammaQ.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_GammaQ.Location = New System.Drawing.Point(33, 95)
+        Me.img_GammaQ.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.img_GammaQ.Name = "img_GammaQ"
+        Me.img_GammaQ.Size = New System.Drawing.Size(89, 25)
+        Me.img_GammaQ.TabIndex = 78
+        Me.img_GammaQ.TabStop = False
         '
         'txt_GammaGinf
         '
         Me.txt_GammaGinf.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaGinf.Location = New System.Drawing.Point(90, 51)
+        Me.txt_GammaGinf.Location = New System.Drawing.Point(121, 63)
+        Me.txt_GammaGinf.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_GammaGinf.Name = "txt_GammaGinf"
-        Me.txt_GammaGinf.Size = New System.Drawing.Size(58, 20)
+        Me.txt_GammaGinf.Size = New System.Drawing.Size(76, 22)
         Me.txt_GammaGinf.TabIndex = 75
+        '
+        'img_GammaGinf
+        '
+        Me.img_GammaGinf.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_GammaGinf.Location = New System.Drawing.Point(33, 63)
+        Me.img_GammaGinf.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.img_GammaGinf.Name = "img_GammaGinf"
+        Me.img_GammaGinf.Size = New System.Drawing.Size(89, 25)
+        Me.img_GammaGinf.TabIndex = 76
+        Me.img_GammaGinf.TabStop = False
         '
         'txt_GammaGsup
         '
         Me.txt_GammaGsup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaGsup.Location = New System.Drawing.Point(90, 25)
+        Me.txt_GammaGsup.Location = New System.Drawing.Point(121, 31)
+        Me.txt_GammaGsup.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_GammaGsup.Name = "txt_GammaGsup"
-        Me.txt_GammaGsup.Size = New System.Drawing.Size(58, 20)
+        Me.txt_GammaGsup.Size = New System.Drawing.Size(76, 22)
         Me.txt_GammaGsup.TabIndex = 73
+        '
+        'img_GammaGsup
+        '
+        Me.img_GammaGsup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_GammaGsup.Location = New System.Drawing.Point(33, 31)
+        Me.img_GammaGsup.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.img_GammaGsup.Name = "img_GammaGsup"
+        Me.img_GammaGsup.Size = New System.Drawing.Size(89, 25)
+        Me.img_GammaGsup.TabIndex = 74
+        Me.img_GammaGsup.TabStop = False
         '
         'pan_Reset
         '
@@ -481,17 +637,18 @@ Partial Class Frm_GammaN
         Me.pan_Reset.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pan_Reset.Controls.Add(Me.btn_Reini)
         Me.pan_Reset.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Reset.Location = New System.Drawing.Point(0, 190)
+        Me.pan_Reset.Location = New System.Drawing.Point(0, 234)
         Me.pan_Reset.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Reset.Name = "pan_Reset"
-        Me.pan_Reset.Size = New System.Drawing.Size(205, 49)
+        Me.pan_Reset.Size = New System.Drawing.Size(274, 60)
         Me.pan_Reset.TabIndex = 3
         '
         'btn_Reini
         '
-        Me.btn_Reini.Location = New System.Drawing.Point(9, 13)
+        Me.btn_Reini.Location = New System.Drawing.Point(12, 16)
+        Me.btn_Reini.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_Reini.Name = "btn_Reini"
-        Me.btn_Reini.Size = New System.Drawing.Size(185, 23)
+        Me.btn_Reini.Size = New System.Drawing.Size(247, 28)
         Me.btn_Reini.TabIndex = 79
         Me.btn_Reini.Text = "btn_Reini"
         Me.btn_Reini.UseVisualStyleBackColor = True
@@ -500,150 +657,20 @@ Partial Class Frm_GammaN
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'TLpan_ChoixResistance
-        '
-        Me.TLpan_ChoixResistance.ColumnCount = 3
-        Me.TLpan_ChoixResistance.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TLpan_ChoixResistance.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TLpan_ChoixResistance.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TLpan_ChoixResistance.Controls.Add(Me.rdb_Feu, 2, 0)
-        Me.TLpan_ChoixResistance.Controls.Add(Me.rdb_Beton, 1, 0)
-        Me.TLpan_ChoixResistance.Controls.Add(Me.rdb_Acier, 0, 0)
-        Me.TLpan_ChoixResistance.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLpan_ChoixResistance.Location = New System.Drawing.Point(0, 30)
-        Me.TLpan_ChoixResistance.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLpan_ChoixResistance.Name = "TLpan_ChoixResistance"
-        Me.TLpan_ChoixResistance.RowCount = 1
-        Me.TLpan_ChoixResistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_ChoixResistance.Size = New System.Drawing.Size(208, 30)
-        Me.TLpan_ChoixResistance.TabIndex = 0
-        '
-        'rdb_Acier
-        '
-        Me.rdb_Acier.Appearance = System.Windows.Forms.Appearance.Button
-        Me.rdb_Acier.AutoSize = True
-        Me.rdb_Acier.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rdb_Acier.Location = New System.Drawing.Point(0, 0)
-        Me.rdb_Acier.Margin = New System.Windows.Forms.Padding(0)
-        Me.rdb_Acier.Name = "rdb_Acier"
-        Me.rdb_Acier.Size = New System.Drawing.Size(69, 30)
-        Me.rdb_Acier.TabIndex = 2
-        Me.rdb_Acier.Text = "rdb_Acier"
-        Me.rdb_Acier.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.rdb_Acier.UseVisualStyleBackColor = True
-        '
-        'rdb_Beton
-        '
-        Me.rdb_Beton.Appearance = System.Windows.Forms.Appearance.Button
-        Me.rdb_Beton.AutoSize = True
-        Me.rdb_Beton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rdb_Beton.Location = New System.Drawing.Point(69, 0)
-        Me.rdb_Beton.Margin = New System.Windows.Forms.Padding(0)
-        Me.rdb_Beton.Name = "rdb_Beton"
-        Me.rdb_Beton.Size = New System.Drawing.Size(69, 30)
-        Me.rdb_Beton.TabIndex = 3
-        Me.rdb_Beton.Text = "rdb_Beton"
-        Me.rdb_Beton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.rdb_Beton.UseVisualStyleBackColor = True
-        '
-        'rdb_Feu
-        '
-        Me.rdb_Feu.Appearance = System.Windows.Forms.Appearance.Button
-        Me.rdb_Feu.AutoSize = True
-        Me.rdb_Feu.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rdb_Feu.Location = New System.Drawing.Point(138, 0)
-        Me.rdb_Feu.Margin = New System.Windows.Forms.Padding(0)
-        Me.rdb_Feu.Name = "rdb_Feu"
-        Me.rdb_Feu.Size = New System.Drawing.Size(70, 30)
-        Me.rdb_Feu.TabIndex = 4
-        Me.rdb_Feu.Text = "rdb_Feu"
-        Me.rdb_Feu.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.rdb_Feu.UseVisualStyleBackColor = True
-        '
-        'img_Q2
-        '
-        Me.img_Q2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Q2.Location = New System.Drawing.Point(126, 25)
-        Me.img_Q2.Name = "img_Q2"
-        Me.img_Q2.Size = New System.Drawing.Size(58, 20)
-        Me.img_Q2.TabIndex = 94
-        Me.img_Q2.TabStop = False
-        '
-        'img_Q1
-        '
-        Me.img_Q1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Q1.Location = New System.Drawing.Point(62, 25)
-        Me.img_Q1.Name = "img_Q1"
-        Me.img_Q1.Size = New System.Drawing.Size(58, 20)
-        Me.img_Q1.TabIndex = 93
-        Me.img_Q1.TabStop = False
-        '
-        'img_Psi2
-        '
-        Me.img_Psi2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Psi2.Location = New System.Drawing.Point(10, 103)
-        Me.img_Psi2.Name = "img_Psi2"
-        Me.img_Psi2.Size = New System.Drawing.Size(46, 20)
-        Me.img_Psi2.TabIndex = 88
-        Me.img_Psi2.TabStop = False
-        '
-        'img_Psi1
-        '
-        Me.img_Psi1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Psi1.Location = New System.Drawing.Point(10, 77)
-        Me.img_Psi1.Name = "img_Psi1"
-        Me.img_Psi1.Size = New System.Drawing.Size(46, 20)
-        Me.img_Psi1.TabIndex = 81
-        Me.img_Psi1.TabStop = False
-        '
-        'img_Psi0
-        '
-        Me.img_Psi0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Psi0.Location = New System.Drawing.Point(10, 51)
-        Me.img_Psi0.Name = "img_Psi0"
-        Me.img_Psi0.Size = New System.Drawing.Size(46, 20)
-        Me.img_Psi0.TabIndex = 80
-        Me.img_Psi0.TabStop = False
-        '
-        'img_GammaQ
-        '
-        Me.img_GammaQ.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaQ.Location = New System.Drawing.Point(24, 77)
-        Me.img_GammaQ.Name = "img_GammaQ"
-        Me.img_GammaQ.Size = New System.Drawing.Size(67, 20)
-        Me.img_GammaQ.TabIndex = 78
-        Me.img_GammaQ.TabStop = False
-        '
-        'img_GammaGinf
-        '
-        Me.img_GammaGinf.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaGinf.Location = New System.Drawing.Point(24, 51)
-        Me.img_GammaGinf.Name = "img_GammaGinf"
-        Me.img_GammaGinf.Size = New System.Drawing.Size(67, 20)
-        Me.img_GammaGinf.TabIndex = 76
-        Me.img_GammaGinf.TabStop = False
-        '
-        'img_GammaGsup
-        '
-        Me.img_GammaGsup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaGsup.Location = New System.Drawing.Point(24, 25)
-        Me.img_GammaGsup.Name = "img_GammaGsup"
-        Me.img_GammaGsup.Size = New System.Drawing.Size(67, 20)
-        Me.img_GammaGsup.TabIndex = 74
-        Me.img_GammaGsup.TabStop = False
-        '
         'Frm_GammaN
         '
         Me.AcceptButton = Me.btn_OK
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Annuler
-        Me.ClientSize = New System.Drawing.Size(624, 285)
+        Me.ClientSize = New System.Drawing.Size(832, 351)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_GammaN"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Gamma"
         Me.pan_General.ResumeLayout(False)
@@ -654,28 +681,28 @@ Partial Class Frm_GammaN
         Me.pan_Resistance.ResumeLayout(False)
         Me.TLPan_Resistance.ResumeLayout(False)
         Me.TLPan_Resistance.PerformLayout()
+        Me.TLpan_ChoixResistance.ResumeLayout(False)
+        Me.TLpan_ChoixResistance.PerformLayout()
         Me.pan_Accompagnement.ResumeLayout(False)
         Me.TLPan_Accompagnement.ResumeLayout(False)
         Me.TLPan_Accompagnement.PerformLayout()
         Me.pan_SaisieAccompagnement.ResumeLayout(False)
         Me.pan_SaisieAccompagnement.PerformLayout()
-        Me.pan_Chargement.ResumeLayout(False)
-        Me.TLPan_Chargement.ResumeLayout(False)
-        Me.TLPan_Chargement.PerformLayout()
-        Me.pan_SaisieChargement.ResumeLayout(False)
-        Me.pan_SaisieChargement.PerformLayout()
-        Me.pan_Reset.ResumeLayout(False)
-        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TLpan_ChoixResistance.ResumeLayout(False)
-        Me.TLpan_ChoixResistance.PerformLayout()
         CType(Me.img_Q2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Q1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Psi2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Psi1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Psi0, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Chargement.ResumeLayout(False)
+        Me.TLPan_Chargement.ResumeLayout(False)
+        Me.TLPan_Chargement.PerformLayout()
+        Me.pan_SaisieChargement.ResumeLayout(False)
+        Me.pan_SaisieChargement.PerformLayout()
         CType(Me.img_GammaQ, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_GammaGinf, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_GammaGsup, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Reset.ResumeLayout(False)
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

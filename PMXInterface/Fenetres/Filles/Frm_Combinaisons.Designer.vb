@@ -50,7 +50,7 @@ Partial Class Frm_Combinaisons
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(473, 498)
+        Me.pan_General.Size = New System.Drawing.Size(631, 613)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -61,40 +61,43 @@ Partial Class Frm_Combinaisons
         Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(473, 498)
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49.0!))
+        Me.TLpan_Main.Size = New System.Drawing.Size(631, 613)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
         '
         Me.TLPan_PartieBasse.ColumnCount = 5
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 461)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(4, 568)
+        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(467, 34)
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(623, 41)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(246, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(329, 4)
+        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
+        Me.btn_OK.Size = New System.Drawing.Size(152, 33)
         Me.btn_OK.TabIndex = 1
         Me.btn_OK.Text = "btn_OK"
         Me.btn_OK.UseVisualStyleBackColor = True
@@ -103,9 +106,10 @@ Partial Class Frm_Combinaisons
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(106, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(142, 4)
+        Me.btn_Annuler.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_Annuler.Name = "btn_Annuler"
-        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Annuler.Size = New System.Drawing.Size(152, 33)
         Me.btn_Annuler.TabIndex = 0
         Me.btn_Annuler.Text = "btn_Annuler"
         Me.btn_Annuler.UseVisualStyleBackColor = True
@@ -115,9 +119,10 @@ Partial Class Frm_Combinaisons
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLpan_Lignes)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Main.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Main.Location = New System.Drawing.Point(4, 4)
+        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(467, 452)
+        Me.pan_Main.Size = New System.Drawing.Size(623, 556)
         Me.pan_Main.TabIndex = 1
         '
         'TLpan_Lignes
@@ -131,12 +136,12 @@ Partial Class Frm_Combinaisons
         Me.TLpan_Lignes.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_Lignes.Name = "TLpan_Lignes"
         Me.TLpan_Lignes.RowCount = 2
-        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49.0!))
         Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLpan_Lignes.Size = New System.Drawing.Size(467, 452)
+        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+        Me.TLpan_Lignes.Size = New System.Drawing.Size(623, 556)
         Me.TLpan_Lignes.TabIndex = 0
         '
         'TLpan_ChoixEL
@@ -156,7 +161,7 @@ Partial Class Frm_Combinaisons
         Me.TLpan_ChoixEL.Name = "TLpan_ChoixEL"
         Me.TLpan_ChoixEL.RowCount = 1
         Me.TLpan_ChoixEL.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_ChoixEL.Size = New System.Drawing.Size(467, 40)
+        Me.TLpan_ChoixEL.Size = New System.Drawing.Size(623, 49)
         Me.TLpan_ChoixEL.TabIndex = 0
         '
         'rdb_Construction
@@ -164,10 +169,10 @@ Partial Class Frm_Combinaisons
         Me.rdb_Construction.Appearance = System.Windows.Forms.Appearance.Button
         Me.rdb_Construction.AutoSize = True
         Me.rdb_Construction.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rdb_Construction.Location = New System.Drawing.Point(349, 0)
+        Me.rdb_Construction.Location = New System.Drawing.Point(466, 0)
         Me.rdb_Construction.Margin = New System.Windows.Forms.Padding(1, 0, 0, 1)
         Me.rdb_Construction.Name = "rdb_Construction"
-        Me.rdb_Construction.Size = New System.Drawing.Size(118, 39)
+        Me.rdb_Construction.Size = New System.Drawing.Size(157, 48)
         Me.rdb_Construction.TabIndex = 3
         Me.rdb_Construction.Text = "rdb_Construction"
         Me.rdb_Construction.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -178,10 +183,10 @@ Partial Class Frm_Combinaisons
         Me.rdb_ELFire.Appearance = System.Windows.Forms.Appearance.Button
         Me.rdb_ELFire.AutoSize = True
         Me.rdb_ELFire.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rdb_ELFire.Location = New System.Drawing.Point(232, 0)
+        Me.rdb_ELFire.Location = New System.Drawing.Point(310, 0)
         Me.rdb_ELFire.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.rdb_ELFire.Name = "rdb_ELFire"
-        Me.rdb_ELFire.Size = New System.Drawing.Size(116, 39)
+        Me.rdb_ELFire.Size = New System.Drawing.Size(155, 48)
         Me.rdb_ELFire.TabIndex = 2
         Me.rdb_ELFire.Text = "rdb_ELFire"
         Me.rdb_ELFire.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -192,10 +197,10 @@ Partial Class Frm_Combinaisons
         Me.rdb_ELS.Appearance = System.Windows.Forms.Appearance.Button
         Me.rdb_ELS.AutoSize = True
         Me.rdb_ELS.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rdb_ELS.Location = New System.Drawing.Point(116, 0)
+        Me.rdb_ELS.Location = New System.Drawing.Point(155, 0)
         Me.rdb_ELS.Margin = New System.Windows.Forms.Padding(0, 0, 1, 1)
         Me.rdb_ELS.Name = "rdb_ELS"
-        Me.rdb_ELS.Size = New System.Drawing.Size(115, 39)
+        Me.rdb_ELS.Size = New System.Drawing.Size(154, 48)
         Me.rdb_ELS.TabIndex = 1
         Me.rdb_ELS.Text = "rdb_ELS"
         Me.rdb_ELS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -209,7 +214,7 @@ Partial Class Frm_Combinaisons
         Me.rdb_ELU.Location = New System.Drawing.Point(0, 0)
         Me.rdb_ELU.Margin = New System.Windows.Forms.Padding(0, 0, 1, 1)
         Me.rdb_ELU.Name = "rdb_ELU"
-        Me.rdb_ELU.Size = New System.Drawing.Size(115, 39)
+        Me.rdb_ELU.Size = New System.Drawing.Size(154, 48)
         Me.rdb_ELU.TabIndex = 0
         Me.rdb_ELU.Text = "rdb_ELU"
         Me.rdb_ELU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -219,24 +224,26 @@ Partial Class Frm_Combinaisons
         '
         Me.pan_Contenu.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Contenu.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Contenu.Location = New System.Drawing.Point(0, 41)
+        Me.pan_Contenu.Location = New System.Drawing.Point(0, 50)
         Me.pan_Contenu.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.pan_Contenu.Name = "pan_Contenu"
-        Me.pan_Contenu.Size = New System.Drawing.Size(467, 411)
+        Me.pan_Contenu.Size = New System.Drawing.Size(623, 506)
         Me.pan_Contenu.TabIndex = 5
         '
         'Frm_Combinaisons
         '
         Me.AcceptButton = Me.btn_OK
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Annuler
-        Me.ClientSize = New System.Drawing.Size(473, 498)
+        Me.ClientSize = New System.Drawing.Size(631, 613)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_Combinaisons"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Combinaisons"
         Me.pan_General.ResumeLayout(False)

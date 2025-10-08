@@ -51,21 +51,22 @@ Partial Class Frm_Ouverture
         Me.TabControl_MenuProject.Controls.Add(Me.TabPage_OpenProject)
         Me.TabControl_MenuProject.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControl_MenuProject.ItemSize = New System.Drawing.Size(117, 20)
-        Me.TabControl_MenuProject.Location = New System.Drawing.Point(3, 3)
-        Me.TabControl_MenuProject.Margin = New System.Windows.Forms.Padding(3, 3, 3, 0)
+        Me.TabControl_MenuProject.Location = New System.Drawing.Point(4, 4)
+        Me.TabControl_MenuProject.Margin = New System.Windows.Forms.Padding(4, 4, 4, 0)
         Me.TabControl_MenuProject.Multiline = True
         Me.TabControl_MenuProject.Name = "TabControl_MenuProject"
         Me.TabControl_MenuProject.Padding = New System.Drawing.Point(12, 3)
         Me.TabControl_MenuProject.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.TabControl_MenuProject.SelectedIndex = 0
-        Me.TabControl_MenuProject.Size = New System.Drawing.Size(747, 420)
+        Me.TabControl_MenuProject.Size = New System.Drawing.Size(996, 517)
         Me.TabControl_MenuProject.TabIndex = 0
         '
         'TabPage_NewProject
         '
         Me.TabPage_NewProject.Location = New System.Drawing.Point(4, 24)
+        Me.TabPage_NewProject.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TabPage_NewProject.Name = "TabPage_NewProject"
-        Me.TabPage_NewProject.Size = New System.Drawing.Size(739, 392)
+        Me.TabPage_NewProject.Size = New System.Drawing.Size(988, 489)
         Me.TabPage_NewProject.TabIndex = 0
         Me.TabPage_NewProject.Text = "TabPage_NewProject"
         Me.TabPage_NewProject.UseVisualStyleBackColor = True
@@ -74,9 +75,10 @@ Partial Class Frm_Ouverture
         '
         Me.TabPage_OpenProject.Controls.Add(Me.pan_Open)
         Me.TabPage_OpenProject.Location = New System.Drawing.Point(4, 24)
+        Me.TabPage_OpenProject.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TabPage_OpenProject.Name = "TabPage_OpenProject"
-        Me.TabPage_OpenProject.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage_OpenProject.Size = New System.Drawing.Size(739, 392)
+        Me.TabPage_OpenProject.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TabPage_OpenProject.Size = New System.Drawing.Size(988, 489)
         Me.TabPage_OpenProject.TabIndex = 1
         Me.TabPage_OpenProject.Text = "TabPage_OpenProject"
         Me.TabPage_OpenProject.UseVisualStyleBackColor = True
@@ -86,37 +88,39 @@ Partial Class Frm_Ouverture
         Me.pan_Open.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pan_Open.Controls.Add(Me.TLpan_OpenProject)
         Me.pan_Open.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Open.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Open.Location = New System.Drawing.Point(4, 4)
+        Me.pan_Open.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Open.Name = "pan_Open"
-        Me.pan_Open.Size = New System.Drawing.Size(733, 386)
+        Me.pan_Open.Size = New System.Drawing.Size(980, 481)
         Me.pan_Open.TabIndex = 2
         '
         'TLpan_OpenProject
         '
         Me.TLpan_OpenProject.ColumnCount = 5
-        Me.TLpan_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
+        Me.TLpan_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 146.0!))
+        Me.TLpan_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 195.0!))
         Me.TLpan_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 16.0!))
+        Me.TLpan_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 21.0!))
         Me.TLpan_OpenProject.Controls.Add(Me.lbl_OpenFile, 1, 1)
         Me.TLpan_OpenProject.Controls.Add(Me.lbl_RecentFiles, 1, 5)
         Me.TLpan_OpenProject.Controls.Add(Me.Button_OpenProject, 2, 3)
         Me.TLpan_OpenProject.Controls.Add(Me.Panel1, 1, 7)
         Me.TLpan_OpenProject.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_OpenProject.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_OpenProject.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLpan_OpenProject.Name = "TLpan_OpenProject"
         Me.TLpan_OpenProject.RowCount = 9
         Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.27273!))
-        Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
+        Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32.0!))
         Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090907!))
-        Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36.0!))
+        Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44.0!))
         Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.27273!))
-        Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
+        Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32.0!))
         Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090907!))
-        Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
+        Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 197.0!))
         Me.TLpan_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.27273!))
-        Me.TLpan_OpenProject.Size = New System.Drawing.Size(731, 384)
+        Me.TLpan_OpenProject.Size = New System.Drawing.Size(978, 479)
         Me.TLpan_OpenProject.TabIndex = 1
         '
         'lbl_OpenFile
@@ -126,9 +130,10 @@ Partial Class Frm_Ouverture
         Me.lbl_OpenFile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TLpan_OpenProject.SetColumnSpan(Me.lbl_OpenFile, 3)
         Me.lbl_OpenFile.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_OpenFile.Location = New System.Drawing.Point(18, 37)
+        Me.lbl_OpenFile.Location = New System.Drawing.Point(24, 47)
+        Me.lbl_OpenFile.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_OpenFile.Name = "lbl_OpenFile"
-        Me.lbl_OpenFile.Size = New System.Drawing.Size(694, 26)
+        Me.lbl_OpenFile.Size = New System.Drawing.Size(929, 32)
         Me.lbl_OpenFile.TabIndex = 4
         Me.lbl_OpenFile.Text = "lbl_OpenFile"
         Me.lbl_OpenFile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -140,9 +145,10 @@ Partial Class Frm_Ouverture
         Me.lbl_RecentFiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TLpan_OpenProject.SetColumnSpan(Me.lbl_RecentFiles, 3)
         Me.lbl_RecentFiles.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_RecentFiles.Location = New System.Drawing.Point(18, 148)
+        Me.lbl_RecentFiles.Location = New System.Drawing.Point(24, 185)
+        Me.lbl_RecentFiles.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_RecentFiles.Name = "lbl_RecentFiles"
-        Me.lbl_RecentFiles.Size = New System.Drawing.Size(694, 26)
+        Me.lbl_RecentFiles.Size = New System.Drawing.Size(929, 32)
         Me.lbl_RecentFiles.TabIndex = 2
         Me.lbl_RecentFiles.Text = "lbl_RecentFiles"
         Me.lbl_RecentFiles.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -152,9 +158,10 @@ Partial Class Frm_Ouverture
         Me.Button_OpenProject.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button_OpenProject.Image = CType(resources.GetObject("Button_OpenProject.Image"), System.Drawing.Image)
         Me.Button_OpenProject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Button_OpenProject.Location = New System.Drawing.Point(295, 78)
+        Me.Button_OpenProject.Location = New System.Drawing.Point(395, 98)
+        Me.Button_OpenProject.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Button_OpenProject.Name = "Button_OpenProject"
-        Me.Button_OpenProject.Size = New System.Drawing.Size(140, 30)
+        Me.Button_OpenProject.Size = New System.Drawing.Size(187, 36)
         Me.Button_OpenProject.TabIndex = 3
         Me.Button_OpenProject.Text = "Button_OpenProject"
         Me.Button_OpenProject.UseVisualStyleBackColor = True
@@ -164,10 +171,10 @@ Partial Class Frm_Ouverture
         Me.TLpan_OpenProject.SetColumnSpan(Me.Panel1, 3)
         Me.Panel1.Controls.Add(Me.ListBox_RecentFiles)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(18, 187)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(3, 1, 3, 0)
+        Me.Panel1.Location = New System.Drawing.Point(24, 233)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(4, 1, 4, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(694, 159)
+        Me.Panel1.Size = New System.Drawing.Size(929, 196)
         Me.Panel1.TabIndex = 5
         '
         'ListBox_RecentFiles
@@ -175,35 +182,38 @@ Partial Class Frm_Ouverture
         Me.ListBox_RecentFiles.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListBox_RecentFiles.FormattingEnabled = True
         Me.ListBox_RecentFiles.HorizontalScrollbar = True
+        Me.ListBox_RecentFiles.ItemHeight = 16
         Me.ListBox_RecentFiles.Location = New System.Drawing.Point(0, 0)
-        Me.ListBox_RecentFiles.Margin = New System.Windows.Forms.Padding(3, 0, 3, 0)
+        Me.ListBox_RecentFiles.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.ListBox_RecentFiles.Name = "ListBox_RecentFiles"
-        Me.ListBox_RecentFiles.Size = New System.Drawing.Size(694, 159)
+        Me.ListBox_RecentFiles.Size = New System.Drawing.Size(929, 196)
         Me.ListBox_RecentFiles.TabIndex = 0
         '
         'TableLayoutPanel_NewProject
         '
         Me.TableLayoutPanel_NewProject.ColumnCount = 3
         Me.TableLayoutPanel_NewProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel_NewProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 96.0!))
+        Me.TableLayoutPanel_NewProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 128.0!))
         Me.TableLayoutPanel_NewProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel_NewProject.Controls.Add(Me.TabControl_MenuProject, 0, 0)
         Me.TableLayoutPanel_NewProject.Controls.Add(Me.Button_Valider, 1, 1)
         Me.TableLayoutPanel_NewProject.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel_NewProject.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanel_NewProject.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TableLayoutPanel_NewProject.Name = "TableLayoutPanel_NewProject"
         Me.TableLayoutPanel_NewProject.RowCount = 2
         Me.TableLayoutPanel_NewProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel_NewProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36.0!))
-        Me.TableLayoutPanel_NewProject.Size = New System.Drawing.Size(753, 459)
+        Me.TableLayoutPanel_NewProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44.0!))
+        Me.TableLayoutPanel_NewProject.Size = New System.Drawing.Size(1004, 565)
         Me.TableLayoutPanel_NewProject.TabIndex = 2
         '
         'Button_Valider
         '
         Me.Button_Valider.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button_Valider.Location = New System.Drawing.Point(331, 426)
+        Me.Button_Valider.Location = New System.Drawing.Point(442, 525)
+        Me.Button_Valider.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Button_Valider.Name = "Button_Valider"
-        Me.Button_Valider.Size = New System.Drawing.Size(90, 30)
+        Me.Button_Valider.Size = New System.Drawing.Size(120, 36)
         Me.Button_Valider.TabIndex = 1
         Me.Button_Valider.Text = "Button_Valider"
         Me.Button_Valider.UseVisualStyleBackColor = True
@@ -215,16 +225,18 @@ Partial Class Frm_Ouverture
         'Frm_Ouverture
         '
         Me.AcceptButton = Me.Button_Valider
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(753, 459)
+        Me.ClientSize = New System.Drawing.Size(1004, 565)
         Me.Controls.Add(Me.TableLayoutPanel_NewProject)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_Ouverture"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.ShowInTaskbar = False
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Ouverture"
         Me.TabControl_MenuProject.ResumeLayout(False)
         Me.TabPage_OpenProject.ResumeLayout(False)

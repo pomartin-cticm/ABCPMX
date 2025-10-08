@@ -65,7 +65,7 @@ AUTOMATIC_DESIGN		= Dimensionnement automatique ?
 AV_PROFILE				= Aire de cisaillement
 AWELD_PROFILE			= Gorge du cordon de soudure
 A_PROFILE				= Aire de la section transversale
-BB_PSS					= Largeur de la face supérieure d'une onde
+BB_PSS					= Largeur de la face inférieure d'une nervure
 BC_PART_ENC				= Largeur totale d'enrobage
 BEAMCHAR				= Propriétés de la poutre :
 BEAMPOSITION			= Position de la poutre
@@ -77,7 +77,7 @@ BF_PROFILE				= Largeur des semelles
 BOTH_FLANGES			= Semelles supérieure et inférieure
 BOTTOM					= Inférieur
 BP_PROFILE				= Largeur du plat inférieur
-BT_PSS					= Largeur de la face inférieure d'une onde
+BT_PSS					= Largeur de la face supérieure d'une nervure
 CALCULATIONOPTIONS		= Paramètres du calcul
 CALCULATIONTYPE			= Type de calcul
 CENTER					= Centre
@@ -610,6 +610,7 @@ WHERE					= Avec
 WSLENDERNESS			= Elancement géométrique de l'âme
 WSLENDERNESSLIMIT		= Limite d'élancement
 WTOFWEBS				= Soudures âme-semelles
+WPLATE					= Soudures du plat
 
 #NDC_DETAILSULS
 TITLE					= Calculs détaillés aux ELU

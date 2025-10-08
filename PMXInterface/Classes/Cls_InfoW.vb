@@ -67,12 +67,14 @@
 
     Public Sub Publie()
         InfoW_lVisible = True
-        Frm_InfoLogiciel.ShowDialog()
+        ' Frm_InfoLogiciel.ShowDialog()
+        Frm_InfoLogicielN.ShowDialog()
     End Sub
 
     Public Sub Fermer()
 
-        Frm_InfoLogiciel.Close()
+        'Frm_InfoLogiciel.Close()
+        Frm_InfoLogicielN.Close()
 
     End Sub
 #End Region

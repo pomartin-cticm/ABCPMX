@@ -884,33 +884,33 @@ Module Mod_Outils
             Case Enu_TypeVariable.Masse
 
                 kUnitU = 1
-                Unite = "kg"
+                Unite = SEP & "kg"
 
             Case Enu_TypeVariable.Massivete
 
                 kUnitU = 1
                 If lNdC Then
-                    Unite = "m\+-1\="
+                    Unite = SEP & "m\+-1\="
                 Else
-                    Unite = "m-1"
+                    Unite = SEP & "m-1"
                 End If
 
             Case Enu_TypeVariable.MasseVolumique
 
                 kUnitU = 1
                 If lNdC Then
-                    Unite = "kg/m\+3\="
+                    Unite = SEP & "kg/m\+3\="
                 Else
-                    Unite = "kg/m3"
+                    Unite = SEP & "kg/m3"
                 End If
 
             Case Enu_TypeVariable.MasseSurfacique
 
                 kUnitU = 1
                 If lNdC Then
-                    Unite = "kg/m\+2\="
+                    Unite = SEP & "kg/m\+2\="
                 Else
-                    Unite = "kg/m2"
+                    Unite = SEP & "kg/m2"
                 End If
 
             Case Enu_TypeVariable.ModuleY
@@ -1934,13 +1934,18 @@ Module Mod_Outils
             InfoW.AddInfo("Sub : " & Routine)
         End If
 
-        InfoW.AddInfo("ERROR : " & myMessage)
-        InfoW.linfo = False
-
+        If lError Then
+            InfoW.AddInfo("ERROR : " & myMessage)
+        Else
+            InfoW.AddInfo(myMessage)
+        End If
+        InfoW.linfo = Not lError
+        If lError Then
+            InfoW.Mode = Cls_InfoW.enu_ModeW.Erreur
+        Else
+            InfoW.Mode = Cls_InfoW.enu_ModeW.Avertissement
+        End If
         InfoW.Publie()
-
-
-
 
         'Dim mySource As String = ""
         'If ModSource <> "" Then mySource = ModSource

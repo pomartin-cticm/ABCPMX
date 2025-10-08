@@ -1226,7 +1226,8 @@ Public Class cls_ModeleP
 
     End Sub
 
-    Public Sub MaillageDalle_YYETA(GammaC As Decimal, bEff As Decimal, nEqDalle As Decimal, DeltaPRd As Decimal, myDalle As cls_Dalle)
+    Public Sub MaillageDalle_YYETA(GammaC As Decimal, bEff As Decimal, nEqDalle As Decimal, DeltaPRd As Decimal,
+                                   myDalle As cls_Dalle)
         '-------------------------------------------------------------------------------------------------------------------
         '   25/04/24 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -1288,16 +1289,10 @@ Public Class cls_ModeleP
         '--> Boucle sur les lits d'armature
 
         For iArma = 0 To myDalle.LitArma.Count - 1
-            'If myDalle.LitArma(iArma).lActive Then
-            '    PhiS = myDalle.LitArma(iArma).PhiS
-            '    EspBar = myDalle.LitArma(iArma).EspBar
-            '    nbBar = bEff / EspBar
 
-            '    Me.AddMailleCirculaire(PhiS / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, GammaS, nbBar, cls_Maille.EnuTypeMaille.Circulaire)
-
-            'End If
             zArma = Ztop - myDalle.LitArma(iArma).z_s
             Me.MaillageLitArmaDalle_YY(GammaS, bEff, myDalle, iArma, zArma, Fsk)
+
         Next
 
     End Sub
@@ -1382,7 +1377,8 @@ Public Class cls_ModeleP
     End Sub
 
     Public Sub MaillageDalleTranches_ETA(GammaC As Decimal, AlphaC As Decimal, bEff As Decimal, nEqDalle As Decimal, myDalle As cls_Dalle,
-                                         DeltaPRd As Decimal, NbTranches As Integer, zTran() As Decimal, eTran() As Decimal, kRedCTr() As Decimal)
+                                         DeltaPRd As Decimal, NbTranches As Integer, zTran() As Decimal, eTran() As Decimal,
+                                         kRedCTr() As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   08/05/24 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------

@@ -37,8 +37,8 @@ Public Class Frm_AjoutePP
 
     Public lOuverture As Boolean = False            ' Indique si appel depuis la fenêtre ouverture (démarrage du programme)
 
-    Dim lSlimAcierDispo As Boolean = lSLIMAcier Or LogicielOptions.lExpert
-    Dim lSlimMixteDispo As Boolean = lSLIMMixte Or LogicielOptions.lExpert
+    Dim lSlimAcierDispo As Boolean = LogicielReglages.lSLIMAcier Or LogicielOptions.lExpert
+    Dim lSlimMixteDispo As Boolean = LogicielReglages.lSLIMMixte Or LogicielOptions.lExpert
 
     Dim strNonDispo As String = ""
 

@@ -61,6 +61,7 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_General = New System.Windows.Forms.Label()
         Me.TLPan_Dalle = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Img = New System.Windows.Forms.Panel()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.pan_EpaisseurMixte = New System.Windows.Forms.Panel()
         Me.rdb_EpPleine = New System.Windows.Forms.RadioButton()
         Me.rdb_EpTotale = New System.Windows.Forms.RadioButton()
@@ -106,7 +107,6 @@ Partial Class Frm_DalleSlimFloor
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.imgList_BOArma = New System.Windows.Forms.ImageList(Me.components)
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.pan_Beton.SuspendLayout()
         CType(Me.img_RhoC, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
@@ -122,6 +122,7 @@ Partial Class Frm_DalleSlimFloor
         Me.TLpan_Gauche.SuspendLayout()
         Me.TLPan_Dalle.SuspendLayout()
         Me.pan_Img.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_EpaisseurMixte.SuspendLayout()
         CType(Me.img_Tc, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Td2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -138,7 +139,6 @@ Partial Class Frm_DalleSlimFloor
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.pan_General.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lbl_Beton
@@ -147,10 +147,10 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_Beton.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_Beton.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Beton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Beton.Location = New System.Drawing.Point(0, 150)
+        Me.lbl_Beton.Location = New System.Drawing.Point(0, 185)
         Me.lbl_Beton.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Beton.Name = "lbl_Beton"
-        Me.lbl_Beton.Size = New System.Drawing.Size(251, 30)
+        Me.lbl_Beton.Size = New System.Drawing.Size(335, 37)
         Me.lbl_Beton.TabIndex = 8
         Me.lbl_Beton.Text = "lbl_Beton"
         Me.lbl_Beton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -160,10 +160,10 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_Acier.BackColor = System.Drawing.SystemColors.ControlDark
         Me.lbl_Acier.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Acier.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Acier.Location = New System.Drawing.Point(0, 270)
+        Me.lbl_Acier.Location = New System.Drawing.Point(0, 333)
         Me.lbl_Acier.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Acier.Name = "lbl_Acier"
-        Me.lbl_Acier.Size = New System.Drawing.Size(251, 30)
+        Me.lbl_Acier.Size = New System.Drawing.Size(335, 37)
         Me.lbl_Acier.TabIndex = 14
         Me.lbl_Acier.Text = "lbl_Acier"
         Me.lbl_Acier.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -179,18 +179,19 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_Beton.Controls.Add(Me.cmb_ClasseBetonDalle)
         Me.pan_Beton.Controls.Add(Me.lbl_ClasseE)
         Me.pan_Beton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Beton.Location = New System.Drawing.Point(0, 180)
+        Me.pan_Beton.Location = New System.Drawing.Point(0, 222)
         Me.pan_Beton.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Beton.Name = "pan_Beton"
-        Me.pan_Beton.Size = New System.Drawing.Size(251, 89)
+        Me.pan_Beton.Size = New System.Drawing.Size(335, 110)
         Me.pan_Beton.TabIndex = 9
         '
         'chk_BetonLeger
         '
         Me.chk_BetonLeger.AutoSize = True
-        Me.chk_BetonLeger.Location = New System.Drawing.Point(13, 9)
+        Me.chk_BetonLeger.Location = New System.Drawing.Point(17, 11)
+        Me.chk_BetonLeger.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chk_BetonLeger.Name = "chk_BetonLeger"
-        Me.chk_BetonLeger.Size = New System.Drawing.Size(105, 17)
+        Me.chk_BetonLeger.Size = New System.Drawing.Size(124, 20)
         Me.chk_BetonLeger.TabIndex = 64
         Me.chk_BetonLeger.Text = "chk_BetonLeger"
         Me.chk_BetonLeger.UseVisualStyleBackColor = True
@@ -198,17 +199,19 @@ Partial Class Frm_DalleSlimFloor
         'txt_RhoC
         '
         Me.txt_RhoC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_RhoC.Location = New System.Drawing.Point(128, 56)
+        Me.txt_RhoC.Location = New System.Drawing.Point(172, 69)
+        Me.txt_RhoC.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_RhoC.Name = "txt_RhoC"
-        Me.txt_RhoC.Size = New System.Drawing.Size(58, 20)
+        Me.txt_RhoC.Size = New System.Drawing.Size(76, 22)
         Me.txt_RhoC.TabIndex = 62
         '
         'img_RhoC
         '
         Me.img_RhoC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_RhoC.Location = New System.Drawing.Point(83, 56)
+        Me.img_RhoC.Location = New System.Drawing.Point(112, 69)
+        Me.img_RhoC.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_RhoC.Name = "img_RhoC"
-        Me.img_RhoC.Size = New System.Drawing.Size(46, 20)
+        Me.img_RhoC.Size = New System.Drawing.Size(61, 25)
         Me.img_RhoC.TabIndex = 63
         Me.img_RhoC.TabStop = False
         '
@@ -216,9 +219,10 @@ Partial Class Frm_DalleSlimFloor
         '
         Me.etq_UnitRhoC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitRhoC.AutoSize = True
-        Me.etq_UnitRhoC.Location = New System.Drawing.Point(192, 59)
+        Me.etq_UnitRhoC.Location = New System.Drawing.Point(257, 73)
+        Me.etq_UnitRhoC.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitRhoC.Name = "etq_UnitRhoC"
-        Me.etq_UnitRhoC.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitRhoC.Size = New System.Drawing.Size(29, 16)
         Me.etq_UnitRhoC.TabIndex = 61
         Me.etq_UnitRhoC.Text = "mm"
         '
@@ -228,9 +232,10 @@ Partial Class Frm_DalleSlimFloor
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_ClasseBetonDalle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_ClasseBetonDalle.FormattingEnabled = True
-        Me.cmb_ClasseBetonDalle.Location = New System.Drawing.Point(128, 30)
+        Me.cmb_ClasseBetonDalle.Location = New System.Drawing.Point(171, 37)
+        Me.cmb_ClasseBetonDalle.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cmb_ClasseBetonDalle.Name = "cmb_ClasseBetonDalle"
-        Me.cmb_ClasseBetonDalle.Size = New System.Drawing.Size(111, 21)
+        Me.cmb_ClasseBetonDalle.Size = New System.Drawing.Size(148, 24)
         Me.cmb_ClasseBetonDalle.TabIndex = 57
         '
         'lbl_ClasseE
@@ -238,7 +243,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_ClasseE.AutoSize = True
         Me.lbl_ClasseE.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_ClasseE.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_ClasseE.Location = New System.Drawing.Point(11, 33)
+        Me.lbl_ClasseE.Location = New System.Drawing.Point(15, 41)
+        Me.lbl_ClasseE.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_ClasseE.Name = "lbl_ClasseE"
         Me.lbl_ClasseE.Size = New System.Drawing.Size(61, 13)
         Me.lbl_ClasseE.TabIndex = 56
@@ -255,26 +261,28 @@ Partial Class Frm_DalleSlimFloor
         Me.Panel2.Controls.Add(Me.cmb_Acier)
         Me.Panel2.Controls.Add(Me.lbl_ClasseA)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel2.Location = New System.Drawing.Point(0, 300)
+        Me.Panel2.Location = New System.Drawing.Point(0, 370)
         Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(251, 73)
+        Me.Panel2.Size = New System.Drawing.Size(335, 89)
         Me.Panel2.TabIndex = 15
         '
         'txt_Fsk
         '
         Me.txt_Fsk.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Fsk.Location = New System.Drawing.Point(149, 38)
+        Me.txt_Fsk.Location = New System.Drawing.Point(200, 47)
+        Me.txt_Fsk.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Fsk.Name = "txt_Fsk"
-        Me.txt_Fsk.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Fsk.Size = New System.Drawing.Size(76, 22)
         Me.txt_Fsk.TabIndex = 59
         '
         'img_Fy
         '
         Me.img_Fy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Fy.Location = New System.Drawing.Point(93, 38)
+        Me.img_Fy.Location = New System.Drawing.Point(125, 47)
+        Me.img_Fy.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_Fy.Name = "img_Fy"
-        Me.img_Fy.Size = New System.Drawing.Size(57, 20)
+        Me.img_Fy.Size = New System.Drawing.Size(76, 25)
         Me.img_Fy.TabIndex = 60
         Me.img_Fy.TabStop = False
         '
@@ -282,9 +290,10 @@ Partial Class Frm_DalleSlimFloor
         '
         Me.etq_UnitSigma2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitSigma2.AutoSize = True
-        Me.etq_UnitSigma2.Location = New System.Drawing.Point(213, 41)
+        Me.etq_UnitSigma2.Location = New System.Drawing.Point(285, 50)
+        Me.etq_UnitSigma2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitSigma2.Name = "etq_UnitSigma2"
-        Me.etq_UnitSigma2.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitSigma2.Size = New System.Drawing.Size(29, 16)
         Me.etq_UnitSigma2.TabIndex = 58
         Me.etq_UnitSigma2.Text = "mm"
         '
@@ -294,9 +303,10 @@ Partial Class Frm_DalleSlimFloor
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_Acier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_Acier.FormattingEnabled = True
-        Me.cmb_Acier.Location = New System.Drawing.Point(127, 11)
+        Me.cmb_Acier.Location = New System.Drawing.Point(169, 14)
+        Me.cmb_Acier.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cmb_Acier.Name = "cmb_Acier"
-        Me.cmb_Acier.Size = New System.Drawing.Size(112, 21)
+        Me.cmb_Acier.Size = New System.Drawing.Size(149, 24)
         Me.cmb_Acier.TabIndex = 57
         '
         'lbl_ClasseA
@@ -304,7 +314,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_ClasseA.AutoSize = True
         Me.lbl_ClasseA.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_ClasseA.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_ClasseA.Location = New System.Drawing.Point(11, 14)
+        Me.lbl_ClasseA.Location = New System.Drawing.Point(15, 17)
+        Me.lbl_ClasseA.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_ClasseA.Name = "lbl_ClasseA"
         Me.lbl_ClasseA.Size = New System.Drawing.Size(61, 13)
         Me.lbl_ClasseA.TabIndex = 56
@@ -317,9 +328,10 @@ Partial Class Frm_DalleSlimFloor
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_TypeDalle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_TypeDalle.FormattingEnabled = True
-        Me.cmb_TypeDalle.Location = New System.Drawing.Point(96, 8)
+        Me.cmb_TypeDalle.Location = New System.Drawing.Point(128, 10)
+        Me.cmb_TypeDalle.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cmb_TypeDalle.Name = "cmb_TypeDalle"
-        Me.cmb_TypeDalle.Size = New System.Drawing.Size(143, 21)
+        Me.cmb_TypeDalle.Size = New System.Drawing.Size(190, 24)
         Me.cmb_TypeDalle.TabIndex = 56
         '
         'ErrorProvider
@@ -333,10 +345,10 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_Type.Controls.Add(Me.lbl_TypeDalle)
         Me.pan_Type.Controls.Add(Me.cmb_TypeDalle)
         Me.pan_Type.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Type.Location = New System.Drawing.Point(0, 30)
+        Me.pan_Type.Location = New System.Drawing.Point(0, 37)
         Me.pan_Type.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Type.Name = "pan_Type"
-        Me.pan_Type.Size = New System.Drawing.Size(251, 119)
+        Me.pan_Type.Size = New System.Drawing.Size(335, 147)
         Me.pan_Type.TabIndex = 7
         '
         'lbl_TypeDalle
@@ -344,7 +356,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_TypeDalle.AutoSize = True
         Me.lbl_TypeDalle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_TypeDalle.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_TypeDalle.Location = New System.Drawing.Point(13, 11)
+        Me.lbl_TypeDalle.Location = New System.Drawing.Point(17, 14)
+        Me.lbl_TypeDalle.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_TypeDalle.Name = "lbl_TypeDalle"
         Me.lbl_TypeDalle.Size = New System.Drawing.Size(71, 13)
         Me.lbl_TypeDalle.TabIndex = 55
@@ -364,18 +377,19 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_Bac.Controls.Add(Me.lbl_BacNom)
         Me.pan_Bac.Controls.Add(Me.txt_BacNom)
         Me.pan_Bac.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Bac.Location = New System.Drawing.Point(0, 30)
+        Me.pan_Bac.Location = New System.Drawing.Point(0, 37)
         Me.pan_Bac.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Bac.Name = "pan_Bac"
-        Me.pan_Bac.Size = New System.Drawing.Size(249, 343)
+        Me.pan_Bac.Size = New System.Drawing.Size(332, 422)
         Me.pan_Bac.TabIndex = 9
         '
         'txt_Hp
         '
         Me.txt_Hp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Hp.Location = New System.Drawing.Point(155, 141)
+        Me.txt_Hp.Location = New System.Drawing.Point(208, 174)
+        Me.txt_Hp.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Hp.Name = "txt_Hp"
-        Me.txt_Hp.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Hp.Size = New System.Drawing.Size(76, 22)
         Me.txt_Hp.TabIndex = 84
         '
         'lbl_HauteurHp
@@ -383,7 +397,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_HauteurHp.AutoSize = True
         Me.lbl_HauteurHp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_HauteurHp.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_HauteurHp.Location = New System.Drawing.Point(16, 144)
+        Me.lbl_HauteurHp.Location = New System.Drawing.Point(21, 177)
+        Me.lbl_HauteurHp.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_HauteurHp.Name = "lbl_HauteurHp"
         Me.lbl_HauteurHp.Size = New System.Drawing.Size(39, 13)
         Me.lbl_HauteurHp.TabIndex = 82
@@ -394,18 +409,20 @@ Partial Class Frm_DalleSlimFloor
         '
         Me.etq_UnitDim4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitDim4.AutoSize = True
-        Me.etq_UnitDim4.Location = New System.Drawing.Point(218, 144)
+        Me.etq_UnitDim4.Location = New System.Drawing.Point(292, 177)
+        Me.etq_UnitDim4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitDim4.Name = "etq_UnitDim4"
-        Me.etq_UnitDim4.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim4.Size = New System.Drawing.Size(29, 16)
         Me.etq_UnitDim4.TabIndex = 83
         Me.etq_UnitDim4.Text = "mm"
         '
         'img_Hp
         '
         Me.img_Hp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Hp.Location = New System.Drawing.Point(118, 141)
+        Me.img_Hp.Location = New System.Drawing.Point(158, 174)
+        Me.img_Hp.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_Hp.Name = "img_Hp"
-        Me.img_Hp.Size = New System.Drawing.Size(37, 20)
+        Me.img_Hp.Size = New System.Drawing.Size(49, 25)
         Me.img_Hp.TabIndex = 85
         Me.img_Hp.TabStop = False
         '
@@ -413,9 +430,10 @@ Partial Class Frm_DalleSlimFloor
         '
         Me.img_Bac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Bac.Location = New System.Drawing.Point(3, 31)
+        Me.img_Bac.Location = New System.Drawing.Point(4, 38)
+        Me.img_Bac.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_Bac.Name = "img_Bac"
-        Me.img_Bac.Size = New System.Drawing.Size(242, 104)
+        Me.img_Bac.Size = New System.Drawing.Size(324, 128)
         Me.img_Bac.TabIndex = 80
         Me.img_Bac.TabStop = False
         '
@@ -423,9 +441,10 @@ Partial Class Frm_DalleSlimFloor
         '
         Me.btn_ModifierBac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn_ModifierBac.Location = New System.Drawing.Point(3, 167)
+        Me.btn_ModifierBac.Location = New System.Drawing.Point(4, 206)
+        Me.btn_ModifierBac.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_ModifierBac.Name = "btn_ModifierBac"
-        Me.btn_ModifierBac.Size = New System.Drawing.Size(242, 27)
+        Me.btn_ModifierBac.Size = New System.Drawing.Size(324, 33)
         Me.btn_ModifierBac.TabIndex = 74
         Me.btn_ModifierBac.Text = "btn_ModifierBac"
         Me.btn_ModifierBac.UseVisualStyleBackColor = True
@@ -435,7 +454,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_BacNom.AutoSize = True
         Me.lbl_BacNom.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_BacNom.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_BacNom.Location = New System.Drawing.Point(12, 12)
+        Me.lbl_BacNom.Location = New System.Drawing.Point(16, 15)
+        Me.lbl_BacNom.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_BacNom.Name = "lbl_BacNom"
         Me.lbl_BacNom.Size = New System.Drawing.Size(64, 13)
         Me.lbl_BacNom.TabIndex = 73
@@ -446,9 +466,10 @@ Partial Class Frm_DalleSlimFloor
         '
         Me.txt_BacNom.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_BacNom.Location = New System.Drawing.Point(89, 9)
+        Me.txt_BacNom.Location = New System.Drawing.Point(119, 11)
+        Me.txt_BacNom.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_BacNom.Name = "txt_BacNom"
-        Me.txt_BacNom.Size = New System.Drawing.Size(156, 20)
+        Me.txt_BacNom.Size = New System.Drawing.Size(208, 22)
         Me.txt_BacNom.TabIndex = 72
         '
         'TLpan_Milieu
@@ -458,14 +479,14 @@ Partial Class Frm_DalleSlimFloor
         Me.TLpan_Milieu.Controls.Add(Me.pan_Bac, 0, 1)
         Me.TLpan_Milieu.Controls.Add(Me.lbl_Bac, 0, 0)
         Me.TLpan_Milieu.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLpan_Milieu.Location = New System.Drawing.Point(252, 0)
+        Me.TLpan_Milieu.Location = New System.Drawing.Point(336, 0)
         Me.TLpan_Milieu.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.TLpan_Milieu.Name = "TLpan_Milieu"
         Me.TLpan_Milieu.RowCount = 2
-        Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLpan_Milieu.Size = New System.Drawing.Size(249, 373)
+        Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+        Me.TLpan_Milieu.Size = New System.Drawing.Size(332, 459)
         Me.TLpan_Milieu.TabIndex = 2
         '
         'lbl_Bac
@@ -477,7 +498,7 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_Bac.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Bac.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Bac.Name = "lbl_Bac"
-        Me.lbl_Bac.Size = New System.Drawing.Size(249, 30)
+        Me.lbl_Bac.Size = New System.Drawing.Size(332, 37)
         Me.lbl_Bac.TabIndex = 2
         Me.lbl_Bac.Text = "lbl_Bac"
         Me.lbl_Bac.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -490,14 +511,14 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(501, 373)
+        Me.pan_Gauche.Size = New System.Drawing.Size(668, 459)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLpan_PartageV
         '
         Me.TLpan_PartageV.ColumnCount = 2
         Me.TLpan_PartageV.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_PartageV.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
+        Me.TLpan_PartageV.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 333.0!))
         Me.TLpan_PartageV.Controls.Add(Me.TLpan_Milieu, 1, 0)
         Me.TLpan_PartageV.Controls.Add(Me.TLpan_Gauche, 0, 0)
         Me.TLpan_PartageV.Dock = System.Windows.Forms.DockStyle.Top
@@ -506,7 +527,7 @@ Partial Class Frm_DalleSlimFloor
         Me.TLpan_PartageV.Name = "TLpan_PartageV"
         Me.TLpan_PartageV.RowCount = 1
         Me.TLpan_PartageV.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_PartageV.Size = New System.Drawing.Size(501, 373)
+        Me.TLpan_PartageV.Size = New System.Drawing.Size(668, 459)
         Me.TLpan_PartageV.TabIndex = 0
         '
         'TLpan_Gauche
@@ -524,13 +545,13 @@ Partial Class Frm_DalleSlimFloor
         Me.TLpan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_Gauche.Name = "TLpan_Gauche"
         Me.TLpan_Gauche.RowCount = 6
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 148.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 111.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Gauche.Size = New System.Drawing.Size(251, 373)
+        Me.TLpan_Gauche.Size = New System.Drawing.Size(335, 459)
         Me.TLpan_Gauche.TabIndex = 0
         '
         'lbl_General
@@ -542,7 +563,7 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_General.Location = New System.Drawing.Point(0, 0)
         Me.lbl_General.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_General.Name = "lbl_General"
-        Me.lbl_General.Size = New System.Drawing.Size(251, 30)
+        Me.lbl_General.Size = New System.Drawing.Size(335, 37)
         Me.lbl_General.TabIndex = 2
         Me.lbl_General.Text = "lbl_General"
         Me.lbl_General.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -550,7 +571,7 @@ Partial Class Frm_DalleSlimFloor
         'TLPan_Dalle
         '
         Me.TLPan_Dalle.ColumnCount = 2
-        Me.TLPan_Dalle.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 501.0!))
+        Me.TLPan_Dalle.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 668.0!))
         Me.TLPan_Dalle.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_Dalle.Controls.Add(Me.pan_Gauche, 0, 0)
         Me.TLPan_Dalle.Controls.Add(Me.pan_Img, 1, 0)
@@ -560,7 +581,7 @@ Partial Class Frm_DalleSlimFloor
         Me.TLPan_Dalle.Name = "TLPan_Dalle"
         Me.TLPan_Dalle.RowCount = 1
         Me.TLPan_Dalle.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Dalle.Size = New System.Drawing.Size(905, 373)
+        Me.TLPan_Dalle.Size = New System.Drawing.Size(1207, 459)
         Me.TLPan_Dalle.TabIndex = 0
         '
         'pan_Img
@@ -572,11 +593,22 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_Img.Controls.Add(Me.pan_Predalle)
         Me.pan_Img.Controls.Add(Me.img_Dalle)
         Me.pan_Img.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Img.Location = New System.Drawing.Point(502, 0)
+        Me.pan_Img.Location = New System.Drawing.Point(669, 0)
         Me.pan_Img.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.pan_Img.Name = "pan_Img"
-        Me.pan_Img.Size = New System.Drawing.Size(403, 373)
+        Me.pan_Img.Size = New System.Drawing.Size(538, 459)
         Me.pan_Img.TabIndex = 1
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackColor = System.Drawing.Color.PowderBlue
+        Me.PictureBox1.Location = New System.Drawing.Point(36, 159)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(44, 126)
+        Me.PictureBox1.TabIndex = 89
+        Me.PictureBox1.TabStop = False
+        Me.PictureBox1.Visible = False
         '
         'pan_EpaisseurMixte
         '
@@ -591,15 +623,17 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_EpaisseurMixte.Controls.Add(Me.lbl_EpaisseurM)
         Me.pan_EpaisseurMixte.Controls.Add(Me.etq_UnitDim10)
         Me.pan_EpaisseurMixte.Controls.Add(Me.img_Td2)
-        Me.pan_EpaisseurMixte.Location = New System.Drawing.Point(89, 180)
+        Me.pan_EpaisseurMixte.Location = New System.Drawing.Point(119, 222)
+        Me.pan_EpaisseurMixte.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_EpaisseurMixte.Name = "pan_EpaisseurMixte"
-        Me.pan_EpaisseurMixte.Size = New System.Drawing.Size(238, 52)
+        Me.pan_EpaisseurMixte.Size = New System.Drawing.Size(318, 64)
         Me.pan_EpaisseurMixte.TabIndex = 88
         '
         'rdb_EpPleine
         '
         Me.rdb_EpPleine.AutoSize = True
-        Me.rdb_EpPleine.Location = New System.Drawing.Point(91, 29)
+        Me.rdb_EpPleine.Location = New System.Drawing.Point(121, 36)
+        Me.rdb_EpPleine.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rdb_EpPleine.Name = "rdb_EpPleine"
         Me.rdb_EpPleine.Size = New System.Drawing.Size(14, 13)
         Me.rdb_EpPleine.TabIndex = 93
@@ -609,7 +643,8 @@ Partial Class Frm_DalleSlimFloor
         'rdb_EpTotale
         '
         Me.rdb_EpTotale.AutoSize = True
-        Me.rdb_EpTotale.Location = New System.Drawing.Point(91, 8)
+        Me.rdb_EpTotale.Location = New System.Drawing.Point(121, 10)
+        Me.rdb_EpTotale.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rdb_EpTotale.Name = "rdb_EpTotale"
         Me.rdb_EpTotale.Size = New System.Drawing.Size(14, 13)
         Me.rdb_EpTotale.TabIndex = 92
@@ -618,32 +653,36 @@ Partial Class Frm_DalleSlimFloor
         '
         'txt_Tc
         '
-        Me.txt_Tc.Location = New System.Drawing.Point(144, 25)
+        Me.txt_Tc.Location = New System.Drawing.Point(192, 31)
+        Me.txt_Tc.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Tc.Name = "txt_Tc"
-        Me.txt_Tc.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Tc.Size = New System.Drawing.Size(76, 22)
         Me.txt_Tc.TabIndex = 90
         '
         'etq_UnitDim11
         '
         Me.etq_UnitDim11.AutoSize = True
-        Me.etq_UnitDim11.Location = New System.Drawing.Point(209, 28)
+        Me.etq_UnitDim11.Location = New System.Drawing.Point(279, 34)
+        Me.etq_UnitDim11.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitDim11.Name = "etq_UnitDim11"
-        Me.etq_UnitDim11.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim11.Size = New System.Drawing.Size(29, 16)
         Me.etq_UnitDim11.TabIndex = 89
         Me.etq_UnitDim11.Text = "mm"
         '
         'txt_Td2
         '
-        Me.txt_Td2.Location = New System.Drawing.Point(144, 4)
+        Me.txt_Td2.Location = New System.Drawing.Point(192, 5)
+        Me.txt_Td2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Td2.Name = "txt_Td2"
-        Me.txt_Td2.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Td2.Size = New System.Drawing.Size(76, 22)
         Me.txt_Td2.TabIndex = 75
         '
         'img_Tc
         '
-        Me.img_Tc.Location = New System.Drawing.Point(109, 25)
+        Me.img_Tc.Location = New System.Drawing.Point(145, 31)
+        Me.img_Tc.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_Tc.Name = "img_Tc"
-        Me.img_Tc.Size = New System.Drawing.Size(37, 20)
+        Me.img_Tc.Size = New System.Drawing.Size(49, 25)
         Me.img_Tc.TabIndex = 91
         Me.img_Tc.TabStop = False
         '
@@ -652,7 +691,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_EpaisseurM.AutoSize = True
         Me.lbl_EpaisseurM.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_EpaisseurM.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_EpaisseurM.Location = New System.Drawing.Point(7, 6)
+        Me.lbl_EpaisseurM.Location = New System.Drawing.Point(9, 7)
+        Me.lbl_EpaisseurM.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_EpaisseurM.Name = "lbl_EpaisseurM"
         Me.lbl_EpaisseurM.Size = New System.Drawing.Size(78, 13)
         Me.lbl_EpaisseurM.TabIndex = 73
@@ -662,17 +702,19 @@ Partial Class Frm_DalleSlimFloor
         'etq_UnitDim10
         '
         Me.etq_UnitDim10.AutoSize = True
-        Me.etq_UnitDim10.Location = New System.Drawing.Point(209, 7)
+        Me.etq_UnitDim10.Location = New System.Drawing.Point(279, 9)
+        Me.etq_UnitDim10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitDim10.Name = "etq_UnitDim10"
-        Me.etq_UnitDim10.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim10.Size = New System.Drawing.Size(29, 16)
         Me.etq_UnitDim10.TabIndex = 74
         Me.etq_UnitDim10.Text = "mm"
         '
         'img_Td2
         '
-        Me.img_Td2.Location = New System.Drawing.Point(109, 4)
+        Me.img_Td2.Location = New System.Drawing.Point(145, 5)
+        Me.img_Td2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_Td2.Name = "img_Td2"
-        Me.img_Td2.Size = New System.Drawing.Size(37, 20)
+        Me.img_Td2.Size = New System.Drawing.Size(49, 25)
         Me.img_Td2.TabIndex = 76
         Me.img_Td2.TabStop = False
         '
@@ -684,16 +726,18 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_Epaisseur.Controls.Add(Me.lbl_Epaisseur)
         Me.pan_Epaisseur.Controls.Add(Me.etq_UnitDim2)
         Me.pan_Epaisseur.Controls.Add(Me.Img_Hd)
-        Me.pan_Epaisseur.Location = New System.Drawing.Point(89, 141)
+        Me.pan_Epaisseur.Location = New System.Drawing.Point(119, 174)
+        Me.pan_Epaisseur.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Epaisseur.Name = "pan_Epaisseur"
-        Me.pan_Epaisseur.Size = New System.Drawing.Size(238, 25)
+        Me.pan_Epaisseur.Size = New System.Drawing.Size(318, 31)
         Me.pan_Epaisseur.TabIndex = 87
         '
         'txt_Hd
         '
-        Me.txt_Hd.Location = New System.Drawing.Point(144, 2)
+        Me.txt_Hd.Location = New System.Drawing.Point(192, 2)
+        Me.txt_Hd.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Hd.Name = "txt_Hd"
-        Me.txt_Hd.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Hd.Size = New System.Drawing.Size(76, 22)
         Me.txt_Hd.TabIndex = 75
         '
         'lbl_Epaisseur
@@ -701,7 +745,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_Epaisseur.AutoSize = True
         Me.lbl_Epaisseur.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Epaisseur.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Epaisseur.Location = New System.Drawing.Point(7, 6)
+        Me.lbl_Epaisseur.Location = New System.Drawing.Point(9, 7)
+        Me.lbl_Epaisseur.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_Epaisseur.Name = "lbl_Epaisseur"
         Me.lbl_Epaisseur.Size = New System.Drawing.Size(69, 13)
         Me.lbl_Epaisseur.TabIndex = 73
@@ -711,17 +756,19 @@ Partial Class Frm_DalleSlimFloor
         'etq_UnitDim2
         '
         Me.etq_UnitDim2.AutoSize = True
-        Me.etq_UnitDim2.Location = New System.Drawing.Point(209, 5)
+        Me.etq_UnitDim2.Location = New System.Drawing.Point(279, 6)
+        Me.etq_UnitDim2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitDim2.Name = "etq_UnitDim2"
-        Me.etq_UnitDim2.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim2.Size = New System.Drawing.Size(29, 16)
         Me.etq_UnitDim2.TabIndex = 74
         Me.etq_UnitDim2.Text = "mm"
         '
         'Img_Hd
         '
-        Me.Img_Hd.Location = New System.Drawing.Point(109, 2)
+        Me.Img_Hd.Location = New System.Drawing.Point(145, 2)
+        Me.Img_Hd.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Img_Hd.Name = "Img_Hd"
-        Me.Img_Hd.Size = New System.Drawing.Size(37, 20)
+        Me.Img_Hd.Size = New System.Drawing.Size(49, 25)
         Me.Img_Hd.TabIndex = 76
         Me.Img_Hd.TabStop = False
         '
@@ -741,39 +788,43 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_Cofradal.Controls.Add(Me.etq_UnitDim13)
         Me.pan_Cofradal.Controls.Add(Me.lbl_Cofradal)
         Me.pan_Cofradal.Controls.Add(Me.etq_UnitDim12)
-        Me.pan_Cofradal.Location = New System.Drawing.Point(89, 248)
+        Me.pan_Cofradal.Location = New System.Drawing.Point(119, 305)
         Me.pan_Cofradal.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Cofradal.Name = "pan_Cofradal"
-        Me.pan_Cofradal.Size = New System.Drawing.Size(238, 111)
+        Me.pan_Cofradal.Size = New System.Drawing.Size(318, 137)
         Me.pan_Cofradal.TabIndex = 86
         '
         'cmb_Cofradal
         '
         Me.cmb_Cofradal.FormattingEnabled = True
-        Me.cmb_Cofradal.Location = New System.Drawing.Point(108, 8)
+        Me.cmb_Cofradal.Location = New System.Drawing.Point(144, 10)
+        Me.cmb_Cofradal.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cmb_Cofradal.Name = "cmb_Cofradal"
-        Me.cmb_Cofradal.Size = New System.Drawing.Size(123, 21)
+        Me.cmb_Cofradal.Size = New System.Drawing.Size(163, 24)
         Me.cmb_Cofradal.TabIndex = 81
         '
         'txt_mupf
         '
-        Me.txt_mupf.Location = New System.Drawing.Point(144, 86)
+        Me.txt_mupf.Location = New System.Drawing.Point(192, 106)
+        Me.txt_mupf.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_mupf.Name = "txt_mupf"
-        Me.txt_mupf.Size = New System.Drawing.Size(58, 20)
+        Me.txt_mupf.Size = New System.Drawing.Size(76, 22)
         Me.txt_mupf.TabIndex = 79
         '
         'txt_NameCustomCofra
         '
-        Me.txt_NameCustomCofra.Location = New System.Drawing.Point(109, 35)
+        Me.txt_NameCustomCofra.Location = New System.Drawing.Point(145, 43)
+        Me.txt_NameCustomCofra.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_NameCustomCofra.Name = "txt_NameCustomCofra"
-        Me.txt_NameCustomCofra.Size = New System.Drawing.Size(122, 20)
+        Me.txt_NameCustomCofra.Size = New System.Drawing.Size(161, 22)
         Me.txt_NameCustomCofra.TabIndex = 79
         '
         'txt_dp
         '
-        Me.txt_dp.Location = New System.Drawing.Point(144, 64)
+        Me.txt_dp.Location = New System.Drawing.Point(192, 79)
+        Me.txt_dp.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_dp.Name = "txt_dp"
-        Me.txt_dp.Size = New System.Drawing.Size(58, 20)
+        Me.txt_dp.Size = New System.Drawing.Size(76, 22)
         Me.txt_dp.TabIndex = 79
         '
         'lbl_mupf
@@ -781,7 +832,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_mupf.AutoSize = True
         Me.lbl_mupf.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_mupf.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_mupf.Location = New System.Drawing.Point(9, 86)
+        Me.lbl_mupf.Location = New System.Drawing.Point(12, 106)
+        Me.lbl_mupf.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_mupf.Name = "lbl_mupf"
         Me.lbl_mupf.Size = New System.Drawing.Size(46, 13)
         Me.lbl_mupf.TabIndex = 77
@@ -793,7 +845,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_Name.AutoSize = True
         Me.lbl_Name.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Name.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Name.Location = New System.Drawing.Point(9, 35)
+        Me.lbl_Name.Location = New System.Drawing.Point(12, 43)
+        Me.lbl_Name.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_Name.Name = "lbl_Name"
         Me.lbl_Name.Size = New System.Drawing.Size(51, 13)
         Me.lbl_Name.TabIndex = 77
@@ -802,9 +855,10 @@ Partial Class Frm_DalleSlimFloor
         '
         'img_mupf
         '
-        Me.img_mupf.Location = New System.Drawing.Point(108, 86)
+        Me.img_mupf.Location = New System.Drawing.Point(144, 106)
+        Me.img_mupf.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_mupf.Name = "img_mupf"
-        Me.img_mupf.Size = New System.Drawing.Size(37, 20)
+        Me.img_mupf.Size = New System.Drawing.Size(49, 25)
         Me.img_mupf.TabIndex = 80
         Me.img_mupf.TabStop = False
         '
@@ -813,7 +867,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_dp.AutoSize = True
         Me.lbl_dp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_dp.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_dp.Location = New System.Drawing.Point(9, 64)
+        Me.lbl_dp.Location = New System.Drawing.Point(12, 79)
+        Me.lbl_dp.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_dp.Name = "lbl_dp"
         Me.lbl_dp.Size = New System.Drawing.Size(35, 13)
         Me.lbl_dp.TabIndex = 77
@@ -822,18 +877,20 @@ Partial Class Frm_DalleSlimFloor
         '
         'img_dp
         '
-        Me.img_dp.Location = New System.Drawing.Point(108, 64)
+        Me.img_dp.Location = New System.Drawing.Point(144, 79)
+        Me.img_dp.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_dp.Name = "img_dp"
-        Me.img_dp.Size = New System.Drawing.Size(37, 20)
+        Me.img_dp.Size = New System.Drawing.Size(49, 25)
         Me.img_dp.TabIndex = 80
         Me.img_dp.TabStop = False
         '
         'etq_UnitDim13
         '
         Me.etq_UnitDim13.AutoSize = True
-        Me.etq_UnitDim13.Location = New System.Drawing.Point(208, 85)
+        Me.etq_UnitDim13.Location = New System.Drawing.Point(277, 105)
+        Me.etq_UnitDim13.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitDim13.Name = "etq_UnitDim13"
-        Me.etq_UnitDim13.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim13.Size = New System.Drawing.Size(29, 16)
         Me.etq_UnitDim13.TabIndex = 78
         Me.etq_UnitDim13.Text = "mm"
         '
@@ -842,7 +899,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_Cofradal.AutoSize = True
         Me.lbl_Cofradal.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Cofradal.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Cofradal.Location = New System.Drawing.Point(9, 7)
+        Me.lbl_Cofradal.Location = New System.Drawing.Point(12, 9)
+        Me.lbl_Cofradal.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_Cofradal.Name = "lbl_Cofradal"
         Me.lbl_Cofradal.Size = New System.Drawing.Size(62, 13)
         Me.lbl_Cofradal.TabIndex = 77
@@ -852,9 +910,10 @@ Partial Class Frm_DalleSlimFloor
         'etq_UnitDim12
         '
         Me.etq_UnitDim12.AutoSize = True
-        Me.etq_UnitDim12.Location = New System.Drawing.Point(208, 63)
+        Me.etq_UnitDim12.Location = New System.Drawing.Point(277, 78)
+        Me.etq_UnitDim12.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitDim12.Name = "etq_UnitDim12"
-        Me.etq_UnitDim12.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim12.Size = New System.Drawing.Size(29, 16)
         Me.etq_UnitDim12.TabIndex = 78
         Me.etq_UnitDim12.Text = "mm"
         '
@@ -870,17 +929,18 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_Predalle.Controls.Add(Me.lbl_EpPreDalle)
         Me.pan_Predalle.Controls.Add(Me.img_EpPredalle)
         Me.pan_Predalle.Controls.Add(Me.etq_UnitDim8)
-        Me.pan_Predalle.Location = New System.Drawing.Point(89, 77)
+        Me.pan_Predalle.Location = New System.Drawing.Point(119, 95)
         Me.pan_Predalle.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Predalle.Name = "pan_Predalle"
-        Me.pan_Predalle.Size = New System.Drawing.Size(238, 52)
+        Me.pan_Predalle.Size = New System.Drawing.Size(318, 64)
         Me.pan_Predalle.TabIndex = 86
         '
         'txt_EpJoint
         '
-        Me.txt_EpJoint.Location = New System.Drawing.Point(146, 29)
+        Me.txt_EpJoint.Location = New System.Drawing.Point(195, 36)
+        Me.txt_EpJoint.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_EpJoint.Name = "txt_EpJoint"
-        Me.txt_EpJoint.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EpJoint.Size = New System.Drawing.Size(76, 22)
         Me.txt_EpJoint.TabIndex = 83
         '
         'lbl_EpJoint
@@ -888,7 +948,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_EpJoint.AutoSize = True
         Me.lbl_EpJoint.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_EpJoint.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_EpJoint.Location = New System.Drawing.Point(9, 29)
+        Me.lbl_EpJoint.Location = New System.Drawing.Point(12, 36)
+        Me.lbl_EpJoint.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_EpJoint.Name = "lbl_EpJoint"
         Me.lbl_EpJoint.Size = New System.Drawing.Size(58, 13)
         Me.lbl_EpJoint.TabIndex = 81
@@ -897,26 +958,29 @@ Partial Class Frm_DalleSlimFloor
         '
         'img_EpJoint
         '
-        Me.img_EpJoint.Location = New System.Drawing.Point(110, 29)
+        Me.img_EpJoint.Location = New System.Drawing.Point(147, 36)
+        Me.img_EpJoint.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_EpJoint.Name = "img_EpJoint"
-        Me.img_EpJoint.Size = New System.Drawing.Size(37, 20)
+        Me.img_EpJoint.Size = New System.Drawing.Size(49, 25)
         Me.img_EpJoint.TabIndex = 84
         Me.img_EpJoint.TabStop = False
         '
         'etq_UnitDim9
         '
         Me.etq_UnitDim9.AutoSize = True
-        Me.etq_UnitDim9.Location = New System.Drawing.Point(210, 32)
+        Me.etq_UnitDim9.Location = New System.Drawing.Point(280, 39)
+        Me.etq_UnitDim9.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitDim9.Name = "etq_UnitDim9"
-        Me.etq_UnitDim9.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim9.Size = New System.Drawing.Size(29, 16)
         Me.etq_UnitDim9.TabIndex = 82
         Me.etq_UnitDim9.Text = "mm"
         '
         'txt_EpPredalle
         '
-        Me.txt_EpPredalle.Location = New System.Drawing.Point(146, 7)
+        Me.txt_EpPredalle.Location = New System.Drawing.Point(195, 9)
+        Me.txt_EpPredalle.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_EpPredalle.Name = "txt_EpPredalle"
-        Me.txt_EpPredalle.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EpPredalle.Size = New System.Drawing.Size(76, 22)
         Me.txt_EpPredalle.TabIndex = 79
         '
         'lbl_EpPreDalle
@@ -924,7 +988,8 @@ Partial Class Frm_DalleSlimFloor
         Me.lbl_EpPreDalle.AutoSize = True
         Me.lbl_EpPreDalle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_EpPreDalle.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_EpPreDalle.Location = New System.Drawing.Point(9, 7)
+        Me.lbl_EpPreDalle.Location = New System.Drawing.Point(12, 9)
+        Me.lbl_EpPreDalle.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_EpPreDalle.Name = "lbl_EpPreDalle"
         Me.lbl_EpPreDalle.Size = New System.Drawing.Size(76, 13)
         Me.lbl_EpPreDalle.TabIndex = 77
@@ -933,18 +998,20 @@ Partial Class Frm_DalleSlimFloor
         '
         'img_EpPredalle
         '
-        Me.img_EpPredalle.Location = New System.Drawing.Point(110, 7)
+        Me.img_EpPredalle.Location = New System.Drawing.Point(147, 9)
+        Me.img_EpPredalle.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_EpPredalle.Name = "img_EpPredalle"
-        Me.img_EpPredalle.Size = New System.Drawing.Size(37, 20)
+        Me.img_EpPredalle.Size = New System.Drawing.Size(49, 25)
         Me.img_EpPredalle.TabIndex = 80
         Me.img_EpPredalle.TabStop = False
         '
         'etq_UnitDim8
         '
         Me.etq_UnitDim8.AutoSize = True
-        Me.etq_UnitDim8.Location = New System.Drawing.Point(210, 10)
+        Me.etq_UnitDim8.Location = New System.Drawing.Point(280, 12)
+        Me.etq_UnitDim8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitDim8.Name = "etq_UnitDim8"
-        Me.etq_UnitDim8.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim8.Size = New System.Drawing.Size(29, 16)
         Me.etq_UnitDim8.TabIndex = 78
         Me.etq_UnitDim8.Text = "mm"
         '
@@ -952,10 +1019,10 @@ Partial Class Frm_DalleSlimFloor
         '
         Me.img_Dalle.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.img_Dalle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Dalle.Location = New System.Drawing.Point(117, 10)
+        Me.img_Dalle.Location = New System.Drawing.Point(156, 12)
         Me.img_Dalle.Margin = New System.Windows.Forms.Padding(1, 0, 0, 1)
         Me.img_Dalle.Name = "img_Dalle"
-        Me.img_Dalle.Size = New System.Drawing.Size(100, 50)
+        Me.img_Dalle.Size = New System.Drawing.Size(133, 61)
         Me.img_Dalle.TabIndex = 3
         Me.img_Dalle.TabStop = False
         '
@@ -964,17 +1031,19 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLPan_Dalle)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Main.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Main.Location = New System.Drawing.Point(4, 4)
+        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(905, 373)
+        Me.pan_Main.Size = New System.Drawing.Size(1207, 459)
         Me.pan_Main.TabIndex = 1
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(465, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(621, 4)
+        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
+        Me.btn_OK.Size = New System.Drawing.Size(152, 33)
         Me.btn_OK.TabIndex = 1
         Me.btn_OK.Text = "btn_OK"
         Me.btn_OK.UseVisualStyleBackColor = True
@@ -983,9 +1052,10 @@ Partial Class Frm_DalleSlimFloor
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(325, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(434, 4)
+        Me.btn_Annuler.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_Annuler.Name = "btn_Annuler"
-        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Annuler.Size = New System.Drawing.Size(152, 33)
         Me.btn_Annuler.TabIndex = 0
         Me.btn_Annuler.Text = "btn_Annuler"
         Me.btn_Annuler.UseVisualStyleBackColor = True
@@ -994,21 +1064,22 @@ Partial Class Frm_DalleSlimFloor
         '
         Me.TLPan_PartieBasse.ColumnCount = 5
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 382)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(4, 471)
+        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(905, 34)
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(1207, 41)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'TLpan_Main
@@ -1019,11 +1090,12 @@ Partial Class Frm_DalleSlimFloor
         Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(911, 419)
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49.0!))
+        Me.TLpan_Main.Size = New System.Drawing.Size(1215, 516)
         Me.TLpan_Main.TabIndex = 0
         '
         'pan_General
@@ -1033,7 +1105,7 @@ Partial Class Frm_DalleSlimFloor
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(911, 419)
+        Me.pan_General.Size = New System.Drawing.Size(1215, 516)
         Me.pan_General.TabIndex = 4
         '
         'imgList_BOArma
@@ -1043,27 +1115,19 @@ Partial Class Frm_DalleSlimFloor
         Me.imgList_BOArma.Images.SetKeyName(0, "Ajouter")
         Me.imgList_BOArma.Images.SetKeyName(1, "Supprimer")
         '
-        'PictureBox1
-        '
-        Me.PictureBox1.BackColor = System.Drawing.Color.PowderBlue
-        Me.PictureBox1.Location = New System.Drawing.Point(27, 129)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(33, 102)
-        Me.PictureBox1.TabIndex = 89
-        Me.PictureBox1.TabStop = False
-        Me.PictureBox1.Visible = False
-        '
         'Frm_DalleSlimFloor
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Annuler
-        Me.ClientSize = New System.Drawing.Size(911, 419)
+        Me.ClientSize = New System.Drawing.Size(1215, 516)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_DalleSlimFloor"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Frm_DalleSlimFloor"
         Me.pan_Beton.ResumeLayout(False)
@@ -1087,6 +1151,7 @@ Partial Class Frm_DalleSlimFloor
         Me.TLpan_Gauche.PerformLayout()
         Me.TLPan_Dalle.ResumeLayout(False)
         Me.pan_Img.ResumeLayout(False)
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_EpaisseurMixte.ResumeLayout(False)
         Me.pan_EpaisseurMixte.PerformLayout()
         CType(Me.img_Tc, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1107,7 +1172,6 @@ Partial Class Frm_DalleSlimFloor
         Me.TLPan_PartieBasse.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)
         Me.pan_General.ResumeLayout(False)
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

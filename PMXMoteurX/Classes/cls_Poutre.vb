@@ -786,9 +786,11 @@ Public Class cls_Poutre
         Me.lDalleContinueDroite = False
 
         Me.lConfigConnexSym = True
+
     End Sub
 
     Private Sub PoutreDefautAcier(lSlim As Boolean)
+
         pNbTravees = 1
         ReDim LongueurTravee(IndiceTraveeConsoleDroite)
         ReDim TypTravee(IndiceTraveeConsoleDroite)
@@ -840,6 +842,8 @@ Public Class cls_Poutre
         InitialiseConnexionDefaut()
 
         lAutomaticDesign = False
+
+        Me.Dalle.lSlimFloor = lSlim
 
     End Sub
 

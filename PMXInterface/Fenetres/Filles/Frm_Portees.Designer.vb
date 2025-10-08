@@ -109,7 +109,7 @@ Partial Class Frm_Portees
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(954, 428)
+        Me.pan_General.Size = New System.Drawing.Size(1272, 527)
         Me.pan_General.TabIndex = 1
         '
         'TLpan_Main
@@ -120,40 +120,43 @@ Partial Class Frm_Portees
         Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(954, 428)
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49.0!))
+        Me.TLpan_Main.Size = New System.Drawing.Size(1272, 527)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
         '
         Me.TLPan_PartieBasse.ColumnCount = 5
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 391)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(4, 482)
+        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(948, 34)
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(1264, 41)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(487, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(649, 4)
+        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
+        Me.btn_OK.Size = New System.Drawing.Size(152, 33)
         Me.btn_OK.TabIndex = 1
         Me.btn_OK.Text = "btn_OK"
         Me.btn_OK.UseVisualStyleBackColor = True
@@ -162,9 +165,10 @@ Partial Class Frm_Portees
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(347, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(462, 4)
+        Me.btn_Annuler.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_Annuler.Name = "btn_Annuler"
-        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Annuler.Size = New System.Drawing.Size(152, 33)
         Me.btn_Annuler.TabIndex = 0
         Me.btn_Annuler.Text = "btn_Annuler"
         Me.btn_Annuler.UseVisualStyleBackColor = True
@@ -174,15 +178,16 @@ Partial Class Frm_Portees
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLPan_Portees)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Main.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Main.Location = New System.Drawing.Point(4, 4)
+        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(948, 382)
+        Me.pan_Main.Size = New System.Drawing.Size(1264, 470)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_Portees
         '
         Me.TLPan_Portees.ColumnCount = 2
-        Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
+        Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 333.0!))
         Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_Portees.Controls.Add(Me.pan_Gauche, 0, 0)
         Me.TLPan_Portees.Controls.Add(Me.TLpan_Droite, 1, 0)
@@ -192,7 +197,7 @@ Partial Class Frm_Portees
         Me.TLPan_Portees.Name = "TLPan_Portees"
         Me.TLPan_Portees.RowCount = 1
         Me.TLPan_Portees.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Portees.Size = New System.Drawing.Size(948, 382)
+        Me.TLPan_Portees.Size = New System.Drawing.Size(1264, 470)
         Me.TLPan_Portees.TabIndex = 0
         '
         'pan_Gauche
@@ -203,7 +208,7 @@ Partial Class Frm_Portees
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(250, 382)
+        Me.pan_Gauche.Size = New System.Drawing.Size(333, 470)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLPan_Gauche
@@ -219,12 +224,12 @@ Partial Class Frm_Portees
         Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
         Me.TLPan_Gauche.RowCount = 5
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 209.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 185.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 380)
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(333, 468)
         Me.TLPan_Gauche.TabIndex = 0
         '
         'lbl_Entraxe
@@ -233,10 +238,10 @@ Partial Class Frm_Portees
         Me.lbl_Entraxe.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_Entraxe.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Entraxe.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Entraxe.Location = New System.Drawing.Point(0, 200)
+        Me.lbl_Entraxe.Location = New System.Drawing.Point(0, 246)
         Me.lbl_Entraxe.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Entraxe.Name = "lbl_Entraxe"
-        Me.lbl_Entraxe.Size = New System.Drawing.Size(250, 30)
+        Me.lbl_Entraxe.Size = New System.Drawing.Size(333, 37)
         Me.lbl_Entraxe.TabIndex = 2
         Me.lbl_Entraxe.Text = "lbl_Entraxe"
         Me.lbl_Entraxe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -250,7 +255,7 @@ Partial Class Frm_Portees
         Me.lbl_Portees.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Portees.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Portees.Name = "lbl_Portees"
-        Me.lbl_Portees.Size = New System.Drawing.Size(250, 30)
+        Me.lbl_Portees.Size = New System.Drawing.Size(333, 37)
         Me.lbl_Portees.TabIndex = 0
         Me.lbl_Portees.Text = "lbl_Portee"
         Me.lbl_Portees.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -274,18 +279,19 @@ Partial Class Frm_Portees
         Me.pan_SaisiePortee.Controls.Add(Me.img_L1)
         Me.pan_SaisiePortee.Controls.Add(Me.lbl_MainSpan)
         Me.pan_SaisiePortee.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 30)
+        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 37)
         Me.pan_SaisiePortee.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_SaisiePortee.Name = "pan_SaisiePortee"
-        Me.pan_SaisiePortee.Size = New System.Drawing.Size(250, 169)
+        Me.pan_SaisiePortee.Size = New System.Drawing.Size(333, 208)
         Me.pan_SaisiePortee.TabIndex = 1
         '
         'chk_ContinuiteDalleAppDroit
         '
         Me.chk_ContinuiteDalleAppDroit.AutoSize = True
-        Me.chk_ContinuiteDalleAppDroit.Location = New System.Drawing.Point(7, 133)
+        Me.chk_ContinuiteDalleAppDroit.Location = New System.Drawing.Point(9, 164)
+        Me.chk_ContinuiteDalleAppDroit.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chk_ContinuiteDalleAppDroit.Name = "chk_ContinuiteDalleAppDroit"
-        Me.chk_ContinuiteDalleAppDroit.Size = New System.Drawing.Size(162, 17)
+        Me.chk_ContinuiteDalleAppDroit.Size = New System.Drawing.Size(197, 20)
         Me.chk_ContinuiteDalleAppDroit.TabIndex = 82
         Me.chk_ContinuiteDalleAppDroit.Text = "chk_ContinuiteDalleAppDroit"
         Me.chk_ContinuiteDalleAppDroit.UseVisualStyleBackColor = True
@@ -293,9 +299,10 @@ Partial Class Frm_Portees
         'chk_ContinuiteDalleAppGauche
         '
         Me.chk_ContinuiteDalleAppGauche.AutoSize = True
-        Me.chk_ContinuiteDalleAppGauche.Location = New System.Drawing.Point(7, 77)
+        Me.chk_ContinuiteDalleAppGauche.Location = New System.Drawing.Point(9, 95)
+        Me.chk_ContinuiteDalleAppGauche.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chk_ContinuiteDalleAppGauche.Name = "chk_ContinuiteDalleAppGauche"
-        Me.chk_ContinuiteDalleAppGauche.Size = New System.Drawing.Size(178, 17)
+        Me.chk_ContinuiteDalleAppGauche.Size = New System.Drawing.Size(216, 20)
         Me.chk_ContinuiteDalleAppGauche.TabIndex = 81
         Me.chk_ContinuiteDalleAppGauche.Text = "chk_ContinuiteDalleAppGauche"
         Me.chk_ContinuiteDalleAppGauche.UseVisualStyleBackColor = True
@@ -303,35 +310,39 @@ Partial Class Frm_Portees
         'etq_UnitL3
         '
         Me.etq_UnitL3.AutoSize = True
-        Me.etq_UnitL3.Location = New System.Drawing.Point(200, 137)
+        Me.etq_UnitL3.Location = New System.Drawing.Point(267, 169)
+        Me.etq_UnitL3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitL3.Name = "etq_UnitL3"
-        Me.etq_UnitL3.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitL3.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitL3.TabIndex = 80
         Me.etq_UnitL3.Text = "kN"
         '
         'txt_PorteeConsoleD
         '
         Me.txt_PorteeConsoleD.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_PorteeConsoleD.Location = New System.Drawing.Point(136, 133)
+        Me.txt_PorteeConsoleD.Location = New System.Drawing.Point(181, 164)
+        Me.txt_PorteeConsoleD.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_PorteeConsoleD.Name = "txt_PorteeConsoleD"
-        Me.txt_PorteeConsoleD.Size = New System.Drawing.Size(58, 20)
+        Me.txt_PorteeConsoleD.Size = New System.Drawing.Size(76, 22)
         Me.txt_PorteeConsoleD.TabIndex = 78
         '
         'img_L3
         '
         Me.img_L3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_L3.Location = New System.Drawing.Point(91, 133)
+        Me.img_L3.Location = New System.Drawing.Point(121, 164)
+        Me.img_L3.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_L3.Name = "img_L3"
-        Me.img_L3.Size = New System.Drawing.Size(46, 20)
+        Me.img_L3.Size = New System.Drawing.Size(61, 25)
         Me.img_L3.TabIndex = 79
         Me.img_L3.TabStop = False
         '
         'chk_ConsoleDroite
         '
         Me.chk_ConsoleDroite.AutoSize = True
-        Me.chk_ConsoleDroite.Location = New System.Drawing.Point(7, 110)
+        Me.chk_ConsoleDroite.Location = New System.Drawing.Point(9, 135)
+        Me.chk_ConsoleDroite.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chk_ConsoleDroite.Name = "chk_ConsoleDroite"
-        Me.chk_ConsoleDroite.Size = New System.Drawing.Size(116, 17)
+        Me.chk_ConsoleDroite.Size = New System.Drawing.Size(140, 20)
         Me.chk_ConsoleDroite.TabIndex = 77
         Me.chk_ConsoleDroite.Text = "chk_ConsoleDroite"
         Me.chk_ConsoleDroite.UseVisualStyleBackColor = True
@@ -339,35 +350,39 @@ Partial Class Frm_Portees
         'etq_UnitL2
         '
         Me.etq_UnitL2.AutoSize = True
-        Me.etq_UnitL2.Location = New System.Drawing.Point(200, 81)
+        Me.etq_UnitL2.Location = New System.Drawing.Point(267, 100)
+        Me.etq_UnitL2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitL2.Name = "etq_UnitL2"
-        Me.etq_UnitL2.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitL2.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitL2.TabIndex = 76
         Me.etq_UnitL2.Text = "kN"
         '
         'txt_PorteeConsoleG
         '
         Me.txt_PorteeConsoleG.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_PorteeConsoleG.Location = New System.Drawing.Point(136, 77)
+        Me.txt_PorteeConsoleG.Location = New System.Drawing.Point(181, 95)
+        Me.txt_PorteeConsoleG.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_PorteeConsoleG.Name = "txt_PorteeConsoleG"
-        Me.txt_PorteeConsoleG.Size = New System.Drawing.Size(58, 20)
+        Me.txt_PorteeConsoleG.Size = New System.Drawing.Size(76, 22)
         Me.txt_PorteeConsoleG.TabIndex = 74
         '
         'img_L2
         '
         Me.img_L2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_L2.Location = New System.Drawing.Point(91, 77)
+        Me.img_L2.Location = New System.Drawing.Point(121, 95)
+        Me.img_L2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_L2.Name = "img_L2"
-        Me.img_L2.Size = New System.Drawing.Size(46, 20)
+        Me.img_L2.Size = New System.Drawing.Size(61, 25)
         Me.img_L2.TabIndex = 75
         Me.img_L2.TabStop = False
         '
         'chk_ConsoleGauche
         '
         Me.chk_ConsoleGauche.AutoSize = True
-        Me.chk_ConsoleGauche.Location = New System.Drawing.Point(7, 54)
+        Me.chk_ConsoleGauche.Location = New System.Drawing.Point(9, 66)
+        Me.chk_ConsoleGauche.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chk_ConsoleGauche.Name = "chk_ConsoleGauche"
-        Me.chk_ConsoleGauche.Size = New System.Drawing.Size(126, 17)
+        Me.chk_ConsoleGauche.Size = New System.Drawing.Size(151, 20)
         Me.chk_ConsoleGauche.TabIndex = 73
         Me.chk_ConsoleGauche.Text = "chk_ConsoleGauche"
         Me.chk_ConsoleGauche.UseVisualStyleBackColor = True
@@ -375,35 +390,39 @@ Partial Class Frm_Portees
         'etq_UnitL1
         '
         Me.etq_UnitL1.AutoSize = True
-        Me.etq_UnitL1.Location = New System.Drawing.Point(200, 29)
+        Me.etq_UnitL1.Location = New System.Drawing.Point(267, 36)
+        Me.etq_UnitL1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitL1.Name = "etq_UnitL1"
-        Me.etq_UnitL1.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitL1.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitL1.TabIndex = 72
         Me.etq_UnitL1.Text = "kN"
         '
         'txt_MainSpan
         '
         Me.txt_MainSpan.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_MainSpan.Location = New System.Drawing.Point(136, 25)
+        Me.txt_MainSpan.Location = New System.Drawing.Point(181, 31)
+        Me.txt_MainSpan.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_MainSpan.Name = "txt_MainSpan"
-        Me.txt_MainSpan.Size = New System.Drawing.Size(58, 20)
+        Me.txt_MainSpan.Size = New System.Drawing.Size(76, 22)
         Me.txt_MainSpan.TabIndex = 70
         '
         'img_L1
         '
         Me.img_L1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_L1.Location = New System.Drawing.Point(91, 25)
+        Me.img_L1.Location = New System.Drawing.Point(121, 31)
+        Me.img_L1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_L1.Name = "img_L1"
-        Me.img_L1.Size = New System.Drawing.Size(46, 20)
+        Me.img_L1.Size = New System.Drawing.Size(61, 25)
         Me.img_L1.TabIndex = 71
         Me.img_L1.TabStop = False
         '
         'lbl_MainSpan
         '
         Me.lbl_MainSpan.AutoSize = True
-        Me.lbl_MainSpan.Location = New System.Drawing.Point(7, 6)
+        Me.lbl_MainSpan.Location = New System.Drawing.Point(9, 7)
+        Me.lbl_MainSpan.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_MainSpan.Name = "lbl_MainSpan"
-        Me.lbl_MainSpan.Size = New System.Drawing.Size(71, 13)
+        Me.lbl_MainSpan.Size = New System.Drawing.Size(89, 16)
         Me.lbl_MainSpan.TabIndex = 0
         Me.lbl_MainSpan.Text = "lbl_MainSpan"
         '
@@ -421,79 +440,87 @@ Partial Class Frm_Portees
         Me.pan_Coupe.Controls.Add(Me.rad_Rive)
         Me.pan_Coupe.Controls.Add(Me.rad_Intermediaire)
         Me.pan_Coupe.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Coupe.Location = New System.Drawing.Point(0, 230)
+        Me.pan_Coupe.Location = New System.Drawing.Point(0, 283)
         Me.pan_Coupe.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Coupe.Name = "pan_Coupe"
-        Me.pan_Coupe.Size = New System.Drawing.Size(250, 150)
+        Me.pan_Coupe.Size = New System.Drawing.Size(333, 185)
         Me.pan_Coupe.TabIndex = 3
         '
         'etq_UnitL5
         '
         Me.etq_UnitL5.AutoSize = True
-        Me.etq_UnitL5.Location = New System.Drawing.Point(191, 112)
+        Me.etq_UnitL5.Location = New System.Drawing.Point(255, 138)
+        Me.etq_UnitL5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitL5.Name = "etq_UnitL5"
-        Me.etq_UnitL5.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitL5.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitL5.TabIndex = 79
         Me.etq_UnitL5.Text = "kN"
         '
         'txt_D2
         '
         Me.txt_D2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_D2.Location = New System.Drawing.Point(127, 108)
+        Me.txt_D2.Location = New System.Drawing.Point(169, 133)
+        Me.txt_D2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_D2.Name = "txt_D2"
-        Me.txt_D2.Size = New System.Drawing.Size(58, 20)
+        Me.txt_D2.Size = New System.Drawing.Size(76, 22)
         Me.txt_D2.TabIndex = 77
         '
         'img_D2
         '
         Me.img_D2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_D2.Location = New System.Drawing.Point(82, 108)
+        Me.img_D2.Location = New System.Drawing.Point(109, 133)
+        Me.img_D2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_D2.Name = "img_D2"
-        Me.img_D2.Size = New System.Drawing.Size(46, 20)
+        Me.img_D2.Size = New System.Drawing.Size(61, 25)
         Me.img_D2.TabIndex = 78
         Me.img_D2.TabStop = False
         '
         'lbl_Entraxes
         '
         Me.lbl_Entraxes.AutoSize = True
-        Me.lbl_Entraxes.Location = New System.Drawing.Point(7, 64)
+        Me.lbl_Entraxes.Location = New System.Drawing.Point(9, 79)
+        Me.lbl_Entraxes.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_Entraxes.Name = "lbl_Entraxes"
-        Me.lbl_Entraxes.Size = New System.Drawing.Size(64, 13)
+        Me.lbl_Entraxes.Size = New System.Drawing.Size(80, 16)
         Me.lbl_Entraxes.TabIndex = 76
         Me.lbl_Entraxes.Text = "lbl_Entraxes"
         '
         'etq_UnitL4
         '
         Me.etq_UnitL4.AutoSize = True
-        Me.etq_UnitL4.Location = New System.Drawing.Point(191, 86)
+        Me.etq_UnitL4.Location = New System.Drawing.Point(255, 106)
+        Me.etq_UnitL4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitL4.Name = "etq_UnitL4"
-        Me.etq_UnitL4.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitL4.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitL4.TabIndex = 75
         Me.etq_UnitL4.Text = "kN"
         '
         'txt_D1
         '
         Me.txt_D1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_D1.Location = New System.Drawing.Point(127, 82)
+        Me.txt_D1.Location = New System.Drawing.Point(169, 101)
+        Me.txt_D1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_D1.Name = "txt_D1"
-        Me.txt_D1.Size = New System.Drawing.Size(58, 20)
+        Me.txt_D1.Size = New System.Drawing.Size(76, 22)
         Me.txt_D1.TabIndex = 73
         '
         'img_D1
         '
         Me.img_D1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_D1.Location = New System.Drawing.Point(82, 82)
+        Me.img_D1.Location = New System.Drawing.Point(109, 101)
+        Me.img_D1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_D1.Name = "img_D1"
-        Me.img_D1.Size = New System.Drawing.Size(46, 20)
+        Me.img_D1.Size = New System.Drawing.Size(61, 25)
         Me.img_D1.TabIndex = 74
         Me.img_D1.TabStop = False
         '
         'rad_Rive
         '
         Me.rad_Rive.AutoSize = True
-        Me.rad_Rive.Location = New System.Drawing.Point(10, 37)
+        Me.rad_Rive.Location = New System.Drawing.Point(13, 46)
+        Me.rad_Rive.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rad_Rive.Name = "rad_Rive"
-        Me.rad_Rive.Size = New System.Drawing.Size(68, 17)
+        Me.rad_Rive.Size = New System.Drawing.Size(80, 20)
         Me.rad_Rive.TabIndex = 1
         Me.rad_Rive.TabStop = True
         Me.rad_Rive.Text = "rad_Rive"
@@ -502,9 +529,10 @@ Partial Class Frm_Portees
         'rad_Intermediaire
         '
         Me.rad_Intermediaire.AutoSize = True
-        Me.rad_Intermediaire.Location = New System.Drawing.Point(10, 14)
+        Me.rad_Intermediaire.Location = New System.Drawing.Point(13, 17)
+        Me.rad_Intermediaire.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rad_Intermediaire.Name = "rad_Intermediaire"
-        Me.rad_Intermediaire.Size = New System.Drawing.Size(106, 17)
+        Me.rad_Intermediaire.Size = New System.Drawing.Size(130, 20)
         Me.rad_Intermediaire.TabIndex = 0
         Me.rad_Intermediaire.TabStop = True
         Me.rad_Intermediaire.Text = "rad_Intermediaire"
@@ -517,13 +545,13 @@ Partial Class Frm_Portees
         Me.TLpan_Droite.Controls.Add(Me.img_Portees, 0, 0)
         Me.TLpan_Droite.Controls.Add(Me.TLPan_Tremies, 0, 1)
         Me.TLpan_Droite.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLpan_Droite.Location = New System.Drawing.Point(250, 0)
+        Me.TLpan_Droite.Location = New System.Drawing.Point(333, 0)
         Me.TLpan_Droite.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_Droite.Name = "TLpan_Droite"
         Me.TLpan_Droite.RowCount = 2
-        Me.TLpan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200.0!))
+        Me.TLpan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 246.0!))
         Me.TLpan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Droite.Size = New System.Drawing.Size(698, 382)
+        Me.TLpan_Droite.Size = New System.Drawing.Size(931, 470)
         Me.TLpan_Droite.TabIndex = 1
         '
         'img_Portees
@@ -532,33 +560,33 @@ Partial Class Frm_Portees
         Me.img_Portees.Location = New System.Drawing.Point(1, 0)
         Me.img_Portees.Margin = New System.Windows.Forms.Padding(1, 0, 0, 1)
         Me.img_Portees.Name = "img_Portees"
-        Me.img_Portees.Size = New System.Drawing.Size(100, 50)
+        Me.img_Portees.Size = New System.Drawing.Size(133, 62)
         Me.img_Portees.TabIndex = 1
         Me.img_Portees.TabStop = False
         '
         'TLPan_Tremies
         '
         Me.TLPan_Tremies.ColumnCount = 2
-        Me.TLPan_Tremies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
+        Me.TLPan_Tremies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 333.0!))
         Me.TLPan_Tremies.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_Tremies.Controls.Add(Me.img_Coupe, 1, 0)
         Me.TLPan_Tremies.Controls.Add(Me.pan_Milieu, 0, 0)
         Me.TLPan_Tremies.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_Tremies.Location = New System.Drawing.Point(0, 200)
+        Me.TLPan_Tremies.Location = New System.Drawing.Point(0, 246)
         Me.TLPan_Tremies.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Tremies.Name = "TLPan_Tremies"
         Me.TLPan_Tremies.RowCount = 1
         Me.TLPan_Tremies.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Tremies.Size = New System.Drawing.Size(698, 182)
+        Me.TLPan_Tremies.Size = New System.Drawing.Size(931, 224)
         Me.TLPan_Tremies.TabIndex = 2
         '
         'img_Coupe
         '
         Me.img_Coupe.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_Coupe.Location = New System.Drawing.Point(251, 0)
+        Me.img_Coupe.Location = New System.Drawing.Point(334, 0)
         Me.img_Coupe.Margin = New System.Windows.Forms.Padding(1, 0, 0, 2)
         Me.img_Coupe.Name = "img_Coupe"
-        Me.img_Coupe.Size = New System.Drawing.Size(100, 50)
+        Me.img_Coupe.Size = New System.Drawing.Size(133, 62)
         Me.img_Coupe.TabIndex = 2
         Me.img_Coupe.TabStop = False
         '
@@ -570,7 +598,7 @@ Partial Class Frm_Portees
         Me.pan_Milieu.Location = New System.Drawing.Point(1, 0)
         Me.pan_Milieu.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.pan_Milieu.Name = "pan_Milieu"
-        Me.pan_Milieu.Size = New System.Drawing.Size(249, 182)
+        Me.pan_Milieu.Size = New System.Drawing.Size(332, 224)
         Me.pan_Milieu.TabIndex = 4
         '
         'TLpan_Milieu
@@ -584,10 +612,10 @@ Partial Class Frm_Portees
         Me.TLpan_Milieu.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_Milieu.Name = "TLpan_Milieu"
         Me.TLpan_Milieu.RowCount = 3
-        Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
+        Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 185.0!))
         Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Milieu.Size = New System.Drawing.Size(249, 180)
+        Me.TLpan_Milieu.Size = New System.Drawing.Size(332, 222)
         Me.TLpan_Milieu.TabIndex = 3
         '
         'lbl_Tremies
@@ -599,7 +627,7 @@ Partial Class Frm_Portees
         Me.lbl_Tremies.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Tremies.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Tremies.Name = "lbl_Tremies"
-        Me.lbl_Tremies.Size = New System.Drawing.Size(249, 30)
+        Me.lbl_Tremies.Size = New System.Drawing.Size(332, 37)
         Me.lbl_Tremies.TabIndex = 3
         Me.lbl_Tremies.Text = "lbl_Tremies"
         Me.lbl_Tremies.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -617,61 +645,67 @@ Partial Class Frm_Portees
         Me.pan_Tremies.Controls.Add(Me.img_TremieGauche)
         Me.pan_Tremies.Controls.Add(Me.chk_TremieGauche)
         Me.pan_Tremies.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Tremies.Location = New System.Drawing.Point(0, 30)
+        Me.pan_Tremies.Location = New System.Drawing.Point(0, 37)
         Me.pan_Tremies.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Tremies.Name = "pan_Tremies"
-        Me.pan_Tremies.Size = New System.Drawing.Size(249, 150)
+        Me.pan_Tremies.Size = New System.Drawing.Size(332, 185)
         Me.pan_Tremies.TabIndex = 4
         '
         'etq_UnitL7
         '
         Me.etq_UnitL7.AutoSize = True
-        Me.etq_UnitL7.Location = New System.Drawing.Point(187, 100)
+        Me.etq_UnitL7.Location = New System.Drawing.Point(249, 123)
+        Me.etq_UnitL7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitL7.Name = "etq_UnitL7"
-        Me.etq_UnitL7.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitL7.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitL7.TabIndex = 83
         Me.etq_UnitL7.Text = "kN"
         '
         'etq_UnitL6
         '
         Me.etq_UnitL6.AutoSize = True
-        Me.etq_UnitL6.Location = New System.Drawing.Point(187, 43)
+        Me.etq_UnitL6.Location = New System.Drawing.Point(249, 53)
+        Me.etq_UnitL6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitL6.Name = "etq_UnitL6"
-        Me.etq_UnitL6.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitL6.Size = New System.Drawing.Size(24, 16)
         Me.etq_UnitL6.TabIndex = 83
         Me.etq_UnitL6.Text = "kN"
         '
         'txt_TremieDroite
         '
         Me.txt_TremieDroite.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_TremieDroite.Location = New System.Drawing.Point(123, 96)
+        Me.txt_TremieDroite.Location = New System.Drawing.Point(165, 118)
+        Me.txt_TremieDroite.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_TremieDroite.Name = "txt_TremieDroite"
-        Me.txt_TremieDroite.Size = New System.Drawing.Size(58, 20)
+        Me.txt_TremieDroite.Size = New System.Drawing.Size(76, 22)
         Me.txt_TremieDroite.TabIndex = 81
         '
         'img_TremieDroite
         '
         Me.img_TremieDroite.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_TremieDroite.Location = New System.Drawing.Point(78, 96)
+        Me.img_TremieDroite.Location = New System.Drawing.Point(105, 118)
+        Me.img_TremieDroite.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_TremieDroite.Name = "img_TremieDroite"
-        Me.img_TremieDroite.Size = New System.Drawing.Size(46, 20)
+        Me.img_TremieDroite.Size = New System.Drawing.Size(61, 25)
         Me.img_TremieDroite.TabIndex = 82
         Me.img_TremieDroite.TabStop = False
         '
         'txt_TremieGauche
         '
         Me.txt_TremieGauche.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_TremieGauche.Location = New System.Drawing.Point(123, 39)
+        Me.txt_TremieGauche.Location = New System.Drawing.Point(165, 48)
+        Me.txt_TremieGauche.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_TremieGauche.Name = "txt_TremieGauche"
-        Me.txt_TremieGauche.Size = New System.Drawing.Size(58, 20)
+        Me.txt_TremieGauche.Size = New System.Drawing.Size(76, 22)
         Me.txt_TremieGauche.TabIndex = 81
         '
         'chk_TremieDroite
         '
         Me.chk_TremieDroite.AutoSize = True
-        Me.chk_TremieDroite.Location = New System.Drawing.Point(7, 73)
+        Me.chk_TremieDroite.Location = New System.Drawing.Point(9, 90)
+        Me.chk_TremieDroite.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chk_TremieDroite.Name = "chk_TremieDroite"
-        Me.chk_TremieDroite.Size = New System.Drawing.Size(110, 17)
+        Me.chk_TremieDroite.Size = New System.Drawing.Size(133, 20)
         Me.chk_TremieDroite.TabIndex = 80
         Me.chk_TremieDroite.Text = "chk_TremieDroite"
         Me.chk_TremieDroite.UseVisualStyleBackColor = True
@@ -679,18 +713,20 @@ Partial Class Frm_Portees
         'img_TremieGauche
         '
         Me.img_TremieGauche.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_TremieGauche.Location = New System.Drawing.Point(78, 39)
+        Me.img_TremieGauche.Location = New System.Drawing.Point(105, 48)
+        Me.img_TremieGauche.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_TremieGauche.Name = "img_TremieGauche"
-        Me.img_TremieGauche.Size = New System.Drawing.Size(46, 20)
+        Me.img_TremieGauche.Size = New System.Drawing.Size(61, 25)
         Me.img_TremieGauche.TabIndex = 82
         Me.img_TremieGauche.TabStop = False
         '
         'chk_TremieGauche
         '
         Me.chk_TremieGauche.AutoSize = True
-        Me.chk_TremieGauche.Location = New System.Drawing.Point(7, 16)
+        Me.chk_TremieGauche.Location = New System.Drawing.Point(9, 20)
+        Me.chk_TremieGauche.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chk_TremieGauche.Name = "chk_TremieGauche"
-        Me.chk_TremieGauche.Size = New System.Drawing.Size(120, 17)
+        Me.chk_TremieGauche.Size = New System.Drawing.Size(144, 20)
         Me.chk_TremieGauche.TabIndex = 80
         Me.chk_TremieGauche.Text = "chk_TremieGauche"
         Me.chk_TremieGauche.UseVisualStyleBackColor = True
@@ -702,15 +738,17 @@ Partial Class Frm_Portees
         'Frm_Portees
         '
         Me.AcceptButton = Me.btn_OK
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Annuler
-        Me.ClientSize = New System.Drawing.Size(954, 428)
+        Me.ClientSize = New System.Drawing.Size(1272, 527)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_Portees"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Portees"
         Me.pan_General.ResumeLayout(False)

@@ -56,7 +56,7 @@ Partial Class Frm_Basic
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(800, 450)
+        Me.pan_General.Size = New System.Drawing.Size(1067, 554)
         Me.pan_General.TabIndex = 2
         '
         'TLpan_Main
@@ -67,40 +67,43 @@ Partial Class Frm_Basic
         Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(800, 450)
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49.0!))
+        Me.TLpan_Main.Size = New System.Drawing.Size(1067, 554)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
         '
         Me.TLPan_PartieBasse.ColumnCount = 5
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 413)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(4, 509)
+        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(794, 34)
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(1059, 41)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(410, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(547, 4)
+        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
+        Me.btn_OK.Size = New System.Drawing.Size(152, 33)
         Me.btn_OK.TabIndex = 1
         Me.btn_OK.Text = "btn_OK"
         Me.btn_OK.UseVisualStyleBackColor = True
@@ -109,9 +112,10 @@ Partial Class Frm_Basic
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(270, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(360, 4)
+        Me.btn_Annuler.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_Annuler.Name = "btn_Annuler"
-        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Annuler.Size = New System.Drawing.Size(152, 33)
         Me.btn_Annuler.TabIndex = 0
         Me.btn_Annuler.Text = "btn_Annuler"
         Me.btn_Annuler.UseVisualStyleBackColor = True
@@ -121,15 +125,16 @@ Partial Class Frm_Basic
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLPan_Portees)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Main.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Main.Location = New System.Drawing.Point(4, 4)
+        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(794, 404)
+        Me.pan_Main.Size = New System.Drawing.Size(1059, 497)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_Portees
         '
         Me.TLPan_Portees.ColumnCount = 2
-        Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
+        Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 333.0!))
         Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_Portees.Controls.Add(Me.pan_Gauche, 0, 0)
         Me.TLPan_Portees.Controls.Add(Me.img_Portees, 1, 0)
@@ -139,7 +144,7 @@ Partial Class Frm_Basic
         Me.TLPan_Portees.Name = "TLPan_Portees"
         Me.TLPan_Portees.RowCount = 1
         Me.TLPan_Portees.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Portees.Size = New System.Drawing.Size(794, 404)
+        Me.TLPan_Portees.Size = New System.Drawing.Size(1059, 497)
         Me.TLPan_Portees.TabIndex = 0
         '
         'pan_Gauche
@@ -150,7 +155,7 @@ Partial Class Frm_Basic
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(250, 404)
+        Me.pan_Gauche.Size = New System.Drawing.Size(333, 497)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLPan_Gauche
@@ -164,10 +169,10 @@ Partial Class Frm_Basic
         Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
         Me.TLPan_Gauche.RowCount = 3
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 209.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 203)
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(333, 250)
         Me.TLPan_Gauche.TabIndex = 0
         '
         'lbl_Portees
@@ -179,7 +184,7 @@ Partial Class Frm_Basic
         Me.lbl_Portees.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Portees.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Portees.Name = "lbl_Portees"
-        Me.lbl_Portees.Size = New System.Drawing.Size(250, 30)
+        Me.lbl_Portees.Size = New System.Drawing.Size(333, 37)
         Me.lbl_Portees.TabIndex = 0
         Me.lbl_Portees.Text = "lbl_Portee"
         Me.lbl_Portees.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -192,19 +197,19 @@ Partial Class Frm_Basic
         Me.pan_SaisiePortee.Controls.Add(Me.Button1)
         Me.pan_SaisiePortee.Controls.Add(Me.btn_Precedent)
         Me.pan_SaisiePortee.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 30)
+        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 37)
         Me.pan_SaisiePortee.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisiePortee.Name = "pan_SaisiePortee"
-        Me.pan_SaisiePortee.Size = New System.Drawing.Size(250, 170)
+        Me.pan_SaisiePortee.Size = New System.Drawing.Size(333, 209)
         Me.pan_SaisiePortee.TabIndex = 1
         '
         'btn_Moins
         '
         Me.btn_Moins.Image = CType(resources.GetObject("btn_Moins.Image"), System.Drawing.Image)
-        Me.btn_Moins.Location = New System.Drawing.Point(149, 84)
+        Me.btn_Moins.Location = New System.Drawing.Point(199, 103)
         Me.btn_Moins.Margin = New System.Windows.Forms.Padding(0)
         Me.btn_Moins.Name = "btn_Moins"
-        Me.btn_Moins.Size = New System.Drawing.Size(23, 12)
+        Me.btn_Moins.Size = New System.Drawing.Size(31, 15)
         Me.btn_Moins.TabIndex = 13
         Me.btn_Moins.TabStop = False
         Me.btn_Moins.UseVisualStyleBackColor = True
@@ -212,10 +217,10 @@ Partial Class Frm_Basic
         'Button1
         '
         Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(149, 73)
+        Me.Button1.Location = New System.Drawing.Point(199, 90)
         Me.Button1.Margin = New System.Windows.Forms.Padding(0)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(23, 12)
+        Me.Button1.Size = New System.Drawing.Size(31, 15)
         Me.Button1.TabIndex = 12
         Me.Button1.TabStop = False
         Me.Button1.UseVisualStyleBackColor = True
@@ -223,10 +228,10 @@ Partial Class Frm_Basic
         'btn_Precedent
         '
         Me.btn_Precedent.Image = CType(resources.GetObject("btn_Precedent.Image"), System.Drawing.Image)
-        Me.btn_Precedent.Location = New System.Drawing.Point(126, 73)
+        Me.btn_Precedent.Location = New System.Drawing.Point(168, 90)
         Me.btn_Precedent.Margin = New System.Windows.Forms.Padding(0)
         Me.btn_Precedent.Name = "btn_Precedent"
-        Me.btn_Precedent.Size = New System.Drawing.Size(23, 23)
+        Me.btn_Precedent.Size = New System.Drawing.Size(31, 28)
         Me.btn_Precedent.TabIndex = 11
         Me.btn_Precedent.TabStop = False
         Me.btn_Precedent.UseVisualStyleBackColor = True
@@ -235,23 +240,25 @@ Partial Class Frm_Basic
         '
         Me.img_Portees.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.img_Portees.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Portees.Location = New System.Drawing.Point(251, 0)
+        Me.img_Portees.Location = New System.Drawing.Point(334, 0)
         Me.img_Portees.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.img_Portees.Name = "img_Portees"
-        Me.img_Portees.Size = New System.Drawing.Size(100, 50)
+        Me.img_Portees.Size = New System.Drawing.Size(133, 61)
         Me.img_Portees.TabIndex = 1
         Me.img_Portees.TabStop = False
         '
         'Frm_Basic
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(1067, 554)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_Basic"
+        Me.ShowInTaskbar = False
         Me.Text = "Frm_Basic"
         Me.pan_General.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)

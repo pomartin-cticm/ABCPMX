@@ -542,13 +542,12 @@
                         RdConnex = DeltaRd(iTravee, 1)(iNodeZero(iTravee, 1) - iNodeDeb) - DeltaRd(iTravee, 1)(iNode - iNodeDeb)
                     Else
                         RdConnex = 0
-                        'lOK = False
                     End If
 
                 End If
 
-                myBeam.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, myBeam.Param.Gamma, rhoVLoc, bEff(iNode),
-                                                               RdConnex, myBeam.Dalle, lWeb, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
+                myBeam.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, myBeam.Param.Gamma, rhoVLoc, bEff(iNode), RdConnex,
+                                                               myBeam.Dalle, lWeb, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
 
                 '--( Traitement du coefficient beta
 
@@ -704,8 +703,8 @@
                 RConnexD = DeltaRd(iTravee, 1)(iNode - iNodeDeb)
                 RConnex = Math.Min(RConnexG, RConnexD)
 
-                MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, rhoVLoc,
-                                                                 bEff(iNode), RConnex, MyPoutre.Dalle, True, zANP, pMfRd(iNode, kDeb))
+                MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, rhoVLoc, bEff(iNode), RConnex,
+                                                                 MyPoutre.Dalle, True, zANP, pMfRd(iNode, kDeb))
 
                 If kfin > kDeb Then
                     pMfRd(iNode, kfin) = pMfRd(iNode, kDeb)

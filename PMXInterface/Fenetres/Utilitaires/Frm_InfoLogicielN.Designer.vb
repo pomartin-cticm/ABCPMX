@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class Frm_InfoLogiciel
+Partial Class Frm_InfoLogicielN
     Inherits System.Windows.Forms.Form
 
     'Form remplace la méthode Dispose pour nettoyer la liste des composants.
@@ -22,76 +22,63 @@ Partial Class Frm_InfoLogiciel
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_InfoLogiciel))
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.pan_G2 = New System.Windows.Forms.Panel()
         Me.TLPan_General = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Lien = New System.Windows.Forms.Panel()
         Me.lbl_ContactSupport = New System.Windows.Forms.Label()
         Me.lbk_Support = New System.Windows.Forms.LinkLabel()
-        Me.img_info = New System.Windows.Forms.PictureBox()
         Me.pan_Info = New System.Windows.Forms.Panel()
         Me.rtb_Info = New System.Windows.Forms.RichTextBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_InfoW = New System.Windows.Forms.Label()
-        Me.img_Close = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.imgList_Info = New System.Windows.Forms.ImageList(Me.components)
         Me.pan_General.SuspendLayout()
         Me.pan_G2.SuspendLayout()
         Me.TLPan_General.SuspendLayout()
         Me.pan_Lien.SuspendLayout()
-        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Info.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        CType(Me.img_Close, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
         '
-        Me.pan_General.BackColor = System.Drawing.Color.OrangeRed
+        Me.pan_General.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_General.Controls.Add(Me.pan_G2)
         Me.pan_General.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
-        Me.pan_General.Margin = New System.Windows.Forms.Padding(4)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Padding = New System.Windows.Forms.Padding(1)
-        Me.pan_General.Size = New System.Drawing.Size(527, 225)
-        Me.pan_General.TabIndex = 0
+        Me.pan_General.Padding = New System.Windows.Forms.Padding(4)
+        Me.pan_General.Size = New System.Drawing.Size(618, 350)
+        Me.pan_General.TabIndex = 1
         '
         'pan_G2
         '
-        Me.pan_G2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pan_G2.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_G2.Controls.Add(Me.TLPan_General)
-        Me.pan_G2.Location = New System.Drawing.Point(3, 2)
-        Me.pan_G2.Margin = New System.Windows.Forms.Padding(4)
+        Me.pan_G2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_G2.Location = New System.Drawing.Point(4, 4)
+        Me.pan_G2.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_G2.Name = "pan_G2"
-        Me.pan_G2.Size = New System.Drawing.Size(521, 220)
+        Me.pan_G2.Size = New System.Drawing.Size(610, 342)
         Me.pan_G2.TabIndex = 0
         '
         'TLPan_General
         '
-        Me.TLPan_General.ColumnCount = 2
-        Me.TLPan_General.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.TLPan_General.ColumnCount = 1
         Me.TLPan_General.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_General.Controls.Add(Me.pan_Lien, 1, 2)
-        Me.TLPan_General.Controls.Add(Me.img_info, 0, 0)
-        Me.TLPan_General.Controls.Add(Me.pan_Info, 1, 1)
-        Me.TLPan_General.Controls.Add(Me.TableLayoutPanel1, 1, 0)
-        Me.TLPan_General.Controls.Add(Me.Label1, 0, 2)
+        Me.TLPan_General.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLPan_General.Controls.Add(Me.pan_Lien, 0, 2)
+        Me.TLPan_General.Controls.Add(Me.pan_Info, 0, 1)
+        Me.TLPan_General.Controls.Add(Me.TableLayoutPanel1, 0, 0)
         Me.TLPan_General.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_General.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_General.Margin = New System.Windows.Forms.Padding(4)
+        Me.TLPan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_General.Name = "TLPan_General"
         Me.TLPan_General.RowCount = 3
         Me.TLPan_General.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.TLPan_General.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_General.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
-        Me.TLPan_General.Size = New System.Drawing.Size(521, 220)
+        Me.TLPan_General.Size = New System.Drawing.Size(610, 342)
         Me.TLPan_General.TabIndex = 0
         '
         'pan_Lien
@@ -101,10 +88,10 @@ Partial Class Frm_InfoLogiciel
         Me.pan_Lien.Controls.Add(Me.lbl_ContactSupport)
         Me.pan_Lien.Controls.Add(Me.lbk_Support)
         Me.pan_Lien.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Lien.Location = New System.Drawing.Point(41, 183)
-        Me.pan_Lien.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.pan_Lien.Location = New System.Drawing.Point(0, 305)
+        Me.pan_Lien.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Lien.Name = "pan_Lien"
-        Me.pan_Lien.Size = New System.Drawing.Size(480, 37)
+        Me.pan_Lien.Size = New System.Drawing.Size(610, 37)
         Me.pan_Lien.TabIndex = 84
         '
         'lbl_ContactSupport
@@ -129,25 +116,15 @@ Partial Class Frm_InfoLogiciel
         Me.lbk_Support.TabStop = True
         Me.lbk_Support.Text = "support.logiciels@cticm.com"
         '
-        'img_info
-        '
-        Me.img_info.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.img_info.Location = New System.Drawing.Point(3, 2)
-        Me.img_info.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.img_info.Name = "img_info"
-        Me.img_info.Size = New System.Drawing.Size(34, 33)
-        Me.img_info.TabIndex = 81
-        Me.img_info.TabStop = False
-        '
         'pan_Info
         '
         Me.pan_Info.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pan_Info.Controls.Add(Me.rtb_Info)
         Me.pan_Info.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Info.Location = New System.Drawing.Point(41, 38)
-        Me.pan_Info.Margin = New System.Windows.Forms.Padding(1)
+        Me.pan_Info.Location = New System.Drawing.Point(0, 38)
+        Me.pan_Info.Margin = New System.Windows.Forms.Padding(0, 1, 0, 1)
         Me.pan_Info.Name = "pan_Info"
-        Me.pan_Info.Size = New System.Drawing.Size(479, 144)
+        Me.pan_Info.Size = New System.Drawing.Size(610, 266)
         Me.pan_Info.TabIndex = 82
         '
         'rtb_Info
@@ -159,24 +136,23 @@ Partial Class Frm_InfoLogiciel
         Me.rtb_Info.Margin = New System.Windows.Forms.Padding(4)
         Me.rtb_Info.Name = "rtb_Info"
         Me.rtb_Info.ReadOnly = True
-        Me.rtb_Info.Size = New System.Drawing.Size(477, 142)
+        Me.rtb_Info.Size = New System.Drawing.Size(608, 264)
         Me.rtb_Info.TabIndex = 0
         Me.rtb_Info.Text = ""
         '
         'TableLayoutPanel1
         '
-        Me.TableLayoutPanel1.ColumnCount = 2
+        Me.TableLayoutPanel1.ColumnCount = 1
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.lbl_InfoW, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.img_Close, 1, 0)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(40, 0)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(481, 37)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(610, 37)
         Me.TableLayoutPanel1.TabIndex = 83
         '
         'lbl_InfoW
@@ -186,71 +162,34 @@ Partial Class Frm_InfoLogiciel
         Me.lbl_InfoW.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_InfoW.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_InfoW.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_InfoW.Location = New System.Drawing.Point(1, 0)
-        Me.lbl_InfoW.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
+        Me.lbl_InfoW.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_InfoW.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_InfoW.Name = "lbl_InfoW"
-        Me.lbl_InfoW.Size = New System.Drawing.Size(439, 37)
+        Me.lbl_InfoW.Size = New System.Drawing.Size(610, 37)
         Me.lbl_InfoW.TabIndex = 3
         Me.lbl_InfoW.Text = "lbl_InfoW"
         Me.lbl_InfoW.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'img_Close
-        '
-        Me.img_Close.Image = CType(resources.GetObject("img_Close.Image"), System.Drawing.Image)
-        Me.img_Close.Location = New System.Drawing.Point(448, 6)
-        Me.img_Close.Margin = New System.Windows.Forms.Padding(7, 6, 7, 6)
-        Me.img_Close.Name = "img_Close"
-        Me.img_Close.Size = New System.Drawing.Size(26, 25)
-        Me.img_Close.TabIndex = 4
-        Me.img_Close.TabStop = False
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label1.Font = New System.Drawing.Font("Arial Black", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(3, 185)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(34, 33)
-        Me.Label1.TabIndex = 85
-        Me.Label1.Text = "i"
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.Label1.Visible = False
-        '
-        'imgList_Info
-        '
-        Me.imgList_Info.ImageStream = CType(resources.GetObject("imgList_Info.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.imgList_Info.TransparentColor = System.Drawing.Color.Transparent
-        Me.imgList_Info.Images.SetKeyName(0, "Warning")
-        Me.imgList_Info.Images.SetKeyName(1, "Info")
-        '
-        'Frm_InfoLogiciel
+        'Frm_InfoLogicielN
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.ClientSize = New System.Drawing.Size(527, 225)
+        Me.ClientSize = New System.Drawing.Size(618, 350)
         Me.Controls.Add(Me.pan_General)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
-        Me.Margin = New System.Windows.Forms.Padding(4)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "Frm_InfoLogiciel"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Frm_InfoLogiciel"
+        Me.Name = "Frm_InfoLogicielN"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.Text = "Frm_InfoLogicielN"
         Me.pan_General.ResumeLayout(False)
         Me.pan_G2.ResumeLayout(False)
         Me.TLPan_General.ResumeLayout(False)
-        Me.TLPan_General.PerformLayout()
         Me.pan_Lien.ResumeLayout(False)
         Me.pan_Lien.PerformLayout()
-        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Info.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
-        CType(Me.img_Close, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -258,15 +197,11 @@ Partial Class Frm_InfoLogiciel
     Friend WithEvents pan_General As Panel
     Friend WithEvents pan_G2 As Panel
     Friend WithEvents TLPan_General As TableLayoutPanel
-    Friend WithEvents img_info As PictureBox
+    Friend WithEvents pan_Lien As Panel
+    Friend WithEvents lbl_ContactSupport As Label
+    Friend WithEvents lbk_Support As LinkLabel
     Friend WithEvents pan_Info As Panel
     Friend WithEvents rtb_Info As RichTextBox
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents lbl_InfoW As Label
-    Friend WithEvents img_Close As PictureBox
-    Friend WithEvents imgList_Info As ImageList
-    Friend WithEvents pan_Lien As Panel
-    Friend WithEvents lbl_ContactSupport As Label
-    Friend WithEvents lbk_Support As LinkLabel
-    Friend WithEvents Label1 As Label
 End Class

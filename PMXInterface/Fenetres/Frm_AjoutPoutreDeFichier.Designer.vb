@@ -31,8 +31,8 @@ Partial Class Frm_AjoutPoutreDeFichier
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Projet = New System.Windows.Forms.Label()
         Me.pan_SaisiePortee = New System.Windows.Forms.Panel()
-        Me.chklst_Beams = New System.Windows.Forms.CheckedListBox()
         Me.lbl_ChoisirPoutre = New System.Windows.Forms.Label()
+        Me.chklst_Beams = New System.Windows.Forms.CheckedListBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -48,7 +48,7 @@ Partial Class Frm_AjoutPoutreDeFichier
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(442, 315)
+        Me.pan_General.Size = New System.Drawing.Size(589, 388)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -59,40 +59,43 @@ Partial Class Frm_AjoutPoutreDeFichier
         Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(442, 315)
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49.0!))
+        Me.TLpan_Main.Size = New System.Drawing.Size(589, 388)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
         '
         Me.TLPan_PartieBasse.ColumnCount = 5
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 278)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(4, 343)
+        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(436, 34)
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(581, 41)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(231, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(308, 4)
+        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
+        Me.btn_OK.Size = New System.Drawing.Size(152, 33)
         Me.btn_OK.TabIndex = 1
         Me.btn_OK.Text = "btn_OK"
         Me.btn_OK.UseVisualStyleBackColor = True
@@ -101,9 +104,10 @@ Partial Class Frm_AjoutPoutreDeFichier
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(91, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(121, 4)
+        Me.btn_Annuler.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_Annuler.Name = "btn_Annuler"
-        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Annuler.Size = New System.Drawing.Size(152, 33)
         Me.btn_Annuler.TabIndex = 0
         Me.btn_Annuler.Text = "btn_Annuler"
         Me.btn_Annuler.UseVisualStyleBackColor = True
@@ -113,9 +117,10 @@ Partial Class Frm_AjoutPoutreDeFichier
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLPan_Gauche)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Main.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Main.Location = New System.Drawing.Point(4, 4)
+        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(436, 269)
+        Me.pan_Main.Size = New System.Drawing.Size(581, 331)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_Gauche
@@ -129,10 +134,10 @@ Partial Class Frm_AjoutPoutreDeFichier
         Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
         Me.TLPan_Gauche.RowCount = 2
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(436, 269)
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(581, 331)
         Me.TLPan_Gauche.TabIndex = 0
         '
         'lbl_Projet
@@ -144,7 +149,7 @@ Partial Class Frm_AjoutPoutreDeFichier
         Me.lbl_Projet.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Projet.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Projet.Name = "lbl_Projet"
-        Me.lbl_Projet.Size = New System.Drawing.Size(436, 30)
+        Me.lbl_Projet.Size = New System.Drawing.Size(581, 37)
         Me.lbl_Projet.TabIndex = 0
         Me.lbl_Projet.Text = "lbl_Projet"
         Me.lbl_Projet.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -156,40 +161,44 @@ Partial Class Frm_AjoutPoutreDeFichier
         Me.pan_SaisiePortee.Controls.Add(Me.lbl_ChoisirPoutre)
         Me.pan_SaisiePortee.Controls.Add(Me.chklst_Beams)
         Me.pan_SaisiePortee.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 30)
+        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 37)
         Me.pan_SaisiePortee.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisiePortee.Name = "pan_SaisiePortee"
-        Me.pan_SaisiePortee.Size = New System.Drawing.Size(436, 239)
+        Me.pan_SaisiePortee.Size = New System.Drawing.Size(581, 294)
         Me.pan_SaisiePortee.TabIndex = 1
+        '
+        'lbl_ChoisirPoutre
+        '
+        Me.lbl_ChoisirPoutre.AutoSize = True
+        Me.lbl_ChoisirPoutre.Location = New System.Drawing.Point(11, 12)
+        Me.lbl_ChoisirPoutre.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lbl_ChoisirPoutre.Name = "lbl_ChoisirPoutre"
+        Me.lbl_ChoisirPoutre.Size = New System.Drawing.Size(108, 16)
+        Me.lbl_ChoisirPoutre.TabIndex = 1
+        Me.lbl_ChoisirPoutre.Text = "lbl_ChoisirPoutre"
         '
         'chklst_Beams
         '
         Me.chklst_Beams.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.chklst_Beams.FormattingEnabled = True
-        Me.chklst_Beams.Location = New System.Drawing.Point(20, 35)
+        Me.chklst_Beams.Location = New System.Drawing.Point(27, 43)
+        Me.chklst_Beams.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chklst_Beams.Name = "chklst_Beams"
-        Me.chklst_Beams.Size = New System.Drawing.Size(401, 197)
+        Me.chklst_Beams.Size = New System.Drawing.Size(534, 240)
         Me.chklst_Beams.TabIndex = 0
-        '
-        'lbl_ChoisirPoutre
-        '
-        Me.lbl_ChoisirPoutre.AutoSize = True
-        Me.lbl_ChoisirPoutre.Location = New System.Drawing.Point(8, 10)
-        Me.lbl_ChoisirPoutre.Name = "lbl_ChoisirPoutre"
-        Me.lbl_ChoisirPoutre.Size = New System.Drawing.Size(85, 13)
-        Me.lbl_ChoisirPoutre.TabIndex = 1
-        Me.lbl_ChoisirPoutre.Text = "lbl_ChoisirPoutre"
         '
         'Frm_AjoutPoutreDeFichier
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(442, 315)
+        Me.ClientSize = New System.Drawing.Size(589, 388)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_AjoutPoutreDeFichier"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_AjoutPoutreDeFichier"
         Me.pan_General.ResumeLayout(False)

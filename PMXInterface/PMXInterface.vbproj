@@ -590,6 +590,12 @@
     <Compile Include="Fenetres\Utilitaires\Frm_InfoLogiciel.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Utilitaires\Frm_InfoLogicielN.Designer.vb">
+      <DependentUpon>Frm_InfoLogicielN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Utilitaires\Frm_InfoLogicielN.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Utilitaires\Frm_ModularN_ResultatsG1.Designer.vb">
       <DependentUpon>Frm_ModularN_ResultatsG1.vb</DependentUpon>
     </Compile>
@@ -898,6 +904,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Utilitaires\Frm_InfoLogiciel.resx">
       <DependentUpon>Frm_InfoLogiciel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Utilitaires\Frm_InfoLogicielN.resx">
+      <DependentUpon>Frm_InfoLogicielN.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Utilitaires\Frm_ModularN_ResultatsG1.resx">
       <DependentUpon>Frm_ModularN_ResultatsG1.vb</DependentUpon>

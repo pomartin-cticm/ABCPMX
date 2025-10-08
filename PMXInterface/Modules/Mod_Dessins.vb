@@ -60,7 +60,7 @@ Public Module Mod_Dessins
         Dim myParAff As Struc_Affichage
         Dim xMin, yMin, xMax, yMax As Double
         Dim dCar As Double
-        Dim lMixte, lEnrob, lLamine, lSlimfloor As Boolean
+        Dim lMixte, lEnrob, lLamine, lSlimF As Boolean
         Dim EntraxeTot As Decimal
         Dim EntraxeD1, EntraxeD2, EntraxeMax As Decimal
 
@@ -98,7 +98,7 @@ Public Module Mod_Dessins
         lEnrob = mySection.lEnrobage
         lLamine = mySection.lLamine
         lCofraplus220 = myDalle.Bac.lCofraplus220
-        lSlimfloor = mySection.lSlimFloor
+        lSlimF = mySection.lSlimFloor
 
         EntraxeD1 = myBeam.EntraxeD1
         EntraxeD2 = myBeam.EntraxeD2
@@ -118,7 +118,7 @@ Public Module Mod_Dessins
             xMin = -EntraxeMax / 4
             xMax = EntraxeMax / 4
 
-            If lSlimfloor Then
+            If lSlimF Then
                 yMin = -mySection.ProfilA.Plat_t - 0.5 * dCar
             Else
                 yMin = -mySection.ProfilA.ha - dCote
@@ -128,7 +128,7 @@ Public Module Mod_Dessins
             xMin = -EntraxeMax - dCar
             xMax = EntraxeMax + dCar
 
-            If lSlimfloor Then
+            If lSlimF Then
                 yMin = -mySection.ProfilA.Plat_t - 1.5 * dCar
             Else
                 yMin = -mySection.ProfilA.ha - 1.5 * dCar
@@ -177,7 +177,7 @@ Public Module Mod_Dessins
                     Case cls_Bac.Enum_Orientation.Parallele
                         DessineDalleMixteParallele_Frm_Main(myGr, myDalle, Ha, Bfs, myParAff, myBrushB, EntraxeD2, myBeam.lIntermediaire, EntraxeD1, EntraxeMax)
                     Case cls_Bac.Enum_Orientation.Perpendiculaire
-                        If lCofraplus220 Then
+                        If lCofraplus220 And Not lSlimF Then
                             DessineDalleMixtePerpendiculaireCfp220_Frm_Main(myGr, myBeam, myParAff, myBrushB, EntraxeD2, myBeam.lIntermediaire, EntraxeD1, EntraxeMax)
                         Else
                             DessineDalleMixtePerpendiculaire_Frm_Main(myGr, myDalle, Ha, Bfs, myParAff, myBrushB, EntraxeD2, myBeam.lIntermediaire, mySection, myBeam.LargeurDalleDispo, EntraxeD1, EntraxeMax)
@@ -192,7 +192,7 @@ Public Module Mod_Dessins
 
         ''# Armatures
 
-        If lSlimfloor Then
+        If lSlimF Then
             If myBeam.Dalle.ArmaSlimFeu.lBarre Then
                 Dim Tw As Decimal = myBeam.Section.ProfilA.Tw
                 If myBeam.lIntermediaire Then
@@ -232,7 +232,7 @@ Public Module Mod_Dessins
 
             DessinFrmMain_Cotation_Entraxes(myBeam, myGr, myParAff, MyPen, myFontNormal, EntraxeD1, EntraxeD2, dCote, lZoomPlus)
 
-            If lSlimfloor Then
+            If lSlimF Then
                 DessinFrmMain_Cotation_SectionSlimF(myBeam, myGr, myParAff, MyPen, myFontNormal, dCote, dCar, lZoomPlus, myBrushB, ColorFond)
             Else
                 DessinFrmMain_Cotation_SectionStandard(myBeam, myGr, myParAff, MyPen, myFontNormal, dCote, dCar, lZoomPlus)
@@ -249,7 +249,11 @@ Public Module Mod_Dessins
 
         End If
 
-        '--> Dessin tremies
+        '--( Affichage du nom du système bac ou plancher préfabrique
+
+        DessinFrmMain_LabelBac(myBeam, myGr, myParAff, MyPen, myFontNormal, lZoomPlus, dCar)
+
+        '--( Dessin tremies
 
         If myBeam.lTremieGauche Or myBeam.lTremieDroite Then
             If lCofraplus220 Then
@@ -348,19 +352,6 @@ Public Module Mod_Dessins
         'Affichage nom du goujon disposé, le cas écheant
 
         If myBeam.lMixte And lCotation Then
-            'Cotation
-            'If lZoomPlus Then
-            '    xo_cotes = -myBeam.Section.ProfilA.Bfs / 2 - dCar / 4
-            'Else
-            '    xo_cotes = -myBeam.Section.ProfilA.Bfs / 2 - dCar / 2
-            'End If
-            'xe_cotes = xo_cotes
-
-            'If lZoomPlus Then
-            '    yo_cotes = zREF - myBeam.Section.ProfilA.Tfs - dCar / 4
-            'Else
-            '    yo_cotes = zREF - myBeam.Section.ProfilA.Tfs - dCar / 4
-            'End If
 
             xo_cotes = 0
             xe_cotes = xo_cotes
@@ -379,13 +370,92 @@ Public Module Mod_Dessins
 
     End Sub
 
+    Private Sub DessinFrmMain_LabelBac(myBeam As cls_Poutre, myGr As Graphics, myParAff As Struc_Affichage,
+                                       myPen As Pen, myFont As Font, lZoomPlus As Boolean, dCar As Decimal)
+        '-----------------------------------------------------------------------------------------------
+        '   07/10/25 :  Version 1.20 - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin des labels des bacs pour la fenêtre principale -
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre à dessiner
+        '   myParAff    [E] :   Paramètres d'affichage  
+        '   myPen       [E] :   Pen à utiliser pour les fleches/cotations    
+        '   myFont      [E] :   Police à utiliser pour l'affichage  
+        '   EntraxeD1   [E] :   Entraxe de la poutre à gauche
+        '   EntraxeD2   [E] :   Entraxe de la poutre à droite
+        '   dCote       [E] :   Décalage pour les cotations 
+        '   dCar        [E] :   Dimension caracteristique pour le dessin
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lCofraplus220 As Boolean
+        Dim lSlimfloor As Boolean
+        Dim lDalleMixteT As Boolean
+        Dim mySection As cls_Section = myBeam.Section
+        Dim myDalle As cls_Dalle = myBeam.Dalle
+
+        '--( Initialisation
+
+        lCofraplus220 = myDalle.Bac.lCofraplus220
+        lSlimfloor = mySection.lSlimFloor
+        lDalleMixteT = myDalle.lMixte And myDalle.Bac.lPerpendiculaire
+
+        '--( Traitement
+
+        Dim xPos, zPos As Decimal
+
+        If lSlimfloor Then
+            If lDalleMixteT Then
+
+                xPos = myBeam.EntraxeD1 - myBeam.Section.LargeurPlatInfSlim / 2
+                zPos = 0
+                DessinFrmMain_LabelBacXY(myBeam, myGr, myParAff, myPen, myFont, xPos, zPos)
+
+            End If
+        Else
+            If lDalleMixteT Then
+                xPos = myBeam.EntraxeD1 - myBeam.Section.ProfilA.Bfs / 2
+                zPos = 0
+                DessinFrmMain_LabelBacXY(myBeam, myGr, myParAff, myPen, myFont, xPos, zPos)
+            End If
+        End If
+    End Sub
+    Private Sub DessinFrmMain_LabelBacXY(myBeam As cls_Poutre, myGr As Graphics, myParAff As Struc_Affichage,
+                                         myPen As Pen, myFont As Font, xPos As Decimal, zPos As Decimal)
+        '-----------------------------------------------------------------------------------------------
+        '   07/10/25 :  Version 1.20 - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin des labels des bacs pour la fenêtre principale -
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   myBeam      [E] :   Poutre à dessiner
+        '   myParAff    [E] :   Paramètres d'affichage  
+        '   myPen       [E] :   Pen à utiliser pour les fleches/cotations    
+        '   myFont      [E] :   Police à utiliser pour l'affichage  
+        '   EntraxeD1   [E] :   Entraxe de la poutre à gauche
+        '   EntraxeD2   [E] :   Entraxe de la poutre à droite
+        '   dCote       [E] :   Décalage pour les cotations 
+        '   dCar        [E] :   Dimension caracteristique pour le dessin
+        '   xPos        [E] :   Position en X pour le label
+        '   zPos        [E] :   Position en Z pour le label
+        '-----------------------------------------------------------------------------------------------
+
+        Dim myFontLoc As New Font(myFont.Name, myFont.Size - 2)
+
+        AddTexte(myGr, New SolidBrush(myPen.Color),
+                 myBeam.Dalle.Bac.Etiquette, myFontLoc, xPos, zPos, myParAff, HorizontalAlignment.Right, VerticalAlignement.Top)
+
+    End Sub
+
     Private Sub DessinFrmMain_LabelProfiles(myBeam As cls_Poutre, myGr As Graphics, myParAff As Struc_Affichage,
                                             myPen As Pen, myFont As Font, lZoomPlus As Boolean, dCar As Decimal,
                                             strPRS As String, strPlat As String, ZRef As Decimal)
         '-----------------------------------------------------------------------------------------------
         '   21/07/25 :  Version 1.10 - POM
         '-----------------------------------------------------------------------------------------------
-        '   Dessin des labels des profilés pour la fenêtre principale - Cas des sections standard
+        '   Dessin des labels des profilés pour la fenêtre principale 
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
         '   myBeam      [E] :   Poutre à dessiner
@@ -405,7 +475,7 @@ Public Module Mod_Dessins
         Dim horAlignement As HorizontalAlignment
         Dim lContour As Boolean = lCONTOURCOTE
 
-        Dim lSlimfloor As Boolean
+        Dim lSlimfloor, lSAB As Boolean
         Dim Chaine As String = ""
         Dim xo_cotes, xe_cotes, yo_cotes, ye_cotes As Decimal
         Dim lLamine, lPlat As Boolean
@@ -415,17 +485,19 @@ Public Module Mod_Dessins
         lSlimfloor = myBeam.Section.lSlimFloor
         lLamine = myBeam.Section.lLamine
         lPlat = myBeam.Section.ProfilA.lPlat And (Not IsEqual(myBeam.Section.ProfilA.Plat_t, 0D)) And (Not IsEqual(myBeam.Section.ProfilA.Plat_b, 0D))
+        lSAB = myBeam.Section.lSlimFloor_SAB
 
         '--( Traitement
 
         If lSlimfloor Then
+
             horAlignement = HorizontalAlignment.Left
-            xo_cotes = Math.Max(myBeam.Section.ProfilA.Bfs / 2, Math.Max(myBeam.Section.ProfilA.Bfi / 2, myBeam.Section.ProfilA.Plat_b / 2))
+            'xo_cotes = Math.Max(myBeam.Section.ProfilA.Bfs / 2, Math.Max(myBeam.Section.ProfilA.Bfi / 2, myBeam.Section.ProfilA.Plat_b / 2))
             xo_cotes = myBeam.Section.LargeurPlatInfSlim / 2
             If lZoomPlus Then
-                xo_cotes += dCar / 10
+                xo_cotes += dCar / 20
             Else
-                xo_cotes += dCar / 8
+                xo_cotes += dCar / 16
             End If
             xe_cotes = xo_cotes
             yo_cotes = 0 ' myBeam.Section.zInf
@@ -473,30 +545,35 @@ Public Module Mod_Dessins
 
         If lSlimfloor Then
 
-            Dim myAlignV As VerticalAlignement = VerticalAlignement.Top
+            If Not lSAB Then
 
-            Chaine = strPlat & " (" &
+                Dim myAlignV As VerticalAlignement = VerticalAlignement.Top
+
+                Chaine = strPlat & " (" &
                          GetStringInUnitN(myBeam.Section.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 3, NON_U, True) & " x " &
                          GetStringInUnitN(myBeam.Section.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 3, NON_U, True) & ")"
 
-            xo_cotes = myBeam.Section.LargeurPlatInfSlim / 2
-            If lZoomPlus Then
-                xo_cotes += dCar / 10
-            Else
-                xo_cotes += dCar / 8
+                xo_cotes = myBeam.Section.LargeurPlatInfSlim / 2
+
+                If lZoomPlus Then
+                    xo_cotes += dCar / 10
+                Else
+                    xo_cotes += dCar / 8
+                End If
+
+                Select Case myBeam.Section.TypeSection
+                    Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte,
+                         cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
+                        yo_cotes = myBeam.Section.zInf + myBeam.Section.ProfilA.Plat_t / 2
+
+                    Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
+                        yo_cotes = myBeam.Section.zSemSup - myBeam.Section.ProfilA.Plat_t / 2
+                        myAlignV = VerticalAlignement.Middle
+                End Select
+
+                AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xo_cotes, yo_cotes, myParAff, horAlignement, myAlignV, New SolidBrush(Color.Transparent), myPen, lContour)
+
             End If
-
-            Select Case myBeam.Section.TypeSection
-                Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte,
-                     cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
-                    yo_cotes = myBeam.Section.zInf + myBeam.Section.ProfilA.Plat_t / 2
-
-                Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
-                    yo_cotes = myBeam.Section.zSemSup - myBeam.Section.ProfilA.Plat_t / 2
-                    myAlignV = VerticalAlignement.Middle
-            End Select
-
-            AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xo_cotes, yo_cotes, myParAff, horAlignement, myAlignV, New SolidBrush(Color.Transparent), myPen, lContour)
 
         Else
 
@@ -1347,7 +1424,8 @@ Public Module Mod_Dessins
     End Sub
 
     Private Sub DessinLitArmaDalle_Frm_Main(ByRef MyGr As Graphics, MyDalle As cls_Dalle, iArma As Integer,
-                                            Ha As Decimal, MyParAffA As Struc_Affichage, MyBrushArma As Brush, EntraxeD2 As Decimal, lIntermediaire As Boolean,
+                                            Ha As Decimal, MyParAffA As Struc_Affichage, MyBrushArma As Brush,
+                                            EntraxeD2 As Decimal, lIntermediaire As Boolean,
                                             Optional EntraxeD1 As Decimal = 0, Optional dCar As Decimal = 0)
         '---------------------------------------------------------------------------------------------------------------------------
         '   10/11/23    :   Création - GUD
@@ -1727,7 +1805,6 @@ Public Module Mod_Dessins
         Dim BeffDes As Decimal = LargeurDalleDispo
         Dim xPts() As Single = Nothing
         Dim yPts() As Single = Nothing
-        Dim nbPts As Integer
         Dim lSlimF As Boolean = mySection.lSlimFloor
 
         '--> Initialisation 
@@ -2396,6 +2473,7 @@ Public Module Mod_Dessins
         End If
 
         '--> Preparation de la zone d'affichage - Calcul de ParAff
+
         dCar = Math.Sqrt(Beff ^ 2 + (Ha + myBeam.Dalle.zTop) ^ 2) / 10
 
         If lIntermediaire Or Not myBeam.Section.lSlimFloor Then
@@ -2826,7 +2904,8 @@ Public Module Mod_Dessins
     End Sub
 
     Private Sub DessineDalleDalle(myGr As Graphics, myBeam As cls_Poutre, myParafD As Struc_Affichage,
-                                  myBrushB As Brush, myBrushPref As Brush, myBrushCofra As Brush, Beff As Decimal, Bfs As Decimal)
+                                  myBrushB As Brush, myBrushPref As Brush, myBrushCofra As Brush,
+                                  Beff As Decimal, Bfs As Decimal)
         '-----------------------------------------------------------------------------------------------
         '   11/08/25 :  Version 1.20
         '-----------------------------------------------------------------------------------------------
@@ -2840,7 +2919,6 @@ Public Module Mod_Dessins
         '   myBrushPref [E] :   Pinceau pour les parties préfa en béton
         '   myBrushCofra[E] :   Pinceau pour les bacs cofraplus220
         '   Beff        [E] :   Largeur d'affichage
-        '   
         '-----------------------------------------------------------------------------------------------
         '-----------------------------------------------------------------------------------------------
 
@@ -2850,6 +2928,7 @@ Public Module Mod_Dessins
         Dim Ha As Decimal
         Ha = myBeam.Section.ProfilA.ha
         Dim lCofraplus220 As Boolean = myBeam.Dalle.Bac.lCofraplus220
+        Dim lSlimFloor As Boolean = myBeam.Section.lSlimFloor
 
         '--( Traitement
 
@@ -2865,7 +2944,7 @@ Public Module Mod_Dessins
                         DessineDalleMixteParallele(myGr, myBeam.Dalle, Ha, Bfs, myParafD, myBrushB, Beff)
 
                     Case cls_Bac.Enum_Orientation.Perpendiculaire
-                        If lCofraplus220 Then
+                        If lCofraplus220 And (Not lSlimFloor) Then
 
                             DessineDalleMixtePerpendiculaireCfp220(myGr, myBeam, myParafD, myBrushB, Beff)
 
@@ -2930,6 +3009,7 @@ Public Module Mod_Dessins
         'Dim lCote As Boolean = True
         Dim lCofraplus220 As Boolean
         Dim LargeurProfil As Decimal
+        ' Dim lSlimF As Boolean = myBeam.lSlimFloor
 
         '--> Initialisation
 
@@ -3036,39 +3116,6 @@ Public Module Mod_Dessins
         '# Dalle béton
 
         DessineDalleDalle(myGr, myBeam, MyParAff, myBrushB, myBrushPref, myBrushCofra, Beff, Bfs)
-
-        'Select Case myBeam.Dalle.type
-        '    Case cls_Dalle.Enum_TypeDalle.Pleine
-
-        '        DessinDallePleine(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, Beff)
-
-        '    Case cls_Dalle.Enum_TypeDalle.Mixte
-        '        Select Case myBeam.Dalle.Bac.Orientation
-        '            Case cls_Bac.Enum_Orientation.Parallele
-
-        '                DessineDalleMixteParallele(myGr, myBeam.Dalle, Ha, Bfs, MyParAff, myBrushB, Beff)
-
-        '            Case cls_Bac.Enum_Orientation.Perpendiculaire
-        '                If lCofraplus220 Then
-
-        '                    DessineDalleMixtePerpendiculaireCfp220(myGr, myBeam, MyParAff, myBrushB, Beff)
-
-        '                Else
-
-        '                    DessineDalleMixtePerpendiculaire(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, Beff)
-
-        '                End If
-        '        End Select
-
-        '    Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
-
-        '        DessinDallePreFab(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
-
-        '    Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
-
-        '        DessinDalleCompletementPrefa(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushCofra, Beff)
-
-        'End Select
 
         '# Armatures
 

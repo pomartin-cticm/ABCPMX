@@ -610,6 +610,7 @@ WHERE					= Where
 WSLENDERNESS			= Web slenderness
 WSLENDERNESSLIMIT		= Limit of web slenderness
 WTOFWEBS				= Web to flanges welds 
+WPLATE					= Plate to section welds
 
 #NDC_DETAILSULS
 TITLE					= Detailed ULS checking
