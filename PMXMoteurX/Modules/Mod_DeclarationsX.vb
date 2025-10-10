@@ -84,6 +84,7 @@
         Public Bappmin As Decimal                       ' Largeur d'appui min à respecter
         Public Tpinfmin As Decimal                      ' Epaisseur min des plats soudés
         Public Twcdmin As Decimal                       ' Epaisseur min des âmes pour une connexion par armatures
+        Public TcSlimMin As Decimal                     ' Epaisseur minimale de la dalle
     End Structure
 
     Public Structure struc_OptionsFeu

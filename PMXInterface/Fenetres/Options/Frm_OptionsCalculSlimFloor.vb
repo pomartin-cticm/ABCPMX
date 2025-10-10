@@ -39,6 +39,7 @@ Public Class Frm_OptionsCalculSlimFloor
             Me.lbl_bappmin.Text = myBloc("SLABSUPPORTMIN")
             Me.lbl_tpinfmin.Text = myBloc("THICKNESSMIN")
             Me.lbl_TwcdMin.Text = myBloc("THICKNESSWMIN")
+            Me.lbl_Tcslimmin.Text = myBloc("THICKNESSTCMIN")
 
 
             Me.lbl_MaintienBac.Text = myBloc("RESTRAINTBYSHEETS")
@@ -66,6 +67,7 @@ Public Class Frm_OptionsCalculSlimFloor
         PrepareTextBoxDipo(Me.txt_bappmin, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_tpinfmin, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_twcdmin, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_TcSlimMin, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_ecMax, False)
 
     End Sub
@@ -77,6 +79,7 @@ Public Class Frm_OptionsCalculSlimFloor
         Me.etq_UnitDim3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitDim4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitDim5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim6.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
     End Sub
 
@@ -88,6 +91,7 @@ Public Class Frm_OptionsCalculSlimFloor
         Me.txt_bappmin.Text = GetStringInUnitN(LocalOptionsSlimFloor.Bappmin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
         Me.txt_tpinfmin.Text = GetStringInUnitN(LocalOptionsSlimFloor.Tpinfmin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
         Me.txt_twcdmin.Text = GetStringInUnitN(LocalOptionsSlimFloor.Twcdmin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_TcSlimMin.Text = GetStringInUnitN(LocalOptionsSlimFloor.TcSlimMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
         Me.txt_ecMax.Text = GetStringInUnitN(LocalOptionsSlimFloor.Tpinfmin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
 
     End Sub
@@ -96,7 +100,7 @@ Public Class Frm_OptionsCalculSlimFloor
 
 #Region " Evènements saisie "
 
-    Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_hslimmax.TextChanged, txt_tpinfmin.TextChanged, txt_twcdmin.TextChanged, txt_bappmin.TextChanged
+    Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_hslimmax.TextChanged, txt_tpinfmin.TextChanged, txt_twcdmin.TextChanged, txt_bappmin.TextChanged, txt_TcSlimMin.TextChanged
 
         If lBuild Then Exit Sub
         Dim lPortees As Boolean = False
@@ -115,6 +119,8 @@ Public Class Frm_OptionsCalculSlimFloor
                     LocalOptionsSlimFloor.Tpinfmin = ValeurUI
                 Case Me.txt_twcdmin.Name
                     LocalOptionsSlimFloor.Twcdmin = ValeurUI
+                Case Me.txt_TcSlimMin.Name
+                    LocalOptionsSlimFloor.TcSlimMin = ValeurUI
             End Select
 
         End If
@@ -166,6 +172,12 @@ Public Class Frm_OptionsCalculSlimFloor
                 ValMax = EPMAX
                 lValMax = False
 
+            Case Me.txt_TcSlimMin.Name
+
+                ValMin = 0
+                ValMax = EPMAX
+                lValMax = False
+
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
@@ -184,7 +196,7 @@ Public Class Frm_OptionsCalculSlimFloor
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_hslimmax.Paint, img_tpinfmin.Paint, img_bappmin.Paint, img_ecMax.Paint, img_twcdmin.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_hslimmax.Paint, img_tpinfmin.Paint, img_bappmin.Paint, img_ecMax.Paint, img_twcdmin.Paint, img_Tcslimmin.Paint
 
         '--> Déclarations
 
@@ -207,6 +219,10 @@ Public Class Frm_OptionsCalculSlimFloor
             Case Me.img_hslimmax.Name
                 strSymbol = "h"
                 strIndice = "slim,max"
+
+            Case Me.img_Tcslimmin.Name
+                strSymbol = "t"
+                strIndice = "c,slim,min"
 
             Case Me.img_bappmin.Name
                 strSymbol = "b"

@@ -1477,10 +1477,11 @@ Public Class Frm_PMX
         My.Settings.RhoCBetonLegerMax = OptionsScope.RhoCBetonLegerMax
 
         '# Options slimfloors
-        My.Settings.hslimmax = OptionsSlimFloor.hslimmax
+        My.Settings.Slim_Hsmax = OptionsSlimFloor.hslimmax
         My.Settings.bappmin = OptionsSlimFloor.Bappmin
-        My.Settings.tpinfmin = OptionsSlimFloor.Tpinfmin
-        My.Settings.Twcdmin = OptionsSlimFloor.Twcdmin
+        My.Settings.Slim_TpInfMin = OptionsSlimFloor.Tpinfmin
+        My.Settings.Slim_TwcdMin = OptionsSlimFloor.Twcdmin
+        My.Settings.Slim_TcMin = OptionsSlimFloor.TcSlimMin
 
         '--( Note de calcul
         My.Settings.lNdCCourbeHivoss = OptionsNdC.lShowHivossCurve

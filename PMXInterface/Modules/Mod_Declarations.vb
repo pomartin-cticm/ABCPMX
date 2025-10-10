@@ -450,10 +450,11 @@ Public Module Mod_Declarations
 
         OptionsCalcul.EtaW = My.Settings.EtaW
 
-        OptionsSlimFloor.hslimmax = My.Settings.hslimmax
+        OptionsSlimFloor.Hslimmax = My.Settings.Slim_Hsmax
         OptionsSlimFloor.bappmin = My.Settings.bappmin
-        OptionsSlimFloor.Tpinfmin = My.Settings.tpinfmin
-        OptionsSlimFloor.Twcdmin = My.Settings.Twcdmin
+        OptionsSlimFloor.Tpinfmin = My.Settings.Slim_TpInfMin
+        OptionsSlimFloor.Twcdmin = My.Settings.Slim_TwcdMin
+        OptionsSlimFloor.TcSlimMin = My.Settings.Slim_TcMin
 
     End Sub
 
@@ -644,6 +645,7 @@ Public Module Mod_Declarations
     Public Const SLIM_TPMINPLAT As Decimal = 0.01               ' Epaisseur minimale d'un plat de slim floor
     Public Const SLIM_HSMAX As Decimal = 0.65                   ' Hauteur maxi des profilés
     Public Const SLIM_BAPPMIN As Decimal = 0.05                 ' Largeur mini des appui d'une dalle
+    Public Const SLIM_TCMIN As Decimal = 0.04                   ' Epaisseur mini de la dalle au dessus du profilé
 
 #End Region
 

@@ -2625,6 +2625,21 @@ Public Module Mod_Dessins
         Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
         AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, myFont, xCoteZ, (yo + ye) / 2, myParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
+        '** épaisseur de béton au dessus du profilé
+
+        yo = myBeam.Section.hec
+        ye = myBeam.Dalle.zTop
+
+        If myBeam.Section.lSlimFloor_IFB_B Then
+            xo = myBeam.Section.ProfilA.Plat_b / 2 * 0.9
+        Else
+            xo = myBeam.Section.ProfilA.Bfs / 2 * 0.9
+        End If
+        xe = xo
+        AddFleche(MyGr, MyPen, xo, yo, xe, ye, myParAffA, True, True)
+        Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
+        AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, xo, (yo + ye) / 2, myParAffA, HorizontalAlignment.Left, VerticalAlignement.Middle)
+
         '    If Not lIntermediaire And myBeam.Section.lSlimFloor Then xCoteZ = LargeurProfil + 0.3 * dCar
 
         '** Traitement dalle mixte

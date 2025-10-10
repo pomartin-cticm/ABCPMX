@@ -124,6 +124,7 @@ CONTROLCRACKW			= Control of concrete cracking
 CRACKWIDTH				= Limit of crack width
 WARNINGCOMPREINF1		= Rebars in compression can not be considered with only one layer of reinforcement in the slab
 WARNINGCOMPREINF2		= When rebars in compression are considered in the design of the beam, requirements of EN 1992-1-1:2005, 9.2.1.2 (3) should be fulfiled to avoid premature buckling
+PSI2LONGTERM			= The quasi-permanent ratio of liva loads is assumed to be a long term effect
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
@@ -187,7 +188,7 @@ LEFTCANT				= Left cantilever span
 MAINSPAN				= Main span
 RIGHTCANT				= Right cantilever span
 SPAN					= Span
-WARNING_CMBTRAVEE			= All the input data must be correct to select an other the span
+WARNING_CMBTRAVEE		= All the input data must be correct to select an other the span
 SURFACELOAD				= Surface load
 WIDTHAPPLICATION		= Width of application
 UNIFORMLOAD				= Uniform load
@@ -212,6 +213,12 @@ STEELENCASEDBEAM		= Partially encased steel beam
 MODULAR					= Modular ratio
 SLAB					= Slab
 ENCASEMENT				= Encasement
+NOPROP					= No propping
+FULLPROP				= Full propping
+POINTPROP				= Point propping
+SHORTTERM				= Short term effects
+LONGTERM				= Long term effects
+REFERENCELTPSI2			= According to $, the ratio psi2 of live loads is assumed to be a long term effect
 
 #FRM_COMBINATIONS
 TITLE					= Combinations
@@ -245,6 +252,7 @@ OK						= Ok
 CANCEL					= Cancel
 CONNECTION				= Connection
 CONNECTORS				= Connectors
+STUD					= Welded studs
 DIAMETER				= Diameter
 AUTOMATICDESIGN			= Automatic design of the connection
 DISPOSITION_LON_BAC_TR	= Disposition every
@@ -270,6 +278,33 @@ REINFORCEMENTS			= Reinforcements
 STUDCONCRETECOVER		= The concrete converage of studs ($) is lower than the minimum requirement of $.
 STUDPREPUNCHED			= The diameter of studs with prepunched steel profiled sheeting should not be greater than 22 mm or smaller than 19 mm.
 STUDWELDEDTHROUGH		= The diameter of studs welded trough the steel profiled sheeting should be greater than 20 mm.
+INFOW_SHEARCONNECTION	= The degree of shear connection is assessed at mid-span, assuming the beam is fully under positive bending moments
+ZONE1 					= First zone
+ZONE2 					= Second zone
+ZONE3 					= Third zone
+SYMMETRICALCONFIG		= Symetrical configuration
+
+#FRM_CONNECTIONSLIM
+TITLE					= Definition of the connection
+OK						= Ok
+CANCEL					= Cancel
+CONNECTION				= Connection
+CONNECTORS				= Connectors
+FLANGE_STUD				= Studs welded on the upper flange
+WEB_STUD				= Studs welded on the web
+WEB_REINF				= Reinforcement dowels
+REBARS					= Rebars
+CONNECTORSTYPE			= Type of connectors
+STUDS					= Studs
+WSTUDS					= Welded studs
+SPACING					= Longitudinal spacing
+ROW_NUMBER				= Number of rows
+WIDTH					= Length
+INFOREINF				= Composite dowels are not available for IFB-B sections nor for webs whose thickness is less than 7,5 mm
+W_MINIMUMCOVERAGE		= Warning : the concrete coverage of the stud ($) is lower than the minimum required value ($).
+W_STUDABOVESLAB			= Warning : the head of the stud is above the outer face of concrete
+CLASS					= Class
+DIAMETER				= Diameter
 
 #FRM_DECKRESTRAINT
 TITLE					= Restraint of the beam by the steel deck (construction phase only)
@@ -576,6 +611,7 @@ RESTRAINTS				= Type of restraint
 RIGHTCANT				= Right cantilever span
 SPAN					= Span
 TITLE 					= Definition of the lateral restraints
+INFOCOMPOSITE			= For composite beams, lateral restraints are taken into account only for the construction phase, in the absence of a full propping
 
 #FRM_MAIN
 ABOUT					= About
@@ -655,11 +691,17 @@ EDITPROFILES			= Edit ArcelorMittal profiles
 EDITSTUDS				= Edit Studs
 EDITDECKS				= Edit Steel profiled sheetings
 WELDEDSEC				= Welded
+PLATE					= Plate
 FIRENOTAVAIL			= Fire calculation is not available in this version of $.
 FIRELATER				= It will be released in a future version.
 CONFIRMBEAMREMOVE		= Confirm the removal of the beam $ from the project
 ERRMISSINGDECK			= Steel deck $ is missing in the database
 ERRMISSINGPSLAB			= Prefabricated slab $ is not recognized by the software 
+WCONTACT				= Contact
+WWARNING				= Warning
+WERROR					= Error
+WINFO					= Information
+WERRORLNG				= Language file error
 
 #FRM_MODULARRATIOTOOL
 TITLE					= Modular ratio tool
@@ -849,6 +891,20 @@ ERRORCCOVER1			= Reinforcement layer n°$
 ERRORCCOVER2			= The concrete coverage ($) should not be less than the minimal value required for bond ($)
 REINFRATIO				= Reinforcement ratio
 NOREINFORCEMENT			= For composite beams without cantilever and for steel beams, the definition of longitudinal reinforcement is not required
+RDB_REINFORCEMENT		= Rebars
+RDB_SHEET				= Sheeting
+RDB_MAIN				= Main
+EDGECHAMBERFILLED		= Edge chamber filled with concrete
+FIREREBARS				= Use of reinforcement rebar for fire design
+FIREREB_NUMBER			= Number
+FIREREB_DIAMETER		= Diameter
+FIREREB_LOCATION		= Location
+FIREREBARSTITLE			= Reinforcement
+MASSES					= Masses
+INFOMASSESSHEET			= Mass per surface unit of the concrete and the sheeting
+INFOMASSESNOSHEET		= Mass per surface unit of the concrete
+INFOMASSESPRESLAB		= Mass per surface unit of the concrete, including the prefabricated part
+INFOMASSESPREFAB		= Mass per surface unit of the concrete and the prefabricated part
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam
@@ -943,6 +999,8 @@ WIDTH					= Width
 WEBHEIGHT				= Web height
 THICKNESS				= Thickness
 IFBSECTION				= IFB section
+TOPPLATE				= Top plate
+BOTPLATE				= Bottom plate
 
 #FRM_SABSECTIONS
 CANCEL					= Cancel
@@ -958,7 +1016,7 @@ STEEL					= Steel
 STEELGRADE				= Steel grade
 TITLE					= Definition of the steel profile
 SABSECTION				= AFB section
-WIDTH					= Width
+WIDTH					= Width of the top flange
 
 #FRM_SFBSECTIONS
 CANCEL					= Cancel
@@ -1018,6 +1076,7 @@ STEELPROFILE			= Steel profile
 TITLE					= Calculation options
 APPLY					= Apply
 CANCEL					= Cancel
+RESET					= Initial values
 GAMMA					= Default national factors
 SCOPE					= Scope of application
 CALCUL					= Calculation options
@@ -1129,6 +1188,7 @@ SLIMFLOORDIM			= Slimfloor dimensions
 DEPTHMAX				= Maximal depth of a slim floor hot rolled profile
 SLABSUPPORTMIN			= Minimum width of a slab support
 THICKNESSMIN			= Minimum thickness of the plate
+THICKNESSWMIN			= Minimum thickness of the web for dowel connectors
 RESTRAINTBYSHEETS		= Lateral restraint by the steel sheeting
 ECSEAMMAX				= Max spacing of seam fastening
 

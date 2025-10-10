@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing.Drawing2D
+Imports System.Globalization
 Imports System.IO
 Imports System.Reflection
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip
@@ -37,6 +38,8 @@ Public Class Frm_DalleSlimFloorN
     Dim iSelect As Integer = -1
 
     Dim myFontFrm As New Font(FontBase.Name, SizeFontFrm)
+
+    Dim strEpMinDalle As String = ""
 
 #End Region
 
@@ -129,6 +132,9 @@ Public Class Frm_DalleSlimFloorN
 
                 CLE = "CONCRETE" : msgDessin(0) = Bloc(CLE)
                 CLE = "REBARSTEEL" : msgDessin(1) = Bloc(CLE)
+
+
+                CLE = "ERRTCMIN" : strEpMinDalle = Bloc(CLE)
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
@@ -253,7 +259,49 @@ Public Class Frm_DalleSlimFloorN
 
 
     Private Function ValideSaisieFenetre() As Boolean
-        Return True
+
+        Dim lOk As Boolean = True
+        Dim myErreurs As New List(Of String)
+        Dim Problem As String = ""
+
+        '---> On vérifie les saisies dans les fenêtres filles
+
+        '** Verification de l'épaisseur de la dalle au dessus des poutres
+
+        Dim TcF As Decimal
+        Dim Td As Decimal
+
+        Td = localDalle.Ep_td
+        TcF = Td - localBeam.Section.hec
+
+        If IsSmaller(TcF, OptionsSlimFloor.TcSlimMin) Then
+
+            Dim strTcf As String = GetStringInUnitN(TcF, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiInterface, True)
+            Dim strTcMin As String = GetStringInUnitN(OptionsSlimFloor.TcSlimMin, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiInterface, True)
+
+            Problem = RemplaceDollar(RemplaceDollar(strEpMinDalle, strTcf), strTcMin)
+
+            myErreurs.Add(Problem)
+
+            lOk = False
+        End If
+
+        If Not lOk Then
+
+            Dim myMsg As String
+
+            myMsg = myErreurs(0)
+
+            For i As Integer = 1 To myErreurs.Count - 1
+                myMsg = myMsg & Chr(13) & myErreurs(i)
+            Next
+
+            'GestionErrorsPMX("", "", myMsg, True)
+            MsgBox(myMsg, MsgBoxStyle.Critical, LogicielInfo.NomLogiciel)
+
+        End If
+
+        Return lOk
     End Function
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)

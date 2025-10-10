@@ -907,6 +907,7 @@ INFOMASSESSHEET			= Masse surfacique du béton et du bac
 INFOMASSESNOSHEET		= Masse surfacique du béton
 INFOMASSESPRESLAB		= Masse surfacique du béton, y compris la prédalle
 INFOMASSESPREFAB		= Masse surfacique du béton et de la partie préfabriquée
+ERRTCMIN				= L'épaisseur de béton au dessus de la semelle supérieure ($) ne doit pas être inférieure à $.
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre
@@ -1159,6 +1160,7 @@ THICKNESSMIN			= Épaisseur minimale du plat
 THICKNESSWMIN			= Épaisseur minimale de l'âme pour la connexion par armatures
 RESTRAINTBYSHEETS		= Maintien au déversement par le bac
 ECSEAMMAX				= Espacement max des fixations de couture
+THICKNESSTCMIN			= Épaisseur minimale de béton au dessus du profilé
 
 #OPTSOFTMAIN
 TITLE					= Options logiciel

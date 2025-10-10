@@ -1232,12 +1232,12 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0.650")>  _
-        Public Property hslimmax() As Decimal
+        Public Property Slim_Hsmax() As Decimal
             Get
-                Return CType(Me("hslimmax"),Decimal)
+                Return CType(Me("Slim_Hsmax"),Decimal)
             End Get
             Set
-                Me("hslimmax") = value
+                Me("Slim_Hsmax") = value
             End Set
         End Property
         
@@ -1256,12 +1256,12 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0.01")>  _
-        Public Property tpinfmin() As Decimal
+        Public Property Slim_TpInfMin() As Decimal
             Get
-                Return CType(Me("tpinfmin"),Decimal)
+                Return CType(Me("Slim_TpInfMin"),Decimal)
             End Get
             Set
-                Me("tpinfmin") = value
+                Me("Slim_TpInfMin") = value
             End Set
         End Property
         
@@ -1376,12 +1376,12 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0.0075")>  _
-        Public Property Twcdmin() As Decimal
+        Public Property Slim_TwcdMin() As Decimal
             Get
-                Return CType(Me("Twcdmin"),Decimal)
+                Return CType(Me("Slim_TwcdMin"),Decimal)
             End Get
             Set
-                Me("Twcdmin") = value
+                Me("Slim_TwcdMin") = value
             End Set
         End Property
         
@@ -1406,6 +1406,18 @@ Namespace My
             End Get
             Set
                 Me("FrmMainLocation") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.04")>  _
+        Public Property Slim_TcMin() As Decimal
+            Get
+                Return CType(Me("Slim_TcMin"),Decimal)
+            End Get
+            Set
+                Me("Slim_TcMin") = value
             End Set
         End Property
     End Class

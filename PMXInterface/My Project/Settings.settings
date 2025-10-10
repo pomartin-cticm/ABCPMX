@@ -296,13 +296,13 @@
     <Setting Name="NbMaxiEtaisP" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
     </Setting>
-    <Setting Name="hslimmax" Type="System.Decimal" Scope="User">
+    <Setting Name="Slim_Hsmax" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0.650</Value>
     </Setting>
     <Setting Name="bappmin" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0.05</Value>
     </Setting>
-    <Setting Name="tpinfmin" Type="System.Decimal" Scope="User">
+    <Setting Name="Slim_TpInfMin" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0.01</Value>
     </Setting>
     <Setting Name="deltaCDev" Type="System.Decimal" Scope="User">
@@ -332,7 +332,7 @@
     <Setting Name="RhoCBetonNormalMin" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">2000</Value>
     </Setting>
-    <Setting Name="Twcdmin" Type="System.Decimal" Scope="User">
+    <Setting Name="Slim_TwcdMin" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0.0075</Value>
     </Setting>
     <Setting Name="FrmMainSize" Type="System.Drawing.Size" Scope="User">
@@ -340,6 +340,9 @@
     </Setting>
     <Setting Name="FrmMainLocation" Type="System.Drawing.Point" Scope="User">
       <Value Profile="(Default)">0, 0</Value>
+    </Setting>
+    <Setting Name="Slim_TcMin" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0.04</Value>
     </Setting>
   </Settings>
 </SettingsFile>

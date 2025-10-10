@@ -359,6 +359,7 @@ Public Class Frm_OptionsCalcul
             GereTransfertValeur(LocalOptionsSlimFloor.bappmin, OptionsSlimFloor.bappmin, lModif)
             GereTransfertValeur(LocalOptionsSlimFloor.Tpinfmin, OptionsSlimFloor.Tpinfmin, lModif)
             GereTransfertValeur(LocalOptionsSlimFloor.Twcdmin, OptionsSlimFloor.Twcdmin, lModif)
+            GereTransfertValeur(LocalOptionsSlimFloor.TcSlimMin, OptionsSlimFloor.TcSlimMin, lModif)
         End If
 
         '# Fenêtre Options Calculs
@@ -566,6 +567,7 @@ Public Class Frm_OptionsCalcul
         LocalOptionsSlimFloor.Tpinfmin = SLIM_TPMINPLAT
         LocalOptionsSlimFloor.Hslimmax = SLIM_HSMAX
         LocalOptionsSlimFloor.Bappmin = SLIM_BAPPMIN
+        LocalOptionsSlimFloor.TcSlimMin = SLIM_TCMIN
 
     End Sub
 

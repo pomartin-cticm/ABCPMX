@@ -559,6 +559,8 @@
 
         Dim FyPlat, fyInf As Decimal
 
+        Dim kCote2, kChargeQ As Decimal
+
         '--> Initialisation
 
         iDebT = myPoutre.IndicePremiereTravee
@@ -571,6 +573,14 @@
 
         FyPlat = myPoutre.Section.FySpd
         fyInf = myPoutre.Section.FyInf
+
+        'If myPoutre.lIntermediaire Then
+        '    kCote2 = myPoutre.EntraxeD2 / (myPoutre.EntraxeD1 + myPoutre.EntraxeD2)
+        'Else
+        '    kCote2 = 1
+        'End If
+        'kChargeQ = Math.Max(kCote2, 1 - kCote2)
+        kChargeQ = CoefficientCharge(myPoutre)
 
         '--> Traitement
 
@@ -592,7 +602,7 @@
                     End If
                     '====
 
-                    q = QEd(iNode) / deltaX
+                    q = kChargeQ * QEd(iNode) / deltaX
 
                     Select Case .typeProfileAcier
                         Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
@@ -1078,6 +1088,30 @@
 
 #Region " Vérification de la poutre acier "
 
+    Private Function CoefficientCharge(myBeam As cls_Poutre) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   10/10/25 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Renvoie la proportion de charge reprise de part et d'autre
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '----------------------------------------------------------------------------------------------------------
+
+        Dim dGauche, dDroite As Decimal
+        Dim kCote As Decimal
+
+        dGauche = myBeam.EntraxeD1
+        dDroite = myBeam.EntraxeD2
+        If myBeam.lIntermediaire Then
+            kCote = Math.Max(dGauche, dDroite) / (dGauche + dDroite)
+        Else
+            kCote = Math.Max(2 * dGauche, dDroite) / (2 * dGauche + dDroite)
+        End If
+
+        Return kCote
+
+    End Function
+
     Private Sub RunCritereResistancePlastiquePlatY_N(myBeam As cls_Poutre, iCombi As Integer, qsupEd() As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   01/08/25 :  Création - POM
@@ -1122,13 +1156,15 @@
         iDebT = myBeam.IndicePremiereTravee
         iFinT = myBeam.IndiceDerniereTravee
 
-        dGauche = myBeam.EntraxeD1
-        dDroite = myBeam.EntraxeD2
-        If myBeam.lIntermediaire Then
-            kCote = Math.Max(dGauche, dDroite) / (dGauche + dDroite)
-        Else
-            kCote = Math.Max(2 * dGauche, dDroite) / (2 * dGauche + dDroite)
-        End If
+        'dGauche = myBeam.EntraxeD1
+        'dDroite = myBeam.EntraxeD2
+        'If myBeam.lIntermediaire Then
+        '    kCote = Math.Max(dGauche, dDroite) / (dGauche + dDroite)
+        'Else
+        '    kCote = Math.Max(2 * dGauche, dDroite) / (2 * dGauche + dDroite)
+        'End If
+
+        kCote = CoefficientCharge(myBeam)
 
         '--> Traitement
 
