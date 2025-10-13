@@ -88,7 +88,7 @@ BLOCK PROFIL
 
 BLOCK SLAB
    Type                  = 0
-   td                    = 0,27
+   td                    = 0,275
    th                    = 0
    preDalle_ep           = 0,06
    preDalle_tjoi         = 0,05
@@ -207,7 +207,7 @@ BLOCK HIVOSS
 
 BLOCK LOADS_G1
    QSurf                 = 0
-   qDist                 = 1 0 10805,431 7 10805,431
+   qDist                 = 1 0 10989,368 7 10989,368
  
 BLOCK LOADS_G2
    QSurf                 = 0

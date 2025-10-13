@@ -198,6 +198,18 @@ Public Class cls_Section
     End Property
 
     ''' <summary>
+    ''' Retourne la masse linéique du plat (/!\ valeur retournée en kg/m /!\)
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property MassLineiquePlat As Decimal
+        Get
+            Dim mass As Decimal
+            mass = Me.ProfilA.AirePlat * Me.AcierPlat.Rho
+            Return mass
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Renvoi la classe de la section acier seule en considérant que la section est soumise à un effort de compression pure ou une flexion pure
     ''' <param name="lCompressionPure">indique si on réalise le calcul en compression pure (True) ou en flexion pure (False)</param>
     ''' </summary>

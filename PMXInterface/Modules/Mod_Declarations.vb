@@ -7,6 +7,16 @@ Public Module Mod_Declarations
 
 #End Region
 
+#Region " Error codes "
+
+    Public Const OOS_ElancementAmeEnrobee As Integer = 1
+    Public Const OOS_ArmatureLongiManquantes As Integer = 2
+    Public Const OOS_BetonSurSlimProfile As Integer = 3
+    Public Const OOS_EpSupHec As Integer = 4
+
+
+#End Region
+
 #Region " Normes "
 
     Public TabNormeEN() As String = {"EN 1994-1-1:2005", "EN 1994-1-1:2025"}

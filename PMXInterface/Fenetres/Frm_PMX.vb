@@ -716,7 +716,7 @@ Public Class Frm_PMX
             Epsilon = myBeam.Section.Acier.get_epsilon(FyW)
 
             If IsGreater(LambdaW, 124 * Epsilon) Then
-                myBeam.iErrScope.Add(1)
+                myBeam.iErrScope.Add(OOS_ElancementAmeEnrobee)
             End If
 
         End If
@@ -726,10 +726,45 @@ Public Class Frm_PMX
         If lMixte Then
 
             If (myBeam.NbTravees > 1) And myBeam.Dalle.lNoArma Then
-                myBeam.iErrScope.Add(2)
+                myBeam.iErrScope.Add(OOS_ArmatureLongiManquantes)
             End If
 
         End If
+
+        '# Pour les poutres slim floor, épaisseur de béton au dessus des profilés
+
+        If myBeam.lSlimFloor Then
+
+            Dim TcSlim As Decimal = myBeam.Dalle.Ep_td - myBeam.Section.hec
+
+            If IsSmaller(TcSlim, OptionsSlimFloor.TcSlimMin) Then
+                myBeam.iErrScope.Add(OOS_BetonSurSlimProfile)
+            End If
+
+            '# Pour les poutres slim floor avec dalle comportant des prédalles, épaisseur de prédalle inférieure à épaisseur hec
+
+            If (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee) Then
+
+                If IsGreater(myBeam.Dalle.preDalle_ep, myBeam.Section.hec) Then
+                    myBeam.iErrScope.Add(OOS_EpSupHec)
+                End If
+
+            End If
+
+            '# Pour les poutres slim floor avec dalle mixte, hauteur du bac inférieure à épaisseur hec
+
+            If (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte) Then
+
+                If IsGreater(myBeam.Dalle.Bac.Hp, myBeam.Section.hec) Then
+                    myBeam.iErrScope.Add(OOS_EpSupHec)
+                End If
+
+            End If
+
+
+
+        End If
+
 
         lOK = (myBeam.iErrScope.Count = 0)
 

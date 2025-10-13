@@ -1755,6 +1755,7 @@ Public Class Frm_SectionAcierStandard
         MySectionLoc.ProfilA.NomProfile = Profile
 
         MySectionLoc.ProfilA.ha = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
+        MySectionLoc.ProfilA.hb = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
         MySectionLoc.ProfilA.Bfs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
         MySectionLoc.ProfilA.Tfs = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
         MySectionLoc.ProfilA.Tw = MyCatalogue.Series(Gamme).Profiles(Profile).Tw

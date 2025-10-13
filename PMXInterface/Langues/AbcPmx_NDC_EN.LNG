@@ -43,6 +43,12 @@ CNOTRECOMMENDED			= Not recommended
 
 #NDC_OUTOFSCOPE
 NOREINFORCEMENT			= Longitudinal reinforcement should be defined for composite beams with cantilevers
+THICKNESSABOVEFLANGENOT	= The thickness of concrete above the upper steel flange is not enough
+THICKNESSABOVEFLANGE	= Thickness of concrete 
+ABOVEFLANGE				= (above the upper steel flange)
+MINIMALVALUE			= Minimal thickness
+THICKNESSPRECASTSUPHEC	= The thickness of the precat element is greater than the height of the profile embedded in concrete
+THICKNESSSSHEETSUPHEC	= The depth of the sheeting is greater than the height of the profile embedded in concrete
 
 #NDC_MAIN
 TITLE					= Calculation report
@@ -226,6 +232,10 @@ LOWER_FLANGE			= Lower flange
 MASSIVENESS				= Section factor (without upper face)
 MASS_LIN_PROFILE		= Mass by length unit
 MASS_PROFILE			= Mass
+MASS_DETAIL				= Details
+MASS_PROCUT				= cutted $ profile
+MASS_PRO				= $ profile
+MASS_PLAT				= plat
 MATERIAL_LONGI_REINF	= Steel of reinforcements
 MATERIAL_PROFILE		= Steel of the profile
 MATERIAL_PLATE			= Steel of the plate

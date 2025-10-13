@@ -389,15 +389,19 @@ Module Mod_NoteCalcul
 
             AddTitreNdC(2, BlocG("OUTOFSCOPE"))
 
-            AddLigneNDC(TABW2 & RemplaceDollar(BlocG("THEBEAMOUTOFSCOPE"), LogicielInfo.Racine))
+            AddLigneNDC(TABW1 & "\G" & RemplaceDollar(BlocG("THEBEAMOUTOFSCOPE"), LogicielInfo.Racine) & "\g")
 
             For iErr As Integer = 0 To myBeam.iErrScope.Count - 1
 
                 Select Case myBeam.iErrScope(iErr)
-                    Case 1
+
+                    '//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    Case OOS_ElancementAmeEnrobee
                         '# Elancement des âmes de profilés partiellement enrobé
 
-                        AddLigneNDC(TABW2 & "\U" & BlocG("WEBSLENDERNESSENCASED") & "\u")
+                        AddLigneNDC(TABW2 & "\U" & BlocG("WEBSLENDERNESSENCASED") & "\u" & "\BAL")
+                        AfficheBalise(False)
 
                         WebSlender = myBeam.Section.ProfilA.HauteurAmeHw / myBeam.Section.ProfilA.Tw
                         Limit = 124 * myBeam.Section.Acier.get_epsilon(myBeam.Section.FyW)
@@ -407,11 +411,42 @@ Module Mod_NoteCalcul
 
                         AddLigneNDC(TABW2 & RemplaceDollar(BlocG("LIMITWEBSLENDERENCASED"), "124 \Se\s"))
 
-                    Case 2
+                        '//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    Case OOS_ArmatureLongiManquantes
                         '# Pas d'armatures longitudinales définies dans le cas de poutres mixtes avec console
 
-                        AddLigneNDC(TABW2 & "\U" & BlocOofS("NOREINFORCEMENT") & "\u")
+                        AddLigneNDC(TABW2 & "\U" & BlocOofS("NOREINFORCEMENT") & "\u" & "\BAL")
+                        AfficheBalise(False)
 
+                          '//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    Case OOS_BetonSurSlimProfile
+                        '# Epaisseur de béton au-dessus de la semelle supérieure insuffisante pour les profilés Slim Floor
+
+                        AddLigneNDC(TABW2 & "\U" & BlocOofS("THICKNESSABOVEFLANGENOT") & "\u" & "\BAL")
+                        AfficheBalise(False)
+
+                        AddLigneNDC(TABW2 & BlocOofS("THICKNESSABOVEFLANGE") _
+                                    & TABAFF2 & "t\-c,slim\= = " & GetStringInUnitN(myBeam.Dalle.Ep_td - myBeam.Section.hec, Enu_TypeVariable.Dimension, 4, 2, OUI, True) _
+                                    & " " & BlocOofS("ABOVEFLANGE"))
+                        AddLigneNDC(TABW2 & BlocOofS("MINIMALVALUE") & TABAFF2 & "t\-c,slim,min\= = " & GetStringInUnitN(OptionsSlimFloor.TcSlimMin, Enu_TypeVariable.Dimension, 4, 2, OUI, True))
+
+                            '//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    Case OOS_EpSupHec
+                        '# Epaisseur des éléments rapportés supérieure à la hauteur du profilés dans la dalle
+
+                        Select Case myBeam.Dalle.type
+                            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
+
+                                AddLigneNDC(TABW2 & "\U" & BlocOofS("THICKNESSPRECASTSUPHEC") & "\u" & "\BAL")
+                                AfficheBalise(False)
+
+                            Case cls_Dalle.Enum_TypeDalle.Mixte
+
+                                AddLigneNDC(TABW2 & "\U" & BlocOofS("THICKNESSSSHEETSUPHEC") & "\u" & "\BAL")
+                                AfficheBalise(False)
+
+
+                        End Select
 
                 End Select
 
@@ -1835,6 +1870,23 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("MASS_LIN_PROFILE") & TABAFF & "m\-lin\=" & TABEGAL & GetStringInUnitN(myBeam.Section.MassLineiqueProfilA, Enu_TypeVariable.SansType, 4, 1, NON_U, False) & " kg/m")
         AddLigneNDC(TABW2 & BlocG("MASS_PROFILE") & TABAFF & "m" & TABEGAL & GetStringInUnitN(myBeam.MasseTotalePoutre, Enu_TypeVariable.Masse, 4, 1, OUI, False))
 
+        If Not myBeam.Section.lSlimFloor_SAB Then
+
+            'AddLigneNDC(TABW2 & BlocG("MASS_PROFILE") & TABAFF & "m" & TABEGAL & GetStringInUnitN(myBeam.MasseTotalePoutre, Enu_TypeVariable.Masse, 4, 1, OUI, False))
+
+            Dim LabelPro As String = ""
+
+            If myBeam.Section.lSlimFloor_SFB Then
+                LabelPro = RemplaceDollar(BlocG("MASS_PRO"), myBeam.Section.ProfilA.NomProfile)
+            Else
+                LabelPro = RemplaceDollar(BlocG("MASS_PROCUT"), myBeam.Section.ProfilA.NomProfile)
+            End If
+
+            AddLigneNDC(TABW2 & BlocG("MASS_DETAIL") & TABAFF & "m\-pro\=" & TABEGAL & GetStringInUnitN(myBeam.MasseTotalePoutreHorsPlat, Enu_TypeVariable.Masse, 4, 1, OUI, False) & " (" & labelpro & ")")
+            AddLigneNDC(TABAFF.Substring(1) & "m\-plat\=" & TABEGAL & GetStringInUnitN(myBeam.MasseTotalePlat, Enu_TypeVariable.Masse, 4, 1, OUI, False) & " (" & BlocG("MASS_PLAT") & ")")
+
+        End If
+
     End Sub
 
     Private Sub EditionProprietesProfileSeul(myBeam As cls_Poutre)
@@ -1852,7 +1904,7 @@ Module Mod_NoteCalcul
         Dim lPRSSym As Boolean = (myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym)
         Dim lSymetric As Boolean = lLamine Or lPRSSym
 
-        '--( Traitement
+        '--( Propriétés de la section
 
         AddTitreNdC(3, BlocG("CHAR_PROFILE"))
         myBeam.Section.ProfilA.InitialiseProprietes()
@@ -1880,10 +1932,16 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnitN(myBeam.Section.ProfilA.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, OUI, False))
         SauteLigne()
 
+        '--( Masse, massivité, surface de peinture
+
         If nbLignes + 7 > MAXLIGNEPPAG Then SautePage()
 
         AddLigneNDC(TABW2 & BlocG("MASS_LIN_PROFILE") & TABAFF & "m\-lin\=" & TABEGAL & GetStringInUnitN(myBeam.Section.MassLineiqueProfilA, Enu_TypeVariable.SansType, 4, 1, NON_U, False) & " kg/m")
         AddLigneNDC(TABW2 & BlocG("MASS_PROFILE") & TABAFF & "m" & TABEGAL & GetStringInUnitN(myBeam.MasseTotalePoutre, Enu_TypeVariable.Masse, 4, 1, OUI, False))
+        If (Not myBeam.lSlimFloor) And myBeam.Section.ProfilA.lPlatRenfort Then
+            AddLigneNDC(TABW2 & BlocG("MASS_DETAIL") & TABAFF & "m\-pro\=" & TABEGAL & GetStringInUnitN(myBeam.MasseTotalePoutreHorsPlat, Enu_TypeVariable.Masse, 4, 1, OUI, False) & " (" & RemplaceDollar(BlocG("MASS_PRO"), myBeam.Section.ProfilA.NomProfile) & ")")
+            AddLigneNDC(TABAFF.Substring(1) & "m\-plat\=" & TABEGAL & GetStringInUnitN(myBeam.MasseTotalePlat, Enu_TypeVariable.Masse, 4, 1, OUI, False) & " (" & BlocG("MASS_PLAT") & ")")
+        End If
         AddLigneNDC(TABW2 & BlocG("TOT_PAINT_SURF") & TABAFF & "S" & TABEGAL & GetStringInUnitN(myBeam.SurfacePeintureTotalePoutre(True), Enu_TypeVariable.AireLongueurNDC, 4, 3, OUI, False))
         AddLigneNDC(TABW2 & BlocG("PAINT_SURF") & TABAFF & "S" & TABEGAL & GetStringInUnitN(myBeam.SurfacePeintureTotalePoutre(False), Enu_TypeVariable.AireLongueurNDC, 4, 3, OUI, False))
         AddLigneNDC(TABW2 & BlocG("TOT_MASSIVENESS") & TABAFF & "M" & TABEGAL & GetStringInUnitN(myBeam.Section.ProfilA.Massivete(True), Enu_TypeVariable.Massivete, 4, 1, OUI, False))

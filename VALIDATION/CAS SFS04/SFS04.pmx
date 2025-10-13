@@ -39,7 +39,7 @@ BLOCK BEAM
    lDefSlab              = False
    ULSlComb              = {False/True/False/False/False/False}
    ULSCoef               = {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1/1,5/1,05/0/0}+{1/1,05/1,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
-   SLSlComb              = {True/False/False/False/False/False}
+   SLSlComb              = {False/False/True/False/False/False}
    SLSCoef               = {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    FLSlComb              = {True/False/False/False/False}
    FLSCoef               = {1/0,5/0,3/0/0}+{1/0,7/0,3/0/0}+{1/0,3/0,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
@@ -88,7 +88,7 @@ BLOCK PROFIL
 
 BLOCK SLAB
    Type                  = 1
-   td                    = 0,370
+   td                    = 0,38
    th                    = 0
    preDalle_ep           = 0,06
    preDalle_tjoi         = 0,05
@@ -227,7 +227,7 @@ BLOCK HIVOSS
 
 BLOCK LOADS_G1
    QSurf                 = 0
-   qDist                 = 1 0 10631,122 9 10631,122
+   qDist                 = 1 0 11121,622 9 11121,622
  
 BLOCK LOADS_G2
    QSurf                 = 0

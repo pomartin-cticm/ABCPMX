@@ -135,8 +135,9 @@
         iDebT = myBeam.IndicePremiereTravee
         iFinT = myBeam.IndiceDerniereTravee
 
-        lRive = Not myBeam.lIntermediaire
-        If lRive Then kQloc = 1 Else kQloc = 1 / 2
+        'lRive = Not myBeam.lIntermediaire
+        'If lRive Then kQloc = 1 Else kQloc = 1 / 2
+        kQloc = CoefficientCharge(myBeam)
 
         dApp = Me.LargeurAppui(myBeam)
         Me.BrasLevier(myBeam, dApp, dbtFi, dbtPlat)

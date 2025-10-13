@@ -153,6 +153,7 @@ Public Class cls_Poutre
     '#####################################################################################
 
     Public iErrScope As New List(Of Integer)
+
 #End Region
 
 #Region " Attributs pour la connection "
@@ -564,6 +565,34 @@ Public Class cls_Poutre
             Dim mass As Decimal
 
             mass = Me.Section.MassLineiqueProfilA * Me.LongueurTotale
+
+            Return mass
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Renvoi la masse totale du plat en cours 
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property MasseTotalePlat As Decimal
+        Get
+            Dim mass As Decimal
+
+            mass = Me.Section.MassLineiquePlat * Me.LongueurTotale
+
+            Return mass
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Renvoi la masse totale de la poutre en cours sans le plat
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property MasseTotalePoutreHorsPlat As Decimal
+        Get
+            Dim mass As Decimal
+
+            mass = Me.MasseTotalePoutre - Me.MasseTotalePlat
 
             Return mass
         End Get
