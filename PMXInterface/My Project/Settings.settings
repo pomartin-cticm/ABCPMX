@@ -158,7 +158,7 @@
     <Setting Name="RhoCBetonLegerMin" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1500</Value>
     </Setting>
-    <Setting Name="RhoCBetonLegerMax" Type="System.String" Scope="User">
+    <Setting Name="RhoCBetonLegerMax" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">2200</Value>
     </Setting>
     <Setting Name="Norme" Type="System.Int32" Scope="User">

@@ -680,9 +680,9 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("2200")>  _
-        Public Property RhoCBetonLegerMax() As String
+        Public Property RhoCBetonLegerMax() As Decimal
             Get
-                Return CType(Me("RhoCBetonLegerMax"),String)
+                Return CType(Me("RhoCBetonLegerMax"),Decimal)
             End Get
             Set
                 Me("RhoCBetonLegerMax") = value

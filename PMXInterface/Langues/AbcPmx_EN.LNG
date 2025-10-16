@@ -906,6 +906,9 @@ INFOMASSESNOSHEET		= Mass per surface unit of the concrete
 INFOMASSESPRESLAB		= Mass per surface unit of the concrete, including the prefabricated part
 INFOMASSESPREFAB		= Mass per surface unit of the concrete and the prefabricated part
 ERRTCMIN				= The concrete thickness above the upper flange ($) should be lower than $.
+PRIOFULLDEPTH			= Define the full depth of the slab, the thickness above the deck is automatically assessed
+PRIODEPTHABOVE			= Define thickness above the deck, the full depth of the slab is automatically assessed
+RHOB					= Density
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam

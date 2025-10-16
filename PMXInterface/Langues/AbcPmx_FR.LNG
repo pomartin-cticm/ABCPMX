@@ -908,6 +908,9 @@ INFOMASSESNOSHEET		= Masse surfacique du béton
 INFOMASSESPRESLAB		= Masse surfacique du béton, y compris la prédalle
 INFOMASSESPREFAB		= Masse surfacique du béton et de la partie préfabriquée
 ERRTCMIN				= L'épaisseur de béton au dessus de la semelle supérieure ($) ne doit pas être inférieure à $.
+PRIOFULLDEPTH			= Définir l'epaisseur totale de la dalle, l'épaisseur au-dessus du bac étant calculée automatiquement
+PRIODEPTHABOVE			= Définir l'epaisseur au-dessus du bac, l'épaisseur totale de la dalle étant calculée automatiquement
+RHOB					= Masse volumique
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre

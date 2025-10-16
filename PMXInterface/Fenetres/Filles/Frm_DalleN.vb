@@ -19,8 +19,8 @@ Public Class Frm_DalleN
 
     Dim strType(2) As String
 
-    Public MyPoutreLoc As New cls_Poutre(NomChargements)
-    Public MyDalleLoc As New cls_Dalle
+    Public myPoutreLoc As New cls_Poutre(NomChargements)
+    Public myDalleLoc As New cls_Dalle
     'Dim COULEURTXTREADONLY As Color = SystemColors.ControlDark
     Const kADJUST As Decimal = 0.95
 
@@ -217,6 +217,21 @@ Public Class Frm_DalleN
 
     End Sub
 
+    Public Sub MAJI_SelectionTxtbox(pSelect As Integer)
+
+        iSelect = pSelect
+
+        Me.img_Dalle.Invalidate()
+
+    End Sub
+
+    Public Sub MAJI_DeselectionTxtbox()
+
+        iSelect = -1
+
+        Me.img_Dalle.Invalidate()
+
+    End Sub
 
 #End Region
 
