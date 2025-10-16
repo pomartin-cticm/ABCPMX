@@ -124,12 +124,17 @@ Public Class Frm_BacN
     End Sub
 
     Private Sub InitialiseVariablesLocales()
+
         If iFrmAppel = EnuFenetres.Dalle Then
             MyBac = Frm_Dalle.MyDalleLoc.Bac.Clone
+        ElseIf iFrmAppel = EnuFenetres.DalleN Then
+            MyBac = Frm_DalleN.MyDalleLoc.Bac.Clone
         Else
             MyBac = MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Clone
         End If
+
         InitialiseProducteursBacs()
+
     End Sub
 
     Private Sub InitialiseProducteursBacs()
@@ -350,6 +355,8 @@ Public Class Frm_BacN
 
             If iFrmAppel = EnuFenetres.Dalle Then
                 TransfertSaisie(Frm_Dalle.MyDalleLoc.Bac, lModif)
+            ElseIf iFrmAppel = EnuFenetres.DalleN Then
+                TransfertSaisie(Frm_DalleN.MyDalleLoc.Bac, lModif)
             ElseIf iFrmAppel = EnuFenetres.DalleSlimFloor Then
                 TransfertSaisie(Frm_DalleSlimFloorN.localDalle.Bac, lModif)
             Else

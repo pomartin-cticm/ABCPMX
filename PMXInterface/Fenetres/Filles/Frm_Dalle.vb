@@ -764,12 +764,12 @@ Public Class Frm_Dalle
 #Region " Dessins "
 
     Private Sub img_Bac_Paint(sender As Object, e As PaintEventArgs) Handles img_Bac.Paint
-        DessineBacTout(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, MyDalleLoc.Bac, True, kADJUST)
+        DessineBacTout(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, MyDalleLoc.Bac, True, kADJUST, False, FontFrm, "")
     End Sub
 
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
         DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
-                     MyPoutreLoc, fontfrm, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, iSelect, msgDessin, lCote)
+                     MyPoutreLoc, FontFrm, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, iSelect, msgDessin, lCote)
     End Sub
 
     '==== A METTRE DANS LE MODULE DESSIN ================================================================

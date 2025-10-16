@@ -690,7 +690,8 @@ Public Module Mod_Declarations
     Public CouleurForeBandeaux As Color = SystemColors.ControlLightLight
 
     'Public CouleurReadOnly As Color = SystemColors.Control       'PaleGrayAM     ' SystemColors.ControlDark
-    Public CouleurReadOnly As Color = GrayAM
+    'Public CouleurReadOnly As Color = GrayAM
+    Public CouleurReadOnly As Color = SystemColors.ControlLight
 
     Public LargeurColonneSaisie As Integer = 250
 

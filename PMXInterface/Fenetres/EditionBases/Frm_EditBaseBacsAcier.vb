@@ -238,7 +238,7 @@ Public Class Frm_EditBaseBacsAcier
 
         'DessineBac(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, 1, BaseBacs(CleBacs(KeyBac)), 0.1, -1, True, False, False)
 
-        DessineBacTout(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, BaseBacs(CleBacs(KeyBac)), True, 1)
+        DessineBacTout(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, BaseBacs(CleBacs(KeyBac)), True, 1, False, FontBase, "")
 
     End Sub
 

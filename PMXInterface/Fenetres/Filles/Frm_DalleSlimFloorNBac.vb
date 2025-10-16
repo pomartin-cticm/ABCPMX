@@ -83,10 +83,11 @@
 #End Region
 
 #Region " Dessin du bac "
+
     Private Sub img_Bac_Paint(sender As Object, e As PaintEventArgs) Handles img_Bac.Paint
         Const kADJS As Decimal = 0.95
         DessineBacTout(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height,
-                       Frm_DalleSlimFloorN.localDalle.Bac, True, kADJS)
+                       Frm_DalleSlimFloorN.localDalle.Bac, True, kADJS, False, FontBase, "")
     End Sub
 
 #End Region

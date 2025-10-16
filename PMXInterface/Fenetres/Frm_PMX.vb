@@ -998,8 +998,11 @@ Public Class Frm_PMX
 
             Case EnuFenetres.Dalle
 
-                Frm_Dalle.ShowDialog()
-
+                If Not Me.chk_NewF.Checked Then
+                    Frm_Dalle.ShowDialog()
+                Else
+                    Frm_DalleN.ShowDialog()
+                End If
 
             Case EnuFenetres.DalleN
 
@@ -1018,7 +1021,6 @@ Public Class Frm_PMX
             Case EnuFenetres.SectionSFB
 
                 Frm_SectionSFB.ShowDialog()
-
 
             Case EnuFenetres.SectionIFB
 

@@ -319,34 +319,6 @@
             Me.Tau.CalculContraintesCharges(myBeam, TauCas)
         End If
 
-        ''# Flux de cisaillement des PRS
-
-        'With myBeam.Section.ProfilA
-
-        '    lSoudure = False
-
-        '    Select Case .typeProfileAcier
-        '        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-        '            lSoudure = True
-        '            ReDim GorgesSouduresMini(1)
-        '            ReDim GorgesSoudures(1)
-
-        '        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-        '            lSoudure = True
-        '            ReDim GorgesSouduresMini(0)
-        '            ReDim GorgesSoudures(0)
-
-        '    End Select
-
-        '    If lSoudure Then
-        '        myBeam.Section.ProfilA.InitialiseSoudureMini(Me.GorgesSouduresMini)
-        '        Me.FluxF = New cls_Flux
-        '        Me.FluxF.InitialiseCalculAcier(myBeam)
-        '        Me.FluxF.CalculFluxChargesACIER(myBeam, FluxCas)
-        '    End If
-
-        'End With
-
         '--> Boucle sur les combinaisons
 
         For iCombi = 0 To combiELU.nbCombi - 1

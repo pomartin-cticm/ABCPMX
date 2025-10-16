@@ -3578,6 +3578,7 @@ Public Class cls_Poutre
         Dim kDeb, kfin As Integer
         Dim InertieY As Decimal
         Const rhoVLoc As Decimal = 0            ' Pas d'interaction MV
+        Dim lEdge As Boolean = Not MyPoutre.lIntermediaire
 
         '--> Initialisation
 
@@ -3599,11 +3600,11 @@ Public Class cls_Poutre
                 If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
                 If iNode = iNodeFin Then kfin = 0 Else kfin = 1
 
-                Me.Section.ProprietesElastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, zANE(iNode, kDeb), InertieY, MelRd(iNode, kDeb),
+                Me.Section.ProprietesElastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, lEdge, zANE(iNode, kDeb), InertieY, MelRd(iNode, kDeb),
                                                         Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
                                                         Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
 
-                Me.Section.ProprietesPlastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, rhoVLoc, zANP(iNode, kDeb), MplRd(iNode, kDeb),
+                Me.Section.ProprietesPlastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, rhoVLoc, lEdge, zANP(iNode, kDeb), MplRd(iNode, kDeb),
                                                         Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
                                                         Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
 

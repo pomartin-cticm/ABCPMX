@@ -65,6 +65,7 @@ Public Class Frm_DalleSlimFloorN
         lCofraPlus220 = localDalle.Bac.lCofraplus220
 
         DefautWrdb = Me.TLpan_Choix.ColumnStyles(2).Width
+
     End Sub
 
     Private Sub GestionStyle()

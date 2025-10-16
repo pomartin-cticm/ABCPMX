@@ -2310,8 +2310,8 @@ Public Module Mod_Dessins
 
 #Region " Dessins pour la définiton de la dalle (FRM_DALLEN) "
 
-    Public Sub DessineBacTout(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyBac As cls_Bac,
-                              ByVal lTitre As Boolean, kAdjust As Decimal,
+    Public Sub DessineBacTout(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, myBac As cls_Bac,
+                              ByVal lTitre As Boolean, kAdjust As Decimal, lHaut As Boolean, myFont As Font, strHauteur As String,
                               ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   26/06/23 :  Version 1.00
@@ -2320,17 +2320,11 @@ Public Module Mod_Dessins
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   myBac       [E] :   Bac à dessiner   
+        '   lTitre      [E] :   Indique si on affiche le titre
+        '   kAdjust     [E] :   Coefficient d'ajustement de l'affichage
+        '   lHaut       [E] :   Indique si on affiche la hauteur du bac
         '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
-        '   EpDalle     [E] :   Epaisseur de la dalle béton
-        '   VariableBac [E] :   Parametre du bac sélectionné (pour affichage en rouge)
-        '   nbOndes     [E] :   Nombre d'ondes sur lequel on représente le bac
-        '   lCotation   [E] :   Indique si on met les cotations sur le dessin
-        '   lCotEpTot   [E] :   Indique si cotation epaisseur bac+dalle
-        '   lTitre      [E] :   Indique si affichage du titre du bac
-        '   ParAff      [S] :   Paramètres d'Affichage
-        '   lMemb       [E] :   Indique si on représente la semelle sup de la memb sup
-        '   tfSup       [E] :   Epasseur semelle de la membrure superieure
-        '   hMax        [E] :   Epaisseur maximale à considérer pour le dessin de la dalle
         '-----------------------------------------------------------------------------------------------
 
         '--> Declarations
@@ -2361,27 +2355,26 @@ Public Module Mod_Dessins
 
         '--> Initialisation
 
-        lRaidSup = MyBac.HasRaidisseurSup
+        lRaidSup = myBac.HasRaidisseurSup
 
-        dCar = (MyBac.Ep + MyBac.Bb) / 2
+        dCar = (myBac.Ep + myBac.Bb) / 2
 
         '--> Preparation de la zone d'affichage - Calcul de ParAff
 
-
         xMin = 0
-        xMax = MyBac.LargeurModule
+        xMax = myBac.LargeurModule
 
-        yMin = 0
-        yMax = MyBac.Hp
+        yMin = -1 / 2 * myBac.Hp
+        yMax = 3 / 2 * myBac.Hp
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
         '--> Calcul des points du pourtour de la dalle
 
         If lRaidSup Then
-            MyBac.PrepareContourModuleBacRaidi(xPts, yPts, nbPts)
+            myBac.PrepareContourModuleBacRaidi(xPts, yPts, nbPts)
         Else
-            MyBac.PrepareContourModuleBacSimple(xPts, yPts, nbPts)
+            myBac.PrepareContourModuleBacSimple(xPts, yPts, nbPts)
         End If
 
         '--> Remplissage contour
@@ -2389,6 +2382,18 @@ Public Module Mod_Dessins
         'ContourZone(myGr, New Pen(BlueAM), xPts, yPts, nbPts, MyParAff, True)
 
         ContourZone(myGr, MyPenBac, xPts, yPts, nbPts, MyParAff, True)
+
+        '--( Affichage de la hauteur
+
+        If lHaut Then
+
+            Dim yU As Decimal = 0.95 * YUnivers(MyParAff, pHi)
+            Dim ChaineHp As String = ""
+            ChaineHp = strHauteur & " : " & GetStringInUnitN(myBac.Hp, Enu_TypeVariable.Dimension, 3, 2, Enu_AfficheUnite.OuiNdC, True)
+            AddTexte(myGr, New SolidBrush(Color.Black), ChaineHp, myFont, myBac.LargeurModule / 2, yU,
+                     MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
+
+        End If
 
         ''--> Liberation des Font, Pen et Brush
 

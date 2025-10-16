@@ -434,15 +434,16 @@ Public Class cls_Section
         '   lValeurRd       [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
         '   Gammas          [E] :   Coefficients partiels
         '   RhoV            [E] :   Coefficient pour l'interaction MV
+        '   lEdge           [E] :   Indique si poutre de rive 
         '   zANP            [S] :   Position axe neutre plastique
         '   MplRd           [S] :   Moment plastique
         '-------------------------------------------------------------------------------------------------------------------
 
-        ProprietesPlastiquesMyy_Slim(Signe, lValeurRd, Gammas, RhoV, zANP, MplRd, 1, 1, 1, 1, 1, 1)
+        ProprietesPlastiquesMyy_Slim(Signe, lValeurRd, Gammas, RhoV, False, zANP, MplRd, 1, 1, 1, 1, 1, 1)
 
     End Sub
 
-    Public Sub ProprietesPlastiquesMyy_Slim(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
+    Public Sub ProprietesPlastiquesMyy_Slim(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal, lEdge As Boolean,
                                             ByRef zANP As Decimal, ByRef MplRd As Decimal,
                                             PsiAfi As Decimal, RhoTfi As Decimal, PsiYfi As Decimal,
                                             PsiAspd As Decimal, RhoTspd As Decimal, PsiYspd As Decimal)
@@ -455,6 +456,7 @@ Public Class cls_Section
         '   lValeurRd       [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
         '   Gammas          [E] :   Coefficients partiels
         '   RhoV            [E] :   Coefficient pour l'interaction MV
+        '   lEdge           [E] :   Indique si poutre de rive 
         '   zANP            [S] :   Position axe neutre plastique
         '   MplRd           [S] :   Moment plastique
         '   PsiAfi,PsiAspd  [E] :   Coefficient de réduction pour l'aire de la semelle inf et du plat (méthode 1 slim floor)
@@ -475,7 +477,7 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        MyModele.MaillageProfileASlim_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, PsiAfi, RhoTfi, PsiYfi, PsiAspd, RhoTspd, PsiYspd)
+        MyModele.MaillageProfileASlim_YY(Gammas.GammaM0, RhoV, ProfilA, lEdge, FySup, FyInf, FyW, FySpd, PsiAfi, RhoTfi, PsiYfi, PsiAspd, RhoTspd, PsiYspd)
 
         '--> Recherche de l'axe neutre plastique
 
@@ -862,11 +864,11 @@ Public Class cls_Section
         '   MelRd                   [S] :   Moment élastique
         '-------------------------------------------------------------------------------------------------------------------
 
-        ProprietesElastiquesMyy_Slim(Signe, lValeurRd, Gammas, zANE, InertieY, MelRd, 1, 1, 1, 1, 1, 1)
+        ProprietesElastiquesMyy_Slim(Signe, lValeurRd, Gammas, False, zANE, InertieY, MelRd, 1, 1, 1, 1, 1, 1)
 
     End Sub
 
-    Public Sub ProprietesElastiquesMyy_Slim(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma,
+    Public Sub ProprietesElastiquesMyy_Slim(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, lEdge As Boolean,
                                             ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal,
                                             PsiAfi As Decimal, RhoTfi As Decimal, PsiYfi As Decimal,
                                             PsiAspd As Decimal, RhoTspd As Decimal, PsiYspd As Decimal)
@@ -879,6 +881,7 @@ Public Class cls_Section
         '   Signe           [E] :   Signe du moment
         '   lValeurRd       [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
         '   Gammas          [E] :   Coefficients partiels
+        '   lEdge           [E] :   Indique si poutre de rive
         '   zANE            [S] :   Position axe neutre élastique
         '   InertieY        [S] :   Inertie de flexion / axe fort
         '   MelRd           [S] :   Moment élastique
@@ -901,7 +904,7 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        MyModele.MaillageProfileASlim_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, PsiAfi, RhoTfi, PsiYfi, PsiAspd, RhoTspd, PsiYspd)
+        MyModele.MaillageProfileASlim_YY(Gammas.GammaM0, RhoV, ProfilA, lEdge, FySup, FyInf, FyW, FySpd, PsiAfi, RhoTfi, PsiYfi, PsiAspd, RhoTspd, PsiYspd)
 
         '--> Recherche de l'axe neutre élastique
 
