@@ -95,6 +95,9 @@
         Me.txt_Firm.Text = Frm_OptionsLogiciel.pLocalLogicielOptions.CompanyName
         Me.txt_UserName.Text = Frm_OptionsLogiciel.pLocalLogicielOptions.UserName
 
+        Me.chk_ControlVersion.Checked = Frm_OptionsLogiciel.pLocalLogicielOptions.lControlWebVersion
+        Me.chk_ControlFichier.Checked = Frm_OptionsLogiciel.pLocalLogicielOptions.lControlWebFichier
+
     End Sub
 
 
@@ -293,7 +296,5 @@
 
 
 #End Region
-
-
 
 End Class

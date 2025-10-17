@@ -1024,6 +1024,24 @@ TITLE					= Définition de la poutre acier
 SABSECTION				= Section AFB
 WIDTH					= Largeur semelle supérieure
 
+#FRM_UPDATE
+TITLE					= Mises à jour
+CLOSE					= Fermer
+GRPSOFTUPDATE			= Mises à jour $
+WEBACCESFAILED1			= Impossible de vérifier en ligne les mises à jour de PMX
+WEBACCESFAILED2 		= Vérifier la connexion internet de l'ordinateur 
+UPTODATE				= La version $ est à jour
+GRPSECTIONS				= Bases de données des profilés et des aciers
+NEWBASE					= Une nouvelle base de données pour les profilés est disponible
+NEWBASESTEEL			= Une nouvelle base de données pour les aciers est disponible
+BASEUPTODATE			= La base de données des profilés est à jour
+BASESTEELUPTOD			= La base de données des aciers est à jour
+DOWNLOAD				= Télécharger les nouvelles bases de données
+SECTIONFAILED			= Echec de la vérification
+RESTART					= Téléchargement OK: Les bases de données sont à jour
+OPENLNK					= Ouvrir la page de téléchargement
+NOINFO					= Les informations relatives aux mises à jour ne sont pas disponibles
+
 #GENERAL
 SELFWEIGHT				= Poids propre
 OTHERG					= Autre charges permanentes
