@@ -909,6 +909,7 @@ ERRTCMIN				= The concrete thickness above the upper flange ($) should be lower 
 PRIOFULLDEPTH			= Define the full depth of the slab, the thickness above the deck is automatically assessed
 PRIODEPTHABOVE			= Define thickness above the deck, the full depth of the slab is automatically assessed
 RHOB					= Density
+SWITCH					= Switch
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam

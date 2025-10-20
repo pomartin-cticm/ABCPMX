@@ -22,6 +22,7 @@ Partial Class Frm_DalleNBac
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_DalleNBac))
         Me.Pan_Main = New System.Windows.Forms.Panel()
         Me.TLpan_Milieu = New System.Windows.Forms.TableLayoutPanel()
@@ -35,18 +36,24 @@ Partial Class Frm_DalleNBac
         Me.rdb_BacPerpendiculaire = New System.Windows.Forms.RadioButton()
         Me.rdb_BacParallele = New System.Windows.Forms.RadioButton()
         Me.pan_ConfigurationNervures = New System.Windows.Forms.Panel()
+        Me.chk_L_PA1 = New System.Windows.Forms.CheckBox()
+        Me.chk_L_PA2 = New System.Windows.Forms.CheckBox()
         Me.rtxt_Configuration = New System.Windows.Forms.RichTextBox()
+        Me.chk_T_PA3 = New System.Windows.Forms.CheckBox()
+        Me.chk_T_PA2 = New System.Windows.Forms.CheckBox()
+        Me.chk_T_PA1 = New System.Windows.Forms.CheckBox()
         Me.lbl_BacConfiguration = New System.Windows.Forms.Label()
+        Me.img_Bac = New System.Windows.Forms.PictureBox()
         Me.btn_ModifierBac = New System.Windows.Forms.Button()
         Me.lbl_BacNom = New System.Windows.Forms.Label()
         Me.txt_BacNom = New System.Windows.Forms.TextBox()
         Me.lbl_Bac = New System.Windows.Forms.Label()
-        Me.chk_L_PA1 = New System.Windows.Forms.CheckBox()
-        Me.chk_L_PA2 = New System.Windows.Forms.CheckBox()
-        Me.chk_T_PA3 = New System.Windows.Forms.CheckBox()
-        Me.chk_T_PA2 = New System.Windows.Forms.CheckBox()
-        Me.chk_T_PA1 = New System.Windows.Forms.CheckBox()
-        Me.img_Bac = New System.Windows.Forms.PictureBox()
+        Me.pan_DecalageCofra220 = New System.Windows.Forms.Panel()
+        Me.lbl_Decalage = New System.Windows.Forms.Label()
+        Me.txt_DecalCofra220 = New System.Windows.Forms.TextBox()
+        Me.img_Decal = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitDim1 = New System.Windows.Forms.Label()
+        Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.Pan_Main.SuspendLayout()
         Me.TLpan_Milieu.SuspendLayout()
         Me.pan_Bac.SuspendLayout()
@@ -54,6 +61,9 @@ Partial Class Frm_DalleNBac
         Me.pan_Orientation.SuspendLayout()
         Me.pan_ConfigurationNervures.SuspendLayout()
         CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_DecalageCofra220.SuspendLayout()
+        CType(Me.img_Decal, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Pan_Main
@@ -118,7 +128,7 @@ Partial Class Frm_DalleNBac
         Me.rdb_Preperce.Location = New System.Drawing.Point(49, 31)
         Me.rdb_Preperce.Margin = New System.Windows.Forms.Padding(4)
         Me.rdb_Preperce.Name = "rdb_Preperce"
-        Me.rdb_Preperce.Size = New System.Drawing.Size(108, 20)
+        Me.rdb_Preperce.Size = New System.Drawing.Size(111, 20)
         Me.rdb_Preperce.TabIndex = 78
         Me.rdb_Preperce.TabStop = True
         Me.rdb_Preperce.Text = "rdb_Preperce"
@@ -130,7 +140,7 @@ Partial Class Frm_DalleNBac
         Me.rdb_ATraversBac.Location = New System.Drawing.Point(49, 58)
         Me.rdb_ATraversBac.Margin = New System.Windows.Forms.Padding(4)
         Me.rdb_ATraversBac.Name = "rdb_ATraversBac"
-        Me.rdb_ATraversBac.Size = New System.Drawing.Size(132, 20)
+        Me.rdb_ATraversBac.Size = New System.Drawing.Size(135, 20)
         Me.rdb_ATraversBac.TabIndex = 79
         Me.rdb_ATraversBac.TabStop = True
         Me.rdb_ATraversBac.Text = "rdb_ATraversBac"
@@ -144,7 +154,7 @@ Partial Class Frm_DalleNBac
         Me.lbl_ConnectorThroughTheWeb.Location = New System.Drawing.Point(12, 9)
         Me.lbl_ConnectorThroughTheWeb.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_ConnectorThroughTheWeb.Name = "lbl_ConnectorThroughTheWeb"
-        Me.lbl_ConnectorThroughTheWeb.Size = New System.Drawing.Size(154, 13)
+        Me.lbl_ConnectorThroughTheWeb.Size = New System.Drawing.Size(203, 17)
         Me.lbl_ConnectorThroughTheWeb.TabIndex = 76
         Me.lbl_ConnectorThroughTheWeb.Text = "lbl_ConnectorThroughTheWeb"
         Me.lbl_ConnectorThroughTheWeb.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -170,7 +180,7 @@ Partial Class Frm_DalleNBac
         Me.lbl_BacOrientation.Location = New System.Drawing.Point(12, 4)
         Me.lbl_BacOrientation.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_BacOrientation.Name = "lbl_BacOrientation"
-        Me.lbl_BacOrientation.Size = New System.Drawing.Size(93, 13)
+        Me.lbl_BacOrientation.Size = New System.Drawing.Size(124, 17)
         Me.lbl_BacOrientation.TabIndex = 75
         Me.lbl_BacOrientation.Text = "lbl_BacOrientation"
         Me.lbl_BacOrientation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -181,7 +191,7 @@ Partial Class Frm_DalleNBac
         Me.rdb_BacPerpendiculaire.Location = New System.Drawing.Point(49, 27)
         Me.rdb_BacPerpendiculaire.Margin = New System.Windows.Forms.Padding(4)
         Me.rdb_BacPerpendiculaire.Name = "rdb_BacPerpendiculaire"
-        Me.rdb_BacPerpendiculaire.Size = New System.Drawing.Size(171, 20)
+        Me.rdb_BacPerpendiculaire.Size = New System.Drawing.Size(174, 20)
         Me.rdb_BacPerpendiculaire.TabIndex = 76
         Me.rdb_BacPerpendiculaire.TabStop = True
         Me.rdb_BacPerpendiculaire.Text = "rdb_BacPerpendiculaire"
@@ -193,7 +203,7 @@ Partial Class Frm_DalleNBac
         Me.rdb_BacParallele.Location = New System.Drawing.Point(49, 54)
         Me.rdb_BacParallele.Margin = New System.Windows.Forms.Padding(4)
         Me.rdb_BacParallele.Name = "rdb_BacParallele"
-        Me.rdb_BacParallele.Size = New System.Drawing.Size(130, 20)
+        Me.rdb_BacParallele.Size = New System.Drawing.Size(133, 20)
         Me.rdb_BacParallele.TabIndex = 77
         Me.rdb_BacParallele.TabStop = True
         Me.rdb_BacParallele.Text = "rdb_BacParallele"
@@ -216,82 +226,6 @@ Partial Class Frm_DalleNBac
         Me.pan_ConfigurationNervures.Size = New System.Drawing.Size(386, 154)
         Me.pan_ConfigurationNervures.TabIndex = 81
         '
-        'rtxt_Configuration
-        '
-        Me.rtxt_Configuration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.rtxt_Configuration.Location = New System.Drawing.Point(20, 96)
-        Me.rtxt_Configuration.Margin = New System.Windows.Forms.Padding(4)
-        Me.rtxt_Configuration.Name = "rtxt_Configuration"
-        Me.rtxt_Configuration.ReadOnly = True
-        Me.rtxt_Configuration.Size = New System.Drawing.Size(283, 50)
-        Me.rtxt_Configuration.TabIndex = 3
-        Me.rtxt_Configuration.Text = ""
-        '
-        'lbl_BacConfiguration
-        '
-        Me.lbl_BacConfiguration.AutoSize = True
-        Me.lbl_BacConfiguration.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_BacConfiguration.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_BacConfiguration.Location = New System.Drawing.Point(12, 9)
-        Me.lbl_BacConfiguration.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.lbl_BacConfiguration.Name = "lbl_BacConfiguration"
-        Me.lbl_BacConfiguration.Size = New System.Drawing.Size(104, 13)
-        Me.lbl_BacConfiguration.TabIndex = 78
-        Me.lbl_BacConfiguration.Text = "lbl_BacConfiguration"
-        Me.lbl_BacConfiguration.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'btn_ModifierBac
-        '
-        Me.btn_ModifierBac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn_ModifierBac.Location = New System.Drawing.Point(4, 169)
-        Me.btn_ModifierBac.Margin = New System.Windows.Forms.Padding(4)
-        Me.btn_ModifierBac.Name = "btn_ModifierBac"
-        Me.btn_ModifierBac.Size = New System.Drawing.Size(386, 33)
-        Me.btn_ModifierBac.TabIndex = 74
-        Me.btn_ModifierBac.Text = "btn_ModifierBac"
-        Me.btn_ModifierBac.UseVisualStyleBackColor = True
-        '
-        'lbl_BacNom
-        '
-        Me.lbl_BacNom.AutoSize = True
-        Me.lbl_BacNom.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_BacNom.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_BacNom.Location = New System.Drawing.Point(16, 15)
-        Me.lbl_BacNom.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.lbl_BacNom.Name = "lbl_BacNom"
-        Me.lbl_BacNom.Size = New System.Drawing.Size(64, 13)
-        Me.lbl_BacNom.TabIndex = 73
-        Me.lbl_BacNom.Text = "lbl_BacNom"
-        Me.lbl_BacNom.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'txt_BacNom
-        '
-        Me.txt_BacNom.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_BacNom.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.txt_BacNom.Location = New System.Drawing.Point(119, 11)
-        Me.txt_BacNom.Margin = New System.Windows.Forms.Padding(4)
-        Me.txt_BacNom.Name = "txt_BacNom"
-        Me.txt_BacNom.Size = New System.Drawing.Size(270, 22)
-        Me.txt_BacNom.TabIndex = 72
-        Me.txt_BacNom.Text = "BAC"
-        Me.txt_BacNom.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'lbl_Bac
-        '
-        Me.lbl_Bac.AutoSize = True
-        Me.lbl_Bac.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Bac.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Bac.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Bac.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Bac.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Bac.Name = "lbl_Bac"
-        Me.lbl_Bac.Size = New System.Drawing.Size(394, 37)
-        Me.lbl_Bac.TabIndex = 2
-        Me.lbl_Bac.Text = "lbl_Bac"
-        Me.lbl_Bac.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'chk_L_PA1
         '
         Me.chk_L_PA1.Appearance = System.Windows.Forms.Appearance.Button
@@ -313,6 +247,17 @@ Partial Class Frm_DalleNBac
         Me.chk_L_PA2.Size = New System.Drawing.Size(59, 54)
         Me.chk_L_PA2.TabIndex = 4
         Me.chk_L_PA2.UseVisualStyleBackColor = True
+        '
+        'rtxt_Configuration
+        '
+        Me.rtxt_Configuration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.rtxt_Configuration.Location = New System.Drawing.Point(20, 96)
+        Me.rtxt_Configuration.Margin = New System.Windows.Forms.Padding(4)
+        Me.rtxt_Configuration.Name = "rtxt_Configuration"
+        Me.rtxt_Configuration.ReadOnly = True
+        Me.rtxt_Configuration.Size = New System.Drawing.Size(283, 50)
+        Me.rtxt_Configuration.TabIndex = 3
+        Me.rtxt_Configuration.Text = ""
         '
         'chk_T_PA3
         '
@@ -347,6 +292,19 @@ Partial Class Frm_DalleNBac
         Me.chk_T_PA1.TabIndex = 0
         Me.chk_T_PA1.UseVisualStyleBackColor = True
         '
+        'lbl_BacConfiguration
+        '
+        Me.lbl_BacConfiguration.AutoSize = True
+        Me.lbl_BacConfiguration.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_BacConfiguration.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_BacConfiguration.Location = New System.Drawing.Point(12, 9)
+        Me.lbl_BacConfiguration.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lbl_BacConfiguration.Name = "lbl_BacConfiguration"
+        Me.lbl_BacConfiguration.Size = New System.Drawing.Size(138, 17)
+        Me.lbl_BacConfiguration.TabIndex = 78
+        Me.lbl_BacConfiguration.Text = "lbl_BacConfiguration"
+        Me.lbl_BacConfiguration.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'img_Bac
         '
         Me.img_Bac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -358,11 +316,127 @@ Partial Class Frm_DalleNBac
         Me.img_Bac.TabIndex = 80
         Me.img_Bac.TabStop = False
         '
+        'btn_ModifierBac
+        '
+        Me.btn_ModifierBac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_ModifierBac.Location = New System.Drawing.Point(4, 169)
+        Me.btn_ModifierBac.Margin = New System.Windows.Forms.Padding(4)
+        Me.btn_ModifierBac.Name = "btn_ModifierBac"
+        Me.btn_ModifierBac.Size = New System.Drawing.Size(386, 33)
+        Me.btn_ModifierBac.TabIndex = 74
+        Me.btn_ModifierBac.Text = "btn_ModifierBac"
+        Me.btn_ModifierBac.UseVisualStyleBackColor = True
+        '
+        'lbl_BacNom
+        '
+        Me.lbl_BacNom.AutoSize = True
+        Me.lbl_BacNom.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_BacNom.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_BacNom.Location = New System.Drawing.Point(16, 15)
+        Me.lbl_BacNom.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lbl_BacNom.Name = "lbl_BacNom"
+        Me.lbl_BacNom.Size = New System.Drawing.Size(83, 17)
+        Me.lbl_BacNom.TabIndex = 73
+        Me.lbl_BacNom.Text = "lbl_BacNom"
+        Me.lbl_BacNom.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txt_BacNom
+        '
+        Me.txt_BacNom.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_BacNom.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.txt_BacNom.Location = New System.Drawing.Point(119, 11)
+        Me.txt_BacNom.Margin = New System.Windows.Forms.Padding(4)
+        Me.txt_BacNom.Name = "txt_BacNom"
+        Me.txt_BacNom.Size = New System.Drawing.Size(270, 22)
+        Me.txt_BacNom.TabIndex = 72
+        Me.txt_BacNom.Text = "BAC"
+        Me.txt_BacNom.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbl_Bac
+        '
+        Me.lbl_Bac.AutoSize = True
+        Me.lbl_Bac.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Bac.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Bac.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Bac.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_Bac.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_Bac.Name = "lbl_Bac"
+        Me.lbl_Bac.Size = New System.Drawing.Size(394, 37)
+        Me.lbl_Bac.TabIndex = 2
+        Me.lbl_Bac.Text = "lbl_Bac"
+        Me.lbl_Bac.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'pan_DecalageCofra220
+        '
+        Me.pan_DecalageCofra220.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_DecalageCofra220.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_DecalageCofra220.Controls.Add(Me.txt_DecalCofra220)
+        Me.pan_DecalageCofra220.Controls.Add(Me.img_Decal)
+        Me.pan_DecalageCofra220.Controls.Add(Me.etq_UnitDim1)
+        Me.pan_DecalageCofra220.Controls.Add(Me.lbl_Decalage)
+        Me.pan_DecalageCofra220.Location = New System.Drawing.Point(729, 178)
+        Me.pan_DecalageCofra220.Margin = New System.Windows.Forms.Padding(4)
+        Me.pan_DecalageCofra220.Name = "pan_DecalageCofra220"
+        Me.pan_DecalageCofra220.Size = New System.Drawing.Size(386, 81)
+        Me.pan_DecalageCofra220.TabIndex = 87
+        '
+        'lbl_Decalage
+        '
+        Me.lbl_Decalage.AutoSize = True
+        Me.lbl_Decalage.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Decalage.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Decalage.Location = New System.Drawing.Point(12, 9)
+        Me.lbl_Decalage.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lbl_Decalage.Name = "lbl_Decalage"
+        Me.lbl_Decalage.Size = New System.Drawing.Size(90, 17)
+        Me.lbl_Decalage.TabIndex = 76
+        Me.lbl_Decalage.Text = "lbl_Decalage"
+        Me.lbl_Decalage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txt_DecalCofra220
+        '
+        Me.txt_DecalCofra220.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_DecalCofra220.Location = New System.Drawing.Point(243, 33)
+        Me.txt_DecalCofra220.Margin = New System.Windows.Forms.Padding(4)
+        Me.txt_DecalCofra220.Name = "txt_DecalCofra220"
+        Me.txt_DecalCofra220.Size = New System.Drawing.Size(76, 22)
+        Me.txt_DecalCofra220.TabIndex = 78
+        Me.txt_DecalCofra220.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'img_Decal
+        '
+        Me.img_Decal.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Decal.Location = New System.Drawing.Point(183, 33)
+        Me.img_Decal.Margin = New System.Windows.Forms.Padding(4)
+        Me.img_Decal.Name = "img_Decal"
+        Me.img_Decal.Size = New System.Drawing.Size(61, 25)
+        Me.img_Decal.TabIndex = 79
+        Me.img_Decal.TabStop = False
+        '
+        'etq_UnitDim1
+        '
+        Me.etq_UnitDim1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim1.AutoSize = True
+        Me.etq_UnitDim1.Location = New System.Drawing.Point(328, 37)
+        Me.etq_UnitDim1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.etq_UnitDim1.Name = "etq_UnitDim1"
+        Me.etq_UnitDim1.Size = New System.Drawing.Size(29, 16)
+        Me.etq_UnitDim1.TabIndex = 77
+        Me.etq_UnitDim1.Text = "mm"
+        '
+        'ErrorProvider
+        '
+        Me.ErrorProvider.ContainerControl = Me
+        '
         'Frm_DalleNBac
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 616)
+        Me.ClientSize = New System.Drawing.Size(1382, 616)
+        Me.Controls.Add(Me.pan_DecalageCofra220)
         Me.Controls.Add(Me.Pan_Main)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "Frm_DalleNBac"
@@ -379,6 +453,10 @@ Partial Class Frm_DalleNBac
         Me.pan_ConfigurationNervures.ResumeLayout(False)
         Me.pan_ConfigurationNervures.PerformLayout()
         CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_DecalageCofra220.ResumeLayout(False)
+        Me.pan_DecalageCofra220.PerformLayout()
+        CType(Me.img_Decal, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -407,4 +485,10 @@ Partial Class Frm_DalleNBac
     Friend WithEvents lbl_BacNom As Label
     Friend WithEvents txt_BacNom As TextBox
     Friend WithEvents lbl_Bac As Label
+    Friend WithEvents pan_DecalageCofra220 As Panel
+    Friend WithEvents lbl_Decalage As Label
+    Friend WithEvents txt_DecalCofra220 As TextBox
+    Friend WithEvents img_Decal As PictureBox
+    Friend WithEvents etq_UnitDim1 As Label
+    Friend WithEvents ErrorProvider As ErrorProvider
 End Class

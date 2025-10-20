@@ -11855,6 +11855,7 @@ Public Module Mod_Dessins
 
         RemplirZone(MyGr, MyBrushDP, xPts, yPts, nbPts, MyParAffA, False, True)
 
+
         xo = -BeffRed / 2
         xe = BeffRed / 2
         AddLigne(MyGr, MyPenContour, xo, zTop, xe, zTop, MyParAffA)

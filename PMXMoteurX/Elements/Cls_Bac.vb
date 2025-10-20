@@ -118,6 +118,11 @@ Public Class cls_Bac
     ''' </summary>
     Public AppuiL As EnuConfigLAppui
 
+    ''' <summary>
+    ''' Décalage du bac Cofraplus220 par rapport à l'arase dup de la poutre
+    ''' </summary>
+    Public eDecalage As Decimal
+
 #End Region
 
 #Region " Enumérations "
@@ -148,6 +153,7 @@ Public Class cls_Bac
         AppuiL = EnuConfigLAppui.BacNonCoupe
 
         Me.Fup = 420
+        Me.eDecalage = 0
     End Sub
 
     Sub New(MyFab As String, ByVal My_etiquette As String, ByVal Mybb As Decimal, ByVal Mybt As Decimal, ByVal Myhp As Decimal, ByVal Myhrs As Decimal,
@@ -170,9 +176,8 @@ Public Class cls_Bac
         AppuiT = EnuConfigTAppui.BetonSeulContinu
         AppuiL = EnuConfigLAppui.BacNonCoupe
         Me.Fup = 420
-
+        Me.eDecalage = 0
     End Sub
-
 
     Sub New(MyFab As String, ByVal My_etiquette As String, ByVal Mybb As Decimal, ByVal Mybt As Decimal, ByVal Myhp As Decimal, ByVal Myhrs As Decimal,
             ByVal Myep As Decimal, ByVal Myt As Decimal, MymSurf As Decimal, Myfyp As Decimal, MyLMod As Decimal, MyIeff As Decimal)
@@ -197,7 +202,7 @@ Public Class cls_Bac
         AppuiT = EnuConfigTAppui.BetonSeulContinu
         AppuiL = EnuConfigLAppui.BacNonCoupe
         Me.Fup = 420
-
+        Me.eDecalage = 0
     End Sub
 
 
@@ -325,6 +330,9 @@ Public Class cls_Bac
 
         If Me.Ieff <> BacSource.Ieff Then lModif = True
         Me.Ieff = BacSource.Ieff
+
+        If Me.eDecalage <> BacSource.eDecalage Then lModif = True
+        Me.eDecalage = BacSource.eDecalage
 
     End Sub
 

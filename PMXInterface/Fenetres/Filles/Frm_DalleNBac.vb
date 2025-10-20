@@ -11,6 +11,8 @@ Public Class Frm_DalleNBac
 
     Const kADJUST As Decimal = 0.95
 
+    Const DECMAX As Decimal = 20 / 1000 ' 20 mm
+
     Dim FontFrm As Font
     Dim strHauteur As String
 
@@ -44,6 +46,7 @@ Public Class Frm_DalleNBac
             CLE = "PERPENDICULAR" : Me.rdb_BacPerpendiculaire.Text = myBloc(CLE)
 
             CLE = "HEIGHT" : strHauteur = myBloc(CLE)
+            CLE = "SWITCH" : Me.lbl_Decalage.Text = myBloc(CLE)
 
             CLE = "RIBCONFIG" : Me.lbl_BacConfiguration.Text = myBloc(CLE)              '"Configuration des nervures sur appui"
 
@@ -59,6 +62,7 @@ Public Class Frm_DalleNBac
 
     Private Sub GestionUnites()
 
+        Me.etq_UnitDim1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
     End Sub
 
@@ -87,11 +91,19 @@ Public Class Frm_DalleNBac
 
         FontFrm = New Font(FontBase.Name, SizeFontFrm)
 
+        Me.pan_Bac.Controls.Add(Me.pan_DecalageCofra220)
+
+        Me.pan_DecalageCofra220.Left = Me.pan_ConfigurationNervures.Left
+        Me.pan_DecalageCofra220.Top = Me.pan_ConfigurationNervures.Top
+        Me.pan_DecalageCofra220.Width = Me.pan_ConfigurationNervures.Width
+
     End Sub
 
     Private Sub AfficherBacEnCours()
 
         AfficheNomBacEnCours()
+
+        Me.txt_DecalCofra220.Text = GetStringInUnitN(Frm_DalleN.myDalleLoc.Bac.eDecalage, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True)
 
     End Sub
 
@@ -107,10 +119,12 @@ Public Class Frm_DalleNBac
             Me.rdb_BacParallele.Visible = False
             Me.pan_ConfigurationNervures.Visible = False
             'Me.pan_DispoConnecteur.Visible = False
+            Me.pan_DecalageCofra220.Visible = True
         Else
             Me.rdb_BacParallele.Visible = True
             Me.pan_DispoConnecteur.Visible = True
             ' Me.pan_ConfigurationNervures.Visible = True
+            Me.pan_DecalageCofra220.Visible = False
         End If
 
         MAJI_OrientationBac()
@@ -138,8 +152,63 @@ Public Class Frm_DalleNBac
 
 #End Region
 
-
 #Region " Evènements "
+
+    Private Sub txt_DecalCofra220_TextChanged(sender As Object, e As EventArgs) Handles txt_DecalCofra220.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim Valeur As Decimal
+
+        If VerificationSaisie(sender, Valeur) Then
+
+            Select Case sender.name
+
+                Case Me.txt_DecalCofra220.Name
+                    Frm_DalleN.myDalleLoc.Bac.eDecalage = Valeur
+
+            End Select
+
+            Frm_DalleN.MAJI_ImageDalle()
+        End If
+
+    End Sub
+
+    ''' <summary>
+    ''' Vérification de la saisie des paramètres
+    ''' </summary>
+    Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+
+        '-- Déclaration - Initialisation
+
+        Dim lOk As Boolean = True
+        ErrorProvider.Clear()
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMin As Boolean = True
+        Dim lValMax As Boolean = True
+        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+
+        Select Case MyTxt.Name
+
+            Case txt_DecalCofra220.Name
+                ValMin = 0 / kUnit
+                ValMax = DECMAX / kUnit
+
+        End Select
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, lValMin, ValMax, lValMax)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            ErrorProvider.Clear()
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+
+    End Function
 
     Private Sub btn_ModifierBac_Click(sender As Object, e As EventArgs) Handles btn_ModifierBac.Click, txt_BacNom.Click, img_Bac.Click
 
