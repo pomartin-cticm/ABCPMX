@@ -3159,6 +3159,17 @@ Public Module Mod_Dessins
             DessinCoteFrmDalle(myGr, myBeam, myFont, lIntermediaire, LargeurProfil, iSelect, MyParAff, dCar, BeffG, BeffD, strMsg, zREF, lCofraplus220)
 
         End If
+
+        If iSelect = 1001 Then
+
+            Dim xPos, yPos As Decimal
+            xPos = 0
+            yPos = myBeam.Dalle.zTop - myBeam.Dalle.LitArma(0).z_s - 1.5 * myBeam.Dalle.LitArma(0).PhiS
+
+            AfficheInfoAcierArma(myGr, MyParAff, strMsg, myBeam.Dalle.AcierArmatures, myFont, xPos, yPos)
+
+        End If
+
     End Sub
 
     Private Sub DessinArmaFeuDalle(ByRef MyGr As Graphics, myBeam As cls_Poutre, myFont As Font, strMsg() As String,

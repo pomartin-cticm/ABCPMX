@@ -224,7 +224,19 @@ Public Class Frm_Dalle
         'cls_Dalle.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Dalle, MyDalleLoc)
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
 
-        MyDalleLoc = MyPoutreLoc.Dalle
+        If MyDalleLoc.lNoArma Then
+            iLitSelect = -1
+            iSelect = -1
+        Else
+            'Ajout GuD: Permet de réinitialiser la variable iLitSelect à l'ouverture
+            If MyDalleLoc.LitArma(1).lActive Then
+                iLitSelect = 1
+                iSelect = 200
+            Else
+                iLitSelect = 0
+                iSelect = 100
+            End If
+        End If
 
         lCofraPlus220 = MyDalleLoc.Bac.lCofraplus220
 
@@ -396,6 +408,13 @@ Public Class Frm_Dalle
 
         '--> Acier
 
+        Chaine = MyDalleLoc.AcierArmatures.Classe
+        If Me.ClasseAcierArma.Contains(Chaine) Then
+            Me.cmb_Acier.SelectedIndex = Array.IndexOf(Me.ClasseAcierArma, Chaine)
+        Else
+            Me.cmb_Acier.SelectedIndex = 0
+        End If
+        MAJI_ProprietesAcier()
         Chaine = MyDalleLoc.AcierArmatures.Classe
         If Me.ClasseAcierArma.Contains(Chaine) Then
             Me.cmb_Acier.SelectedIndex = Array.IndexOf(Me.ClasseAcierArma, Chaine)

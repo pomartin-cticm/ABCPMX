@@ -55,6 +55,8 @@ Partial Class Frm_DalleNArma
         Me.chk_Lit1 = New System.Windows.Forms.CheckBox()
         Me.lbl_NoArma = New System.Windows.Forms.Label()
         Me.ToolTipDalle = New System.Windows.Forms.ToolTip(Me.components)
+        Me.imgList_BOArma = New System.Windows.Forms.ImageList(Me.components)
+        Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.Pan_Contenu.SuspendLayout()
         Me.TLpan_Gauche.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -64,13 +66,14 @@ Partial Class Frm_DalleNArma
         CType(Me.img_zs, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_esp, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Pan_Contenu
         '
         Me.Pan_Contenu.Controls.Add(Me.TLpan_Gauche)
         Me.Pan_Contenu.Location = New System.Drawing.Point(152, 5)
-        Me.Pan_Contenu.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Pan_Contenu.Margin = New System.Windows.Forms.Padding(2)
         Me.Pan_Contenu.Name = "Pan_Contenu"
         Me.Pan_Contenu.Size = New System.Drawing.Size(296, 470)
         Me.Pan_Contenu.TabIndex = 1
@@ -412,6 +415,17 @@ Partial Class Frm_DalleNArma
         Me.lbl_NoArma.Text = "lbl_NoArma"
         Me.lbl_NoArma.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'imgList_BOArma
+        '
+        Me.imgList_BOArma.ImageStream = CType(resources.GetObject("imgList_BOArma.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.imgList_BOArma.TransparentColor = System.Drawing.Color.Transparent
+        Me.imgList_BOArma.Images.SetKeyName(0, "Ajouter")
+        Me.imgList_BOArma.Images.SetKeyName(1, "Supprimer")
+        '
+        'ErrorProvider
+        '
+        Me.ErrorProvider.ContainerControl = Me
+        '
         'Frm_DalleNArma
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -419,7 +433,7 @@ Partial Class Frm_DalleNArma
         Me.ClientSize = New System.Drawing.Size(600, 479)
         Me.Controls.Add(Me.Pan_Contenu)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "Frm_DalleNArma"
         Me.Text = "Frm_DanneNArma"
         Me.Pan_Contenu.ResumeLayout(False)
@@ -434,6 +448,7 @@ Partial Class Frm_DalleNArma
         CType(Me.img_zs, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_esp, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -469,4 +484,6 @@ Partial Class Frm_DalleNArma
     Friend WithEvents chk_Lit1 As CheckBox
     Friend WithEvents lbl_NoArma As Label
     Friend WithEvents ToolTipDalle As ToolTip
+    Friend WithEvents imgList_BOArma As ImageList
+    Friend WithEvents ErrorProvider As ErrorProvider
 End Class
