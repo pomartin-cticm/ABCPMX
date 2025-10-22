@@ -238,7 +238,6 @@ Public Class Frm_DalleN
 #Region " Dessins "
 
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
-        Debug.WriteLine("Dans paint, objet iSelect = " & iSelect)
         DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
                      myPoutreLoc, FontFrm, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, iSelect, msgDessin, lCote)
     End Sub

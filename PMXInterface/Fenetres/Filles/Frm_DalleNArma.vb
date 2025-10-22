@@ -55,15 +55,13 @@ Public Class Frm_DalleNArma
         MAJI_BOArmatures()
         AfficherLitEncours()
 
-        RemplirComboAvecTableau(Me.cmb_Acier, ClasseAcierArma)
+        RemplirListeClasseAcier(Me.lst_ClasseAcier, ClasseAcierArma)
 
     End Sub
 
-    Private Sub RemplirComboAvecTableau(MyCombo As System.Windows.Forms.ComboBox, tabValeurs() As String)
-
-        MyCombo.Items.Clear()
-        MyCombo.Items.AddRange(tabValeurs)
-
+    Private Sub RemplirListeClasseAcier(MyList As ListBox, tabValeurs() As String)
+        MyList.Items.Clear()
+        MyList.Items.AddRange(tabValeurs)
     End Sub
 
     Private Sub GestionStyle()
@@ -130,7 +128,6 @@ Public Class Frm_DalleNArma
 
     End Sub
 
-
     Private Sub AfficherLitEncours()
 
         If iLitSelect = -1 Then
@@ -153,7 +150,6 @@ Public Class Frm_DalleNArma
         End If
     End Sub
 
-
     Private Sub AfficherDalleEnCours()
 
         If Frm_DalleN.myDalleLoc.lNoArma Then
@@ -172,11 +168,12 @@ Public Class Frm_DalleNArma
 
         Dim Chaine = Frm_DalleN.myDalleLoc.AcierArmatures.Classe
         If Me.ClasseAcierArma.Contains(Chaine) Then
-            Me.cmb_Acier.SelectedIndex = Array.IndexOf(Me.ClasseAcierArma, Chaine)
+            Me.lst_ClasseAcier.SelectedIndex = Array.IndexOf(Me.ClasseAcierArma, Chaine)
         Else
-            Me.cmb_Acier.SelectedIndex = 0
+            Me.lst_ClasseAcier.SelectedIndex = 0
         End If
         MAJI_ProprietesAcier()
+        Frm_DalleN.MAJI_SelectionTxtbox(iSelect)
     End Sub
 
 #End Region
@@ -289,18 +286,7 @@ Public Class Frm_DalleNArma
 
 #End Region
 
-
-
-
-
-#Region "===FERMETURE==="
-    '''TODO
-#End Region
-
-
-
-#Region " Evènements sur la BO Armatures + évènements TextBox "
-
+#Region " Gestion des évènements "
     Private Sub BOArma_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Lit2.CheckedChanged, chk_Lit1.CheckedChanged, chk_Lit0.CheckedChanged
 
         If lBuild Then Exit Sub
@@ -314,15 +300,14 @@ Public Class Frm_DalleNArma
 
         Frm_DalleN.myDalleLoc.lNoArma = (iLitSelect = -1)
 
-        MAJ_ValeursLimites()
-
         'Dim ValeurUI As Decimal
         'VerificationSaisie(Me.txt_zs, ValeurUI)
 
+        MAJ_ValeursLimites()
         AfficherLitEncours()
         MAJI_StatutBOArma()
         MAJI_BOArmatures()
-        Frm_DalleN.img_Dalle.Invalidate()
+        Frm_DalleN.MAJI_SelectionTxtbox(iSelect)
 
     End Sub
 
@@ -357,23 +342,30 @@ Public Class Frm_DalleNArma
 
         Select Case iLitSelect
             Case 0
-                '# Cas où on ajoute un lit = on sélectionne le second (créé)
-                Frm_DalleN.myDalleLoc.LitArma(1).lActive = True
-                iLitSelect = 1 : iSelect = 200
-                Frm_DalleN.myDalleLoc.LitArma(1).z_s = Math.Max(Frm_DalleN.myDalleLoc.LitArma(0).z_s, Frm_DalleN.myDalleLoc.LitArma(1).z_s)
-                Frm_DalleN.myDalleLoc.LitArma(1).z_s = Math.Min(Frm_DalleN.myDalleLoc.EpaisseurActive - ZMIN, Frm_DalleN.myDalleLoc.LitArma(1).z_s)
+                If (Frm_DalleN.myDalleLoc.LitArma(1).lActive) Then
+                    Frm_DalleN.myDalleLoc.LitArma(1).lActive = False
+                    iLitSelect = 0 : iSelect = 100
+                Else
+                    '# Cas où on ajoute un lit = on sélectionne le second (créé)
+                    Frm_DalleN.myDalleLoc.LitArma(1).lActive = True
+                    iLitSelect = 1 : iSelect = 200
+                    Frm_DalleN.myDalleLoc.LitArma(1).z_s = Math.Max(Frm_DalleN.myDalleLoc.LitArma(0).z_s, Frm_DalleN.myDalleLoc.LitArma(1).z_s)
+                    Frm_DalleN.myDalleLoc.LitArma(1).z_s = Math.Min(Frm_DalleN.myDalleLoc.EpaisseurActive - ZMIN, Frm_DalleN.myDalleLoc.LitArma(1).z_s)
+                End If
+
             Case 1
                 '# Cas où on supprime le second lit : on sélectionne le premier
                 Frm_DalleN.myDalleLoc.LitArma(1).lActive = False
                 iLitSelect = 0 : iSelect = 100
         End Select
 
-        Frm_DalleN.img_Dalle.Invalidate()
-        MAJI_BOArmatures()
-        MAJI_StatutBOArma()
+
         MAJ_ValeursLimites()
-        Frm_DalleN.MAJI_TauxArma()
         AfficherLitEncours()
+        MAJI_StatutBOArma()
+        MAJI_BOArmatures()
+        Frm_DalleN.MAJI_TauxArma()
+        Frm_DalleN.MAJI_SelectionTxtbox(iSelect)
 
     End Sub
 
@@ -397,29 +389,27 @@ Public Class Frm_DalleNArma
         Frm_DalleN.MAJI_DeselectionTxtbox()
     End Sub
 
-    Private Sub LeaveAcierArma(sender As Object, e As EventArgs) Handles cmb_Acier.Leave
+    Private Sub LeaveAcierArma(sender As Object, e As EventArgs) Handles lst_ClasseAcier.Leave
         If lBuild Then Exit Sub
         iSelect = -1
         Frm_DalleN.img_Dalle.Invalidate()
     End Sub
 
-    Private Sub EnterAcierArma(sender As Object, e As EventArgs) Handles cmb_Acier.Enter
+    Private Sub EnterAcierArma(sender As Object, e As EventArgs) Handles lst_ClasseAcier.Enter
         If lBuild Then Exit Sub
         Frm_DalleN.MAJI_SelectionTxtbox(1001)
     End Sub
 
-#End Region
-
-#Region " Evenement sur Clase Acier "
-    Private Sub cmb_Acier_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Acier.SelectedIndexChanged
+    Private Sub lst_ClasseAcier_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lst_ClasseAcier.SelectedIndexChanged
         If lBuild Then Exit Sub
-        Frm_DalleN.myDalleLoc.AcierArmatures.Classe = Me.ClasseAcierArma(Me.cmb_Acier.SelectedIndex)
+        Frm_DalleN.myDalleLoc.AcierArmatures.Classe = Me.ClasseAcierArma(Me.lst_ClasseAcier.SelectedIndex)
         MAJI_ProprietesAcier()
 
         Frm_DalleN.img_Dalle.Invalidate()
     End Sub
 #End Region
 
+#Region " Vérification des saisies "
     ''' <summary>
     ''' Vérification de la saisie des paramètres
     ''' </summary>
@@ -440,25 +430,15 @@ Public Class Frm_DalleNArma
                 ValMin = PHIMIN / kUnit
                 ValMax = PHIMAX / kUnit
 
-                Debug.WriteLine("phi")
-
             Case Me.txt_esp.Name
                 ValMin = ESPMIN / kUnit
                 ValMax = ESPMAX / kUnit
-
-                Debug.WriteLine("espacement")
 
             Case Me.txt_zs.Name
                 ValMin = Me.zMin_Rel / kUnit
                 ValMax = Me.zMax_Rel / kUnit
 
-                Debug.WriteLine("position")
-
         End Select
-
-        Debug.WriteLine("val min " & ValMin)
-        Debug.WriteLine("val max " & ValMax)
-
 
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
@@ -473,5 +453,6 @@ Public Class Frm_DalleNArma
         Return lOk
 
     End Function
+#End Region
 
 End Class

@@ -5,6 +5,10 @@ Imports PMXMoteur2
 Public Class Frm_DalleNBac
 
 #Region " Variables locales "
+    Dim strAppuiTcontinus, strAppuiTRibContinu, strAppuiTBacNonContinu As String
+    Dim strAppuiTDiscontinus As String
+    Dim strAppuiLbacUncut As String
+    Dim strAppuiLbacCut1, strAppuiLbacCut2 As String
 
     Dim lBuild As Boolean
     Dim lCofraPlus220 As Boolean
@@ -102,14 +106,63 @@ Public Class Frm_DalleNBac
     Private Sub AfficherBacEnCours()
 
         AfficheNomBacEnCours()
-
+        ''' -> Orientation
+        Select Case Frm_DalleN.myDalleLoc.Bac.Orientation
+            Case cls_Bac.Enum_Orientation.Parallele
+                Me.rdb_BacParallele.Checked = True
+            Case cls_Bac.Enum_Orientation.Perpendiculaire
+                Me.rdb_BacPerpendiculaire.Checked = True
+        End Select
+        MAJI_OrientationBac()
         Me.txt_DecalCofra220.Text = GetStringInUnitN(Frm_DalleN.myDalleLoc.Bac.eDecalage, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True)
+
+        '--> Bac prépercé
+
+        'Me.chk_BacPreperce.Checked = MyDalleLoc.Bac.lPreperce
+        If Frm_DalleN.myDalleLoc.Bac.lPreperce Then
+            Me.rdb_Preperce.Checked = True
+        Else
+            Me.rdb_ATraversBac.Checked = True
+        End If
+
+        '--> Configurations sur appui
+
+        MAJI_ConfigurationAppuiBac()
+
+        Select Case Frm_DalleN.myDalleLoc.Bac.AppuiL 'Modig GuD: Réinitialise les chkbox, il y'a des cas où plusieurs checkbox étaient sélectionnés
+            Case cls_Bac.EnuConfigLAppui.BacCoupe
+                Me.chk_L_PA2.Checked = True
+                UnselectChkTConfig(Me.chk_L_PA2.Name)
+            Case cls_Bac.EnuConfigLAppui.BacNonCoupe
+                Me.chk_L_PA1.Checked = True
+                UnselectChkTConfig(Me.chk_L_PA1.Name)
+        End Select
+
+        Select Case Frm_DalleN.myDalleLoc.Bac.AppuiT
+            Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                Me.chk_T_PA2.Checked = True
+                UnselectChkTConfig(Me.chk_T_PA2.Name)
+            Case cls_Bac.EnuConfigTAppui.Discontinu
+                Me.chk_T_PA3.Checked = True
+                UnselectChkTConfig(Me.chk_T_PA3.Name)
+            Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+                Me.chk_T_PA1.Checked = True
+                UnselectChkTConfig(Me.chk_T_PA1.Name)
+        End Select
 
     End Sub
 
 #End Region
 
 #Region " Routines MAJI "
+    Private Sub UnselectChkTConfig(NameSelect As String)
+        Dim lbuildBack As Boolean = lBuild
+        lBuild = True
+        If Me.chk_T_PA1.Name <> NameSelect Then Me.chk_T_PA1.Checked = False
+        If Me.chk_T_PA2.Name <> NameSelect Then Me.chk_T_PA2.Checked = False
+        If Me.chk_T_PA3.Name <> NameSelect Then Me.chk_T_PA3.Checked = False
+        lBuild = lbuildBack
+    End Sub
 
     Private Sub MAJI_ChangeBac()
         lCofraPlus220 = Frm_DalleN.MyDalleLoc.Bac.lCofraplus220
@@ -133,8 +186,8 @@ Public Class Frm_DalleNBac
 
     Private Sub MAJI_OrientationBac()
 
-        Me.chk_L_PA1.Visible = False '   (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele)
-        Me.chk_L_PA2.Visible = False '   (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele)
+        Me.chk_L_PA1.Visible = (Frm_DalleN.myDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele)
+        Me.chk_L_PA2.Visible = (Frm_DalleN.myDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele)
         Me.chk_T_PA1.Visible = (Frm_DalleN.MyDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
         Me.chk_T_PA2.Visible = (Frm_DalleN.MyDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
         Me.chk_T_PA3.Visible = (Frm_DalleN.MyDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
@@ -147,6 +200,32 @@ Public Class Frm_DalleNBac
 
         'PrepareTextBoxDipo(Me.txt_Td2, DefEpMixte = Enu_DefEpMixte.Totale)
         'PrepareTextBoxDipo(Me.txt_Tc, DefEpMixte = Enu_DefEpMixte.Pleine)
+
+    End Sub
+
+    Private Sub MAJI_ConfigurationAppuiBac()
+        '----------------------------------------------------------------------------------------------------------------
+        '   Mise à jour du texte d'explication en fct de la configuration d'appui du bac
+        '----------------------------------------------------------------------------------------------------------------
+
+        Select Case Frm_DalleN.myDalleLoc.Bac.Orientation
+            Case cls_Bac.Enum_Orientation.Perpendiculaire
+                Select Case Frm_DalleN.myDalleLoc.Bac.AppuiT
+                    Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+                        Me.rtxt_Configuration.Text = strAppuiTcontinus
+                    Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                        Me.rtxt_Configuration.Text = strAppuiTRibContinu & Chr(13) & strAppuiTBacNonContinu
+                    Case cls_Bac.EnuConfigTAppui.Discontinu
+                        Me.rtxt_Configuration.Text = strAppuiTDiscontinus
+                End Select
+            Case cls_Bac.Enum_Orientation.Parallele
+                Select Case Frm_DalleN.myDalleLoc.Bac.AppuiL
+                    Case cls_Bac.EnuConfigLAppui.BacCoupe
+                        Me.rtxt_Configuration.Text = strAppuiLbacCut1 & Chr(13) & strAppuiLbacCut2
+                    Case cls_Bac.EnuConfigLAppui.BacNonCoupe
+                        Me.rtxt_Configuration.Text = strAppuiLbacUncut
+                End Select
+        End Select
 
     End Sub
 
@@ -242,7 +321,6 @@ Public Class Frm_DalleNBac
     End Sub
 
 #End Region
-
 
 #Region " Dessins "
 

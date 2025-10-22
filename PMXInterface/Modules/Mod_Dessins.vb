@@ -3122,7 +3122,7 @@ Public Module Mod_Dessins
                 ColorArmatures(0) = CouleurArmaNormal
                 ColorArmatures(1) = CouleurArmaNormal
         End Select
-        'myBrushA(0) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.LightGray, ColorArmatures(0))
+
         myBrushA(0) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorArmatures(0), ColorArmatures(0))
         myBrushA(1) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorArmatures(1), ColorArmatures(1))
 

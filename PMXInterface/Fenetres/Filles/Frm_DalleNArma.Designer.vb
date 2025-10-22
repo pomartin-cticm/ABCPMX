@@ -27,10 +27,10 @@ Partial Class Frm_DalleNArma
         Me.Pan_Contenu = New System.Windows.Forms.Panel()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.lst_ClasseAcier = New System.Windows.Forms.ListBox()
         Me.txt_Fsk = New System.Windows.Forms.TextBox()
         Me.img_Fy = New System.Windows.Forms.PictureBox()
         Me.etq_UnitSigma2 = New System.Windows.Forms.Label()
-        Me.cmb_Acier = New System.Windows.Forms.ComboBox()
         Me.lbl_ClasseA = New System.Windows.Forms.Label()
         Me.lbl_Acier = New System.Windows.Forms.Label()
         Me.lbl_Armatures = New System.Windows.Forms.Label()
@@ -106,22 +106,31 @@ Partial Class Frm_DalleNArma
         '
         Me.Panel2.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel2.Controls.Add(Me.lst_ClasseAcier)
         Me.Panel2.Controls.Add(Me.txt_Fsk)
         Me.Panel2.Controls.Add(Me.img_Fy)
         Me.Panel2.Controls.Add(Me.etq_UnitSigma2)
-        Me.Panel2.Controls.Add(Me.cmb_Acier)
         Me.Panel2.Controls.Add(Me.lbl_ClasseA)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(0, 210)
-        Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel2.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(296, 260)
+        Me.Panel2.Size = New System.Drawing.Size(296, 259)
         Me.Panel2.TabIndex = 15
+        '
+        'lst_ClasseAcier
+        '
+        Me.lst_ClasseAcier.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lst_ClasseAcier.FormattingEnabled = True
+        Me.lst_ClasseAcier.Location = New System.Drawing.Point(149, 9)
+        Me.lst_ClasseAcier.Name = "lst_ClasseAcier"
+        Me.lst_ClasseAcier.Size = New System.Drawing.Size(57, 30)
+        Me.lst_ClasseAcier.TabIndex = 61
         '
         'txt_Fsk
         '
         Me.txt_Fsk.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Fsk.Location = New System.Drawing.Point(194, 33)
+        Me.txt_Fsk.Location = New System.Drawing.Point(149, 45)
         Me.txt_Fsk.Name = "txt_Fsk"
         Me.txt_Fsk.Size = New System.Drawing.Size(58, 20)
         Me.txt_Fsk.TabIndex = 59
@@ -129,7 +138,7 @@ Partial Class Frm_DalleNArma
         'img_Fy
         '
         Me.img_Fy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Fy.Location = New System.Drawing.Point(138, 33)
+        Me.img_Fy.Location = New System.Drawing.Point(93, 45)
         Me.img_Fy.Name = "img_Fy"
         Me.img_Fy.Size = New System.Drawing.Size(57, 20)
         Me.img_Fy.TabIndex = 60
@@ -139,22 +148,11 @@ Partial Class Frm_DalleNArma
         '
         Me.etq_UnitSigma2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitSigma2.AutoSize = True
-        Me.etq_UnitSigma2.Location = New System.Drawing.Point(258, 36)
+        Me.etq_UnitSigma2.Location = New System.Drawing.Point(213, 48)
         Me.etq_UnitSigma2.Name = "etq_UnitSigma2"
         Me.etq_UnitSigma2.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitSigma2.TabIndex = 58
         Me.etq_UnitSigma2.Text = "mm"
-        '
-        'cmb_Acier
-        '
-        Me.cmb_Acier.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmb_Acier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_Acier.FormattingEnabled = True
-        Me.cmb_Acier.Location = New System.Drawing.Point(127, 6)
-        Me.cmb_Acier.Name = "cmb_Acier"
-        Me.cmb_Acier.Size = New System.Drawing.Size(157, 21)
-        Me.cmb_Acier.TabIndex = 57
         '
         'lbl_ClasseA
         '
@@ -459,7 +457,6 @@ Partial Class Frm_DalleNArma
     Friend WithEvents txt_Fsk As TextBox
     Friend WithEvents img_Fy As PictureBox
     Friend WithEvents etq_UnitSigma2 As Label
-    Friend WithEvents cmb_Acier As ComboBox
     Friend WithEvents lbl_ClasseA As Label
     Friend WithEvents lbl_Acier As Label
     Friend WithEvents lbl_Armatures As Label
@@ -486,4 +483,5 @@ Partial Class Frm_DalleNArma
     Friend WithEvents ToolTipDalle As ToolTip
     Friend WithEvents imgList_BOArma As ImageList
     Friend WithEvents ErrorProvider As ErrorProvider
+    Friend WithEvents lst_ClasseAcier As ListBox
 End Class
