@@ -275,10 +275,10 @@ Public Class Frm_DalleSlimFloorN
         Td = localDalle.Ep_td
         TcF = Td - localBeam.Section.hec
 
-        If IsSmaller(TcF, OptionsSlimFloor.TcSlimMin) Then
+        If IsSmaller(TcF, OptionsDalle.TcSlimMin) Then
 
             Dim strTcf As String = GetStringInUnitN(TcF, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiInterface, True)
-            Dim strTcMin As String = GetStringInUnitN(OptionsSlimFloor.TcSlimMin, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiInterface, True)
+            Dim strTcMin As String = GetStringInUnitN(OptionsDalle.TcSlimMin, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.OuiInterface, True)
 
             Problem = RemplaceDollar(RemplaceDollar(strEpMinDalle, strTcf), strTcMin)
 

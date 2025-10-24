@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Runtime.Remoting.Channels
 Imports PMXMoteur2
 
 Module Mod_Outils
@@ -1037,8 +1038,6 @@ Module Mod_Outils
                 'Fmt = LogicielInfo.Format_Longueur(LogicielOptions.IndUnitDimension)
                 NbDigitMax = LogicielInfo.NbDigitMax_Longueur(LogicielOptions.IndUnitDimension)
 
-
-
             'Case Enu_TypeVariable.Millimetres
             '    Chaine = Format(Valeur / kUnitLongueur(indUnitMILLIMETRE), fmtUnitLongueur(indUnitMILLIMETRE))
             Case Enu_TypeVariable.Effort
@@ -1516,7 +1515,6 @@ Module Mod_Outils
             MyTxt.ReadOnly = True
             MyTxt.BackColor = CouleurReadOnly
         End If
-
     End Sub
 
     ''' <summary>

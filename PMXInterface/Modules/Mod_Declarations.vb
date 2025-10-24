@@ -273,6 +273,9 @@ Public Module Mod_Declarations
         Public RapportAfMax As Decimal          ' Valeur maximal du rapport des aires de semelles PRS 
 
         Public MB_spCoutureMax As Decimal       ' Espacement maxi des vis de couturage, pour le maintien par le bac
+
+        'Public eDecalageMax As Decimal          ' Décalage maximal autorisé pour les bac en Cofraplus220
+
     End Structure
 
     Public Structure struc_ReglagesLogiciel
@@ -337,6 +340,8 @@ Public Module Mod_Declarations
         myOptions.RapportAfMin = 1
 
         myOptions.MB_spCoutureMax = 500 / 1000
+
+        'myOptions.eDecalageMax = 20
 
     End Sub
 
@@ -460,11 +465,12 @@ Public Module Mod_Declarations
 
         OptionsCalcul.EtaW = My.Settings.EtaW
 
-        OptionsSlimFloor.Hslimmax = My.Settings.Slim_Hsmax
-        OptionsSlimFloor.bappmin = My.Settings.bappmin
-        OptionsSlimFloor.Tpinfmin = My.Settings.Slim_TpInfMin
-        OptionsSlimFloor.Twcdmin = My.Settings.Slim_TwcdMin
-        OptionsSlimFloor.TcSlimMin = My.Settings.Slim_TcMin
+        OptionsDalle.Hslimmax = My.Settings.Slim_Hsmax
+        OptionsDalle.Bappmin = My.Settings.bappmin
+        OptionsDalle.Tpinfmin = My.Settings.Slim_TpInfMin
+        OptionsDalle.Twcdmin = My.Settings.Slim_TwcdMin
+        OptionsDalle.TcSlimMin = My.Settings.Slim_TcMin
+        OptionsDalle.DecalageMax = My.Settings.DecalageMax
 
     End Sub
 
@@ -656,6 +662,7 @@ Public Module Mod_Declarations
     Public Const SLIM_HSMAX As Decimal = 0.65                   ' Hauteur maxi des profilés
     Public Const SLIM_BAPPMIN As Decimal = 0.05                 ' Largeur mini des appui d'une dalle
     Public Const SLIM_TCMIN As Decimal = 0.04                   ' Epaisseur mini de la dalle au dessus du profilé
+    Public Const SLIM_DECALAGEMAX As Decimal = 0.02             ' Décalage maximal pour un bac cofraplus220
 
 #End Region
 

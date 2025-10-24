@@ -2433,9 +2433,9 @@ Public Class cls_Poutre
 
 #Region " Calcul des armatures transversales "
 
-    ''' <summary>
-    ''' Calcul la contrainte tangentielle induite par les connecteurs 
-    ''' </summary>
+    '' <summary>
+    '' Calcul la contrainte tangentielle induite par les connecteurs 
+    '' </summary>
     'Sub CalculArmaturesTransversales()
     '    '------------------------------------------------------------------------------------------------------------------
     '    '    17/11/23 : Création - GUD

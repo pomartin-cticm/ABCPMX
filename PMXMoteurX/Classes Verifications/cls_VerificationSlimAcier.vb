@@ -445,7 +445,7 @@
             If lDallePleine Then
                 dApp = myBeam.Section.LargeurAppuiSlimDallePleine
             Else
-                dApp = (2 / 3) * OptionsSlimFloor.Bappmin
+                dApp = (2 / 3) * OptionsDalle.Bappmin
             End If
         End If
 

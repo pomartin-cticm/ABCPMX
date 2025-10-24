@@ -585,7 +585,7 @@
             MyzTop = Me.EpRenformis + Me.Ep_td
 
             If (Me.type = Enum_TypeDalle.Mixte) Then
-                If (Me.Bac.lCofraplus220) And (Not Me.lSlimFloor) Then MyzTop -= Me.Bac.Hp
+                If (Me.Bac.lCofraplus220) And (Not Me.lSlimFloor) Then MyzTop += Me.Bac.eDecalage - Me.Bac.Hp
             End If
 
             Return MyzTop

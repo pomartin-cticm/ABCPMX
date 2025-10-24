@@ -170,6 +170,7 @@ Public Class Frm_Dalle
 
                 'strAppuiTRibContinu = "Nervure continue"
                 strAppuiTRibContinu = Bloc("CONTINUOUSRIB")
+
                 'strAppuiTBacNonContinu = "Bac discontinu"
                 strAppuiTBacNonContinu = Bloc("DISCONTINUOUSDECK")
 
@@ -949,7 +950,6 @@ Public Class Frm_Dalle
         Me.img_Dalle.Invalidate()
     End Sub
 
-
     Private Sub LeaveAcierArma(sender As Object, e As EventArgs) Handles cmb_Acier.Leave
         If lBuild Then Exit Sub
 
@@ -983,7 +983,6 @@ Public Class Frm_Dalle
         iSelect = -1
         Me.img_Dalle.Invalidate()
     End Sub
-
 
     Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Leave, txt_zs.Leave, txt_PhiS.Leave, txt_esp.Leave, txt_RhoC.Leave, txt_Td2.Leave, txt_Tc.Leave, txt_Hd.Leave, txt_EpPredalle.Leave, txt_EpJoint.Leave
         If lBuild Then Exit Sub

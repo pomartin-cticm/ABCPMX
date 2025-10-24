@@ -1,6 +1,6 @@
 ﻿Imports PMXMoteur2
 
-Public Class Frm_OptionsCalculSlimFloor
+Public Class Frm_OptionsCalculDalle
 
 #Region " Variables locales "
 
@@ -27,27 +27,28 @@ Public Class Frm_OptionsCalculSlimFloor
     End Sub
 
     Private Sub GestionLangue(ByVal myBloc As Dictionary(Of String, String))
+        Dim strLoadedKey As String = ""
+        Dim CLE As String = ""
         Try
 
-            Me.lbl_Slimfloors.Text = myBloc("TITLE")
-            Me.lbl_Dalles.Text = myBloc("SLABS")
+            CLE = "TITLE" : Me.lbl_Slimfloors.Text = myBloc(CLE)
+            CLE = "SLABS" : Me.lbl_Dalles.Text = myBloc(CLE)
 
-            '#-------------------- GEOMETRIE SELPOUTRE
+            CLE = "SLIMFLOORDIM" : Me.lbl_SlimFloor.Text = myBloc(CLE)
+            CLE = "DEPTHMAX" : Me.lbl_hslimmax.Text = myBloc(CLE)
+            CLE = "SLABSUPPORTMIN" : Me.lbl_bappmin.Text = myBloc(CLE)
+            CLE = "THICKNESSMIN" : Me.lbl_tpinfmin.Text = myBloc(CLE)
+            CLE = "THICKNESSWMIN" : Me.lbl_TwcdMin.Text = myBloc(CLE)
+            CLE = "THICKNESSTCMIN" : Me.lbl_Tcslimmin.Text = myBloc(CLE)
+            CLE = "SLABOFFSETMAX" : Me.lbl_MaxDecalage.Text = myBloc(CLE)
 
-            Me.lbl_SlimFloor.Text = myBloc("SLIMFLOORDIM")
-            Me.lbl_hslimmax.Text = myBloc("DEPTHMAX")
-            Me.lbl_bappmin.Text = myBloc("SLABSUPPORTMIN")
-            Me.lbl_tpinfmin.Text = myBloc("THICKNESSMIN")
-            Me.lbl_TwcdMin.Text = myBloc("THICKNESSWMIN")
-            Me.lbl_Tcslimmin.Text = myBloc("THICKNESSTCMIN")
-
-
-            Me.lbl_MaintienBac.Text = myBloc("RESTRAINTBYSHEETS")
-            Me.lbl_EntraxeCoutureMax.Text = myBloc("ECSEAMMAX")
+            CLE = "RESTRAINTBYSHEETS" : Me.lbl_MaintienBac.Text = myBloc(CLE)
+            CLE = "ECSEAMMAX" : Me.lbl_EntraxeCoutureMax.Text = myBloc(CLE)
 
         Catch ex As Exception
-            GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+            'GestionErreurAffichageLangue(Me.Name, "GestionLangues")
             'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+            GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
         Finally
         End Try
     End Sub
@@ -68,6 +69,7 @@ Public Class Frm_OptionsCalculSlimFloor
         PrepareTextBoxDipo(Me.txt_tpinfmin, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_twcdmin, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_TcSlimMin, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_maxdecalage, LogicielOptions.lExpert)
         PrepareTextBoxDipo(Me.txt_ecMax, False)
 
     End Sub
@@ -80,6 +82,7 @@ Public Class Frm_OptionsCalculSlimFloor
         Me.etq_UnitDim4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitDim5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitDim6.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim7.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
     End Sub
 
@@ -87,12 +90,13 @@ Public Class Frm_OptionsCalculSlimFloor
 
         '--> Paramètres
 
-        Me.txt_hslimmax.Text = GetStringInUnitN(LocalOptionsSlimFloor.Hslimmax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        Me.txt_bappmin.Text = GetStringInUnitN(LocalOptionsSlimFloor.Bappmin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        Me.txt_tpinfmin.Text = GetStringInUnitN(LocalOptionsSlimFloor.Tpinfmin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        Me.txt_twcdmin.Text = GetStringInUnitN(LocalOptionsSlimFloor.Twcdmin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        Me.txt_TcSlimMin.Text = GetStringInUnitN(LocalOptionsSlimFloor.TcSlimMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        Me.txt_ecMax.Text = GetStringInUnitN(LocalOptionsSlimFloor.Tpinfmin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_hslimmax.Text = GetStringInUnitN(LocalOptionsDalle.Hslimmax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_bappmin.Text = GetStringInUnitN(LocalOptionsDalle.Bappmin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_tpinfmin.Text = GetStringInUnitN(LocalOptionsDalle.Tpinfmin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_twcdmin.Text = GetStringInUnitN(LocalOptionsDalle.Twcdmin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_TcSlimMin.Text = GetStringInUnitN(LocalOptionsDalle.TcSlimMin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_ecMax.Text = GetStringInUnitN(LocalOptionsDalle.Tpinfmin, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
+        Me.txt_maxdecalage.Text = GetStringInUnitN(LocalOptionsDalle.DecalageMax, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
 
     End Sub
 
@@ -100,7 +104,7 @@ Public Class Frm_OptionsCalculSlimFloor
 
 #Region " Evènements saisie "
 
-    Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_hslimmax.TextChanged, txt_tpinfmin.TextChanged, txt_twcdmin.TextChanged, txt_bappmin.TextChanged, txt_TcSlimMin.TextChanged
+    Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_hslimmax.TextChanged, txt_tpinfmin.TextChanged, txt_twcdmin.TextChanged, txt_bappmin.TextChanged, txt_TcSlimMin.TextChanged, txt_maxdecalage.TextChanged
 
         If lBuild Then Exit Sub
         Dim lPortees As Boolean = False
@@ -112,15 +116,17 @@ Public Class Frm_OptionsCalculSlimFloor
 
             Select Case sender.name
                 Case Me.txt_hslimmax.Name
-                    LocalOptionsSlimFloor.Hslimmax = ValeurUI
+                    LocalOptionsDalle.Hslimmax = ValeurUI
                 Case Me.txt_bappmin.Name
-                    LocalOptionsSlimFloor.Bappmin = ValeurUI
+                    LocalOptionsDalle.Bappmin = ValeurUI
                 Case Me.txt_tpinfmin.Name
-                    LocalOptionsSlimFloor.Tpinfmin = ValeurUI
+                    LocalOptionsDalle.Tpinfmin = ValeurUI
                 Case Me.txt_twcdmin.Name
-                    LocalOptionsSlimFloor.Twcdmin = ValeurUI
+                    LocalOptionsDalle.Twcdmin = ValeurUI
                 Case Me.txt_TcSlimMin.Name
-                    LocalOptionsSlimFloor.TcSlimMin = ValeurUI
+                    LocalOptionsDalle.TcSlimMin = ValeurUI
+                Case Me.txt_maxdecalage.Name
+                    LocalOptionsDalle.DecalageMax = ValeurUI
             End Select
 
         End If
@@ -178,6 +184,12 @@ Public Class Frm_OptionsCalculSlimFloor
                 ValMax = EPMAX
                 lValMax = False
 
+            Case Me.txt_maxdecalage.Name
+
+                ValMin = 0
+                ValMax = EPMAX
+                lValMax = False
+
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
@@ -196,7 +208,7 @@ Public Class Frm_OptionsCalculSlimFloor
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_hslimmax.Paint, img_tpinfmin.Paint, img_bappmin.Paint, img_ecMax.Paint, img_twcdmin.Paint, img_Tcslimmin.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_hslimmax.Paint, img_tpinfmin.Paint, img_bappmin.Paint, img_ecMax.Paint, img_twcdmin.Paint, img_Tcslimmin.Paint, img_maxdecalage.Paint
 
         '--> Déclarations
 
@@ -228,6 +240,10 @@ Public Class Frm_OptionsCalculSlimFloor
                 strSymbol = "b"
                 strIndice = "app,min"
 
+            Case Me.img_maxdecalage.Name
+                strSymbol = "e"
+                strIndice = "220,max"
+
             Case Me.img_tpinfmin.Name
                 strSymbol = "t"
                 strIndice = "p,inf,min"
@@ -248,7 +264,6 @@ Public Class Frm_OptionsCalculSlimFloor
                     FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
-
 #End Region
 
 End Class

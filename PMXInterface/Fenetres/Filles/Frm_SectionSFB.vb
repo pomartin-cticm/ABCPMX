@@ -11,11 +11,11 @@ Public Class Frm_SectionSFB
     Const EPSILONG As Double = 0.0001
     Const iFRMSECTION As Integer = 4
 
-    Dim HSLIMMAX As Decimal = OptionsSlimFloor.hslimmax 'limite le choix des profilés à ceux dont la hauteur et inférieure ou égale à 650 mm
+    Dim HSLIMMAX As Decimal = OptionsDalle.hslimmax 'limite le choix des profilés à ceux dont la hauteur et inférieure ou égale à 650 mm
     Const BFMAXI As Decimal = 0.5
     Const EPMAXI As Decimal = 0.5
-    Dim BAPPMIN As Decimal = OptionsSlimFloor.bappmin
-    Dim TPINFMIN As Decimal = OptionsSlimFloor.tpinfmin
+    Dim BAPPMIN As Decimal = OptionsDalle.bappmin
+    Dim TPINFMIN As Decimal = OptionsDalle.tpinfmin
     Structure strucAcierLocal
         Dim Nuance As String
         Dim Qualite As String

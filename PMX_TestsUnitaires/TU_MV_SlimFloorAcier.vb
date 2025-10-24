@@ -35,7 +35,7 @@ Imports PMXMoteur2
 
         myBeam.Initialise_CoefficientsCombinaisons()
         myBeam.Section.TypeSection = cls_Section.Enum_TypeSection.SFB
-        OptionsSlimFloor.Bappmin = 50 / 1000
+        OptionsDalle.Bappmin = 50 / 1000
 
 #End Region
 
@@ -225,7 +225,7 @@ Imports PMXMoteur2
 
         myBeam.Initialise_CoefficientsCombinaisons()
         myBeam.Section.TypeSection = cls_Section.Enum_TypeSection.SFB
-        OptionsSlimFloor.Bappmin = 50 / 1000
+        OptionsDalle.Bappmin = 50 / 1000
 
 #End Region
 
@@ -416,7 +416,7 @@ Imports PMXMoteur2
 
         myBeam.Initialise_CoefficientsCombinaisons()
         myBeam.Section.TypeSection = cls_Section.Enum_TypeSection.IFB_A
-        OptionsSlimFloor.Bappmin = 50 / 1000
+        OptionsDalle.Bappmin = 50 / 1000
 
 #End Region
 
@@ -612,7 +612,7 @@ Imports PMXMoteur2
 
         myBeam.Initialise_CoefficientsCombinaisons()
         myBeam.Section.TypeSection = cls_Section.Enum_TypeSection.IFB_B
-        OptionsSlimFloor.Bappmin = 50 / 1000
+        OptionsDalle.Bappmin = 50 / 1000
 
 #End Region
 

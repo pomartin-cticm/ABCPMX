@@ -27,8 +27,8 @@ YEARVERSION				= Année :
 #FRM_ADDBEAMFILE
 TITLE					= Ajouter une poutre
 OK						= OK
-CANCEL					= Annuler
 CLOSE					= Fermer
+CANCEL					= Annuler
 PROJECT					= Projet $
 ADDBEAM					= Ajouter les poutres suivantes dans le projet
 
@@ -1183,6 +1183,7 @@ THICKNESSWMIN			= Épaisseur minimale de l'âme pour la connexion par armatures
 RESTRAINTBYSHEETS		= Maintien au déversement par le bac
 ECSEAMMAX				= Espacement max des fixations de couture
 THICKNESSTCMIN			= Épaisseur minimale de béton au dessus du profilé
+SLABOFFSETMAX			= Décalage maximal de la dalle si Cofraplus220
 
 #OPTSOFTMAIN
 TITLE					= Options logiciel

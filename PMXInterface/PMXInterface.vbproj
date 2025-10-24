@@ -361,10 +361,10 @@
     <Compile Include="Fenetres\Options\Frm_OptionsCalculConnecteurs.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fenetres\Options\Frm_OptionsCalculSlimFloor.Designer.vb">
-      <DependentUpon>Frm_OptionsCalculSlimFloor.vb</DependentUpon>
+    <Compile Include="Fenetres\Options\Frm_OptionsCalculDalle.Designer.vb">
+      <DependentUpon>Frm_OptionsCalculDalle.vb</DependentUpon>
     </Compile>
-    <Compile Include="Fenetres\Options\Frm_OptionsCalculSlimFloor.vb">
+    <Compile Include="Fenetres\Options\Frm_OptionsCalculDalle.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\PostProcess\Frm_PPCasDeCharge.Designer.vb">
@@ -812,8 +812,8 @@
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsCalculConnecteurs.resx">
       <DependentUpon>Frm_OptionsCalculConnecteurs.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fenetres\Options\Frm_OptionsCalculSlimFloor.resx">
-      <DependentUpon>Frm_OptionsCalculSlimFloor.vb</DependentUpon>
+    <EmbeddedResource Include="Fenetres\Options\Frm_OptionsCalculDalle.resx">
+      <DependentUpon>Frm_OptionsCalculDalle.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\PostProcess\Frm_PPCasDeCharge.resx">
       <DependentUpon>Frm_PPCasDeCharge.vb</DependentUpon>

@@ -100,7 +100,7 @@ Partial Class Frm_DalleNGeneral
         '
         Me.Pan_Contenu.Controls.Add(Me.TLpan_Gauche)
         Me.Pan_Contenu.Location = New System.Drawing.Point(22, 16)
-        Me.Pan_Contenu.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Pan_Contenu.Margin = New System.Windows.Forms.Padding(2)
         Me.Pan_Contenu.Name = "Pan_Contenu"
         Me.Pan_Contenu.Size = New System.Drawing.Size(296, 470)
         Me.Pan_Contenu.TabIndex = 0
@@ -675,7 +675,7 @@ Partial Class Frm_DalleNGeneral
         Me.Controls.Add(Me.pan_Renformis)
         Me.Controls.Add(Me.cmb_ClasseBetonDalle)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "Frm_DalleNGeneral"
         Me.Text = "Frm_DalleNGeneral"
         Me.Pan_Contenu.ResumeLayout(False)

@@ -195,7 +195,7 @@ Public Class Frm_ConnectionSlimConnecteur
         RemplirComboDiametreArma()
         RemplirComboAvecTableau(Me.cmb_Acier, ClasseAcierArma)
 
-        lArmaDispo = IsGreaterOrEqual(Frm_ConnectionSlimN.localBeam.Section.ProfilA.Tw, OptionsSlimFloor.Twcdmin) _
+        lArmaDispo = IsGreaterOrEqual(Frm_ConnectionSlimN.localBeam.Section.ProfilA.Tw, OptionsDalle.Twcdmin) _
                  And (Not Frm_ConnectionSlimN.localBeam.Section.lSlimFloor_IFB_B)
 
         Me.rdb_Armatures.Enabled = lArmaDispo

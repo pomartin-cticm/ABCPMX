@@ -56,7 +56,6 @@ Public Class Frm_DalleN
         InitialisationVariablesLocales()
         PreparerFenetre()
         AffichageFille()
-        'AfficherDalleEnCours()
         lBuild = False
 
     End Sub
@@ -93,6 +92,8 @@ Public Class Frm_DalleN
 
                 CLE = "ERRORCCOVER1" : strErreurEnrob(0) = Bloc(CLE)
                 CLE = "ERRORCCOVER2" : strErreurEnrob(1) = Bloc(CLE)
+
+                CLE = "REINFRATIO" : strTauxArma = Bloc(CLE)
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
@@ -150,6 +151,8 @@ Public Class Frm_DalleN
             Case Enu_AffParam.General
                 Me.rdb_General.Checked = True
         End Select
+
+        MAJI_TauxArma()
     End Sub
 
 #End Region

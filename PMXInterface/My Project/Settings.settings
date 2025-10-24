@@ -344,5 +344,8 @@
     <Setting Name="Slim_TcMin" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0.04</Value>
     </Setting>
+    <Setting Name="DecalageMax" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0.02</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

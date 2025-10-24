@@ -248,8 +248,9 @@ Partial Class Frm_DalleNBac
         Me.rtxt_Configuration.Location = New System.Drawing.Point(15, 78)
         Me.rtxt_Configuration.Name = "rtxt_Configuration"
         Me.rtxt_Configuration.ReadOnly = True
-        Me.rtxt_Configuration.Size = New System.Drawing.Size(213, 41)
+        Me.rtxt_Configuration.Size = New System.Drawing.Size(213, 29)
         Me.rtxt_Configuration.TabIndex = 3
+        Me.rtxt_Configuration.TabStop = False
         Me.rtxt_Configuration.Text = ""
         '
         'chk_T_PA3

@@ -180,6 +180,32 @@ Public Class cls_Bac
     End Sub
 
     Sub New(MyFab As String, ByVal My_etiquette As String, ByVal Mybb As Decimal, ByVal Mybt As Decimal, ByVal Myhp As Decimal, ByVal Myhrs As Decimal,
+            ByVal Myep As Decimal, ByVal Myt As Decimal, MymSurf As Decimal, Myfyp As Decimal, MyLMod As Decimal, MyIeff As Decimal, MyDecalage As Decimal)
+
+        Me.Producteur = MyFab
+        Me.lDatabase = True
+        Me.Etiquette = My_etiquette
+        Me.Bb = Mybb
+        Me.Bt = Mybt
+
+        Me.Hp = Myhp
+        Me.Ep = Myep
+        Me.Tp = Myt
+        Me.h_rs = Myhrs
+
+        Me.msurf = MymSurf
+        Me.Fyp = Myfyp
+
+        Me.Ieff = MyIeff
+        Me.LargeurModule = MyLMod
+        Me.lPreperce = True
+        AppuiT = EnuConfigTAppui.BetonSeulContinu
+        AppuiL = EnuConfigLAppui.BacNonCoupe
+        Me.Fup = 420
+        Me.eDecalage = MyDecalage
+    End Sub
+
+    Sub New(MyFab As String, ByVal My_etiquette As String, ByVal Mybb As Decimal, ByVal Mybt As Decimal, ByVal Myhp As Decimal, ByVal Myhrs As Decimal,
             ByVal Myep As Decimal, ByVal Myt As Decimal, MymSurf As Decimal, Myfyp As Decimal, MyLMod As Decimal, MyIeff As Decimal)
 
         Me.Producteur = MyFab
@@ -194,7 +220,7 @@ Public Class cls_Bac
         Me.h_rs = Myhrs
 
         Me.msurf = MymSurf
-        Me.fyp = Myfyp
+        Me.Fyp = Myfyp
 
         Me.Ieff = MyIeff
         Me.LargeurModule = MyLMod
@@ -202,7 +228,6 @@ Public Class cls_Bac
         AppuiT = EnuConfigTAppui.BetonSeulContinu
         AppuiL = EnuConfigLAppui.BacNonCoupe
         Me.Fup = 420
-        Me.eDecalage = 0
     End Sub
 
 
@@ -277,6 +302,7 @@ Public Class cls_Bac
         'Lines.Add("   Bhpg          = " & h_pg)
         Lines.Add("   Bhp           = " & Hp)
         Lines.Add("   Bep           = " & Ep)
+        Lines.Add("   eDecalage     = " & eDecalage)
 
     End Sub
 

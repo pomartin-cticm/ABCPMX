@@ -428,7 +428,7 @@ Module Mod_NoteCalcul
                         AddLigneNDC(TABW2 & BlocOofS("THICKNESSABOVEFLANGE") _
                                     & TABAFF2 & "t\-c,slim\= = " & GetStringInUnitN(myBeam.Dalle.Ep_td - myBeam.Section.hec, Enu_TypeVariable.Dimension, 4, 2, OUI, True) _
                                     & " " & BlocOofS("ABOVEFLANGE"))
-                        AddLigneNDC(TABW2 & BlocOofS("MINIMALVALUE") & TABAFF2 & "t\-c,slim,min\= = " & GetStringInUnitN(OptionsSlimFloor.TcSlimMin, Enu_TypeVariable.Dimension, 4, 2, OUI, True))
+                        AddLigneNDC(TABW2 & BlocOofS("MINIMALVALUE") & TABAFF2 & "t\-c,slim,min\= = " & GetStringInUnitN(OptionsDalle.TcSlimMin, Enu_TypeVariable.Dimension, 4, 2, OUI, True))
 
                             '//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     Case OOS_EpSupHec

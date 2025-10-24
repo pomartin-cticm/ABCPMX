@@ -1197,6 +1197,7 @@ THICKNESSWMIN			= Minimum thickness of the web for dowel connectors
 RESTRAINTBYSHEETS		= Lateral restraint by the steel sheeting
 ECSEAMMAX				= Max spacing of seam fastening
 THICKNESSTCMIN			= Minimum thickness of concrete above the steel flange
+SLABOFFSETMAX			= Maximum offset of a slab with Cofraplus220
 
 #OPTSOFTMAIN
 TITLE					= Software options

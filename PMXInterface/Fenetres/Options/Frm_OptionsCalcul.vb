@@ -130,7 +130,7 @@ Public Class Frm_OptionsCalcul
         LocalOptionsScope = OptionsScope
         LocalOptionsCalcul = OptionsCalcul
         LocalOptionsFeu = OptionsFeu
-        LocalOptionsSlimFloor = OptionsSlimFloor
+        LocalOptionsDalle = OptionsDalle
 
         Me.lSettingsReset = False
 
@@ -267,8 +267,8 @@ Public Class Frm_OptionsCalcul
 
             Case Enu_OptionsCalcul.Slimfloor
 
-                Me.pan_Contenu.Controls.Add(Frm_OptionsCalculSlimFloor.pan_Slimfloor)
-                Frm_OptionsCalculSlimFloor.InitialiseFrm()
+                Me.pan_Contenu.Controls.Add(Frm_OptionsCalculDalle.pan_Slimfloor)
+                Frm_OptionsCalculDalle.InitialiseFrm()
 
             Case Enu_OptionsCalcul.Incendie
 
@@ -355,11 +355,20 @@ Public Class Frm_OptionsCalcul
 
         '# Fenêtre Dalle et slimfloor
         If lExpert Then
-            GereTransfertValeur(LocalOptionsSlimFloor.hslimmax, OptionsSlimFloor.hslimmax, lModif)
-            GereTransfertValeur(LocalOptionsSlimFloor.bappmin, OptionsSlimFloor.bappmin, lModif)
-            GereTransfertValeur(LocalOptionsSlimFloor.Tpinfmin, OptionsSlimFloor.Tpinfmin, lModif)
-            GereTransfertValeur(LocalOptionsSlimFloor.Twcdmin, OptionsSlimFloor.Twcdmin, lModif)
-            GereTransfertValeur(LocalOptionsSlimFloor.TcSlimMin, OptionsSlimFloor.TcSlimMin, lModif)
+            GereTransfertValeur(LocalOptionsDalle.Hslimmax, OptionsDalle.Hslimmax, lModif)
+            GereTransfertValeur(LocalOptionsDalle.Bappmin, OptionsDalle.Bappmin, lModif)
+            GereTransfertValeur(LocalOptionsDalle.Tpinfmin, OptionsDalle.Tpinfmin, lModif)
+            GereTransfertValeur(LocalOptionsDalle.Twcdmin, OptionsDalle.Twcdmin, lModif)
+            GereTransfertValeur(LocalOptionsDalle.TcSlimMin, OptionsDalle.TcSlimMin, lModif)
+            Debug.WriteLine("Appel transfert valeur decalage max")
+            Debug.WriteLine("Avant")
+            Debug.WriteLine("val local : " & LocalOptionsDalle.DecalageMax)
+            Debug.WriteLine("val globale : " & OptionsDalle.DecalageMax)
+            GereTransfertValeur(LocalOptionsDalle.DecalageMax, OptionsDalle.DecalageMax, lModif)
+            Debug.WriteLine("Après")
+            Debug.WriteLine("val local : " & LocalOptionsDalle.DecalageMax)
+            Debug.WriteLine("val globale : " & OptionsDalle.DecalageMax)
+            Debug.WriteLine("")
         End If
 
         '# Fenêtre Options Calculs
@@ -536,8 +545,8 @@ Public Class Frm_OptionsCalcul
                 InitialiseOptionsScopeDefaut(LocalOptionsScope)
                 Frm_OptionsCalculScope.InitialiseFrm(True)
             Case Enu_OptionsCalcul.Slimfloor
-                InitialiseOptionsCalSlimFloor()
-                Frm_OptionsCalculSlimFloor.InitialiseFrm(True)
+                InitialiseOptionsCalDalle()
+                Frm_OptionsCalculDalle.InitialiseFrm(True)
         End Select
 
     End Sub
@@ -555,19 +564,20 @@ Public Class Frm_OptionsCalcul
 
     End Sub
 
-    Private Sub InitialiseOptionsCalSlimFloor()
+    Private Sub InitialiseOptionsCalDalle()
         '-----------------------------------------------------------------------------------------------------------------------------
         '   29/07/25 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------------------
-        '   Valeurs par défaut des options de calcul pour les slimfloors
+        '   Valeurs par défaut des options de calcul pour les slimfloors & les dalles
         '-----------------------------------------------------------------------------------------------------------------------------
         '-----------------------------------------------------------------------------------------------------------------------------
 
-        LocalOptionsSlimFloor.Twcdmin = SLIM_TWMINARMA
-        LocalOptionsSlimFloor.Tpinfmin = SLIM_TPMINPLAT
-        LocalOptionsSlimFloor.Hslimmax = SLIM_HSMAX
-        LocalOptionsSlimFloor.Bappmin = SLIM_BAPPMIN
-        LocalOptionsSlimFloor.TcSlimMin = SLIM_TCMIN
+        LocalOptionsDalle.Twcdmin = SLIM_TWMINARMA
+        LocalOptionsDalle.Tpinfmin = SLIM_TPMINPLAT
+        LocalOptionsDalle.Hslimmax = SLIM_HSMAX
+        LocalOptionsDalle.Bappmin = SLIM_BAPPMIN
+        LocalOptionsDalle.TcSlimMin = SLIM_TCMIN
+        LocalOptionsDalle.DecalageMax = SLIM_DECALAGEMAX
 
     End Sub
 

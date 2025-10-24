@@ -58,6 +58,11 @@ Public Class Frm_DalleNBac
             CLE = "THROUGHDECKW" : Me.rdb_ATraversBac.Text = myBloc(CLE)
             CLE = "PREPUNCHED" : Me.rdb_Preperce.Text = myBloc(CLE)
 
+            CLE = "CONTINUOUSRIBANDDECK" : Me.strAppuiTcontinus = myBloc(CLE)
+            CLE = "CONTINUOUSRIB" : Me.strAppuiTRibContinu = myBloc(CLE)
+            CLE = "DISCONTINUOUSDECK" : Me.strAppuiTBacNonContinu = myBloc(CLE)
+            CLE = "DISCONTINUOUSRIBDECK" : Me.strAppuiTDiscontinus = myBloc(CLE)
+
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
         End Try
@@ -101,11 +106,12 @@ Public Class Frm_DalleNBac
         Me.pan_DecalageCofra220.Top = Me.pan_ConfigurationNervures.Top
         Me.pan_DecalageCofra220.Width = Me.pan_ConfigurationNervures.Width
 
+        Me.txt_DecalCofra220.Text = Frm_DalleN.myDalleLoc.Bac.eDecalage
+
     End Sub
 
     Private Sub AfficherBacEnCours()
-
-        AfficheNomBacEnCours()
+        MAJI_ChangeBac()
         ''' -> Orientation
         Select Case Frm_DalleN.myDalleLoc.Bac.Orientation
             Case cls_Bac.Enum_Orientation.Parallele
@@ -113,43 +119,43 @@ Public Class Frm_DalleNBac
             Case cls_Bac.Enum_Orientation.Perpendiculaire
                 Me.rdb_BacPerpendiculaire.Checked = True
         End Select
-        MAJI_OrientationBac()
         Me.txt_DecalCofra220.Text = GetStringInUnitN(Frm_DalleN.myDalleLoc.Bac.eDecalage, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True)
 
         '--> Bac prépercé
-
-        'Me.chk_BacPreperce.Checked = MyDalleLoc.Bac.lPreperce
         If Frm_DalleN.myDalleLoc.Bac.lPreperce Then
             Me.rdb_Preperce.Checked = True
         Else
             Me.rdb_ATraversBac.Checked = True
         End If
 
-        '--> Configurations sur appui
 
-        MAJI_ConfigurationAppuiBac()
+        'Select Case Frm_DalleN.myDalleLoc.Bac.AppuiL 'Modig GuD: Réinitialise les chkbox, il y'a des cas où plusieurs checkbox étaient sélectionnés
+        '    Case cls_Bac.EnuConfigLAppui.BacCoupe
+        '        Me.chk_L_PA2.Checked = True
+        '        UnselectChkTConfig(Me.chk_L_PA2.Name)
 
-        Select Case Frm_DalleN.myDalleLoc.Bac.AppuiL 'Modig GuD: Réinitialise les chkbox, il y'a des cas où plusieurs checkbox étaient sélectionnés
-            Case cls_Bac.EnuConfigLAppui.BacCoupe
-                Me.chk_L_PA2.Checked = True
-                UnselectChkTConfig(Me.chk_L_PA2.Name)
-            Case cls_Bac.EnuConfigLAppui.BacNonCoupe
-                Me.chk_L_PA1.Checked = True
-                UnselectChkTConfig(Me.chk_L_PA1.Name)
-        End Select
+        '    Case cls_Bac.EnuConfigLAppui.BacNonCoupe
+        '        Me.chk_L_PA1.Checked = True
+        '        UnselectChkTConfig(Me.chk_L_PA1.Name)
+        'End Select
 
         Select Case Frm_DalleN.myDalleLoc.Bac.AppuiT
             Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
                 Me.chk_T_PA2.Checked = True
                 UnselectChkTConfig(Me.chk_T_PA2.Name)
+
             Case cls_Bac.EnuConfigTAppui.Discontinu
                 Me.chk_T_PA3.Checked = True
                 UnselectChkTConfig(Me.chk_T_PA3.Name)
+
             Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
                 Me.chk_T_PA1.Checked = True
                 UnselectChkTConfig(Me.chk_T_PA1.Name)
         End Select
 
+        '--> Configurations sur appui
+        MAJI_ConfigurationAppuiBac()
+        MAJI_OrientationBac()
     End Sub
 
 #End Region
@@ -166,7 +172,6 @@ Public Class Frm_DalleNBac
 
     Private Sub MAJI_ChangeBac()
         lCofraPlus220 = Frm_DalleN.MyDalleLoc.Bac.lCofraplus220
-
         If lCofraPlus220 Then
             Me.rdb_BacPerpendiculaire.Checked = True
             Me.rdb_BacParallele.Visible = False
@@ -181,7 +186,6 @@ Public Class Frm_DalleNBac
         End If
 
         MAJI_OrientationBac()
-
     End Sub
 
     Private Sub MAJI_OrientationBac()
@@ -218,6 +222,7 @@ Public Class Frm_DalleNBac
                     Case cls_Bac.EnuConfigTAppui.Discontinu
                         Me.rtxt_Configuration.Text = strAppuiTDiscontinus
                 End Select
+
             Case cls_Bac.Enum_Orientation.Parallele
                 Select Case Frm_DalleN.myDalleLoc.Bac.AppuiL
                     Case cls_Bac.EnuConfigLAppui.BacCoupe
@@ -232,6 +237,54 @@ Public Class Frm_DalleNBac
 #End Region
 
 #Region " Evènements "
+
+    Private Sub ConfigTCheckedChanged(sender As Object, e As EventArgs) Handles chk_T_PA3.CheckedChanged, chk_T_PA2.CheckedChanged, chk_T_PA1.CheckedChanged, chk_L_PA2.CheckedChanged, chk_L_PA1.CheckedChanged
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case Me.chk_T_PA1.Name
+                'Me.rtxt_Configuration.Text = "Nervure et bac continus"
+                Frm_DalleN.myDalleLoc.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+                UnselectChkTConfig(Me.chk_T_PA1.Name)
+            Case Me.chk_T_PA2.Name
+                'Me.rtxt_Configuration.Text = "Nervure continue" & Chr(13) & "Bac discontinu"
+                Frm_DalleN.myDalleLoc.Bac.AppuiT = cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                UnselectChkTConfig(Me.chk_T_PA2.Name)
+            Case Me.chk_T_PA3.Name
+                'Me.rtxt_Configuration.Text = "Nervure et bac discontinus"
+                Frm_DalleN.myDalleLoc.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu
+                UnselectChkTConfig(Me.chk_T_PA3.Name)
+                'Case Me.chk_L_PA1.Name
+                '    'Me.rtxt_Configuration.Text = "Uncut deck"
+                '    Frm_DalleN.myDalleLoc.Bac.AppuiL = cls_Bac.EnuConfigLAppui.BacNonCoupe
+                '    UnselectChkLConfig(Me.chk_L_PA1.Name)
+                'Case Me.chk_L_PA2.Name
+                '    'Me.rtxt_Configuration.Text = "Uncut deck" & Chr(13) & "the width of the concrete through is equal to the width of the deck through"
+                '    Frm_DalleN.myDalleLoc.Bac.AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe
+                '    UnselectChkLConfig(Me.chk_L_PA2.Name)
+        End Select
+
+        MAJI_ConfigurationAppuiBac()
+        Frm_DalleN.img_Dalle.Invalidate()
+
+    End Sub
+
+    Private Sub OrientationBac_checkedChanged(sender As Object, e As EventArgs) Handles rdb_BacParallele.CheckedChanged, rdb_BacPerpendiculaire.CheckedChanged
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case Me.rdb_BacParallele.Name : Frm_DalleN.myDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele
+            Case Me.rdb_BacPerpendiculaire.Name : Frm_DalleN.myDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
+        End Select
+        MAJI_ChangeBac()
+        Frm_DalleN.img_Dalle.Invalidate()
+
+    End Sub
+
+    Private Sub rdb_Preperce_CheckedChanged(sender As Object, e As EventArgs) Handles rdb_Preperce.CheckedChanged, rdb_ATraversBac.CheckedChanged
+        If lBuild Then Exit Sub
+        Frm_DalleN.myDalleLoc.Bac.lPreperce = Me.rdb_Preperce.Checked
+    End Sub
 
     Private Sub txt_DecalCofra220_TextChanged(sender As Object, e As EventArgs) Handles txt_DecalCofra220.TextChanged
         If lBuild Then Exit Sub
@@ -272,7 +325,7 @@ Public Class Frm_DalleNBac
 
             Case txt_DecalCofra220.Name
                 ValMin = 0 / kUnit
-                ValMax = DECMAX / kUnit
+                ValMax = OptionsDalle.DecalageMax / kUnit
 
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
@@ -289,9 +342,10 @@ Public Class Frm_DalleNBac
 
     End Function
 
+
     Private Sub btn_ModifierBac_Click(sender As Object, e As EventArgs) Handles btn_ModifierBac.Click, txt_BacNom.Click, img_Bac.Click
 
-        Dim Tc As Decimal = Frm_DalleN.MyDalleLoc.EpaisseurActive
+        Dim Tc As Decimal = Frm_DalleN.myDalleLoc.EpaisseurActive
         Dim lOldCfp220 As Boolean = lCofraPlus220
 
         iFrmAppel = EnuFenetres.DalleN
@@ -300,8 +354,8 @@ Public Class Frm_DalleNBac
         MAJI_ChangeBac()
         If lCofraPlus220 <> lOldCfp220 Then
             lBuild = True
-            Dim Td As Decimal = Tc + Frm_DalleN.MyDalleLoc.Bac.Hp
-            Frm_DalleN.MyDalleLoc.Ep_td = Td
+            Dim Td As Decimal = Tc + Frm_DalleN.myDalleLoc.Bac.Hp
+            Frm_DalleN.myDalleLoc.Ep_td = Td
             'Me.txt_Td2.Text = GetStringNoUnit(Frm_DalleN.MyDalleLoc.Ep_td, Enu_TypeVariable.Dimension)
             'Me.rdb_EpPleine.Checked = True
             'DefEpMixte = Enu_DefEpMixte.Pleine
@@ -327,6 +381,38 @@ Public Class Frm_DalleNBac
     Private Sub img_Bac_Paint(sender As Object, e As PaintEventArgs) Handles img_Bac.Paint
         DessineBacTout(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, Frm_DalleN.MyDalleLoc.Bac,
                        True, kADJUST, True, FontFrm, strhauteur)
+    End Sub
+
+#End Region
+
+#Region " Symboles "
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Decal.Paint
+        '--> Déclarations
+
+        Dim sWI As Single = sender.Width
+        Dim sHI As Single = sender.Height
+        Dim xStart As Single = sWI * 0.95
+
+        Dim strIndice As String = Nothing
+        Dim strSymbol As String = Nothing
+        Dim lGrec, lIndice, lEgal As Boolean
+        Dim xPen As Single = xStart
+        Dim hCar As Single = e.Graphics.MeasureString("X", FontSymbolNormal).Height
+        Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
+        Dim AlignH As Enu_AlignementH = Enu_AlignementH.Droite
+
+        '--> Initialisation
+        lIndice = False
+        lGrec = False
+        lEgal = True
+
+        strSymbol = "e"
+        strIndice = "220"
+
+
+        '--> Dessin
+        DrawSymbolN(e.Graphics, Brushes.Black, strSymbol, strIndice, sWI, sHI, lGrec, lIndice, AlignH,
+                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
     End Sub
 
 #End Region

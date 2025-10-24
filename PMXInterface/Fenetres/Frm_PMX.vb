@@ -737,7 +737,7 @@ Public Class Frm_PMX
 
             Dim TcSlim As Decimal = myBeam.Dalle.Ep_td - myBeam.Section.hec
 
-            If IsSmaller(TcSlim, OptionsSlimFloor.TcSlimMin) Then
+            If IsSmaller(TcSlim, OptionsDalle.TcSlimMin) Then
                 myBeam.iErrScope.Add(OOS_BetonSurSlimProfile)
             End If
 
@@ -1513,12 +1513,13 @@ Public Class Frm_PMX
         My.Settings.RhoCBetonLegerMin = OptionsScope.RhoCBetonLegerMin
         My.Settings.RhoCBetonLegerMax = OptionsScope.RhoCBetonLegerMax
 
-        '# Options slimfloors
-        My.Settings.Slim_Hsmax = OptionsSlimFloor.hslimmax
-        My.Settings.bappmin = OptionsSlimFloor.Bappmin
-        My.Settings.Slim_TpInfMin = OptionsSlimFloor.Tpinfmin
-        My.Settings.Slim_TwcdMin = OptionsSlimFloor.Twcdmin
-        My.Settings.Slim_TcMin = OptionsSlimFloor.TcSlimMin
+        '# Options dalle
+        My.Settings.Slim_Hsmax = OptionsDalle.hslimmax
+        My.Settings.bappmin = OptionsDalle.Bappmin
+        My.Settings.Slim_TpInfMin = OptionsDalle.Tpinfmin
+        My.Settings.Slim_TwcdMin = OptionsDalle.Twcdmin
+        My.Settings.Slim_TcMin = OptionsDalle.TcSlimMin
+        My.Settings.DecalageMax = OptionsDalle.DecalageMax
 
         '--( Note de calcul
         My.Settings.lNdCCourbeHivoss = OptionsNdC.lShowHivossCurve

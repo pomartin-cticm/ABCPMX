@@ -8,8 +8,8 @@
 
 #Region " Variables globales "
 
-    Public OptionsSlimFloor As Struc_OptionsSlimFloor
-    Public LocalOptionsSlimFloor As Struc_OptionsSlimFloor  ' Pour la saisie des paramètres dans la fenetre des options de calcul 
+    Public OptionsDalle As Struc_OptionsDalle
+    Public LocalOptionsDalle As Struc_OptionsDalle  ' Pour la saisie des paramètres dans la fenetre des options de calcul 
 
 #End Region
 
@@ -79,12 +79,13 @@
         Public EtaW As Decimal                          ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
     End Structure
 
-    Public Structure Struc_OptionsSlimFloor
+    Public Structure Struc_OptionsDalle
         Public Hslimmax As Decimal                      ' hauteur maximale des sections slimfloors
         Public Bappmin As Decimal                       ' Largeur d'appui min à respecter
         Public Tpinfmin As Decimal                      ' Epaisseur min des plats soudés
         Public Twcdmin As Decimal                       ' Epaisseur min des âmes pour une connexion par armatures
         Public TcSlimMin As Decimal                     ' Epaisseur minimale de la dalle
+        Public DecalageMax As Decimal                   ' Décalage maximal autorisé pour les bac en Cofraplus220
     End Structure
 
     Public Structure struc_OptionsFeu

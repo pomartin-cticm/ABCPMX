@@ -422,6 +422,7 @@ Public Class cls_Projet
             AjouteLigneFrmt(Lines, "b_t", .Bt)
             AjouteLigneFrmt(Lines, "e_p", .Ep)
             AjouteLigneFrmt(Lines, "tp", .Tp)
+            AjouteLigneFrmt(Lines, "h_offset", .eDecalage)
             AjouteLigneFrmt(Lines, "Orientation", .Orientation)
             AjouteLigneFrmt(Lines, "msurf", .msurf)
             AjouteLigneFrmt(Lines, "Fyp", .Fyp)
@@ -1172,6 +1173,7 @@ Public Class cls_Projet
         '--( Chargement de la poutre
 
         ReadPoutreDansFichier(Lines, Blocs, indBlocs, NomCasChargesU, iLineStop)
+
 
     End Sub
 
@@ -2360,6 +2362,7 @@ Public Class cls_Projet
                         Case "B_T" : .Bt = CDec(TraiteReal(Mots(nbMots)))
                         Case "E_P" : .Ep = CDec(TraiteReal(Mots(nbMots)))
                         Case "TP" : .Tp = CDec(TraiteReal(Mots(nbMots)))
+                        Case "H_OFFS" : .eDecalage = CDec(TraiteReal(Mots(nbMots)))
                         Case "ORIENT" : .Orientation = Mots(nbMots)
                         Case "MSURF" : .msurf = CDec(TraiteReal(Mots(nbMots)))
                         Case "FYP" : .Fyp = CDec(TraiteReal(Mots(nbMots)))

@@ -1420,6 +1420,18 @@ Namespace My
                 Me("Slim_TcMin") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.02")>  _
+        Public Property DecalageMax() As Decimal
+            Get
+                Return CType(Me("DecalageMax"),Decimal)
+            End Get
+            Set
+                Me("DecalageMax") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
