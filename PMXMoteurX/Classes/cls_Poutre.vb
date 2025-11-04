@@ -4587,7 +4587,7 @@ Public Class cls_Poutre
             End If
 
             '# Dalle
-            .qPP_DalleBeton = Me.Dalle.Aire(dc, Me.Section.ProfilA.Bfs, Me.lSlimFloor) * Me.Dalle.beton.RhoC * G
+            .qPP_DalleBeton = Me.Dalle.AireEq(dc, Me.Section.ProfilA.Bfs, Me.lSlimFloor) * Me.Dalle.beton.RhoC * G
 
             '# Bac acier
             If Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then

@@ -482,6 +482,8 @@ Public Class Frm_DalleNGeneral
             DefEpMixte = Enu_DefEpMixte.Totale
         End If
         MAJI_SaisieEpMixte()
+        Frm_DalleN.MAJI_DeselectionTxtbox()
+        Frm_DalleN.MAJI_ImageDalle()
     End Sub
 
     Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Leave, txt_RhoC.Leave, txt_Td2.Leave, txt_Tc.Leave,

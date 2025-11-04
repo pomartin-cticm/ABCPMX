@@ -113,9 +113,9 @@ Partial Class Frm_DalleNArma
         Me.Panel2.Controls.Add(Me.lbl_ClasseA)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(0, 210)
-        Me.Panel2.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
+        Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(296, 259)
+        Me.Panel2.Size = New System.Drawing.Size(296, 260)
         Me.Panel2.TabIndex = 15
         '
         'lst_ClasseAcier

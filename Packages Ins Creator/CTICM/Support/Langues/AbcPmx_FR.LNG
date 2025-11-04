@@ -27,8 +27,8 @@ YEARVERSION				= Année :
 #FRM_ADDBEAMFILE
 TITLE					= Ajouter une poutre
 OK						= OK
-CANCEL					= Annuler
 CLOSE					= Fermer
+CANCEL					= Annuler
 PROJECT					= Projet $
 ADDBEAM					= Ajouter les poutres suivantes dans le projet
 
@@ -907,6 +907,11 @@ INFOMASSESSHEET			= Masse surfacique du béton et du bac
 INFOMASSESNOSHEET		= Masse surfacique du béton
 INFOMASSESPRESLAB		= Masse surfacique du béton, y compris la prédalle
 INFOMASSESPREFAB		= Masse surfacique du béton et de la partie préfabriquée
+ERRTCMIN				= L'épaisseur de béton au dessus de la semelle supérieure ($) ne doit pas être inférieure à $.
+PRIOFULLDEPTH			= Définir l'epaisseur totale de la dalle, l'épaisseur au-dessus du bac étant calculée automatiquement
+PRIODEPTHABOVE			= Définir l'epaisseur au-dessus du bac, l'épaisseur totale de la dalle étant calculée automatiquement
+RHOB					= Masse 
+SWITCH					= Décalage
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre
@@ -1019,6 +1024,24 @@ STEELGRADE				= Nuance d'acier
 TITLE					= Définition de la poutre acier
 SABSECTION				= Section AFB
 WIDTH					= Largeur semelle supérieure
+
+#FRM_UPDATE
+TITLE					= Mises à jour
+CLOSE					= Fermer
+GRPSOFTUPDATE			= Mises à jour $
+WEBACCESFAILED1			= Impossible de vérifier en ligne les mises à jour de PMX
+WEBACCESFAILED2 		= Vérifier la connexion internet de l'ordinateur 
+UPTODATE				= La version $ est à jour
+GRPSECTIONS				= Bases de données des profilés et des aciers
+NEWBASE					= Une nouvelle base de données pour les profilés est disponible
+NEWBASESTEEL			= Une nouvelle base de données pour les aciers est disponible
+BASEUPTODATE			= La base de données des profilés est à jour
+BASESTEELUPTOD			= La base de données des aciers est à jour
+DOWNLOAD				= Télécharger les nouvelles bases de données
+SECTIONFAILED			= Echec de la vérification
+RESTART					= Téléchargement OK: Les bases de données sont à jour
+OPENLNK					= Ouvrir la page de téléchargement
+NOINFO					= Les informations relatives aux mises à jour ne sont pas disponibles
 
 #GENERAL
 SELFWEIGHT				= Poids propre
@@ -1159,6 +1182,8 @@ THICKNESSMIN			= Épaisseur minimale du plat
 THICKNESSWMIN			= Épaisseur minimale de l'âme pour la connexion par armatures
 RESTRAINTBYSHEETS		= Maintien au déversement par le bac
 ECSEAMMAX				= Espacement max des fixations de couture
+THICKNESSTCMIN			= Épaisseur minimale de béton au dessus du profilé
+SLABOFFSETMAX			= Décalage maximal de la dalle si Cofraplus220
 
 #OPTSOFTMAIN
 TITLE					= Options logiciel

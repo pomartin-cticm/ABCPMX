@@ -152,7 +152,7 @@ Public Class Frm_InformationPP
         Dim lSlimFloor As Boolean = MyPoutreLoc.lSlimFloor
 
         Me.txt_rhoc.Text = Format(MyPoutreLoc.Dalle.beton.RhoC, formatTxtBox2)
-        Me.txt_Ac.Text = GetStringInUnit(MyPoutreLoc.Dalle.Aire(dc, MyPoutreLoc.Section.ProfilA.Bfs, lSlimFloor) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2, Enu_TypeVariable.SansType, 3, 3, False)
+        Me.txt_Ac.Text = GetStringInUnit(MyPoutreLoc.Dalle.AireEq(dc, MyPoutreLoc.Section.ProfilA.Bfs, lSlimFloor) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2, Enu_TypeVariable.SansType, 3, 3, False)
         Me.txt_qc.Text = GetStringInUnit(PoidsPropreLoc.qPP_DalleBeton / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 3, False)
 
         If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then

@@ -148,9 +148,9 @@ Partial Class Frm_DalleNGeneral
         Me.pan_Beton.Controls.Add(Me.etq_UnitRhoC)
         Me.pan_Beton.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Beton.Location = New System.Drawing.Point(0, 172)
-        Me.pan_Beton.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
+        Me.pan_Beton.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Beton.Name = "pan_Beton"
-        Me.pan_Beton.Size = New System.Drawing.Size(296, 297)
+        Me.pan_Beton.Size = New System.Drawing.Size(296, 298)
         Me.pan_Beton.TabIndex = 9
         '
         'txt_Ecm

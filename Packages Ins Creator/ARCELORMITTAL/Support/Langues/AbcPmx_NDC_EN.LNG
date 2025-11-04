@@ -43,6 +43,12 @@ CNOTRECOMMENDED			= Not recommended
 
 #NDC_OUTOFSCOPE
 NOREINFORCEMENT			= Longitudinal reinforcement should be defined for composite beams with cantilevers
+THICKNESSABOVEFLANGENOT	= The thickness of concrete above the upper steel flange is not enough
+THICKNESSABOVEFLANGE	= Thickness of concrete 
+ABOVEFLANGE				= (above the upper steel flange)
+MINIMALVALUE			= Minimal thickness
+THICKNESSPRECASTSUPHEC	= The thickness of the precat element is greater than the height of the profile embedded in concrete
+THICKNESSSSHEETSUPHEC	= The depth of the sheeting is greater than the height of the profile embedded in concrete
 
 #NDC_MAIN
 TITLE					= Calculation report
@@ -81,7 +87,8 @@ BT_PSS					= Top width of ribs
 CALCULATIONOPTIONS		= Calculation parameters
 CALCULATIONTYPE			= Calculation type
 CENTER					= Center
-CHAR_PROFILE			= Properties
+CHAR_PROFILE			= Properties of the profile
+CHAR_SECTION			= Properties of the steel section
 CHAR_PSS				= Dimensions and properties:
 CLASS_CONCRETE			= Class of concrete
 CLASS_REINFORCEMENT		= Class
@@ -225,8 +232,13 @@ LOWER_FLANGE			= Lower flange
 MASSIVENESS				= Section factor (without upper face)
 MASS_LIN_PROFILE		= Mass by length unit
 MASS_PROFILE			= Mass
-MATERIAL_LONGI_REINF	= Material: Steel reinforcements
-MATERIAL_PROFILE		= Material: steel
+MASS_DETAIL				= Details
+MASS_PROCUT				= cutted $ profile
+MASS_PRO				= $ profile
+MASS_PLAT				= plat
+MATERIAL_LONGI_REINF	= Steel of reinforcements
+MATERIAL_PROFILE		= Steel of the profile
+MATERIAL_PLATE			= Steel of the plate
 MIDDLE					= Middle
 MUP_PSS					= Surface mass
 M_CONCRETE				= Mass of concrete
@@ -278,6 +290,16 @@ PROFILED_STEEL_SH		= Profiled steel sheeting
 PROPPINGLOCATION		= Propping location
 PRS_BI_SYM				= Bi-symmetrical welded section
 PRS_MONO_SYM			= Mono-symmetrical welded section
+SLIM_SFB				= Slim floor SFB section
+SLIM_SAB				= Slim floor SAB section
+SLIM_IFBA				= Slim floor IFB-A section
+SLIM_IFBB				= Slim floor IFB-B section
+COMPOSEDWITH			= Composed with
+HOTROLLEDPROFILE		= a hot rolled profile
+STEELPLATE				= and a steel plate
+REINFPLATE				= with a reinforcing lower plate
+PLB_PROFILE				= Plate width
+PLT_PROFILE				= Plate thickness
 PSS_FROM				= Profiled steel sheeting from
 QSURF					= Surface load
 QSURF_VALUE				= Uniform load
@@ -518,6 +540,8 @@ ENCASEMENTC				= Concrete encasement
 ENCREINFORCEMENTS		= Encasement reinforcements	
 ASSMPOS					= With properties for positive bending moments
 ASSMNEG					= With properties for negative bending moments
+FRACTION 				= Ratio
+LONGTERMPSI2			= According to EN 1990:2004, 4.1.3 (1) c), the ratio $ of live loads is considered as a long term effect
 
 #NDC_VERIFICATIONSULS
 ULS_CHECKS				= Ultimate Limit States
@@ -554,6 +578,7 @@ MINVALUE				= Minimum value
 MVBINTERACTION			= MV interaction according to EN 1993-1-5 § 7.1
 MVB_CRITERIA			= Resistance to MVb interaction
 MV_CRITERIA				= Resistance to MV interaction
+MY_CRITERIA				= Resistance to local transverse bending
 M_CRITERIA				= Resistance to bending moment
 NBTRANSVERSELAYER		= Number of transverse reinforcement layers
 NORMALS_INCONCRETE		= Normal compression stresses in the concrete slab
@@ -595,6 +620,7 @@ WHERE					= Where
 WSLENDERNESS			= Web slenderness
 WSLENDERNESSLIMIT		= Limit of web slenderness
 WTOFWEBS				= Web to flanges welds 
+WPLATE					= Plate to section welds
 
 #NDC_DETAILSULS
 TITLE					= Detailed ULS checking

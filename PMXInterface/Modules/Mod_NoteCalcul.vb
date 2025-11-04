@@ -2294,7 +2294,7 @@ Module Mod_NoteCalcul
 
         '# béton
 
-        mBeton = myBeam.Dalle.Aire(dC, myBeam.Section.ProfilA.Bfs, myBeam.lSlimFloor) * myBeam.Dalle.beton.RhoC
+        mBeton = myBeam.Dalle.AireEq(dC, myBeam.Section.ProfilA.Bfs, myBeam.lSlimFloor) * myBeam.Dalle.beton.RhoC
 
         AddLigneNDC(TABW2 & BlocG("M_CONCRETE") & TABAFF & "m\-c\=" & TABEGAL & GetStringInUnitN(mBeton, Enu_TypeVariable.SansType, 4, 3, NON, True) & " kg/m")
 

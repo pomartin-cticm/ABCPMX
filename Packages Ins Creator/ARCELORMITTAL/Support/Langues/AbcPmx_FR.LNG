@@ -27,8 +27,8 @@ YEARVERSION				= Année :
 #FRM_ADDBEAMFILE
 TITLE					= Ajouter une poutre
 OK						= OK
-CANCEL					= Annuler
 CLOSE					= Fermer
+CANCEL					= Annuler
 PROJECT					= Projet $
 ADDBEAM					= Ajouter les poutres suivantes dans le projet
 
@@ -124,6 +124,7 @@ CONTROLCRACKW			= Maîtrise de la fissuration
 CRACKWIDTH				= Limite d'ouverture des fissures
 WARNINGCOMPREINF1		= Les armatures en compression ne peuvent pas être prises en compte pour une dalle avec un seul lit d'armatures
 WARNINGCOMPREINF2		= Quand les armatures en compression sont prises en compte dans les calculs de la poutre, les exigences de l'EN 1992-1-1:2005, clause 9.2.1.2 (3) doivent être satisfaites, pour éviter un flambement prématuré des barres.
+PSI2LONGTERM			= La fraction quasi permanente des charges d'exploitation est considéré comme effet de long terme
 
 #FRM_CALCULATIONSHEET
 TITLE					= Note de calculs
@@ -212,6 +213,12 @@ STEELENCASEDBEAM		= Poutre acier partiellement enrobée
 MODULAR					= Coefficient d'équivalence
 SLAB					= Dalle
 ENCASEMENT				= Enrobage
+NOPROP					= Sans étaiement
+FULLPROP				= Étaiement complet
+POINTPROP				= Étaiements ponctuels
+SHORTTERM				= Effets à court terme
+LONGTERM				= Effets à long terme
+REFERENCELTPSI2			= Conformément à $, la fraction psi2 des charges variables est considérée comme un effet de long terme
 
 #FRM_COMBINATIONS
 TITLE					= Combinaisons
@@ -245,6 +252,7 @@ OK						= Ok
 CANCEL					= Annuler
 CONNECTION				= Connection
 CONNECTORS				= Connecteurs
+STUD					= Goujons soudés
 DIAMETER				= Diamètre
 AUTOMATICDESIGN			= Dimensionnement automatique de la connection
 DISPOSITION_LON_BAC_TR	= Disposition toutes les 
@@ -270,6 +278,35 @@ REINFORCEMENTS			= Armatures
 STUDCONCRETECOVER		= L'épaisseur d'enrobage des goujons ($) est inférieure à la valeur minimale imposée par $.
 STUDPREPUNCHED			= Le diamètre des goujons avec bac prépercé ne doit pas être inférieur à 19 mm ni supérieur à 22 mm.
 STUDWELDEDTHROUGH		= Le diamètre des goujons soudé à travers le bac ne doit pas excéder 20 mm.
+INFOW_SHEARCONNECTION	= Le degré de connexion est calculé à mi-travée de la poutre, en supposant que la poutre en entièrement sous moment positif
+ZONE1					= Première zone
+ZONE2					= Deuxième zone
+ZONE3					= Troisième zone
+SYMMETRICALCONFIG		= Configuration symétrique
+
+#FRM_CONNECTIONSLIM
+TITLE					= Definition of the connection
+OK						= Ok
+CANCEL					= Cancel
+ADD						= Ajouter
+DELETE					= Supprimer
+CONNECTION				= Connexion
+CONNECTORS				= Connecteurs
+FLANGE_STUD				= Goujons soudés sur la semelle supérieure
+WEB_STUD				= Goujons soudés sur l'âme
+WEB_REINF				= Armatures traversant l'âme
+REBARS					= Barres
+CONNECTORSTYPE			= Type de connecteurs
+STUDS					= Goujons
+WSTUDS					= Goujons soudés
+SPACING					= Espacement longitudinal
+ROW_NUMBER				= Nombre de files
+WIDTH					= Longueur
+INFOREINF				= La connexion par les armatures n'est pas disponible pour les sections IFB-B ni pour les âmes d'épaisseur inférieure à 7,5 mm
+W_MINIMUMCOVERAGE		= Attention : l'enrobage du goujon ($) est inférieur à la valeur minimale requise ($).
+W_STUDABOVESLAB			= Attention : la tête du goujon dépasse la surface du béton
+CLASS					= Classe
+DIAMETER				= Diamètre
 
 #FRM_DECKRESTRAINT
 TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)
@@ -576,6 +613,7 @@ RESTRAINTS				= Type de maintien
 RIGHTCANT				= Console droite
 SPAN					= Travée
 TITLE 					= Definition des maintiens latéraux de la poutre
+INFOCOMPOSITE			= Pour les poutres mixtes, les maitiens latéraux ne sont pris en compte que dans la phase de construction, en l'absence d'un étaiement complet
 
 #FRM_MAIN
 ABOUT					= A propos
@@ -655,11 +693,17 @@ EDITPROFILES			= Editer les profilés ArcelorMittal
 EDITSTUDS				= Editer les goujons
 EDITDECKS				= Editer les bacs acier
 WELDEDSEC				= PRS
+PLATE					= Plat
 FIRENOTAVAIL			= Le calcul au feu n'est pas disponible dans cette version de $.
 FIRELATER				= Il sera fourni dans une future version.
 CONFIRMBEAMREMOVE		= Confirmer la suppression de la poutre $ du projet
 ERRMISSINGDECK			= Le profil $ n'est pas disponible dans la base de données
 ERRMISSINGPSLAB			= Le plancher préfabriqué $ n'est pas reconnu par le logiciel 
+WCONTACT				= Contact
+WWARNING				= Attention
+WERROR					= Erreur
+WINFO					= Information
+WERRORLNG				= Erreur d'affichage du fichier langue / fichier langue incomplet
 
 #FRM_MODULARRATIOTOOL
 TITLE					= Options coefficient d'équivalence 
@@ -816,10 +860,10 @@ MODIFYSH				= Modifier le bac acier
 MSURF					= Poids surfacique 
 NAME					= Nom
 PARALLEL				= Parallèle
-PERPENDICULAR			= Perpendicular							   
-PRECASTSLAB				= Dalle partiellement préabriquée											 
+PERPENDICULAR			= Perpendiculaire							   
+PRECASTSLAB				= Dalle partiel. préfabriquée											 
 PREPUNCHED				= Bac prépercé								   
-PRESLAB					= Parti préfa.
+PRESLAB					= Partie préfa.
 REBARS					= Armatures longitudinales
 REBARSTEEL				= Acier des armatures								   
 REINFLAYER0				= Pas d'armature définie
@@ -849,12 +893,31 @@ ERRORCCOVER1			= Lit d'armature n°$
 ERRORCCOVER2			= L'épaisseur d'enrobage ($) devrait être supérieure à la valeur minimale requise pour l'adhérence ($)
 REINFRATIO				= Taux d'armature
 NOREINFORCEMENT			= Pour les poutres mixtes sans parties en console ou pour les poutres non mixtes, la définition des armatures longitudinales n'est pas requise
+RDB_REINFORCEMENT		= Armatures
+RDB_SHEET				= Bac
+RDB_MAIN				= Général
+EDGECHAMBERFILLED		= Chambre de rive remplie de béton
+FIREREBARS				= Utilisation d'armatures longi pour le calcul incendie
+FIREREB_NUMBER			= Nombre
+FIREREB_DIAMETER		= Diamètre
+FIREREB_LOCATION		= Position
+FIREREBARSTITLE			= Armatures longitudinales
+MASSES					= Masses
+INFOMASSESSHEET			= Masse surfacique du béton et du bac
+INFOMASSESNOSHEET		= Masse surfacique du béton
+INFOMASSESPRESLAB		= Masse surfacique du béton, y compris la prédalle
+INFOMASSESPREFAB		= Masse surfacique du béton et de la partie préfabriquée
+ERRTCMIN				= L'épaisseur de béton au dessus de la semelle supérieure ($) ne doit pas être inférieure à $.
+PRIOFULLDEPTH			= Définir l'epaisseur totale de la dalle, l'épaisseur au-dessus du bac étant calculée automatiquement
+PRIODEPTHABOVE			= Définir l'epaisseur au-dessus du bac, l'épaisseur totale de la dalle étant calculée automatiquement
+RHOB					= Masse 
+SWITCH					= Décalage
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre
 CANCEL					= Annuler
 OK						= OK
-EDGEBEAM				= Poutre d'extrémité
+EDGEBEAM				= Poutre de rive
 INTERMEDIATEBEAM		= Poutre intermédiaire
 LEFTCANT				= Console gauche
 LEFTOPENING				= Ouverture gauche
@@ -943,6 +1006,8 @@ WEBHEIGHT				= Hauteur de l'âme
 WIDTH					= Largeur
 THICKNESS				= Epaisseur
 IFBSECTION				= Section IFB
+TOPPLATE				= Plat supérieur
+BOTPLATE				= Plat inférieur
 
 #FRM_SABSECTIONS
 CANCEL					= Annuler
@@ -958,7 +1023,25 @@ STEEL					= Acier
 STEELGRADE				= Nuance d'acier
 TITLE					= Définition de la poutre acier
 SABSECTION				= Section AFB
-WIDTH					= Largeur
+WIDTH					= Largeur semelle supérieure
+
+#FRM_UPDATE
+TITLE					= Mises à jour
+CLOSE					= Fermer
+GRPSOFTUPDATE			= Mises à jour $
+WEBACCESFAILED1			= Impossible de vérifier en ligne les mises à jour de PMX
+WEBACCESFAILED2 		= Vérifier la connexion internet de l'ordinateur 
+UPTODATE				= La version $ est à jour
+GRPSECTIONS				= Bases de données des profilés et des aciers
+NEWBASE					= Une nouvelle base de données pour les profilés est disponible
+NEWBASESTEEL			= Une nouvelle base de données pour les aciers est disponible
+BASEUPTODATE			= La base de données des profilés est à jour
+BASESTEELUPTOD			= La base de données des aciers est à jour
+DOWNLOAD				= Télécharger les nouvelles bases de données
+SECTIONFAILED			= Echec de la vérification
+RESTART					= Téléchargement OK: Les bases de données sont à jour
+OPENLNK					= Ouvrir la page de téléchargement
+NOINFO					= Les informations relatives aux mises à jour ne sont pas disponibles
 
 #GENERAL
 SELFWEIGHT				= Poids propre
@@ -984,6 +1067,7 @@ STEELPROFILE			= Profilé acier
 TITLE					= Options de calcul
 APPLY					= Appliquer
 CANCEL					= Annuler
+RESET					= Valeurs initiales
 GAMMA					= Coefficients nationaux par défaut
 SCOPE					= Domaine d'application
 CALCUL					= Options de calcul
@@ -1095,8 +1179,11 @@ SLIMFLOORDIM			= Dimensions des slimfloors
 DEPTHMAX				= Hauteur maximale d'un profil laminé intégré
 SLABSUPPORTMIN			= Largeur minimale d'un support de dalle
 THICKNESSMIN			= Épaisseur minimale du plat
+THICKNESSWMIN			= Épaisseur minimale de l'âme pour la connexion par armatures
 RESTRAINTBYSHEETS		= Maintien au déversement par le bac
 ECSEAMMAX				= Espacement max des fixations de couture
+THICKNESSTCMIN			= Épaisseur minimale de béton au dessus du profilé
+SLABOFFSETMAX			= Décalage maximal de la dalle si Cofraplus220
 
 #OPTSOFTMAIN
 TITLE					= Options logiciel

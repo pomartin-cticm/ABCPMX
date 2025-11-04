@@ -905,6 +905,11 @@ INFOMASSESSHEET			= Mass per surface unit of the concrete and the sheeting
 INFOMASSESNOSHEET		= Mass per surface unit of the concrete
 INFOMASSESPRESLAB		= Mass per surface unit of the concrete, including the prefabricated part
 INFOMASSESPREFAB		= Mass per surface unit of the concrete and the prefabricated part
+ERRTCMIN				= The concrete thickness above the upper flange ($) should be lower than $.
+PRIOFULLDEPTH			= Define the full depth of the slab, the thickness above the deck is automatically assessed
+PRIODEPTHABOVE			= Define thickness above the deck, the full depth of the slab is automatically assessed
+RHOB					= Density
+SWITCH					= Vertical offset
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam
@@ -1038,7 +1043,7 @@ WIDTH					= Width
 TITLE					= Updates
 CLOSE					= Close
 GRPSOFTUPDATE			= $ Update
-WEBACCESFAILED1			= Impossible to check online the updates of VCA+
+WEBACCESFAILED1			= Impossible to check online the updates of ABC+
 WEBACCESFAILED2 		= Please check the connection of your computer 
 UPTODATE				= The current version $ is up-to-date
 GRPSECTIONS				= Profiles and steels databases
@@ -1191,6 +1196,8 @@ THICKNESSMIN			= Minimum thickness of the plate
 THICKNESSWMIN			= Minimum thickness of the web for dowel connectors
 RESTRAINTBYSHEETS		= Lateral restraint by the steel sheeting
 ECSEAMMAX				= Max spacing of seam fastening
+THICKNESSTCMIN			= Minimum thickness of concrete above the steel flange
+SLABOFFSETMAX			= Maximum offset of a slab with Cofraplus220
 
 #OPTSOFTMAIN
 TITLE					= Software options

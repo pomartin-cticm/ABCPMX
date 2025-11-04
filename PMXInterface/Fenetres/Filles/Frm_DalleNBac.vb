@@ -111,7 +111,10 @@ Public Class Frm_DalleNBac
     End Sub
 
     Private Sub AfficherBacEnCours()
+
         MAJI_ChangeBac()
+        MAJI_PanDispoConnecteur()
+
         ''' -> Orientation
         Select Case Frm_DalleN.myDalleLoc.Bac.Orientation
             Case cls_Bac.Enum_Orientation.Parallele
@@ -243,29 +246,30 @@ Public Class Frm_DalleNBac
 
         Select Case sender.name
             Case Me.chk_T_PA1.Name
-                'Me.rtxt_Configuration.Text = "Nervure et bac continus"
+
                 Frm_DalleN.myDalleLoc.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus
                 UnselectChkTConfig(Me.chk_T_PA1.Name)
+
             Case Me.chk_T_PA2.Name
-                'Me.rtxt_Configuration.Text = "Nervure continue" & Chr(13) & "Bac discontinu"
+
                 Frm_DalleN.myDalleLoc.Bac.AppuiT = cls_Bac.EnuConfigTAppui.BetonSeulContinu
                 UnselectChkTConfig(Me.chk_T_PA2.Name)
+
             Case Me.chk_T_PA3.Name
-                'Me.rtxt_Configuration.Text = "Nervure et bac discontinus"
+
                 Frm_DalleN.myDalleLoc.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu
                 UnselectChkTConfig(Me.chk_T_PA3.Name)
-                'Case Me.chk_L_PA1.Name
-                '    'Me.rtxt_Configuration.Text = "Uncut deck"
-                '    Frm_DalleN.myDalleLoc.Bac.AppuiL = cls_Bac.EnuConfigLAppui.BacNonCoupe
-                '    UnselectChkLConfig(Me.chk_L_PA1.Name)
-                'Case Me.chk_L_PA2.Name
-                '    'Me.rtxt_Configuration.Text = "Uncut deck" & Chr(13) & "the width of the concrete through is equal to the width of the deck through"
-                '    Frm_DalleN.myDalleLoc.Bac.AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe
-                '    UnselectChkLConfig(Me.chk_L_PA2.Name)
+
         End Select
 
         MAJI_ConfigurationAppuiBac()
-        Frm_DalleN.img_Dalle.Invalidate()
+        Frm_DalleN.MAJI_ImageDalle()
+        MAJI_PanDispoConnecteur()
+    End Sub
+
+    Private Sub MAJI_PanDispoConnecteur()
+
+        Me.pan_DispoConnecteur.Visible = Not (Frm_DalleN.myDalleLoc.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu)
 
     End Sub
 
@@ -369,8 +373,14 @@ Public Class Frm_DalleNBac
 
     End Sub
 
+    Private Sub txt_DecalCofra220_Enter(sender As Object, e As EventArgs) Handles txt_DecalCofra220.Enter
+        If lBuild Then Exit Sub
+        Frm_DalleN.MAJI_SelectionTxtbox(401)
+    End Sub
+
+
     Private Sub AfficheNomBacEnCours()
-        Me.txt_BacNom.Text = Frm_DalleN.MyDalleLoc.Bac.Etiquette
+        Me.txt_BacNom.Text = Frm_DalleN.myDalleLoc.Bac.Etiquette
         '  Me.txt_Hp.Text = GetStringInUnitN(Frm_DalleN.MyDalleLoc.Bac.Hp, Enu_TypeVariable.Dimension, 4, 3, Enu_AfficheUnite.Non, True)
     End Sub
 

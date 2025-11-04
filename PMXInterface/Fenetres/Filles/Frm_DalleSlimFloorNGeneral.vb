@@ -108,6 +108,8 @@ Public Class Frm_DalleSlimFloorNGeneral
         Me.lbl_Masses.BackColor = CouleurBackBandeaux
         Me.lbl_Masses.ForeColor = CouleurForeBandeaux
 
+        PrepareTextBoxDipo(Me.txt_MassSurf, False)
+
     End Sub
 
     Private Sub GestionLangue(myBloc As Dictionary(Of String, String))

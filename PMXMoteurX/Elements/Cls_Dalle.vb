@@ -237,7 +237,7 @@
         Dim pAire As Decimal
         Dim mSurf As Decimal
 
-        pAire = Me.Aire(dc, Bfs, lSlimF)
+        pAire = Me.AireEq(dc, Bfs, lSlimF)
         mSurf = pAire * Me.beton.RhoC / dc
 
         If lBac And Me.type = Enum_TypeDalle.Mixte Then
@@ -252,21 +252,29 @@
     End Function
 
     ''' <summary>
-    '''  Aire de la dalle
+    '''  Aire équivalente de la dalle pour le calcul de la masse de béton (volume par U de longueur)
     ''' </summary>
     ''' <param name="dc">largeur de calcul de l'aire</param>
     ''' <param name="bfs">largeur de la semelle supérieure</param>
     ''' <param name="lSlimF">indique si partie d'une poutre slimfloor</param>
     ''' <returns></returns>
-    Public Function Aire(dc As Decimal, bfs As Decimal, lSlimF As Boolean) As Decimal
+    Public Function AireEq(dc As Decimal, bfs As Decimal, lSlimF As Boolean) As Decimal
         Dim Ac As Decimal
 
         If Me.lMixte Then
-            '==== Cas d'une dalle mixte
-            'If Me.type = cls_Dalle.Enum_TypeDalle.Mixte Then
+
+            Dim lCofraplus220 As Boolean
+            lCofraplus220 = (Me.Bac.lCofraplus220 And (Not lSlimF))
+            '==== Cas d'une dalle mixte 
             Dim tc As Decimal
             tc = Me.Ep_td - Me.Bac.Hp
-            Ac = dc * tc * (1 + Me.Bac.LargeurBmoyenne * Me.Bac.Hp / (Me.Bac.Ep * tc))
+
+            If lCofraplus220 Then
+                Ac = tc * dc + Me.Bac.eDecalage * bfs + Me.Bac.LargeurBmoyenne * Me.Bac.Hp * (dc - bfs) / Me.Bac.Ep
+            Else
+                Ac = dc * tc * (1 + Me.Bac.LargeurBmoyenne * Me.Bac.Hp / (Me.Bac.Ep * tc))
+            End If
+
 
         ElseIf ((Me.type = Enum_TypeDalle.PartiellementPrefabriquee) Or (Me.type = Enum_TypeDalle.PlancherPrefabrique)) Then
             '=== dalle partiellement préfa ou plancher préfa

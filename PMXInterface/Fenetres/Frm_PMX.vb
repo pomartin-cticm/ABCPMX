@@ -406,6 +406,7 @@ Public Class Frm_PMX
 
         Me.TLpan_OrganisationMenuBO.ColumnStyles(1).Width = 0
 
+        Me.chk_NewF.Visible = Me.chk_NewF.Visible And LogicielOptions.lDebug
     End Sub
 
 #End Region

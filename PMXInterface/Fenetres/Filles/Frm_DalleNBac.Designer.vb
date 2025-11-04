@@ -105,9 +105,9 @@ Partial Class Frm_DalleNBac
         Me.pan_Bac.Controls.Add(Me.txt_BacNom)
         Me.pan_Bac.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Bac.Location = New System.Drawing.Point(0, 30)
-        Me.pan_Bac.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
+        Me.pan_Bac.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Bac.Name = "pan_Bac"
-        Me.pan_Bac.Size = New System.Drawing.Size(296, 439)
+        Me.pan_Bac.Size = New System.Drawing.Size(296, 440)
         Me.pan_Bac.TabIndex = 9
         '
         'pan_DispoConnecteur

@@ -10,6 +10,8 @@ Imports PMXMoteur2
 
 #End Region
 
+#Region " TU pour les largeurs efficaces de dalle "
+
     <TestMethod()> Public Sub TestMethod_BEffDalle01()
         '----------------------------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création GUD
@@ -651,5 +653,33 @@ Imports PMXMoteur2
         End With
 
     End Sub
+
+#End Region
+
+#Region " TU pour les poids propres"
+
+    <TestMethod()> Public Sub TestMethod_PMixCofraPlus220()
+
+        Dim poutre As New cls_Poutre(NomCharges)
+
+        poutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte
+
+        poutre.Dalle.Bac.InitialiseCofraplus220()
+        poutre.Section.ProfilA.GenereProfileIPE300()
+
+        poutre.Dalle.Ep_td = poutre.Dalle.Bac.Hp + 120 / 1000
+
+        poutre.Dalle.Bac.eDecalage = 20 / 1000
+
+        poutre.InitialisePoidsPropres()
+
+        Dim qPP As Decimal = poutre.ChargesU(cls_Poutre.KEYPP).FReparties(1)(0).Force(0)
+        Dim ValRef As Decimal = 8.365 * 1000
+        Assert.IsTrue(IsEqual(qPP, ValRef))
+
+    End Sub
+
+
+#End Region
 
 End Class

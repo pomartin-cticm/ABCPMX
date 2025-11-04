@@ -238,7 +238,7 @@ Public Module Mod_Dessins
             If lSlimF Then
                 DessinFrmMain_Cotation_SectionSlimF(myBeam, myGr, myParAff, MyPen, myFontNormal, dCote, dCar, lZoomPlus, myBrushB, ColorFond)
             Else
-                DessinFrmMain_Cotation_SectionStandard(myBeam, myGr, myParAff, MyPen, myFontNormal, dCote, dCar, lZoomPlus)
+                DessinFrmMain_Cotation_SectionStandard(myBeam, myGr, myParAff, MyPen, myFontNormal, dCote, dCar, lZoomPlus, myBrushB)
             End If
 
         End If
@@ -762,7 +762,7 @@ Public Module Mod_Dessins
     End Sub
 
     Private Sub DessinFrmMain_Cotation_SectionStandard(myBeam As cls_Poutre, myGr As Graphics, myParAff As Struc_Affichage, myPen As Pen, myFont As Font,
-                                                       dCote As Decimal, dCar As Decimal, lZoomPlus As Boolean)
+                                                       dCote As Decimal, dCar As Decimal, lZoomPlus As Boolean, myBrushB As Brush)
         '-----------------------------------------------------------------------------------------------
         '   21/07/25 :  Version 1.10 - POM
         '-----------------------------------------------------------------------------------------------
@@ -794,12 +794,15 @@ Public Module Mod_Dessins
         Dim xVcote                          'x vertical des cotes
         Dim hPro As Decimal                 'hauteur du profilé
         Dim hBac As Decimal                 'hauteur du bac
+        Dim myBrush As Brush                'brush pour l'arriere plan des cotes
 
         '--( Initialisation
         eDec = 0
         lCofraplus220 = myBeam.Dalle.Bac.lCofraplus220
+        myBrush = New SolidBrush(SystemColors.ControlLightLight)
         If lCofraplus220 Then
             eDec = myBeam.Dalle.Bac.eDecalage
+            myBrush = myBrushB
         End If
 
         If lPlat Then
@@ -834,7 +837,7 @@ Public Module Mod_Dessins
         If lCofraplus220 Then
             Chaine = GetStringInUnitN(hBac + eDec, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
             AddFleche(myGr, myPen, xVcote, eDec, xVcote, -hBac, myParAff, True, True)
-            AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, -hBac + DeltaZ, myParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), myPen, lContour)
+            AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, (eDec - hBac) / 2, myParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, myBrush, myPen, lContour)
 
             xVcote = 0 - 1 * dCar / 2
         End If
@@ -842,14 +845,13 @@ Public Module Mod_Dessins
         '-- Hauteur du profilé
         AddFleche(myGr, myPen, xVcote, 0, xVcote, -hPro, myParAff, True, True)
         Chaine = GetStringInUnitN(hPro, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, -hPro / 2, myParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), myPen, lContour)
+        AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, -hPro / 2, myParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, myBrush, myPen, lContour)
 
         '-- Hauteur totale
         xVcote = 0 - 1.5 * dCar
-
         AddFleche(myGr, myPen, xVcote, -hPro - tPlat, xVcote, +hDalle, myParAff, True, True)
         Chaine = GetStringInUnitN(hPro + hDalle + tPlat, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, -hPro / 2, myParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), myPen, lContour)
+        AddTexteFond(myGr, New SolidBrush(myPen.Color), Chaine, myFont, xVcote, (hDalle - hPro) / 2, myParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, myBrush, myPen, lContour)
 
     End Sub
 
@@ -3310,6 +3312,7 @@ Public Module Mod_Dessins
         '               2 : epaisseur dalle au dessus du bac
         '              10 ! epaisseur de la prédalle
         '              11 ! épaisseur du joint
+        '             401 : décalage e220
         '            1000 : béton dalle  
         '            1001 : acier armature
         '-----------------------------------------------------------------------------------------------
@@ -3492,12 +3495,11 @@ Public Module Mod_Dessins
 
             AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, myParAffA, True, True)
             AddLigne(MyGr, MyPen, xCoteZ, ye, xCoteZ, ye + dCar / 2, myParAffA)
-
             Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
             AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, ye + dCar2 / 4, myParAffA, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
-            '# Epaisseur du bac
 
+            '# Epaisseur du bac
             MyColor = StyleCouleur(iSelect, -2)
             MyPen.Color = MyColor
 
@@ -3508,19 +3510,33 @@ Public Module Mod_Dessins
                 yo = 0
                 ye = myBeam.Dalle.Bac.Hp
             End If
-
             AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, myParAffA, True, True)
-            'AddLigne(MyGr, MyPen, xCoteZ, yo - dCar / 2, xCoteZ, yo, myParAffA)
             Dim epBac As Decimal = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
             Chaine = epBac
             If (lCofraplus220) Then
-                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, (yo + ye) / 2, myParAffA, HorizontalAlignment.Center, VerticalAlignement.Top, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, (yo + ye) / 2, myParAffA, HorizontalAlignment.Center, VerticalAlignement.Top, New SolidBrush(CouleurBetonNormal), MyPen, lContour)
             Else
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, yo - dCar2 / 2, myParAffA, HorizontalAlignment.Center, VerticalAlignement.Top, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
             End If
+
+
+            '# Décalage e220
+            If eDec <> 0 Then
+                Dim myPen2 As New Pen(Color.Black)
+                If (iSelect = 401) Then
+                    myPen2.Color = Color.Red
+                End If
+                xCoteZ = -2 * dCar
+                AddLigne(MyGr, myPen2, xCoteZ, ye, xCoteZ, 0, myParAffA)
+                AddLigne(MyGr, myPen2, xCoteZ - dCar / 10, 0, xCoteZ + dCar / 10, 0, myParAffA)
+                AddFleche(MyGr, myPen2, xCoteZ, myBeam.Dalle.zTop + dCar / 2, xCoteZ, ye, myParAffA, False, True)
+                Chaine = GetStringNoUnit(eDec, Enu_TypeVariable.Dimension)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, myBeam.Dalle.zTop + dCar2 / 4, myParAffA, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+
+            End If
         End If
         '# Hauteur totale de la Section + dalle
-
         If Not myBeam.Section.lSlimFloor Then
 
             MyColor = StyleCouleur(iSelect, -2)

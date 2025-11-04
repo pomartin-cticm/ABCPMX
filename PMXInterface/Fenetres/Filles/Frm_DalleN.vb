@@ -194,6 +194,9 @@ Public Class Frm_DalleN
 
         End Select
 
+        iSelect = -1
+        MAJI_ImageDalle()
+
     End Sub
 
 #End Region

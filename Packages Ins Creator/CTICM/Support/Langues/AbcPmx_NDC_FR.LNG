@@ -43,6 +43,12 @@ CNOTRECOMMENDED			= Non recommandé
 
 #NDC_OUTOFSCOPE
 NOREINFORCEMENT			= Les armatures longitudinales doivent être défines dans le cas des poutres mixtes avec console
+THICKNESSABOVEFLANGENOT	= L'épaisseur de béton au dessus de la semelle supérieure du profilé n'est pas suffisante
+THICKNESSABOVEFLANGE	= Épaisseur de béton 
+ABOVEFLANGE				= (au dessus de la semelle supérieure du profilé)	
+MINIMALVALUE			= Épaisseur minimale
+THICKNESSPRECASTSUPHEC	= L'épaisseur de l'élément préfa est supérieure à la hauteur du profilé dans le béton
+THICKNESSSSHEETSUPHEC	= La hauteur du bac est supérieure à la hauteur du profilé dans le béton
 
 #NDC_MAIN
 TITLE					= Note de calculs
@@ -226,6 +232,10 @@ LOWER_FLANGE			= Semelle inférieure
 MASSIVENESS				= Massiveté (sans la face supérieure)
 MASS_LIN_PROFILE		= Masse linéique
 MASS_PROFILE			= Masse
+MASS_DETAIL				= Détails
+MASS_PROCUT				= Profilé $ coupé
+MASS_PRO				= Profilé $
+MASS_PLAT				= Plat
 MATERIAL_LONGI_REINF	= Acier des armatures longitudinales
 MATERIAL_PROFILE		= Acier du profilé
 MATERIAL_PLATE			= Acier de la plaque

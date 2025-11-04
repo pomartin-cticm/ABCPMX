@@ -95,9 +95,9 @@ Partial Class Frm_DalleN
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.Size = New System.Drawing.Size(686, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
@@ -179,9 +179,9 @@ Partial Class Frm_DalleN
         '
         Me.pan_ContenuFille.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_ContenuFille.Location = New System.Drawing.Point(0, 30)
-        Me.pan_ContenuFille.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_ContenuFille.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_ContenuFille.Name = "pan_ContenuFille"
-        Me.pan_ContenuFille.Size = New System.Drawing.Size(250, 461)
+        Me.pan_ContenuFille.Size = New System.Drawing.Size(250, 460)
         Me.pan_ContenuFille.TabIndex = 3
         '
         'TLpan_Choix
@@ -249,9 +249,9 @@ Partial Class Frm_DalleN
         Me.pan_Img.Controls.Add(Me.TLpan_Images)
         Me.pan_Img.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Img.Location = New System.Drawing.Point(251, 0)
-        Me.pan_Img.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.pan_Img.Margin = New System.Windows.Forms.Padding(1, 0, 0, 1)
         Me.pan_Img.Name = "pan_Img"
-        Me.pan_Img.Size = New System.Drawing.Size(435, 491)
+        Me.pan_Img.Size = New System.Drawing.Size(435, 490)
         Me.pan_Img.TabIndex = 1
         '
         'TLpan_Images
@@ -261,7 +261,7 @@ Partial Class Frm_DalleN
         Me.TLpan_Images.Controls.Add(Me.img_Dalle, 0, 0)
         Me.TLpan_Images.Controls.Add(Me.pan_TauxArma, 0, 1)
         Me.TLpan_Images.Location = New System.Drawing.Point(15, 142)
-        Me.TLpan_Images.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
+        Me.TLpan_Images.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_Images.Name = "TLpan_Images"
         Me.TLpan_Images.RowCount = 2
         Me.TLpan_Images.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -274,7 +274,7 @@ Partial Class Frm_DalleN
         Me.img_Dalle.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.img_Dalle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.img_Dalle.Location = New System.Drawing.Point(0, 0)
-        Me.img_Dalle.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
+        Me.img_Dalle.Margin = New System.Windows.Forms.Padding(0)
         Me.img_Dalle.Name = "img_Dalle"
         Me.img_Dalle.Size = New System.Drawing.Size(100, 50)
         Me.img_Dalle.TabIndex = 3
@@ -296,7 +296,7 @@ Partial Class Frm_DalleN
         Me.lbl_TauxArma.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_TauxArma.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_TauxArma.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_TauxArma.Margin = New System.Windows.Forms.Padding(0, 0, 0, 2)
+        Me.lbl_TauxArma.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.lbl_TauxArma.Name = "lbl_TauxArma"
         Me.lbl_TauxArma.Size = New System.Drawing.Size(384, 30)
         Me.lbl_TauxArma.TabIndex = 0
@@ -309,7 +309,7 @@ Partial Class Frm_DalleN
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(692, 537)
         Me.Controls.Add(Me.pan_General)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "Frm_DalleN"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_DalleN"
