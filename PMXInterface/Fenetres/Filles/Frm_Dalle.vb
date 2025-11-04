@@ -6,6 +6,8 @@ Imports System.Collections.Specialized.BitVector32
 
 Public Class Frm_Dalle
 
+    '  FENETRE REMPLACEE PAR FRM_DALLEN
+
 #Region " Variables locales "
 
     Dim lBuild As Boolean = True
