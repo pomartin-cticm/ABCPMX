@@ -141,7 +141,6 @@ Public Class Frm_OptionsFeuN_Calcul
     End Sub
 #End Region
 
-
 #Region " Dessins des symboles "
 
     Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_tDalleFEMmax.Paint, img_U.Paint
@@ -251,7 +250,6 @@ Public Class Frm_OptionsFeuN_Calcul
 
 
 #End Region
-
 
 #Region " Evenements de saisie "
 

@@ -115,6 +115,12 @@
     <Compile Include="Fenetres\EditionBases\Frm_EditGoujons.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\FEM_Slim\Frm_MaillageSlim.Designer.vb">
+      <DependentUpon>Frm_MaillageSlim.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\FEM_Slim\Frm_MaillageSlim.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_ConnectionSlimConnecteur.Designer.vb">
       <DependentUpon>Frm_ConnectionSlimConnecteur.vb</DependentUpon>
     </Compile>
@@ -305,6 +311,12 @@
       <DependentUpon>Frm_OptionsFeuN_Calcul.vb</DependentUpon>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_OptionsFeuN_Calcul.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_OptionsFeuN_CalculSlim.Designer.vb">
+      <DependentUpon>Frm_OptionsFeuN_CalculSlim.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_OptionsFeuN_CalculSlim.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_OptionsFeuN_Parametres.Designer.vb">
@@ -689,6 +701,9 @@
     <EmbeddedResource Include="Fenetres\EditionBases\Frm_EditGoujons.resx">
       <DependentUpon>Frm_EditGoujons.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\FEM_Slim\Frm_MaillageSlim.resx">
+      <DependentUpon>Frm_MaillageSlim.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_About.resx">
       <DependentUpon>Frm_About.vb</DependentUpon>
     </EmbeddedResource>
@@ -784,6 +799,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_OptionsFeuN_Calcul.resx">
       <DependentUpon>Frm_OptionsFeuN_Calcul.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_OptionsFeuN_CalculSlim.resx">
+      <DependentUpon>Frm_OptionsFeuN_CalculSlim.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_OptionsFeuN_Parametres.resx">
       <DependentUpon>Frm_OptionsFeuN_Parametres.vb</DependentUpon>

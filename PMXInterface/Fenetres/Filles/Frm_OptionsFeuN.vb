@@ -10,6 +10,7 @@ Public Class Frm_OptionsFeuN
     Dim Bloc As Dictionary(Of String, String)
 
     Public BeamLoc As cls_Poutre
+    Dim lSlim As Boolean
 
 #End Region
 
@@ -27,6 +28,7 @@ Public Class Frm_OptionsFeuN
         Me.Icon = Frm_PMX.Icon
 
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), BeamLoc)
+        lSlim = BeamLoc.lSlimFloor
 
         Select Case AffichageOptFeu
             Case Enu_AffichageOptions.Calcul
@@ -92,8 +94,15 @@ Public Class Frm_OptionsFeuN
                 Me.pan_Contenu.Controls.Add(Frm_OptionsFeuN_Poutre.pan_General)
                 Frm_OptionsFeuN_Poutre.InitialiseFenetre(Bloc, BeamLoc)
             Case Enu_AffichageOptions.Calcul
-                Me.pan_Contenu.Controls.Add(Frm_OptionsFeuN_Calcul.pan_General)
-                Frm_OptionsFeuN_Calcul.InitialiseFenetre(Bloc)
+
+                If lSlim Then
+                    Me.pan_Contenu.Controls.Add(Frm_OptionsFeuN_CalculSlim.pan_General)
+                    Frm_OptionsFeuN_CalculSlim.InitialiseFenetre(Bloc)
+                Else
+                    Me.pan_Contenu.Controls.Add(Frm_OptionsFeuN_Calcul.pan_General)
+                    Frm_OptionsFeuN_Calcul.InitialiseFenetre(Bloc)
+                End If
+
             Case Enu_AffichageOptions.Parametres
                 Me.pan_Contenu.Controls.Add(Frm_OptionsFeuN_Parametres.pan_General)
                 Frm_OptionsFeuN_Parametres.InitialiseFenetre(Bloc)

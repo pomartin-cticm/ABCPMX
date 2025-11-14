@@ -6,15 +6,15 @@
 
     Const BMAXDAL As Decimal = 0.4              ' Largeur limite de dalle pour prise en compte d'un effet 2D dans le calcul thermique (m)
 
-    Const MATVIDEFERME As Integer = -2          ' vide d'une cavite fermee (espace entre le mur et le profile metallique d'une poutre de rive
-    Const MATVIDEOUVERT As Integer = -1         ' vide d'une cavite ouverte
-    Const MATACIERPLAT As Integer = 0           ' acier de construction du plat soudé
-    Const MATACIERSEMI As Integer = 1           ' acier de construction de la semelle inférieure
-    Const MATACIERAME As Integer = 2            ' acier de construction de l'ame
-    Const MATACIERSEMS As Integer = 3           ' acier de construction de la semelle supérieure
-    Const MATACIERSOUD As Integer = 4           ' acier de soudure du plat
-    Const MATARMA As Integer = 5                ' acier d'armature
-    Const MATBETON As Integer = 6               ' béton de la dalle
+    Public Const MATVIDEFERME As Integer = -2          ' vide d'une cavite fermee (espace entre le mur et le profile metallique d'une poutre de rive
+    Public Const MATVIDEOUVERT As Integer = -1         ' vide d'une cavite ouverte
+    Public Const MATACIERPLAT As Integer = 0           ' acier de construction du plat soudé
+    Public Const MATACIERSEMI As Integer = 1           ' acier de construction de la semelle inférieure
+    Public Const MATACIERAME As Integer = 2            ' acier de construction de l'ame
+    Public Const MATACIERSEMS As Integer = 3           ' acier de construction de la semelle supérieure
+    Public Const MATACIERSOUD As Integer = 4           ' acier de soudure du plat
+    Public Const MATARMA As Integer = 5                ' acier d'armature
+    Public Const MATBETON As Integer = 6               ' béton de la dalle
 
 #End Region
 

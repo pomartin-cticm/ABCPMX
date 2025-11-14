@@ -412,18 +412,19 @@ Public Module Mod_Dessins
         If lSlimfloor Then
             If lDalleMixteT Then
 
-                xPos = myBeam.EntraxeD1 - myBeam.Section.LargeurPlatInfSlim / 2
+                xPos = myBeam.EntraxeD2 - myBeam.Section.LargeurPlatInfSlim / 2
                 zPos = 0
                 DessinFrmMain_LabelBacXY(myBeam, myGr, myParAff, myPen, myFont, xPos, zPos)
 
             End If
         Else
             If lDalleMixteT Then
-                xPos = myBeam.EntraxeD1 - myBeam.Section.ProfilA.Bfs / 2
+                xPos = myBeam.EntraxeD2 - myBeam.Section.ProfilA.Bfs / 2
                 zPos = 0
                 DessinFrmMain_LabelBacXY(myBeam, myGr, myParAff, myPen, myFont, xPos, zPos)
             End If
         End If
+
     End Sub
     Private Sub DessinFrmMain_LabelBacXY(myBeam As cls_Poutre, myGr As Graphics, myParAff As Struc_Affichage,
                                          myPen As Pen, myFont As Font, xPos As Decimal, zPos As Decimal)
@@ -729,7 +730,7 @@ Public Module Mod_Dessins
 
         '--( Cotation de la poutre à gauche, ou distance au bord de la dalle
 
-        If (Not lZoomPlus) Then
+        If (Not lZoomPlus) And (IsGreater(EntraxeD1, 0)) Then
 
 
             xo_cotes = -EntraxeD1
