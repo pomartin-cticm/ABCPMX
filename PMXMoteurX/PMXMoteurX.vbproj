@@ -83,7 +83,9 @@
     <Compile Include="Classes Charges\cls_Moment.vb" />
     <Compile Include="Classes Charges\cls_PointsSigma.vb" />
     <Compile Include="Classes Incendie\cls_EchauffementDalleFEM.vb" />
+    <Compile Include="Classes Incendie\cls_EchauffementSlimFEM.vb" />
     <Compile Include="Classes Incendie\cls_EurocodesFeu.vb" />
+    <Compile Include="Classes Incendie\cls_MaillageSlimFloor.vb" />
     <Compile Include="Classes Incendie\cls_VerifFeuAcier.vb" />
     <Compile Include="Classes Incendie\cls_VerifFeuEnrobe.vb" />
     <Compile Include="Classes Incendie\cls_VerifFeuMixte.vb" />

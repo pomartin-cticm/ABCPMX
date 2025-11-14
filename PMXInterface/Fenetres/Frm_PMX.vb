@@ -955,7 +955,7 @@ Public Class Frm_PMX
                     lFireDispo = LogicielReglages.lFIRE
                 End If
 
-                If lFireDispo Then
+                If lFireDispo Or LogicielOptions.lDebug Then
 
                     FilleEnCours = EnuFenetres.Incendie
 
