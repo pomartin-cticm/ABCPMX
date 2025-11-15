@@ -63,11 +63,16 @@
 
         Me.ModelNum = New cls_EchauffementSlimFEM
 
-        Maillage.Creation_maillage_2D_poutre_plancher_mince(myBeam.Section.ProfilA, myBeam.Dalle, bEffG, beffd, myBeam.lIntermediaire, bapp)
+        Maillage.Creation_maillage_2D_poutre_plancher_mince(myBeam.Section.ProfilA, myBeam.Dalle, myBeam.ParamFeu, bEffG, bEffD, myBeam.lIntermediaire, bApp)
+
+        '--( Initialisation des températures 
+
+        Maillage.InitialiseTemp(myBeam.ParamFeu.TempRef)
 
         '--( Boucle sur TimeSteps
 
         For iSTep = 0 To Me.NbStep - 1
+
 
 
         Next

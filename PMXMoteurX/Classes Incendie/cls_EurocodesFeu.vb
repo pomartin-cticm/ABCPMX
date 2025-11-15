@@ -565,7 +565,7 @@
 
         cA = Me.ChaleurSpecifiqueAcier(TempA)
         RhoA = cls_Acier.RHOACIER
-        EpsilonA = EmissiviteAcier(TempA, myParamFeu.TypeSurface)
+        EpsilonA = EmissiviteAcier(TempA, myParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise)
 
         If IsEqual(Cred2, 1) Then
             TempG = Me.TemperatureGazISO(TimeT)
@@ -929,7 +929,7 @@
 
         cA = Me.ChaleurSpecifiqueAcier(TempA)
         RhoA = cls_Acier.RHOACIER
-        EpsilonA = EmissiviteAcier(TempA, myParamFeu.TypeSurface)
+        EpsilonA = EmissiviteAcier(TempA, myParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise)
         FluxConv = myParamFeu.ConvectionCoef * (TempG - TempA)
         FluxRad = Me.FluxRadiatif(TempA, TempG, EpsilonA, myParamFeu)
         FluxTherm = FluxRad + FluxConv
@@ -967,30 +967,55 @@
         Return myCa
     End Function
 
-    Public Function EmissiviteAcier(TempA As Decimal, typeSurf As cls_OptionsFeu.enu_TypeSurface) As Decimal
+    'Public Function EmissiviteAcier(TempA As Decimal, typeSurf As cls_OptionsFeu.enu_TypeSurface) As Decimal
+    '    '--------------------------------------------------------------------------------------------------------------------------------
+    '    '   22/04/24 :  Création - POM
+    '    '--------------------------------------------------------------------------------------------------------------------------------
+    '    '   Emissivité de l'acier en fonction de la température et de l'état de surface
+    '    '--------------------------------------------------------------------------------------------------------------------------------
+    '    '   TempA       [E] :   Température de l'acier
+    '    '   typeSurf    [E] :   Type de surface, acier nu ou galvanisé
+    '    '--------------------------------------------------------------------------------------------------------------------------------
+
+    '    Dim myEpsilonA As Decimal
+
+    '    Select Case typeSurf
+    '        Case cls_OptionsFeu.enu_TypeSurface.AcierNu
+    '            myEpsilonA = 0.7
+    '        Case cls_OptionsFeu.enu_TypeSurface.Galvanise
+    '            If IsSmaller(TempA, 500) Then
+    '                myEpsilonA = 0.35
+    '            Else
+    '                myEpsilonA = 0.7
+    '            End If
+    '        Case Else
+    '            myEpsilonA = 0.7
+    '    End Select
+
+    '    Return myEpsilonA
+    'End Function
+
+    Public Function EmissiviteAcier(TempA As Decimal, lGalva As Boolean) As Decimal
         '--------------------------------------------------------------------------------------------------------------------------------
         '   22/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------------
         '   Emissivité de l'acier en fonction de la température et de l'état de surface
         '--------------------------------------------------------------------------------------------------------------------------------
         '   TempA       [E] :   Température de l'acier
-        '   typeSurf    [E] :   Type de surface, acier nu ou galvanisé
+        '   lGalva      [E] :   Indique si acier galvanisé (true) ou acier nu (false)
         '--------------------------------------------------------------------------------------------------------------------------------
 
         Dim myEpsilonA As Decimal
 
-        Select Case typeSurf
-            Case cls_OptionsFeu.enu_TypeSurface.AcierNu
+        If lGalva Then
+            If IsSmaller(TempA, 500) Then
+                myEpsilonA = 0.35
+            Else
                 myEpsilonA = 0.7
-            Case cls_OptionsFeu.enu_TypeSurface.Galvanise
-                If IsSmaller(TempA, 500) Then
-                    myEpsilonA = 0.35
-                Else
-                    myEpsilonA = 0.7
-                End If
-            Case Else
-                myEpsilonA = 0.7
-        End Select
+            End If
+        Else
+            myEpsilonA = 0.7
+        End If
 
         Return myEpsilonA
     End Function
@@ -1763,7 +1788,6 @@
 
     End Function
 
-
     Public Function Conductivite_thermique_beton(ByVal lNormal As Boolean, lANF As Boolean, ByVal lGene1 As Boolean, ByVal ThetaC As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------------------
         '   15/05/24 :  Création - GiB
@@ -1950,4 +1974,5 @@
 
 
 #End Region
+
 End Class

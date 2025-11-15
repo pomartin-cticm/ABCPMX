@@ -4,7 +4,7 @@
 
     Const DIMDEF As Integer = 10000             ' Dimension initiale des tableaux de maillage
 
-    Const BMAXDAL As Decimal = 0.4              ' Largeur limite de dalle pour prise en compte d'un effet 2D dans le calcul thermique (m)
+    Public Const BMAXDAL As Double = 0.4              ' Largeur limite de dalle pour prise en compte d'un effet 2D dans le calcul thermique (m)
 
     Public Const MATVIDEFERME As Integer = -2          ' vide d'une cavite fermee (espace entre le mur et le profile metallique d'une poutre de rive
     Public Const MATVIDEOUVERT As Integer = -1         ' vide d'une cavite ouverte
@@ -22,12 +22,12 @@
 
     Public nb_cells_y As Integer                ' nombre de mailles suivant l'axe fort
     Public nb_cells_z As Integer                ' nombre de mailles suivant l'axe faible
-    Public Tab_mesh_y() As Single               ' densité du maillage (taille de la maille (i,j)) suivant l'axe y       (m)
-    Public Tab_mesh_z() As Single               ' densité du maillage (taille de la maille (i,j)) suivant l'axe z       (m)
-    Public Tab_mesh_cent_y(,) As Single         ' abscisse du centre de chaque maille (i,j)    (m)
-    Public Tab_mesh_cent_z(,) As Single         ' ordonnée du centre de chaque maille (i,j)    (m)
-    Public Tab_mesh_mat(,) As Integer           ' numéro de matériau de chaque maille (i,j)
-    Public Tab_mesh_temp(,) As Single           ' tempérarature de chaque maille (i,j) à un instant donné
+    Public Tab_mesh_y() As Double               ' densité du maillage (taille de la maille (i,j)) suivant l'axe y       (m)
+    Public Tab_mesh_z() As Double               ' densité du maillage (taille de la maille (i,j)) suivant l'axe z       (m)
+    Public Tab_mesh_cent_y(,) As Double         ' abscisse du centre de chaque maille (i,j)    (m)
+    Public Tab_mesh_cent_z(,) As Double         ' ordonnée du centre de chaque maille (i,j)    (m)
+    Public Tab_mesh_mat(,) As Double            ' numéro de matériau de chaque maille (i,j)
+    Public Tab_mesh_temp(,) As Double           ' tempérarature de chaque maille (i,j) à un instant donné
     Public ind_0 As Integer                     ' indice de la maille suivant l'axe fort à partir de laquelle effectuer le calcul de transfert thermique
     Public ind_1 As Integer                     ' indice de la maille suivant l'axe fort jusqu'à laquelle effectuer le calcul de transfert thermique
 
@@ -43,7 +43,7 @@
 
 #Region " Préparation du maillage "
 
-    Public Sub Creation_maillage_2D_poutre_plancher_mince(myProfil As cls_ProfilA, myDalle As cls_Dalle,
+    Public Sub Creation_maillage_2D_poutre_plancher_mince(myProfil As cls_ProfilA, myDalle As cls_Dalle, paramF As cls_OptionsFeu,
                                                           bEffG As Decimal, bEffD As Decimal, lInter As Boolean, bApp As Decimal)
         '---------------------------------------------------------------------------------------------------------------------------------------
         '   13/11/25 :  Création - GiB
@@ -60,38 +60,38 @@
 
         '--( Variables particulières
 
-        Dim bAppG As Decimal = bApp                                             ' Largeur d'appui de la dalle à gauche 
-        Dim bAppD As Decimal = bApp                                             ' Largeur d'appui de la dalle à droite 
+        Dim bAppG As Double = bApp                                             ' Largeur d'appui de la dalle à gauche 
+        Dim bAppD As Double = bApp                                             ' Largeur d'appui de la dalle à droite 
 
         '--( Déclaration des variables
 
         Dim i_ As Integer, j_ As Integer, k_ As Integer, l_ As Integer
         Dim i_mat As Integer
         Dim n_dec As Integer, n_dec_y As Integer, n_dec_z As Integer            ' nombre de plans de coupe du maillage
-        Dim val_bs_eq As Single                                                 ' côté des barres d'armature conduisant à une aire équivalente
-        Dim val_size As Single                                                  ' densité du maillage
-        Dim val_bw As Single                                                    ' gorge de soudure dans le modèle
-        Dim Tab_dec(0 To 100) As Single
-        Dim Tab_y(0 To 100) As Single                                           ' abscisse des plans de coupe du maillage
-        Dim Tab_z(0 To 100) As Single                                           ' ordonnee des plans de coupe du maillage
+        Dim val_bs_eq As Double                                                 ' côté des barres d'armature conduisant à une aire équivalente
+        Dim val_size As Double                                                  ' densité du maillage
+        Dim val_bw As Double                                                    ' gorge de soudure dans le modèle
+        Dim Tab_dec(0 To 100) As Double
+        Dim Tab_y(0 To 100) As Double                                           ' abscisse des plans de coupe du maillage
+        Dim Tab_z(0 To 100) As Double                                           ' ordonnee des plans de coupe du maillage
 
-        Dim y_0 As Single, z_0 As Single                                        ' abscisses et ordonnées de l'angle inférieur gauche de la section transversale
-        Dim yp_1 As Single, yp_2 As Single, zp_1 As Single, zp_2 As Single      ' abscisses et ordonnées extrémales du plat soudé
-        Dim yfi_1 As Single, yfi_2 As Single, zfi_1 As Single, zfi_2 As Single  ' abscisses et ordonnées extrémales de la semelle inférieure
-        Dim yfs_1 As Single, yfs_2 As Single, zfs_1 As Single, zfs_2 As Single  ' abscisses et ordonnées extrémales de la semelle supérieure
-        Dim yw_1 As Single, yw_2 As Single, zw_1 As Single, zw_2 As Single      ' abscisses et ordonnées extrémales de l'âme
-        Dim ys_1 As Single, ys_2 As Single, ys_3 As Single, ys_4 As Single      ' abscisses extrémales des deux barres d'armature à gauche de l'âme
-        Dim ys_5 As Single, ys_6 As Single, ys_7 As Single, ys_8 As Single      ' abscisses extrémales des deux barres d'armature à droite de l'âme
-        Dim zs_1 As Single, zs_2 As Single, zs_3 As Single, zs_4 As Single      ' ordonnées extrémales des deux barres d'armature à gauche de l'âme
-        Dim zs_5 As Single, zs_6 As Single, zs_7 As Single, zs_8 As Single      ' ordonnées extrémales des deux barres d'armature à droite de l'âme
-        Dim ywd_1 As Single, ywd_2 As Single, zwd_1 As Single, zwd_2 As Single  ' abscisses et ordonnées extrémales de la soudure de gauche d'un plat inférieur
-        Dim ywd_3 As Single, ywd_4 As Single, zwd_3 As Single, zwd_4 As Single  ' abscisses et ordonnées extrémales de la soudure de droite d'un plat inférieur
-        Dim yv_1 As Single, yv_2 As Single, zv_1 As Single, zv_2 As Single      ' abscisses et ordonnées extrémales du vide de gauche 
-        Dim yv_3 As Single, yv_4 As Single, zv_3 As Single, zv_4 As Single      ' abscisses et ordonnées extrémales du vide de droite 
+        Dim y_0 As Double, z_0 As Double                                        ' abscisses et ordonnées de l'angle inférieur gauche de la section transversale
+        Dim yp_1 As Double, yp_2 As Double, zp_1 As Double, zp_2 As Double      ' abscisses et ordonnées extrémales du plat soudé
+        Dim yfi_1 As Double, yfi_2 As Double, zfi_1 As Double, zfi_2 As Double  ' abscisses et ordonnées extrémales de la semelle inférieure
+        Dim yfs_1 As Double, yfs_2 As Double, zfs_1 As Double, zfs_2 As Double  ' abscisses et ordonnées extrémales de la semelle supérieure
+        Dim yw_1 As Double, yw_2 As Double, zw_1 As Double, zw_2 As Double      ' abscisses et ordonnées extrémales de l'âme
+        Dim ys_1 As Double, ys_2 As Double, ys_3 As Double, ys_4 As Double      ' abscisses extrémales des deux barres d'armature à gauche de l'âme
+        Dim ys_5 As Double, ys_6 As Double, ys_7 As Double, ys_8 As Double      ' abscisses extrémales des deux barres d'armature à droite de l'âme
+        Dim zs_1 As Double, zs_2 As Double, zs_3 As Double, zs_4 As Double      ' ordonnées extrémales des deux barres d'armature à gauche de l'âme
+        Dim zs_5 As Double, zs_6 As Double, zs_7 As Double, zs_8 As Double      ' ordonnées extrémales des deux barres d'armature à droite de l'âme
+        Dim ywd_1 As Double, ywd_2 As Double, zwd_1 As Double, zwd_2 As Double  ' abscisses et ordonnées extrémales de la soudure de gauche d'un plat inférieur
+        Dim ywd_3 As Double, ywd_4 As Double, zwd_3 As Double, zwd_4 As Double  ' abscisses et ordonnées extrémales de la soudure de droite d'un plat inférieur
+        Dim yv_1 As Double, yv_2 As Double, zv_1 As Double, zv_2 As Double      ' abscisses et ordonnées extrémales du vide de gauche 
+        Dim yv_3 As Double, yv_4 As Double, zv_3 As Double, zv_4 As Double      ' abscisses et ordonnées extrémales du vide de droite 
 
         Dim prop_encl_open As Boolean   'nature ouverte ou fermee de la cavite entre le mur et le profile metallique d'une poutre de rive
 
-        Dim y_min As Single, y_max As Single, delta_y As Single
+        Dim y_min As Double, y_max As Double, delta_y As Double
 
         Dim lSFB As Boolean
         Dim lSAB As Boolean
@@ -138,7 +138,7 @@
         yv_3 = y_0 : yv_4 = y_0 : zv_3 = z_0 : zv_4 = z_0
         y_min = y_0 : y_max = y_0 + bEffG + bEffD
 
-        delta_y = BMAXDAL                       ' Taille limite de dalle modélisée de part et d'autre de l'âme
+        delta_y = paramF.bEffect2D                          ' Taille limite de dalle modélisée de part et d'autre de l'âme
 
         '====== TRAITEMENT PROFILE METALLIQUE ======
         '==== with myProfil
@@ -157,11 +157,11 @@
             zp_1 = z_0
 
             If lIFB_B Then
-                zp_1 += myProfil.ha - myProfil.Plat_t                ' .hs - .tp
+                zp_1 += myProfil.ha - myProfil.Plat_t
             End If
 
-            yp_2 = yp_1 + myProfil.Plat_b                   ' .bp
-            zp_2 = zp_1 + myProfil.Plat_t                   ' .tp
+            yp_2 = yp_1 + myProfil.Plat_b
+            zp_2 = zp_1 + myProfil.Plat_t
 
         End If
 
@@ -429,7 +429,7 @@
 
         Me.nb_cells_y = 0
         j_ = 0
-            l_ = -1
+        l_ = -1
         For i_ = 1 To n_dec_y - 1
 
             j_ = Math.Max(1, CInt((Tab_y(i_) - Tab_y(i_ - 1)) / val_size))
@@ -461,9 +461,9 @@
 
         'Borne inférieure
         y_min = Math.Min(y_min, 0.5 * (yw_1 + yw_2) - delta_y)
-            If y_min > y_0 Then
+        If y_min > y_0 Then
 
-                Dim y_ As Single : y_ = y_0
+            Dim y_ As Single : y_ = y_0
 
             For i_ = 0 To Me.nb_cells_y - 1
                 y_ += Me.Tab_mesh_y(i_)
@@ -476,8 +476,8 @@
 
         End If
 
-            'Borne supérieure
-            y_max = Math.Max(y_max, 0.5 * (yw_1 + yw_2) + delta_y)
+        'Borne supérieure
+        y_max = Math.Max(y_max, 0.5 * (yw_1 + yw_2) + delta_y)
 
         If y_max < y_0 + bEffG + bEffD Then
 
@@ -544,10 +544,10 @@
 
         Me.nb_cells_z = 0
         l_ = -1
-            For i_ = 1 To n_dec_z - 1
-                j_ = Math.Max(1, CInt((Tab_z(i_) - Tab_z(i_ - 1)) / val_size))
-                For k_ = 1 To j_
-                    l_ += 1
+        For i_ = 1 To n_dec_z - 1
+            j_ = Math.Max(1, CInt((Tab_z(i_) - Tab_z(i_ - 1)) / val_size))
+            For k_ = 1 To j_
+                l_ += 1
                 Me.Tab_mesh_z(l_) = (Tab_z(i_) - Tab_z(i_ - 1)) / j_
             Next
             Me.nb_cells_z += j_
@@ -556,7 +556,6 @@
 
 
         '--( CALCUL DES COORDONNEES DU CENTRE DE CHAQUE MAILLE
-
 
         ReDim Me.Tab_mesh_cent_y(0 To Me.nb_cells_y - 1, 0 To Me.nb_cells_z - 1)
         ReDim Me.Tab_mesh_cent_z(0 To Me.nb_cells_y - 1, 0 To Me.nb_cells_z - 1)
@@ -749,7 +748,7 @@
         '--( Déclaration
 
         Dim ii_ As Integer, jj_ As Integer
-        Dim val_y As Single, val_z As Single
+        Dim val_y As Double, val_z As Double
 
         '--( Traitement
 
@@ -781,6 +780,29 @@
 
             End If
 
+        Next
+
+    End Sub
+
+#End Region
+
+#Region " Initialisation du calcul Feu "
+
+    Public Sub InitialiseTemp(Temp0 As Double)
+        '---------------------------------------------------------------------------------------------------------------------------------------
+        '   14/11/25 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------------------
+        '   Initialisation de la table des températures du maillage
+        '---------------------------------------------------------------------------------------------------------------------------------------
+        '   Temp0      [E] :   Température initiale (°C)
+        '---------------------------------------------------------------------------------------------------------------------------------------
+
+        ReDim Me.Tab_mesh_temp(0 To nb_cells_y - 1, 0 To nb_cells_z - 1)
+
+        For i As Integer = 0 To nb_cells_y - 1
+            For j As Integer = 0 To nb_cells_z - 1
+                Me.Tab_mesh_temp(i, j) = Temp0
+            Next
         Next
 
     End Sub

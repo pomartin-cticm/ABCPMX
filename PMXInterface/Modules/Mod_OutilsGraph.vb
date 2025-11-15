@@ -620,7 +620,28 @@ Module Mod_OutilsGraph
 #End Region
 
 #Region "   Rectangles "
+    Sub AddRectangle(ByRef MyGr As Graphics, ByVal MyPen As Pen,
+                     ByVal xo As Double, ByVal yo As Double,
+                     ByVal xe As Double, ByVal ye As Double,
+                     ByVal ParAff As Struc_Affichage)
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   11/02/08 :  Creation - v1.00
+        '
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   Affichage d'un rectangle sans remplissage
+        '
+        '-----------------------------------------------------------------------------------------------------
 
+        Dim xEo As Single = XEcran(ParAff, xo)
+        Dim xEe As Single = XEcran(ParAff, xe)
+        Dim yEo As Single = YEcran(ParAff, yo)
+        Dim yEe As Single = YEcran(ParAff, ye)
+
+        MyGr.DrawRectangle(MyPen, Math.Min(xEo, xEe), Math.Min(yEo, yEe), Math.Abs(xEe - xEo), Math.Abs(yEe - yEo))
+
+    End Sub
 
     Sub AddRectanglePlein(ByRef MyGr As Graphics, ByVal Color As Color,
                           ByVal xo As Double, ByVal yo As Double,

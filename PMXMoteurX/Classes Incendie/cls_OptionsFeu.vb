@@ -14,7 +14,7 @@
     Public EmissivityFire As Decimal                        ' Emissivité du feu
     Public EmissivityFireCreuxO As Decimal                  ' Emissivité du feu pour un calcu de creux d'onde
     Public EmissivityC As Decimal                           ' Emissivité du béton
-    'Public EmissivitySteel As Decimal                        ' Emissivité de l'acier
+    'Public EmissivitySteel As Decimal                      ' Emissivité de l'acier
 
     Public ConvectionCoef As Decimal                        ' Coefficient de convection sur les faces exposées au feu (AlphaC)
     Public ConvectionCoefDalle As Decimal                   ' Coefficient de convection sur la face supérieure de la dalle, non exposée au feu (uniquement si calcul EF Dalle)
@@ -37,6 +37,8 @@
 
     Public lDalleFEM As Boolean                             ' Indique pour les poutres mixtes si on calcule l'échauffement par une analyse EF
     Public tDalleEFmax As Decimal                           ' Epaisseur maximale d'un elt dalle pour le calcul numérique de l'échauffement de la dalle
+
+    Public bEffect2D As Decimal                             ' Largeur de dalle pour laquelle on prend en compte l'effet 2D dans le calcul d'échauffement de la poutre slim
 
     Public lCreuxProteges As Boolean                        ' Indique pour les dalles mixtes perpendiculaires, si les creux d'ondes sont protégés
 
@@ -107,6 +109,8 @@
 
         Me.lDalleFEM = False
         Me.tDalleEFmax = 10 / 1000          ' 10 mm
+
+        Me.bEffect2D = cls_MaillageSlimFloor.BMAXDAL ' 0.4 m
 
         Me.TypeSurface = enu_TypeSurface.AcierNu
 
