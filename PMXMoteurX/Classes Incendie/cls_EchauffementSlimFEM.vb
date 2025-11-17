@@ -142,14 +142,14 @@
 
                         If prop_expo Then
                             'Face exposee
-                            h_net_ce = My_fire.AlphaCInf * (TempG - Temp_0(i_, j_))    'densite de flux convectif
-                            h_net_re = My_fire.EpsilonF * val_epsilon * SigmaSB * ((TempG + 273.0) ^ 4 - (Temp_0(i_, j_) + 273.0) ^ 4)    'densite de flux radiatif
+                            ''h_net_ce = My_fire.AlphaCInf * (TempG - Temp_0(i_, j_))    'densite de flux convectif
+                            ''h_net_re = My_fire.EpsilonF * val_epsilon * SigmaSB * ((TempG + 273.0) ^ 4 - (Temp_0(i_, j_) + 273.0) ^ 4)    'densite de flux radiatif
                             h_net_de = h_net_ce + h_net_re  'densite de flux net
 
                         ElseIf prop_noex Then
                             'Face non exposee
-                            h_net_cn = My_fire.AlphaCSup * (My_fire.TempRef - Temp_0(i_, j_))    'densite de flux convectif
-                            h_net_rn = My_fire.EpsilonF * val_epsilon * SigmaSB * ((My_fire.TempRef + 273.0) ^ 4 - (Temp_0(i_, j_) + 273.0) ^ 4)    'densite de flux radiatif
+                            ''h_net_cn = My_fire.AlphaCSup * (My_fire.TempRef - Temp_0(i_, j_))    'densite de flux convectif
+                            ''h_net_rn = My_fire.EpsilonF * val_epsilon * SigmaSB * ((My_fire.TempRef + 273.0) ^ 4 - (Temp_0(i_, j_) + 273.0) ^ 4)    'densite de flux radiatif
                             h_net_dn = h_net_cn + h_net_rn  'densite de flux net
 
                         End If
@@ -174,7 +174,7 @@
                             '%% Conductivite thermique de la maille (i-1,j_)
 
                             If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure), de soudure (4) ou d'armature (5)  
-                                lambda_Lb = Conductivite_thermique_acier(Temp_0(ii_, j_))
+                                ''lambda_Lb = Conductivite_thermique_acier(Temp_0(ii_, j_))
                             ElseIf j_mat = 6 OrElse j_mat = 7 Then  'beton NC (6) ou LC (7)
                                 'lambda_Lb = Conductivite_thermique_beton(My_materials.lNormal, My_materials.lANFrance, My_materials.lGeneration1, Temp_0(ii_, j_))
                                 lambda_Lb = EN_Feu.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(ii_, j_))
@@ -194,7 +194,7 @@
                         'Conductivite thermique de la maille (i_,j_-1)
                         j_mat = My_mesh.Tab_mesh_mat(i_, jj_)
                         If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure), de soudure (4) ou d'armature (5)  
-                            lambda_Bb = Conductivite_thermique_acier(Temp_0(i_, jj_))
+                            ''lambda_Bb = Conductivite_thermique_acier(Temp_0(i_, jj_))
                         ElseIf j_mat = 6 OrElse j_mat = 7 Then
                             'lambda_Bb = Conductivite_thermique_beton(My_materials.lNormal, My_materials.lANFrance, My_materials.lGeneration1, Temp_0(i_, jj_))
                             lambda_Bb = EN_Feu.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_, jj_))
@@ -216,7 +216,7 @@
 
                             'Conductivite thermique de la maille (i_,j_+1)
                             If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure), de soudure (4) ou d'armature (5)  
-                                lambda_Tb = Conductivite_thermique_acier(Temp_0(i_, jj_))
+                                '' lambda_Tb = Conductivite_thermique_acier(Temp_0(i_, jj_))
                             ElseIf j_mat = 6 OrElse j_mat = 7 Then  'beton NC (6) ou LC (7)
                                 ' lambda_Tb = Conductivite_thermique_beton(My_materials.lNormal, My_materials.lANFrance, My_materials.lGeneration1, Temp_0(i_, jj_))
                                 lambda_Tb = EN_Feu.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_, jj_))
@@ -245,7 +245,7 @@
 
                             'Conductivite thermique de la maille (i_+1,j_)
                             If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure), de soudure (4) ou d'armature (5)  
-                                lambda_Rb = Conductivite_thermique_acier(Temp_0(ii_, j_))
+                                '' lambda_Rb = Conductivite_thermique_acier(Temp_0(ii_, j_))
                             ElseIf j_mat = 6 OrElse j_mat = 7 Then  'beton NC (6) ou LC (7)
                                 'lambda_Rb = Conductivite_thermique_beton(My_materials.lNormal, My_materials.lANFrance, My_materials.lGeneration1, Temp_0(ii_, j_))
                                 lambda_Rb = EN_Feu.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(ii_, j_))
@@ -260,8 +260,8 @@
 
                     '2e terme du denominateur de qi
                     If i_mat >= 0 AndAlso i_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure), de soudure (4) ou d'armature (5)  
-                        lambda_ = Conductivite_thermique_acier(Temp_0(i_, j_))
-                        rho_ = My_materials.Rho_A
+                        ''  lambda_ = Conductivite_thermique_acier(Temp_0(i_, j_))
+                        '' rho_ = My_materials.Rho_A
 
                         'cp_ = Chaleur_specifique_acier(Temp_0(i_, j_))
                         cp_ = EN_Feu.ChaleurSpecifiqueAcier(Temp_0(i_, j_))
@@ -271,7 +271,7 @@
                         lambda_ = EN_Feu.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_, j_))
 
                         'rho_ = Masse_volumique_beton(My_materials.lNormal, My_materials.lRhoCVariable, My_materials.lGeneration1, My_materials.RhoC, Temp_0(i_, j_))
-                        rho_ = EN_Feu.Masse_volumique_beton(lNormal, My_materials.lRhoCVariable, lGeneration1, My_materials.RhoC, Temp_0(i_, j_))
+                        ''  rho_ = EN_Feu.Masse_volumique_beton(lNormal, My_materials.lRhoCVariable, lGeneration1, My_materials.RhoC, Temp_0(i_, j_))
 
                         'cp_ = Chaleur_specifique_beton(My_materials.lNormal, My_materials.U_, My_materials.lGeneration1, Temp_0(i_, j_))
                         cp_ = EN_Feu.Chaleur_specifique_beton(lNormal, val_U, lGeneration1, Temp_0(i_, j_))
@@ -313,7 +313,8 @@
         With My_mesh
 
             If .ind_0 > 0 Then
-                If My_time < My_fire.Duration Then
+                ' If My_time < My_fire.Duration Then
+                If My_time < 1000 Then
                     i_ = .ind_0 - 1 'colonne de mailles adjacentes a la borne inferieure de l'intervalle calculé
                     For j_ = 0 To .nb_cells_z - 1
                         .Tab_mesh_temp(i_, j_) = .Tab_mesh_temp(.ind_0, j_)
@@ -328,7 +329,8 @@
             End If
 
             If .ind_1 < .nb_cells_y - 1 Then
-                If My_time < My_fire.Duration Then
+                ' If My_time < My_fire.Duration Then
+                If My_time < 1000 Then
                     i_ = .ind_1 + 1     'colonne de mailles adjacentes a la borne inferieure de l'intervalle calculé
                     For j_ = 0 To .nb_cells_z - 1
                         .Tab_mesh_temp(i_, j_) = .Tab_mesh_temp(.ind_1, j_)

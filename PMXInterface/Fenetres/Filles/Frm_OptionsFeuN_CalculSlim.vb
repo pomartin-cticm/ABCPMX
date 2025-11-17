@@ -20,7 +20,6 @@ Public Class Frm_OptionsFeuN_CalculSlim
 
         Me.pan_General.Dock = DockStyle.Fill
 
-        RemplirComboTherm()
         AffichePoutreEnCours(Frm_OptionsFeuN.BeamLoc)
 
         lBuild = False

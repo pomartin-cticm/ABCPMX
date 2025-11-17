@@ -62,7 +62,7 @@ Public Class Frm_MaillageSlim
 
         Me.cmb_TempR.Items.Add("0")
         For i As Integer = 0 To cls_VerifFeuSlimAcier.TimeSteps.GetUpperBound(0)
-            Me.cmb_TempR.Items.Add("R") & cls_VerifFeuSlimAcier.TimeSteps(i).ToString
+            Me.cmb_TempR.Items.Add("R" & cls_VerifFeuSlimAcier.TimeSteps(i).ToString)
         Next
 
         Me.cmb_TempR.SelectedIndex = 0
@@ -280,7 +280,11 @@ Public Class Frm_MaillageSlim
 
             InfoMaille(myMail, iSelect, jSelect, myColor, lDessin, ChMat)
             AddRectangle(myGr, myPenN, xo, yo, xe, ye, myParAff)
-            AfficheInfoMaille(myGr, myParAff, iSelect, jSelect, ChMat, lAffTh, myMail.Tab_mesh_temp(iSelect, jSelect))
+            If lCalculTh Then
+                AfficheInfoMaille(myGr, myParAff, iSelect, jSelect, ChMat, lAffTh, myMail.Tab_mesh_temp(iSelect, jSelect))
+            Else
+                AfficheInfoMaille(myGr, myParAff, iSelect, jSelect, ChMat, lAffTh, 0)
+            End If
         End If
 
         '--( Représentation des largeurs 2D

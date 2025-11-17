@@ -26,7 +26,7 @@
     Public Tab_mesh_z() As Double               ' densité du maillage (taille de la maille (i,j)) suivant l'axe z       (m)
     Public Tab_mesh_cent_y(,) As Double         ' abscisse du centre de chaque maille (i,j)    (m)
     Public Tab_mesh_cent_z(,) As Double         ' ordonnée du centre de chaque maille (i,j)    (m)
-    Public Tab_mesh_mat(,) As Double            ' numéro de matériau de chaque maille (i,j)
+    Public Tab_mesh_mat(,) As Integer           ' numéro de matériau de chaque maille (i,j)
     Public Tab_mesh_temp(,) As Double           ' tempérarature de chaque maille (i,j) à un instant donné
     Public ind_0 As Integer                     ' indice de la maille suivant l'axe fort à partir de laquelle effectuer le calcul de transfert thermique
     Public ind_1 As Integer                     ' indice de la maille suivant l'axe fort jusqu'à laquelle effectuer le calcul de transfert thermique
@@ -729,8 +729,9 @@
 
     End Sub
 
-    Private Sub Affectation_materiau_maillage(val_mat As Integer, val_y0 As Single, val_y1 As Single, val_y2 As Single,
-                                              val_z0 As Single, val_z1 As Single, val_z2 As Single, Tab_1() As Single, Tab_2() As Single, ByRef Tab_3(,) As Integer)
+    Private Sub Affectation_materiau_maillage(val_mat As Integer, val_y0 As Double, val_y1 As Double, val_y2 As Double,
+                                              val_z0 As Double, val_z1 As Double, val_z2 As Double,
+                                              Tab_1() As Double, Tab_2() As Double, ByRef Tab_3(,) As Integer)
         '---------------------------------------------------------------------------------------------------------------------------------------
         '   13/11/25 :  Création - GiB
         '---------------------------------------------------------------------------------------------------------------------------------------
