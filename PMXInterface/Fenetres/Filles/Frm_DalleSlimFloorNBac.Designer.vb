@@ -44,9 +44,10 @@ Partial Class Frm_DalleSlimFloorNBac
         'pan_Main
         '
         Me.pan_Main.Controls.Add(Me.TLpan_Milieu)
-        Me.pan_Main.Location = New System.Drawing.Point(111, 94)
+        Me.pan_Main.Location = New System.Drawing.Point(148, 116)
+        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(415, 496)
+        Me.pan_Main.Size = New System.Drawing.Size(553, 610)
         Me.pan_Main.TabIndex = 0
         '
         'TLpan_Milieu
@@ -60,10 +61,10 @@ Partial Class Frm_DalleSlimFloorNBac
         Me.TLpan_Milieu.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.TLpan_Milieu.Name = "TLpan_Milieu"
         Me.TLpan_Milieu.RowCount = 2
-        Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLpan_Milieu.Size = New System.Drawing.Size(415, 496)
+        Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+        Me.TLpan_Milieu.Size = New System.Drawing.Size(553, 610)
         Me.TLpan_Milieu.TabIndex = 3
         '
         'pan_Bac
@@ -79,18 +80,19 @@ Partial Class Frm_DalleSlimFloorNBac
         Me.pan_Bac.Controls.Add(Me.lbl_BacNom)
         Me.pan_Bac.Controls.Add(Me.txt_BacNom)
         Me.pan_Bac.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Bac.Location = New System.Drawing.Point(0, 30)
+        Me.pan_Bac.Location = New System.Drawing.Point(0, 37)
         Me.pan_Bac.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Bac.Name = "pan_Bac"
-        Me.pan_Bac.Size = New System.Drawing.Size(415, 466)
+        Me.pan_Bac.Size = New System.Drawing.Size(553, 573)
         Me.pan_Bac.TabIndex = 9
         '
         'txt_Hp
         '
         Me.txt_Hp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Hp.Location = New System.Drawing.Point(321, 141)
+        Me.txt_Hp.Location = New System.Drawing.Point(428, 174)
+        Me.txt_Hp.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_Hp.Name = "txt_Hp"
-        Me.txt_Hp.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Hp.Size = New System.Drawing.Size(76, 22)
         Me.txt_Hp.TabIndex = 84
         '
         'lbl_HauteurHp
@@ -98,7 +100,8 @@ Partial Class Frm_DalleSlimFloorNBac
         Me.lbl_HauteurHp.AutoSize = True
         Me.lbl_HauteurHp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_HauteurHp.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_HauteurHp.Location = New System.Drawing.Point(16, 144)
+        Me.lbl_HauteurHp.Location = New System.Drawing.Point(21, 177)
+        Me.lbl_HauteurHp.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_HauteurHp.Name = "lbl_HauteurHp"
         Me.lbl_HauteurHp.Size = New System.Drawing.Size(39, 13)
         Me.lbl_HauteurHp.TabIndex = 82
@@ -109,18 +112,20 @@ Partial Class Frm_DalleSlimFloorNBac
         '
         Me.etq_UnitDim4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitDim4.AutoSize = True
-        Me.etq_UnitDim4.Location = New System.Drawing.Point(384, 144)
+        Me.etq_UnitDim4.Location = New System.Drawing.Point(512, 177)
+        Me.etq_UnitDim4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.etq_UnitDim4.Name = "etq_UnitDim4"
-        Me.etq_UnitDim4.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim4.Size = New System.Drawing.Size(29, 16)
         Me.etq_UnitDim4.TabIndex = 83
         Me.etq_UnitDim4.Text = "mm"
         '
         'img_Hp
         '
         Me.img_Hp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Hp.Location = New System.Drawing.Point(284, 141)
+        Me.img_Hp.Location = New System.Drawing.Point(379, 174)
+        Me.img_Hp.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_Hp.Name = "img_Hp"
-        Me.img_Hp.Size = New System.Drawing.Size(37, 20)
+        Me.img_Hp.Size = New System.Drawing.Size(49, 25)
         Me.img_Hp.TabIndex = 85
         Me.img_Hp.TabStop = False
         '
@@ -128,9 +133,10 @@ Partial Class Frm_DalleSlimFloorNBac
         '
         Me.img_Bac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Bac.Location = New System.Drawing.Point(3, 31)
+        Me.img_Bac.Location = New System.Drawing.Point(4, 38)
+        Me.img_Bac.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.img_Bac.Name = "img_Bac"
-        Me.img_Bac.Size = New System.Drawing.Size(408, 104)
+        Me.img_Bac.Size = New System.Drawing.Size(544, 128)
         Me.img_Bac.TabIndex = 80
         Me.img_Bac.TabStop = False
         '
@@ -138,9 +144,10 @@ Partial Class Frm_DalleSlimFloorNBac
         '
         Me.btn_ModifierBac.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn_ModifierBac.Location = New System.Drawing.Point(3, 167)
+        Me.btn_ModifierBac.Location = New System.Drawing.Point(4, 206)
+        Me.btn_ModifierBac.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btn_ModifierBac.Name = "btn_ModifierBac"
-        Me.btn_ModifierBac.Size = New System.Drawing.Size(408, 27)
+        Me.btn_ModifierBac.Size = New System.Drawing.Size(544, 33)
         Me.btn_ModifierBac.TabIndex = 74
         Me.btn_ModifierBac.Text = "btn_ModifierBac"
         Me.btn_ModifierBac.UseVisualStyleBackColor = True
@@ -150,7 +157,8 @@ Partial Class Frm_DalleSlimFloorNBac
         Me.lbl_BacNom.AutoSize = True
         Me.lbl_BacNom.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_BacNom.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_BacNom.Location = New System.Drawing.Point(12, 12)
+        Me.lbl_BacNom.Location = New System.Drawing.Point(16, 15)
+        Me.lbl_BacNom.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_BacNom.Name = "lbl_BacNom"
         Me.lbl_BacNom.Size = New System.Drawing.Size(64, 13)
         Me.lbl_BacNom.TabIndex = 73
@@ -161,9 +169,10 @@ Partial Class Frm_DalleSlimFloorNBac
         '
         Me.txt_BacNom.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_BacNom.Location = New System.Drawing.Point(89, 9)
+        Me.txt_BacNom.Location = New System.Drawing.Point(119, 11)
+        Me.txt_BacNom.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txt_BacNom.Name = "txt_BacNom"
-        Me.txt_BacNom.Size = New System.Drawing.Size(322, 20)
+        Me.txt_BacNom.Size = New System.Drawing.Size(428, 22)
         Me.txt_BacNom.TabIndex = 72
         '
         'lbl_Bac
@@ -175,18 +184,19 @@ Partial Class Frm_DalleSlimFloorNBac
         Me.lbl_Bac.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Bac.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Bac.Name = "lbl_Bac"
-        Me.lbl_Bac.Size = New System.Drawing.Size(415, 30)
+        Me.lbl_Bac.Size = New System.Drawing.Size(553, 37)
         Me.lbl_Bac.TabIndex = 2
         Me.lbl_Bac.Text = "lbl_Bac"
         Me.lbl_Bac.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Frm_DalleSlimFloorNBac
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 693)
+        Me.ClientSize = New System.Drawing.Size(1067, 853)
         Me.Controls.Add(Me.pan_Main)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "Frm_DalleSlimFloorNBac"
         Me.Text = "Frm_DalleSlimFloorNBac"
         Me.pan_Main.ResumeLayout(False)

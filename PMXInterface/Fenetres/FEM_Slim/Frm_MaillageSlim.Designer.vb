@@ -42,6 +42,7 @@ Partial Class Frm_MaillageSlim
         Me.lbl_NbMailles = New System.Windows.Forms.Label()
         Me.pan_Image = New System.Windows.Forms.Panel()
         Me.img_Maillage = New System.Windows.Forms.PictureBox()
+        Me.prb_CalculTh = New System.Windows.Forms.ProgressBar()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -182,6 +183,7 @@ Partial Class Frm_MaillageSlim
         '
         Me.pan_Maillage.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Maillage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Maillage.Controls.Add(Me.prb_CalculTh)
         Me.pan_Maillage.Controls.Add(Me.cmb_TempR)
         Me.pan_Maillage.Controls.Add(Me.chk_CalculTherm)
         Me.pan_Maillage.Controls.Add(Me.chk_CoutourSeul)
@@ -300,6 +302,13 @@ Partial Class Frm_MaillageSlim
         Me.img_Maillage.TabIndex = 1
         Me.img_Maillage.TabStop = False
         '
+        'prb_CalculTh
+        '
+        Me.prb_CalculTh.Location = New System.Drawing.Point(13, 167)
+        Me.prb_CalculTh.Name = "prb_CalculTh"
+        Me.prb_CalculTh.Size = New System.Drawing.Size(304, 23)
+        Me.prb_CalculTh.TabIndex = 127
+        '
         'Frm_MaillageSlim
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -346,4 +355,5 @@ Partial Class Frm_MaillageSlim
     Friend WithEvents chk_CoutourSeul As CheckBox
     Friend WithEvents cmb_TempR As ComboBox
     Friend WithEvents chk_CalculTherm As CheckBox
+    Friend WithEvents prb_CalculTh As ProgressBar
 End Class

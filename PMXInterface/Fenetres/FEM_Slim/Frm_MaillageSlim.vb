@@ -6,6 +6,7 @@ Imports PMXMoteur2
 Public Class Frm_MaillageSlim
 
 #Region " Attributs "
+
     Dim lBuild As Boolean
 
     Dim locMail As cls_MaillageSlimFloor
@@ -131,32 +132,53 @@ Public Class Frm_MaillageSlim
         Me.img_Maillage.Invalidate()
     End Sub
 
+    Private Sub cmb_TempR_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_TempR.SelectedIndexChanged
+
+        MAJI_CalculTh()
+        Me.img_Maillage.Invalidate()
+
+    End Sub
+
     Private Sub MAJI_CalculTh()
 
-        locMail.InitialiseTemp(MyProjet.Poutres(MyProjet.IndEnCours).ParamFeu.TempRef)
+        If lCalculTh Then
+            locMail.InitialiseTemp(MyProjet.Poutres(MyProjet.IndEnCours).ParamFeu.TempRef)
 
-        Dim TargetStep As Integer = Me.cmb_TempR.SelectedIndex
+            Dim TargetStep As Integer = Me.cmb_TempR.SelectedIndex
 
-        If TargetStep > 0 Then
+            If TargetStep > 0 Then
 
-            CalculThermique(TargetStep - 1)
+                CalculThermique(MyProjet.Poutres(MyProjet.IndEnCours), TargetStep - 1)
+
+            End If
 
         End If
 
     End Sub
 
-    Private Sub CalculThermique(iStep As Integer)
+    Private Sub CalculThermique(myBeam As cls_Poutre, iStep As Integer)
 
         Dim TimeTarget As Double
         Dim lCont As Boolean
         Dim TimeT As Double = 0
         Dim TempG As Double
         Dim DeltaT As Double = 0.2 ' secondes
+        Dim lTargetT As Boolean = False
+
+        Dim val_U As Double = myBeam.ParamFeu.TeneurU
+        Dim lNormal As Boolean = Not myBeam.Dalle.beton.lLeger
+        Dim lANF As Boolean = myBeam.ParamFeu.lANFrance
+        Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
+        Dim lRhoCVar As Boolean = myBeam.ParamFeu.lRhoCvar
+        Dim RhoC As Double = myBeam.Dalle.beton.RhoC
 
         Dim EN_Feu As New cls_EurocodesFeu
+        Dim SolveurTh As New cls_EchauffementSlimFEM
 
         TimeTarget = cls_VerifFeuAcier.TimeSteps(iStep) * kConvMinSec
         lCont = IsSmaller(TimeT, TimeTarget)
+
+        Me.prb_CalculTh.Value = 0
 
         Do While lCont
 
@@ -167,13 +189,16 @@ Public Class Frm_MaillageSlim
             '# Température des gaz chauds
 
             TempG = EN_Feu.TemperatureGazISO(TimeT)
+            lTargetT = IsSmaller(TimeT, TimeTarget)
 
+            SolveurTh.Calcul_thermique_Poutre_plancher_mince(locMail, myBeam.ParamFeu, TimeT, DeltaT, lTargetT, TempG,
+                                                             val_U, lNormal, lANF, lGeneration1, rhoc, lrhocVar)
 
+            lCont = lTargetT
 
-            lCont = IsSmaller(TimeT, TimeTarget)
+            Me.prb_CalculTh.Value = TimeT / TimeTarget * 100
 
         Loop
-
 
     End Sub
 
@@ -288,8 +313,6 @@ Public Class Frm_MaillageSlim
         End If
 
         '--( Représentation des largeurs 2D
-
-
 
         If myBeam.lIntermediaire Then
 
@@ -597,6 +620,7 @@ Public Class Frm_MaillageSlim
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
         Me.Close()
     End Sub
+
 
 #End Region
 

@@ -1741,7 +1741,36 @@
 
 #End Region
 
-#Region " Propriétés fonction de la température "
+#Region " Propriétés de l'acier fonction de la température "
+
+    Public Function Conductivite_thermique_acier(ByVal ThetaA As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   15/05/24 :  Création - GiB
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Conductivite thermique de l'acier selon NF EN 1994-1-2
+        '   Génération 1 : EN 1994-1-2:2005 3.3.1 (7) 
+        '   Génération 2 : prEN 1994-1-2:2024 xxx
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   ThetaA      [E] :   temperature (°C)
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lambda_A As Single
+
+        If IsGreaterOrEqual(ThetaA, 20.0) AndAlso IsSmaller(ThetaA, 800.0) Then
+            lambda_a = 54.0 - 0.0333 * ThetaA
+        ElseIf IsGreaterOrEqual(ThetaA, 800.0) AndAlso IsSmallerOrEqual(ThetaA, 1200.0) Then
+            lambda_a = 27.3
+        End If
+
+        Return lambda_a
+
+    End Function
+
+#End Region
+
+#Region " Propriétés du béton fonction de la température "
 
     Public Function Masse_volumique_beton(ByVal lNormal As Boolean, ByVal lVariable As Boolean,
                                           ByVal lGeneration1 As Boolean, ByVal Rho0 As Decimal, ByVal Theta As Decimal) As Decimal
