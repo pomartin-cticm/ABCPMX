@@ -6,7 +6,7 @@
 
     Public Const BMAXDAL As Double = 0.4              ' Largeur limite de dalle pour prise en compte d'un effet 2D dans le calcul thermique (m)
 
-    Public Const MATVIDEFERME As Integer = -2          ' vide d'une cavite fermee (espace entre le mur et le profile metallique d'une poutre de rive
+    Public Const MATVIDEFERME As Integer = -2          ' vide d'une cavite fermee (espace entre le mur et le profile metallique d'une poutre de rive)
     Public Const MATVIDEOUVERT As Integer = -1         ' vide d'une cavite ouverte
     Public Const MATACIERPLAT As Integer = 0           ' acier de construction du plat soudé
     Public Const MATACIERSEMI As Integer = 1           ' acier de construction de la semelle inférieure
@@ -99,6 +99,7 @@
         Dim lIFB_B As Boolean
         Dim lDalMixte As Boolean
         Dim lPredalle As Boolean
+        Dim lPlancherPrefa As Boolean   'GiB 18/11/2025 : ajout
 
         '--( Initilisation des variables
 
@@ -108,6 +109,7 @@
         lIFB_B = (myProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB)
         lDalMixte = myDalle.lMixte
         lPredalle = myDalle.lPrefaPredalle
+        lPlancherPrefa = myDalle.lPlancherPrefabriquee   'GiB 18/11/2025 : ajout
 
         '--( Dimension des tableaux
 
@@ -116,6 +118,16 @@
         ReDim Me.Tab_mesh_mat(0 To DIMDEF, 0 To DIMDEF)
 
         '--( CALCUL DES COORDONNEES DES POINTS D'INTERSECTION DES PLANS DE COUPE
+
+        'GiB 19/11/2025 : augmentation de la largeur de gauche de la dalle d'une poutre de rive
+        If (Not lInter) AndAlso IsSmallerOrEqual(bEffG, 0) Then
+            If lSFB OrElse lIFB_A Then  'SFB ou IFB-A : demi-semelle supérieure
+                bEffG = Math.Max(bEffG, 0.5 * myProfil.Bfs)
+            ElseIf lIFB_B OrElse lSAB Then  'IFB-B ou SAB : demi-semelle inférieure
+                bEffG = Math.Max(bEffG, 0.5 * myProfil.Bfi)
+            End If
+            bAppG = 0.0 'largeur d'appui de la dalle : nulle à gauche
+        End If
 
         y_0 = -bEffG
         If (lSFB Or lIFB_A) Then
@@ -186,7 +198,7 @@
         End If
 
         '**( Semelle supérieure éventuelle
-        If (Not lIFB_B) Then   'SFB, IFB-B ou SAB
+        If (Not lIFB_B) Then   'SFB, IFB-A ou SAB
 
             yfs_1 = y_0 + bEffG
             If lInter OrElse (lSFB Or lIFB_A) Then  'poutre intérieure ou SFB ou IFB-A
@@ -220,7 +232,9 @@
         '**( Soudures du plat inférieur : SFB ou IFB-A
 
         val_bw = 0.0
-        If (Not lIFB_A) Then
+        'GiB 18/11/2025 : correction
+        'If (Not lIFB_A) Then
+        If lSFB OrElse lIFB_A Then
 
             If lSFB Then
                 val_bw = 0.5 * myProfil.Tfi
@@ -232,8 +246,11 @@
                 ywd_3 = yw_2
             End If
 
-            ywd_1 -= val_bw
-            ywd_2 = ywd_1 + val_bw
+            'GiB 18/11/2025 : ajout d'une condition
+            If Not (lSFB AndAlso (Not lInter)) Then 'hors SFB de rive
+                ywd_1 -= val_bw
+                ywd_2 = ywd_1 + val_bw
+            End If
 
             ywd_4 = ywd_3 + val_bw
 
@@ -251,16 +268,16 @@
 
         '**( Intervalle de calcul suivant l'axe fort
 
-        If (lSFB Or lIFB_A) Then                    ' plat soudé inférieur
-            If lInter Then                          ' poutre intérieure
+        If (lSFB Or lIFB_A) Then 'plat soudé inférieur
+            If lInter Then 'poutre intérieure
                 y_min = y_0 + bEffG - myProfil.Plat_b
                 y_max = y_min + 2 * myProfil.Plat_b
-            Else                                    ' poutre de rive
+            Else 'poutre de rive
                 y_min = y_0 + bEffG - myProfil.Bfs
                 y_max = y_min + 2 * myProfil.Bfs
             End If
 
-        Else                                        ' semelle inférieure en talon
+        Else 'semelle inférieure en talon
 
             y_min = y_0 + bEffG - myProfil.Bfi
             y_max = y_min + 2 * myProfil.Bfi
@@ -302,7 +319,9 @@
 
             If (myDalle.ArmaSlimFeu.NbBarres = 2) Then
 
-                If Not ((Not lInter) AndAlso myDalle.lRiveRemplie) Then   ' hors poutre de rive avec espace non rempli entre le mur et le profile metallique
+                'GiB 18/11/2025 : correction
+                'If Not ((Not lInter) AndAlso myDalle.lRiveRemplie) Then   ' hors poutre de rive avec espace non rempli entre le mur et le profile metallique
+                If Not ((Not lInter) AndAlso (Not myDalle.lRiveRemplie)) Then
 
                     ys_1 = yw_1 - UwY - UcY - 0.5 * val_bs_eq
                     ys_2 = ys_1 + val_bs_eq
@@ -325,7 +344,9 @@
 
             Else
 
-                If Not ((Not lInter) AndAlso myDalle.lRiveRemplie) Then   ' hors poutre de rive avec espace non rempli entre le mur et le profile metallique
+                'GiB 18/11/2025 : correction
+                'If Not ((Not lInter) AndAlso myDalle.lRiveRemplie) Then   ' hors poutre de rive avec espace non rempli entre le mur et le profile metallique
+                If Not ((Not lInter) AndAlso (Not myDalle.lRiveRemplie)) Then
                     ys_1 = yw_1 - UwY - 0.5 * val_bs_eq
                     ys_2 = ys_1 + val_bs_eq
                 End If
@@ -363,6 +384,8 @@
             'ElseIf My_slab.shape = 2 Then   'dalle mixte
         ElseIf lDalMixte Then   'dalle mixte
             zv_2 += +myDalle.Bac.Hp
+        ElseIf lPlancherPrefa Then   'GiB 18/11/2025 : dalle prefabriquee
+            zv_2 += myDalle.Cofradal.dp
         End If
 
         yv_2 += bAppG
@@ -387,7 +410,7 @@
             val_size = Math.Min(val_size, 0.5 * myProfil.Plat_t)
         End If
 
-        '--( CALCUL DES ABSCISSES DES PLANS DE COUPE PARELLES A L'AXE FAIBLE
+        '--( CALCUL DES ABSCISSES DES PLANS DE COUPE PARALELLES A L'AXE FAIBLE
 
         Tab_dec(0) = y_0
         Tab_dec(1) = yv_1 : Tab_dec(2) = yv_2 : Tab_dec(3) = yv_3 : Tab_dec(4) = yv_4
@@ -621,7 +644,9 @@
 
         '--( Vide d'une poutre de rive entre le mur et le profile metallique
 
-        If (Not lInter) AndAlso myDalle.lRiveRemplie Then
+        'If (Not lInter) AndAlso myDalle.lRiveRemplie Then
+        'GiB 18/11/2025 : correction
+        If (Not lInter) AndAlso (Not myDalle.lRiveRemplie) Then
 
             prop_encl_open = (lSFB AndAlso IsSmaller(y_0, yp_1 - val_bw)) _
                       OrElse (lIFB_A AndAlso IsSmaller(y_0, yp_1)) _
@@ -714,8 +739,12 @@
 
         If (myDalle.ArmaSlimFeu.lBarre And (myDalle.ArmaSlimFeu.NbBarres > 0)) Then
 
-            i_mat = 5
-            If Math.Abs(ys_1 - ys_2) > 0.0001 Then
+            'GiB 19/11/2025 
+            'i_mat = 5
+            i_mat = MATARMA
+            'GiB 18/11/2025 : cohérence avec le reste du code
+            'If Math.Abs(ys_1 - ys_2) > 0.0001 Then
+            If IsGreater(Math.Abs(ys_1 - ys_2), 0) Then
                 Call Affectation_materiau_maillage(i_mat, y_0, ys_1, ys_2, z_0, zs_1, zs_2, Me.Tab_mesh_y, Me.Tab_mesh_z, Me.Tab_mesh_mat)
             End If
             Call Affectation_materiau_maillage(i_mat, y_0, ys_3, ys_4, z_0, zs_3, zs_4, Me.Tab_mesh_y, Me.Tab_mesh_z, Me.Tab_mesh_mat)
@@ -760,14 +789,17 @@
             val_y += Tab_1(ii_)
 
             'If val_y >= val_y1 + 0.0001 AndAlso val_y <= val_y2 + 0.0001 Then
-            If IsGreaterOrEqual(val_y, val_y1) AndAlso IsSmallerOrEqual(val_y, val_y2) Then
-
+            'If IsGreaterOrEqual(val_y, val_y1) AndAlso IsSmallerOrEqual(val_y, val_y2) Then
+            'GiB 17/11/2025 : correction
+            If IsGreater(val_y, val_y1) AndAlso IsSmallerOrEqual(val_y, val_y2) Then
                 val_z = val_z0
 
                 For jj_ = Tab_2.GetLowerBound(0) To Tab_2.GetUpperBound(0)
                     val_z += Tab_2(jj_)
                     'If val_z >= val_z1 + 0.0001 AndAlso val_z <= val_z2 + 0.0001 Then
-                    If IsGreaterOrEqual(val_z, val_z1) AndAlso IsSmallerOrEqual(val_z, val_z2) Then
+                    'If IsGreaterOrEqual(val_z, val_z1) AndAlso IsSmallerOrEqual(val_z, val_z2) Then
+                    'GiB 17/11/2025 : correction
+                    If IsGreater(val_z, val_z1) AndAlso IsSmallerOrEqual(val_z, val_z2) Then
                         Tab_3(ii_, jj_) = val_mat
                         'ElseIf val_z >= val_z2 - val_ZERO Then
                     ElseIf IsGreaterOrEqual(val_z, val_z2) Then

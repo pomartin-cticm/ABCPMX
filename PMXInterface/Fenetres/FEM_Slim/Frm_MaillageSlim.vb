@@ -621,6 +621,10 @@ Public Class Frm_MaillageSlim
         Me.Close()
     End Sub
 
+    Private Sub img_Maillage_Click(sender As Object, e As EventArgs) Handles img_Maillage.Click
+
+    End Sub
+
 
 #End Region
 

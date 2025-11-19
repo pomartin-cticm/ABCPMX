@@ -1,5 +1,5 @@
 ﻿Public Class cls_EchauffementSlimFEM
-    '===== CLASSE POUR LE CALCUL NUMERIQUE DE L'ECHAUFFEMENT D'UNE DALLE ======
+    '===== CLASSE POUR LE CALCUL NUMERIQUE DE L'ECHAUFFEMENT D'UNE POUTRE DE PLANCHER MINCE ======
 
 #Region " Solveur Numérique "
 
@@ -17,7 +17,7 @@
         '   My_fire         [E] :   Classe de caractéristiques du calcul au feu
         '   My_time         [E] :   Temps actuel du calcul (s) (étape précécente, t=my_Time-DeltaT)
         '   DeltaT          [E] :   Pas de temps du calcul (s)
-        '   lTargetT        [E] :   indique si le temps de calcul correspond à la valeur cible (true) ou si on est en cours de calcul (false)
+        '   lTargetT        [E] :   indique si le temps de calcul est inférieur à la valeur cible (true) ou s'il correspond à la valeur cible (false)
         '   TempG           [E] :   Température des gaz chauds au contact de la face exposée de la dalle (°C)
         '   val_U           [E] :   taux d'humidite (%)
         '   lNormal         [E] :   indique si béton NC (true) ou LC (false)
@@ -79,11 +79,19 @@
         Dim AlphaCInf As Double, AlphaCSup As Double
         Dim EpsilonF As Double
 
+        Dim i_mat_a_0 As Integer    'GiB 18/11/2025 : ajout
+        Dim i_mat_a_1 As Integer    'GiB 18/11/2025 : ajout
+        Dim i_mat_c As Integer    'GiB 18/11/2025 : ajout
+
         '--( Initialisation 
 
         AlphaCInf = myParamFeu.ConvectionCoef
         AlphaCSup = myParamFeu.ConvectionCoefDalle
         EpsilonF = myParamFeu.EmissivityFire
+
+        i_mat_a_0 = my_Mesh.MATACIERPLAT
+        i_mat_a_1 = my_Mesh.MATARMA
+        i_mat_c = my_Mesh.MATBETON
 
         '--( Temperature des mailles à l'instant val_t
 
@@ -145,16 +153,20 @@
                     'Faces exterieures de la maille
                     If prop_expo Or prop_noex Then
                         'Emissivite de surface
-                        If i_mat >= 0 AndAlso i_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure), de soudure (4) ou d'armature (5)  
-                            'val_epsilon = My_materials.EpsilonA
-                            'If My_materials.Acier_galva AndAlso Temp_0(i_, j_) <= 500.0 Then    'acier galvanisé à chaud échauffé à 500 °C ou moins
-                            '    val_epsilon = My_materials.EpsilonA_galva
-                            'End If
-                            val_epsilon = EN_Feu.EmissiviteAcier(Temp_0(i_, j_), myParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise)
+                        'GiB 18/11/2025 : cohérence avec le reste du code
+                        'If i_mat >= 0 AndAlso i_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure, de soudure (4) ou d'armature (5)  
+                        If IsGreaterOrEqual(i_mat, i_mat_a_0) AndAlso IsSmallerOrEqual(i_mat, i_mat_a_1) Then
+                                'val_epsilon = My_materials.EpsilonA
+                                'If My_materials.Acier_galva AndAlso Temp_0(i_, j_) <= 500.0 Then    'acier galvanisé à chaud échauffé à 500 °C ou moins
+                                '    val_epsilon = My_materials.EpsilonA_galva
+                                'End If
+                                val_epsilon = EN_Feu.EmissiviteAcier(Temp_0(i_, j_), myParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise)
 
-                        ElseIf i_mat = 6 OrElse i_mat = 7 Then  'beton NC (6) ou LC (7)
-                            val_epsilon = myParamFeu.EmissivityC 'My_materials.EpsilonC
-                        End If
+                            'GiB 18/11/2025 : cohérence avec le reste du code
+                            'ElseIf i_mat = 6  Then  'beton (6)
+                        ElseIf IsEqual(i_mat, i_mat_c) Then
+                                val_epsilon = myParamFeu.EmissivityC 'My_materials.EpsilonC
+                            End If
 
                         If prop_expo Then
                             'Face exposee
@@ -169,12 +181,15 @@
                             h_net_dn = h_net_cn + h_net_rn  'densite de flux net
 
                         End If
+
                     End If
 
                     '1er terme du denominateur de q_lb : face de gauche de la maille (i_,j_)
                     If i_ = 0 Then
+
                         dth_lb = 0.0
                         h_lb_1 = 0.0
+
                     Else
 
                         ii_ = i_ - 1
@@ -183,15 +198,20 @@
                         If prop_expo AndAlso j_mat = -1 Then        '$ face exposee
                             dth_lb = TempG - Temp_0(i_, j_)         '$ ecart de temperature entre les gaz chauds et la maille (i_-1,j_)
                             h_lb_1 = dth_lb / h_net_de
-                        ElseIf j_mat >= 0 Then
+                            'GiB 18/11/2025 : cohérence avec le reste du code
+                            'ElseIf j_mat >= 0 Then
+                        ElseIf IsGreaterOrEqual(j_mat, i_mat_a_0) Then
 
                             dth_lb = Temp_0(ii_, j_) - Temp_0(i_, j_) 'ecart de temperature entre les mailles (i_-1,j_) et (i_,j_)
 
                             '%% Conductivite thermique de la maille (i-1,j_)
 
-                            If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure), de soudure (4) ou d'armature (5)  
+                            'GiB 18/11/2025 : cohérence avec le reste du code
+                            'If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure, de soudure (4) ou d'armature (5)  
+                            If IsSmallerOrEqual(j_mat, i_mat_a_1) Then
                                 lambda_Lb = EN_Feu.Conductivite_thermique_acier(Temp_0(ii_, j_))
-                            ElseIf j_mat = 6 OrElse j_mat = 7 Then  'beton NC (6) ou LC (7)
+                                'ElseIf j_mat = 6  Then  'beton (6)
+                            ElseIf IsEqual(j_mat, i_mat_c) Then
                                 'lambda_Lb = Conductivite_thermique_beton(My_materials.lNormal, My_materials.lANFrance, My_materials.lGeneration1, Temp_0(ii_, j_))
                                 lambda_Lb = EN_Feu.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(ii_, j_))
                             End If
@@ -204,14 +224,19 @@
                     If prop_expo AndAlso (j_ = 0 OrElse my_Mesh.Tab_mesh_mat(i_, jj_) = -1) Then    'face exposee
                         dth_bb = TempG - Temp_0(i_, j_) 'ecart de temperature entre les gaz chauds et la maille (i_,j_)
                         h_bb_1 = dth_bb / h_net_de
-                    ElseIf my_Mesh.Tab_mesh_mat(i_, jj_) >= 0 Then
+                        'GiB 18/11/2025 : cohérence avec le reste du code
+                        'ElseIf my_Mesh.Tab_mesh_mat(i_, jj_) >= 0 Then
+                    ElseIf isgreaterorequal(my_Mesh.Tab_mesh_mat(i_, jj_), 0) Then
                         dth_bb = Temp_0(i_, jj_) - Temp_0(i_, j_) 'ecart de temperature entre les mailles (i_,j_-1) et (i_,j_)
 
                         'Conductivite thermique de la maille (i_,j_-1)
                         j_mat = my_Mesh.Tab_mesh_mat(i_, jj_)
-                        If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure), de soudure (4) ou d'armature (5)  
+                        'GiB 18/11/2025 : cohérence avec le reste du code
+                        'If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure, de soudure (4) ou d'armature (5)  
+                        If IsGreaterOrEqual(j_mat, i_mat_a_0) AndAlso IsSmallerOrEqual(j_mat, i_mat_a_1) Then
                             lambda_Bb = EN_Feu.Conductivite_thermique_acier(Temp_0(i_, jj_))
-                        ElseIf j_mat = 6 OrElse j_mat = 7 Then
+                            'ElseIf j_mat = 6 OrElse j_mat = 7 Then 'beton (6)
+                        ElseIf IsEqual(j_mat, i_mat_c) Then
                             'lambda_Bb = Conductivite_thermique_beton(My_materials.lNormal, My_materials.lANFrance, My_materials.lGeneration1, Temp_0(i_, jj_))
                             lambda_Bb = EN_Feu.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_, jj_))
                         End If
@@ -227,13 +252,18 @@
                         If prop_expo AndAlso j_mat = -1 Then    'face superieure exposee
                             dth_tb = TempG - Temp_0(i_, j_) 'ecart de temperature entre les gaz chauds et la maille (i_,j_)
                             h_tb_1 = dth_tb / h_net_de
-                        ElseIf j_mat >= 0 Then
+                            'GiB 18/11/2025 : cohérence avec le reste du code                            '
+                            'ElseIf j_mat >= 0 Then
+                        ElseIf IsGreaterOrEqual(j_mat, i_mat_a_0) Then
                             dth_tb = Temp_0(i_, jj_) - Temp_0(i_, j_) 'ecart de temperature entre les mailles (i_,j_+1) et (i_,j_)
 
                             'Conductivite thermique de la maille (i_,j_+1)
-                            If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure), de soudure (4) ou d'armature (5)  
+                            'GiB 18/11/2025 : cohérence avec le reste du code                            '
+                            'If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure, de soudure (4) ou d'armature (5)  
+                            If IsSmallerOrEqual(j_mat, i_mat_a_1) Then
                                 lambda_Tb = EN_Feu.Conductivite_thermique_acier(Temp_0(i_, jj_))
-                            ElseIf j_mat = 6 OrElse j_mat = 7 Then  'beton NC (6) ou LC (7)
+                                'ElseIf j_mat = 6 OrElse j_mat = 7 Then  'beton (6)
+                            ElseIf IsEqual(j_mat, i_mat_c) Then
                                 ' lambda_Tb = Conductivite_thermique_beton(My_materials.lNormal, My_materials.lANFrance, My_materials.lGeneration1, Temp_0(i_, jj_))
                                 lambda_Tb = EN_Feu.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_, jj_))
                             End If
@@ -256,33 +286,42 @@
                         If prop_expo AndAlso j_mat = -1 Then    'face exposee au feu
                             dth_rb = TempG - Temp_0(i_, j_) 'ecart de temperature entre les gaz chauds et la maille (i_,j_)
                             h_rb_1 = dth_rb / h_net_de
-                        ElseIf j_mat >= 0 Then
+
+                            'GiB 18/11/2025 : cohérence avec le reste du code   
+                            'ElseIf j_mat >= 0 Then
+                        ElseIf IsGreaterOrEqual(j_mat, i_mat_a_0) Then
                             dth_rb = Temp_0(ii_, j_) - Temp_0(i_, j_) 'ecart de temperature entre les mailles (i_+1,j_) et (i_,j_)
 
                             'Conductivite thermique de la maille (i_+1,j_)
-                            If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure), de soudure (4) ou d'armature (5)  
+                            'GiB 18/11/2025 : cohérence avec le reste du code
+                            'If j_mat >= 0 AndAlso j_mat <= 5 Then
+                            If IsSmallerOrEqual(j_mat, i_mat_a_1) Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure, de soudure (4) ou d'armature (5)  
                                 lambda_Rb = EN_Feu.Conductivite_thermique_acier(Temp_0(ii_, j_))
-                            ElseIf j_mat = 6 OrElse j_mat = 7 Then  'beton NC (6) ou LC (7)
+                                'ElseIf j_mat = 6  Then  'beton (6)
+                            ElseIf IsEqual(j_mat, i_mat_c) Then
                                 'lambda_Rb =  EN_Feu.Conductivite_thermique_beton(My_materials.lNormal, My_materials.lANFrance, My_materials.lGeneration1, Temp_0(ii_, j_))
                                 lambda_Rb = EN_Feu.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(ii_, j_))
-                            End If
+                                End If
 
-                            h_rb_1 = 0.5 * my_Mesh.Tab_mesh_y(ii_) / lambda_Rb
-                        End If
-                    Else
+                                h_rb_1 = 0.5 * my_Mesh.Tab_mesh_y(ii_) / lambda_Rb
+                            End If
+                        Else
                         dth_rb = 0.0
                         h_rb_1 = 0.0
                     End If
 
                     '2e terme du denominateur de qi
-                    If i_mat >= 0 AndAlso i_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure), de soudure (4) ou d'armature (5)  
+                    'GiB 18/11/2025 : cohérence avec le reste du code
+                    'If i_mat >= 0 AndAlso i_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure, de soudure (4) ou d'armature (5)  
+                    If IsGreaterOrEqual(i_mat, i_mat_a_0) AndAlso IsSmallerOrEqual(i_mat, i_mat_a_1) Then
                         lambda_ = EN_Feu.Conductivite_thermique_acier(Temp_0(i_, j_))
                         rho_ = cls_Acier.RHOACIER
 
                         'cp_ = Chaleur_specifique_acier(Temp_0(i_, j_))
                         cp_ = EN_Feu.ChaleurSpecifiqueAcier(Temp_0(i_, j_))
 
-                    ElseIf i_mat = 6 OrElse i_mat = 7 Then  'beton NC (6) ou LC (7)
+                        'ElseIf i_mat = 6  Then  'beton (6) 
+                    ElseIf isequal(i_mat, i_mat_c) Then
                         'lambda_ = Conductivite_thermique_beton(My_materials.lNormal, My_materials.lANFrance, My_materials.lGeneration1, Temp_0(i_, j_))
                         lambda_ = EN_Feu.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_, j_))
 
@@ -364,6 +403,27 @@
             End If
 
         End With
+
+        'GiB 19/11/2025 : affectation de température des gaz chauds aux mailles du vide correspondantes
+
+        If Not lTargetT Then
+
+            With my_Mesh
+                For j_ = 0 To NbZ - 1
+
+                    For i_ = 0 To NbY - 1
+
+                        If .Tab_mesh_mat(i_, j_) = .MATVIDEOUVERT Then
+                            .Tab_mesh_temp(i_, j_) = TempG
+                        End If
+
+                    Next
+
+                Next
+
+            End With
+
+        End If
 
     End Sub
 

@@ -32,6 +32,7 @@ Partial Class Frm_MaillageSlim
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Maillage = New System.Windows.Forms.Label()
         Me.pan_Maillage = New System.Windows.Forms.Panel()
+        Me.prb_CalculTh = New System.Windows.Forms.ProgressBar()
         Me.cmb_TempR = New System.Windows.Forms.ComboBox()
         Me.chk_CalculTherm = New System.Windows.Forms.CheckBox()
         Me.chk_CoutourSeul = New System.Windows.Forms.CheckBox()
@@ -42,7 +43,6 @@ Partial Class Frm_MaillageSlim
         Me.lbl_NbMailles = New System.Windows.Forms.Label()
         Me.pan_Image = New System.Windows.Forms.Panel()
         Me.img_Maillage = New System.Windows.Forms.PictureBox()
-        Me.prb_CalculTh = New System.Windows.Forms.ProgressBar()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -62,7 +62,7 @@ Partial Class Frm_MaillageSlim
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(841, 473)
+        Me.pan_General.Size = New System.Drawing.Size(631, 384)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -73,39 +73,36 @@ Partial Class Frm_MaillageSlim
         Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
-        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(4)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(841, 473)
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.TLpan_Main.Size = New System.Drawing.Size(631, 384)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
         '
         Me.TLPan_PartieBasse.ColumnCount = 3
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
+        Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(4, 428)
-        Me.TLPan_PartieBasse.Margin = New System.Windows.Forms.Padding(4)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 347)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(833, 41)
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(625, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(340, 4)
-        Me.btn_OK.Margin = New System.Windows.Forms.Padding(4)
+        Me.btn_OK.Location = New System.Drawing.Point(255, 3)
         Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(152, 33)
+        Me.btn_OK.Size = New System.Drawing.Size(114, 28)
         Me.btn_OK.TabIndex = 1
         Me.btn_OK.Text = "btn_OK"
         Me.btn_OK.UseVisualStyleBackColor = True
@@ -115,16 +112,15 @@ Partial Class Frm_MaillageSlim
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLPan_Portees)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Main.Location = New System.Drawing.Point(4, 4)
-        Me.pan_Main.Margin = New System.Windows.Forms.Padding(4)
+        Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(833, 416)
+        Me.pan_Main.Size = New System.Drawing.Size(625, 338)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_Portees
         '
         Me.TLPan_Portees.ColumnCount = 2
-        Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 333.0!))
+        Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
         Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_Portees.Controls.Add(Me.pan_Gauche, 0, 0)
         Me.TLPan_Portees.Controls.Add(Me.pan_Image, 1, 0)
@@ -134,7 +130,7 @@ Partial Class Frm_MaillageSlim
         Me.TLPan_Portees.Name = "TLPan_Portees"
         Me.TLPan_Portees.RowCount = 1
         Me.TLPan_Portees.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Portees.Size = New System.Drawing.Size(833, 416)
+        Me.TLPan_Portees.Size = New System.Drawing.Size(625, 338)
         Me.TLPan_Portees.TabIndex = 0
         '
         'pan_Gauche
@@ -145,7 +141,7 @@ Partial Class Frm_MaillageSlim
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(333, 416)
+        Me.pan_Gauche.Size = New System.Drawing.Size(250, 338)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLPan_Gauche
@@ -159,10 +155,10 @@ Partial Class Frm_MaillageSlim
         Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
         Me.TLPan_Gauche.RowCount = 2
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(333, 413)
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16.0!))
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 336)
         Me.TLPan_Gauche.TabIndex = 0
         '
         'lbl_Maillage
@@ -174,7 +170,7 @@ Partial Class Frm_MaillageSlim
         Me.lbl_Maillage.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Maillage.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Maillage.Name = "lbl_Maillage"
-        Me.lbl_Maillage.Size = New System.Drawing.Size(333, 37)
+        Me.lbl_Maillage.Size = New System.Drawing.Size(250, 30)
         Me.lbl_Maillage.TabIndex = 0
         Me.lbl_Maillage.Text = "lbl_Portee"
         Me.lbl_Maillage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -193,29 +189,35 @@ Partial Class Frm_MaillageSlim
         Me.pan_Maillage.Controls.Add(Me.txt_NbMailX)
         Me.pan_Maillage.Controls.Add(Me.lbl_NbMailles)
         Me.pan_Maillage.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Maillage.Location = New System.Drawing.Point(0, 37)
+        Me.pan_Maillage.Location = New System.Drawing.Point(0, 30)
         Me.pan_Maillage.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Maillage.Name = "pan_Maillage"
-        Me.pan_Maillage.Size = New System.Drawing.Size(333, 376)
+        Me.pan_Maillage.Size = New System.Drawing.Size(250, 306)
         Me.pan_Maillage.TabIndex = 1
+        '
+        'prb_CalculTh
+        '
+        Me.prb_CalculTh.Location = New System.Drawing.Point(10, 136)
+        Me.prb_CalculTh.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.prb_CalculTh.Name = "prb_CalculTh"
+        Me.prb_CalculTh.Size = New System.Drawing.Size(228, 19)
+        Me.prb_CalculTh.TabIndex = 127
         '
         'cmb_TempR
         '
         Me.cmb_TempR.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_TempR.FormattingEnabled = True
-        Me.cmb_TempR.Location = New System.Drawing.Point(215, 130)
-        Me.cmb_TempR.Margin = New System.Windows.Forms.Padding(4)
+        Me.cmb_TempR.Location = New System.Drawing.Point(161, 106)
         Me.cmb_TempR.Name = "cmb_TempR"
-        Me.cmb_TempR.Size = New System.Drawing.Size(102, 24)
+        Me.cmb_TempR.Size = New System.Drawing.Size(78, 21)
         Me.cmb_TempR.TabIndex = 126
         '
         'chk_CalculTherm
         '
         Me.chk_CalculTherm.AutoSize = True
-        Me.chk_CalculTherm.Location = New System.Drawing.Point(11, 132)
-        Me.chk_CalculTherm.Margin = New System.Windows.Forms.Padding(4)
+        Me.chk_CalculTherm.Location = New System.Drawing.Point(8, 107)
         Me.chk_CalculTherm.Name = "chk_CalculTherm"
-        Me.chk_CalculTherm.Size = New System.Drawing.Size(130, 20)
+        Me.chk_CalculTherm.Size = New System.Drawing.Size(109, 17)
         Me.chk_CalculTherm.TabIndex = 125
         Me.chk_CalculTherm.Text = "chk_CalculTherm"
         Me.chk_CalculTherm.UseVisualStyleBackColor = True
@@ -223,20 +225,18 @@ Partial Class Frm_MaillageSlim
         'chk_CoutourSeul
         '
         Me.chk_CoutourSeul.AutoSize = True
-        Me.chk_CoutourSeul.Location = New System.Drawing.Point(11, 104)
-        Me.chk_CoutourSeul.Margin = New System.Windows.Forms.Padding(4)
+        Me.chk_CoutourSeul.Location = New System.Drawing.Point(8, 84)
         Me.chk_CoutourSeul.Name = "chk_CoutourSeul"
-        Me.chk_CoutourSeul.Size = New System.Drawing.Size(127, 20)
+        Me.chk_CoutourSeul.Size = New System.Drawing.Size(108, 17)
         Me.chk_CoutourSeul.TabIndex = 65
         Me.chk_CoutourSeul.Text = "chk_CoutourSeul"
         Me.chk_CoutourSeul.UseVisualStyleBackColor = True
         '
         'lbl_SuivantY
         '
-        Me.lbl_SuivantY.Location = New System.Drawing.Point(83, 69)
-        Me.lbl_SuivantY.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lbl_SuivantY.Location = New System.Drawing.Point(62, 56)
         Me.lbl_SuivantY.Name = "lbl_SuivantY"
-        Me.lbl_SuivantY.Size = New System.Drawing.Size(89, 16)
+        Me.lbl_SuivantY.Size = New System.Drawing.Size(67, 13)
         Me.lbl_SuivantY.TabIndex = 76
         Me.lbl_SuivantY.Text = "lbl_SuivantY"
         Me.lbl_SuivantY.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -244,19 +244,17 @@ Partial Class Frm_MaillageSlim
         'txt_NbMailY
         '
         Me.txt_NbMailY.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_NbMailY.Location = New System.Drawing.Point(180, 66)
-        Me.txt_NbMailY.Margin = New System.Windows.Forms.Padding(4)
+        Me.txt_NbMailY.Location = New System.Drawing.Point(135, 54)
         Me.txt_NbMailY.Name = "txt_NbMailY"
-        Me.txt_NbMailY.Size = New System.Drawing.Size(76, 22)
+        Me.txt_NbMailY.Size = New System.Drawing.Size(58, 20)
         Me.txt_NbMailY.TabIndex = 75
         Me.txt_NbMailY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lbl_SuivantX
         '
-        Me.lbl_SuivantX.Location = New System.Drawing.Point(83, 39)
-        Me.lbl_SuivantX.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lbl_SuivantX.Location = New System.Drawing.Point(62, 32)
         Me.lbl_SuivantX.Name = "lbl_SuivantX"
-        Me.lbl_SuivantX.Size = New System.Drawing.Size(89, 16)
+        Me.lbl_SuivantX.Size = New System.Drawing.Size(67, 13)
         Me.lbl_SuivantX.TabIndex = 74
         Me.lbl_SuivantX.Text = "lbl_SuivantX"
         Me.lbl_SuivantX.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -264,20 +262,18 @@ Partial Class Frm_MaillageSlim
         'txt_NbMailX
         '
         Me.txt_NbMailX.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_NbMailX.Location = New System.Drawing.Point(180, 36)
-        Me.txt_NbMailX.Margin = New System.Windows.Forms.Padding(4)
+        Me.txt_NbMailX.Location = New System.Drawing.Point(135, 29)
         Me.txt_NbMailX.Name = "txt_NbMailX"
-        Me.txt_NbMailX.Size = New System.Drawing.Size(76, 22)
+        Me.txt_NbMailX.Size = New System.Drawing.Size(58, 20)
         Me.txt_NbMailX.TabIndex = 73
         Me.txt_NbMailX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lbl_NbMailles
         '
         Me.lbl_NbMailles.AutoSize = True
-        Me.lbl_NbMailles.Location = New System.Drawing.Point(8, 12)
-        Me.lbl_NbMailles.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lbl_NbMailles.Location = New System.Drawing.Point(6, 10)
         Me.lbl_NbMailles.Name = "lbl_NbMailles"
-        Me.lbl_NbMailles.Size = New System.Drawing.Size(89, 16)
+        Me.lbl_NbMailles.Size = New System.Drawing.Size(69, 13)
         Me.lbl_NbMailles.TabIndex = 72
         Me.lbl_NbMailles.Text = "lbl_NbMailles"
         '
@@ -285,36 +281,30 @@ Partial Class Frm_MaillageSlim
         '
         Me.pan_Image.Controls.Add(Me.img_Maillage)
         Me.pan_Image.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Image.Location = New System.Drawing.Point(334, 0)
+        Me.pan_Image.Location = New System.Drawing.Point(251, 0)
         Me.pan_Image.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.pan_Image.Name = "pan_Image"
-        Me.pan_Image.Size = New System.Drawing.Size(499, 416)
+        Me.pan_Image.Size = New System.Drawing.Size(374, 338)
         Me.pan_Image.TabIndex = 1
         '
         'img_Maillage
         '
         Me.img_Maillage.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.img_Maillage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Maillage.Location = New System.Drawing.Point(68, 92)
+        Me.img_Maillage.Location = New System.Drawing.Point(51, 75)
         Me.img_Maillage.Margin = New System.Windows.Forms.Padding(0)
         Me.img_Maillage.Name = "img_Maillage"
-        Me.img_Maillage.Size = New System.Drawing.Size(133, 61)
+        Me.img_Maillage.Size = New System.Drawing.Size(100, 50)
         Me.img_Maillage.TabIndex = 1
         Me.img_Maillage.TabStop = False
         '
-        'prb_CalculTh
-        '
-        Me.prb_CalculTh.Location = New System.Drawing.Point(13, 167)
-        Me.prb_CalculTh.Name = "prb_CalculTh"
-        Me.prb_CalculTh.Size = New System.Drawing.Size(304, 23)
-        Me.prb_CalculTh.TabIndex = 127
-        '
         'Frm_MaillageSlim
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(841, 473)
+        Me.ClientSize = New System.Drawing.Size(631, 384)
         Me.Controls.Add(Me.pan_General)
+        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.MinimizeBox = False
         Me.Name = "Frm_MaillageSlim"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
