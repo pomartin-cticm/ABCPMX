@@ -116,10 +116,10 @@ Partial Class Frm_OptionsFeuN_CalculSlim
         'img_bEff2D
         '
         Me.img_bEff2D.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_bEff2D.Location = New System.Drawing.Point(274, 10)
+        Me.img_bEff2D.Location = New System.Drawing.Point(252, 10)
         Me.img_bEff2D.Margin = New System.Windows.Forms.Padding(4)
         Me.img_bEff2D.Name = "img_bEff2D"
-        Me.img_bEff2D.Size = New System.Drawing.Size(61, 25)
+        Me.img_bEff2D.Size = New System.Drawing.Size(83, 25)
         Me.img_bEff2D.TabIndex = 76
         Me.img_bEff2D.TabStop = False
         '

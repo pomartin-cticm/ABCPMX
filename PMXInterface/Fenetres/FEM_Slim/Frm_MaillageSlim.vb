@@ -20,7 +20,11 @@ Public Class Frm_MaillageSlim
 
     Dim zCarMail As Decimal
     Dim lContourSeul As Boolean = False
-    Dim lCalculTh As Boolean = False
+    Dim lCalculTh As Boolean = False        ' Indique si on réalise le calcul thermique
+
+    Dim lAffChTh As Boolean = False         ' Indique si on affiche le champ thermique
+
+    Dim Tab_Couleurs() As Color = {Color.Blue, Color.LightBlue, Color.Green, Color.Yellow, Color.Orange, Color.Red}
 
 #End Region
 
@@ -35,6 +39,7 @@ Public Class Frm_MaillageSlim
         PrepareFenetre()
         AfficheInfoMaillage()
         RemplirComboTherm()
+        MAJI_Images()
 
         lBuild = False
 
@@ -49,6 +54,7 @@ Public Class Frm_MaillageSlim
         Me.chk_CoutourSeul.Text = "Afficher le contour des matériaux uniquement"
 
         Me.lbl_NbMailles.Text = "Nombre de mailles :"
+        Me.chk_AffChampTherm.Text = "Afficher le champ thermique"
 
         Me.lbl_SuivantX.Text = "// X"
         Me.lbl_SuivantY.Text = "// Y"
@@ -76,6 +82,7 @@ Public Class Frm_MaillageSlim
 
         Me.chk_CoutourSeul.Checked = lContourSeul
         Me.chk_CalculTherm.Checked = lCalculTh
+        Me.chk_AffChampTherm.Checked = lAffChTh
     End Sub
 
     Private Sub GestionStyle()
@@ -120,6 +127,7 @@ Public Class Frm_MaillageSlim
 
     Private Sub Frm_MaillageSlim_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
         Me.img_Maillage.Invalidate()
+        Me.img_Legende.Invalidate()
     End Sub
     Private Sub chk_CoutourSeul_CheckedChanged(sender As Object, e As EventArgs) Handles chk_CoutourSeul.CheckedChanged
         lContourSeul = Me.chk_CoutourSeul.Checked
@@ -129,6 +137,12 @@ Public Class Frm_MaillageSlim
     Private Sub chk_CalculTherm_CheckedChanged(sender As Object, e As EventArgs) Handles chk_CalculTherm.CheckedChanged
         lCalculTh = Me.chk_CalculTherm.Checked
         MAJI_CalculTh()
+        Me.img_Maillage.Invalidate()
+    End Sub
+
+    Private Sub chk_ChampTherm_CheckedChanged(sender As Object, e As EventArgs) Handles chk_AffChampTherm.CheckedChanged
+        lAffChTh = Me.chk_AffChampTherm.Checked
+        MAJI_Images()
         Me.img_Maillage.Invalidate()
     End Sub
 
@@ -192,7 +206,7 @@ Public Class Frm_MaillageSlim
             lTargetT = IsSmaller(TimeT, TimeTarget)
 
             SolveurTh.Calcul_thermique_Poutre_plancher_mince(locMail, myBeam.ParamFeu, TimeT, DeltaT, lTargetT, TempG,
-                                                             val_U, lNormal, lANF, lGeneration1, rhoc, lrhocVar)
+                                                             val_U, lNormal, lANF, lGeneration1, RhoC, lRhoCVar)
 
             lCont = lTargetT
 
@@ -206,10 +220,102 @@ Public Class Frm_MaillageSlim
 
 #Region " Dessin Maillage "
 
+    Private Sub MAJI_Images()
+
+        Dim lOKTh As Boolean
+
+        lOKTh = locMail.Tab_mesh_temp IsNot Nothing
+
+        'If lAffChTh And lOKTh Then
+        '    Me.tlp_Images.RowStyles(1).Height = 50
+        'Else
+        '    Me.tlp_Images.RowStyles(1).Height = 0
+        'End If
+
+    End Sub
+
+    Private Sub img_Legende_Paint(sender As Object, e As PaintEventArgs) Handles img_Legende.Paint
+
+        DessinLegende(e.Graphics, img_Legende.Width, img_Legende.Height)
+
+    End Sub
+
+    Private Sub DessinLegende(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single)
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   20/11/25 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Représentation de la légende pour les champs thermiques
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics
+        '   pWi         [E] :   Largeur de la zone de dessin
+        '   pHi         [E] :   Hauteur de la zone de dessin
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+
+        Const kADJUST As Decimal = 0.95
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim LegParaff As Struc_Affichage
+        Dim dCar As Double
+        Const LL As Double = 100
+        Dim H As Double = LL * pHi / pWi
+        Dim nbColors As Integer = Tab_Couleurs.GetUpperBound(0) + 1
+
+        dCar = Math.Sqrt((LL) ^ 2 + (H) ^ 2) / 50
+        xMin = 0
+        yMin = 0
+        xMax = LL
+        yMax = H + dCar
+
+        ParametresAffichage(LegParaff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, 0, 0, kADJUST)
+
+        For i As Integer = 0 To nbColors - 2
+            Dim xo, yo As Double
+            Dim xe, ye As Double
+            xo = i * LL / nbColors
+            xe = (i + 1) * LL / (nbColors - 1)
+            yo = 0
+            ye = H
+            'AddRectanglePlein(myGr, Tab_Couleurs(i), xo, yo, xe, ye, LegParaff, False)
+
+            AddRectanglePleinGradient(myGr, Tab_Couleurs(i), Tab_Couleurs(i + 1), xo, yo, xe, ye, LegParaff)
+        Next
+
+        For i As Integer = 0 To nbColors
+            Dim xo, yo As Double
+            Dim xe, ye As Double
+            xo = i * LL / nbColors
+            xe = xo
+            yo = H + dCar / 2
+            ye = H
+            AddLigne(myGr, New Pen(Color.Black, 1), xo, yo, xe, ye, LegParaff)
+
+            Dim Chaine As String = GetStringInUnitN((i * LL / nbColors), Enu_TypeVariable.SansType, 3, 2, False, True)
+
+            AddTexte(myGr, New SolidBrush(Color.Black), Chaine, FontFrm, xo, yo, LegParaff,
+                       HorizontalAlignment.Center, VerticalAlignement.Top)
+        Next
+
+        Dim CompRed As Byte = Tab_Couleurs(0).R
+        Dim CompGreen As Byte = Tab_Couleurs(0).G
+        Dim CompBlue As Byte = Tab_Couleurs(0).B
+    End Sub
+
+
     Private Sub img_Maillage_Paint(sender As Object, e As PaintEventArgs) Handles img_Maillage.Paint
 
-        DessinMaillage(e.Graphics, img_Maillage.Width, img_Maillage.Height, MyProjet.Poutres(MyProjet.IndEnCours),
+        Dim lOKTh As Boolean
+
+        lOKTh = locMail.Tab_mesh_temp IsNot Nothing
+
+
+        If lAffChTh And lOKTh Then
+
+
+
+        Else
+            DessinMaillage(e.Graphics, img_Maillage.Width, img_Maillage.Height, MyProjet.Poutres(MyProjet.IndEnCours),
                        locMail, iSelect, jSelect, lContourSeul, lCalculTh)
+
+        End If
 
     End Sub
 
@@ -555,7 +661,7 @@ Public Class Frm_MaillageSlim
         Dim lTrouve As Boolean = False
         Dim iSelectBack, jSelectBack As Integer
 
-        xReel = XUnivers(MyParAff, xSouris)
+        xReel = XUnivers(myParAff, xSouris)
         yReel = YUnivers(myParAff, ySouris)
         iSelectBack = iSelect
         jSelectBack = jSelect
@@ -621,9 +727,8 @@ Public Class Frm_MaillageSlim
         Me.Close()
     End Sub
 
-    Private Sub img_Maillage_Click(sender As Object, e As EventArgs) Handles img_Maillage.Click
 
-    End Sub
+
 
 
 #End Region

@@ -643,6 +643,28 @@ Module Mod_OutilsGraph
 
     End Sub
 
+    Sub AddRectanglePleinGradient(ByRef MyGr As Graphics, ByVal ColorG As Color, ColorD As Color,
+                                  ByVal xo As Double, ByVal yo As Double,
+                                  ByVal xe As Double, ByVal ye As Double,
+                                  ByVal ParAff As Struc_Affichage)
+
+        Dim xEo As Single = XEcran(ParAff, xo)
+        Dim xEe As Single = XEcran(ParAff, xe)
+        Dim yEo As Single = YEcran(ParAff, yo)
+        Dim yEe As Single = YEcran(ParAff, ye)
+
+        Dim xG As Single = Math.Min(xEo, xEe)
+        Dim xD As Single = Math.Max(xEo, xEe)
+        Dim yB As Single = Math.Min(yEo, yEe)
+        Dim yH As Single = Math.Max(yEo, yEe)
+
+        Dim MyBrush As New LinearGradientBrush(New Point(xG, yB), New Point(xD, yH), ColorG, ColorD)
+
+        MyGr.FillRectangle(MyBrush, xG, yB, Math.Abs(xEe - xEo), Math.Abs(yEe - yEo))
+
+        MyBrush.Dispose()
+    End Sub
+
     Sub AddRectanglePlein(ByRef MyGr As Graphics, ByVal Color As Color,
                           ByVal xo As Double, ByVal yo As Double,
                           ByVal xe As Double, ByVal ye As Double,
