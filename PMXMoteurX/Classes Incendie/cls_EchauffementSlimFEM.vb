@@ -93,6 +93,8 @@
         i_mat_a_1 = my_Mesh.MATARMA
         i_mat_c = my_Mesh.MATBETON
 
+        'GiB 20/11/2025 : cohérence avec le reste du code : les conditions d'égalité ou d'inégalité sont remplacées par les fonctions IsSmaller, IsEqual, etc.
+
         '--( Temperature des mailles à l'instant val_t
 
         For i_ = 0 To NbY - 1
@@ -106,7 +108,7 @@
 
         For j_ = 0 To NbZ - 1
 
-            For i_ = my_Mesh.ind_0 To my_Mesh.ind_1
+            For i_ = my_Mesh.ind_2 To my_Mesh.ind_1
 
                 'q_lb : échange entre (i_-1, j_) et (i_,j_) : "left boundary"
                 'q_tb : échange entre (i_, j_-1) et (i_,j_) : "top boundary"
@@ -127,46 +129,50 @@
 
                 '%%Conditions d'exposition au feu
                 prop_expo = False
-                If i_mat >= 0 Then
+                'If i_mat >= 0 Then
+                If IsGreaterOrEqual(i_mat, 0) Then
 
-                    If j_ < Temp_0.GetUpperBound(1) AndAlso my_Mesh.Tab_mesh_mat(i_, j_ + 1) = -1 Then   'face sup du talon 
+                    'If j_ < Temp_0.GetUpperBound(1) AndAlso my_Mesh.Tab_mesh_mat(i_, j_ + 1) = -1 Then   'face sup du talon 
+                    If IsSmaller(j_, Temp_0.GetUpperBound(1)) AndAlso IsEqual(my_Mesh.Tab_mesh_mat(i_, j_ + 1), -1) Then
                         prop_expo = True
                     End If
 
-                    If j_ = 0 OrElse my_Mesh.Tab_mesh_mat(i_, j_ - 1) = -1 Then   'face inf du talon ou de la dalle 
+                    'If j_ = 0 OrElse my_Mesh.Tab_mesh_mat(i_, j_ - 1) = -1 Then   'face inf du talon ou de la dalle 
+                    If IsEqual(j_, 0) OrElse IsEqual(my_Mesh.Tab_mesh_mat(i_, j_ - 1), -1) Then
                         prop_expo = True
                     End If
 
-                    If i_ > 0 AndAlso my_Mesh.Tab_mesh_mat(i_ - 1, j_) = -1 Then   'face laterale gauche du talon ou de la dalle 
+                    'If i_ > 0 AndAlso my_Mesh.Tab_mesh_mat(i_ - 1, j_) = -1 Then   'face laterale gauche du talon ou de la dalle 
+                    If IsGreater(i_, 0) AndAlso IsEqual(my_Mesh.Tab_mesh_mat(i_ - 1, j_), -1) Then
                         prop_expo = True
                     End If
 
-                    If i_ < Temp_0.GetUpperBound(0) AndAlso my_Mesh.Tab_mesh_mat(i_ + 1, j_) = -1 Then   'face laterale droite du talon ou de la dalle 
+                    'If i_ < Temp_0.GetUpperBound(0) AndAlso my_Mesh.Tab_mesh_mat(i_ + 1, j_) = -1 Then   'face laterale droite du talon ou de la dalle 
+                    If IsSmaller(i_, Temp_0.GetUpperBound(0)) AndAlso IsEqual(my_Mesh.Tab_mesh_mat(i_ + 1, j_), -1) Then
                         prop_expo = True
                     End If
 
                     prop_noex = False
-                    If j_ = Temp_0.GetUpperBound(1) Then
+                    'If j_ = Temp_0.GetUpperBound(1) Then
+                    If IsEqual(j_, Temp_0.GetUpperBound(1)) Then
                         prop_noex = True
                     End If
 
                     'Faces exterieures de la maille
                     If prop_expo Or prop_noex Then
                         'Emissivite de surface
-                        'GiB 18/11/2025 : cohérence avec le reste du code
                         'If i_mat >= 0 AndAlso i_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure, de soudure (4) ou d'armature (5)  
                         If IsGreaterOrEqual(i_mat, i_mat_a_0) AndAlso IsSmallerOrEqual(i_mat, i_mat_a_1) Then
-                                'val_epsilon = My_materials.EpsilonA
-                                'If My_materials.Acier_galva AndAlso Temp_0(i_, j_) <= 500.0 Then    'acier galvanisé à chaud échauffé à 500 °C ou moins
-                                '    val_epsilon = My_materials.EpsilonA_galva
-                                'End If
-                                val_epsilon = EN_Feu.EmissiviteAcier(Temp_0(i_, j_), myParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise)
+                            'val_epsilon = My_materials.EpsilonA
+                            'If My_materials.Acier_galva AndAlso Temp_0(i_, j_) <= 500.0 Then    'acier galvanisé à chaud échauffé à 500 °C ou moins
+                            '    val_epsilon = My_materials.EpsilonA_galva
+                            'End If
+                            val_epsilon = EN_Feu.EmissiviteAcier(Temp_0(i_, j_), myParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise)
 
-                            'GiB 18/11/2025 : cohérence avec le reste du code
                             'ElseIf i_mat = 6  Then  'beton (6)
                         ElseIf IsEqual(i_mat, i_mat_c) Then
-                                val_epsilon = myParamFeu.EmissivityC 'My_materials.EpsilonC
-                            End If
+                            val_epsilon = myParamFeu.EmissivityC 'My_materials.EpsilonC
+                        End If
 
                         If prop_expo Then
                             'Face exposee
@@ -185,7 +191,8 @@
                     End If
 
                     '1er terme du denominateur de q_lb : face de gauche de la maille (i_,j_)
-                    If i_ = 0 Then
+                    'If i_ = 0 Then
+                    If IsEqual(i_, my_Mesh.ind_2) Then
 
                         dth_lb = 0.0
                         h_lb_1 = 0.0
@@ -198,7 +205,6 @@
                         If prop_expo AndAlso j_mat = -1 Then        '$ face exposee
                             dth_lb = TempG - Temp_0(i_, j_)         '$ ecart de temperature entre les gaz chauds et la maille (i_-1,j_)
                             h_lb_1 = dth_lb / h_net_de
-                            'GiB 18/11/2025 : cohérence avec le reste du code
                             'ElseIf j_mat >= 0 Then
                         ElseIf IsGreaterOrEqual(j_mat, i_mat_a_0) Then
 
@@ -206,7 +212,6 @@
 
                             '%% Conductivite thermique de la maille (i-1,j_)
 
-                            'GiB 18/11/2025 : cohérence avec le reste du code
                             'If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure, de soudure (4) ou d'armature (5)  
                             If IsSmallerOrEqual(j_mat, i_mat_a_1) Then
                                 lambda_Lb = EN_Feu.Conductivite_thermique_acier(Temp_0(ii_, j_))
@@ -221,17 +226,16 @@
 
                     '1er terme du denominateur de q_bb : face inferieure de la maille (i_,j_)
                     jj_ = j_ - 1
-                    If prop_expo AndAlso (j_ = 0 OrElse my_Mesh.Tab_mesh_mat(i_, jj_) = -1) Then    'face exposee
+                    'If prop_expo AndAlso (j_ = 0 OrElse my_Mesh.Tab_mesh_mat(i_, jj_) = -1) Then    'face exposee
+                    If prop_expo AndAlso (IsEqual(j_, 0) OrElse IsEqual(my_Mesh.Tab_mesh_mat(i_, jj_), -1)) Then
                         dth_bb = TempG - Temp_0(i_, j_) 'ecart de temperature entre les gaz chauds et la maille (i_,j_)
                         h_bb_1 = dth_bb / h_net_de
-                        'GiB 18/11/2025 : cohérence avec le reste du code
                         'ElseIf my_Mesh.Tab_mesh_mat(i_, jj_) >= 0 Then
-                    ElseIf isgreaterorequal(my_Mesh.Tab_mesh_mat(i_, jj_), 0) Then
+                    ElseIf IsGreaterOrEqual(my_Mesh.Tab_mesh_mat(i_, jj_), 0) Then
                         dth_bb = Temp_0(i_, jj_) - Temp_0(i_, j_) 'ecart de temperature entre les mailles (i_,j_-1) et (i_,j_)
 
                         'Conductivite thermique de la maille (i_,j_-1)
                         j_mat = my_Mesh.Tab_mesh_mat(i_, jj_)
-                        'GiB 18/11/2025 : cohérence avec le reste du code
                         'If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure, de soudure (4) ou d'armature (5)  
                         If IsGreaterOrEqual(j_mat, i_mat_a_0) AndAlso IsSmallerOrEqual(j_mat, i_mat_a_1) Then
                             lambda_Bb = EN_Feu.Conductivite_thermique_acier(Temp_0(i_, jj_))
@@ -245,20 +249,21 @@
                     End If
 
                     '1er terme du denominateur de q_tb : face superieure de la maille (i_,j_)
-                    If j_ < Temp_0.GetUpperBound(1) Then
+                    'If j_ < Temp_0.GetUpperBound(1) Then
+                    If IsSmaller(j_, Temp_0.GetUpperBound(1)) Then
+
                         jj_ = j_ + 1
                         j_mat = my_Mesh.Tab_mesh_mat(i_, jj_)
 
-                        If prop_expo AndAlso j_mat = -1 Then    'face superieure exposee
+                        'If prop_expo AndAlso j_mat = -1 Then    'face superieure exposee
+                        If prop_expo AndAlso IsEqual(j_mat, -1) Then    'face superieure exposee
                             dth_tb = TempG - Temp_0(i_, j_) 'ecart de temperature entre les gaz chauds et la maille (i_,j_)
-                            h_tb_1 = dth_tb / h_net_de
-                            'GiB 18/11/2025 : cohérence avec le reste du code                            '
+                            h_tb_1 = dth_tb / h_net_de                        '
                             'ElseIf j_mat >= 0 Then
                         ElseIf IsGreaterOrEqual(j_mat, i_mat_a_0) Then
                             dth_tb = Temp_0(i_, jj_) - Temp_0(i_, j_) 'ecart de temperature entre les mailles (i_,j_+1) et (i_,j_)
 
-                            'Conductivite thermique de la maille (i_,j_+1)
-                            'GiB 18/11/2025 : cohérence avec le reste du code                            '
+                            'Conductivite thermique de la maille (i_,j_+1)                          '
                             'If j_mat >= 0 AndAlso j_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure, de soudure (4) ou d'armature (5)  
                             If IsSmallerOrEqual(j_mat, i_mat_a_1) Then
                                 lambda_Tb = EN_Feu.Conductivite_thermique_acier(Temp_0(i_, jj_))
@@ -280,20 +285,21 @@
                     End If
 
                     '1er terme du denominateur de q_rb : face de droite de la maille (i_,j_)
-                    If i_ < Temp_0.GetUpperBound(0) Then
+                    'If i_ < Temp_0.GetUpperBound(0) Then
+                    If IsSmaller(i_, my_Mesh.ind_1) Then
+
                         ii_ = i_ + 1
                         j_mat = my_Mesh.Tab_mesh_mat(ii_, j_)
-                        If prop_expo AndAlso j_mat = -1 Then    'face exposee au feu
+                        'If prop_expo AndAlso j_mat = -1 Then    'face exposee au feu
+                        If prop_expo AndAlso IsEqual(j_mat, -1) Then
                             dth_rb = TempG - Temp_0(i_, j_) 'ecart de temperature entre les gaz chauds et la maille (i_,j_)
                             h_rb_1 = dth_rb / h_net_de
 
-                            'GiB 18/11/2025 : cohérence avec le reste du code   
                             'ElseIf j_mat >= 0 Then
                         ElseIf IsGreaterOrEqual(j_mat, i_mat_a_0) Then
                             dth_rb = Temp_0(ii_, j_) - Temp_0(i_, j_) 'ecart de temperature entre les mailles (i_+1,j_) et (i_,j_)
 
                             'Conductivite thermique de la maille (i_+1,j_)
-                            'GiB 18/11/2025 : cohérence avec le reste du code
                             'If j_mat >= 0 AndAlso j_mat <= 5 Then
                             If IsSmallerOrEqual(j_mat, i_mat_a_1) Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure, de soudure (4) ou d'armature (5)  
                                 lambda_Rb = EN_Feu.Conductivite_thermique_acier(Temp_0(ii_, j_))
@@ -301,17 +307,16 @@
                             ElseIf IsEqual(j_mat, i_mat_c) Then
                                 'lambda_Rb =  EN_Feu.Conductivite_thermique_beton(My_materials.lNormal, My_materials.lANFrance, My_materials.lGeneration1, Temp_0(ii_, j_))
                                 lambda_Rb = EN_Feu.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(ii_, j_))
-                                End If
-
-                                h_rb_1 = 0.5 * my_Mesh.Tab_mesh_y(ii_) / lambda_Rb
                             End If
-                        Else
+
+                            h_rb_1 = 0.5 * my_Mesh.Tab_mesh_y(ii_) / lambda_Rb
+                        End If
+                    Else
                         dth_rb = 0.0
                         h_rb_1 = 0.0
                     End If
 
                     '2e terme du denominateur de qi
-                    'GiB 18/11/2025 : cohérence avec le reste du code
                     'If i_mat >= 0 AndAlso i_mat <= 5 Then 'acier de construction (0 : plat soudé, 1 : semelle inférieure, 2 : âme, 3 : semelle supérieure, de soudure (4) ou d'armature (5)  
                     If IsGreaterOrEqual(i_mat, i_mat_a_0) AndAlso IsSmallerOrEqual(i_mat, i_mat_a_1) Then
                         lambda_ = EN_Feu.Conductivite_thermique_acier(Temp_0(i_, j_))
@@ -321,7 +326,7 @@
                         cp_ = EN_Feu.ChaleurSpecifiqueAcier(Temp_0(i_, j_))
 
                         'ElseIf i_mat = 6  Then  'beton (6) 
-                    ElseIf isequal(i_mat, i_mat_c) Then
+                    ElseIf IsEqual(i_mat, i_mat_c) Then
                         'lambda_ = Conductivite_thermique_beton(My_materials.lNormal, My_materials.lANFrance, My_materials.lGeneration1, Temp_0(i_, j_))
                         lambda_ = EN_Feu.Conductivite_thermique_beton(lNormal, lANFrance, lGeneration1, Temp_0(i_, j_))
 
@@ -364,51 +369,61 @@
 
         Next
 
-        'Affectation éventuelle de températures des mailles hors [ind_0;ind_1]
-        With my_Mesh
+        'Affectation éventuelle de températures des mailles hors [ind_0;ind_1] en fin de calcul
 
-            If .ind_0 > 0 Then
+        If Not lTargetT Then
 
-                'If my_Time < My_fire.Duration Then
-                If lTargetT Then
+            With my_Mesh
 
-                    i_ = .ind_0 - 1 'colonne de mailles adjacentes a la borne inferieure de l'intervalle calculé
+                'Symétrie pour une poutre intérieure dont la largeur de la dalle est supérieure à delta_y de chaque côté de l'âme
+                If Not IsEqual(.ind_0, .ind_2) Then
                     For j_ = 0 To .nb_cells_z - 1
-                        .Tab_mesh_temp(i_, j_) = .Tab_mesh_temp(.ind_0, j_)
+                        For i_ = .ind_0 To .ind_2 - 1
+                            ii_ = .Tab_mesh_y.GetUpperBound(0) - i_
+                            .Tab_mesh_temp(i_, j_) = .Tab_mesh_temp(ii_, j_)
+                        Next
                     Next
-                Else 'toutes les colonnes de mailles à gauche de la borne inferieure de l'intervalle calculé
+                End If
+                '
+                'If .ind_0 > 0 Then
+                If IsGreater(.ind_0, .Tab_mesh_y.GetLowerBound(0)) Then
+
+                    'If my_Time < My_fire.Duration Then
+                    'If lTargetT Then
+
+                    'i_ = .ind_0 - 1 'colonne de mailles adjacentes a la borne inferieure de l'intervalle calculé
+                    'For j_ = 0 To .nb_cells_z - 1
+                    '.Tab_mesh_temp(i_, j_) = .Tab_mesh_temp(.ind_0, j_)
+                    'Next
+                    'Else 'toutes les colonnes de mailles à gauche de la borne inferieure de l'intervalle calculé
                     For j_ = 0 To .nb_cells_z - 1
                         For i_ = 0 To .ind_0 - 1
                             .Tab_mesh_temp(i_, j_) = .Tab_mesh_temp(.ind_0, j_)
                         Next
                     Next
+                    'End If
+
                 End If
 
-            End If
-
-            If .ind_1 < .nb_cells_y - 1 Then
-                ' If My_time < My_fire.Duration Then
-                If lTargetT Then
-                    i_ = .ind_1 + 1     'colonne de mailles adjacentes a la borne inferieure de l'intervalle calculé
-                    For j_ = 0 To .nb_cells_z - 1
-                        .Tab_mesh_temp(i_, j_) = .Tab_mesh_temp(.ind_1, j_)
-                    Next
-                Else        'toutes les colonnes de mailles à droite de la borne inferieure de l'intervalle calculé
+                'If .ind_1 < .nb_cells_y - 1 Then
+                If IsSmaller(.ind_1, .Tab_mesh_y.GetUpperBound(0)) Then
+                    ' If My_time < My_fire.Duration Then
+                    'If lTargetT Then
+                    'i_ = .ind_1 + 1     'colonne de mailles adjacentes a la borne inferieure de l'intervalle calculé
+                    'For j_ = 0 To .nb_cells_z - 1
+                    '    .Tab_mesh_temp(i_, j_) = .Tab_mesh_temp(.ind_1, j_)
+                    'Next
+                    'Else        'toutes les colonnes de mailles à droite de la borne inferieure de l'intervalle calculé
                     For j_ = 0 To .nb_cells_z - 1
                         For i_ = .ind_1 + 1 To .nb_cells_y - 1
                             .Tab_mesh_temp(i_, j_) = .Tab_mesh_temp(.ind_1, j_)
                         Next
                     Next
+                    'End If
                 End If
-            End If
 
-        End With
+                'GiB 19/11/2025 : affectation de température des gaz chauds aux mailles du vide correspondantes
 
-        'GiB 19/11/2025 : affectation de température des gaz chauds aux mailles du vide correspondantes
-
-        If Not lTargetT Then
-
-            With my_Mesh
                 For j_ = 0 To NbZ - 1
 
                     For i_ = 0 To NbY - 1
@@ -428,7 +443,5 @@
     End Sub
 
 #End Region
-
-
 
 End Class
