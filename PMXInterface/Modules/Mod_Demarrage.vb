@@ -1273,7 +1273,6 @@ Public Module Mod_Demarrage
         '-----------------------------------------------------------------------------------------------------------------
 
         Dim Indice As Integer = -1
-        'Dim lCont As Boolean = True
 
         If LogicielInfo.ListeLangue.Contains(FRANCAIS) Then
             Indice = Array.IndexOf(LogicielInfo.ListeLangue, FRANCAIS)
