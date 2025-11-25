@@ -51,7 +51,7 @@ Public Module Mod_Demarrage
         LogicielReglages.lSLIMAcier = True
         LogicielReglages.lSLIMMixte = False
         LogicielReglages.lFIRE = True
-        LogicielReglages.lFIRESLIMAcier = False
+        LogicielReglages.lFIRESLIMAcier = True
         LogicielReglages.lFIRESLIMMixte = False
 
         LogicielReglages.lCreuxO = (LogicielInfo.Maitre = EnuMaitre.CTICM)

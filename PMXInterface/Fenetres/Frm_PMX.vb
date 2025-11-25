@@ -289,6 +289,7 @@ Public Class Frm_PMX
                 Me.TSbtn_ZoomPlus.ToolTipText = Bloc("ZOOMIN")
                 Me.TSbtn_ZoomMoins.ToolTipText = Bloc("ZOOMOUT")
                 Me.TSbtn_Cotations.ToolTipText = Bloc("COTATIONS")
+                Me.TSbtn_MontreIdent.ToolTipText = Bloc("SHOWID")
                 Me.TSbtn_ExpertMode.ToolTipText = Bloc("EXPERT")
                 Me.TSbtn_CopieImage.ToolTipText = Bloc("COPYIMAGE")
 

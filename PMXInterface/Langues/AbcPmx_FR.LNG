@@ -686,6 +686,7 @@ PPOSTT					= Résultats
 ZOOMIN					= Zoom avant
 ZOOMOUT					= Zoom arrière
 COTATIONS				= Afficher les dimensions
+SHOWID					= Afficher les informations d'identification
 EXPERT					= Mode expert
 COPYIMAGE				= Copier l'image
 EDIT					= Editer

@@ -684,6 +684,7 @@ PPOSTT					= Results
 ZOOMIN					= Zoom in
 ZOOMOUT					= Zoom out
 COTATIONS				= Display dimensions
+SHOWID					= Display identification informations
 EXPERT					= Expert mode
 COPYIMAGE				= Copy the main image
 EDIT					= Edit
