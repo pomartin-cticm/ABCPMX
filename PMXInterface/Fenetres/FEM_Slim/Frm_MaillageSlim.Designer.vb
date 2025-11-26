@@ -32,6 +32,8 @@ Partial Class Frm_MaillageSlim
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Maillage = New System.Windows.Forms.Label()
         Me.pan_Maillage = New System.Windows.Forms.Panel()
+        Me.lbl_ch_th = New System.Windows.Forms.Label()
+        Me.lbl_elements = New System.Windows.Forms.Label()
         Me.chk_AffVide = New System.Windows.Forms.CheckBox()
         Me.chk_AffDalle = New System.Windows.Forms.CheckBox()
         Me.chk_AffPoutre = New System.Windows.Forms.CheckBox()
@@ -52,8 +54,9 @@ Partial Class Frm_MaillageSlim
         Me.tlp_Images = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Legende = New System.Windows.Forms.PictureBox()
         Me.img_Maillage = New System.Windows.Forms.PictureBox()
-        Me.lbl_elements = New System.Windows.Forms.Label()
-        Me.lbl_ch_th = New System.Windows.Forms.Label()
+        Me.chk_Lissage_Couleur = New System.Windows.Forms.CheckBox()
+        Me.chk_AffArmature = New System.Windows.Forms.CheckBox()
+        Me.chk_AffChThArmature = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -193,6 +196,9 @@ Partial Class Frm_MaillageSlim
         '
         Me.pan_Maillage.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Maillage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Maillage.Controls.Add(Me.chk_AffChThArmature)
+        Me.pan_Maillage.Controls.Add(Me.chk_AffArmature)
+        Me.pan_Maillage.Controls.Add(Me.chk_Lissage_Couleur)
         Me.pan_Maillage.Controls.Add(Me.lbl_ch_th)
         Me.pan_Maillage.Controls.Add(Me.lbl_elements)
         Me.pan_Maillage.Controls.Add(Me.chk_AffVide)
@@ -218,10 +224,28 @@ Partial Class Frm_MaillageSlim
         Me.pan_Maillage.Size = New System.Drawing.Size(299, 399)
         Me.pan_Maillage.TabIndex = 1
         '
+        'lbl_ch_th
+        '
+        Me.lbl_ch_th.AutoSize = True
+        Me.lbl_ch_th.Location = New System.Drawing.Point(139, 243)
+        Me.lbl_ch_th.Name = "lbl_ch_th"
+        Me.lbl_ch_th.Size = New System.Drawing.Size(99, 13)
+        Me.lbl_ch_th.TabIndex = 136
+        Me.lbl_ch_th.Text = "Champs thermiques"
+        '
+        'lbl_elements
+        '
+        Me.lbl_elements.AutoSize = True
+        Me.lbl_elements.Location = New System.Drawing.Point(25, 243)
+        Me.lbl_elements.Name = "lbl_elements"
+        Me.lbl_elements.Size = New System.Drawing.Size(50, 13)
+        Me.lbl_elements.TabIndex = 135
+        Me.lbl_elements.Text = "Eléments"
+        '
         'chk_AffVide
         '
         Me.chk_AffVide.AutoSize = True
-        Me.chk_AffVide.Location = New System.Drawing.Point(29, 279)
+        Me.chk_AffVide.Location = New System.Drawing.Point(28, 305)
         Me.chk_AffVide.Name = "chk_AffVide"
         Me.chk_AffVide.Size = New System.Drawing.Size(84, 17)
         Me.chk_AffVide.TabIndex = 134
@@ -231,7 +255,7 @@ Partial Class Frm_MaillageSlim
         'chk_AffDalle
         '
         Me.chk_AffDalle.AutoSize = True
-        Me.chk_AffDalle.Location = New System.Drawing.Point(29, 256)
+        Me.chk_AffDalle.Location = New System.Drawing.Point(28, 282)
         Me.chk_AffDalle.Name = "chk_AffDalle"
         Me.chk_AffDalle.Size = New System.Drawing.Size(87, 17)
         Me.chk_AffDalle.TabIndex = 133
@@ -241,7 +265,7 @@ Partial Class Frm_MaillageSlim
         'chk_AffPoutre
         '
         Me.chk_AffPoutre.AutoSize = True
-        Me.chk_AffPoutre.Location = New System.Drawing.Point(29, 233)
+        Me.chk_AffPoutre.Location = New System.Drawing.Point(28, 259)
         Me.chk_AffPoutre.Name = "chk_AffPoutre"
         Me.chk_AffPoutre.Size = New System.Drawing.Size(94, 17)
         Me.chk_AffPoutre.TabIndex = 132
@@ -251,7 +275,7 @@ Partial Class Frm_MaillageSlim
         'chk_AffChThVideOuvert
         '
         Me.chk_AffChThVideOuvert.AutoSize = True
-        Me.chk_AffChThVideOuvert.Location = New System.Drawing.Point(174, 279)
+        Me.chk_AffChThVideOuvert.Location = New System.Drawing.Point(173, 305)
         Me.chk_AffChThVideOuvert.Name = "chk_AffChThVideOuvert"
         Me.chk_AffChThVideOuvert.Size = New System.Drawing.Size(142, 17)
         Me.chk_AffChThVideOuvert.TabIndex = 131
@@ -261,7 +285,7 @@ Partial Class Frm_MaillageSlim
         'chk_AffChThDalle
         '
         Me.chk_AffChThDalle.AutoSize = True
-        Me.chk_AffChThDalle.Location = New System.Drawing.Point(174, 256)
+        Me.chk_AffChThDalle.Location = New System.Drawing.Point(173, 282)
         Me.chk_AffChThDalle.Name = "chk_AffChThDalle"
         Me.chk_AffChThDalle.Size = New System.Drawing.Size(113, 17)
         Me.chk_AffChThDalle.TabIndex = 130
@@ -272,7 +296,7 @@ Partial Class Frm_MaillageSlim
         '
         Me.chk_AffChThPoutre.AutoSize = True
         Me.chk_AffChThPoutre.Enabled = False
-        Me.chk_AffChThPoutre.Location = New System.Drawing.Point(174, 233)
+        Me.chk_AffChThPoutre.Location = New System.Drawing.Point(173, 259)
         Me.chk_AffChThPoutre.Name = "chk_AffChThPoutre"
         Me.chk_AffChThPoutre.Size = New System.Drawing.Size(120, 17)
         Me.chk_AffChThPoutre.TabIndex = 129
@@ -282,7 +306,7 @@ Partial Class Frm_MaillageSlim
         'chk_AffChampTherm
         '
         Me.chk_AffChampTherm.AutoSize = True
-        Me.chk_AffChampTherm.Location = New System.Drawing.Point(8, 192)
+        Me.chk_AffChampTherm.Location = New System.Drawing.Point(3, 192)
         Me.chk_AffChampTherm.Name = "chk_AffChampTherm"
         Me.chk_AffChampTherm.Size = New System.Drawing.Size(126, 17)
         Me.chk_AffChampTherm.TabIndex = 128
@@ -420,23 +444,35 @@ Partial Class Frm_MaillageSlim
         Me.img_Maillage.TabIndex = 1
         Me.img_Maillage.TabStop = False
         '
-        'lbl_elements
+        'chk_Lissage_Couleur
         '
-        Me.lbl_elements.AutoSize = True
-        Me.lbl_elements.Location = New System.Drawing.Point(26, 217)
-        Me.lbl_elements.Name = "lbl_elements"
-        Me.lbl_elements.Size = New System.Drawing.Size(50, 13)
-        Me.lbl_elements.TabIndex = 135
-        Me.lbl_elements.Text = "Eléments"
+        Me.chk_Lissage_Couleur.AutoSize = True
+        Me.chk_Lissage_Couleur.Location = New System.Drawing.Point(28, 215)
+        Me.chk_Lissage_Couleur.Name = "chk_Lissage_Couleur"
+        Me.chk_Lissage_Couleur.Size = New System.Drawing.Size(128, 17)
+        Me.chk_Lissage_Couleur.TabIndex = 137
+        Me.chk_Lissage_Couleur.Text = "chk_Lissage_Couleur"
+        Me.chk_Lissage_Couleur.UseVisualStyleBackColor = True
         '
-        'lbl_ch_th
+        'chk_AffArmature
         '
-        Me.lbl_ch_th.AutoSize = True
-        Me.lbl_ch_th.Location = New System.Drawing.Point(140, 217)
-        Me.lbl_ch_th.Name = "lbl_ch_th"
-        Me.lbl_ch_th.Size = New System.Drawing.Size(99, 13)
-        Me.lbl_ch_th.TabIndex = 136
-        Me.lbl_ch_th.Text = "Champs thermiques"
+        Me.chk_AffArmature.AutoSize = True
+        Me.chk_AffArmature.Location = New System.Drawing.Point(28, 328)
+        Me.chk_AffArmature.Name = "chk_AffArmature"
+        Me.chk_AffArmature.Size = New System.Drawing.Size(105, 17)
+        Me.chk_AffArmature.TabIndex = 138
+        Me.chk_AffArmature.Text = "chk_AffArmature"
+        Me.chk_AffArmature.UseVisualStyleBackColor = True
+        '
+        'chk_AffChThArmature
+        '
+        Me.chk_AffChThArmature.AutoSize = True
+        Me.chk_AffChThArmature.Location = New System.Drawing.Point(173, 328)
+        Me.chk_AffChThArmature.Name = "chk_AffChThArmature"
+        Me.chk_AffChThArmature.Size = New System.Drawing.Size(131, 17)
+        Me.chk_AffChThArmature.TabIndex = 139
+        Me.chk_AffChThArmature.Text = "chk_AffChThArmature"
+        Me.chk_AffChThArmature.UseVisualStyleBackColor = True
         '
         'Frm_MaillageSlim
         '
@@ -499,4 +535,7 @@ Partial Class Frm_MaillageSlim
     Friend WithEvents chk_AffPoutre As CheckBox
     Friend WithEvents lbl_ch_th As Label
     Friend WithEvents lbl_elements As Label
+    Friend WithEvents chk_Lissage_Couleur As CheckBox
+    Friend WithEvents chk_AffChThArmature As CheckBox
+    Friend WithEvents chk_AffArmature As CheckBox
 End Class

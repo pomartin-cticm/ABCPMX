@@ -3,6 +3,7 @@ Imports System.Drawing.Text
 Imports System.Net
 Imports System.Net.Mime.MediaTypeNames
 Imports System.Security.Cryptography
+Imports Microsoft.VisualBasic.Logging
 Imports PMXMoteur2
 
 Public Class Frm_MaillageSlim
@@ -24,21 +25,30 @@ Public Class Frm_MaillageSlim
     Dim lContourSeul As Boolean = False
     Dim lCalculTh As Boolean = False            ' Indique si on réalise le calcul thermique
     Dim lCalculThTermine As Boolean = False     ' Indique si le calcul thermique est terminé
+    Dim lLissage As Boolean = False             ' Indique si le lissage de couleur est réalisé
 
     Dim lAffPoutre As Boolean = True            ' Indique si on affiche la poutre
     Dim lAffDalle As Boolean = True             ' Indique si on affiche la dalle
     Dim lAffVideOuvert As Boolean = True        ' Indique si on affiche le vide ouvert = air pas enfermé
+    Dim LaffArmature As Boolean = True          ' Indique si on affiche l'armature
 
     Dim lAffChTh As Boolean = True              ' Indique si on affiche le champ thermique
     Dim lAffChThPoutre As Boolean = True        ' Indique si on affiche le champ thermique de la poutre
     Dim lAffChThDalle As Boolean = True         ' Indique si on affiche le champ thermique de la dalle
     Dim lAffChThVideOuvert As Boolean = True    ' Indique si on affiche le champ thermique du vide ouvert = air pas enfermé
+    Dim LaffChThArmature As Boolean = True          ' Indique si on affiche le champ thermique de l'armature
 
     Dim tempMin As Double                       'température minimale sur toutes les mailles
     Dim tempMax As Double                       'température maximale sur toutes les mailles
 
     Dim Tab_Couleurs() As Color = {Color.DarkBlue, Color.Blue, Color.MediumTurquoise, Color.LightGreen, Color.Yellow, Color.Orange, Color.Red, Color.DarkRed}
     Dim Tab_IntervalleCouleurs(Tab_Couleurs.Length - 1) As Double
+
+    'tableau de tableau de tableau de taille 4 qui contient les températures aux 4 coins de la maille i,j
+    'dans l'ordre d'indice : coin haut gauche, haut droite, bas droite, bas gauche
+    'utilisé dans le lissage des couleurs
+    Dim listeTempCoins As Double()()() = {New Double()() {New Double(3) {}}}
+
 
 #End Region
 
@@ -55,6 +65,7 @@ Public Class Frm_MaillageSlim
         RemplirComboTherm()
         MAJI_Images()
         MAJI_chk_ChampTherm()
+        chk_Lissage_Couleur.Enabled = False
         lBuild = False
 
     End Sub
@@ -69,12 +80,15 @@ Public Class Frm_MaillageSlim
 
         Me.lbl_NbMailles.Text = "Nombre de mailles :"
         Me.chk_AffChampTherm.Text = "Afficher le champ thermique"
+        Me.chk_Lissage_Couleur.Text = "Lissage"
         Me.chk_AffPoutre.Text = "Poutre"
         Me.chk_AffDalle.Text = "Dalle"
         Me.chk_AffVide.Text = "Vide ouvert"
+        Me.chk_AffArmature.Text = "Armature"
         Me.chk_AffChThPoutre.Text = ""
         Me.chk_AffChThDalle.Text = ""
         Me.chk_AffChThVideOuvert.Text = ""
+        Me.chk_AffChThArmature.Text = ""
 
         Me.lbl_SuivantX.Text = "// X"
         Me.lbl_SuivantY.Text = "// Y"
@@ -163,25 +177,32 @@ Public Class Frm_MaillageSlim
         Me.img_Maillage.Invalidate()
     End Sub
 
+    Private Sub chk_Lissage_Couleur_Click(sender As Object, e As EventArgs) Handles chk_Lissage_Couleur.Click
+        lLissage = chk_Lissage_Couleur.Checked
+    End Sub
+
     Private Sub chk_ChampTherm_CheckedChanged(sender As Object, e As EventArgs) Handles chk_AffChampTherm.CheckedChanged
         lAffChTh = Me.chk_AffChampTherm.Checked
+        chk_Lissage_Couleur.Enabled = Me.chk_AffChampTherm.Checked
         MAJI_chk_AfficherElements()
         MAJI_Images()
         Me.img_Maillage.Invalidate()
     End Sub
 
-    Private Sub chk_AfficherElementsCheckedChanged(sender As Object, e As EventArgs) Handles chk_AffVide.CheckedChanged, chk_AffPoutre.CheckedChanged, chk_AffDalle.CheckedChanged
+    Private Sub chk_AfficherElementsCheckedChanged(sender As Object, e As EventArgs) Handles chk_AffVide.CheckedChanged, chk_AffPoutre.CheckedChanged, chk_AffDalle.CheckedChanged, chk_AffArmature.CheckedChanged
         lAffPoutre = chk_AffPoutre.Checked
         lAffDalle = chk_AffDalle.Checked
         lAffVideOuvert = chk_AffVide.Checked
+        LaffArmature = chk_AffArmature.Checked
         MAJI_chk_ChampTherm_Autres()
         Me.img_Maillage.Invalidate()
     End Sub
 
-    Private Sub chk_ChampTherm_AutresCheckedChanged(sender As Object, e As EventArgs) Handles chk_AffChThDalle.CheckedChanged, chk_AffChThPoutre.CheckedChanged, chk_AffChThVideOuvert.CheckedChanged
+    Private Sub chk_ChampTherm_AutresCheckedChanged(sender As Object, e As EventArgs) Handles chk_AffChThDalle.CheckedChanged, chk_AffChThPoutre.CheckedChanged, chk_AffChThVideOuvert.CheckedChanged, chk_AffChThArmature.CheckedChanged
         lAffChThPoutre = chk_AffChThPoutre.Checked
         lAffChThDalle = chk_AffChThDalle.Checked
         lAffChThVideOuvert = chk_AffChThVideOuvert.Checked
+        LaffChThArmature = chk_AffChThArmature.Checked
         Me.img_Legende.Invalidate() 'pour déclencher le calcul de l'échelle des températures (si le calcul à l'incendie est déjà fait)
         Me.img_Maillage.Invalidate()
     End Sub
@@ -321,6 +342,9 @@ Public Class Frm_MaillageSlim
         chk_AffVide.Enabled = lAffChTh
         chk_AffVide.Checked = False
 
+        chk_AffArmature.Enabled = lAffChTh
+        chk_AffArmature.Checked = lAffChTh
+
         MAJI_chk_ChampTherm_Autres()
 
     End Sub
@@ -337,11 +361,13 @@ Public Class Frm_MaillageSlim
         chk_AffChThVideOuvert.Enabled = chk_AffVide.Checked
         chk_AffChThVideOuvert.Checked = chk_AffVide.Checked
 
+        chk_AffChThArmature.Enabled = chk_AffArmature.Checked
+        chk_AffChThArmature.Checked = chk_AffArmature.Checked
 
     End Sub
 
     Private Sub PrepareEchelleTemp()
-        Dim indicesPoutre() As Integer = {0, 1, 2, 3, 4, 5} 'liste des indices matériaux constituant la poutre
+        Dim elemPoutre() As Integer = {cls_MaillageSlimFloor.MATACIERPLAT, cls_MaillageSlimFloor.MATACIERSEMI, cls_MaillageSlimFloor.MATACIERAME, cls_MaillageSlimFloor.MATACIERSEMS, cls_MaillageSlimFloor.MATACIERSOUD}
         tempMin = 10000
         tempMax = 0
         For i = 0 To locMail.nb_cells_y - 1
@@ -349,22 +375,27 @@ Public Class Frm_MaillageSlim
 
                 'si le champ thermique de l'élément n'est pas affiché les températures de ce dernier ne sont pas prises en compte pour l'échelle
                 'poutre
-                If lAffChThPoutre And indicesPoutre.Contains(locMail.Tab_mesh_mat(i, j)) Then
+                If lAffChThPoutre And elemPoutre.Contains(locMail.Tab_mesh_mat(i, j)) Then
                     checkMinMax(i, j)
                 End If
 
                 'dalle
-                If lAffChThDalle And locMail.Tab_mesh_mat(i, j) = 6 Then
+                If lAffChThDalle And locMail.Tab_mesh_mat(i, j) = cls_MaillageSlimFloor.MATBETON Then
                     checkMinMax(i, j)
                 End If
 
                 'vide
-                If lAffChThVideOuvert And locMail.Tab_mesh_mat(i, j) = -1 Then
+                If lAffChThVideOuvert And locMail.Tab_mesh_mat(i, j) = cls_MaillageSlimFloor.MATVIDEOUVERT Then
                     checkMinMax(i, j)
                 End If
 
-                'si aucun champs thermiques n'est selectionné, on prend en compte les trois éléments
-                If Not lAffChThPoutre And Not lAffChThDalle And Not lAffChThVideOuvert Then
+                'armature
+                If LaffChThArmature And locMail.Tab_mesh_mat(i, j) = cls_MaillageSlimFloor.MATARMA Then
+                    checkMinMax(i, j)
+                End If
+
+                'si aucun champs thermiques n'est selectionné, on prend en compte les quatres éléments
+                If Not lAffChThPoutre And Not lAffChThDalle And Not lAffChThVideOuvert And Not LaffChThArmature Then
                     checkMinMax(i, j)
                 End If
 
@@ -383,7 +414,6 @@ Public Class Frm_MaillageSlim
             Tab_IntervalleCouleurs(i) = tempInt
         Next
     End Sub
-
 
     Private Sub checkMinMax(iMail As Integer, jMail As Integer)
         If (locMail.Tab_mesh_temp(iMail, jMail) < tempMin) Then
@@ -491,7 +521,7 @@ Public Class Frm_MaillageSlim
         DessinMaillage(e.Graphics, img_Maillage.Width, img_Maillage.Height, MyProjet.Poutres(MyProjet.IndEnCours),
                        locMail, iSelect, jSelect, lContourSeul, lCalculTh)
 
-        'testGradient(e.graphics) 
+        
 
 
     End Sub
@@ -507,7 +537,7 @@ Public Class Frm_MaillageSlim
         }
 
         Dim coulCoins As Color() = {
-            Color.Blue,
+            Color.DarkBlue,
             Color.Blue,
             Color.LightBlue,
             Color.Blue
@@ -542,17 +572,8 @@ Public Class Frm_MaillageSlim
         }
 
         dessinCarreGradient(myGr, pts, coulCoins, Color.Blue)
-        dessinCarreGradient(myGr, pts2, coulCoins2, Color.LightBlue)
-        dessinCarreGradient(myGr, pts3, coulCoins3, Color.LightBlue)
-    End Sub
-    Private Sub dessinCarreGradient(ByRef myGr As Graphics, ByRef pts As Point(), ByRef coulCoins As Color(), coulCentre As Color)
-        Dim gp As New GraphicsPath()
-        gp.AddPolygon(pts)
-        Dim pgb As New PathGradientBrush(gp)
-
-        pgb.CenterColor = coulCentre
-        pgb.SurroundColors = coulCoins
-        myGr.FillPath(pgb, gp)
+        'dessinCarreGradient(myGr, pts2, coulCoins2, Color.LightBlue)
+        'dessinCarreGradient(myGr, pts3, coulCoins3, Color.LightBlue)
     End Sub
     ''----------------------------------------------------------FIN ZONE TEST----------------------------------------------------------
 
@@ -645,7 +666,11 @@ Public Class Frm_MaillageSlim
                 For i = 0 To nbY - 1
                     For j = 0 To nbZ - 1
                         If DoWeDraw(myMail, i, j) Then
-                            Dessine_Maille(myGr, myParAff, myMail, i, j, iSelect, jSelect)   'vérification du matériaux de la maille et de si on l'affiche ou non
+                            If lLissage Then
+                                Dessine_Maille_Lissage(myGr, myParAff, myMail, i, j, iSelect, jSelect)
+                            Else
+                                Dessine_Maille(myGr, myParAff, myMail, i, j, iSelect, jSelect)
+                            End If
                         End If
                     Next
                 Next
@@ -828,6 +853,118 @@ Public Class Frm_MaillageSlim
         'End If
     End Sub
 
+    Private Sub Dessine_Maille_Lissage(ByRef myGr As Graphics, myParaff As Struc_Affichage, myMail As cls_MaillageSlimFloor, iMail As Integer, jMail As Integer,
+                               iSelect As Integer, jSelect As Integer)
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   26/11/25 :  Création - BEB
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Représentation graphique d'une maille du maillage
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration des variables
+
+        Dim myColor As Color
+        Dim x1, y1 As Double
+        Dim x2, y2 As Double
+
+        Dim lDessin As Boolean
+        Dim lSelect As Boolean = (iMail = iSelect) AndAlso (jMail = jSelect)
+        Dim ChMat As String = ""
+        Dim points As Point()
+        Dim couleurs As Color()
+        Dim coulCentre As Color
+        Dim tempCoins As Double()
+
+        '--( Informations de la maille
+        InfoMaille(myMail, iMail, jMail, myColor, lDessin, ChMat)
+
+        coulCentre = myColor
+
+        '--( Coordonnées de la maille
+        x1 = myMail.Tab_mesh_cent_y(iMail, jMail) - myMail.Tab_mesh_y(iMail) / 2
+        x2 = myMail.Tab_mesh_cent_y(iMail, jMail) + myMail.Tab_mesh_y(iMail) / 2
+        y1 = myMail.Tab_mesh_cent_z(iMail, jMail) - myMail.Tab_mesh_z(jMail) / 2
+        y2 = myMail.Tab_mesh_cent_z(iMail, jMail) + myMail.Tab_mesh_z(jMail) / 2
+
+        points = {New Point(x1, y1), New Point(x2, y1), New Point(x2, y2), New Point(x1, y2)}
+
+
+        '--( Calcul des températures des coins
+        tempCoins = CalculTempCoins(myMail, myMail.Tab_mesh_temp(iMail, jMail), iMail, jMail)
+
+        '--( Traduction en couleur
+        couleurs = {AttributionCouleurChTh(tempCoins(0)), AttributionCouleurChTh(tempCoins(1)), AttributionCouleurChTh(tempCoins(2)), AttributionCouleurChTh(tempCoins(3))}
+
+
+        '--( Dessine la maille
+        If lDessin Or lSelect Then _
+        dessinCarreGradient(myGr, points, couleurs, coulCentre)
+
+    End Sub
+
+
+    Private Function CalculTempCoins(myMail As cls_MaillageSlimFloor, tempMaille As Double, iMail As Integer, jMail As Integer) As Double()
+        Dim tempCoins As Double() = New Double(3) {}
+        Dim voisinGauche As Boolean
+        Dim voisinDroite As Boolean
+        Dim voisinHaut As Boolean
+        Dim voisinBas As Boolean
+
+        '   1 ______ 2
+        '    |      |  
+        '    |      |      
+        '    |______| 
+        '   4        3
+
+        'on regarde où il y a une 'frontière' (i.e différence de matériaux ou rien)
+        If (iMail = 0) Or (myMail.Tab_mesh_mat(iMail - 1, jMail) <> myMail.Tab_mesh_mat(iMail, jMail)) Then                             'frontière à gauche
+            voisinGauche = False
+        End If
+        If (jMail = 0) Or (myMail.Tab_mesh_mat(iMail, jMail + 1) <> myMail.Tab_mesh_mat(iMail, jMail)) Then                             'frontière en haut
+            voisinHaut = False
+        End If
+        If (iMail = myMail.nb_cells_y - 1) Or (myMail.Tab_mesh_mat(iMail + 1, jMail) <> myMail.Tab_mesh_mat(iMail, jMail)) Then         'frontière à droite
+            voisinDroite = False
+        End If
+        If (jMail = myMail.nb_cells_z - 1) Or (myMail.Tab_mesh_mat(iMail, jMail + 1) <> myMail.Tab_mesh_mat(iMail, jMail)) Then         'frontière en bas
+            voisinBas = False
+        End If
+
+        'coin 1  = Haut Gauche
+        If voisinHaut And voisinGauche Then
+            'TODO CREER FONCTION QUI FAIT LA MOYENNE, ATTENTION A POUVOIR PRENDRE DEUX & TROIS PARAMETRES
+        End If
+
+
+
+
+        Return tempCoins
+    End Function
+
+    Private Sub dessinCarreGradient(ByRef myGr As Graphics, ByRef pts As Point(), ByRef coulCoins As Color(), coulCentre As Color)
+        Dim gp As New GraphicsPath()
+        gp.AddPolygon(pts)
+        Dim pgb As New PathGradientBrush(gp)
+
+        pgb.CenterColor = coulCentre
+        pgb.SurroundColors = coulCoins
+        myGr.FillPath(pgb, gp)
+    End Sub
+
+
+
+
+
+
+
+
+
+
+
+
+
     Private Sub AfficheInfoMaille(ByRef myGr As Graphics, myParaff As Struc_Affichage, iMail As Integer, jMail As Integer, ChMat As String,
                                   lTemp As Boolean, Theta As Double)
 
@@ -905,11 +1042,11 @@ Public Class Frm_MaillageSlim
 
         'si l'option d'afficher le champ thermique est selectionnée & si le calcul thermique est terminé
         If lAffChTh And lCalculThTermine Then
-
+            Dim tempMaille = myMail.Tab_mesh_temp(iMail, jMail)
             'si l'option vide ouvert est selectionnée
             If lAffChThVideOuvert Then
                 If myMail.Tab_mesh_mat(iMail, jMail) = cls_MaillageSlimFloor.MATVIDEOUVERT Then
-                    myColor = AttributionCouleurChTh(myMail, iMail, jMail)
+                    myColor = AttributionCouleurChTh(tempMaille)
                     lDessin = True
                 End If
             End If
@@ -917,7 +1054,7 @@ Public Class Frm_MaillageSlim
             'si l'option dalle est selectionnée
             If lAffChThDalle Then
                 If myMail.Tab_mesh_mat(iMail, jMail) = cls_MaillageSlimFloor.MATBETON Then
-                    myColor = AttributionCouleurChTh(myMail, iMail, jMail)
+                    myColor = AttributionCouleurChTh(tempMaille)
                 End If
             End If
 
@@ -925,15 +1062,14 @@ Public Class Frm_MaillageSlim
             If lAffChThPoutre Then
                 Dim listeAcier = New List(Of String) From {cls_MaillageSlimFloor.MATACIERSEMI, cls_MaillageSlimFloor.MATACIERSEMS, cls_MaillageSlimFloor.MATACIERAME, cls_MaillageSlimFloor.MATACIERPLAT, cls_MaillageSlimFloor.MATARMA, cls_MaillageSlimFloor.MATACIERSOUD}
                 If listeAcier.Contains(myMail.Tab_mesh_mat(iMail, jMail)) Then
-                    myColor = AttributionCouleurChTh(myMail, iMail, jMail)
+                    myColor = AttributionCouleurChTh(tempMaille)
                 End If
             End If
 
         End If
     End Sub
 
-    Private Function AttributionCouleurChTh(myMail As cls_MaillageSlimFloor, iMail As Integer, jMail As Integer) As Color
-        Dim tempMaille = myMail.Tab_mesh_temp(iMail, jMail)
+    Private Function AttributionCouleurChTh(tempMaille As Double) As Color
         Dim indBorneInf As Integer    'indice borne inférieure
         Dim indBorneSup As Integer    'indice borne supérieure
         Dim tempInf As Double         'température borne inférieure
@@ -1066,34 +1202,27 @@ Public Class Frm_MaillageSlim
 
     ' renvoie un bouléen indiquant si on dessine cette maille, ces contours
     ' i.e est ce que le matériaux de la maille est selectionné comme à afficher ou non
-
-
-    'Rappel des matériaux possible et de leur ind
-    'Public Const MATVIDEFERME As Integer = -2          ' vide d'une cavite fermee (espace entre le mur et le profile metallique d'une poutre de rive)
-    'Public Const MATVIDEOUVERT As Integer = -1         ' vide d'une cavite ouverte
-    'Public Const MATACIERPLAT As Integer = 0           ' acier de construction du plat soudé
-    'Public Const MATACIERSEMI As Integer = 1           ' acier de construction de la semelle inférieure
-    'Public Const MATACIERAME As Integer = 2            ' acier de construction de l'ame
-    'Public Const MATACIERSEMS As Integer = 3           ' acier de construction de la semelle supérieure
-    'Public Const MATACIERSOUD As Integer = 4           ' acier de soudure du plat
-    'Public Const MATARMA As Integer = 5                ' acier d'armature
-    'Public Const MATBETON As Integer = 6               ' béton de la dalle
     Private Function DoWeDraw(mymail As cls_MaillageSlimFloor, iMail As Integer, jmail As Integer) As Boolean
         Dim matMail As Integer = mymail.Tab_mesh_mat(iMail, jmail)
-        Dim indicesPoutre() As Integer = {0, 1, 2, 3, 4, 5}
+        Dim elemPoutre() As Integer = {cls_MaillageSlimFloor.MATACIERPLAT, cls_MaillageSlimFloor.MATACIERSEMI, cls_MaillageSlimFloor.MATACIERAME, cls_MaillageSlimFloor.MATACIERSEMS, cls_MaillageSlimFloor.MATACIERSOUD}
 
         'on affiche la poutre et notre maille est une maille de la poutre
-        If lAffPoutre And indicesPoutre.Contains(matMail) Then
+        If lAffPoutre And elemPoutre.Contains(matMail) Then
             Return True
         End If
 
         'on affiche la dalle et notre maille est une maille de la dalle
-        If lAffDalle And matMail = 6 Then
+        If lAffDalle And matMail = cls_MaillageSlimFloor.MATBETON Then
             Return True
         End If
 
         'on affiche le vide ouvert et notre maille est une maille du vide ouvert
-        If lAffVideOuvert And matMail = -1 Then
+        If lAffVideOuvert And matMail = cls_MaillageSlimFloor.MATVIDEOUVERT Then
+            Return True
+        End If
+
+        'on affiche l'armature et notre maille est une maille de l'armature
+        If LaffArmature And matMail = cls_MaillageSlimFloor.MATARMA Then
             Return True
         End If
 
@@ -1109,7 +1238,6 @@ Public Class Frm_MaillageSlim
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
         Me.Close()
     End Sub
-
 #End Region
 
 End Class

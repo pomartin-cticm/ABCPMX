@@ -1038,33 +1038,33 @@ Partial Class Frm_PMX
         Me.NewToolStripMenuItemN.Image = CType(resources.GetObject("NewToolStripMenuItemN.Image"), System.Drawing.Image)
         Me.NewToolStripMenuItemN.Name = "NewToolStripMenuItemN"
         Me.NewToolStripMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.N), System.Windows.Forms.Keys)
-        Me.NewToolStripMenuItemN.Size = New System.Drawing.Size(290, 22)
+        Me.NewToolStripMenuItemN.Size = New System.Drawing.Size(294, 26)
         Me.NewToolStripMenuItemN.Text = "NewToolStripMenuItemN"
         '
         'ToolStripSeparator12
         '
         Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
-        Me.ToolStripSeparator12.Size = New System.Drawing.Size(287, 6)
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(291, 6)
         '
         'OpenToolStripMenuItemN
         '
         Me.OpenToolStripMenuItemN.Image = CType(resources.GetObject("OpenToolStripMenuItemN.Image"), System.Drawing.Image)
         Me.OpenToolStripMenuItemN.Name = "OpenToolStripMenuItemN"
         Me.OpenToolStripMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.O), System.Windows.Forms.Keys)
-        Me.OpenToolStripMenuItemN.Size = New System.Drawing.Size(290, 22)
+        Me.OpenToolStripMenuItemN.Size = New System.Drawing.Size(294, 26)
         Me.OpenToolStripMenuItemN.Text = "OpenToolStripMenuItemN"
         '
         'ToolStripSeparator13
         '
         Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
-        Me.ToolStripSeparator13.Size = New System.Drawing.Size(287, 6)
+        Me.ToolStripSeparator13.Size = New System.Drawing.Size(291, 6)
         '
         'SaveToolStripMenuItemN
         '
         Me.SaveToolStripMenuItemN.Image = CType(resources.GetObject("SaveToolStripMenuItemN.Image"), System.Drawing.Image)
         Me.SaveToolStripMenuItemN.Name = "SaveToolStripMenuItemN"
         Me.SaveToolStripMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
-        Me.SaveToolStripMenuItemN.Size = New System.Drawing.Size(290, 22)
+        Me.SaveToolStripMenuItemN.Size = New System.Drawing.Size(294, 26)
         Me.SaveToolStripMenuItemN.Text = "SaveToolStripMenuItemN"
         '
         'SaveAsToolStripMenuItemN
@@ -1073,32 +1073,32 @@ Partial Class Frm_PMX
         Me.SaveAsToolStripMenuItemN.Name = "SaveAsToolStripMenuItemN"
         Me.SaveAsToolStripMenuItemN.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Shift) _
             Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
-        Me.SaveAsToolStripMenuItemN.Size = New System.Drawing.Size(290, 22)
+        Me.SaveAsToolStripMenuItemN.Size = New System.Drawing.Size(294, 26)
         Me.SaveAsToolStripMenuItemN.Text = "SaveAsToolStripMenuItemN"
         '
         'ToolStripSeparator14
         '
         Me.ToolStripSeparator14.Name = "ToolStripSeparator14"
-        Me.ToolStripSeparator14.Size = New System.Drawing.Size(287, 6)
+        Me.ToolStripSeparator14.Size = New System.Drawing.Size(291, 6)
         '
         'RecentFileToolStripMenuItemN
         '
         Me.RecentFileToolStripMenuItemN.Image = CType(resources.GetObject("RecentFileToolStripMenuItemN.Image"), System.Drawing.Image)
         Me.RecentFileToolStripMenuItemN.Name = "RecentFileToolStripMenuItemN"
-        Me.RecentFileToolStripMenuItemN.Size = New System.Drawing.Size(290, 22)
+        Me.RecentFileToolStripMenuItemN.Size = New System.Drawing.Size(294, 26)
         Me.RecentFileToolStripMenuItemN.Text = "RecentFileToolStripMenuItemN"
         '
         'ToolStripSeparator17
         '
         Me.ToolStripSeparator17.Name = "ToolStripSeparator17"
-        Me.ToolStripSeparator17.Size = New System.Drawing.Size(287, 6)
+        Me.ToolStripSeparator17.Size = New System.Drawing.Size(291, 6)
         '
         'QuitToolStripMenuItemN
         '
         Me.QuitToolStripMenuItemN.Image = CType(resources.GetObject("QuitToolStripMenuItemN.Image"), System.Drawing.Image)
         Me.QuitToolStripMenuItemN.Name = "QuitToolStripMenuItemN"
         Me.QuitToolStripMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
-        Me.QuitToolStripMenuItemN.Size = New System.Drawing.Size(290, 22)
+        Me.QuitToolStripMenuItemN.Size = New System.Drawing.Size(294, 26)
         Me.QuitToolStripMenuItemN.Text = "QuitToolStripMenuItemN"
         '
         'TSbtn_Edit
