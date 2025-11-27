@@ -1,5 +1,6 @@
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
+Imports PMXMoteur2
 
 #Region "Déclarations générales"
 
@@ -34,15 +35,15 @@ Module Mod_OutilsGraph
         Top
     End Enum
 
-    Sub AddTexte(ByRef MyGr As Graphics, ByVal MyPenBrush As Brush, ByVal Chaine As String, ByVal MyFont As Font, _
-             ByVal xo As Double, ByVal yo As Double, ByVal ParAff As struc_Affichage, _
+    Sub AddTexte(ByRef MyGr As Graphics, ByVal MyPenBrush As Brush, ByVal Chaine As String, ByVal MyFont As Font,
+             ByVal xo As Double, ByVal yo As Double, ByVal ParAff As Struc_Affichage,
              ByVal HAlign As HorizontalAlignment, ByVal VAlign As VerticalAlignement)
         AddTexte(MyGr, MyPenBrush, Chaine, MyFont, xo, yo, ParAff, HAlign, VAlign, False, Pens.Black)
     End Sub
 
-    Sub AddTexte(ByRef MyGr As Graphics, ByVal MyPenBrush As Brush, ByVal Chaine As String, ByVal MyFont As Font, _
-                 ByVal xo As Double, ByVal yo As Double, ByVal ParAff As struc_Affichage, _
-                 ByVal HAlign As HorizontalAlignment, ByVal VAlign As VerticalAlignement, _
+    Sub AddTexte(ByRef MyGr As Graphics, ByVal MyPenBrush As Brush, ByVal Chaine As String, ByVal MyFont As Font,
+                 ByVal xo As Double, ByVal yo As Double, ByVal ParAff As Struc_Affichage,
+                 ByVal HAlign As HorizontalAlignment, ByVal VAlign As VerticalAlignement,
                  ByVal lEntoure As Boolean, ByVal MyPen As Pen)
         '-------------------------------------------------------------------------------------
         '
@@ -63,8 +64,8 @@ Module Mod_OutilsGraph
         '
         '-------------------------------------------------------------------------------------
 
-        Dim xEo As Single = xEcran(ParAff, xo)
-        Dim yEo As Single = yEcran(ParAff, yo)
+        Dim xEo As Single = XEcran(ParAff, xo)
+        Dim yEo As Single = YEcran(ParAff, yo)
         Dim xDecal, yDecal As Single
         Const FLOU As Single = 2
 
@@ -240,8 +241,8 @@ Module Mod_OutilsGraph
     End Sub
 
 
-    Sub AddTexteVertical(ByRef MyGr As Graphics, ByVal MyPenBrush As Brush, ByVal Chaine As String, ByVal MyFont As Font, _
-                         ByVal xo As Double, ByVal yo As Double, ByVal ParAff As struc_Affichage, _
+    Sub AddTexteVertical(ByRef MyGr As Graphics, ByVal MyPenBrush As Brush, ByVal Chaine As String, ByVal MyFont As Font,
+                         ByVal xo As Double, ByVal yo As Double, ByVal ParAff As Struc_Affichage,
                          ByVal HAlign As HorizontalAlignment, ByVal VAlign As VerticalAlignement)
         '-------------------------------------------------------------------------------------
         '
@@ -262,8 +263,8 @@ Module Mod_OutilsGraph
         '
         '-------------------------------------------------------------------------------------
 
-        Dim xEo As Single = xEcran(ParAff, xo)
-        Dim yEo As Single = yEcran(ParAff, yo)
+        Dim xEo As Single = XEcran(ParAff, xo)
+        Dim yEo As Single = YEcran(ParAff, yo)
         Dim xDecal, yDecal As Single
         'Const FLOU As Single = 2
 
@@ -324,9 +325,9 @@ Module Mod_OutilsGraph
 
     End Sub
 
-    Sub AddCercleTronque(ByVal MyGr As Graphics, ByVal MyBrush As Brush, ByVal MyHatch As Brush, _
-                         ByVal xC As Double, ByVal yC As Double, ByVal Diametre As Double, _
-                         ByVal xCoupe As Double, ByVal lGauche As Boolean, ByVal MyParAff As struc_Affichage)
+    Sub AddCercleTronque(ByVal MyGr As Graphics, ByVal MyBrush As Brush, ByVal MyHatch As Brush,
+                         ByVal xC As Double, ByVal yC As Double, ByVal Diametre As Double,
+                         ByVal xCoupe As Double, ByVal lGauche As Boolean, ByVal MyParAff As Struc_Affichage)
         '----------------------------------------------------------------------------------------
         '
         '   02/02/09 :  Création - Version 1.00 Beta 5 - POM
@@ -405,9 +406,9 @@ Module Mod_OutilsGraph
         RemplirZone(MyGr, MyHatch, xPts, yPts, nbPts + 1, MyParAff, True)
     End Sub
 
-    Sub AddCercleTronqueCourbe(ByVal MyGr As Graphics, ByVal MyBrush As Brush, ByVal MyHatch As Brush, _
-                               ByVal AlphaC As Double, ByVal RCourbure As Double, ByVal Diametre As Double, _
-                               ByVal AlphaCoupe As Double, ByVal lGauche As Boolean, ByVal MyParAff As struc_Affichage)
+    Sub AddCercleTronqueCourbe(ByVal MyGr As Graphics, ByVal MyBrush As Brush, ByVal MyHatch As Brush,
+                               ByVal AlphaC As Double, ByVal RCourbure As Double, ByVal Diametre As Double,
+                               ByVal AlphaCoupe As Double, ByVal lGauche As Boolean, ByVal MyParAff As Struc_Affichage)
         '----------------------------------------------------------------------------------------
         '
         '   02/02/09 :  Création - Version 1.00 Beta 5 - POM
@@ -492,7 +493,7 @@ Module Mod_OutilsGraph
     Sub AddCerclePlein(ByRef MyGr As Graphics, ByVal MyBrush As Brush,
                        ByVal xC As Double, ByVal yC As Double,
                        ByVal Diametre As Double,
-                       ByVal ParAff As struc_Affichage, ByVal lContour As Boolean)
+                       ByVal ParAff As Struc_Affichage, ByVal lContour As Boolean)
         '----------------------------------------------------------------------------------------
         '
         '   AffichageOptFeu d'un cercle
@@ -508,8 +509,8 @@ Module Mod_OutilsGraph
         '
         '----------------------------------------------------------------------------------------
 
-        Dim xEo As Single = xEcran(ParAff, xC)
-        Dim yEo As Single = yEcran(ParAff, yC)
+        Dim xEo As Single = XEcran(ParAff, xC)
+        Dim yEo As Single = YEcran(ParAff, yC)
         Dim DiaE As Single = CSng(ParAff.CRed * Diametre)
 
         MyGr.FillEllipse(MyBrush, xEo - DiaE / 2, yEo - DiaE / 2, DiaE, DiaE)
@@ -676,6 +677,7 @@ Module Mod_OutilsGraph
 
         MyBrush.Dispose()
     End Sub
+
     Sub AddRectanglePlein(ByRef MyGr As Graphics,
                           ByVal MyBrush As Brush, ByVal MyPen As Pen,
                           ByVal xo As Double, ByVal yo As Double,
@@ -755,6 +757,63 @@ Module Mod_OutilsGraph
         If lContourDroite Then MyGr.DrawLine(MyPen, xEe, yEo, xEe, yEe)
         If lContourHaut Then MyGr.DrawLine(MyPen, xEo, yEe, xEe, yEe)
         If lContourBas Then MyGr.DrawLine(MyPen, xEo, yEo, xEe, yEo)
+
+    End Sub
+
+    Sub AddRectanglePleinGradientPath(ByRef myGr As Graphics, ByVal ParAff As Struc_Affichage, ByRef points As Double(), ByRef coulCoins As Color(), coulCentre As Color)
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   27/11/25 :  Creation - v1.00
+        '
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   Affichage d'un rectangle au points indiqués dans points, de couleur gradiente, une couleur par coin (définies dans coulCoins) et une couleur centrale
+        '
+        '   Indice des Points et des Couleurs dans pts et coulCoins :
+        '
+        '   0 ______ 1
+        '    |      |  
+        '    |      |      
+        '    |______| 
+        '   3        2
+        '
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   MyGr        [E] :   Graphics recevant le dessin
+        '   ParAff      [E] :   Paramètres de l'affichage
+        '   points      [E] :   Liste de 4 points définissant le rectangle (c.f schéma ci-dessus pour l'ordre)
+        '   coulCoins   [E] :   Liste de 4 couleurs, une par coin (c.f schéma ci-dessus pour l'ordre)
+        '   coulCentre  [E] :   Couleur du centre du rectangle
+        '
+        '----------------------------------------------------------------------------------------------------
+        Dim GrPath As New GraphicsPath()
+
+        Dim pointsEcran As Point() = New Point(3) {}
+        Dim indice As Integer = 0
+        Dim str As String = ""
+        For i = 0 To points.Length - 2
+            pointsEcran(indice) = New Point(XEcran(ParAff, points(i)), YEcran(ParAff, points(i + 1)))
+
+            str += pointsEcran(indice).ToString + " ; "
+
+            i += 1
+            indice += 1
+
+        Next
+
+        GrPath.AddPolygon(pointsEcran)
+        Try
+            Dim PathGradientBr As New PathGradientBrush(GrPath)
+            PathGradientBr.CenterColor = coulCentre
+            PathGradientBr.SurroundColors = coulCoins
+
+            myGr.FillPath(PathGradientBr, GrPath)
+            PathGradientBr.Dispose()
+
+        Catch e As OutOfMemoryException
+            Debug.WriteLine("Erreur dans AddRectanglePleinGradientPath. Probablement un problème sur les points du rectangle")
+            Debug.WriteLine(e.Message)
+        End Try
 
     End Sub
 
@@ -1498,7 +1557,5 @@ Module Mod_OutilsGraph
     End Sub
 
 #End Region
-
-
 
 End Module

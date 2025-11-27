@@ -44,10 +44,7 @@ Public Class Frm_MaillageSlim
     Dim Tab_Couleurs() As Color = {Color.DarkBlue, Color.Blue, Color.MediumTurquoise, Color.LightGreen, Color.Yellow, Color.Orange, Color.Red, Color.DarkRed}
     Dim Tab_IntervalleCouleurs(Tab_Couleurs.Length - 1) As Double
 
-    'tableau de tableau de tableau de taille 4 qui contient les températures aux 4 coins de la maille i,j
-    'dans l'ordre d'indice : coin haut gauche, haut droite, bas droite, bas gauche
-    'utilisé dans le lissage des couleurs
-    Dim listeTempCoins As Double()()() = {New Double()() {New Double(3) {}}}
+
 
 
 #End Region
@@ -179,6 +176,7 @@ Public Class Frm_MaillageSlim
 
     Private Sub chk_Lissage_Couleur_Click(sender As Object, e As EventArgs) Handles chk_Lissage_Couleur.Click
         lLissage = chk_Lissage_Couleur.Checked
+        Me.img_Maillage.Invalidate()
     End Sub
 
     Private Sub chk_ChampTherm_CheckedChanged(sender As Object, e As EventArgs) Handles chk_AffChampTherm.CheckedChanged
@@ -222,49 +220,49 @@ Public Class Frm_MaillageSlim
             Dim TargetStep As Integer = Me.cmb_TempR.SelectedIndex
 
             If TargetStep > 0 Then
-                'CalculThermique(MyProjet.Poutres(MyProjet.IndEnCours), TargetStep - 1)
+                CalculThermique(MyProjet.Poutres(MyProjet.IndEnCours), TargetStep - 1)
 
                 'sur la dalle
-                locMail.Tab_mesh_temp(20, 31) = 1800
-                locMail.Tab_mesh_temp(20, 30) = 1600
-                locMail.Tab_mesh_temp(20, 29) = 1500
-                locMail.Tab_mesh_temp(20, 28) = 1400
-                locMail.Tab_mesh_temp(20, 27) = 1300
-                locMail.Tab_mesh_temp(20, 26) = 1200
-                locMail.Tab_mesh_temp(20, 25) = 1100
-                locMail.Tab_mesh_temp(20, 24) = 1000
-                locMail.Tab_mesh_temp(20, 23) = 750
-                locMail.Tab_mesh_temp(20, 22) = 650
-                locMail.Tab_mesh_temp(20, 21) = 550
-                locMail.Tab_mesh_temp(20, 20) = 450
-                locMail.Tab_mesh_temp(20, 19) = 350
-                locMail.Tab_mesh_temp(20, 18) = 250
-                locMail.Tab_mesh_temp(20, 17) = 150
-                locMail.Tab_mesh_temp(20, 16) = 100
-                locMail.Tab_mesh_temp(20, 15) = 0
+                'locMail.Tab_mesh_temp(20, 31) = 1800
+                'locMail.Tab_mesh_temp(20, 30) = 1600
+                'locMail.Tab_mesh_temp(20, 29) = 1500
+                'locMail.Tab_mesh_temp(20, 28) = 1400
+                'locMail.Tab_mesh_temp(20, 27) = 1300
+                'locMail.Tab_mesh_temp(20, 26) = 1200
+                'locMail.Tab_mesh_temp(20, 25) = 1100
+                'locMail.Tab_mesh_temp(20, 24) = 1000
+                'locMail.Tab_mesh_temp(20, 23) = 750
+                'locMail.Tab_mesh_temp(20, 22) = 650
+                'locMail.Tab_mesh_temp(20, 21) = 550
+                'locMail.Tab_mesh_temp(20, 20) = 450
+                'locMail.Tab_mesh_temp(20, 19) = 350
+                'locMail.Tab_mesh_temp(20, 18) = 250
+                'locMail.Tab_mesh_temp(20, 17) = 150
+                'locMail.Tab_mesh_temp(20, 16) = 100
+                'locMail.Tab_mesh_temp(20, 15) = 0
 
 
                 'sur l'ame
-                locMail.Tab_mesh_temp(50, 60) = 200
-                locMail.Tab_mesh_temp(50, 59) = 190
-                locMail.Tab_mesh_temp(50, 58) = 180
-                locMail.Tab_mesh_temp(50, 57) = 170
-                locMail.Tab_mesh_temp(50, 56) = 160
-                locMail.Tab_mesh_temp(50, 55) = 150
-                locMail.Tab_mesh_temp(50, 54) = 140
-                locMail.Tab_mesh_temp(50, 53) = 130
-                locMail.Tab_mesh_temp(50, 52) = 120
-                locMail.Tab_mesh_temp(50, 51) = 110
-                locMail.Tab_mesh_temp(50, 50) = 100
-                locMail.Tab_mesh_temp(50, 49) = 90
-                locMail.Tab_mesh_temp(50, 48) = 80
-                locMail.Tab_mesh_temp(50, 47) = 70
-                locMail.Tab_mesh_temp(50, 46) = 60
-                locMail.Tab_mesh_temp(50, 45) = 50
-                locMail.Tab_mesh_temp(50, 44) = 40
-                locMail.Tab_mesh_temp(50, 43) = 30
-                locMail.Tab_mesh_temp(50, 42) = 20
-                locMail.Tab_mesh_temp(50, 41) = 10
+                'locMail.Tab_mesh_temp(50, 60) = 200
+                'locMail.Tab_mesh_temp(50, 59) = 190
+                'locMail.Tab_mesh_temp(50, 58) = 180
+                'locMail.Tab_mesh_temp(50, 57) = 170
+                'locMail.Tab_mesh_temp(50, 56) = 160
+                'locMail.Tab_mesh_temp(50, 55) = 150
+                'locMail.Tab_mesh_temp(50, 54) = 140
+                'locMail.Tab_mesh_temp(50, 53) = 130
+                'locMail.Tab_mesh_temp(50, 52) = 120
+                'locMail.Tab_mesh_temp(50, 51) = 110
+                'locMail.Tab_mesh_temp(50, 50) = 100
+                'locMail.Tab_mesh_temp(50, 49) = 90
+                'locMail.Tab_mesh_temp(50, 48) = 80
+                'locMail.Tab_mesh_temp(50, 47) = 70
+                'locMail.Tab_mesh_temp(50, 46) = 60
+                'locMail.Tab_mesh_temp(50, 45) = 50
+                'locMail.Tab_mesh_temp(50, 44) = 40
+                'locMail.Tab_mesh_temp(50, 43) = 30
+                'locMail.Tab_mesh_temp(50, 42) = 20
+                'locMail.Tab_mesh_temp(50, 41) = 10
 
                 lCalculThTermine = True
 
@@ -517,68 +515,10 @@ Public Class Frm_MaillageSlim
 
         'lOKTh = locMail.Tab_mesh_temp IsNot Nothing
 
-
         DessinMaillage(e.Graphics, img_Maillage.Width, img_Maillage.Height, MyProjet.Poutres(MyProjet.IndEnCours),
                        locMail, iSelect, jSelect, lContourSeul, lCalculTh)
 
-        
-
-
     End Sub
-
-
-    ''----------------------------------------------------------ZONE TEST GRADIENT----------------------------------------------------------
-    Private Sub testGradient(ByRef myGr As Graphics)
-        Dim pts As Point() = New Point() {
-            New Point(0, 0),        ' Coin 1
-            New Point(200, 0),      ' Coin 2
-            New Point(200, 200),    ' Coin 3
-            New Point(0, 200)       ' Coin 4
-        }
-
-        Dim coulCoins As Color() = {
-            Color.DarkBlue,
-            Color.Blue,
-            Color.LightBlue,
-            Color.Blue
-        }
-
-        Dim pts2 As Point() = New Point() {
-            New Point(200, 0),        ' Coin 1
-            New Point(400, 0),      ' Coin 2
-            New Point(400, 200),    ' Coin 3
-            New Point(200, 200)       ' Coin 4
-        }
-
-        Dim coulCoins2 As Color() = {
-            Color.Blue,
-            Color.LightBlue,
-            Color.LightGreen,
-            Color.LightBlue
-        }
-
-        Dim pts3 As Point() = New Point() {
-            New Point(0, 200),        ' Coin 1
-            New Point(200, 200),      ' Coin 2
-            New Point(200, 400),    ' Coin 3
-            New Point(0, 400)       ' Coin 4
-        }
-
-        Dim coulCoins3 As Color() = {
-            Color.LightBlue,
-            Color.LightBlue,
-            Color.LightGreen,
-            Color.LightGreen
-        }
-
-        dessinCarreGradient(myGr, pts, coulCoins, Color.Blue)
-        'dessinCarreGradient(myGr, pts2, coulCoins2, Color.LightBlue)
-        'dessinCarreGradient(myGr, pts3, coulCoins3, Color.LightBlue)
-    End Sub
-    ''----------------------------------------------------------FIN ZONE TEST----------------------------------------------------------
-
-
-
 
     Private Sub DessinMaillage(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, myBeam As cls_Poutre, myMail As cls_MaillageSlimFloor,
                                iSelect As Integer, jSelect As Integer, lContourOnly As Boolean, lAffTh As Boolean,
@@ -608,6 +548,7 @@ Public Class Frm_MaillageSlim
         Dim xo, yo As Double
         Dim xe, ye As Double
         Dim myPenR As New Pen(Color.DarkRed, 1)
+
 
         '--( Initialisation 
 
@@ -853,12 +794,12 @@ Public Class Frm_MaillageSlim
         'End If
     End Sub
 
-    Private Sub Dessine_Maille_Lissage(ByRef myGr As Graphics, myParaff As Struc_Affichage, myMail As cls_MaillageSlimFloor, iMail As Integer, jMail As Integer,
-                               iSelect As Integer, jSelect As Integer)
+    Private Sub Dessine_Maille_Lissage(ByRef myGr As Graphics, myParaff As Struc_Affichage, myMail As cls_MaillageSlimFloor,
+                                       iMail As Integer, jMail As Integer, iSelect As Integer, jSelect As Integer)
         '------------------------------------------------------------------------------------------------------------------------------------------------
         '   26/11/25 :  Création - BEB
         '------------------------------------------------------------------------------------------------------------------------------------------------
-        '   Représentation graphique d'une maille du maillage
+        '   Représentation graphique d'une maille du maillage avec lissage des couleurs 
         '------------------------------------------------------------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics
         '------------------------------------------------------------------------------------------------------------------------------------------------
@@ -872,7 +813,9 @@ Public Class Frm_MaillageSlim
         Dim lDessin As Boolean
         Dim lSelect As Boolean = (iMail = iSelect) AndAlso (jMail = jSelect)
         Dim ChMat As String = ""
-        Dim points As Point()
+
+        'Dim points As Point()
+        Dim coordonnees As Double()
         Dim couleurs As Color()
         Dim coulCentre As Color
         Dim tempCoins As Double()
@@ -882,14 +825,21 @@ Public Class Frm_MaillageSlim
 
         coulCentre = myColor
 
+
         '--( Coordonnées de la maille
         x1 = myMail.Tab_mesh_cent_y(iMail, jMail) - myMail.Tab_mesh_y(iMail) / 2
         x2 = myMail.Tab_mesh_cent_y(iMail, jMail) + myMail.Tab_mesh_y(iMail) / 2
         y1 = myMail.Tab_mesh_cent_z(iMail, jMail) - myMail.Tab_mesh_z(jMail) / 2
         y2 = myMail.Tab_mesh_cent_z(iMail, jMail) + myMail.Tab_mesh_z(jMail) / 2
 
-        points = {New Point(x1, y1), New Point(x2, y1), New Point(x2, y2), New Point(x1, y2)}
 
+        'Debug.WriteLine("Maille " & iMail & " ; " & jMail)
+        'Debug.WriteLine(x1 & " , " & y2 & " , " & x2 & " , " & y2 & " , " & x2 & " , " & y1 & " , " & x1 & " , " & y1)
+
+
+
+        'points = {New Point(x1, y2), New Point(x2, y2), New Point(x2, y1), New Point(x1, y1)}
+        coordonnees = {x1, y2, x2, y2, x2, y1, x1, y1}
 
         '--( Calcul des températures des coins
         tempCoins = CalculTempCoins(myMail, myMail.Tab_mesh_temp(iMail, jMail), iMail, jMail)
@@ -897,13 +847,11 @@ Public Class Frm_MaillageSlim
         '--( Traduction en couleur
         couleurs = {AttributionCouleurChTh(tempCoins(0)), AttributionCouleurChTh(tempCoins(1)), AttributionCouleurChTh(tempCoins(2)), AttributionCouleurChTh(tempCoins(3))}
 
-
         '--( Dessine la maille
         If lDessin Or lSelect Then _
-        dessinCarreGradient(myGr, points, couleurs, coulCentre)
+        AddRectanglePleinGradientPath(myGr, myParaff, coordonnees, couleurs, coulCentre)
 
     End Sub
-
 
     Private Function CalculTempCoins(myMail As cls_MaillageSlimFloor, tempMaille As Double, iMail As Integer, jMail As Integer) As Double()
         Dim tempCoins As Double() = New Double(3) {}
@@ -911,6 +859,10 @@ Public Class Frm_MaillageSlim
         Dim voisinDroite As Boolean
         Dim voisinHaut As Boolean
         Dim voisinBas As Boolean
+        Dim voisinGaucheTemp As Double
+        Dim voisinDroiteTemp As Double
+        Dim voisinHautTemp As Double
+        Dim voisinBasTemp As Double
 
         '   1 ______ 2
         '    |      |  
@@ -919,51 +871,118 @@ Public Class Frm_MaillageSlim
         '   4        3
 
         'on regarde où il y a une 'frontière' (i.e différence de matériaux ou rien)
-        If (iMail = 0) Or (myMail.Tab_mesh_mat(iMail - 1, jMail) <> myMail.Tab_mesh_mat(iMail, jMail)) Then                             'frontière à gauche
+        If (iMail = 0) Then                             'frontière à gauche
             voisinGauche = False
+        ElseIf (myMail.Tab_mesh_mat(iMail - 1, jMail) = myMail.Tab_mesh_mat(iMail, jMail)) Then
+            voisinGauche = True
+            voisinGaucheTemp = myMail.Tab_mesh_temp(iMail - 1, jMail)
         End If
-        If (jMail = 0) Or (myMail.Tab_mesh_mat(iMail, jMail + 1) <> myMail.Tab_mesh_mat(iMail, jMail)) Then                             'frontière en haut
-            voisinHaut = False
-        End If
-        If (iMail = myMail.nb_cells_y - 1) Or (myMail.Tab_mesh_mat(iMail + 1, jMail) <> myMail.Tab_mesh_mat(iMail, jMail)) Then         'frontière à droite
-            voisinDroite = False
-        End If
-        If (jMail = myMail.nb_cells_z - 1) Or (myMail.Tab_mesh_mat(iMail, jMail + 1) <> myMail.Tab_mesh_mat(iMail, jMail)) Then         'frontière en bas
+
+
+        If (jMail = 0) Then                             'frontière en bas
             voisinBas = False
+        ElseIf (myMail.Tab_mesh_mat(iMail, jMail - 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
+            voisinBas = True
+            voisinBasTemp = myMail.Tab_mesh_temp(iMail, jMail - 1)
         End If
 
-        'coin 1  = Haut Gauche
+
+        If (iMail = myMail.nb_cells_y - 1) Then         'frontière à droite
+            voisinDroite = False
+        ElseIf (myMail.Tab_mesh_mat(iMail + 1, jMail) = myMail.Tab_mesh_mat(iMail, jMail)) Then
+
+            voisinDroite = True
+            voisinDroiteTemp = myMail.Tab_mesh_temp(iMail + 1, jMail)
+        End If
+
+
+        If (jMail = myMail.nb_cells_z - 1) Then         'frontière en haut
+            voisinHaut = False
+        ElseIf (myMail.Tab_mesh_mat(iMail, jMail + 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
+            voisinHaut = True
+            voisinHautTemp = myMail.Tab_mesh_temp(iMail, jMail + 1)
+        End If
+
+
+        'coin 1 = Haut Gauche
         If voisinHaut And voisinGauche Then
-            'TODO CREER FONCTION QUI FAIT LA MOYENNE, ATTENTION A POUVOIR PRENDRE DEUX & TROIS PARAMETRES
+            'moy(maille, voisinHaut, voisinGauche)
+            tempCoins(0) = Moyenne(tempMaille, voisinHautTemp, voisinGaucheTemp)
+
+        ElseIf voisinHaut And Not voisinGauche Then
+            'moy(maille, voisinHaut)
+            tempCoins(0) = Moyenne(tempMaille, voisinHautTemp)
+
+        ElseIf voisinGauche And Not voisinHaut Then
+            'moy(maille, voisinGauche)
+            tempCoins(0) = Moyenne(tempMaille, voisinGaucheTemp)
+        Else
+            tempCoins(0) = tempMaille
         End If
 
+
+        'coin 2 = Haut Droite
+        If voisinHaut And voisinDroite Then
+            'moy(maille, voisinHaut, voisinDroite)
+            tempCoins(1) = Moyenne(tempMaille, voisinHautTemp, voisinDroiteTemp)
+
+        ElseIf voisinHaut And Not voisinDroite Then
+            'moy(maille, voisinHaut)
+            tempCoins(1) = Moyenne(tempMaille, voisinHautTemp)
+
+        ElseIf voisinDroite And Not voisinHaut Then
+            'moy(maille, voisinDroite)
+            tempCoins(1) = Moyenne(tempMaille, voisinDroiteTemp)
+        Else
+            tempCoins(1) = tempMaille
+        End If
+
+
+        'coin 3 = Bas Droite
+        If voisinBas And voisinDroite Then
+            'moy(maille, voisinBas, voisinDroite)
+            tempCoins(2) = Moyenne(tempMaille, voisinBasTemp, voisinDroiteTemp)
+
+        ElseIf voisinBas And Not voisinDroite Then
+            'moy(maille, voisinBas)
+            tempCoins(2) = Moyenne(tempMaille, voisinBasTemp)
+
+        ElseIf voisinDroite And Not voisinBas Then
+            'moy(maille, voisinDroite)
+            tempCoins(2) = Moyenne(tempMaille, voisinDroiteTemp)
+        Else
+            tempCoins(2) = tempMaille
+        End If
+
+
+        'coin 4 = Bas Gauche
+        If voisinBas And voisinGauche Then
+            'moy(maille, voisinBas, voisinGauche)
+            tempCoins(3) = Moyenne(tempMaille, voisinBasTemp, voisinGaucheTemp)
+
+        ElseIf voisinBas And Not voisinGauche Then
+            'moy(maille, voisinBas)
+            tempCoins(3) = Moyenne(tempMaille, voisinBasTemp)
+
+        ElseIf voisinGauche And Not voisinBas Then
+            'moy(maille, voisinGauche)
+            tempCoins(3) = Moyenne(tempMaille, voisinGaucheTemp)
+        Else
+            tempCoins(3) = tempMaille
+        End If
 
 
 
         Return tempCoins
     End Function
 
-    Private Sub dessinCarreGradient(ByRef myGr As Graphics, ByRef pts As Point(), ByRef coulCoins As Color(), coulCentre As Color)
-        Dim gp As New GraphicsPath()
-        gp.AddPolygon(pts)
-        Dim pgb As New PathGradientBrush(gp)
-
-        pgb.CenterColor = coulCentre
-        pgb.SurroundColors = coulCoins
-        myGr.FillPath(pgb, gp)
-    End Sub
-
-
-
-
-
-
-
-
-
-
-
-
+    Private Function Moyenne(nb1 As Double, nb2 As Double, Optional nb3 As Double = -1) As Double
+        If nb3 = -1 Then
+            Return (nb1 + nb2) / 2
+        Else
+            Return (nb1 + nb2 + nb3) / 3
+        End If
+    End Function
 
     Private Sub AfficheInfoMaille(ByRef myGr As Graphics, myParaff As Struc_Affichage, iMail As Integer, jMail As Integer, ChMat As String,
                                   lTemp As Boolean, Theta As Double)
@@ -1046,6 +1065,7 @@ Public Class Frm_MaillageSlim
             'si l'option vide ouvert est selectionnée
             If lAffChThVideOuvert Then
                 If myMail.Tab_mesh_mat(iMail, jMail) = cls_MaillageSlimFloor.MATVIDEOUVERT Then
+
                     myColor = AttributionCouleurChTh(tempMaille)
                     lDessin = True
                 End If
@@ -1060,6 +1080,11 @@ Public Class Frm_MaillageSlim
 
             'si l'option Poutre est selectionnée
             If lAffChThPoutre Then
+
+                If (iMail = 51 And jMail = 1) Then
+                    Dim i As Integer = 0
+                End If
+
                 Dim listeAcier = New List(Of String) From {cls_MaillageSlimFloor.MATACIERSEMI, cls_MaillageSlimFloor.MATACIERSEMS, cls_MaillageSlimFloor.MATACIERAME, cls_MaillageSlimFloor.MATACIERPLAT, cls_MaillageSlimFloor.MATARMA, cls_MaillageSlimFloor.MATACIERSOUD}
                 If listeAcier.Contains(myMail.Tab_mesh_mat(iMail, jMail)) Then
                     myColor = AttributionCouleurChTh(tempMaille)
@@ -1099,21 +1124,21 @@ Public Class Frm_MaillageSlim
 
         Dim r, g, b
         If coulInf.R > coulSup.R Then
-            r = coulInf.R
+            r = coulSup.R + (1 - coefCouleur) * (coulInf.R - coulSup.R)
         Else
             r = coulInf.R + coefCouleur * (coulSup.R - coulInf.R)
         End If
 
 
         If coulInf.G > coulSup.G Then
-            g = coulInf.G
+            g = coulSup.G + (1 - coefCouleur) * (coulInf.G - coulSup.G)
         Else
             g = coulInf.G + coefCouleur * (coulSup.G - coulInf.G)
         End If
 
 
         If coulInf.B > coulSup.B Then
-            b = coulInf.B
+            b = coulSup.B + (1 - coefCouleur) * (coulInf.B - coulSup.B)
         Else
             b = coulInf.B + coefCouleur * (coulSup.B - coulInf.B)
         End If
@@ -1238,6 +1263,7 @@ Public Class Frm_MaillageSlim
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
         Me.Close()
     End Sub
+
 #End Region
 
 End Class

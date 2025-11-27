@@ -32,6 +32,15 @@ Partial Class Frm_MaillageSlim
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Maillage = New System.Windows.Forms.Label()
         Me.pan_Maillage = New System.Windows.Forms.Panel()
+        Me.chk_EchelleTempPerso = New System.Windows.Forms.CheckBox()
+        Me.chk_Aff2D = New System.Windows.Forms.CheckBox()
+        Me.lbl_arma = New System.Windows.Forms.Label()
+        Me.lbl_vide = New System.Windows.Forms.Label()
+        Me.lbl_dalle = New System.Windows.Forms.Label()
+        Me.lbl_poutre = New System.Windows.Forms.Label()
+        Me.chk_AffChThArmature = New System.Windows.Forms.CheckBox()
+        Me.chk_AffArmature = New System.Windows.Forms.CheckBox()
+        Me.chk_Lissage_Couleur = New System.Windows.Forms.CheckBox()
         Me.lbl_ch_th = New System.Windows.Forms.Label()
         Me.lbl_elements = New System.Windows.Forms.Label()
         Me.chk_AffVide = New System.Windows.Forms.CheckBox()
@@ -54,9 +63,6 @@ Partial Class Frm_MaillageSlim
         Me.tlp_Images = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Legende = New System.Windows.Forms.PictureBox()
         Me.img_Maillage = New System.Windows.Forms.PictureBox()
-        Me.chk_Lissage_Couleur = New System.Windows.Forms.CheckBox()
-        Me.chk_AffArmature = New System.Windows.Forms.CheckBox()
-        Me.chk_AffChThArmature = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -196,6 +202,12 @@ Partial Class Frm_MaillageSlim
         '
         Me.pan_Maillage.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Maillage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Maillage.Controls.Add(Me.chk_EchelleTempPerso)
+        Me.pan_Maillage.Controls.Add(Me.chk_Aff2D)
+        Me.pan_Maillage.Controls.Add(Me.lbl_arma)
+        Me.pan_Maillage.Controls.Add(Me.lbl_vide)
+        Me.pan_Maillage.Controls.Add(Me.lbl_dalle)
+        Me.pan_Maillage.Controls.Add(Me.lbl_poutre)
         Me.pan_Maillage.Controls.Add(Me.chk_AffChThArmature)
         Me.pan_Maillage.Controls.Add(Me.chk_AffArmature)
         Me.pan_Maillage.Controls.Add(Me.chk_Lissage_Couleur)
@@ -224,10 +236,96 @@ Partial Class Frm_MaillageSlim
         Me.pan_Maillage.Size = New System.Drawing.Size(299, 399)
         Me.pan_Maillage.TabIndex = 1
         '
+        'chk_EchelleTempPerso
+        '
+        Me.chk_EchelleTempPerso.AutoSize = True
+        Me.chk_EchelleTempPerso.Location = New System.Drawing.Point(28, 238)
+        Me.chk_EchelleTempPerso.Name = "chk_EchelleTempPerso"
+        Me.chk_EchelleTempPerso.Size = New System.Drawing.Size(139, 17)
+        Me.chk_EchelleTempPerso.TabIndex = 145
+        Me.chk_EchelleTempPerso.Text = "chk_EchelleTempPerso"
+        Me.chk_EchelleTempPerso.UseVisualStyleBackColor = True
+        '
+        'chk_Aff2D
+        '
+        Me.chk_Aff2D.AutoSize = True
+        Me.chk_Aff2D.Location = New System.Drawing.Point(27, 261)
+        Me.chk_Aff2D.Name = "chk_Aff2D"
+        Me.chk_Aff2D.Size = New System.Drawing.Size(77, 17)
+        Me.chk_Aff2D.TabIndex = 144
+        Me.chk_Aff2D.Text = "chk_Aff2D"
+        Me.chk_Aff2D.UseVisualStyleBackColor = True
+        '
+        'lbl_arma
+        '
+        Me.lbl_arma.AutoSize = True
+        Me.lbl_arma.Location = New System.Drawing.Point(33, 368)
+        Me.lbl_arma.Name = "lbl_arma"
+        Me.lbl_arma.Size = New System.Drawing.Size(46, 13)
+        Me.lbl_arma.TabIndex = 143
+        Me.lbl_arma.Text = "lbl_arma"
+        '
+        'lbl_vide
+        '
+        Me.lbl_vide.AutoSize = True
+        Me.lbl_vide.Location = New System.Drawing.Point(33, 345)
+        Me.lbl_vide.Name = "lbl_vide"
+        Me.lbl_vide.Size = New System.Drawing.Size(43, 13)
+        Me.lbl_vide.TabIndex = 142
+        Me.lbl_vide.Text = "lbl_vide"
+        '
+        'lbl_dalle
+        '
+        Me.lbl_dalle.AutoSize = True
+        Me.lbl_dalle.Location = New System.Drawing.Point(33, 322)
+        Me.lbl_dalle.Name = "lbl_dalle"
+        Me.lbl_dalle.Size = New System.Drawing.Size(45, 13)
+        Me.lbl_dalle.TabIndex = 141
+        Me.lbl_dalle.Text = "lbl_dalle"
+        '
+        'lbl_poutre
+        '
+        Me.lbl_poutre.AutoSize = True
+        Me.lbl_poutre.Location = New System.Drawing.Point(33, 299)
+        Me.lbl_poutre.Name = "lbl_poutre"
+        Me.lbl_poutre.Size = New System.Drawing.Size(53, 13)
+        Me.lbl_poutre.TabIndex = 140
+        Me.lbl_poutre.Text = "lbl_poutre"
+        '
+        'chk_AffChThArmature
+        '
+        Me.chk_AffChThArmature.AutoSize = True
+        Me.chk_AffChThArmature.Location = New System.Drawing.Point(232, 368)
+        Me.chk_AffChThArmature.Name = "chk_AffChThArmature"
+        Me.chk_AffChThArmature.Size = New System.Drawing.Size(131, 17)
+        Me.chk_AffChThArmature.TabIndex = 139
+        Me.chk_AffChThArmature.Text = "chk_AffChThArmature"
+        Me.chk_AffChThArmature.UseVisualStyleBackColor = True
+        '
+        'chk_AffArmature
+        '
+        Me.chk_AffArmature.AutoSize = True
+        Me.chk_AffArmature.Location = New System.Drawing.Point(132, 368)
+        Me.chk_AffArmature.Name = "chk_AffArmature"
+        Me.chk_AffArmature.Size = New System.Drawing.Size(105, 17)
+        Me.chk_AffArmature.TabIndex = 138
+        Me.chk_AffArmature.Text = "chk_AffArmature"
+        Me.chk_AffArmature.UseVisualStyleBackColor = True
+        '
+        'chk_Lissage_Couleur
+        '
+        Me.chk_Lissage_Couleur.AutoSize = True
+        Me.chk_Lissage_Couleur.Location = New System.Drawing.Point(28, 215)
+        Me.chk_Lissage_Couleur.Name = "chk_Lissage_Couleur"
+        Me.chk_Lissage_Couleur.Size = New System.Drawing.Size(128, 17)
+        Me.chk_Lissage_Couleur.TabIndex = 137
+        Me.chk_Lissage_Couleur.Text = "chk_Lissage_Couleur"
+        Me.chk_Lissage_Couleur.UseVisualStyleBackColor = True
+        '
         'lbl_ch_th
         '
         Me.lbl_ch_th.AutoSize = True
-        Me.lbl_ch_th.Location = New System.Drawing.Point(139, 243)
+        Me.lbl_ch_th.Location = New System.Drawing.Point(195, 283)
         Me.lbl_ch_th.Name = "lbl_ch_th"
         Me.lbl_ch_th.Size = New System.Drawing.Size(99, 13)
         Me.lbl_ch_th.TabIndex = 136
@@ -236,7 +334,7 @@ Partial Class Frm_MaillageSlim
         'lbl_elements
         '
         Me.lbl_elements.AutoSize = True
-        Me.lbl_elements.Location = New System.Drawing.Point(25, 243)
+        Me.lbl_elements.Location = New System.Drawing.Point(114, 283)
         Me.lbl_elements.Name = "lbl_elements"
         Me.lbl_elements.Size = New System.Drawing.Size(50, 13)
         Me.lbl_elements.TabIndex = 135
@@ -245,7 +343,7 @@ Partial Class Frm_MaillageSlim
         'chk_AffVide
         '
         Me.chk_AffVide.AutoSize = True
-        Me.chk_AffVide.Location = New System.Drawing.Point(28, 305)
+        Me.chk_AffVide.Location = New System.Drawing.Point(132, 345)
         Me.chk_AffVide.Name = "chk_AffVide"
         Me.chk_AffVide.Size = New System.Drawing.Size(84, 17)
         Me.chk_AffVide.TabIndex = 134
@@ -255,7 +353,7 @@ Partial Class Frm_MaillageSlim
         'chk_AffDalle
         '
         Me.chk_AffDalle.AutoSize = True
-        Me.chk_AffDalle.Location = New System.Drawing.Point(28, 282)
+        Me.chk_AffDalle.Location = New System.Drawing.Point(132, 322)
         Me.chk_AffDalle.Name = "chk_AffDalle"
         Me.chk_AffDalle.Size = New System.Drawing.Size(87, 17)
         Me.chk_AffDalle.TabIndex = 133
@@ -265,7 +363,7 @@ Partial Class Frm_MaillageSlim
         'chk_AffPoutre
         '
         Me.chk_AffPoutre.AutoSize = True
-        Me.chk_AffPoutre.Location = New System.Drawing.Point(28, 259)
+        Me.chk_AffPoutre.Location = New System.Drawing.Point(132, 299)
         Me.chk_AffPoutre.Name = "chk_AffPoutre"
         Me.chk_AffPoutre.Size = New System.Drawing.Size(94, 17)
         Me.chk_AffPoutre.TabIndex = 132
@@ -275,7 +373,7 @@ Partial Class Frm_MaillageSlim
         'chk_AffChThVideOuvert
         '
         Me.chk_AffChThVideOuvert.AutoSize = True
-        Me.chk_AffChThVideOuvert.Location = New System.Drawing.Point(173, 305)
+        Me.chk_AffChThVideOuvert.Location = New System.Drawing.Point(232, 345)
         Me.chk_AffChThVideOuvert.Name = "chk_AffChThVideOuvert"
         Me.chk_AffChThVideOuvert.Size = New System.Drawing.Size(142, 17)
         Me.chk_AffChThVideOuvert.TabIndex = 131
@@ -285,7 +383,7 @@ Partial Class Frm_MaillageSlim
         'chk_AffChThDalle
         '
         Me.chk_AffChThDalle.AutoSize = True
-        Me.chk_AffChThDalle.Location = New System.Drawing.Point(173, 282)
+        Me.chk_AffChThDalle.Location = New System.Drawing.Point(232, 322)
         Me.chk_AffChThDalle.Name = "chk_AffChThDalle"
         Me.chk_AffChThDalle.Size = New System.Drawing.Size(113, 17)
         Me.chk_AffChThDalle.TabIndex = 130
@@ -296,7 +394,7 @@ Partial Class Frm_MaillageSlim
         '
         Me.chk_AffChThPoutre.AutoSize = True
         Me.chk_AffChThPoutre.Enabled = False
-        Me.chk_AffChThPoutre.Location = New System.Drawing.Point(173, 259)
+        Me.chk_AffChThPoutre.Location = New System.Drawing.Point(232, 299)
         Me.chk_AffChThPoutre.Name = "chk_AffChThPoutre"
         Me.chk_AffChThPoutre.Size = New System.Drawing.Size(120, 17)
         Me.chk_AffChThPoutre.TabIndex = 129
@@ -444,36 +542,6 @@ Partial Class Frm_MaillageSlim
         Me.img_Maillage.TabIndex = 1
         Me.img_Maillage.TabStop = False
         '
-        'chk_Lissage_Couleur
-        '
-        Me.chk_Lissage_Couleur.AutoSize = True
-        Me.chk_Lissage_Couleur.Location = New System.Drawing.Point(28, 215)
-        Me.chk_Lissage_Couleur.Name = "chk_Lissage_Couleur"
-        Me.chk_Lissage_Couleur.Size = New System.Drawing.Size(128, 17)
-        Me.chk_Lissage_Couleur.TabIndex = 137
-        Me.chk_Lissage_Couleur.Text = "chk_Lissage_Couleur"
-        Me.chk_Lissage_Couleur.UseVisualStyleBackColor = True
-        '
-        'chk_AffArmature
-        '
-        Me.chk_AffArmature.AutoSize = True
-        Me.chk_AffArmature.Location = New System.Drawing.Point(28, 328)
-        Me.chk_AffArmature.Name = "chk_AffArmature"
-        Me.chk_AffArmature.Size = New System.Drawing.Size(105, 17)
-        Me.chk_AffArmature.TabIndex = 138
-        Me.chk_AffArmature.Text = "chk_AffArmature"
-        Me.chk_AffArmature.UseVisualStyleBackColor = True
-        '
-        'chk_AffChThArmature
-        '
-        Me.chk_AffChThArmature.AutoSize = True
-        Me.chk_AffChThArmature.Location = New System.Drawing.Point(173, 328)
-        Me.chk_AffChThArmature.Name = "chk_AffChThArmature"
-        Me.chk_AffChThArmature.Size = New System.Drawing.Size(131, 17)
-        Me.chk_AffChThArmature.TabIndex = 139
-        Me.chk_AffChThArmature.Text = "chk_AffChThArmature"
-        Me.chk_AffChThArmature.UseVisualStyleBackColor = True
-        '
         'Frm_MaillageSlim
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -538,4 +606,10 @@ Partial Class Frm_MaillageSlim
     Friend WithEvents chk_Lissage_Couleur As CheckBox
     Friend WithEvents chk_AffChThArmature As CheckBox
     Friend WithEvents chk_AffArmature As CheckBox
+    Friend WithEvents lbl_poutre As Label
+    Friend WithEvents lbl_dalle As Label
+    Friend WithEvents chk_EchelleTempPerso As CheckBox
+    Friend WithEvents chk_Aff2D As CheckBox
+    Friend WithEvents lbl_arma As Label
+    Friend WithEvents lbl_vide As Label
 End Class
