@@ -25,18 +25,20 @@ Public Class Frm_MaillageSlim
     Dim lContourSeul As Boolean = False
     Dim lCalculTh As Boolean = False            ' Indique si on réalise le calcul thermique
     Dim lCalculThTermine As Boolean = False     ' Indique si le calcul thermique est terminé
+
+    Dim lAffChTh As Boolean = True              ' Indique si on affiche le champ thermique
     Dim lLissage As Boolean = False             ' Indique si le lissage de couleur est réalisé
+    Dim lEchelleTempPerso As Boolean = False    ' Indique si on utilise une échelle de température personnelle pour les couleurs (val min/max trouvée automatiquement ou données)
+    Dim lAff2DUniquement As Boolean = False     ' Indique si on affiche uniquement les mailles calculées en 2D (les mailles centrales)
 
     Dim lAffPoutre As Boolean = True            ' Indique si on affiche la poutre
     Dim lAffDalle As Boolean = True             ' Indique si on affiche la dalle
-    Dim lAffVideOuvert As Boolean = True        ' Indique si on affiche le vide ouvert = air pas enfermé
     Dim LaffArmature As Boolean = True          ' Indique si on affiche l'armature
 
-    Dim lAffChTh As Boolean = True              ' Indique si on affiche le champ thermique
     Dim lAffChThPoutre As Boolean = True        ' Indique si on affiche le champ thermique de la poutre
     Dim lAffChThDalle As Boolean = True         ' Indique si on affiche le champ thermique de la dalle
     Dim lAffChThVideOuvert As Boolean = True    ' Indique si on affiche le champ thermique du vide ouvert = air pas enfermé
-    Dim LaffChThArmature As Boolean = True          ' Indique si on affiche le champ thermique de l'armature
+    Dim LaffChThArmature As Boolean = True      ' Indique si on affiche le champ thermique de l'armature
 
     Dim tempMin As Double                       'température minimale sur toutes les mailles
     Dim tempMax As Double                       'température maximale sur toutes les mailles
@@ -78,10 +80,18 @@ Public Class Frm_MaillageSlim
         Me.lbl_NbMailles.Text = "Nombre de mailles :"
         Me.chk_AffChampTherm.Text = "Afficher le champ thermique"
         Me.chk_Lissage_Couleur.Text = "Lissage"
-        Me.chk_AffPoutre.Text = "Poutre"
-        Me.chk_AffDalle.Text = "Dalle"
-        Me.chk_AffVide.Text = "Vide ouvert"
-        Me.chk_AffArmature.Text = "Armature"
+        Me.chk_EchelleTempPerso.Text = "Utiliser une échelle de température perso"
+        Me.chk_Aff2D.Text = "Afficher uniquement les éléments 2D"
+
+        Me.lbl_poutre.Text = "Poutre"
+        Me.lbl_dalle.Text = "Dalle"
+        Me.lbl_vide.Text = "Vide ouvert"
+        Me.lbl_arma.Text = "Armature"
+
+        Me.chk_AffPoutre.Text = ""
+        Me.chk_AffDalle.Text = ""
+        Me.chk_AffArmature.Text = ""
+
         Me.chk_AffChThPoutre.Text = ""
         Me.chk_AffChThDalle.Text = ""
         Me.chk_AffChThVideOuvert.Text = ""
@@ -174,23 +184,24 @@ Public Class Frm_MaillageSlim
         Me.img_Maillage.Invalidate()
     End Sub
 
-    Private Sub chk_Lissage_Couleur_Click(sender As Object, e As EventArgs) Handles chk_Lissage_Couleur.Click
-        lLissage = chk_Lissage_Couleur.Checked
-        Me.img_Maillage.Invalidate()
-    End Sub
-
     Private Sub chk_ChampTherm_CheckedChanged(sender As Object, e As EventArgs) Handles chk_AffChampTherm.CheckedChanged
         lAffChTh = Me.chk_AffChampTherm.Checked
-        chk_Lissage_Couleur.Enabled = Me.chk_AffChampTherm.Checked
+        MAJI_chk_ChThOptions()
         MAJI_chk_AfficherElements()
         MAJI_Images()
         Me.img_Maillage.Invalidate()
     End Sub
 
-    Private Sub chk_AfficherElementsCheckedChanged(sender As Object, e As EventArgs) Handles chk_AffVide.CheckedChanged, chk_AffPoutre.CheckedChanged, chk_AffDalle.CheckedChanged, chk_AffArmature.CheckedChanged
+    Private Sub chk_ChThOptions_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Lissage_Couleur.CheckedChanged, chk_EchelleTempPerso.CheckedChanged, chk_Aff2D.CheckedChanged
+        lLissage = chk_Lissage_Couleur.Checked
+        lEchelleTempPerso = chk_EchelleTempPerso.Checked
+        lAff2DUniquement = chk_Aff2D.Checked
+        Me.img_Maillage.Invalidate()
+    End Sub
+
+    Private Sub chk_AfficherElementsCheckedChanged(sender As Object, e As EventArgs) Handles chk_AffPoutre.CheckedChanged, chk_AffDalle.CheckedChanged, chk_AffArmature.CheckedChanged
         lAffPoutre = chk_AffPoutre.Checked
         lAffDalle = chk_AffDalle.Checked
-        lAffVideOuvert = chk_AffVide.Checked
         LaffArmature = chk_AffArmature.Checked
         MAJI_chk_ChampTherm_Autres()
         Me.img_Maillage.Invalidate()
@@ -220,49 +231,50 @@ Public Class Frm_MaillageSlim
             Dim TargetStep As Integer = Me.cmb_TempR.SelectedIndex
 
             If TargetStep > 0 Then
-                CalculThermique(MyProjet.Poutres(MyProjet.IndEnCours), TargetStep - 1)
 
                 'sur la dalle
-                'locMail.Tab_mesh_temp(20, 31) = 1800
-                'locMail.Tab_mesh_temp(20, 30) = 1600
-                'locMail.Tab_mesh_temp(20, 29) = 1500
-                'locMail.Tab_mesh_temp(20, 28) = 1400
-                'locMail.Tab_mesh_temp(20, 27) = 1300
-                'locMail.Tab_mesh_temp(20, 26) = 1200
-                'locMail.Tab_mesh_temp(20, 25) = 1100
-                'locMail.Tab_mesh_temp(20, 24) = 1000
-                'locMail.Tab_mesh_temp(20, 23) = 750
-                'locMail.Tab_mesh_temp(20, 22) = 650
-                'locMail.Tab_mesh_temp(20, 21) = 550
-                'locMail.Tab_mesh_temp(20, 20) = 450
-                'locMail.Tab_mesh_temp(20, 19) = 350
-                'locMail.Tab_mesh_temp(20, 18) = 250
-                'locMail.Tab_mesh_temp(20, 17) = 150
-                'locMail.Tab_mesh_temp(20, 16) = 100
-                'locMail.Tab_mesh_temp(20, 15) = 0
+                locMail.Tab_mesh_temp(20, 31) = 1800
+                locMail.Tab_mesh_temp(20, 30) = 1600
+                locMail.Tab_mesh_temp(20, 29) = 1500
+                locMail.Tab_mesh_temp(20, 28) = 1400
+                locMail.Tab_mesh_temp(20, 27) = 1300
+                locMail.Tab_mesh_temp(20, 26) = 1200
+                locMail.Tab_mesh_temp(20, 25) = 1100
+                locMail.Tab_mesh_temp(20, 24) = 1000
+                locMail.Tab_mesh_temp(20, 23) = 750
+                locMail.Tab_mesh_temp(20, 22) = 650
+                locMail.Tab_mesh_temp(20, 21) = 550
+                locMail.Tab_mesh_temp(20, 20) = 450
+                locMail.Tab_mesh_temp(20, 19) = 350
+                locMail.Tab_mesh_temp(20, 18) = 250
+                locMail.Tab_mesh_temp(20, 17) = 150
+                locMail.Tab_mesh_temp(20, 16) = 100
+                locMail.Tab_mesh_temp(20, 15) = 0
 
 
                 'sur l'ame
-                'locMail.Tab_mesh_temp(50, 60) = 200
-                'locMail.Tab_mesh_temp(50, 59) = 190
-                'locMail.Tab_mesh_temp(50, 58) = 180
-                'locMail.Tab_mesh_temp(50, 57) = 170
-                'locMail.Tab_mesh_temp(50, 56) = 160
-                'locMail.Tab_mesh_temp(50, 55) = 150
-                'locMail.Tab_mesh_temp(50, 54) = 140
-                'locMail.Tab_mesh_temp(50, 53) = 130
-                'locMail.Tab_mesh_temp(50, 52) = 120
-                'locMail.Tab_mesh_temp(50, 51) = 110
-                'locMail.Tab_mesh_temp(50, 50) = 100
-                'locMail.Tab_mesh_temp(50, 49) = 90
-                'locMail.Tab_mesh_temp(50, 48) = 80
-                'locMail.Tab_mesh_temp(50, 47) = 70
-                'locMail.Tab_mesh_temp(50, 46) = 60
-                'locMail.Tab_mesh_temp(50, 45) = 50
-                'locMail.Tab_mesh_temp(50, 44) = 40
-                'locMail.Tab_mesh_temp(50, 43) = 30
-                'locMail.Tab_mesh_temp(50, 42) = 20
-                'locMail.Tab_mesh_temp(50, 41) = 10
+                locMail.Tab_mesh_temp(50, 60) = 200
+                locMail.Tab_mesh_temp(50, 59) = 190
+                locMail.Tab_mesh_temp(50, 58) = 180
+                locMail.Tab_mesh_temp(50, 57) = 170
+                locMail.Tab_mesh_temp(50, 56) = 160
+                locMail.Tab_mesh_temp(50, 55) = 150
+                locMail.Tab_mesh_temp(50, 54) = 140
+                locMail.Tab_mesh_temp(50, 53) = 130
+                locMail.Tab_mesh_temp(50, 52) = 120
+                locMail.Tab_mesh_temp(50, 51) = 110
+                locMail.Tab_mesh_temp(50, 50) = 100
+                locMail.Tab_mesh_temp(50, 49) = 90
+                locMail.Tab_mesh_temp(50, 48) = 80
+                locMail.Tab_mesh_temp(50, 47) = 70
+                locMail.Tab_mesh_temp(50, 46) = 60
+                locMail.Tab_mesh_temp(50, 45) = 50
+                locMail.Tab_mesh_temp(50, 44) = 40
+                locMail.Tab_mesh_temp(50, 43) = 30
+                locMail.Tab_mesh_temp(50, 42) = 20
+                locMail.Tab_mesh_temp(50, 41) = 10
+
+                CalculThermique(MyProjet.Poutres(MyProjet.IndEnCours), TargetStep - 1)
 
                 lCalculThTermine = True
 
@@ -327,21 +339,28 @@ Public Class Frm_MaillageSlim
         chk_AffChampTherm.Checked = chk_CalculTherm.Checked And Me.cmb_TempR.SelectedIndex > 0
     End Sub
 
+    Private Sub MAJI_chk_ChThOptions()
+        chk_Lissage_Couleur.Enabled = Me.chk_AffChampTherm.Checked
+        chk_EchelleTempPerso.Enabled = Me.chk_AffChampTherm.Checked
+        chk_Aff2D.Enabled = Me.chk_AffChampTherm.Checked
+    End Sub
+
     Private Sub MAJI_chk_AfficherElements()
         lbl_elements.Enabled = lAffChTh
         lbl_ch_th.Enabled = lAffChTh
+        lbl_poutre.Enabled = lAffChTh
+        lbl_dalle.Enabled = lAffChTh
+        lbl_vide.Enabled = lAffChTh
+        lbl_arma.Enabled = lAffChTh
 
         chk_AffPoutre.Enabled = lAffChTh
-        chk_AffPoutre.Checked = lAffChTh
+        chk_AffPoutre.Checked = lAffChThPoutre
 
         chk_AffDalle.Enabled = lAffChTh
-        chk_AffDalle.Checked = lAffChTh
-
-        chk_AffVide.Enabled = lAffChTh
-        chk_AffVide.Checked = False
+        chk_AffDalle.Checked = lAffDalle
 
         chk_AffArmature.Enabled = lAffChTh
-        chk_AffArmature.Checked = lAffChTh
+        chk_AffArmature.Checked = LaffArmature
 
         MAJI_chk_ChampTherm_Autres()
 
@@ -350,17 +369,17 @@ Public Class Frm_MaillageSlim
     Private Sub MAJI_chk_ChampTherm_Autres()
         'si un élément n'est pas affiché on ne peut afficher son champ thermique, donc on désactive le btn et on le décoche
 
-        chk_AffChThPoutre.Enabled = chk_AffPoutre.Checked
-        chk_AffChThPoutre.Checked = chk_AffPoutre.Checked
+        chk_AffChThPoutre.Enabled = lAffChTh And chk_AffPoutre.Checked
+        chk_AffChThPoutre.Checked = lAffChThPoutre
 
-        chk_AffChThDalle.Enabled = chk_AffDalle.Checked
-        chk_AffChThDalle.Checked = chk_AffDalle.Checked
+        chk_AffChThDalle.Enabled = lAffChTh And chk_AffDalle.Checked
+        chk_AffChThDalle.Checked = lAffChThDalle
 
-        chk_AffChThVideOuvert.Enabled = chk_AffVide.Checked
-        chk_AffChThVideOuvert.Checked = chk_AffVide.Checked
+        chk_AffChThVideOuvert.Enabled = lAffChTh And lAffChTh
+        chk_AffChThVideOuvert.Checked = lAffChThVideOuvert
 
-        chk_AffChThArmature.Enabled = chk_AffArmature.Checked
-        chk_AffChThArmature.Checked = chk_AffArmature.Checked
+        chk_AffChThArmature.Enabled = lAffChTh And chk_AffArmature.Checked
+        chk_AffChThArmature.Checked = LaffChThArmature
 
     End Sub
 
@@ -625,6 +644,14 @@ Public Class Frm_MaillageSlim
                 Next
             Next
         End If
+
+
+        '--( Affichage températures des gazs chaud si l'option est activée
+        If lAffChThVideOuvert Then
+            IndiquerTempGaz(myGr, myParAff, myMail, img_Legende.Width, img_Legende.Height)
+        End If
+
+
 
         '--( Affichage de la maille sélectionnée
 
@@ -984,6 +1011,37 @@ Public Class Frm_MaillageSlim
         End If
     End Function
 
+    Private Sub IndiquerTempGaz(ByRef myGr As Graphics, myParaff As Struc_Affichage, myMail As cls_MaillageSlimFloor, ByVal pWi As Single, ByVal pHi As Single)
+        'si lAffChThVideOuvert on ajoute un text sous le dessin de la structure pour indiquer la température des gazs chaud (température qui est uniforme)
+        'on cherche une maille vide
+        Dim temp As Double
+        Dim chaine As String = "Aucune maille de vide ouvert trouvée"
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim dCar As Double
+        Const LL As Double = 100
+        Dim H As Double = LL * pHi / pWi
+
+        dCar = Math.Sqrt((LL) ^ 2 + (H) ^ 2) / 50
+        xMin = 0
+        yMin = 0
+        xMax = LL
+        yMax = H + dCar
+
+        For i = 0 To myMail.nb_cells_y - 1
+            For j = 0 To myMail.nb_cells_z - 1
+                If myMail.Tab_mesh_mat(i, j) = cls_MaillageSlimFloor.MATVIDEOUVERT Then
+                    temp = myMail.Tab_mesh_temp(i, j)
+                    chaine = "Gaz chaud : " + Math.Round(temp).ToString + "°C"
+                    Exit For
+                End If
+            Next
+        Next
+        Dim yo As Double = zCarMail + dCar
+        AddTexte(myGr, New SolidBrush(Color.Black), chaine, FontFrm, 0, 2 * zCarMail, myParaff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+
+
+    End Sub
+
     Private Sub AfficheInfoMaille(ByRef myGr As Graphics, myParaff As Struc_Affichage, iMail As Integer, jMail As Integer, ChMat As String,
                                   lTemp As Boolean, Theta As Double)
 
@@ -1225,7 +1283,7 @@ Public Class Frm_MaillageSlim
     End Sub
 
 
-    ' renvoie un bouléen indiquant si on dessine cette maille, ces contours
+    ' renvoie un bouléen indiquant si on dessine cette maille, ses contours
     ' i.e est ce que le matériaux de la maille est selectionné comme à afficher ou non
     Private Function DoWeDraw(mymail As cls_MaillageSlimFloor, iMail As Integer, jmail As Integer) As Boolean
         Dim matMail As Integer = mymail.Tab_mesh_mat(iMail, jmail)
@@ -1238,11 +1296,6 @@ Public Class Frm_MaillageSlim
 
         'on affiche la dalle et notre maille est une maille de la dalle
         If lAffDalle And matMail = cls_MaillageSlimFloor.MATBETON Then
-            Return True
-        End If
-
-        'on affiche le vide ouvert et notre maille est une maille du vide ouvert
-        If lAffVideOuvert And matMail = cls_MaillageSlimFloor.MATVIDEOUVERT Then
             Return True
         End If
 

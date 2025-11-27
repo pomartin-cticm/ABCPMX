@@ -43,7 +43,6 @@ Partial Class Frm_MaillageSlim
         Me.chk_Lissage_Couleur = New System.Windows.Forms.CheckBox()
         Me.lbl_ch_th = New System.Windows.Forms.Label()
         Me.lbl_elements = New System.Windows.Forms.Label()
-        Me.chk_AffVide = New System.Windows.Forms.CheckBox()
         Me.chk_AffDalle = New System.Windows.Forms.CheckBox()
         Me.chk_AffPoutre = New System.Windows.Forms.CheckBox()
         Me.chk_AffChThVideOuvert = New System.Windows.Forms.CheckBox()
@@ -213,7 +212,6 @@ Partial Class Frm_MaillageSlim
         Me.pan_Maillage.Controls.Add(Me.chk_Lissage_Couleur)
         Me.pan_Maillage.Controls.Add(Me.lbl_ch_th)
         Me.pan_Maillage.Controls.Add(Me.lbl_elements)
-        Me.pan_Maillage.Controls.Add(Me.chk_AffVide)
         Me.pan_Maillage.Controls.Add(Me.chk_AffDalle)
         Me.pan_Maillage.Controls.Add(Me.chk_AffPoutre)
         Me.pan_Maillage.Controls.Add(Me.chk_AffChThVideOuvert)
@@ -339,16 +337,6 @@ Partial Class Frm_MaillageSlim
         Me.lbl_elements.Size = New System.Drawing.Size(50, 13)
         Me.lbl_elements.TabIndex = 135
         Me.lbl_elements.Text = "Eléments"
-        '
-        'chk_AffVide
-        '
-        Me.chk_AffVide.AutoSize = True
-        Me.chk_AffVide.Location = New System.Drawing.Point(132, 345)
-        Me.chk_AffVide.Name = "chk_AffVide"
-        Me.chk_AffVide.Size = New System.Drawing.Size(84, 17)
-        Me.chk_AffVide.TabIndex = 134
-        Me.chk_AffVide.Text = "chk_AffVide"
-        Me.chk_AffVide.UseVisualStyleBackColor = True
         '
         'chk_AffDalle
         '
@@ -515,7 +503,7 @@ Partial Class Frm_MaillageSlim
         Me.tlp_Images.Name = "tlp_Images"
         Me.tlp_Images.RowCount = 2
         Me.tlp_Images.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tlp_Images.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
+        Me.tlp_Images.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
         Me.tlp_Images.Size = New System.Drawing.Size(449, 468)
         Me.tlp_Images.TabIndex = 0
         '
@@ -524,10 +512,10 @@ Partial Class Frm_MaillageSlim
         Me.img_Legende.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.img_Legende.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.img_Legende.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.img_Legende.Location = New System.Drawing.Point(0, 427)
+        Me.img_Legende.Location = New System.Drawing.Point(0, 418)
         Me.img_Legende.Margin = New System.Windows.Forms.Padding(0)
         Me.img_Legende.Name = "img_Legende"
-        Me.img_Legende.Size = New System.Drawing.Size(449, 41)
+        Me.img_Legende.Size = New System.Drawing.Size(449, 50)
         Me.img_Legende.TabIndex = 2
         Me.img_Legende.TabStop = False
         '
@@ -598,7 +586,6 @@ Partial Class Frm_MaillageSlim
     Friend WithEvents chk_AffChThVideOuvert As CheckBox
     Friend WithEvents chk_AffChThDalle As CheckBox
     Friend WithEvents chk_AffChThPoutre As CheckBox
-    Friend WithEvents chk_AffVide As CheckBox
     Friend WithEvents chk_AffDalle As CheckBox
     Friend WithEvents chk_AffPoutre As CheckBox
     Friend WithEvents lbl_ch_th As Label
