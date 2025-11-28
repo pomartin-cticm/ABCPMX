@@ -27,18 +27,19 @@ Public Class Frm_MaillageSlim
     Dim lCalculThTermine As Boolean = False     ' Indique si le calcul thermique est terminé
 
     Dim lAffChTh As Boolean = True              ' Indique si on affiche le champ thermique
-    Dim lLissage As Boolean            ' Indique si le lissage de couleur est réalisé
-    Dim lEchelleTempPerso As Boolean     ' Indique si on utilise une échelle de température personnelle pour les couleurs (val min/max trouvée automatiquement ou données)
-    Dim lAff2DUniquement As Boolean  ' Indique si on affiche uniquement les mailles calculées en 2D (les mailles centrales)
+    Dim lLissage As Boolean                     ' Indique si le lissage de couleur est réalisé
+    Dim lEchelleTempPerso As Boolean            ' Indique si on utilise une échelle de température personnelle pour les couleurs (val min/max trouvée automatiquement ou données)
+    Dim lAff2DUniquement As Boolean             ' Indique si on affiche uniquement les mailles calculées en 2D (les mailles centrales)
+    Dim lCurseurTemp As Boolean = True          ' Indique si on affiche le curseur indiquant la température de la maille seléctionnée sur la légende
 
-    Dim lAffPoutre As Boolean = True                   ' Indique si on affiche la poutre
-    Dim lAffDalle As Boolean = True                  ' Indique si on affiche la dalle
-    Dim LaffArmature As Boolean = True            ' Indique si on affiche l'armature
+    Dim lAffPoutre As Boolean = True            ' Indique si on affiche la poutre
+    Dim lAffDalle As Boolean = True             ' Indique si on affiche la dalle
+    Dim LaffArmature As Boolean = True          ' Indique si on affiche l'armature
 
-    Dim lAffChThPoutre As Boolean = True      ' Indique si on affiche le champ thermique de la poutre
-    Dim lAffChThDalle As Boolean = True ' Indique si on affiche le champ thermique de la dalle
-    Dim lAffChThVideOuvert As Boolean = True ' Indique si on affiche le champ thermique du vide ouvert = air pas enfermé
-    Dim lAffChThArmature As Boolean = True ' Indique si on affiche le champ thermique de l'armature
+    Dim lAffChThPoutre As Boolean = True        ' Indique si on affiche le champ thermique de la poutre
+    Dim lAffChThDalle As Boolean = True         ' Indique si on affiche le champ thermique de la dalle
+    Dim lAffChThVideOuvert As Boolean = True    ' Indique si on affiche le champ thermique du vide ouvert = air pas enfermé
+    Dim lAffChThArmature As Boolean = True      ' Indique si on affiche le champ thermique de l'armature
 
     Dim tempMin As Double                       ' température minimale sur toutes les mailles
     Dim tempMax As Double                       ' température maximale sur toutes les mailles
@@ -491,7 +492,13 @@ Public Class Frm_MaillageSlim
 
         If lCalculThTermine Then
             PrepareEchelleTemp()
-            DessinLegende(e.Graphics, img_Legende.Width, img_Legende.Height)
+
+            'si on affiche pas le curseur ou qu'aucune maille n'est selectionnée ou 
+            If Not lCurseurTemp Or (iSelect = -1 Or jSelect = -1) Then
+                DessinLegende(e.Graphics, img_Legende.Width, img_Legende.Height)
+            Else
+                DessinLegendeCurseurTemp(e.Graphics, img_Legende.Width, img_Legende.Height, locMail.Tab_mesh_temp(iSelect, jSelect))
+            End If
         End If
     End Sub
 
@@ -518,7 +525,8 @@ Public Class Frm_MaillageSlim
         xMin = 0
         yMin = 0
         xMax = LL
-        yMax = H + dCar
+        yMax = H + 5 * dCar / 3
+
 
         ParametresAffichage(LegParaff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, 0, 0, kADJUST)
 
@@ -529,7 +537,7 @@ Public Class Frm_MaillageSlim
             xe = (i + 1) * LL / (nbColors - 1)
             yo = 0
             ye = H
-            'AddRectanglePlein(myGr, Tab_Couleurs(i), xo, yo, xe, ye, LegParaff, False)
+
 
             AddRectanglePleinGradient(myGr, Tab_Couleurs(i), Tab_Couleurs(i + 1), xo, yo, xe, ye, LegParaff)
         Next
@@ -555,6 +563,93 @@ Public Class Frm_MaillageSlim
 
         Dim MyClolor As Color = Color.FromArgb(CompRed, CompGreen, CompBlue)
     End Sub
+
+    Private Sub DessinLegendeCurseurTemp(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, Optional ByRef tempMaille As Double = -1)
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   28/11/25 :  Création - BeB
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Représentation de la légende pour les champs thermiques avec un curseur indiquant la température passée en paramètre
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics
+        '   pWi         [E] :   Largeur de la zone de dessin
+        '   pHi         [E] :   Hauteur de la zone de dessin
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+
+        Const kADJUST As Decimal = 0.95
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim LegParaff As Struc_Affichage
+        Dim dCar As Double
+        Const LL As Double = 100
+        Dim H As Double = LL * pHi / pWi
+        Dim nbColors As Integer = Tab_Couleurs.GetUpperBound(0) + 1
+
+        dCar = Math.Sqrt((LL) ^ 2 + (H) ^ 2) / 50
+        xMin = 0
+        yMin = 0
+        xMax = LL
+        yMax = H + 5 * dCar / 3
+
+
+        ParametresAffichage(LegParaff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, 0, 0, kADJUST)
+
+        ' --( Valeur des intervalles
+        For i As Integer = 0 To nbColors - 1
+            Dim xo, yo As Double
+            Dim xe, ye As Double
+            xo = i * LL / (nbColors - 1)
+            xe = xo
+            yo = H + dCar / 2
+            ye = H
+            AddLigne(myGr, New Pen(Color.Black, 1), xo, yo, xe, ye, LegParaff)
+
+            Dim chaine = Int(Tab_IntervalleCouleurs(i))
+
+            AddTexte(myGr, New SolidBrush(Color.Black), chaine, FontFrm, xo, yo, LegParaff,
+                       HorizontalAlignment.Center, VerticalAlignement.Top)
+        Next
+
+
+        '--( Dessin des rectangles de couleurs gradientes & du curseur
+        Dim lCurseurAdessiner As Boolean = True
+        For i As Integer = 1 To nbColors - 1
+            Dim xo, yo As Double
+            Dim xe, ye As Double
+            xo = xe
+            xe = (i) * LL / (nbColors - 1)
+            yo = 0
+            ye = H
+            AddRectanglePleinGradient(myGr, Tab_Couleurs(i - 1), Tab_Couleurs(i), xo, yo, xe, ye, LegParaff)
+
+
+            ' --( Dessin du curseur
+            Dim tempInf As Double         'température borne inférieure
+            Dim tempSup As Double         'température borne supérieure
+            Dim xCurseur As Double        'position x de la pointe du curseur
+
+            If tempMaille < Tab_IntervalleCouleurs(i) And lCurseurAdessiner Then
+                lCurseurAdessiner = False
+
+                tempInf = Tab_IntervalleCouleurs(i - 1)
+                tempSup = Tab_IntervalleCouleurs(i)
+
+                Dim coefIntervalle As Double = (tempMaille - tempInf) / (tempSup - tempInf)
+
+                xCurseur = coefIntervalle * (xe - xo) + xo
+
+                AddLigne(myGr, New Pen(Color.Pink, 3), xCurseur, 0, xCurseur, ye, LegParaff)
+            End If
+        Next
+
+
+
+
+        Dim CompRed As Byte = Tab_Couleurs(0).R
+        Dim CompGreen As Byte = Tab_Couleurs(0).G
+        Dim CompBlue As Byte = Tab_Couleurs(0).B
+
+        Dim MyClolor As Color = Color.FromArgb(CompRed, CompGreen, CompBlue)
+    End Sub
+
 
     Private Sub img_Maillage_Paint(sender As Object, e As PaintEventArgs) Handles img_Maillage.Paint
 
@@ -726,7 +821,13 @@ Public Class Frm_MaillageSlim
             Else
                 AfficheInfoMaille(myGr, myParAff, iSelect, jSelect, ChMat, lAffTh, 0)
             End If
+
+            'si l'option d'afficher le curseur est activée on redessine la légende pour actualiser la position du curseur
+            If lCurseurTemp Then
+                Me.img_Legende.Invalidate()
+            End If
         End If
+
 
 
         '--( Représentation des largeurs 2D
