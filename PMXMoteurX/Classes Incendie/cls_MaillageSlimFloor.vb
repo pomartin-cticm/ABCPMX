@@ -32,6 +32,7 @@
     Public ind_1 As Integer                     ' indice de la maille suivant l'axe fort jusqu'à laquelle effectuer le calcul de transfert thermique
     Public ind_2 As Integer                     ' indice de la maille suivant l'axe fort à droite de l'axe de symétrie de l'âme
 
+    Public y_min, y_max As Double
 #End Region
 
 #Region " Constructeur "
@@ -95,7 +96,7 @@
 
         Dim prop_encl_open As Boolean   'nature ouverte ou fermee de la cavite entre le mur et le profile metallique d'une poutre de rive
 
-        Dim y_min As Double, y_max As Double, delta_y As Double
+        Dim delta_y As Double
         Dim y_a_min As Double, y_a_max As Double    'abscisses extremales du plat ou de la semelle inferieur(e)
 
         Dim lSFB As Boolean
