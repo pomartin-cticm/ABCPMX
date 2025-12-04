@@ -380,11 +380,44 @@ Public Class Frm_MaillageSlim
 
         Me.prb_CalculTh.Value = 0
 
+        '# GiB 02/12/2025 : ajout de la réinitialisation des températures à 20 °C pour éviter des valeurs supérieures à la température des gaz chauds
+        locMail.InitialiseTemp(myBeam.ParamFeu.TempRef)
+
         Do While lCont
 
-            '# Boucle sur le temps jusqu'à obtenir la durée cible
+            '# GiB 02/12/2025 : parametrage de l'increment de temps
+            If IsGreaterOrEqual(TimeT, 600.0) AndAlso IsSmaller(TimeT, 900.0) Then
+                DeltaT = 0.25
+            ElseIf IsGreaterOrEqual(TimeT, 900.0) Then
+                If myBeam.lIntermediaire Then   'poutre intérieure
+                    If IsSmaller(TimeT, 1200.0) Then
+                        DeltaT = 0.3
+                    ElseIf IsSmaller(TimeT, 1800.0) Then
+                        DeltaT = 0.4
+                    ElseIf IsSmaller(TimeT, 3600.0) Then
+                        DeltaT = 0.5
+                    ElseIf IsSmaller(TimeT, 5400.0) Then
+                        DeltaT = 0.6
+                    ElseIf IsSmaller(TimeT, 7200.0) Then
+                        DeltaT = 0.75
+                    Else
+                        DeltaT = 1.0
+                    End If
+                ElseIf IsSmaller(TimeT, 2700.0) Then
+                    DeltaT = 0.3
+                ElseIf IsSmaller(TimeT, 3600.0) Then
+                    DeltaT = 0.4
+                ElseIf IsSmaller(TimeT, 7200.0) Then
+                    DeltaT = 0.5
+                Else
+                    DeltaT = 0.6
+                End If
 
-            TimeT += DeltaT
+            End If
+
+                '# Boucle sur le temps jusqu'à obtenir la durée cible
+
+                TimeT += DeltaT
 
             '# Température des gaz chauds
 
@@ -392,7 +425,7 @@ Public Class Frm_MaillageSlim
             lTargetT = IsSmaller(TimeT, TimeTarget)
 
             SolveurTh.Calcul_thermique_Poutre_plancher_mince(locMail, myBeam.ParamFeu, TimeT, DeltaT, lTargetT, TempG,
-                                                             val_U, lNormal, lANF, lGeneration1, RhoC, lRhoCVar)
+                                                         val_U, lNormal, lANF, lGeneration1, RhoC, lRhoCVar)
 
             lCont = lTargetT
 
