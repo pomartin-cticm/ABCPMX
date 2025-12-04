@@ -6117,7 +6117,7 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(1, BlocAnalyse("STRESSES"))
 
-        MyBeam.PtsSigma.Initialise(MyBeam)
+        MyBeam.PtsSigma.Initialise(MyBeam, False)
         MyBeam.PtsSigma.CalculContraintesCharges(MyBeam, 1, SigmaCasP)
         MyBeam.PtsSigma.CalculContraintesCharges(MyBeam, -1, SigmaCasM)
 
@@ -11690,7 +11690,7 @@ Module Mod_NoteCalcul
 
         '--( Calcul des contraintes élastiques
 
-        myBeam.PtsSigma.Initialise(myBeam)
+        myBeam.PtsSigma.Initialise(myBeam, False)
         myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaCasP)
         myBeam.PtsSigma.CalculContraintesCharges(myBeam, -1, SigmaCasM)
 

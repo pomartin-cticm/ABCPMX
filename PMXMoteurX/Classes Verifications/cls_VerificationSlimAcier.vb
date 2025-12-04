@@ -308,7 +308,7 @@
         '# Contraintes normales
 
         If lVerifElastic Then
-            myBeam.PtsSigma.Initialise(myBeam)
+            myBeam.PtsSigma.Initialise(myBeam, lConstructionPhase)
             myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaCas)
         End If
 

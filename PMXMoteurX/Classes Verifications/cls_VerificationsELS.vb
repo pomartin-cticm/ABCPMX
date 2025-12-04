@@ -92,7 +92,7 @@ Public Class cls_VerificationsELS
 
             '# Calcul des contraintes normales élastiques pour les cas de charges
 
-            myBeam.PtsSigma.Initialise(myBeam)
+            myBeam.PtsSigma.Initialise(myBeam, False)
             myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaP)
             myBeam.PtsSigma.CalculContraintesCharges(myBeam, -1, SigmaM)
 

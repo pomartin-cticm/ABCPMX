@@ -31,11 +31,14 @@
 
 #Region " Initialisation "
 
-    Public Sub Initialise(MyPoutre As cls_Poutre)
+    Public Sub Initialise(MyPoutre As cls_Poutre, lConstruction As Boolean)
         '-----------------------------------------------------------------------------------
         '   20/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------
         '   Initialisation des points de calculs des contraintes normales
+        '-----------------------------------------------------------------------------------
+        '   myPoutre        [E] :   Poutre calculée
+        '   lConstruction   [E] :   Indique si phas de construction     (V1.20)
         '-----------------------------------------------------------------------------------
 
         Me.zPos.Clear()
@@ -43,9 +46,10 @@
         InitialisePourProfile(MyPoutre)
         InitialisePourBetonEnrob(MyPoutre)
         InitialisePourArmaEnrob(MyPoutre)
-        InitialisePourBetonDalle(MyPoutre)
-        InitialisePourArmaDalle(MyPoutre)
-
+        If Not lConstruction Then
+            InitialisePourBetonDalle(MyPoutre)
+            InitialisePourArmaDalle(MyPoutre)
+        End If
     End Sub
 
     Private Sub InitialisePourArmaDalle(MyPoutre As cls_Poutre)

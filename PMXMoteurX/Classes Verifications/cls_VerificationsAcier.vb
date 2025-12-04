@@ -241,7 +241,7 @@ Public Class cls_VerificationsAcier
         '# Contraintes normales
 
         If lVerifElastic Then
-            myBeam.PtsSigma.Initialise(myBeam)
+            myBeam.PtsSigma.Initialise(myBeam, False)
             myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaCas)
         End If
 
@@ -669,7 +669,6 @@ Public Class cls_VerificationsAcier
             RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydInf, FydW), Me.CritereSigmaA)
             '( Contrainte face externe de la semelle inférieure
             RunCritereFlexionVM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.CritereSigmaA)
-
         End If
 
         '# Contraintes dans l'enrobage

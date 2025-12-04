@@ -3295,13 +3295,13 @@ Public Class cls_Poutre
         '------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '------------------------------------------------------------------------------
-        '   Calcul des moments plastiques le long de la poutre (sur les noeuds du modèle)
+        '   Calcul des propriétés élastiques le long de la poutre (sur les noeuds du modèle)
         '------------------------------------------------------------------------------
         '   Beff        [E] :   Largeur participante de dalle
         '   Signe       [E] :   Signe du moment à considérer
         '   lValRd      [E] :   Indique si valeurs de calcul
-        '   MplRd       [S] :   Table des moments plastiques au droit des noeuds du modèle
-        '   zANP        [S] :   Table des position des ANP
+        '   InertieY    [S] :   Table des moments d'inertie au droit des noeuds du modèle
+        '   zANE        [S] :   Table des position des ANE
         '   lDalle      [E] :   Indique si on prend en compte la dalle, pour les poutres mixtes (cela permet le calcul en acier seul)
         '------------------------------------------------------------------------------
 
@@ -4393,6 +4393,7 @@ Public Class cls_Poutre
         Dim lMultiT As Boolean
         Dim ChaineEx As String
         Me.lMultiQ = {False, False, False}
+        Dim pEtatDalleQ() As cls_CasDeCharge.EnuEtatDalle = {pEtatDalle, pEtatDalle, pEtatDalleNonMixte}        '== R25-012
 
         Dim iQFin As Integer
         'If lMixte Then iQFin = 2 Else iQFin = 1
@@ -4403,30 +4404,31 @@ Public Class cls_Poutre
 
             lMultiT = Me.ChargesU(LabelQ(iq)).EstMultiTravee(Me.IndicePremiereTravee, Me.IndiceDerniereTravee)
             Me.lMultiQ(iq) = lMultiT
-            ChaineEx = strExploitation & " " & CStr(iq + 1)
+            'ChaineEx = strExploitation & " " & CStr(iq + 1)
+            ChaineEx = strExploitation & " " & LabelQ(iq)
 
             If lMixte And (iq < 2) And Me.Param.lPsi2LongTerm Then
                 '--( Cas de charges d'exploitation comportant deux coefficients d'équivalence
                 If (Me.NbTravees = 1) Or (Not lMultiT) Then
-                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalleQ(iq)))
                     InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
                 Else
-                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 1", LabelQ(iq) & "#1", IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 1", LabelQ(iq) & "#1", IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalleQ(iq)))
                     InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
-                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 2", LabelQ(iq) & "#2", IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 2", LabelQ(iq) & "#2", IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalleQ(iq)))
                     InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesCentrale)
-                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 3", LabelQ(iq) & "#3", IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 3", LabelQ(iq) & "#3", IndQ(iq), IndQLT(iq), 1 - Psi2Q(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalleQ(iq)))
                     InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesConsoles)
                 End If
             Else
-                '--( Cas de charges d'exploitation comportant un seul coefficient d'équivalence
+                '--( Cas de charges d'exploitation comportant un seul coefficient d'équivalence et charge QC
                 If (Me.NbTravees = 1) Or (Not lMultiT) Then
-                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalleQ(iq)))
                     InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
                 Else
-                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 1", LabelQ(iq) & "#1", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 1", LabelQ(iq) & "#1", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalleQ(iq)))
                     InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
-                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 2", LabelQ(iq) & "#2", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                    Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 2", LabelQ(iq) & "#2", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalleQ(iq)))
                     InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesCentrale)
                     Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 3", LabelQ(iq) & "#3", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                     InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesConsoles)
