@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.Specialized.BitVector32
 Imports System.IO
+Imports System.IO.Ports
 Imports System.Reflection
 Imports System.Reflection.Emit
 Imports System.Runtime.InteropServices
@@ -95,6 +96,7 @@ Module Mod_NoteCalcul
     Private strRacineELF As String
 
     Private BlocG As New Dictionary(Of String, String)                      ' Messages généraux
+    Private BlocDEC As New Dictionary(Of String, String)                    ' Messages généraux pour le maintien par le bac
     Private BlocOofS As New Dictionary(Of String, String)                   ' Messages quand hors domaine d'application
     Private BlocSP As New Dictionary(Of String, String)
     Private BlocAnalyse As New Dictionary(Of String, String)
@@ -311,11 +313,16 @@ Module Mod_NoteCalcul
 
         Dim CLE As String = "NOKEY"
         Dim lastKey As String = ""
+        Dim BlocLine As Cls_LinesOfFile = Nothing
 
         Try
             CLE = "#NDC_MAIN"
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.LangueNDC, CLE)
+            BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, CLE)
             BlocLine.CreationBloc(BlocG, lastKey)
+
+            CLE = "#NDC_DECKR"
+            BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, CLE)
+            BlocLine.CreationBloc(BlocDEC, lastKey)
 
             CLE = "#NDC_OUTOFSCOPE"
             BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, CLE)
@@ -458,7 +465,6 @@ Module Mod_NoteCalcul
 
 
 #End Region
-
 
 #Region "***Synthèse des poutres du projet***"
 
@@ -769,7 +775,7 @@ Module Mod_NoteCalcul
         Dim lEnrob As Boolean = myBeam.lEnrobage
         Dim lLamine As Boolean = (myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
         Dim lMulti As Boolean = myBeam.lMultiSpan
-        Dim iTravee, iSigne As Integer
+        Dim iTravee As Integer
         Dim indDeb, indFin As Integer
         Dim DegreMin As Decimal
         Dim SigneM As Integer
@@ -1001,7 +1007,6 @@ Module Mod_NoteCalcul
         End If
 
     End Sub
-
 
     Private Sub AfficheCritereRptProjet(Critere As Decimal, myTab As Integer, Symbol As String, Optional lRetour As Boolean = True)
         '----------------------------------------------------------------------------------------------
@@ -1450,7 +1455,6 @@ Module Mod_NoteCalcul
 
         AddLigneNDC(TABW2 & BlocG("LENGTHBEAM") & TABAFF2 & "L\-tot\= = " & GetStringInUnitN(MyBeam.LongueurTotale, Enu_TypeVariable.Longueur, 4, 2, OUI, True))
         AddLigneNDC(TABW2 & BlocG("NBTOTSPAN") & TABAFF2 & GetStringInUnitN(MyBeam.NbTravees, Enu_TypeVariable.SansType, 2, 0, NON, False))
-
 
         ' -->Tableau récapitulatif de la poutre 
         If MyBeam.NbTravees > 1 Then
@@ -2877,35 +2881,49 @@ Module Mod_NoteCalcul
         Dim kUnitSlip As Decimal = 1000 ^ 2
         Const kUnitFlex As Decimal = 10 ^ 6
         Const UNITFlex As String = " mm/kN"
+        Dim lWarningD As Boolean = False
+        Dim DeltaD, Dmax As Decimal
+        Dim SymbolW As String = ""
 
         '--> Initialisation
 
         ns = myBeam.MaintienBac.m * myBeam.MaintienBac.nt + 1
+        If myBeam.lIntermediaire Then
+            DeltaD = Math.Abs(myBeam.EntraxeD1 - myBeam.EntraxeD2)
+            Dmax = Math.Max(myBeam.EntraxeD1, myBeam.EntraxeD2)
+            If IsGreater(DeltaD, 0.25 * Dmax) Then lWarningD = True
+            If lWarningD Then SymbolW = " " & ChrW(9888) ' Warning sign
+        End If
 
         '--> Traitement
 
         If myBeam.lMaintienBacPossible And myBeam.MaintienBac.lMaintienBac Then
 
-            AddTitreNdC(2, BlocG("SHEETRESTRAINT"), NumTitreMaintienBac)
+            AddTitreNdC(2, BlocDEC("SHEETRESTRAINT"), NumTitreMaintienBac)
 
             '--( Général
 
-            AddLigneNDC(TABW2 & BlocG("SHEETNBTDIR") & TABAFF & "nt" & TABEGAL & CStr(myBeam.MaintienBac.nt))
-            AddLigneNDC(TABW2 & BlocG("SHEETSPANNUMBER") & TABAFF & "m" & TABEGAL & CStr(myBeam.MaintienBac.m))
-            AddLigneNDC(TABW2 & BlocG("SECONDBEAMSNB") & TABAFF & "ns" & TABEGAL & CStr(ns))
-            AddLigneNDC(TABW2 & BlocG("SECONDBEAMSPACING") & TABAFF & "d" & TABEGAL & GetStringInUnitN(EntraxeD, Enu_TypeVariable.Longueur, 3, 2, OUI, True))
-            AddLigneNDC(TABW2 & BlocG("FLOORWIDTH") & TABAFF & "" & TABEGAL & GetStringInUnitN((ns - 1) * EntraxeD, Enu_TypeVariable.Longueur, 3, 2, OUI, True))
-            AddLigneNDC(TABW2 & BlocG("SHEETDIMENSIONS") & TABAFF & "ap" & TABEGAL & GetStringInUnitN((myBeam.MaintienBac.m) * EntraxeD, Enu_TypeVariable.Longueur, 3, 2, OUI, True))
+            AddLigneNDC(TABW2 & BlocDEC("SHEETNBTDIR") & TABAFF & "nt" & TABEGAL & CStr(myBeam.MaintienBac.nt))
+            AddLigneNDC(TABW2 & BlocDEC("SHEETSPANNUMBER") & TABAFF & "m" & TABEGAL & CStr(myBeam.MaintienBac.m))
+            AddLigneNDC(TABW2 & BlocDEC("SECONDBEAMSNB") & TABAFF & "ns" & TABEGAL & CStr(ns))
+            AddLigneNDC(TABW2 & BlocDEC("SECONDBEAMSPACING") & TABAFF & "d" & TABEGAL & GetStringInUnitN(EntraxeD, Enu_TypeVariable.Longueur, 3, 2, OUI, True))
+            AddLigneNDC(TABW2 & BlocDEC("FLOORWIDTH") & TABAFF & "" & TABEGAL & GetStringInUnitN((ns - 1) * EntraxeD, Enu_TypeVariable.Longueur, 3, 2, OUI, True))
+            AddLigneNDC(TABW2 & BlocDEC("SHEETDIMENSIONS") & TABAFF & "ap" & TABEGAL & GetStringInUnitN((myBeam.MaintienBac.m) * EntraxeD, Enu_TypeVariable.Longueur, 3, 2, OUI, True))
             AddLigneNDC(TABAFF & "bp" & TABEGAL & GetStringInUnitN(myBeam.Dalle.Bac.LargeurModule, Enu_TypeVariable.Longueur, 3, 2, OUI, True))
-            AddLigneNDC(TABW2 & BlocG("SHEETCOATING") & TABAFF & "t\-pr\=" & TABEGAL & GetStringInUnitN(myBeam.MaintienBac.Tpr, Enu_TypeVariable.Dimension, 4, 4, OUI, True))
+            AddLigneNDC(TABW2 & BlocDEC("SHEETCOATING") & TABAFF & "t\-pr\=" & TABEGAL & GetStringInUnitN(myBeam.MaintienBac.Tpr, Enu_TypeVariable.Dimension, 4, 4, OUI, True))
+
+            If lWarningD Then
+                SauteLigne()
+                AddLigneNDC(TABW1 & SymbolW.Trim & ": " & BlocDEC("WARNINGD"))
+            End If
 
             '--( Panneaux adjacent au support des poutres
 
             If myBeam.MaintienBac.nt > 1 Then
                 Select Case myBeam.MaintienBac.Transition
-                    Case cls_MaintienBac.Enu_Transition.Aboutage : Chaine = BlocG("ADJACENTSHEETNOGAP")
-                    Case cls_MaintienBac.Enu_Transition.Adistance : Chaine = BlocG("ADJACENTSHEETGAP")
-                    Case cls_MaintienBac.Enu_Transition.Emboitement : Chaine = BlocG("ADJACENTSHEETOVERLAP")
+                    Case cls_MaintienBac.Enu_Transition.Aboutage : Chaine = BlocDEC("ADJACENTSHEETNOGAP")
+                    Case cls_MaintienBac.Enu_Transition.Adistance : Chaine = BlocDEC("ADJACENTSHEETGAP")
+                    Case cls_MaintienBac.Enu_Transition.Emboitement : Chaine = BlocDEC("ADJACENTSHEETOVERLAP")
                 End Select
                 SauteLigne()
                 AddLigneNDC(TABW2 & Chaine)
@@ -2915,31 +2933,31 @@ Module Mod_NoteCalcul
 
             SauteLigne()
             Select Case myBeam.MaintienBac.FixNervuresMod
-                Case cls_MaintienBac.Enu_FixationNervures.Toutes : Chaine = BlocG("ALLRIBSAREFASTENED")
-                Case cls_MaintienBac.Enu_FixationNervures.UneSurDeux : Chaine = BlocG("EVERY2RIBSAREFASTENED")
+                Case cls_MaintienBac.Enu_FixationNervures.Toutes : Chaine = BlocDEC("ALLRIBSAREFASTENED")
+                Case cls_MaintienBac.Enu_FixationNervures.UneSurDeux : Chaine = BlocDEC("EVERY2RIBSAREFASTENED")
             End Select
             AddLigneNDC(TABW2 & Chaine)
-            Select Case myBeam.MaintienBac.FixnervuresTyp
-                Case cls_MaintienBac.Enu_FixNervuresType.Pistolet : Chaine = BlocG("FIREDPINS") : ChaineD = BlocG("FIXDIASPINS")
-                Case cls_MaintienBac.Enu_FixNervuresType.VisNeoprene : Chaine = BlocG("SELFDSCREWSNORMALW") : ChaineD = BlocG("FIXDIASCREWS")
-                Case cls_MaintienBac.Enu_FixNervuresType.VisNormale : Chaine = BlocG("SELFDSCREWSNEOPRENW") : ChaineD = BlocG("FIXDIASCREWS")
+            Select Case myBeam.MaintienBac.FixNervuresTyp
+                Case cls_MaintienBac.Enu_FixNervuresType.Pistolet : Chaine = BlocDEC("FIREDPINS") : ChaineD = BlocDEC("FIXDIASPINS")
+                Case cls_MaintienBac.Enu_FixNervuresType.VisNeoprene : Chaine = BlocG("SELFDSCREWSNORMALW") : ChaineD = BlocDEC("FIXDIASCREWS")
+                Case cls_MaintienBac.Enu_FixNervuresType.VisNormale : Chaine = BlocG("SELFDSCREWSNEOPRENW") : ChaineD = BlocDEC("FIXDIASCREWS")
             End Select
-            AddLigneNDC(TABW2 & BlocG("FASTENERTYPE") & TABAFF & Chaine)
+            AddLigneNDC(TABW2 & BlocDEC("FASTENERTYPE") & TABAFF & Chaine)
             'AddLigneNDC(TABW2 & BlocG("FIXDIAMETER") & TABAFF & ChaineD)
-            AddLigneNDC(TABW2 & BlocG("FIXDIAMETER") & TABAFF & GetStringInUnitN(myBeam.MaintienBac.dFpNerv, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
-            AddLigneNDC(TABW2 & BlocG("FIXSLIP") & TABAFF & GetStringInUnitN(myBeam.MaintienBac.FixNervuresSlip * kUnitSlip, Enu_TypeVariable.SansType, 4, 3, NON, True) & UNITFlex)
+            AddLigneNDC(TABW2 & BlocDEC("FIXDIAMETER") & TABAFF & GetStringInUnitN(myBeam.MaintienBac.dFpNerv, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
+            AddLigneNDC(TABW2 & BlocDEC("FIXSLIP") & TABAFF & GetStringInUnitN(myBeam.MaintienBac.FixNervuresSlip * kUnitSlip, Enu_TypeVariable.SansType, 4, 3, NON, True) & UNITFlex)
 
             '--( Fixations de couture
 
             SauteLigne()
             Select Case myBeam.MaintienBac.FixCoutureType
-                Case cls_MaintienBac.Enu_CoutureType.Rivet : Chaine = BlocG("SEAMRIVET") : ChaineD = BlocG("SEAMDIARIVET")
-                Case cls_MaintienBac.Enu_CoutureType.Vis : Chaine = BlocG("SEAMSCREW") : ChaineD = BlocG("SEAMDIASCREW")
+                Case cls_MaintienBac.Enu_CoutureType.Rivet : Chaine = BlocDEC("SEAMRIVET") : ChaineD = BlocDEC("SEAMDIARIVET")
+                Case cls_MaintienBac.Enu_CoutureType.Vis : Chaine = BlocDEC("SEAMSCREW") : ChaineD = BlocDEC("SEAMDIASCREW")
             End Select
-            AddLigneNDC(TABW2 & BlocG("FASTENERTYPE") & TABAFF & Chaine)
+            AddLigneNDC(TABW2 & BlocDEC("FASTENERTYPE") & TABAFF & Chaine)
             'AddLigneNDC(TABW2 & BlocG("FIXDIAMETER") & TABAFF & ChaineD)
-            AddLigneNDC(TABW2 & BlocG("FIXDIAMETER") & TABAFF & GetStringInUnitN(myBeam.MaintienBac.dFsCouture, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
-            AddLigneNDC(TABW2 & BlocG("FIXSLIP") & TABAFF & GetStringInUnitN(myBeam.MaintienBac.FixCoutureSlip * kUnitSlip, Enu_TypeVariable.SansType, 4, 3, NON, True) & UNITFlex)
+            AddLigneNDC(TABW2 & BlocDEC("FIXDIAMETER") & TABAFF & GetStringInUnitN(myBeam.MaintienBac.dFsCouture, Enu_TypeVariable.Dimension, 4, 3, OUI, True))
+            AddLigneNDC(TABW2 & BlocDEC("FIXSLIP") & TABAFF & GetStringInUnitN(myBeam.MaintienBac.FixCoutureSlip * kUnitSlip, Enu_TypeVariable.SansType, 4, 3, NON, True) & UNITFlex)
 
             '--( Flexibilité et raideur en cisaillement
 
@@ -2955,7 +2973,7 @@ Module Mod_NoteCalcul
             Const locTabAFF As String = "\T50"
 
             SauteLigne()
-            AddLigneNDC(TABW2 & BlocG("SHEARFLEXIBILITIES"))
+            AddLigneNDC(TABW2 & BlocDEC("SHEARFLEXIBILITIES"))
             AddLigneNDC(locTabAFF & "c\-11\=" & TABEGAL & GetStringInUnitN(c11 * kUnitFlex, Enu_TypeVariable.SansType, 4, 3, NON, False) & UNITFlex)
             AddLigneNDC(locTabAFF & "c\-12\=" & TABEGAL & GetStringInUnitN(c12 * kUnitFlex, Enu_TypeVariable.SansType, 4, 3, NON, False) & UNITFlex)
             AddLigneNDC(locTabAFF & "c\-21\=" & TABEGAL & GetStringInUnitN(c21 * kUnitFlex, Enu_TypeVariable.SansType, 4, 3, NON, False) & UNITFlex)
@@ -2968,8 +2986,20 @@ Module Mod_NoteCalcul
 
             SauteLigne()
 
+            Dim KFactor As Double = myBeam.MaintienBac.CoefficientK(myBeam.Dalle.Bac)
+            If myBeam.Dalle.Bac.lNervuresOuvertes Then
+                AddLigneNDC(TABW2 & BlocDEC("K_OPENRIBS"))
+                AddLigneNDC(TABW2 & RemplaceDollar(BlocDEC("K_CECMREPORT"), "c\-11\="))
+            Else
+                AddLigneNDC(TABW2 & BlocDEC("K_REINTRANTRIBS"))
+                AddLigneNDC(TABW2 & RemplaceDollar(BlocDEC("K_USER"), "c\-11\="))
+            End If
+            AddLigneNDC(locTabAFF & "K" & TABEGAL & GetStringInUnitN(KFactor, Enu_TypeVariable.SansType, 4, 3, NON_U, True))
+
+            SauteLigne()
+
             If myBeam.MaintienBac.lTheta Then
-                AddLigneNDC(TABW2 & BlocG("BENDINGSTIFFNESS"))
+                AddLigneNDC(TABW2 & BlocDEC("BENDINGSTIFFNESS"))
 
                 Dim kTheta, kThetaA, kThetaC As Decimal
                 Dim bFs As Decimal = MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Bfs
@@ -2983,7 +3013,7 @@ Module Mod_NoteCalcul
                 AddLigneNDC(locTabAFF & "k\-\Sq\s\=" & TABEGAL & GetStringInUnitN(kTheta, Enu_TypeVariable.Effort, 4, 3, OUI, True) & "m/m")
 
             Else
-                AddLigneNDC(TABW2 & BlocG("NOBENDINGSTIFFNESS") & TABAFF & Chaine)
+                AddLigneNDC(TABW2 & BlocDEC("NOBENDINGSTIFFNESS") & TABAFF & Chaine)
             End If
 
             '--( Résistances
@@ -2992,20 +3022,20 @@ Module Mod_NoteCalcul
             'Dim Fup As Decimal = 450
 
             SauteLigne()
-            AddLigneNDC(TABW2 & BlocG("SHEETRESISTANCES"))
+            AddLigneNDC(TABW2 & BlocDEC("SHEETRESISTANCES"))
 
             FpRd = myBeam.MaintienBac.ResistanceFpRd(myBeam.Dalle.Bac.Tp, myBeam.Dalle.Bac.Fup, myBeam.Param.Gamma.GammaM2)
-            AddLigneNDC(TABW3 & BlocG("RESFIX") & TABAFF & "F\-p,Rd\=" & TABEGAL & GetStringInUnitN(FpRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
+            AddLigneNDC(TABW3 & BlocDEC("RESFIX") & TABAFF & "F\-p,Rd\=" & TABEGAL & GetStringInUnitN(FpRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
 
             FsRd = myBeam.MaintienBac.ResistanceFsRd(myBeam.Dalle.Bac.Tp, myBeam.Dalle.Bac.Fup, myBeam.Param.Gamma.GammaM2)
-            AddLigneNDC(TABW3 & BlocG("RESSEAM") & TABAFF & "F\-s,Rd\=" & TABEGAL & GetStringInUnitN(FsRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
+            AddLigneNDC(TABW3 & BlocDEC("RESSEAM") & TABAFF & "F\-s,Rd\=" & TABEGAL & GetStringInUnitN(FsRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
 
             VmRd = myBeam.MaintienBac.ResistanceVmRd(myBeam.EntraxeSolive, myBeam.Dalle.Bac, myBeam.Param.Gamma.GammaM2)
-            AddLigneNDC(TABW3 & BlocG("RESPANEL") & TABAFF & "V\-m,Rd\=" & TABEGAL & GetStringInUnitN(VmRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
+            AddLigneNDC(TABW3 & BlocDEC("RESPANEL") & TABAFF & "V\-m,Rd\=" & TABEGAL & GetStringInUnitN(VmRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
 
             SauteLigne()
-            AddLigneNDC(TABW2 & BlocG("SHEETNONPERMIISBLEM"))
-            AddLigneNDC(TABW3 & BlocG("SHEETRESFIX"))
+            AddLigneNDC(TABW2 & BlocDEC("SHEETNONPERMIISBLEM"))
+            AddLigneNDC(TABW3 & BlocDEC("SHEETRESFIX"))
 
             Dim eL As Decimal = myBeam.MaintienBac.EntraxeLongi(myBeam.Dalle.Bac.Ep)
             Dim V06 As Decimal = 0.6 * EntraxeD / eL * FpRd
@@ -3034,7 +3064,7 @@ Module Mod_NoteCalcul
             Dim ChaineFpend As String = "F\-p,end,Rd\="
 
             SauteLigne()
-            AddLigneNDC(TABW3 & BlocG("SHEETENDFAILURE") & TABAFF & ChaineFpend & TABEGAL & GetStringInUnitN(FpEndRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
+            AddLigneNDC(TABW3 & BlocDEC("SHEETENDFAILURE") & TABAFF & ChaineFpend & TABEGAL & GetStringInUnitN(FpEndRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
             If IsGreaterOrEqual(FpEndRd, VmRd) Then
 
                 AddLigneNDC(locTabAFF & ChaineFpend & SP & SUPEGAL & " V\-m,Rd\=" & TABBAL)
@@ -3053,7 +3083,7 @@ Module Mod_NoteCalcul
             Dim VbRddSurL As Decimal = VbRd * EntraxeD / myBeam.LongueurTravee(1)
 
             SauteLigne()
-            AddLigneNDC(TABW3 & BlocG("SHEETSHEARBUCKLING") & TABAFF & ChaineVbRd & TABEGAL & GetStringInUnitN(VbRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
+            AddLigneNDC(TABW3 & BlocDEC("SHEETSHEARBUCKLING") & TABAFF & ChaineVbRd & TABEGAL & GetStringInUnitN(VbRd, Enu_TypeVariable.Effort, 4, 3, OUI, False))
             AddLigneNDC(locTabAFF & ChaineVbRdDsurL & TABEGAL & GetStringInUnitN(VbRddSurL, Enu_TypeVariable.Effort, 4, 3, OUI, False))
 
             If IsGreaterOrEqual(VbRddSurL, VmRd) Then
@@ -7391,13 +7421,17 @@ Module Mod_NoteCalcul
 
         Dim ChaineU As String = ""
 
-        If lFeu Then
-            ChaineU = myBeam.CombiA_ELF.Symbole(Critere.iCombiM)
+        If Critere.iCombiM = -1 Then
+            ChaineU = "--"
         Else
-            If lConstructionP Then
-                ChaineU = myBeam.CombiA_ELCU.Symbole(Critere.iCombiM)
+            If lFeu Then
+                ChaineU = myBeam.CombiA_ELF.Symbole(Critere.iCombiM)
             Else
-                ChaineU = myBeam.CombiA_ELU.Symbole(Critere.iCombiM)
+                If lConstructionP Then
+                    ChaineU = myBeam.CombiA_ELCU.Symbole(Critere.iCombiM)
+                Else
+                    ChaineU = myBeam.CombiA_ELU.Symbole(Critere.iCombiM)
+                End If
             End If
         End If
 
@@ -7776,10 +7810,6 @@ Module Mod_NoteCalcul
 
 
 #End Region
-
-
-
-
 
 #Region "***Edition vérifications ELU pour les poutres MIXTEs***"
 
@@ -12065,10 +12095,234 @@ Module Mod_NoteCalcul
 
         EditionVerificationsFEUDetail(myBeam)
 
-        '--( Courbes
+        '--( Courbes d'échauffement
 
-        EditionELFeuCourbes(myBeam)
+        If myBeam.lSlimFloor Then
 
+            EditionFeuChampsThermSlim(myBeam)
+
+        ElseIf Not myBeam.lEnrobage Then
+
+            EditionELFeuCourbes(myBeam)
+
+        End If
+
+    End Sub
+
+    Private Sub EditionFeuChampsThermSlim(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   13/04/26 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition des cartes de champs thermiques pour les poutres Slim Floor
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre Calculée au feu
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim iStep, NbStep As Integer
+        Dim VbRdFi() As Decimal = Nothing
+
+        '--( Initialisation
+
+        NbStep = cls_VerifFeuSlimAcier.TimeSteps.GetUpperBound(0) + 1
+
+        SautePage()
+        AddTitreNdC(2, BlocFEU("FIRE_CHARTSHEATING"))
+
+        myBeam.VerifFeuSlimAcier.CalculVbRdFeuSlimAcier(myBeam, VbRdFi)
+
+        '--( Affichage des cartes
+
+        For iStep = 0 To NbStep - 1
+
+            'If (iStep Mod 2 = 0) And (iStep > 0) Then
+            If (iStep > 0) Then  SautePage()
+            'End If
+
+            'AddLigneNDC(TABW2 & "Echauffement à " & cls_VerifFeuSlimAcier.TimeSteps(iStep) & " min")
+            AddLigneNDC(TABW2 & RemplaceDollar(BlocFEU("HEATINGTEMP"), cls_VerifFeuSlimAcier.TimeSteps(iStep)))
+
+            AddLigneNDC("\IMG CHAMPSTH 10 90 30 NoCadre " & iStep.ToString)
+            AddLigneNDC("\IMG CHAMPSTH_LEGEND 10 90 3 NoCadre")
+            SauteLigne()
+
+            AfficheTableauTempSlim(myBeam, iStep)
+
+            AfficheResistanceFeuSlim(myBeam, iStep, VbRdFi)
+
+        Next
+
+    End Sub
+
+    Private Sub AfficheResistanceFeuSlim(myBeam As cls_Poutre, iStep As Integer, VbRdFi() As Decimal)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   13/04/26 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Affiche les valeurs de moments fléchissants résistants au feu pour les poutres Slim Floor
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre Calculée au feu
+        '   iStep       [E] :   Indice de la durée au feu traitée
+        '   VbRdFi      [E] :   Table des résistance VBRdFi
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim myModele As New cls_ModeleP
+        Dim Signe As Decimal = 1
+        Const lValeurRd As Boolean = True
+        Dim zANP As Decimal
+        Dim MplRd As Decimal
+
+        '--> Construction du modèle de la section à partir des champs thermiques
+
+        myModele.MaillageSlimThermique(myBeam, iStep, 0)
+
+        '--> Recherche de l'axe neutre plastique
+
+        myModele.RechercheANP(Signe, zANP, lValeurRd)
+
+        '--> Moment plastique
+
+        MplRd = myModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+        '--( Résultat
+
+        SauteLigne()
+        AddLigneNDC(TABAFF & "M\-pl,Rd,fi\=" & TABEGAL & GetStringInUnitN(MplRd, Enu_TypeVariable.Moment, 4, 3, True, True))
+        AddLigneNDC(TABAFF & "V\-pl,Rd,fi\=" & TABEGAL & GetStringInUnitN(VbRdFi(iStep), Enu_TypeVariable.Effort, 4, 3, True, True))
+
+    End Sub
+
+    Private Sub AfficheTableauTempSlim(myBeam As cls_Poutre, iStep As Integer)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   13/04/26 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition tableau valeurs enveloppe champs thermiques pour les poutres Slim Floor
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre Calculée au feu
+        '   iStep       [E] :   Indice de la durée au feu traitée
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim POS As Integer
+        Dim TempBeton() As Decimal = {0}
+        Dim TempAme() As Decimal = {0}
+        Dim TempSemInf() As Decimal = {0}
+        Dim TempSemSup() As Decimal = {0}
+        Dim TempArma() As Decimal = {0}
+        Dim TempPlat() As Decimal = {0}
+        Dim TempSoud() As Decimal = {0}
+
+        Dim lSAB As Boolean = myBeam.Section.lSlimFloor_SAB
+        Dim lSFB As Boolean = myBeam.Section.lSlimFloor_SFB
+        Dim lIFB_A As Boolean = myBeam.Section.lSlimFloor_IFB_A
+        Dim lIFB_B As Boolean = myBeam.Section.lSlimFloor_IFB_B
+
+        Dim TempG As Decimal
+        Dim ENFeu As New cls_EurocodesFeu
+
+        '--( Entete du tableau
+
+        EnteteTableauTempSlim(POS, cls_VerifFeuSlimAcier.TimeSteps(iStep).ToString)
+
+        '--( Récupération des températures min/max
+
+        myBeam.VerifFeuSlimAcier.TemperatureStepMinMax(iStep, TempBeton, TempAme, TempSemInf, TempSemSup, TempPlat, TempSoud, TempArma)
+
+        '--( Affichage des températures
+
+        '### BETON
+
+        LigneTableauTempSlim(POS, BlocFEU("CONCRETE"), TempBeton)
+
+        '### SEMELLE SUPERIEURE
+
+        If Not lIFB_B Then
+            LigneTableauTempSlim(POS, BlocFEU("UPPERFLANGE"), TempSemSup)
+        End If
+
+        '### AME
+
+        LigneTableauTempSlim(POS, BlocFEU("WEB"), TempAme)
+
+        '### SEMELLE INFERIEURE
+
+        If Not lIFB_A Then
+            LigneTableauTempSlim(POS, BlocFEU("LOWERFLANGE"), TempSemInf)
+        End If
+
+        '### PLAT
+
+        If Not lSAB Then
+            LigneTableauTempSlim(POS, BlocFEU("STEELPLATE"), TempPlat)
+        End If
+
+        '### SOUDURE
+
+        If Not lSAB Then
+            LigneTableauTempSlim(POS, BlocFEU("WELDS"), TempSoud)
+        End If
+
+        '### Gaz Chauds
+
+        TempG = ENFeu.TemperatureGazISO_Minutes(cls_VerifFeuSlimAcier.TimeSteps(iStep))
+
+        InitialiseLigneTableau(2, HLIGNE)
+
+        AddCellule(LC1, Bordures.Tous, PositionTexteInCell.Gauche, BlocFEU("HOTGAZES"))
+
+        AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(TempG, Enu_TypeVariable.Temperature, 3, 1, False, True))
+
+        '--( 
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub LigneTableauTempSlim(ByRef Pos As Integer, Partie As String, TempPart() As Decimal)
+
+        InitialiseLigneTableau(3, HLIGNE)
+
+        AddCellule(LC1, Bordures.Tous, PositionTexteInCell.Gauche, Partie)
+
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(TempPart(0), Enu_TypeVariable.Temperature, 3, 1, False, True))
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(TempPart(1), Enu_TypeVariable.Temperature, 3, 1, False, True))
+
+    End Sub
+
+
+    Private Sub EnteteTableauTempSlim(ByRef Pos As Integer, RStep As String)
+        '-------------------------------------------------------------------------------------------
+        '   20/12/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition de l'entete du tableau des sollicitations internes
+        '-------------------------------------------------------------------------------------------
+        '   NCol        [S] :   Nombre de colonnes
+        '   Pos         [S] :   Position du tableau / bord gauche
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations 
+
+        Const strMin As String = "min"
+        Const strMax As String = "max"
+        Const UnitTemp As String = "°C"
+        Dim NCol As Integer
+
+        '--( Initialisation
+
+        NCol = 3
+        Pos = 20
+
+        AddLigneNDC("\TABLEAU " & CStr(Pos), False)
+
+        InitialiseLigneTableau(NCol, HLIGNEENTETE)
+
+        AddCelluleFond(LC1, Bordures.Tous, PositionTexteInCell.Centre, "R" & RStep)
+
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "T\-" & strMin & "\= (" & UnitTemp & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "T\-" & strMax & "\= (" & UnitTemp & ")")
 
     End Sub
 
@@ -12091,6 +12345,8 @@ Module Mod_NoteCalcul
         Dim lSsExposee As Boolean
         Dim lMethCreuxOndes As Boolean
         Dim lBacPerpendiculaire As Boolean = myBeam.Dalle.lMixte And myBeam.Dalle.Bac.lPerpendiculaire And myBeam.Dalle.Bac.lNervuresContinues
+
+        If myBeam.lSlimFloorAcier Then Exit Sub
 
         '--( Titre
 
@@ -12185,7 +12441,6 @@ Module Mod_NoteCalcul
 
     End Sub
 
-
     Private Sub EditionELFeuCourbes(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
         '   22/10/24 :  Création - POM
@@ -12206,9 +12461,9 @@ Module Mod_NoteCalcul
         Dim lProtege As Boolean
         Dim lMixte As Boolean
 
-        '--( On ne trace pas les courbes d'échauffement si on a un poutrelle partiellement enrobée
+        '--( On ne trace pas les courbes d'échauffement si on a un poutrelle partiellement enrobée, ou poutre slim floor
 
-        If myBeam.lEnrobage Then Exit Sub
+        If myBeam.lEnrobage Or myBeam.lSlimFloor Then Exit Sub
 
         '--( Initialisation
 
@@ -12294,6 +12549,8 @@ Module Mod_NoteCalcul
                 EditionVerificationsFEUSyntheseEnrobe(myBeam)
             Case cls_Section.Enum_TypeSection.Mixte
                 EditionVerificationsFEUSyntheseMixte(myBeam)
+            Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SFB
+                EditionVerificationsFEUSyntheseSlimAcier(myBeam)
         End Select
 
     End Sub
@@ -12314,7 +12571,133 @@ Module Mod_NoteCalcul
                 EditionVerificationsFEUDetailEnrobe(myBeam)
             Case cls_Section.Enum_TypeSection.Mixte
                 EditionVerificationsFEUDetailMixte(myBeam)
+            Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SFB
+                EditionVerificationsFEUDetailSlimAcier(myBeam)
         End Select
+
+    End Sub
+
+    '######### ACIER SLIM ##################################################################################################
+
+    Private Sub EditionVerificationsFEUDetailSlimAcier(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres acier
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+        Dim iStep As Integer
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_DETAIL"))
+
+        '--( Entete du tableau
+
+        EnteteTableauVerifFeuSlimAcier(NCOL, LargCol)
+
+        '--( Remplissage tableau
+
+        For iStep = 0 To cls_VerifFeuSlimAcier.TimeSteps.GetUpperBound(0)
+            LigneTableauVerifFeuSlimAcier(iStep, myBeam.VerifFeuSlimAcier, NCOL, LargCol)
+        Next
+
+        '--( Fin
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub EnteteTableauVerifFeuSlimAcier(ByRef NCOL As Integer, ByRef LargCol() As Single)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres partiellement enrobée de béton (acier ou mixte)
+        '   Entête du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   NCOL        [S] :   Nombre de colonnes dans le tableau
+        '   LargCol     [S] :   Largeur des colonnes du tab
+        '   lbuckling   [E] :   Indique si voilement par cisaillement
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Initialisation
+
+        NCOL = 5
+
+        ReDim LargCol(NCOL - 1)
+
+        LargCol(0) = 15
+        For i As Integer = 1 To NCOL - 1
+            LargCol(i) = 8
+        Next
+
+        Const POS As Integer = 10
+
+        '--( AffichageOptFeu de l'entête
+
+        AddLigneNDC("\TABLEAU " & CStr(POS), False)
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
+
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-My\=")
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
+
+    End Sub
+
+    Private Sub LigneTableauVerifFeuSlimAcier(iStep As Integer, myVerifFeu As cls_VerifFeuSlimAcier,
+                                              NCOL As Integer, LargCol() As Single)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres en acier 
+        '   Ligne du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   iStep       [E] :   Indice du pas de temps
+        '   myVerifFeu  [E] :   Critères
+        '   NCOL        [E] :   Nombre de colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tab
+        '   lbuckling   [E] :   Indique si voilement par cisaillement
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        ' Dim kY, kE As Decimal
+        Dim EN_Feu As New cls_EurocodesFeu
+        Dim ChaineMV As String = "--"
+        Dim iCol As Integer = 6
+
+        '--( Initialisation
+
+        'kY = EN_Feu.ReducFyAcier(myVerifFeu.TempAStep(iStep))
+        'kE = EN_Feu.ReducEyAcier(myVerifFeu.TempAStep(iStep))
+
+        '--( AffichageOptFeu
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuSlimAcier.TimeSteps(iStep)))
+
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereMY(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
+
+        If IsGreater(myVerifFeu.CritereV(iStep).CritereMax, 0) Then
+            ChaineMV = GetStringInUnitN(myVerifFeu.CritereMV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False)
+        End If
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, ChaineMV)
 
     End Sub
 
@@ -12656,6 +13039,43 @@ Module Mod_NoteCalcul
 
     End Sub
 
+    Private Sub EditionVerificationsFEUSyntheseSlimAcier(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la synthèse des calculs au feu pour une poutre à section acier slim floor
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Calcul au feu
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myStep As Integer
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_SYMMARY"))
+
+        '--( Durée de résistance au feu
+
+        If myBeam.VerifFeuSlimAcier.RStep = -1 Then
+            myStep = 0
+        Else
+            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuSlimAcier.TimeSteps(myBeam.VerifFeuSlimAcier.RStep)))
+            myStep = myBeam.VerifFeuSlimAcier.RStep
+        End If
+
+        '--( Synthèse des critères
+
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimAcier.CritereMY(myStep), "\SG\s\-My\=", BlocELU("MY_CRITERIA"), False, True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimAcier.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), False, True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimAcier.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), False, True)
+
+        If IsGreater(myBeam.VerifFeuSlimAcier.CritereV(myStep).CritereMax, 0) Then
+            AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimAcier.CritereMV(myStep), "\SG\s\-MV\=", BlocELU("MV_CRITERIA"), False, True)
+        End If
+
+    End Sub
 
     Private Sub EditionVerificationsFEUSyntheseAcier(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
@@ -12679,7 +13099,7 @@ Module Mod_NoteCalcul
         If myBeam.VerifFeuAcier.RStep = -1 Then
             myStep = 0
         Else
-            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuEnrobe.TimeSteps(myBeam.VerifFeuAcier.RStep)))
+            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuAcier.TimeSteps(myBeam.VerifFeuAcier.RStep)))
             myStep = myBeam.VerifFeuAcier.RStep
         End If
 

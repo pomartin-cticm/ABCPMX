@@ -26,10 +26,8 @@ Partial Class Frm_MaintienBacN_Plancher
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Options = New System.Windows.Forms.Label()
-        Me.lbl_Panneau = New System.Windows.Forms.Label()
         Me.lbl_Floor = New System.Windows.Forms.Label()
         Me.pan_DefPlancher = New System.Windows.Forms.Panel()
-        Me.img_nt = New System.Windows.Forms.PictureBox()
         Me.lbl_EntraxeD = New System.Windows.Forms.Label()
         Me.txt_EntraxeD = New System.Windows.Forms.TextBox()
         Me.etq_UnitL5 = New System.Windows.Forms.Label()
@@ -45,46 +43,18 @@ Partial Class Frm_MaintienBacN_Plancher
         Me.etq_UnitL2 = New System.Windows.Forms.Label()
         Me.etq_UnitL1 = New System.Windows.Forms.Label()
         Me.txt_LargeurP = New System.Windows.Forms.TextBox()
-        Me.pan_Panneau = New System.Windows.Forms.Panel()
-        Me.lbl_NbSpans = New System.Windows.Forms.Label()
-        Me.lbl_Tpr = New System.Windows.Forms.Label()
-        Me.img_Tpr = New System.Windows.Forms.PictureBox()
-        Me.etq_UnitD1 = New System.Windows.Forms.Label()
-        Me.txt_Tpr = New System.Windows.Forms.TextBox()
-        Me.img_m = New System.Windows.Forms.PictureBox()
-        Me.cmb_NbSpan = New System.Windows.Forms.ComboBox()
-        Me.pan_BacIndividuel = New System.Windows.Forms.Panel()
-        Me.img_bp = New System.Windows.Forms.PictureBox()
-        Me.img_ap = New System.Windows.Forms.PictureBox()
-        Me.lbl_SheetWidth = New System.Windows.Forms.Label()
-        Me.lbl_SheetLength = New System.Windows.Forms.Label()
-        Me.etq_UnitL4 = New System.Windows.Forms.Label()
-        Me.txt_SheetWidth = New System.Windows.Forms.TextBox()
-        Me.etq_UnitL3 = New System.Windows.Forms.Label()
-        Me.txt_SheetLength = New System.Windows.Forms.TextBox()
-        Me.lbl_IndSheetDimensions = New System.Windows.Forms.Label()
         Me.pan_Options = New System.Windows.Forms.Panel()
         Me.chk_Theta = New System.Windows.Forms.CheckBox()
         Me.chk_PriseEnCompteBac = New System.Windows.Forms.CheckBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.lbl_Fu = New System.Windows.Forms.Label()
-        Me.img_Fup = New System.Windows.Forms.PictureBox()
-        Me.etq_UnitF1 = New System.Windows.Forms.Label()
-        Me.txt_Fup = New System.Windows.Forms.TextBox()
+        Me.img_nt = New System.Windows.Forms.PictureBox()
         Me.pan_Main.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
         Me.pan_DefPlancher.SuspendLayout()
-        CType(Me.img_nt, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_DimPlancher.SuspendLayout()
-        Me.pan_Panneau.SuspendLayout()
-        CType(Me.img_Tpr, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_m, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_BacIndividuel.SuspendLayout()
-        CType(Me.img_bp, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_ap, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Options.SuspendLayout()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Fup, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_nt, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Main
@@ -103,24 +73,22 @@ Partial Class Frm_MaintienBacN_Plancher
         Me.TLPan_Gauche.ColumnCount = 1
         Me.TLPan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_Gauche.Controls.Add(Me.lbl_Options, 0, 0)
-        Me.TLPan_Gauche.Controls.Add(Me.lbl_Panneau, 0, 4)
         Me.TLPan_Gauche.Controls.Add(Me.lbl_Floor, 0, 2)
         Me.TLPan_Gauche.Controls.Add(Me.pan_DefPlancher, 0, 3)
-        Me.TLPan_Gauche.Controls.Add(Me.pan_Panneau, 0, 5)
         Me.TLPan_Gauche.Controls.Add(Me.pan_Options, 0, 1)
-        Me.TLPan_Gauche.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TLPan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
-        Me.TLPan_Gauche.RowCount = 7
+        Me.TLPan_Gauche.RowCount = 5
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 73.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 165.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(300, 502)
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(300, 524)
         Me.TLPan_Gauche.TabIndex = 1
         '
         'lbl_Options
@@ -136,20 +104,6 @@ Partial Class Frm_MaintienBacN_Plancher
         Me.lbl_Options.TabIndex = 4
         Me.lbl_Options.Text = "lbl_Options"
         Me.lbl_Options.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'lbl_Panneau
-        '
-        Me.lbl_Panneau.AutoSize = True
-        Me.lbl_Panneau.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Panneau.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Panneau.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Panneau.Location = New System.Drawing.Point(0, 298)
-        Me.lbl_Panneau.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Panneau.Name = "lbl_Panneau"
-        Me.lbl_Panneau.Size = New System.Drawing.Size(300, 30)
-        Me.lbl_Panneau.TabIndex = 2
-        Me.lbl_Panneau.Text = "lbl_Panneau"
-        Me.lbl_Panneau.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lbl_Floor
         '
@@ -184,15 +138,6 @@ Partial Class Frm_MaintienBacN_Plancher
         Me.pan_DefPlancher.Name = "pan_DefPlancher"
         Me.pan_DefPlancher.Size = New System.Drawing.Size(300, 164)
         Me.pan_DefPlancher.TabIndex = 1
-        '
-        'img_nt
-        '
-        Me.img_nt.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_nt.Location = New System.Drawing.Point(160, 9)
-        Me.img_nt.Name = "img_nt"
-        Me.img_nt.Size = New System.Drawing.Size(37, 20)
-        Me.img_nt.TabIndex = 96
-        Me.img_nt.TabStop = False
         '
         'lbl_EntraxeD
         '
@@ -341,196 +286,6 @@ Partial Class Frm_MaintienBacN_Plancher
         Me.txt_LargeurP.TabIndex = 76
         Me.txt_LargeurP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'pan_Panneau
-        '
-        Me.pan_Panneau.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_Panneau.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Panneau.Controls.Add(Me.lbl_Fu)
-        Me.pan_Panneau.Controls.Add(Me.img_Fup)
-        Me.pan_Panneau.Controls.Add(Me.etq_UnitF1)
-        Me.pan_Panneau.Controls.Add(Me.txt_Fup)
-        Me.pan_Panneau.Controls.Add(Me.lbl_NbSpans)
-        Me.pan_Panneau.Controls.Add(Me.lbl_Tpr)
-        Me.pan_Panneau.Controls.Add(Me.img_Tpr)
-        Me.pan_Panneau.Controls.Add(Me.etq_UnitD1)
-        Me.pan_Panneau.Controls.Add(Me.txt_Tpr)
-        Me.pan_Panneau.Controls.Add(Me.img_m)
-        Me.pan_Panneau.Controls.Add(Me.cmb_NbSpan)
-        Me.pan_Panneau.Controls.Add(Me.pan_BacIndividuel)
-        Me.pan_Panneau.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Panneau.Location = New System.Drawing.Point(0, 328)
-        Me.pan_Panneau.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_Panneau.Name = "pan_Panneau"
-        Me.pan_Panneau.Size = New System.Drawing.Size(300, 150)
-        Me.pan_Panneau.TabIndex = 3
-        '
-        'lbl_NbSpans
-        '
-        Me.lbl_NbSpans.Location = New System.Drawing.Point(8, 5)
-        Me.lbl_NbSpans.Name = "lbl_NbSpans"
-        Me.lbl_NbSpans.Size = New System.Drawing.Size(153, 31)
-        Me.lbl_NbSpans.TabIndex = 3
-        Me.lbl_NbSpans.Text = "lbl_NbSpans"
-        '
-        'lbl_Tpr
-        '
-        Me.lbl_Tpr.AutoSize = True
-        Me.lbl_Tpr.Location = New System.Drawing.Point(8, 105)
-        Me.lbl_Tpr.Name = "lbl_Tpr"
-        Me.lbl_Tpr.Size = New System.Drawing.Size(39, 13)
-        Me.lbl_Tpr.TabIndex = 100
-        Me.lbl_Tpr.Text = "lbl_Tpr"
-        '
-        'img_Tpr
-        '
-        Me.img_Tpr.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Tpr.Location = New System.Drawing.Point(160, 102)
-        Me.img_Tpr.Name = "img_Tpr"
-        Me.img_Tpr.Size = New System.Drawing.Size(37, 20)
-        Me.img_Tpr.TabIndex = 99
-        Me.img_Tpr.TabStop = False
-        '
-        'etq_UnitD1
-        '
-        Me.etq_UnitD1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitD1.AutoSize = True
-        Me.etq_UnitD1.Location = New System.Drawing.Point(261, 106)
-        Me.etq_UnitD1.Name = "etq_UnitD1"
-        Me.etq_UnitD1.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitD1.TabIndex = 97
-        Me.etq_UnitD1.Text = "kN"
-        '
-        'txt_Tpr
-        '
-        Me.txt_Tpr.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Tpr.Location = New System.Drawing.Point(197, 102)
-        Me.txt_Tpr.Name = "txt_Tpr"
-        Me.txt_Tpr.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Tpr.TabIndex = 96
-        Me.txt_Tpr.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'img_m
-        '
-        Me.img_m.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_m.Location = New System.Drawing.Point(160, 6)
-        Me.img_m.Name = "img_m"
-        Me.img_m.Size = New System.Drawing.Size(37, 20)
-        Me.img_m.TabIndex = 95
-        Me.img_m.TabStop = False
-        '
-        'cmb_NbSpan
-        '
-        Me.cmb_NbSpan.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmb_NbSpan.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_NbSpan.FormattingEnabled = True
-        Me.cmb_NbSpan.Location = New System.Drawing.Point(197, 5)
-        Me.cmb_NbSpan.Name = "cmb_NbSpan"
-        Me.cmb_NbSpan.Size = New System.Drawing.Size(75, 21)
-        Me.cmb_NbSpan.TabIndex = 5
-        '
-        'pan_BacIndividuel
-        '
-        Me.pan_BacIndividuel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pan_BacIndividuel.Controls.Add(Me.img_bp)
-        Me.pan_BacIndividuel.Controls.Add(Me.img_ap)
-        Me.pan_BacIndividuel.Controls.Add(Me.lbl_SheetWidth)
-        Me.pan_BacIndividuel.Controls.Add(Me.lbl_SheetLength)
-        Me.pan_BacIndividuel.Controls.Add(Me.etq_UnitL4)
-        Me.pan_BacIndividuel.Controls.Add(Me.txt_SheetWidth)
-        Me.pan_BacIndividuel.Controls.Add(Me.etq_UnitL3)
-        Me.pan_BacIndividuel.Controls.Add(Me.txt_SheetLength)
-        Me.pan_BacIndividuel.Controls.Add(Me.lbl_IndSheetDimensions)
-        Me.pan_BacIndividuel.Location = New System.Drawing.Point(1, 37)
-        Me.pan_BacIndividuel.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_BacIndividuel.Name = "pan_BacIndividuel"
-        Me.pan_BacIndividuel.Size = New System.Drawing.Size(292, 62)
-        Me.pan_BacIndividuel.TabIndex = 5
-        '
-        'img_bp
-        '
-        Me.img_bp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_bp.Location = New System.Drawing.Point(159, 38)
-        Me.img_bp.Name = "img_bp"
-        Me.img_bp.Size = New System.Drawing.Size(37, 20)
-        Me.img_bp.TabIndex = 89
-        Me.img_bp.TabStop = False
-        '
-        'img_ap
-        '
-        Me.img_ap.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_ap.Location = New System.Drawing.Point(159, 16)
-        Me.img_ap.Name = "img_ap"
-        Me.img_ap.Size = New System.Drawing.Size(37, 20)
-        Me.img_ap.TabIndex = 94
-        Me.img_ap.TabStop = False
-        '
-        'lbl_SheetWidth
-        '
-        Me.lbl_SheetWidth.Location = New System.Drawing.Point(6, 42)
-        Me.lbl_SheetWidth.Name = "lbl_SheetWidth"
-        Me.lbl_SheetWidth.Size = New System.Drawing.Size(136, 13)
-        Me.lbl_SheetWidth.TabIndex = 93
-        Me.lbl_SheetWidth.Text = "lbl_SheetWidth"
-        Me.lbl_SheetWidth.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'lbl_SheetLength
-        '
-        Me.lbl_SheetLength.Location = New System.Drawing.Point(6, 20)
-        Me.lbl_SheetLength.Name = "lbl_SheetLength"
-        Me.lbl_SheetLength.Size = New System.Drawing.Size(136, 13)
-        Me.lbl_SheetLength.TabIndex = 92
-        Me.lbl_SheetLength.Text = "lbl_SheetLength"
-        Me.lbl_SheetLength.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'etq_UnitL4
-        '
-        Me.etq_UnitL4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitL4.AutoSize = True
-        Me.etq_UnitL4.Location = New System.Drawing.Point(260, 42)
-        Me.etq_UnitL4.Name = "etq_UnitL4"
-        Me.etq_UnitL4.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitL4.TabIndex = 91
-        Me.etq_UnitL4.Text = "kN"
-        '
-        'txt_SheetWidth
-        '
-        Me.txt_SheetWidth.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_SheetWidth.Location = New System.Drawing.Point(196, 38)
-        Me.txt_SheetWidth.Name = "txt_SheetWidth"
-        Me.txt_SheetWidth.Size = New System.Drawing.Size(58, 20)
-        Me.txt_SheetWidth.TabIndex = 90
-        Me.txt_SheetWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'etq_UnitL3
-        '
-        Me.etq_UnitL3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitL3.AutoSize = True
-        Me.etq_UnitL3.Location = New System.Drawing.Point(260, 20)
-        Me.etq_UnitL3.Name = "etq_UnitL3"
-        Me.etq_UnitL3.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitL3.TabIndex = 89
-        Me.etq_UnitL3.Text = "kN"
-        '
-        'txt_SheetLength
-        '
-        Me.txt_SheetLength.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_SheetLength.Location = New System.Drawing.Point(196, 16)
-        Me.txt_SheetLength.Name = "txt_SheetLength"
-        Me.txt_SheetLength.Size = New System.Drawing.Size(58, 20)
-        Me.txt_SheetLength.TabIndex = 88
-        Me.txt_SheetLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'lbl_IndSheetDimensions
-        '
-        Me.lbl_IndSheetDimensions.AutoSize = True
-        Me.lbl_IndSheetDimensions.Location = New System.Drawing.Point(7, 2)
-        Me.lbl_IndSheetDimensions.Name = "lbl_IndSheetDimensions"
-        Me.lbl_IndSheetDimensions.Size = New System.Drawing.Size(120, 13)
-        Me.lbl_IndSheetDimensions.TabIndex = 87
-        Me.lbl_IndSheetDimensions.Text = "lbl_IndSheetDimensions"
-        '
         'pan_Options
         '
         Me.pan_Options.BackColor = System.Drawing.SystemColors.ControlLightLight
@@ -571,42 +326,14 @@ Partial Class Frm_MaintienBacN_Plancher
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'lbl_Fu
+        'img_nt
         '
-        Me.lbl_Fu.AutoSize = True
-        Me.lbl_Fu.Location = New System.Drawing.Point(8, 128)
-        Me.lbl_Fu.Name = "lbl_Fu"
-        Me.lbl_Fu.Size = New System.Drawing.Size(39, 13)
-        Me.lbl_Fu.TabIndex = 104
-        Me.lbl_Fu.Text = "Label1"
-        '
-        'img_Fup
-        '
-        Me.img_Fup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Fup.Location = New System.Drawing.Point(160, 125)
-        Me.img_Fup.Name = "img_Fup"
-        Me.img_Fup.Size = New System.Drawing.Size(37, 20)
-        Me.img_Fup.TabIndex = 103
-        Me.img_Fup.TabStop = False
-        '
-        'etq_UnitF1
-        '
-        Me.etq_UnitF1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitF1.AutoSize = True
-        Me.etq_UnitF1.Location = New System.Drawing.Point(261, 129)
-        Me.etq_UnitF1.Name = "etq_UnitF1"
-        Me.etq_UnitF1.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitF1.TabIndex = 102
-        Me.etq_UnitF1.Text = "kN"
-        '
-        'txt_Fup
-        '
-        Me.txt_Fup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Fup.Location = New System.Drawing.Point(197, 125)
-        Me.txt_Fup.Name = "txt_Fup"
-        Me.txt_Fup.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Fup.TabIndex = 101
-        Me.txt_Fup.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.img_nt.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_nt.Location = New System.Drawing.Point(160, 9)
+        Me.img_nt.Name = "img_nt"
+        Me.img_nt.Size = New System.Drawing.Size(37, 20)
+        Me.img_nt.TabIndex = 96
+        Me.img_nt.TabStop = False
         '
         'Frm_MaintienBacN_Plancher
         '
@@ -622,28 +349,18 @@ Partial Class Frm_MaintienBacN_Plancher
         Me.TLPan_Gauche.PerformLayout()
         Me.pan_DefPlancher.ResumeLayout(False)
         Me.pan_DefPlancher.PerformLayout()
-        CType(Me.img_nt, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_DimPlancher.ResumeLayout(False)
         Me.pan_DimPlancher.PerformLayout()
-        Me.pan_Panneau.ResumeLayout(False)
-        Me.pan_Panneau.PerformLayout()
-        CType(Me.img_Tpr, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_m, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_BacIndividuel.ResumeLayout(False)
-        Me.pan_BacIndividuel.PerformLayout()
-        CType(Me.img_bp, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_ap, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Options.ResumeLayout(False)
         Me.pan_Options.PerformLayout()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Fup, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_nt, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents pan_Main As Panel
     Friend WithEvents TLPan_Gauche As TableLayoutPanel
-    Friend WithEvents lbl_Panneau As Label
     Friend WithEvents lbl_Floor As Label
     Friend WithEvents pan_DefPlancher As Panel
     Friend WithEvents chk_PriseEnCompteBac As CheckBox
@@ -659,34 +376,12 @@ Partial Class Frm_MaintienBacN_Plancher
     Friend WithEvents etq_UnitL2 As Label
     Friend WithEvents etq_UnitL1 As Label
     Friend WithEvents txt_LargeurP As TextBox
-    Friend WithEvents pan_Panneau As Panel
-    Friend WithEvents cmb_NbSpan As ComboBox
-    Friend WithEvents lbl_NbSpans As Label
-    Friend WithEvents pan_BacIndividuel As Panel
-    Friend WithEvents lbl_SheetWidth As Label
-    Friend WithEvents lbl_SheetLength As Label
-    Friend WithEvents etq_UnitL4 As Label
-    Friend WithEvents txt_SheetWidth As TextBox
-    Friend WithEvents etq_UnitL3 As Label
-    Friend WithEvents txt_SheetLength As TextBox
-    Friend WithEvents lbl_IndSheetDimensions As Label
     Friend WithEvents ErrorProvider As ErrorProvider
-    Friend WithEvents img_bp As PictureBox
-    Friend WithEvents img_ap As PictureBox
     Friend WithEvents lbl_Options As Label
     Friend WithEvents pan_Options As Panel
     Friend WithEvents chk_Theta As CheckBox
     Friend WithEvents lbl_EntraxeD As Label
     Friend WithEvents txt_EntraxeD As TextBox
     Friend WithEvents etq_UnitL5 As Label
-    Friend WithEvents img_m As PictureBox
     Friend WithEvents img_nt As PictureBox
-    Friend WithEvents lbl_Tpr As Label
-    Friend WithEvents img_Tpr As PictureBox
-    Friend WithEvents etq_UnitD1 As Label
-    Friend WithEvents txt_Tpr As TextBox
-    Friend WithEvents lbl_Fu As Label
-    Friend WithEvents img_Fup As PictureBox
-    Friend WithEvents etq_UnitF1 As Label
-    Friend WithEvents txt_Fup As TextBox
 End Class

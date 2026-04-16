@@ -126,6 +126,12 @@ WARNINGCOMPREINF1		= Rebars in compression can not be considered with only one l
 WARNINGCOMPREINF2		= When rebars in compression are considered in the design of the beam, requirements of EN 1992-1-1:2005, 9.2.1.2 (3) should be fulfiled to avoid premature buckling
 PSI2LONGTERM			= The quasi-permanent ratio of liva loads is assumed to be a long term effect
 
+#FRM_CALCULENCOURS
+TITLE 					= Progress of the heating calculation
+TITLELABL				= Progression du calcul d'échauffement
+PROGRESTEP				= Fire calculation for a duration of
+PROGREINSTEP			= Progress
+
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
 CLOSE					= Close
@@ -310,6 +316,7 @@ DIAMETER				= Diameter
 TITLE					= Restraint of the beam by the steel deck (construction phase only)
 OK						= Ok
 CANCEL					= Cancel
+IDECK					= Deck
 RESTRAINTBYTHEDECK		= The beam is laterally restrained by the deck
 INDIVIDUALSHEET			= Individual sheet
 NUMBERSPANS				= Number of spans crossed by the sheets
@@ -355,6 +362,10 @@ OPTIONS					= Options
 BEAMSPACING				= Spacing of beams
 THCOATING				= Thickness of coating
 FUP						= Ultimate resistance
+REINTRANTRIBSW1			= The K factor used to assess the flexibility in distorsion is provided in CECM report no 88 only for decks with open ribs.
+REINTRANTRIBSW2			= For reintrant ribs, the K factor should be defined by the User.
+DISTORSIONFLEX			= Distorsion flexibility
+INFOW_TOLEK				= Values of K may be found in the paper "Resistance to lateral torsional buckling of a secondary beam in construction phase – Restraint by the steel deck", journal Construction Métallique no 2022/3
 
 #FRMEDITSTUDS	
 TITLE					= Studs data base

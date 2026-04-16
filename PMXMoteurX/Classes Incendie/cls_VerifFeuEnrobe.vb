@@ -757,7 +757,7 @@ Public Class cls_VerifFeuEnrobe
         Dim Hw As Decimal
         Dim lLamine As Boolean = mySection.lLamine
 
-        Const RhoV As Decimal = 0
+        '  Const RhoV As Decimal = 0
         Dim FySup, FyInf, FyW As Decimal
         Const Signe As Decimal = 1
         Const lValeurRd As Boolean = True

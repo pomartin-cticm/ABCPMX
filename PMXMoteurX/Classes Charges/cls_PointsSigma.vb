@@ -387,10 +387,40 @@
         '-----------------------------------------------------------------------------------
         '   Calculs des contraintes normales issues de tous les cas de charges
         '-----------------------------------------------------------------------------------
+        '   myBeam              [E] :   Poutre traitée
+        '   Signe               [E] :   Signe du moment
+        '   lChargesATraiter    [E] :   Cas de charges à traiter
+        '   Sigma               [S] :   Table des contraintes (icas, ipts,inode,0 ou 1)
         '-----------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '   Signe       [E] :   Cas de charge traité (qui a été calculé par EF)
-        '   Sigma       [S] :   Table des contraintes (icas, ipts,inode,0 ou 1)
+
+        '--( Déclarations
+
+        Dim lChOK() As Boolean = Nothing
+
+        ReDim lChOK(myBeam.ChargesA.Count - 1)
+
+        '--( Traitement
+
+        For icas As Integer = 0 To myBeam.ChargesA.Count - 1
+            lChOK(icas) = True
+        Next
+
+        '--( Calcul des contraintes pour tous les cas de charges
+
+        Me.CalculContraintesCharges(myBeam, Signe, lChOK, Sigma)
+
+    End Sub
+
+    Public Sub CalculContraintesCharges(myBeam As cls_Poutre, Signe As Decimal, lChargesATraiter() As Boolean, ByRef Sigma(,,,) As Decimal)
+        '-----------------------------------------------------------------------------------
+        '   20/10/23 :  Création - POM
+        '-----------------------------------------------------------------------------------
+        '   Calculs des contraintes normales issues de tous les cas de charges
+        '-----------------------------------------------------------------------------------
+        '   myBeam              [E] :   Poutre traitée
+        '   Signe               [E] :   Signe du moment
+        '   lChargesATraiter    [E] :   Cas de charges à traiter
+        '   Sigma               [S] :   Table des contraintes (icas, ipts,inode,0 ou 1)
         '-----------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -412,7 +442,7 @@
 
         For iCas = 0 To NbCas - 1
 
-            If myBeam.ChargesA(iCas).lRunCalcul Then
+            If myBeam.ChargesA(iCas).lRunCalcul And lChargesATraiter(iCas) Then
 
                 If lAcierNonEnrob Then
                     Me.CalculContraintesSectionsAcierNonEnrobees(myBeam, iCas, Sigma)

@@ -359,6 +359,7 @@ Public Class Frm_MaintienBacN_Fixation
         '----------------------------------------------------------------------------------------------------
 
         If lNervures Then
+
             '# Fixation des nervures sur les solives
             Select Case Frm_MaintienBacN.localMaitienBac.FixNervuresTyp
                 Case cls_MaintienBac.Enu_FixNervuresType.Pistolet
@@ -370,6 +371,7 @@ Public Class Frm_MaintienBacN_Fixation
             End Select
 
         Else
+
             '# Fixation des bacs entre eux (coutures)
 
             Select Case Frm_MaintienBacN.localMaitienBac.FixCoutureType

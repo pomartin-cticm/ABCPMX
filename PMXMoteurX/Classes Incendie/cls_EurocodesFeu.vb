@@ -199,7 +199,7 @@
         '--------------------------------------------------------------------------------------------------------------------------------
         '   Courbe ISO des gaz chauds (selon EN 1991-1-2 3.2.1 (1))
         '--------------------------------------------------------------------------------------------------------------------------------
-        '   TimeT       [E] :   Temps auquel on calcule la température en secondes
+        '   TimeT       [E] :   Temps en secondes auquel on calcule la température en °C
         '--------------------------------------------------------------------------------------------------------------------------------
 
         'Dim myTemp As Decimal
@@ -216,7 +216,7 @@
         '--------------------------------------------------------------------------------------------------------------------------------
         '   Courbe ISO des gaz chauds (selon EN 1991-1-2 3.2.1 (1))
         '--------------------------------------------------------------------------------------------------------------------------------
-        '   TimeTminutes    [E] :   Temps en minutes auquel on calcule la température en secondes
+        '   TimeTminutes    [E] :   Temps en minutes auquel on calcule la température en °C
         '--------------------------------------------------------------------------------------------------------------------------------
 
         Dim myTemp As Decimal
@@ -232,6 +232,7 @@
         '   13/03/25 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------------
         '   Courbe des gaz chauds dans les creux d'ondes non remplis
+        '   D'après Formules (J.1) et (J.2) de l'EN 1994-1-2:2026 - Annexe J (amendement A1)
         '--------------------------------------------------------------------------------------------------------------------------------
         '   TimeT       [E] :   Temps auquel on calcule la température en secondes
         '   CRed1, CRed2[E] :   Paramètres pour le calcul de la température
@@ -591,14 +592,19 @@
         '   13/03/25 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------------
         '   Calcul du paramètre Phi Cavité pour une onde de bac non remplies avec semelle protégée
+        '   Formule (J.7) de l'EN 1994-1-2:2026 - Annexe J (amendement A1)
         '--------------------------------------------------------------------------------------------------------------------------------
         '   myBac       [E] :   Bac de la dalle mixte
         '   Bfs         [E] :   Largeur de la semelle supérieure
         '   dp          [E] :   Epaisseur de la protection feu
         '--------------------------------------------------------------------------------------------------------------------------------
 
+        '--( Déclarations
+
         Dim Phi As Decimal
         Dim R1, R2 As Decimal
+
+        '--( Traitement
 
         R1 = 2 * myBac.Hp / (Bfs + 2 * dp)
         ' R2 = (myBac.Ep + myBac.Bb - 2 * myBac.Bt) / (Bfs + 2 * dp)
@@ -615,6 +621,7 @@
         '   14/03/25 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------------
         '   Calcul du CRed1 
+        '   Formule (J.5) de l'EN 1994-1-2:2026 - Annexe J (amendement A1)
         '--------------------------------------------------------------------------------------------------------------------------------
         '   PhiV        [E] :   Coefficient de vue des creux d'ondes
         '--------------------------------------------------------------------------------------------------------------------------------
@@ -628,6 +635,7 @@
         '   14/03/25 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------------
         '   Calcul du CRed2 
+        '   Formule (J.6) de l'EN 1994-1-2:2026 - Annexe J (amendement A1)
         '--------------------------------------------------------------------------------------------------------------------------------
         '   PhiV        [E] :   Coefficient de vue des creux d'ondes
         '--------------------------------------------------------------------------------------------------------------------------------
@@ -712,14 +720,19 @@
 
         Dim TempFiMod As Decimal
         Dim aTheta As Decimal
+        Dim TempFiLoc As Decimal = TempFi
 
         '--( Calculs
 
-        aTheta = Me.CoefATheta(TempFi, Hpro, iStep)
+        '== Modif Annex J
+        If TempFiLoc < 450 Then TempFiLoc = 450
 
-        TempFiMod = TempFi * (1 + (TempFs - Theta0) * aTheta)
+        aTheta = Me.CoefATheta(TempFiLoc, Hpro, iStep)
 
-        Return TempFiMod
+        TempFiMod = TempFiLoc * (1 + (TempFs - Theta0) * aTheta)
+
+        Return Math.Min(TempFiMod, TempFs)
+        'Return TempFiMod
 
     End Function
 
@@ -747,33 +760,55 @@
 
         '--( Initialisation du tableau de valeurs
 
+        '== 25/03/2026 Modif Annex J 
         Dim TabATheta(,,) As Decimal =
        {
-            {
-                {0.2, 1, 1.4, 0.65, 0},
-                {0.2, 2, 3.2, 1.8, 0.75},
-                {0.2, 3, 4.6, 2.8, 1.5},
-                {0.2, 4, 5.6, 3.8, 2.0}
-            },
-            {
-                {0.3, 1, 0, 0, 0},
-                {0.3, 2, 1, 0, 0},
-                {0.3, 3, 2, 1.1, 0.65},
-                {0.3, 4, 2.6, 1.6, 0.88}
-            },
-            {
-                {0.4, 1, 0, 0, 0},
-                {0.4, 2, 0, 0, 0},
-                {0.4, 3, 0.6, 0, 0},
-                {0.4, 4, 1.2, 0.76, 0.35}
-            },
-            {
-                {0.5, 1, 0, 0, 0},
-                {0.5, 2, 0, 0, 0},
-                {0.5, 3, 0, 0, 0},
-                {0.5, 4, 0, 0, 0}
-            }
-       }
+              {
+                  {0.2, 1, 0, 0, 0},
+                  {0.2, 2, 3.2, 1.8, 0.75},
+                  {0.2, 3, 4.6, 2.8, 1.5},
+                  {0.2, 4, 5.6, 3.8, 2.0}
+              },
+              {
+                  {0.3, 1, 0, 0, 0},
+                  {0.3, 2, 1.2, 0.6, 0},
+                  {0.3, 3, 2, 1.2, 0.6},
+                  {0.3, 4, 2.8, 1.7, 0.88}
+              },
+              {
+                  {0.45, 1, 0, 0, 0},
+                  {0.45, 2, 0, 0, 0},
+                  {0.45, 3, 0, 0, 0},
+                  {0.45, 4, 0, 0, 0}
+              }
+         }
+
+        '{
+        '      {
+        '          {0.2, 1, 1.4, 0.65, 0},
+        '          {0.2, 2, 3.2, 1.8, 0.75},
+        '          {0.2, 3, 4.6, 2.8, 1.5},
+        '          {0.2, 4, 5.6, 3.8, 2.0}
+        '      },
+        '      {
+        '          {0.3, 1, 0, 0, 0},
+        '          {0.3, 2, 1, 0, 0},
+        '          {0.3, 3, 2, 1.1, 0.65},
+        '          {0.3, 4, 2.6, 1.6, 0.88}
+        '      },
+        '      {
+        '          {0.4, 1, 0, 0, 0},
+        '          {0.4, 2, 0, 0, 0},
+        '          {0.4, 3, 0.6, 0, 0},
+        '          {0.4, 4, 1.2, 0.76, 0.35}
+        '      },
+        '      {
+        '          {0.5, 1, 0, 0, 0},
+        '          {0.5, 2, 0, 0, 0},
+        '          {0.5, 3, 0, 0, 0},
+        '          {0.5, 4, 0, 0, 0}
+        '      }
+        ' }
 
 
         '--( Initialisation
@@ -1426,7 +1461,7 @@
     End Function
 
     ''' <summary>
-    ''' Fonction qui renvoi le coefficient minorateur appliqué aux armatures de la dalle béton dans le cas de l'annexe F avec M<0
+    ''' Fonction qui renvoi le coefficient minorateur appliqué aux armatures de la dalle béton dans le cas de l'annexe F avec M negatif
     ''' </summary>
     ''' <param name="Time">Durée du feu en minutes</param>
     ''' <param name="u">Distance du lit d'armatures à la face la plus proche de la dalle béton</param>
@@ -1600,8 +1635,10 @@
         Dim MassiV As Decimal
 
         '--( Calculs
+        '--Modification selon l'annexe J - 25/03/2026
 
-        MassiV = (2 * myBac.Bt + myBac.Bb - myBac.Ep) / ((myBac.Bt + myBac.Bb) * myProfil.Tfs)
+        'MassiV = (2 * myBac.Bt + myBac.Bb - myBac.Ep) / ((myBac.Bt + myBac.Bb) * myProfil.Tfs)
+        MassiV = ((myBac.Ep - myBac.Bt) + myBac.Bt - myBac.Bb) / ((myBac.Bt + (myBac.Ep - myBac.Bt)) * myProfil.Tfs)
 
         Return (MassiV)
 

@@ -92,10 +92,10 @@
         AlphaCSup = myParamFeu.ConvectionCoefDalle
         EpsilonF = myParamFeu.EmissivityFire
 
-        i_mat_a_0 = my_Mesh.MATACIERPLAT
-        i_mat_a_1 = my_Mesh.MATARMA
-        i_mat_c = my_Mesh.MATBETON
-        i_mat_v_0 = my_Mesh.MATVIDEOUVERT
+        i_mat_a_0 = cls_MaillageSlimFloor.MATACIERPLAT
+        i_mat_a_1 = cls_MaillageSlimFloor.MATARMA
+        i_mat_c = cls_MaillageSlimFloor.MATBETON
+        i_mat_v_0 = cls_MaillageSlimFloor.MATVIDEOUVERT
 
         'GiB 20/11/2025 : cohérence avec le reste du code : les conditions d'égalité ou d'inégalité sont remplacées par les fonctions IsSmaller, IsEqual, etc.
 
@@ -412,7 +412,7 @@
 
                     For i_ = 0 To NbY - 1
 
-                        If .Tab_mesh_mat(i_, j_) = .MATVIDEOUVERT Then
+                        If .Tab_mesh_mat(i_, j_) = cls_MaillageSlimFloor.MATVIDEOUVERT Then
                             .Tab_mesh_temp(i_, j_) = TempG
                         End If
 

@@ -283,6 +283,12 @@
     <Compile Include="Fenetres\Filles\Frm_MaintienBacN_Plancher.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienBacN_Tole.Designer.vb">
+      <DependentUpon>Frm_MaintienBacN_Tole.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienBacN_Tole.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_MaintienN.Designer.vb">
       <DependentUpon>Frm_MaintienN.vb</DependentUpon>
     </Compile>
@@ -353,6 +359,12 @@
       <DependentUpon>Frm_AjoutPoutreDeFichier.vb</DependentUpon>
     </Compile>
     <Compile Include="Fenetres\Frm_AjoutPoutreDeFichier.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Frm_CalculEnCours.Designer.vb">
+      <DependentUpon>Frm_CalculEnCours.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Frm_CalculEnCours.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Frm_ErreursMessages.Designer.vb">
@@ -785,6 +797,9 @@
     <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienBacN_Plancher.resx">
       <DependentUpon>Frm_MaintienBacN_Plancher.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienBacN_Tole.resx">
+      <DependentUpon>Frm_MaintienBacN_Tole.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienN.resx">
       <DependentUpon>Frm_MaintienN.vb</DependentUpon>
     </EmbeddedResource>
@@ -820,6 +835,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Frm_AjoutPoutreDeFichier.resx">
       <DependentUpon>Frm_AjoutPoutreDeFichier.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Frm_CalculEnCours.resx">
+      <DependentUpon>Frm_CalculEnCours.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Frm_ErreursMessages.resx">
       <DependentUpon>Frm_ErreursMessages.vb</DependentUpon>

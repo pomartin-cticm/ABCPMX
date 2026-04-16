@@ -133,7 +133,6 @@
 
 #End Region
 
-
 #Region " Calcul taux armature minimal pour les poutres continues "
 
     Public Function TauxArmaMin551(myBeam As cls_Poutre) As Decimal
@@ -711,4 +710,42 @@
 
 #End Region
 
+#Region " Fonctions pour les slim floors "
+
+    Public Function SlimCalculPsiY(q As Decimal, dbt As Decimal, t As Decimal, fy As Decimal, gammaM0 As Decimal) As Decimal
+        '------------------------------------------------------------------------------------------------------------------
+        '   13/04/24 : Création - GuD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient de réduction de la limite d'élasticité du plat support de slim floor
+        '   d'après annexe I de l'EN 1994-1-1:2025
+        '------------------------------------------------------------------------------------------------------------------
+        '   q       [E] :   Charge sur le plat
+        '   dbt     [E] :   Bras de levier de la charge
+        '   t       [E] :   Epaisseur du plat
+        '   GammaM0 [E] :   GammaM0
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim mybt_Ed, mybt_Rd, eta_m, psiY As Decimal
+
+        '--( Initialisation
+
+        mybt_Ed = q * dbt
+        mybt_Rd = 1.2 * t ^ 2 * fy / (6 * gammaM0) * kConvMPaPa
+
+        '--( Calcul
+
+        eta_m = Math.Min(Math.Abs(mybt_Ed / mybt_Rd), 1)
+
+        psiY = (eta_m - Math.Sqrt(eta_m ^ 2 - 16 * eta_m + 16)) / (2 * (eta_m - 2))
+
+        'psiY = Math.Max(psiY, 0) 'minoration par 0 au cas où
+        'psiY = Math.Min(psiY, 1) 'majoration par 1 au cas où
+
+        Return psiY
+
+    End Function
+
+#End Region
 End Class

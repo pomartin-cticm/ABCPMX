@@ -699,7 +699,8 @@ Public Class Frm_ChargementN
         Dim lNDalle As Boolean = False
         Dim lNEnrob As Boolean = False
         Dim nDalle, nDalleLT As Decimal
-        Dim nEnrob, nEnrobLT As Decimal
+        'Dim nEnrob, nEnrobLT As Decimal
+        Dim nEnrob As Decimal
         Dim RH As Decimal
         Dim t0 As Decimal
         Dim PsiL As Decimal

@@ -612,7 +612,7 @@ Public Class cls_Poutre
 
 #End Region
 
-#Region " Variables pour les valeurs par défaut et le statut de la poutre "
+#Region " Attributs pour les valeurs par défaut et le statut de la poutre "
 
     ''' <summary>
     ''' Indique si la définition des portées, entraxes et trémies est celle par défaut
@@ -633,6 +633,21 @@ Public Class cls_Poutre
     Public lNouvellePoutre As Boolean
 
     'Public lPoutreModifiee As Boolean
+
+    ''' <summary>
+    ''' Indique si le calcul (thermique) a été réalisé pour la poutre ou non
+    ''' </summary>
+    Public lCalculOK As Boolean
+
+    ''' <summary>
+    ''' Indique si le calcul (thermique) a été enregistré
+    ''' </summary>
+    Public lCalculSauve As Boolean
+
+    ''' <summary>
+    ''' Indique si le calcul (thermique) a été chargé
+    ''' </summary>
+    Public lCalculCharge As Boolean
 
 #End Region
 
@@ -802,6 +817,9 @@ Public Class cls_Poutre
         Me.lDefautDalle = True
         Me.lDonneesSauvees = False
         Me.lNouvellePoutre = True
+        Me.lCalculOK = False
+        Me.lCalculSauve = False
+        Me.lCalculCharge = False
         'Me.lPoutreModifiee = False
 
         '--> Initialisation Classes
@@ -987,6 +1005,35 @@ Public Class cls_Poutre
 
 #Region " Outils divers "
 
+    Public ReadOnly Property SlimLargeurAppui() As Decimal
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   31/07/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Renvoie la distance entre le centre des charges sur l'appui et le bord de l'appui
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------------------------------------
+        Get
+            '--( Déclarations
+            Dim dApp As Decimal
+            Dim lDallePleine As Boolean = Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine
+
+            '--( Traitement
+
+            If Me.Param.MethodReducPlatSlim = cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire Then
+                dApp = 40 / 1000        '== 40 mm
+            Else
+                If lDallePleine Then
+                    dApp = Me.Section.LargeurAppuiSlimDallePleine
+                Else
+                    dApp = (2 / 3) * OptionsDalle.Bappmin
+                End If
+            End If
+
+            Return dApp
+
+        End Get
+    End Property
+
     Public ReadOnly Property lMaintienBacPossible As Boolean
         '---------------------------------------------------------------------------------------
         '   01/02/24 :  Création - V1.00 - POM
@@ -1100,6 +1147,12 @@ Public Class cls_Poutre
         End Get
     End Property
 
+    Public ReadOnly Property lSlimFloorAcier As Boolean
+        Get
+            Return Me.Section.lSlimFloor_Acier
+        End Get
+    End Property
+
     ''' <summary>
     ''' Indique si poutre avec enrobage partiel
     ''' </summary>
@@ -1118,6 +1171,9 @@ Public Class cls_Poutre
 
         Me.lNouvellePoutre = False
         Me.lDonneesSauvees = False
+        Me.lCalculOK = False
+        Me.lCalculSauve = False
+        Me.lCalculCharge = False
         'Me.lPoutreModifiee = True
 
         Me.InitialisePoidsPropres()
@@ -3619,7 +3675,6 @@ Public Class cls_Poutre
         Next
     End Sub
 
-
 #End Region
 
 #Region " Combinaisons "
@@ -5720,11 +5775,21 @@ Public Class cls_Poutre
 
 #Region " Vérifications "
 
-    Public Sub AAA_Verifications(NomCharges() As String, strRacineELU As String, strRacineELS As String, strRacineELF As String, strRacineELUC As String, strRacineELSC As String)
+    Public Sub AAA_Verifications(iBeam As Integer, FileName As String, NomCharges() As String,
+                                 strRacineELU As String, strRacineELS As String, strRacineELF As String,
+                                 strRacineELUC As String, strRacineELSC As String,
+                                 Optional progressGlobal As IProgress(Of Struc_MAJEtape) = Nothing,
+                                 Optional progressStep As IProgress(Of Integer) = Nothing)
         '-------------------------------------------------------------------------------------
         '   05/10/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
         '   Routine générale pour gérér les vérifications de la poutre
+        '-------------------------------------------------------------------------------------
+        '   iBeam              [E] :   Indice de la poutre traitée (dans le projet)
+        '   NomCharges         [E] :   Tableau des noms des cas de charges à traiter
+        '   strRacineELU       [E] :   symbole ELU dans les noms de combinaisons ELU etc
+        '   progressEtape      [E] :   Permet de d'envoyer l'information de progression sur les étapes de temps à la Frm_CalculEnCours
+        '   progressDansEtape  [E] :   Permet de d'envoyer l'information de progression entre les étapes de temps à la Frm_CalculEnCours
         '-------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -5829,7 +5894,7 @@ Public Class cls_Poutre
                 Case cls_Section.Enum_TypeSection.Mixte
                     Me.VerifFeuMixte.Z_VerifFeu(Me)
                 Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SFB
-                    Me.VerifFeuSlimAcier.Z_VerifFeu(Me)
+                    Me.VerifFeuSlimAcier.Z_VerifFeu(Me, iBeam, FileName, progressGlobal, progressStep)
                 Case cls_Section.Enum_TypeSection.SABmixte, cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SFBmixte
                     Me.VerifFeuSlimMixte.Z_VerifFeu(Me)
             End Select

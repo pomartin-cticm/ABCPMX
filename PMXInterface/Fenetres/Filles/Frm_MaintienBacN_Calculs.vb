@@ -105,7 +105,7 @@ Public Class Frm_MaintienBacN_Calculs
         Dim c11 As Decimal = Frm_MaintienBacN.localMaitienBac.Flexibilite_C11_DistorsionBac(PorteeL, EntraxeD, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, eYoung)
         Dim c12 As Decimal = Frm_MaintienBacN.localMaitienBac.Flexibilite_C12_Shear(PorteeL, EntraxeD, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, eYoung, Poisson)
         Dim c21 As Decimal = Frm_MaintienBacN.localMaitienBac.Flexibilite_C21_BeamFasteners(PorteeL, EntraxeD, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Ep)
-        Dim c22 As Decimal = Frm_MaintienBacN.localMaitienBac.Flexibilite_C21_BeamFasteners(PorteeL, EntraxeD, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Ep)
+        Dim c22 As Decimal = Frm_MaintienBacN.localMaitienBac.Flexibilite_C22_SeamFastener(PorteeL, EntraxeD, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac)
         Dim cCumul As Decimal
         Dim SAct As Decimal
 

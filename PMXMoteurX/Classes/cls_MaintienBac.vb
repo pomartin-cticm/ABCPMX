@@ -9,7 +9,6 @@ Public Class cls_MaintienBac
 
 #Region " Déclarations "
 
-
     Public Enum Enu_Transition
         Emboitement
         Aboutage
@@ -58,6 +57,8 @@ Public Class cls_MaintienBac
     Public lTheta As Boolean                        ' Indique si on prend en compte la rigidité de flexion du bac pour le calcul au déversement
 
     Public Tpr As Decimal                           ' Epaisseur de revêtement du bac
+
+    Public KUser As Decimal                         ' Coefficient K pour la flexibilité en distorsion, définie par l'utilisateur dans le cas des bacs à nervures rentrantes
 
 #End Region
 
@@ -112,7 +113,6 @@ Public Class cls_MaintienBac
         Return Slip * kUnitSlip
     End Function
 
-
     Public Function FixCoutureSlip() As Decimal
         '--------------------------------------------------------------------------------------------
         '   18/12/23 :  Création - POM
@@ -122,7 +122,6 @@ Public Class cls_MaintienBac
 
         Return FixCoutureSlip(Me.FixCoutureType)
     End Function
-
 
     Public Function FixCoutureSlip(MyType As cls_MaintienBac.Enu_CoutureType) As Decimal
         '--------------------------------------------------------------------------------------------
@@ -274,13 +273,21 @@ Public Class cls_MaintienBac
         Dim K As Decimal
         Dim lOK As Boolean
 
-        Select Case Me.FixNervuresMod
-            Case Enu_FixationNervures.Toutes
-                K = MyBac.CoefK1(lOK)
-            Case Enu_FixationNervures.UneSurDeux
-                K = MyBac.CoefK2(lOK)
-        End Select
+        If MyBac.lNervuresOuvertes Then
 
+            '--( Pour un bac à nervures ouvertes, le coefficient K peut être obtenu d'après le guide CECM n°88
+
+            Select Case Me.FixNervuresMod
+                Case Enu_FixationNervures.Toutes
+                    K = MyBac.CoefK1(lOK)
+                Case Enu_FixationNervures.UneSurDeux
+                    K = MyBac.CoefK2(lOK)
+            End Select
+
+        Else
+            '--( Pour un bac à nervures rentrantes, le coefficient K est défini par l'utilisateur
+            K = Me.KUser
+        End If
         Return K
     End Function
 

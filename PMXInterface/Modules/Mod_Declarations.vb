@@ -295,6 +295,14 @@ Public Module Mod_Declarations
         Public lSLIMMixte As Boolean            ' Indique si les sections slim floors mixtes sont disponibles dans le logiciel
     End Structure
 
+    '#Region " Structure pour MAJ Progression du calcul (SlimFloor) "
+    '    Public Structure Struc_MAJEtape
+    '        Dim ValeurEtape As Integer          'Valeur de l'étape temps que l'on est en train de calculer, en minute
+    '        Dim ValeurProgression As Integer    'Valeur en % de la progression du calcul par rapport aux étapes
+    '    End Structure
+
+    '#End Region
+
     Public Enum Enu_Normes
         Eurocodes_G1
         Eurocodes_G2
@@ -652,6 +660,9 @@ Public Module Mod_Declarations
 
     Public Const lblHISTAR As String = "HISTAR"
 
+    Public Const TEMPMINPERSO As Double = 20           ' température minimale de l'échelle pour le champ thermique
+    Public Const TEMPMAXPERSO As Double = 1200         ' température maximale de l'échelle pour le champ thermique
+
 
 #End Region
 
@@ -733,10 +744,13 @@ Public Module Mod_Declarations
     Public CouleurProfile As Color = Color.LightGray
     Public CouleurDalle As Color = Color.DarkGray
 
-
     Public MyOrange As Color = Color.FromArgb(231, 62, 1)
 
     Public CouleurErreur As Color = Color.DarkRed
+
+    'Couleurs utilisées pour l'affichage du champ thermique de l'échauffement des SlimFloor - utilisée dans Frm_MaillageSlim et dans la NDC en cas de calcul de SlimFloor
+    Public Tab_Couleurs() As Color = {Color.DarkBlue, Color.Blue, Color.MediumTurquoise, Color.LightGreen, Color.Yellow, Color.Orange, Color.Red, Color.DarkRed}
+
 
 #End Region
 

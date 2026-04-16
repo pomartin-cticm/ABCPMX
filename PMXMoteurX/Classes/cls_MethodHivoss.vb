@@ -808,7 +808,7 @@ Public Class cls_MethodHivoss
 
 #Region "===Application générale de la méthode==="
 
-    Public Function ApplicationMethode(myBeam As cls_Poutre, lFreqDalle As Boolean)
+    Public Sub ApplicationMethode(myBeam As cls_Poutre, lFreqDalle As Boolean)
         '------------------------------------------------------------------------------------------------------------------------
         '   13/08/24 :  Création - V1.00 - POM
         '------------------------------------------------------------------------------------------------------------------------
@@ -863,9 +863,7 @@ Public Class cls_MethodHivoss
         myBeam.Hivoss.CalculMethodHivoss(CInt(Me.Amortissement * kPC), Me.Frequence, Me.MassModale, Me.HCategorie, Me.OsRMS)
         Me.indConfort = myBeam.Hivoss.ConfortAssessment(Me.HCategorie)
 
-
-    End Function
-
+    End Sub
 
 #End Region
 

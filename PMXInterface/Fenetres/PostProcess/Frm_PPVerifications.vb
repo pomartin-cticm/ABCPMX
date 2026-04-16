@@ -58,7 +58,8 @@ Public Class Frm_PPVerifications
         lBuild = True
 
         'MyProjet.Poutres(MyProjet.IndEnCours).Param.lElasticDesign = True
-        MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA, strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
+        MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(MyProjet.IndEnCours, MyProjet.FileName, NomChargesA,
+                                                                strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
         GestionLangues()
         GestionStyle()
         PrepareFenetre()

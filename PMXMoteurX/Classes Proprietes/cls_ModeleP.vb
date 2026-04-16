@@ -1729,4 +1729,69 @@ Public Class cls_ModeleP
 
 #End Region
 
+#Region " Outils de modélisation - Maillage slim floor "
+
+    Public Sub MaillageSlimThermique(myBeam As cls_Poutre, iStep As Integer, RhoV As Decimal,
+                                     Optional kReducFiY As Decimal = 1, Optional kReducPlY As Decimal = 1)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   13/04/26 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage d'une section slim floor pour le calcul de ses propriétés en tenant compte du champs thermiques=
+        '-------------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre dont ou maille la section slim floor
+        '   iStep       [E] :   Indice du pas de temps à traiter
+        '   RhoV        [E] :   Coefficient d'interaction MV
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim nbY As Integer = myBeam.VerifFeuSlimAcier.Maillage_NbY
+        Dim nbZ As Integer = myBeam.VerifFeuSlimAcier.Maillage_NbZ
+
+        Dim iY, iZ As Integer
+        Dim FyW As Decimal = myBeam.Section.FyW
+        Dim FyS As Decimal = myBeam.Section.FySup
+        Dim FyI As Decimal = myBeam.Section.FyInf
+        Dim FySpd As Decimal = myBeam.Section.FySpd
+
+        Dim GammaM As Decimal = myBeam.Param.Gamma.GammaM_fi
+
+        Dim kReduc, myTemp As Decimal
+        Dim zPos As Decimal
+        Dim Epaisseur, Largeur As Decimal
+
+        Dim EnFeu As New cls_EurocodesFeu
+
+        '--( Traitement de chacune des mailles
+
+        For iY = 0 To nbY - 1
+
+            Largeur = myBeam.VerifFeuSlimAcier.MaillageLargeur(iY)
+
+            For iZ = 0 To nbZ - 1
+
+                zPos = myBeam.VerifFeuSlimAcier.Maillage_zPos(iY, iZ)
+                Epaisseur = myBeam.VerifFeuSlimAcier.MaillageEpaisseur(iZ)
+                myTemp = myBeam.VerifFeuSlimAcier.TemperatureMaille(iStep, iY, iZ)
+                kReduc = EnFeu.ReducFyAcier(myTemp)
+
+                Select Case myBeam.VerifFeuSlimAcier.MaillageIndMat(iY, iZ)
+                    Case cls_MaillageSlimFloor.MATACIERAME
+                        Me.AddMaille(Largeur * Epaisseur, Epaisseur, zPos, 1, 1, 1, FyW, kReduc * (1 - RhoV), GammaM)
+                    Case cls_MaillageSlimFloor.MATACIERSEMI
+                        Me.AddMaille(Largeur * Epaisseur, Epaisseur, zPos, 1, 1, 1, FyI, kReduc * kReducFiY, GammaM)
+                    Case cls_MaillageSlimFloor.MATACIERSEMS
+                        Me.AddMaille(Largeur * Epaisseur, Epaisseur, zPos, 1, 1, 1, FyS, kReduc, GammaM)
+                    Case cls_MaillageSlimFloor.MATACIERPLAT
+                        Me.AddMaille(Largeur * Epaisseur, Epaisseur, zPos, 1, 1, 1, FySpd, kReduc * kReducPlY, GammaM)
+                End Select
+
+            Next
+        Next
+
+    End Sub
+
+#End Region
+
+
 End Class

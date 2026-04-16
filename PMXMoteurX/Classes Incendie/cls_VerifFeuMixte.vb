@@ -147,6 +147,7 @@
 
         Dim EN_Feu As New cls_EurocodesFeu
         Dim lProtege As Boolean
+        Dim lIntumescentP As Boolean
         Dim lSsExposee As Boolean               ' Indique si la semelle supérieure est exposée au feu
 
         Dim MEd(,) As Decimal = Nothing
@@ -207,6 +208,8 @@
         Dim DeltaRd() As List(Of Decimal) = Nothing
         Dim NbStepsCalcul As Integer
 
+        Const Temp300C As Decimal = 300
+
         '--( Initialisation
 
         TempG = myBeam.ParamFeu.TempRef
@@ -223,6 +226,7 @@
         DeltaT = myBeam.ParamFeu.DeltaTCalcul
         nbCombiELU = myBeam.CombiA_ELF.nbCombi
         lProtege = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
+        lIntumescentP = myBeam.ParamFeu.lProtectionPaint
         MassivFs = EN_Feu.MassiveteSemelleSup(myBeam.Section.ProfilA, lSsExposee)
         MassivFsCo = EN_Feu.MassiveteSemelleSupCreuxOndes(myBeam.Dalle.Bac, myBeam.Section.ProfilA)
         MassivFi = EN_Feu.MassiveteSemelleInf(myBeam.Section.ProfilA)
@@ -314,18 +318,36 @@
                 '# Calcul de l'échauffement de la section acier sur le pas de temps
 
                 If lProtege Then
+
                     If lBoard Then
+
                         TempFs += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivS, TimeT, DeltaT, myBeam.ParamFeu)
                         TempFi = TempFs
                         TempW = TempFs
+
                     ElseIf lMethCreuxOndes Then
                         '--( 13/03/25 )--
 
                         '#temperature dans la semelle supérieure
-                        TempFsN += EN_Feu.DeltaTempAcierProtege(TempFsN, TempG, MassivFs, TimeT, DeltaT, myBeam.ParamFeu)
-                        TempFsC += EN_Feu.DeltaTempSemSupCreuxOnde(TempFsC, TempG, MassivFsCo, TimeT, DeltaT, CRed1, CRed2, myBeam.ParamFeu)
 
-                        TempFs = Math.Max(TempFsN, TempFsC)
+                        '$$$ Modif selon Annexe J de EN 1994-1-2:2026 pour peinture intumescente - 02 04 2026
+                        '$$$ si peinture intumescente et température des gaz < 300°C, on considère que la peinture n'est pas activée et on applique la formule de l'acier non protégé
+                        '$$$ voir clause J.4 (4) de l'EN 1994-1-2:2026 - Amendement A1
+
+                        If lIntumescentP AndAlso (TempFs < Temp300C) Then
+
+                            TempFs += EN_Feu.DeltaTempAcierNonProtege(TempFs, TempG, MassivFs, TimeT, DeltaT, myBeam.ParamFeu)
+                            TempFsN = TempFs
+                            TempFsC = TempFs
+
+                        Else
+
+                            TempFsN += EN_Feu.DeltaTempAcierProtege(TempFsN, TempG, MassivFs, TimeT, DeltaT, myBeam.ParamFeu)
+                            TempFsC += EN_Feu.DeltaTempSemSupCreuxOnde(TempFsC, TempG, MassivFsCo, TimeT, DeltaT, CRed1, CRed2, myBeam.ParamFeu)
+
+                            TempFs = Math.Max(TempFsN, TempFsC)
+
+                        End If
 
                         '#temperature dans la semelle inférieure
 
@@ -345,9 +367,11 @@
                         TempW = Math.Max(TempWN, (TempFsC + TempFi) / 2)
 
                     Else
+
                         TempFs += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivFs, TimeT, DeltaT, myBeam.ParamFeu)
                         TempFi += EN_Feu.DeltaTempAcierProtege(TempFi, TempG, MassivFi, TimeT, DeltaT, myBeam.ParamFeu)
                         TempW += EN_Feu.DeltaTempAcierProtege(TempW, TempG, MassivW, TimeT, DeltaT, myBeam.ParamFeu)
+
                     End If
                 Else
                     TempFs += EN_Feu.DeltaTempAcierNonProtege(TempFs, TempG, MassivFs, kSh, DeltaT, myBeam.ParamFeu)

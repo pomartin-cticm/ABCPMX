@@ -9,6 +9,7 @@ Public Class Frm_MaintienBacN
     Enum enu_AffParametres
         Plancher
         Fixation
+        Tole
     End Enum
 
     Const SELBACINDI As Integer = 1
@@ -30,7 +31,7 @@ Public Class Frm_MaintienBacN
 
     Dim Bloc As New Dictionary(Of String, String)
 
-    Dim lAffCalculs As Boolean = False
+    Dim lAffCalculs As Boolean = True
     Dim lAffFirst As Boolean = True
 
     Dim iSelect As Integer = -1
@@ -72,6 +73,9 @@ Public Class Frm_MaintienBacN
             Case enu_AffParametres.Fixation
                 Me.pan_ContenuG.Controls.Add(Frm_MaintienBacN_Fixation.pan_Main)
                 Frm_MaintienBacN_Fixation.InitialiseFenetre(Bloc)
+            Case enu_AffParametres.Tole
+                Me.pan_ContenuG.Controls.Add(Frm_MaintienBacN_Tole.pan_Main)
+                Frm_MaintienBacN_Tole.InitialiseFenetre(Bloc)
         End Select
 
     End Sub
@@ -109,7 +113,8 @@ Public Class Frm_MaintienBacN
 
                 Me.rdb_Plancher.Text = Bloc("FLOOR")
                 Me.rdb_Fixations.Text = Bloc("FASTENINGRDB")
-                Me.chk_Calculs.Text = Bloc("RESULTS")
+                'Me.rdb_Tole.Text = Bloc("RESULTS")
+                Me.rdb_Tole.Text = Bloc("IDECK")
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
@@ -162,24 +167,31 @@ Public Class Frm_MaintienBacN
 
 #Region " Evènements "
 
-    Private Sub chk_Calculs_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Calculs.CheckedChanged
-        If lBuild Then Exit Sub
-        lAffCalculs = Not lAffCalculs
-        MAJI_Calculs()
-        MAJI_Dessin()
+    Private Sub chk_Calculs_CheckedChanged(sender As Object, e As EventArgs)
+        'If lBuild Then Exit Sub
+        'lAffCalculs = Not lAffCalculs
+        'MAJI_Calculs()
+        'MAJI_Dessin()
     End Sub
 
-    Private Sub rdb_Fixations_CheckedChanged(sender As Object, e As EventArgs) Handles rdb_Fixations.CheckedChanged
+    Private Sub rdb_Fixations_CheckedChanged(sender As Object, e As EventArgs) _
+        Handles rdb_Fixations.CheckedChanged, rdb_Tole.CheckedChanged, rdb_Plancher.CheckedChanged
+
         If lBuild Then Exit Sub
+
+        Dim AffParamB As enu_AffParametres = AffParam
 
         Select Case True
             Case Me.rdb_Plancher.Checked
                 AffParam = enu_AffParametres.Plancher
             Case Me.rdb_Fixations.Checked
                 AffParam = enu_AffParametres.Fixation
+            Case Me.rdb_Tole.Checked
+                AffParam = enu_AffParametres.Tole
         End Select
 
-        AffichageParametres()
+        If AffParamB <> AffParam Then _
+            AffichageParametres()
     End Sub
 
     Private Sub Frm_MaintienBacN_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
@@ -216,8 +228,9 @@ Public Class Frm_MaintienBacN
         GereTransfertValeur(localMaitienBac.nt, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.nt, lModif)
         GereTransfertValeur(localMaitienBac.ec, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.ec, lModif)
         GereTransfertValeur(localMaitienBac.Tpr, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.Tpr, lModif)
-        GereTransfertValeur(localFup, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Fup, lModif)
+        GereTransfertValeur(localMaitienBac.KUser, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.KUser, lModif)
 
+        GereTransfertValeur(localFup, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Fup, lModif)
         GereTransfertValeur(localMaitienBac.lMaintienBac, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.lMaintienBac, lModif)
         GereTransfertValeur(localMaitienBac.lTheta, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.lTheta, lModif)
 
@@ -723,6 +736,7 @@ Public Class Frm_MaintienBacN
     Public Sub ChangeSelectBP()
         ChangeSelect(SELBP)
     End Sub
+
 
 
 #End Region

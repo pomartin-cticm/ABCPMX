@@ -389,7 +389,7 @@ Public Class Frm_Maintiens
 
 #End Region
 
-#Region "Gestion de la souris dans l'image"
+#Region " Gestion de la souris dans l'image "
 
     Private Sub MousseMove(sender As Object, e As MouseEventArgs) Handles img_Maintiens.MouseMove
         If lBuild Then Exit Sub
@@ -820,6 +820,7 @@ Public Class Frm_Maintiens
         InfoW.Publie()
 
     End Sub
+
 
 #End Region
 

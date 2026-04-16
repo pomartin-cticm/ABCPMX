@@ -295,6 +295,40 @@ Public Class cls_Section
 
 #Region " Propriétés section slim floor "
 
+    Public Sub SlimBrasLevier(dApp As Decimal, ByRef dbtFi As Decimal, ByRef dbtPlat As Decimal)
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   31/07/25 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Calcul des bras de levier entre point d'application charge locale et point de calcul des contraintes
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   dApp        [E] :   Largeur de l'appui de la dalle
+        '   dbtFi       [S] :   Bras de levier pour la semelle inférieure (le cas échéant)
+        '   dbtPlat     [S] :   Bras de levier pour le plat inférieur (le cas échéant)
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        With Me
+            Select Case .TypeSection
+                Case cls_Section.Enum_TypeSection.IFB_A
+                    With .ProfilA
+                        dbtFi = 0
+                        dbtPlat = (.Plat_b - .Tw) / 2 - dApp
+                    End With
+                Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB
+                    With .ProfilA
+                        dbtFi = (.Bfi - .Tw) / 2 - .Rci - dApp
+                        dbtPlat = 0
+                    End With
+                Case cls_Section.Enum_TypeSection.SFB
+                    With .ProfilA
+                        dbtFi = (.Bfi - .Tw) / 2 - .Rci
+                        dbtPlat = (.Plat_b - .Bfi) / 2 - dApp
+                    End With
+            End Select
+        End With
+
+    End Sub
+
+
     Public ReadOnly Property LargeurAppuiSlimDallePleine As Decimal
         '-------------------------------------------------------------------------------------------------------------------------------------
         '   31/07/25 :  Création - POM
@@ -1257,6 +1291,14 @@ Public Class cls_Section
                      Or Me.TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage)
         End Get
     End Property
+
+    Public ReadOnly Property lSlimFloor_Acier As Boolean
+        Get
+            Return (Me.TypeSection = cls_Section.Enum_TypeSection.IFB_A) Or (Me.TypeSection = cls_Section.Enum_TypeSection.IFB_B) _
+                Or (Me.TypeSection = cls_Section.Enum_TypeSection.SFB) Or (Me.TypeSection = cls_Section.Enum_TypeSection.SAB)
+        End Get
+    End Property
+
 
     ''' <summary>
     ''' Indique si la section est une slimfloor de type IFB_A

@@ -38,13 +38,9 @@ Public Class Frm_MaintienBacN_Plancher
         Me.lbl_Floor.BackColor = CouleurBackBandeaux
         Me.lbl_Floor.ForeColor = CouleurForeBandeaux
 
-        Me.lbl_Panneau.BackColor = CouleurBackBandeaux
-        Me.lbl_Panneau.ForeColor = CouleurForeBandeaux
 
         PrepareTextBoxDipo(Me.txt_LargeurP, False)
         PrepareTextBoxDipo(Me.txt_LongueurP, False)
-        PrepareTextBoxDipo(Me.txt_SheetLength, False)
-        PrepareTextBoxDipo(Me.txt_SheetWidth, False)
         PrepareTextBoxDipo(Me.txt_EntraxeD, False)
 
     End Sub
@@ -53,11 +49,7 @@ Public Class Frm_MaintienBacN_Plancher
 
         Me.etq_UnitL1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
-        Me.etq_UnitL3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
-        Me.etq_UnitL4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
-        Me.etq_UnitD1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-        Me.etq_UnitF1.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
 
     End Sub
 
@@ -86,16 +78,6 @@ Public Class Frm_MaintienBacN_Plancher
             strTransitionOptions(1) = Bloc("ADJACENTNOGAP")
             strTransitionOptions(2) = Bloc("FLANGEEDGES")
 
-            '=== PANNEAU ELEMENTAIRE ==========================================================
-
-            Me.lbl_Panneau.Text = Bloc("INDIVIDUALSHEET")
-            Me.lbl_NbSpans.Text = Bloc("NUMBERSPANS")
-            Me.lbl_IndSheetDimensions.Text = Bloc("DIMENSIONS")
-            Me.lbl_SheetLength.Text = Bloc("SHEETLENGTH")
-            Me.lbl_SheetWidth.Text = Bloc("SHEETWIDTH")
-
-            Me.lbl_Tpr.Text = Bloc("THCOATING")
-            Me.lbl_Fu.Text = Bloc("FUP")
 
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -107,17 +89,11 @@ Public Class Frm_MaintienBacN_Plancher
     End Sub
 
     Private Sub PrepareFenetre()
+
         EntraxeD = MyProjet.Poutres(MyProjet.IndEnCours).EntraxeSolive
 
-        RemplirCmbNbSpans()
         RemplirCmbTransition()
-    End Sub
 
-    Private Sub RemplirCmbNbSpans()
-        Me.cmb_NbSpan.Items.Clear()
-        For i As Integer = 1 To 5
-            Me.cmb_NbSpan.Items.Add(CStr(i))
-        Next
     End Sub
 
     Private Sub RemplirCmbTransition()
@@ -133,7 +109,6 @@ Public Class Frm_MaintienBacN_Plancher
         Me.chk_PriseEnCompteBac.Checked = Frm_MaintienBacN.localMaitienBac.lMaintienBac
         Me.chk_Theta.Checked = Frm_MaintienBacN.localMaitienBac.lTheta
 
-        Me.cmb_NbSpan.SelectedIndex = Frm_MaintienBacN.localMaitienBac.m - 1
         Select Case Frm_MaintienBacN.localMaitienBac.Transition
             Case cls_MaintienBac.Enu_Transition.Emboitement : Me.cmb_Transition.SelectedIndex = 0
             Case cls_MaintienBac.Enu_Transition.Aboutage : Me.cmb_Transition.SelectedIndex = 1
@@ -142,11 +117,8 @@ Public Class Frm_MaintienBacN_Plancher
 
         Me.txt_NbSheetsTransverse.Text = GetStringInUnitN(Frm_MaintienBacN.localMaitienBac.nt, Enu_TypeVariable.SansType, 2, 0, NON_U, False)
         Me.txt_EntraxeD.Text = GetStringInUnitN(EntraxeD, Enu_TypeVariable.Longueur, 4, 3, NON_U, True)
-        Me.txt_Tpr.Text = GetStringInUnitN(Frm_MaintienBacN.localMaitienBac.Tpr, Enu_TypeVariable.Dimension, 4, 3, NON_U, True)
-        Me.txt_Fup.Text = GetStringInUnitN(Frm_MaintienBacN.localFup, Enu_TypeVariable.Contrainte, 4, 3, NON_U, True)
 
         MAJI_DimensionsPlancher()
-        MAJI_DimensionsPanneau()
         MAJI_Transition()
         MAJI_Dessin()
 
@@ -156,7 +128,7 @@ Public Class Frm_MaintienBacN_Plancher
 
 #Region " Evènements "
 
-    Private Sub txt_Fup_TextChanged(sender As Object, e As EventArgs) Handles txt_Fup.TextChanged
+    Private Sub txt_Fup_TextChanged(sender As Object, e As EventArgs)
         If lBuild Then Exit Sub
 
         Dim Valeur As Decimal
@@ -171,7 +143,7 @@ Public Class Frm_MaintienBacN_Plancher
         End If
     End Sub
 
-    Private Sub txt_Tpr_TextChanged(sender As Object, e As EventArgs) Handles txt_Tpr.TextChanged
+    Private Sub txt_Tpr_TextChanged(sender As Object, e As EventArgs)
         If lBuild Then Exit Sub
 
         Dim Valeur As Decimal
@@ -230,19 +202,7 @@ Public Class Frm_MaintienBacN_Plancher
                 lValMax = True
                 kUnit = 1
 
-            Case Me.txt_Tpr.Name
 
-                ValMin = 0
-                ValMax = (MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Tp / 10) / kUnit
-                lValMax = True
-
-            Case Me.txt_Fup.Name
-
-                kUnit = LogicielInfo.Transfert_Contraintes(LogicielOptions.IndUnitContraintes)
-
-                ValMin = 1
-                ValMax = 1000 / kUnit
-                lValMax = True
 
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
@@ -283,16 +243,6 @@ Public Class Frm_MaintienBacN_Plancher
 
     End Sub
 
-    Private Sub cmb_NbSpan_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbSpan.SelectedIndexChanged
-        If lBuild Then Exit Sub
-        Frm_MaintienBacN.localMaitienBac.m = Me.cmb_NbSpan.SelectedIndex + 1
-        MAJI_DimensionsPanneau()
-        MAJI_DimensionsPlancher()
-        MAJI_Transition()
-        MAJI_Calculs()
-        MAJI_Dessin()
-    End Sub
-
 #End Region
 
 #Region " Gestion des mises à jour de la fenêtre "
@@ -321,18 +271,12 @@ Public Class Frm_MaintienBacN_Plancher
 
     End Sub
 
-    Private Sub MAJI_DimensionsPanneau()
-
-        Me.txt_SheetLength.Text = GetStringInUnit(Frm_MaintienBacN.localMaitienBac.LongueurPanneau(EntraxeD), Enu_TypeVariable.Longueur, 4, 2, False)
-        Me.txt_SheetWidth.Text = GetStringInUnit(MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.LargeurModule, Enu_TypeVariable.Longueur, 4, 2, False)
-
-    End Sub
 
 #End Region
 
 #Region " Symboles "
 
-    Private Sub PaintSymbols(sender As Object, e As PaintEventArgs) Handles img_ap.Paint, img_bp.Paint, img_m.Paint, img_nt.Paint, img_Tpr.Paint, img_Fup.Paint
+    Private Sub PaintSymbols(sender As Object, e As PaintEventArgs) Handles img_nt.Paint
 
         '--> Déclarations
 
@@ -357,29 +301,12 @@ Public Class Frm_MaintienBacN_Plancher
 
         Select Case sender.name
 
-            Case Me.img_ap.Name
-                strSymbol = "a"
-                strIndice = "p"
 
-            Case Me.img_bp.Name
-                strSymbol = "b"
-                strIndice = "p"
-
-            Case Me.img_m.Name
-                strSymbol = "m"
-                strIndice = ""
 
             Case Me.img_nt.Name
                 strSymbol = "n"
                 strIndice = "t"
 
-            Case Me.img_Tpr.Name
-                strSymbol = "t"
-                strIndice = "pr"
-
-            Case Me.img_Fup.Name
-                strSymbol = "f"
-                strIndice = "up"
 
         End Select
 
@@ -422,7 +349,7 @@ Public Class Frm_MaintienBacN_Plancher
     '    Frm_MaintienBacN.ChangeSelect(-1)
     'End Sub
 
-    Private Sub cmb_NbSpan_MouseEnter(sender As Object, e As EventArgs) Handles cmb_NbSpan.MouseEnter
+    Private Sub cmb_NbSpan_MouseEnter(sender As Object, e As EventArgs)
         Frm_MaintienBacN.ChangeSelectBacIndi()
     End Sub
 
@@ -458,23 +385,23 @@ Public Class Frm_MaintienBacN_Plancher
         Frm_MaintienBacN.ChangeSelect(-1)
     End Sub
 
-    Private Sub txt_SheetLength_MouseEnter(sender As Object, e As EventArgs) Handles txt_SheetLength.MouseEnter
+    Private Sub txt_SheetLength_MouseEnter(sender As Object, e As EventArgs)
         Frm_MaintienBacN.ChangeSelectAP()
     End Sub
 
-    Private Sub txt_SheetLength_MouseLeave(sender As Object, e As EventArgs) Handles txt_SheetLength.MouseLeave
+    Private Sub txt_SheetLength_MouseLeave(sender As Object, e As EventArgs)
         Frm_MaintienBacN.ChangeSelect(-1)
     End Sub
 
-    Private Sub txt_SheetWidth_MouseEnter(sender As Object, e As EventArgs) Handles txt_SheetWidth.MouseEnter
+    Private Sub txt_SheetWidth_MouseEnter(sender As Object, e As EventArgs)
         Frm_MaintienBacN.ChangeSelectBP()
     End Sub
 
-    Private Sub txt_SheetWidth_MouseLeave(sender As Object, e As EventArgs) Handles txt_SheetWidth.MouseLeave
+    Private Sub txt_SheetWidth_MouseLeave(sender As Object, e As EventArgs)
         Frm_MaintienBacN.ChangeSelect(-1)
     End Sub
 
-    Private Sub cmb_NbSpan_MouseLeave(sender As Object, e As EventArgs) Handles cmb_NbSpan.MouseLeave
+    Private Sub cmb_NbSpan_MouseLeave(sender As Object, e As EventArgs)
         Frm_MaintienBacN.ChangeSelect(-1)
     End Sub
 

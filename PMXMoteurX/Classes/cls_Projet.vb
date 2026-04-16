@@ -36,6 +36,8 @@ Public Class cls_Projet
 
     Const BkCharges As String = "LOADS_"
 
+    Const BkCALCULTH As String = "THERMAL_CAL"
+    Const BkTHR As String = "THER_"
 #End Region
 
 #Region " Attributs "
@@ -103,6 +105,26 @@ Public Class cls_Projet
             Dim retour As Boolean = True
             For i As Integer = 0 To Me.Poutres.Count - 1
                 retour = retour And Me.Poutres(i).lDonneesSauvees
+            Next
+            Return retour
+        End Get
+    End Property
+
+    Public Property lCalculSaved As Boolean
+        Set(value As Boolean)
+            For i As Integer = 0 To Me.Poutres.Count - 1
+                If Me.Poutres(i).Section.lSlimFloor Then
+                    Me.Poutres(i).lCalculSauve = True
+                End If
+            Next
+        End Set
+        Get
+            Dim retour As Boolean = True
+
+            For i As Integer = 0 To Me.Poutres.Count - 1
+                If Me.Poutres(i).Section.lSlimFloor Then
+                    retour = retour And (Me.Poutres(i).lCalculOK And Me.Poutres(i).lCalculSauve)
+                End If
             Next
             Return retour
         End Get
@@ -285,6 +307,7 @@ Public Class cls_Projet
 
             AjouteLigneFrmt(Lines, "EC", (.ec))
             AjouteLigneFrmt(Lines, "Tpr", (.Tpr))
+            AjouteLigneFrmt(Lines, "KUser", (.KUser))
             AjouteLigneFrmt(Lines, "FixCoutureType", (.FixCoutureType))
             AjouteLigneFrmt(Lines, "DiaSeam", .dFsCouture)
 
@@ -883,6 +906,68 @@ Public Class cls_Projet
 
 #End Region
 
+#Region " Ecriture / Lecture - Bloc des calculs thermiques "
+
+    Private Sub SaveFileBlocCalculTh(myBeam As cls_Poutre, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   10/04/26 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc CALCUL THERMIQUE de la poutre (pour poutre slim floor)
+        '-------------------------------------------------------------------------------------
+
+        If myBeam.lSlimFloorAcier And myBeam.lCalculOK Then
+
+            Lines.Add("BLOCK " & BkCALCULTH)
+
+            SaveFileCalculThDet(myBeam.VerifFeuSlimAcier, Lines)
+
+        End If
+
+    End Sub
+
+    Private Sub SaveFileCalculThDet(ResultsTh As cls_VerifFeuSlimAcier, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   10/04/26 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc CALCUL THERMIQUE de la poutre (pour poutre slim floor)
+        '-------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim iStep As Integer = 0
+        Dim NbStep As Integer
+        Dim iY As Integer
+        Dim Chaine As String = ""
+        Const SP As String = " "
+        Dim KeyMot As String
+
+        '--(
+
+        AjouteLigneFrmt(Lines, "NB_Y", ResultsTh.Maillage_NbY)
+        AjouteLigneFrmt(Lines, "NB_Z", ResultsTh.Maillage_NbZ)
+
+        NbStep = cls_VerifFeuSlimAcier.TimeSteps.GetUpperBound(0) + 1
+
+        For iStep = 0 To NbStep - 1
+
+            Lines.Add("BLOCK " & BkTHR & "R" & CInt(cls_VerifFeuSlimAcier.TimeSteps(iStep)).ToString)
+
+            For iY = 0 To ResultsTh.Maillage_NbY - 1
+
+                KeyMot = "Column " & CStr(iY) & SP
+                Chaine = ""
+                For iZ As Integer = 0 To ResultsTh.Maillage_NbZ - 1
+                    Chaine = Chaine & Format(ResultsTh.TemperatureMaille(iStep, iY, iZ), "0.00") & SP
+                Next
+
+                AjouteLigneFrmt(Lines, KeyMot, Chaine)
+
+            Next
+        Next
+    End Sub
+
+#End Region
+
 #Region " Ecriture / Lecture - Fichier "
 
     Public Sub SaveFile(ByRef Lines As List(Of String), ByVal version As String)
@@ -1018,6 +1103,10 @@ Public Class cls_Projet
             '==[ Classe ChargementU ]=================================================================
 
             SaveFileBlocCharges(pTre.ChargesU, pTre.IndicePremiereTravee, pTre.IndiceDerniereTravee, Lines)
+
+            '==[ Calcul thermique poutre slim floor ]=================================================================
+
+            SaveFileBlocCalculTh(pTre, Lines)
 
         Next
 
@@ -1174,10 +1263,9 @@ Public Class cls_Projet
 
         ReadPoutreDansFichier(Lines, Blocs, indBlocs, NomCasChargesU, iLineStop)
 
-
     End Sub
 
-    Private Sub RepereLignesBlocPoutre(Lines As List(Of String), ByRef Bloc As List(Of String), ByRef indBloc As List(Of Integer), Optional iStart As Integer = 0)
+    Public Sub RepereLignesBlocPoutre(Lines As List(Of String), ByRef Bloc As List(Of String), ByRef indBloc As List(Of Integer), Optional iStart As Integer = 0)
         '---------------------------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
         '---------------------------------------------------------------------------------------------------------
@@ -1236,7 +1324,7 @@ Public Class cls_Projet
     End Sub
 
     Private Sub ReadPoutreDansFichier(Lines As List(Of String), Blocs As List(Of String), indBlocs As List(Of Integer),
-                                   NomCasChargesU() As String, iLineStop As Integer)
+                                      NomCasChargesU() As String, iLineStop As Integer)
         '---------------------------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
         '---------------------------------------------------------------------------------------------------------
@@ -1552,6 +1640,12 @@ Public Class cls_Projet
                     Dim KeyCh As String = ListeBlocCle(i).Substring(BkCharges.Length)
                     ReadBlocCharges(Me.Poutres.Last, KeyCh, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
 
+                Case BkCALCULTH
+
+                    Me.Poutres.Last.lCalculOK = True
+                    Me.Poutres.Last.lCalculSauve = True
+                    Me.Poutres.Last.lCalculCharge = False
+
             End Select
 
         Next
@@ -1820,7 +1914,6 @@ Public Class cls_Projet
 
     End Sub
 
-
     Private Sub ReadBlocMaintienBac(myRestB As cls_MaintienBac, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '-------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
@@ -1861,6 +1954,7 @@ Public Class cls_Projet
                         Case "DIAFIX" : .dFpNerv = CDec(TraiteReal(Mots(nbMots)))
                         Case "DIASEA" : .dFsCouture = CDec(TraiteReal(Mots(nbMots)))
                         Case "TPR" : .Tpr = CDec(TraiteReal(Mots(nbMots)))
+                        Case "KUSER" : .KUser = CDec(TraiteReal(Mots(nbMots)))
                         Case "FIXCOU" : .FixCoutureType = TraiteReal(Mots(nbMots))
                         Case "LDECKR" : .lMaintienBac = Mots(nbMots)
                         Case "LTHETA" : .lTheta = Mots(nbMots)
@@ -2607,7 +2701,8 @@ Public Class cls_Projet
 
         '--> Déclaration
 
-        Dim i, iFirst As Integer
+        ' Dim i, iFirst As Integer
+        Dim i As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
         Const NBCAR As Integer = 6
@@ -3165,6 +3260,22 @@ Public Class cls_Projet
     '    Next
 
     'End Sub
+
+#End Region
+
+#Region " Fonctions propriétés "
+
+    Public ReadOnly Property NomBlocCalculThermique As String
+        Get
+            Return BkCALCULTH
+        End Get
+    End Property
+
+    Public ReadOnly Property NomBlocThermiqueR As String
+        Get
+            Return BkTHR
+        End Get
+    End Property
 
 #End Region
 

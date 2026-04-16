@@ -310,6 +310,7 @@ DIAMETER				= Diameter
 TITLE					= Restraint of the beam by the steel deck (construction phase only)
 OK						= Ok
 CANCEL					= Cancel
+IDECK					= Deck
 RESTRAINTBYTHEDECK		= The beam is laterally restrained by the deck
 INDIVIDUALSHEET			= Individual sheet
 NUMBERSPANS				= Number of spans crossed by the sheets
@@ -355,6 +356,10 @@ OPTIONS					= Options
 BEAMSPACING				= Spacing of beams
 THCOATING				= Thickness of coating
 FUP						= Ultimate resistance
+REINTRANTRIBSW1			= The K factor used to assess the flexibility in distorsion is provided in CECM report no 88 only for decks with open ribs.
+REINTRANTRIBSW2			= For reintrant ribs, the K factor should be defined by the User.
+DISTORSIONFLEX			= Distorsion flexibility
+INFOW_TOLEK				= Values of K may be found in the paper "Resistance to lateral torsional buckling of a secondary beam in construction phase – Restraint by the steel deck", journal Construction Métallique no 2022/3
 
 #FRMEDITSTUDS	
 TITLE					= Studs data base
@@ -684,6 +689,7 @@ PPOSTT					= Results
 ZOOMIN					= Zoom in
 ZOOMOUT					= Zoom out
 COTATIONS				= Display dimensions
+SHOWID					= Display identification informations
 EXPERT					= Expert mode
 COPYIMAGE				= Copy the main image
 EDIT					= Edit

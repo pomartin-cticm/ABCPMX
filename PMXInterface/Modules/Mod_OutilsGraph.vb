@@ -791,7 +791,9 @@ Module Mod_OutilsGraph
         Dim pointsEcran As Point() = New Point(3) {}
         Dim indice As Integer = 0
         Dim str As String = ""
+
         For i = 0 To points.Length - 2
+
             pointsEcran(indice) = New Point(XEcran(ParAff, points(i)), YEcran(ParAff, points(i + 1)))
 
             str += pointsEcran(indice).ToString + " ; "

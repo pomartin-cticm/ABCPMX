@@ -163,6 +163,8 @@ Public Class cls_VerificationsAcier
         Const lWEB As Boolean = True
         Dim lRec As Boolean
 
+        Dim lChInCombi() As Boolean = Nothing
+
         '--> Initialisations
 
         '# Critères
@@ -174,6 +176,8 @@ Public Class cls_VerificationsAcier
             nbCombiELU = myBeam.CombiA_ELU.nbCombi      'cls_Poutre.nbCombELU
             combiELU = myBeam.CombiA_ELU
         End If
+
+        combiELU.GetTablesChargesDansCombi(myBeam.ChargesA.Count, lchincombi)
 
         Me.InitialiseRhoV(nbCombiELU, myBeam.Nodes.nbNodes)
         Me.InitialiseCriteresVM(myBeam.Nodes.nbNodes, myBeam.lEnrobage, nbCombiELU, myBeam.IndiceDerniereTravee)
@@ -242,7 +246,7 @@ Public Class cls_VerificationsAcier
 
         If lVerifElastic Then
             myBeam.PtsSigma.Initialise(myBeam, False)
-            myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaCas)
+            myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, lChInCombi, SigmaCas)
         End If
 
         '# Contraintes de cisaillement

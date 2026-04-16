@@ -46,11 +46,8 @@ Public Class Frm_MaillageSlim
     Const TEMPMINPERSO As Double = 20           ' température minimale de l'échelle dans le cas où on utilise une échelle personnalisée
     Const TEMPMAXPERSO As Double = 1200         ' température maximale de l'échelle dans le cas où on utilise une échelle personnalisée
 
-    Dim Tab_Couleurs() As Color = {Color.DarkBlue, Color.Blue, Color.MediumTurquoise, Color.LightGreen, Color.Yellow, Color.Orange, Color.Red, Color.DarkRed}
-    Dim Tab_IntervalleCouleurs(Tab_Couleurs.Length - 1) As Double
 
-
-
+    Public Tab_IntervalleCouleurs(Tab_Couleurs.Length - 1) As Double
 
 #End Region
 
@@ -300,47 +297,47 @@ Public Class Frm_MaillageSlim
 
             If TargetStep > 0 Then
 
-                'sur la dalle
-                locMail.Tab_mesh_temp(20, 31) = 1200
-                locMail.Tab_mesh_temp(20, 30) = 1200
-                locMail.Tab_mesh_temp(20, 29) = 1200
-                locMail.Tab_mesh_temp(20, 28) = 1200
-                locMail.Tab_mesh_temp(20, 27) = 1200
-                locMail.Tab_mesh_temp(20, 26) = 1200
-                locMail.Tab_mesh_temp(20, 25) = 1100
-                locMail.Tab_mesh_temp(20, 24) = 1000
-                locMail.Tab_mesh_temp(20, 23) = 750
-                locMail.Tab_mesh_temp(20, 22) = 650
-                locMail.Tab_mesh_temp(20, 21) = 550
-                locMail.Tab_mesh_temp(20, 20) = 450
-                locMail.Tab_mesh_temp(20, 19) = 350
-                locMail.Tab_mesh_temp(20, 18) = 250
-                locMail.Tab_mesh_temp(20, 17) = 150
-                locMail.Tab_mesh_temp(20, 16) = 100
-                locMail.Tab_mesh_temp(20, 15) = 0
+                ''sur la dalle
+                'locMail.Tab_mesh_temp(20, 31) = 1200
+                'locMail.Tab_mesh_temp(20, 30) = 1200
+                'locMail.Tab_mesh_temp(20, 29) = 1200
+                'locMail.Tab_mesh_temp(20, 28) = 1200
+                'locMail.Tab_mesh_temp(20, 27) = 1200
+                'locMail.Tab_mesh_temp(20, 26) = 1200
+                'locMail.Tab_mesh_temp(20, 25) = 1100
+                'locMail.Tab_mesh_temp(20, 24) = 1000
+                'locMail.Tab_mesh_temp(20, 23) = 750
+                'locMail.Tab_mesh_temp(20, 22) = 650
+                'locMail.Tab_mesh_temp(20, 21) = 550
+                'locMail.Tab_mesh_temp(20, 20) = 450
+                'locMail.Tab_mesh_temp(20, 19) = 350
+                'locMail.Tab_mesh_temp(20, 18) = 250
+                'locMail.Tab_mesh_temp(20, 17) = 150
+                'locMail.Tab_mesh_temp(20, 16) = 100
+                'locMail.Tab_mesh_temp(20, 15) = 0
 
 
-                'sur l'ame
-                locMail.Tab_mesh_temp(50, 60) = 200
-                locMail.Tab_mesh_temp(50, 59) = 190
-                locMail.Tab_mesh_temp(50, 58) = 180
-                locMail.Tab_mesh_temp(50, 57) = 170
-                locMail.Tab_mesh_temp(50, 56) = 160
-                locMail.Tab_mesh_temp(50, 55) = 150
-                locMail.Tab_mesh_temp(50, 54) = 140
-                locMail.Tab_mesh_temp(50, 53) = 130
-                locMail.Tab_mesh_temp(50, 52) = 120
-                locMail.Tab_mesh_temp(50, 51) = 110
-                locMail.Tab_mesh_temp(50, 50) = 100
-                locMail.Tab_mesh_temp(50, 49) = 90
-                locMail.Tab_mesh_temp(50, 48) = 80
-                locMail.Tab_mesh_temp(50, 47) = 70
-                locMail.Tab_mesh_temp(50, 46) = 60
-                locMail.Tab_mesh_temp(50, 45) = 50
-                locMail.Tab_mesh_temp(50, 44) = 40
-                locMail.Tab_mesh_temp(50, 43) = 30
-                locMail.Tab_mesh_temp(50, 42) = 20
-                locMail.Tab_mesh_temp(50, 41) = 10
+                ''sur l'ame
+                'locMail.Tab_mesh_temp(50, 60) = 200
+                'locMail.Tab_mesh_temp(50, 59) = 190
+                'locMail.Tab_mesh_temp(50, 58) = 180
+                'locMail.Tab_mesh_temp(50, 57) = 170
+                'locMail.Tab_mesh_temp(50, 56) = 160
+                'locMail.Tab_mesh_temp(50, 55) = 150
+                'locMail.Tab_mesh_temp(50, 54) = 140
+                'locMail.Tab_mesh_temp(50, 53) = 130
+                'locMail.Tab_mesh_temp(50, 52) = 120
+                'locMail.Tab_mesh_temp(50, 51) = 110
+                'locMail.Tab_mesh_temp(50, 50) = 100
+                'locMail.Tab_mesh_temp(50, 49) = 90
+                'locMail.Tab_mesh_temp(50, 48) = 80
+                'locMail.Tab_mesh_temp(50, 47) = 70
+                'locMail.Tab_mesh_temp(50, 46) = 60
+                'locMail.Tab_mesh_temp(50, 45) = 50
+                'locMail.Tab_mesh_temp(50, 44) = 40
+                'locMail.Tab_mesh_temp(50, 43) = 30
+                'locMail.Tab_mesh_temp(50, 42) = 20
+                'locMail.Tab_mesh_temp(50, 41) = 10
 
                 CalculThermique(MyProjet.Poutres(MyProjet.IndEnCours), TargetStep - 1)
 
@@ -535,67 +532,7 @@ Public Class Frm_MaillageSlim
         End If
     End Sub
 
-    Private Sub DessinLegende(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single)
-        '------------------------------------------------------------------------------------------------------------------------------------------------
-        '   20/11/25 :  Création - POM
-        '------------------------------------------------------------------------------------------------------------------------------------------------
-        '   Représentation de la légende pour les champs thermiques
-        '------------------------------------------------------------------------------------------------------------------------------------------------
-        '   myGr        [E] :   Graphics
-        '   pWi         [E] :   Largeur de la zone de dessin
-        '   pHi         [E] :   Hauteur de la zone de dessin
-        '------------------------------------------------------------------------------------------------------------------------------------------------
 
-        Const kADJUST As Decimal = 0.95
-        Dim xMin, yMin, xMax, yMax As Double
-        Dim LegParaff As Struc_Affichage
-        Dim dCar As Double
-        Const LL As Double = 100
-        Dim H As Double = LL * pHi / pWi
-        Dim nbColors As Integer = Tab_Couleurs.GetUpperBound(0) + 1
-
-        dCar = Math.Sqrt((LL) ^ 2 + (H) ^ 2) / 50
-        xMin = 0
-        yMin = 0
-        xMax = LL
-        yMax = H + 5 * dCar / 3
-
-
-        ParametresAffichage(LegParaff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, 0, 0, kADJUST)
-
-        For i As Integer = 0 To nbColors - 2
-            Dim xo, yo As Double
-            Dim xe, ye As Double
-            xo = xe
-            xe = (i + 1) * LL / (nbColors - 1)
-            yo = 0
-            ye = H
-
-
-            AddRectanglePleinGradient(myGr, Tab_Couleurs(i), Tab_Couleurs(i + 1), xo, yo, xe, ye, LegParaff)
-        Next
-
-        For i As Integer = 0 To nbColors - 1
-            Dim xo, yo As Double
-            Dim xe, ye As Double
-            xo = i * LL / (nbColors - 1)
-            xe = xo
-            yo = H + dCar / 2
-            ye = H
-            AddLigne(myGr, New Pen(Color.Black, 1), xo, yo, xe, ye, LegParaff)
-
-            Dim chaine = Int(Tab_IntervalleCouleurs(i))
-
-            AddTexte(myGr, New SolidBrush(Color.Black), chaine, FontFrm, xo, yo, LegParaff,
-                       HorizontalAlignment.Center, VerticalAlignement.Top)
-        Next
-
-        Dim CompRed As Byte = Tab_Couleurs(0).R
-        Dim CompGreen As Byte = Tab_Couleurs(0).G
-        Dim CompBlue As Byte = Tab_Couleurs(0).B
-
-        Dim MyClolor As Color = Color.FromArgb(CompRed, CompGreen, CompBlue)
-    End Sub
 
     Private Sub DessinLegendeCurseurTemp(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, Optional ByRef tempMaille As Double = -1)
         '------------------------------------------------------------------------------------------------------------------------------------------------
@@ -742,7 +679,6 @@ Public Class Frm_MaillageSlim
         'yMin = -Math.Max(myBeam.Section.ProfilA.Plat_t, myBeam.Section.ProfilA.Tfi)
         'yMax = myBeam.Dalle.zTop
 
-
         If lAff2DUniquement Then
             iMin = 0
             lContinuer = Not IsSmaller(Math.Abs(myMail.Tab_mesh_cent_y(iMin, j)), myBeam.ParamFeu.bEffect2D)
@@ -836,8 +772,6 @@ Public Class Frm_MaillageSlim
             IndiquerTempGaz(myGr, myParAff, myMail, img_Legende.Width, img_Legende.Height)
         End If
 
-
-
         '--( Affichage de la maille sélectionnée
 
         Dim lSelect As Boolean = (iSelect >= 0) AndAlso (jSelect >= 0)
@@ -860,8 +794,6 @@ Public Class Frm_MaillageSlim
                 Me.img_Legende.Invalidate()
             End If
         End If
-
-
 
         '--( Représentation des largeurs 2D
 
@@ -1066,6 +998,8 @@ Public Class Frm_MaillageSlim
         End If
     End Sub
 
+
+    '==POM AJOUTER COMMENTAIRES
     Private Function CalculTempCoins(myMail As cls_MaillageSlimFloor, tempMaille As Double, iMail As Integer, jMail As Integer) As Double()
         Dim tempCoins As Double() = New Double(3) {}
         Dim vGauche As Boolean
@@ -1477,6 +1411,7 @@ Public Class Frm_MaillageSlim
     End Function
 
     'idem mais pour le champ thermique
+    '==== JE NE COMPRENDS PAS POURQUOI ON A CETTE FONCTION (POM)
     Private Function DoWeDrawChTh(mymail As cls_MaillageSlimFloor, iMail As Integer, jmail As Integer) As Boolean
         Dim matMail As Integer = mymail.Tab_mesh_mat(iMail, jmail)
         Dim elemPoutre() As Integer = {cls_MaillageSlimFloor.MATACIERPLAT, cls_MaillageSlimFloor.MATACIERSEMI, cls_MaillageSlimFloor.MATACIERAME, cls_MaillageSlimFloor.MATACIERSEMS, cls_MaillageSlimFloor.MATACIERSOUD}

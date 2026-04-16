@@ -90,7 +90,7 @@ Imports PMXMoteur2
 
         TU_poutre.CombiA_ELU.CombineMoments(iCombi, TU_poutre.Nodes.nbNodes, TU_poutre.ChargesA, Med, lRetraitEl)
 
-        TU_poutre.PtsSigma.Initialise(TU_poutre)
+        TU_poutre.PtsSigma.Initialise(TU_poutre, False)
         TU_poutre.PtsSigma.CalculContraintesCharges(TU_poutre, 1, SigmaCdC)
         TU_poutre.CombiA_ELU.CombineContraintes(iCombi, TU_poutre.ChargesA.Count, TU_poutre.PtsSigma.zPos.Count, TU_poutre.Nodes.nbNodes,
                                                         TU_poutre.ChargesA, Med, SigmaCdC, SigmaCdC, lRetraitEl, SigmaELU)
@@ -117,9 +117,6 @@ Imports PMXMoteur2
     End Sub
 
 #End Region
-
-
-
 
 
 End Class

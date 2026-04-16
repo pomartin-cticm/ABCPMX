@@ -51,10 +51,39 @@
         '-----------------------------------------------------------------------------------------------------------------------------
         '   04/12/25 :  Création - V1.20 - POM
         '-----------------------------------------------------------------------------------------------------------------------------
-        '   
+        '   Indique quels sont les cas de charges inclus dans les combinaisons
         '-----------------------------------------------------------------------------------------------------------------------------
+        '   nbCharges       [E] :   Nombre de cas de charges traités par le calcul
+        '   lChInCombi      [S] :   Indique pour chaque cas de charge s'il est inclus dans les combinaisons
         '-----------------------------------------------------------------------------------------------------------------------------
 
+        '--( Déclarations
+
+        Dim iCas, iCombi As Integer
+
+        '--( Dimension du tableau
+
+        ReDim lChInCombi(nbCharges - 1)
+
+        '--( Initialisation par défaut à false
+
+        For iCas = 0 To nbCharges - 1
+
+            lChInCombi(iCas) = False
+
+        Next
+
+        '--( Traitement
+
+        For iCombi = 0 To Me.nbCombi - 1
+
+            For iCas = 0 To nbCharges - 1
+
+                If Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0) Then lChInCombi(iCas) = True
+
+            Next
+
+        Next
 
     End Sub
 

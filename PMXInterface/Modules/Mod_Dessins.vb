@@ -3,6 +3,7 @@
 Imports System.Collections.Specialized.BitVector32
 Imports System.Drawing.Drawing2D
 Imports System.Globalization
+Imports System.Net
 Imports System.Reflection
 Imports System.Windows
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Tab
@@ -23,7 +24,6 @@ Public Module Mod_Dessins
     Const DELTATime As Decimal = 5 * 60
 
     Dim ColorNotPossible As Color = Color.LightGray
-
 
 #End Region
 
@@ -3321,8 +3321,7 @@ Public Module Mod_Dessins
         '--> Déclarations
 
         Dim xCoteZ As Decimal = -BeffG - dCar
-        Dim ye As Decimal
-        Dim xo, yo As Decimal
+        Dim ye, yo As Decimal
         Dim MyPen As New Pen(Color.Black, 1)
         Dim MyColor As Color
 
@@ -3613,7 +3612,7 @@ Public Module Mod_Dessins
 
         Dim MyPen As New Pen(Color.Black, 1)
         Dim MyColor As Color
-        Dim xo, yo As Decimal
+        Dim xo As Decimal
 
         MyColor = StyleCouleur(1, 1)
         MyPen.Color = MyColor
@@ -7752,7 +7751,7 @@ Public Module Mod_Dessins
         Dim lCofraplus220 As Boolean = myBeam.Dalle.Bac.lCofraplus220
         'Dim lNervureContinue As Boolean = Not (myBeam.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu)
         Dim Bfs, Tfs, Tw, zTop As Decimal
-        Dim xo As Decimal
+        '   Dim xo As Decimal
         Dim Chaine As String
         Dim dGouj, hSc As Decimal
         Dim xCote As Decimal
@@ -9352,7 +9351,7 @@ Public Module Mod_Dessins
                 Dim yMin, yMax As Decimal
                 Dim dCar, dCarApp As Decimal
                 Dim MyParAff As Struc_Affichage
-                Dim LongueurPoutre, LongueurTravee, LongueurConsoleGauche, LongueurConsoleDroite, HauteurPoutre, EpaisseurSemelle, RayonConge As Decimal
+                Dim LongueurPoutre, LongueurTravee, LongueurConsoleGauche, LongueurConsoleDroite, HauteurPoutre, DecalMax, RayonConge As Decimal
 
                 '--> Initialisations
 
@@ -9361,8 +9360,8 @@ Public Module Mod_Dessins
                 If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee / 2
                 If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee / 2
                 HauteurPoutre = MyPoutre.HauteurTotale
-                EpaisseurSemelle = HauteurPoutre / 10
-                RayonConge = EpaisseurSemelle / 2
+                DecalMax = HauteurPoutre
+                RayonConge = DecalMax / 2
                 'LongueurDalle = myBeam.LongueurTotale
                 'HauteurDalle = myBeam.Dalle.Ep_td
                 dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
@@ -9419,15 +9418,15 @@ Public Module Mod_Dessins
                 End Select
 
                 If MyPoutre.pIndiceMaintienSelectionne = 0 Then
-                    x_Loc_min = 0 + EpaisseurSemelle
+                    x_Loc_min = 0 + DecalMax
                 Else
-                    x_Loc_min = MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne - 1).x_Loc + EpaisseurSemelle
+                    x_Loc_min = MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne - 1).x_Loc + DecalMax
                 End If
 
                 If MyPoutre.pIndiceMaintienSelectionne = MyPoutre.Maintiens(indiceTravee).Count - 1 Then
-                    x_Loc_max = MyPoutre.LongueurTravee(indiceTravee) - EpaisseurSemelle
+                    x_Loc_max = MyPoutre.LongueurTravee(indiceTravee) - DecalMax
                 Else
-                    x_Loc_max = MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne + 1).x_Loc - EpaisseurSemelle
+                    x_Loc_max = MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne + 1).x_Loc - DecalMax
                 End If
 
                 x_Loc_local = Math.Max(x_Loc_local, x_Loc_min)
@@ -14854,7 +14853,815 @@ Public Module Mod_Dessins
 
 #End Region
 
-#Region " Dessins des calculs au feu "
+#Region " Dessins champs thermiques pour les poutres slim floors "
+    Private Sub InitialiseTempCouleurs(tempMin As Decimal, tempMax As Decimal, ByRef tab_TempCouleurs() As Decimal)
+        '-----------------------------------------------------------------------------------------------
+        '   10/04/26 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Initialisation des températures associées aux couleurs
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim nbInterv As Double = tab_TempCouleurs.Length
+
+        '--( Calculs
+
+        tab_TempCouleurs(0) = tempMin
+        tab_TempCouleurs(nbInterv - 1) = tempMax
+
+        Dim tempInt As Decimal
+        For i = 1 To nbInterv - 2
+            tempInt = tempMin + (i / nbInterv * (tempMax - tempMin))
+            tab_TempCouleurs(i) = tempInt
+        Next
+
+    End Sub
+
+    Public Sub DessinLegende(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
+                             ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   20/11/25 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Représentation de la légende pour les champs thermiques
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics
+        '   pWi         [E] :   Largeur de la zone de dessin
+        '   pHi         [E] :   Hauteur de la zone de dessin
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+
+        Const kADJUST As Decimal = 0.95
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim LegParaff As Struc_Affichage
+        Dim dCar As Double
+        Const LL As Double = 100
+        Dim H As Double = LL * pHi / pWi
+        Dim nbColors As Integer = Tab_Couleurs.GetUpperBound(0) + 1
+        Dim FontFrm As Font = New Font(FontBase.Name, SizeFontFrm)
+        Dim tab_TempCouleurs(Tab_Couleurs.Length - 1) As Decimal
+
+        dCar = Math.Sqrt((LL) ^ 2 + (H) ^ 2) / 50
+        xMin = 0
+        yMin = 0
+        xMax = LL
+        yMax = H + 5 * dCar / 3
+
+        InitialiseTempCouleurs(TEMPMINPERSO, TEMPMAXPERSO, tab_TempCouleurs)
+
+        ParametresAffichage(LegParaff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+
+        For i As Integer = 0 To nbColors - 2
+            Dim xo, yo As Double
+            Dim xe, ye As Double
+            xo = xe
+            xe = (i + 1) * LL / (nbColors - 1)
+            yo = 0
+            ye = H
+
+
+            AddRectanglePleinGradient(myGr, Tab_Couleurs(i), Tab_Couleurs(i + 1), xo, yo, xe, ye, LegParaff)
+        Next
+
+        For i As Integer = 0 To nbColors - 1
+            Dim xo, yo As Double
+            Dim xe, ye As Double
+            xo = i * LL / (nbColors - 1)
+            xe = xo
+            yo = H + dCar / 2
+            ye = H
+            AddLigne(myGr, New Pen(Color.Black, 1), xo, yo, xe, ye, LegParaff)
+
+            Dim chaine = Int(tab_TempCouleurs(i))
+
+            AddTexte(myGr, New SolidBrush(Color.Black), chaine, FontFrm, xo, yo, LegParaff,
+                       HorizontalAlignment.Center, VerticalAlignement.Top)
+        Next
+
+        Dim CompRed As Byte = Tab_Couleurs(0).R
+        Dim CompGreen As Byte = Tab_Couleurs(0).G
+        Dim CompBlue As Byte = Tab_Couleurs(0).B
+
+        Dim MyClolor As Color = Color.FromArgb(CompRed, CompGreen, CompBlue)
+    End Sub
+
+    Public Sub DessineChampThSlim(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
+                                  myBeam As cls_Poutre, iStep As Integer,
+                                  ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   10/04/26 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation d'une carte de champs thermiques pour une poutre slim floor
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   myBeam      [E] :   Poutre à dessiner
+        '   iStep       [E] :   Indice du pas de temps à dessiner
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim xMin, yMin, xMax, yMax As Double
+        Const kADJUST As Decimal = 0.95
+        Dim Maillage As New cls_MaillageSlimFloor
+        Dim bEffG, bEffD, bApp As Decimal
+        Dim nbY, nbZ As Integer
+        Dim iMin, iMax As Integer
+        Dim dCar As Double
+        Dim zCarMail As Decimal
+        Dim myParAff As Struc_Affichage
+        Dim i, j As Integer
+
+        Const lZoneCentrale As Boolean = True
+        Const lContourSeul As Boolean = False
+        Const lLissage As Boolean = True
+        Const lAffSect As Boolean = True
+        Const lAffDall As Boolean = True
+        Const lAffArma As Boolean = True
+
+        
+        Dim tab_TempCouleurs(tab_Couleurs.Length - 1) As Decimal
+
+
+        '--( Sécurité
+
+        If Not myBeam.lSlimFloor Then Exit Sub
+
+        '--( Initialisation
+
+        InitialiseTempCouleurs(TEMPMINPERSO, TEMPMAXPERSO, tab_TempCouleurs)
+
+        myBeam.VerifFeuSlimAcier.ParamBeffMaillage(myBeam, bEffG, bEffD, bApp)
+
+        '--( On commence par extraire le maillage et les températures à représenter
+
+        Maillage.Creation_maillage_2D_poutre_plancher_mince(myBeam.Section.ProfilA, myBeam.Dalle, myBeam.ParamFeu, bEffG, bEffD, myBeam.lIntermediaire, bApp)
+
+        '--( Préparation
+
+        nbY = Maillage.nb_cells_y
+        nbZ = Maillage.nb_cells_z
+
+        IndicesMaillesYAffichage(myBeam, Maillage, nbY, lZoneCentrale, iMin, iMax)
+
+        '--( Valeurs min/max pour l'affichage
+
+        xMin = Maillage.Tab_mesh_cent_y(iMin, 0) - Maillage.Tab_mesh_y(iMin) / 2
+        yMin = Maillage.Tab_mesh_cent_z(0, 0) - Maillage.Tab_mesh_z(0) / 2
+        xMax = Maillage.Tab_mesh_cent_y(iMax, 0) + Maillage.Tab_mesh_y(iMax) / 2
+        yMax = Maillage.Tab_mesh_cent_z(0, nbZ - 1) + Maillage.Tab_mesh_z(nbZ - 1) / 2
+
+        dCar = Math.Sqrt((xMax - xMin) ^ 2 + (yMax - yMin) ^ 2) / 20
+        zCarMail = -dCar
+
+        'yMin = -2 * dCar
+        'yMax += dCar
+
+        ParametresAffichage(myParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+
+        '--( Représentation des mailles
+
+        If Not lContourSeul Then
+            For i = iMin To iMax
+                For j = 0 To nbZ - 1
+                    If DoWeDraw(Maillage, i, j, lAffSect, lAffDall, lAffArma) Then
+                        If lLissage Then
+                            Dessine_Maille_Lissage(myGr, myParAff, myBeam, iStep, Maillage, i, j, tab_Couleurs, tab_TempCouleurs)
+                        Else
+                            Dessine_Maille(myGr, myParAff, Maillage, i, j)
+                        End If
+                    End If
+                Next
+            Next
+        End If
+
+        '%% Coutour des zones
+
+        For i = iMin To iMax
+            For j = 0 To nbZ - 1
+                If DoWeDraw(Maillage, i, j, lAffSect, lAffDall, lAffArma) Then
+                    DessineMailleContourSeul(myGr, myParAff, Maillage, i, j)
+                End If
+            Next
+        Next
+
+    End Sub
+
+    Private Sub Dessine_Maille(ByRef myGr As Graphics, myParaff As Struc_Affichage, myMail As cls_MaillageSlimFloor, iMail As Integer, jMail As Integer,
+                               Optional iSelect As Integer = -1, Optional jSelect As Integer = -1)
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   14/11/25 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Représentation graphique d'une maille du maillage
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration des variables
+
+        Dim myColor As Color
+        Dim xo, yo As Double
+        Dim xe, ye As Double
+        Dim lDessin As Boolean
+        Dim lSelect As Boolean = (iMail = iSelect) AndAlso (jMail = jSelect)
+
+        '--( Informations de la maille
+
+        InfoMaille(myMail, iMail, jMail, myColor, lDessin)
+
+        '--( Coordonnées de la maille
+
+        xo = myMail.Tab_mesh_cent_y(iMail, jMail) - myMail.Tab_mesh_y(iMail) / 2
+        xe = myMail.Tab_mesh_cent_y(iMail, jMail) + myMail.Tab_mesh_y(iMail) / 2
+        yo = myMail.Tab_mesh_cent_z(iMail, jMail) - myMail.Tab_mesh_z(jMail) / 2
+        ye = myMail.Tab_mesh_cent_z(iMail, jMail) + myMail.Tab_mesh_z(jMail) / 2
+
+        '--( Dessine la maille
+
+        If lDessin Or lSelect Then _
+        AddRectanglePlein(myGr, myColor, xo, yo, xe, ye, myParaff, lSelect)
+
+    End Sub
+
+    Private Sub DessineMailleContourSeul(ByRef myGr As Graphics, myParaff As Struc_Affichage, myMail As cls_MaillageSlimFloor, iMail As Integer, jMail As Integer,
+                                         Optional iSelect As Integer = -1, Optional jSelect As Integer = -1)
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   14/11/25 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Représentation graphique d'une maille du maillage
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration des variables
+
+        Dim myColor As Color
+
+        Dim xo, yo As Double
+        Dim xe, ye As Double
+        Dim lDessin As Boolean
+        Dim lSelect As Boolean = (iMail = iSelect) AndAlso (jMail = jSelect)
+        Dim myPen As New Pen(Color.Black, 1)
+        Dim lOK As Boolean = False
+
+        '--( Informations de la maille
+
+        InfoMaille(myMail, iMail, jMail, myColor, lDessin)
+
+        '--( Coordonnées de la maille
+
+        xo = myMail.Tab_mesh_cent_y(iMail, jMail) - myMail.Tab_mesh_y(iMail) / 2
+        xe = myMail.Tab_mesh_cent_y(iMail, jMail) + myMail.Tab_mesh_y(iMail) / 2
+        yo = myMail.Tab_mesh_cent_z(iMail, jMail) - myMail.Tab_mesh_z(jMail) / 2
+        ye = myMail.Tab_mesh_cent_z(iMail, jMail) + myMail.Tab_mesh_z(jMail) / 2
+
+        '--( Dessin des contours
+
+        If lDessin Then
+
+            '%% Contour gauche
+            If (iMail = 0) Then
+                lOK = True
+            ElseIf (myMail.Tab_mesh_mat(iMail - 1, jMail) <> myMail.Tab_mesh_mat(iMail, jMail)) Then
+                lOK = True
+            Else
+                lOK = False
+            End If
+            If lOK Then AddLigne(myGr, myPen, xo, yo, xo, ye, myParaff)
+
+
+            '%% Contour haut
+            If (jMail = myMail.nb_cells_z - 1) Then
+                lOK = True
+            ElseIf (myMail.Tab_mesh_mat(iMail, jMail + 1) <> myMail.Tab_mesh_mat(iMail, jMail)) Then
+                lOK = True
+            Else
+                lOK = False
+            End If
+            If lOK Then AddLigne(myGr, myPen, xo, ye, xe, ye, myParaff)
+
+
+            '%% Contour droite
+            If (iMail = myMail.nb_cells_y - 1) Then
+                lOK = True
+            ElseIf (myMail.Tab_mesh_mat(iMail + 1, jMail) <> myMail.Tab_mesh_mat(iMail, jMail)) Then
+                lOK = True
+            Else
+                lOK = False
+            End If
+            If lOK Then AddLigne(myGr, myPen, xe, yo, xe, ye, myParaff)
+
+            '%% Contour bas
+            If (jMail = 0) Then
+                lOK = True
+            ElseIf (myMail.Tab_mesh_mat(iMail, jMail - 1) <> myMail.Tab_mesh_mat(iMail, jMail)) Then
+                lOK = True
+            Else
+                lOK = False
+            End If
+            If lOK Then AddLigne(myGr, myPen, xo, yo, xe, yo, myParaff)
+        End If
+
+
+    End Sub
+
+    Private Sub Dessine_Maille_Lissage(ByRef myGr As Graphics, myParaff As Struc_Affichage,
+                                       myBeam As cls_Poutre, iStep As Integer, myMail As cls_MaillageSlimFloor,
+                                       iMail As Integer, jMail As Integer, Tab_Couleurs() As Color, Tab_ThCouleurs() As Decimal,
+                                       Optional iSelect As Integer = -1, Optional jSelect As Integer = -1)
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   26/11/25 :  Création - BEB
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Représentation graphique d'une maille du maillage avec lissage des couleurs 
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   myGr            [E] :   Graphics
+        '   tabColor        [E] :   Table des coueurs utilisées pour l'affichage (doit être triée par ordre croissant de température)
+        '   Tab_ThCouleurs  [E] :   Table des températures correspondant à chaque couleur (doit être triée par ordre croissant de température)
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration des variables
+
+        Dim myColor As Color
+        Dim x1, y1 As Double
+        Dim x2, y2 As Double
+
+        Dim lDessin As Boolean
+        Dim lSelect As Boolean = (iMail = iSelect) AndAlso (jMail = jSelect)
+
+        Dim coordonnees As Double()
+        Dim couleurs As Color()
+        Dim coulCentre As Color
+        Dim tempCoins As Double()
+        Dim myTemp As Decimal = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail, jMail)
+
+        '--( Informations de la maille
+
+        InfoMaille(myMail, iMail, jMail, myColor, lDessin)
+
+        coulCentre = myColor
+
+        '--( Coordonnées de la maille
+
+        x1 = myMail.Tab_mesh_cent_y(iMail, jMail) - myMail.Tab_mesh_y(iMail) / 2
+        x2 = myMail.Tab_mesh_cent_y(iMail, jMail) + myMail.Tab_mesh_y(iMail) / 2
+        y1 = myMail.Tab_mesh_cent_z(iMail, jMail) - myMail.Tab_mesh_z(jMail) / 2
+        y2 = myMail.Tab_mesh_cent_z(iMail, jMail) + myMail.Tab_mesh_z(jMail) / 2
+
+        coordonnees = {x1, y2, x2, y2, x2, y1, x1, y1}
+
+        '--( Calcul des températures des 4 coins de la maille (pour le lissage)
+
+        tempCoins = CalculTempCoins(myBeam, iStep, myMail, myTemp, iMail, jMail)
+
+        '--( Traduction en couleur
+        couleurs = {AttributionCouleurChTh(tempCoins(0), Tab_Couleurs, Tab_ThCouleurs),
+                    AttributionCouleurChTh(tempCoins(1), Tab_Couleurs, Tab_ThCouleurs),
+                    AttributionCouleurChTh(tempCoins(2), Tab_Couleurs, Tab_ThCouleurs),
+                    AttributionCouleurChTh(tempCoins(3), Tab_Couleurs, Tab_ThCouleurs)}
+
+        coulCentre = CouleurMoyenne(couleurs)
+
+        '--( Dessine la maille
+        If lDessin Or lSelect Then _
+                AddRectanglePleinGradientPath(myGr, myParaff, coordonnees, couleurs, coulCentre)
+
+    End Sub
+
+    Private Function CouleurMoyenne(tabColor() As Color) As Color
+
+        Dim r As Integer = 0
+        Dim g As Integer = 0
+        Dim b As Integer = 0
+        Dim n As Integer = tabColor.Length
+
+        For Each c As Color In tabColor
+            r += c.R
+            g += c.G
+            b += c.B
+        Next
+
+        Return Color.FromArgb(r \ n, g \ n, b \ n)
+
+    End Function
+
+    Private Function AttributionCouleurChTh(tempMaille As Double, Tab_Couleurs() As Color, Tab_ThCouleurs() As Decimal) As Color
+        '--------------------------------------------------------------------------------------------
+        '   11/04/26 :  Version 1.00 - BEB
+        '--------------------------------------------------------------------------------------------
+        '   Attribution d'une couleur à une température donnée en fonction de l'intervalle de couleurs défini
+        '--------------------------------------------------------------------------------------------
+        '   tempMaille      [E] :   Température de la maille
+        '   tabColor        [E] :   Table des coueurs utilisées pour l'affichage (doit être triée par ordre croissant de température)
+        '   Tab_ThCouleurs  [E] :   Table des températures correspondant à chaque couleur (doit être triée par ordre croissant de température)
+        '--------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim indBorneInf As Integer    'indice borne inférieure
+        Dim indBorneSup As Integer    'indice borne supérieure
+        Dim tempInf As Double         'température borne inférieure
+        Dim tempSup As Double         'température borne supérieure
+        Dim coefCouleur As Double
+        Dim coulInf As Color
+        Dim coulSup As Color
+
+        Dim myColor As Color
+
+        Dim lCont As Boolean = True
+        Dim lBorne As Boolean = False       ' Indique une température exactement égale à une borne de l'intervalle de couleurs
+        Dim iColor As Integer = 0
+        Dim NbColors As Integer = Tab_ThCouleurs.Length
+
+        Do While lCont And iColor < NbColors - 1
+            iColor += 1
+            If IsSmaller(tempMaille, Tab_ThCouleurs(iColor)) Then
+                lCont = False
+                indBorneInf = iColor - 1
+                indBorneSup = iColor
+            ElseIf IsEqual(tempMaille, Tab_ThCouleurs(iColor)) Then
+                lCont = False
+                lBorne = True
+                myColor = Tab_Couleurs(iColor)
+            End If
+        Loop
+
+        If Not lBorne Then
+            tempInf = Tab_ThCouleurs(indBorneInf)
+            tempSup = Tab_ThCouleurs(indBorneSup)
+            coulInf = Tab_Couleurs(indBorneInf)
+            coulSup = Tab_Couleurs(indBorneSup)
+
+            coefCouleur = (tempMaille - tempInf) / (tempSup - tempInf)
+
+            Dim r, g, b
+            If coulInf.R > coulSup.R Then
+                r = coulSup.R + (1 - coefCouleur) * (coulInf.R - coulSup.R)
+            Else
+                r = coulInf.R + coefCouleur * (coulSup.R - coulInf.R)
+            End If
+
+
+            If coulInf.G > coulSup.G Then
+                g = coulSup.G + (1 - coefCouleur) * (coulInf.G - coulSup.G)
+            Else
+                g = coulInf.G + coefCouleur * (coulSup.G - coulInf.G)
+            End If
+
+
+            If coulInf.B > coulSup.B Then
+                b = coulSup.B + (1 - coefCouleur) * (coulInf.B - coulSup.B)
+            Else
+                b = coulInf.B + coefCouleur * (coulSup.B - coulInf.B)
+            End If
+
+            myColor = Color.FromArgb(r, g, b)
+        End If
+
+        Return myColor
+
+    End Function
+
+    Private Function CalculTempCoins(myBeam As cls_Poutre, iStep As Integer, myMail As cls_MaillageSlimFloor,
+                                     tempMaille As Double, iMail As Integer, jMail As Integer) As Double()
+        '-------------------------------------------------------------------------------------------------
+        '   10/04/26 :  Version 1.00 - BEB
+        '-------------------------------------------------------------------------------------------------
+        '   Renvoie les températures des 4 coins de la maille
+        '   en fonction de la température de la maille et de celles des mailles entourant les coins
+        '   Indices :   0 : en haut à Gauche
+        '               1 : en haut à droite
+        '               2 : en bas à droite,
+        '               3 : en bas à gauche
+        '
+        '   1 ______ 2
+        '    |      |  
+        '    |      |      
+        '    |______| 
+        '   4        3
+        '
+        '-------------------------------------------------------------------------------------------------
+        '   myMail          [E] :   Maillage
+        '   tempMaille      [E] :   Température de la maille
+        '   iMail, jMail    [E] :   Indices de la maille
+        '-------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        '========Tableau qui contiendra nos valeurs finale========
+        Dim TemperatureAuxCoins As Double() = New Double(3) {}
+
+        '========Variables pour nous permettre de savoir si il y a des mailles voisines dans les directions spécifiées========
+        Dim vGauche As Boolean
+        Dim vDroite As Boolean
+        Dim vHaut As Boolean
+        Dim vBas As Boolean
+        Dim vDiagHautGauche As Boolean
+        Dim vDiagHautDroite As Boolean
+        Dim vDiagBasGauche As Boolean
+        Dim vDiagBasDroite As Boolean
+
+        '========Variables pour stocker les températures des mailles voisines========
+        Dim vGaucheTemp As Double
+        Dim vDroiteTemp As Double
+        Dim vHautTemp As Double
+        Dim vBasTemp As Double
+        Dim vDiagHautGaucheTemp As Double
+        Dim vDiagHautDroiteTemp As Double
+        Dim vDiagBasGaucheTemp As Double
+        Dim vDiagBasDroiteTemp As Double
+
+
+        '--( Traitement
+
+        '=== PREMIERE ETAPE===
+        ' On regarde qui sont les voisins de la maille actuelle , une maille à un voisin dans une direction si une maille est présente dans cette direction et si cette maille est
+        ' du MËME matériaux que notre maille actuelle
+        ' il y a 7 directions possible les voisins d'une maille :
+        ' gauche,
+        ' la diagonale en haut à gauche,
+        ' haut,
+        ' la diagonale en haut à droite,
+        ' droite,
+        ' la diagonale en bas à droite,
+        ' bas,
+        ' la diagonale en bas à gauche
+        ' Dans cette étape on va en même temps récupérer la température de la maille voisine, si donc elle existe et est bien du même type
+
+
+        '==Direction cardinales==
+        If (iMail = 0) Then     'frontière à gauche
+            vGauche = False
+        ElseIf (myMail.Tab_mesh_mat(iMail - 1, jMail) = myMail.Tab_mesh_mat(iMail, jMail)) Then
+            vGauche = True
+            vGaucheTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail - 1, jMail)
+        End If
+
+        If (jMail = 0) Then     'frontière en bas
+            vBas = False
+
+        ElseIf (myMail.Tab_mesh_mat(iMail, jMail - 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
+            vBas = True
+            vBasTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail, jMail - 1)
+        End If
+
+        If (iMail = myMail.nb_cells_y - 1) Then     'frontière à droite
+            vDroite = False
+
+        ElseIf (myMail.Tab_mesh_mat(iMail + 1, jMail) = myMail.Tab_mesh_mat(iMail, jMail)) Then
+            vDroite = True
+            vDroiteTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail + 1, jMail)
+        End If
+
+        If (jMail = myMail.nb_cells_z - 1) Then     'frontière en haut
+            vHaut = False
+
+        ElseIf (myMail.Tab_mesh_mat(iMail, jMail + 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
+            vHaut = True
+            vHautTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail, jMail + 1)
+        End If
+
+        '==Direction diagonales==
+        'haut gauche
+        If vHaut And vGauche Then
+            If (myMail.Tab_mesh_mat(iMail - 1, jMail + 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
+                vDiagHautGauche = True
+                vDiagHautGaucheTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail - 1, jMail + 1)
+            End If
+        End If
+
+        'haut droite
+        If vHaut And vDroite Then
+            If (myMail.Tab_mesh_mat(iMail + 1, jMail + 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
+                vDiagHautDroite = True
+                vDiagHautDroiteTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail + 1, jMail + 1)
+            End If
+        End If
+
+        'bas droite
+        If vBas And vDroite Then
+            If (myMail.Tab_mesh_mat(iMail + 1, jMail - 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
+                vDiagBasDroite = True
+                vDiagBasDroiteTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail + 1, jMail - 1)
+            End If
+        End If
+
+        'bas gauche
+        If vBas And vGauche Then
+            If (myMail.Tab_mesh_mat(iMail - 1, jMail - 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
+                vDiagBasGauche = True
+                vDiagBasGaucheTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail - 1, jMail - 1)
+            End If
+        End If
+
+
+
+        '=== DEUXIEME ETAPE===
+        ' Dans cette étape finale, nous allons utiliser les informations récupérées lors de la première étape et réaliser le calcul des températures moyennes aux coins de la maille actuelle
+        ' Nous procédons coin par coin dans l'ordre spécifié en début de fonction
+        ' On va regarder si les voisins correspondant au coin actuel sont présent ou non et s'ils sont bien présent, on ajoute leur température dans la liste dédiée, afin de pouvoir calculer la moyenne plus facilement
+
+        ' Exemple : on regarde le premier coin de notre maille actuelle, en haut à gauche :
+        ' on ajoute dans la liste dédiée au calcul de la moyenne la température de la maille (action répétée dans tous les cas)
+        ' comme on est sur le coin en haut à gauche, on va regarder si on a un voisin dans les directions suivantes:
+        ' - à gauche
+        ' - en haut
+        ' - en haut à gauche
+        ' pour chaque cas si on a bien une maille voisine, on ajoute sa température à la liste pour le calcul de la moyenne
+        ' enfin une fois que la liste est remplit (potentiellement d'une seule valeur = la température de la case actuelle si on a aucun voisin (mais ce cas n'est pas possible dans notre situation)),
+        ' on ajoute au tableau "TemperatureAuxCoins" à l'indice correspondant à notre coins, donc ici 0, la moyenne obtenue.
+
+        Dim ListeTemporaireTempCoin As New List(Of Double)      'Pour chaque coin, contiendra les températures des cases voisines (permet de faciliter le calcul de la moyenne)
+
+        'coin 1 = Haut Gauche
+        ListeTemporaireTempCoin.Clear()
+        ListeTemporaireTempCoin.Add(tempMaille)
+        If vHaut Then ListeTemporaireTempCoin.Add(vHautTemp)
+        If vGauche Then ListeTemporaireTempCoin.Add(vGaucheTemp)
+        If vDiagHautGauche Then ListeTemporaireTempCoin.Add(vDiagHautGaucheTemp)
+        TemperatureAuxCoins(0) = Moyenne(ListeTemporaireTempCoin.ToArray())
+
+        'coin 2 = Haut Droite
+        ListeTemporaireTempCoin.Clear()
+        ListeTemporaireTempCoin.Add(tempMaille)
+        If vHaut Then ListeTemporaireTempCoin.Add(vHautTemp)
+        If vDroite Then ListeTemporaireTempCoin.Add(vDroiteTemp)
+        If vDiagHautDroite Then ListeTemporaireTempCoin.Add(vDiagHautDroiteTemp)
+        TemperatureAuxCoins(1) = Moyenne(ListeTemporaireTempCoin.ToArray())
+
+        'coin 3 = Bas Droite
+        ListeTemporaireTempCoin.Clear()
+        ListeTemporaireTempCoin.Add(tempMaille)
+        If vBas Then ListeTemporaireTempCoin.Add(vBasTemp)
+        If vDroite Then ListeTemporaireTempCoin.Add(vDroiteTemp)
+        If vDiagBasDroite Then ListeTemporaireTempCoin.Add(vDiagBasDroiteTemp)
+        TemperatureAuxCoins(2) = Moyenne(ListeTemporaireTempCoin.ToArray())
+
+        'coin 4 = Bas Gauche
+        ListeTemporaireTempCoin.Clear()
+        ListeTemporaireTempCoin.Add(tempMaille)
+        If vBas Then ListeTemporaireTempCoin.Add(vBasTemp)
+        If vGauche Then ListeTemporaireTempCoin.Add(vGaucheTemp)
+        If vDiagBasGauche Then ListeTemporaireTempCoin.Add(vDiagBasGaucheTemp)
+        TemperatureAuxCoins(3) = Moyenne(ListeTemporaireTempCoin.ToArray())
+
+        Return TemperatureAuxCoins
+    End Function
+
+    Private Function Moyenne(valeurs As Double()) As Double
+        Return Enumerable.Sum(valeurs) / valeurs.Length
+    End Function
+
+    Private Sub InfoMaille(myMail As cls_MaillageSlimFloor, iMail As Integer, jMail As Integer,
+                           ByRef myColor As Color, ByRef lDessin As Boolean)
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   14/11/25 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Exraction des informations relatives à une maille du maillage
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+        '   myMail      [E] :   Maillage de la poutre en cours
+        '   iMail       [E] :   Indice de la maille en X
+        '   jMail       [E] :   Indice de la maille en Y
+        '   myColor     [S] :   Couleur associée à la maille, en fonction du matériau
+        '   lDessin     [S] :   Indique si on dessine de la maille
+        '   ChaineMat   [S] :   Description du matériau de la maille
+        '------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+        'couleur par défaut
+        Select Case myMail.Tab_mesh_mat(iMail, jMail)
+            Case cls_MaillageSlimFloor.MATVIDEFERME, cls_MaillageSlimFloor.MATVIDEOUVERT
+                myColor = Color.White
+                lDessin = False
+
+            Case cls_MaillageSlimFloor.MATACIERSEMI
+                myColor = CouleurAcierNormal
+                lDessin = True
+
+            Case cls_MaillageSlimFloor.MATACIERSEMS
+                myColor = CouleurAcierNormal
+                lDessin = True
+
+            Case cls_MaillageSlimFloor.MATACIERAME
+                myColor = CouleurAcierNormal
+                lDessin = True
+
+            Case cls_MaillageSlimFloor.MATBETON
+                myColor = CouleurBetonNormal
+                lDessin = True
+
+            Case cls_MaillageSlimFloor.MATACIERPLAT
+                myColor = BleuCTICM
+                lDessin = True
+
+            Case cls_MaillageSlimFloor.MATARMA
+                myColor = CouleurArmaSelect
+                lDessin = True
+
+            Case cls_MaillageSlimFloor.MATACIERSOUD
+                myColor = CouleurArmaNormal
+                lDessin = True
+
+        End Select
+
+    End Sub
+
+    Private Function DoWeDraw(mymail As cls_MaillageSlimFloor, iMail As Integer, jmail As Integer,
+                              lAffSect As Boolean, lAffDall As Boolean, lAffArma As Boolean) As Boolean
+        '-----------------------------------------------------------------------------------------------
+        '   xx/02/26 :  Version 1.00 - BEB   
+        '-----------------------------------------------------------------------------------------------
+        '   Indique si la maille est affichée ou non (on n'affiche pas les mailles vides)
+        '-----------------------------------------------------------------------------------------------
+        '   myMail          [E] :   Maillage de la section slim floor
+        '   iMail, jMail    [E] :   Indices de la maille à traiter
+        '   lAffSect        [E] :   Indicateur pour afficher les mailles de la section
+        '   lAffDall        [E] :   Indicateur pour afficher les mailles de la dalle
+        '   lAddArma        [E] :   Indicateur pour afficher les mailles d'armature
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim matMail As Integer = mymail.Tab_mesh_mat(iMail, jmail)
+        Dim elemPoutre() As Integer = {cls_MaillageSlimFloor.MATACIERPLAT,
+                                       cls_MaillageSlimFloor.MATACIERSEMI,
+                                       cls_MaillageSlimFloor.MATACIERAME,
+                                       cls_MaillageSlimFloor.MATACIERSEMS,
+                                       cls_MaillageSlimFloor.MATACIERSOUD}
+        Dim lDessine As Boolean = False
+
+        '--( Affichage de la maille
+
+        'on affiche la poutre et notre maille est une maille de la poutre
+        If lAffSect And elemPoutre.Contains(matMail) Then
+            lDessine = True
+        End If
+
+        'on affiche la dalle et notre maille est une maille de la dalle
+        If lAffDall And matMail = cls_MaillageSlimFloor.MATBETON Then
+            lDessine = True
+        End If
+
+        'on affiche l'armature et notre maille est une maille de l'armature
+        If lAffArma And matMail = cls_MaillageSlimFloor.MATARMA Then
+            lDessine = True
+        End If
+
+        Return lDessine
+
+    End Function
+
+    Private Sub IndicesMaillesYAffichage(myBeam As cls_Poutre, myMail As cls_MaillageSlimFloor, nbY As Integer,
+                                         lZoneCentrale As Boolean, ByRef iMin As Integer, ByRef iMax As Integer)
+        '-----------------------------------------------------------------------------------------------
+        '   10/04/26 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation d'une carte de champs thermiques pour une poutre slim floor
+        '-----------------------------------------------------------------------------------------------
+        '   myBeam          [E] :   Poutre à dessiner   
+        '   myMail          [E] :   Maillage de section slim
+        '   lZoneCentrale   [E] :   Indicateur pour n'afficher que la zone centrale (2D) ou toute la section
+        '   iMin, iMax      [S] :   Indices mini et maxi suivant Y des mailles à afficher
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lCont As Boolean
+        Const j As Integer = 0
+
+        '--( Traitement
+
+        If lZoneCentrale Then
+            iMin = 0
+            lCont = Not IsSmaller(Math.Abs(myMail.Tab_mesh_cent_y(iMin, j)), myBeam.ParamFeu.bEffect2D)
+            Do While lCont And iMin < nbY - 2
+                iMin += 1
+                lCont = Not IsSmaller(Math.Abs(myMail.Tab_mesh_cent_y(iMin, j)), myBeam.ParamFeu.bEffect2D)
+            Loop
+            If lCont Then
+                'TODO Prévoir msg erreur
+            End If
+
+            iMax = nbY - 1
+            lCont = Not IsSmaller(Math.Abs(myMail.Tab_mesh_cent_y(iMax, j)), myBeam.ParamFeu.bEffect2D)
+            Do While lCont And iMax > 0
+                iMax -= 1
+                lCont = Not IsSmaller(Math.Abs(myMail.Tab_mesh_cent_y(iMax, j)), myBeam.ParamFeu.bEffect2D)
+            Loop
+            If lCont Then
+                'TODO Prévoir msg erreur
+            End If
+
+        Else
+            iMin = 0
+            iMax = nbY - 1
+        End If
+
+    End Sub
+
+#End Region
+
+
+#Region " Dessins des calculs au feu (courbes echauffement) "
 
     Public Sub DessineCourbeEchauffement(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
                                          myBeam As cls_Poutre,

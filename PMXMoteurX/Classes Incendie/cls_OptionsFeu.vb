@@ -130,6 +130,7 @@
 
         Me.lCreuxProteges = True
 
+        Me.CustomLambdaP = 0.005        ' Valeur minimale dans le MT pour la conductivité thermique de la peinture intumescente
     End Sub
 
 #End Region

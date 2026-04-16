@@ -152,7 +152,7 @@ Module Mod_Internet
 
                         Dim Bloc As New Dictionary(Of String, String)
                         Dim strLoadedKey As String = ""
-                        Const CLE As String = ""
+                        'Const CLE As String = ""
 
                         BlocLine.CreationBloc(Bloc, strLoadedKey)
 
@@ -438,7 +438,7 @@ Module Mod_Internet
 
         Dim BlocLine As New Cls_LinesOfFile(FichierCible, True)
         Dim strLoadedKey As String = ""
-        Const CLE As String = ""
+        'Const CLE As String = ""
 
         BlocLine.CreationBloc(BlocMAJ, strLoadedKey)
 

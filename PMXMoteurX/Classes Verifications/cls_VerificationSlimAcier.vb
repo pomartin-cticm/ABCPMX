@@ -6,7 +6,7 @@
 #Region " Attributs "
 
     Public CritereM As cls_Critere                  ' Resistance à la flexion
-    Public CritereMY As cls_Critere                 ' Resistance à la flexion transversale dans le cas d'un calcul élastique
+    Public CritereMY As cls_Critere                 ' Resistance à la flexion transversale 
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
     Public CritereMV As cls_Critere                 ' Résistance à l'interacion MV
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
@@ -118,7 +118,7 @@
 
         '--( Déclaration
 
-        Dim lRive As Boolean
+        '  Dim lRive As Boolean
         Dim kQloc As Decimal
         Dim iNode As Integer
         Dim tFi, tPlat As Decimal
@@ -139,8 +139,10 @@
         'If lRive Then kQloc = 1 Else kQloc = 1 / 2
         kQloc = CoefficientCharge(myBeam)
 
-        dApp = Me.LargeurAppui(myBeam)
-        Me.BrasLevier(myBeam, dApp, dbtFi, dbtPlat)
+        'dApp = Me.LargeurAppui(myBeam)
+        'Me.BrasLevier(myBeam, dApp, dbtFi, dbtPlat)
+        dApp = myBeam.SlimLargeurAppui
+        myBeam.Section.SlimBrasLevier(dApp, dbtFi, dbtPlat)
 
         tPlat = myBeam.Section.ProfilA.Plat_t
         tFi = myBeam.Section.ProfilA.Tfi
@@ -238,7 +240,7 @@
         Dim TauCas(,,,) As Decimal = Nothing            ' Contraintes de cisaillement pour les cas de charges
         Dim FluxCas(,,,) As Decimal = Nothing           ' Flux de cisaillement dans les soudures de PRS par cas de charges
         Dim FluxELU(,,) As Decimal = Nothing            ' Flux de cisaillement dans les soudures de PRS aux ELU
-        Dim lSoudure As Boolean                         ' Indique si un calcul de soudure est nécessaire 
+        ' Dim lSoudure As Boolean                         ' Indique si un calcul de soudure est nécessaire 
 
         '**     **  Dans ces tableaux, indice 2 iNode, indice 3 0 pour la semelle, 1 pour le plat
 
@@ -251,6 +253,8 @@
         Const lWEB As Boolean = True
         Dim lRec As Boolean
 
+        Dim lChInCombi() As Boolean = Nothing
+
         '--> Initialisations
 
         '# Critères
@@ -262,6 +266,9 @@
             nbCombiELU = myBeam.CombiA_ELU.nbCombi      'cls_Poutre.nbCombELU
             combiELU = myBeam.CombiA_ELU
         End If
+
+        combiELU.GetTablesChargesDansCombi(myBeam.ChargesA.Count, lchincombi)
+
 
         Me.InitialiseCoeffReduc(nbCombiELU, myBeam.Nodes.nbNodes)
         Me.InitialiseRhoV(nbCombiELU, myBeam.Nodes.nbNodes)
@@ -309,7 +316,7 @@
 
         If lVerifElastic Then
             myBeam.PtsSigma.Initialise(myBeam, lConstructionPhase)
-            myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaCas)
+            myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, lChInCombi, SigmaCas)
         End If
 
         '# Contraintes de cisaillement
@@ -424,68 +431,70 @@
 
 #Region " Largeurs d'appui et bras de levier "
 
-    Private Function LargeurAppui(myBeam As cls_Poutre) As Decimal
-        '-----------------------------------------------------------------------------------------------------------------------------
-        '   31/07/25 :  Création - POM
-        '-----------------------------------------------------------------------------------------------------------------------------
-        '   Renvoie la distance entre le centre des charges sur l'appui et le bord de l'appui
-        '-----------------------------------------------------------------------------------------------------------------------------
-        '-----------------------------------------------------------------------------------------------------------------------------
+    '=== FONCTION TRANSFEREE DANS cls_poutre
+    'Private Function LargeurAppui(myBeam As cls_Poutre) As Decimal
+    '    '-----------------------------------------------------------------------------------------------------------------------------
+    '    '   31/07/25 :  Création - POM
+    '    '-----------------------------------------------------------------------------------------------------------------------------
+    '    '   Renvoie la distance entre le centre des charges sur l'appui et le bord de l'appui
+    '    '-----------------------------------------------------------------------------------------------------------------------------
+    '    '-----------------------------------------------------------------------------------------------------------------------------
 
-        '--( Déclarations
+    '    '--( Déclarations
 
-        Dim dApp As Decimal
-        Dim lDallePleine As Boolean = myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine
+    '    Dim dApp As Decimal
+    '    Dim lDallePleine As Boolean = myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine
 
-        '--( Traitement
+    '    '--( Traitement
 
-        If myBeam.Param.MethodReducPlatSlim = cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire Then
-            dApp = 40 / 1000        '== 40 mm
-        Else
-            If lDallePleine Then
-                dApp = myBeam.Section.LargeurAppuiSlimDallePleine
-            Else
-                dApp = (2 / 3) * OptionsDalle.Bappmin
-            End If
-        End If
+    '    If myBeam.Param.MethodReducPlatSlim = cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire Then
+    '        dApp = 40 / 1000        '== 40 mm
+    '    Else
+    '        If lDallePleine Then
+    '            dApp = myBeam.Section.LargeurAppuiSlimDallePleine
+    '        Else
+    '            dApp = (2 / 3) * OptionsDalle.Bappmin
+    '        End If
+    '    End If
 
-        Return dApp
+    '    Return dApp
 
-    End Function
+    'End Function
 
-    Private Sub BrasLevier(myBeam As cls_Poutre, dApp As Decimal, ByRef dbtFi As Decimal, ByRef dbtPlat As Decimal)
-        '-----------------------------------------------------------------------------------------------------------------------------
-        '   31/07/25 :  Création - POM
-        '-----------------------------------------------------------------------------------------------------------------------------
-        '   Calcul des bras de levier entre point d'application charge locale et point de calcul des contraintes
-        '-----------------------------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre étudiée
-        '   dApp        [E] :   Largeur de l'appui de la dalle
-        '   dbtFi       [S] :   Bras de levier pour la semelle inférieure (le cas échéant)
-        '   dbtPlat     [S] :   Bras de levier pour le plat inférieur (le cas échéant)
-        '-----------------------------------------------------------------------------------------------------------------------------
+    '==== FONCTION TRANSFEREE DANS cls_Section
+    'Private Sub BrasLevier(myBeam As cls_Poutre, dApp As Decimal, ByRef dbtFi As Decimal, ByRef dbtPlat As Decimal)
+    '    '-----------------------------------------------------------------------------------------------------------------------------
+    '    '   31/07/25 :  Création - POM
+    '    '-----------------------------------------------------------------------------------------------------------------------------
+    '    '   Calcul des bras de levier entre point d'application charge locale et point de calcul des contraintes
+    '    '-----------------------------------------------------------------------------------------------------------------------------
+    '    '   myBeam      [E] :   Poutre étudiée
+    '    '   dApp        [E] :   Largeur de l'appui de la dalle
+    '    '   dbtFi       [S] :   Bras de levier pour la semelle inférieure (le cas échéant)
+    '    '   dbtPlat     [S] :   Bras de levier pour le plat inférieur (le cas échéant)
+    '    '-----------------------------------------------------------------------------------------------------------------------------
 
-        With myBeam.Section
-            Select Case .TypeSection
-                Case cls_Section.Enum_TypeSection.IFB_A
-                    With .ProfilA
-                        dbtFi = 0
-                        dbtPlat = (.Plat_b - .Tw) / 2 - dApp
-                    End With
-                Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB
-                    With .ProfilA
-                        dbtFi = (.Bfi - .Tw) / 2 - .Rci - dApp
-                        dbtPlat = 0
-                    End With
-                Case cls_Section.Enum_TypeSection.SFB
-                    With .ProfilA
-                        dbtFi = (.Bfi - .Tw) / 2 - .Rci
-                        dbtPlat = (.Plat_b - .Bfi) / 2 - dApp
-                    End With
-            End Select
-        End With
+    '    With myBeam.Section
+    '        Select Case .TypeSection
+    '            Case cls_Section.Enum_TypeSection.IFB_A
+    '                With .ProfilA
+    '                    dbtFi = 0
+    '                    dbtPlat = (.Plat_b - .Tw) / 2 - dApp
+    '                End With
+    '            Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB
+    '                With .ProfilA
+    '                    dbtFi = (.Bfi - .Tw) / 2 - .Rci - dApp
+    '                    dbtPlat = 0
+    '                End With
+    '            Case cls_Section.Enum_TypeSection.SFB
+    '                With .ProfilA
+    '                    dbtFi = (.Bfi - .Tw) / 2 - .Rci
+    '                    dbtPlat = (.Plat_b - .Bfi) / 2 - dApp
+    '                End With
+    '        End Select
+    '    End With
 
-    End Sub
+    'End Sub
 
 
 #End Region
@@ -532,7 +541,9 @@
 
         Dim FyPlat, fyInf As Decimal
 
-        Dim kCote2, kChargeQ As Decimal
+        Dim kChargeQ As Decimal
+
+        Dim EN1994 As New cls_Eurocodes
 
         '--> Initialisation
 
@@ -541,8 +552,9 @@
 
         gammaM0 = myPoutre.Param.Gamma.GammaM0
 
-        dApp = Me.LargeurAppui(myPoutre)
-        Me.BrasLevier(myPoutre, dApp, dbtFi, dbtPlat)
+        dApp = myPoutre.SlimLargeurAppui
+        'Me.BrasLevier(myPoutre, dApp, dbtFi, dbtPlat)
+        myPoutre.Section.SlimBrasLevier(dApp, dbtFi, dbtPlat)
 
         FyPlat = myPoutre.Section.FySpd
         fyInf = myPoutre.Section.FyInf
@@ -610,8 +622,8 @@
                                     rho_t_spd(iCombi, iNode) = 1
                                     rho_t_fi(iCombi, iNode) = 1
 
-                                    Psi_y_spd(iCombi, iNode) = CalculPsiY(q, dbtPlat, .Plat_t, FyPlat, gammaM0)
-                                    Psi_y_fi(iCombi, iNode) = CalculPsiY(q, dbtFi, .Tfi, fyInf, gammaM0)
+                                    Psi_y_spd(iCombi, iNode) = EN1994.SlimCalculPsiY(q, dbtPlat, .Plat_t, FyPlat, GammaM0)
+                                    Psi_y_fi(iCombi, iNode) = EN1994.SlimCalculPsiY(q, dbtFi, .Tfi, fyInf, GammaM0)
 
                             End Select
 
@@ -646,7 +658,7 @@
                                     rho_t_spd(iCombi, iNode) = 1
                                     rho_t_fi(iCombi, iNode) = 1
 
-                                    Psi_y_spd(iCombi, iNode) = CalculPsiY(q, dbtPlat, .Plat_t, FyPlat, gammaM0)
+                                    Psi_y_spd(iCombi, iNode) = EN1994.SlimCalculPsiY(q, dbtPlat, .Plat_t, FyPlat, GammaM0)
                                     Psi_y_fi(iCombi, iNode) = 1
 
                             End Select
@@ -683,7 +695,7 @@
                                     rho_t_fi(iCombi, iNode) = 1
 
                                     Psi_y_spd(iCombi, iNode) = 1
-                                    Psi_y_fi(iCombi, iNode) = CalculPsiY(q, dbtFi, .Tfi, fyInf, gammaM0)
+                                    Psi_y_fi(iCombi, iNode) = EN1994.SlimCalculPsiY(q, dbtFi, .Tfi, fyInf, GammaM0)
 
                             End Select
 
@@ -767,40 +779,41 @@
         Return rho_t
     End Function
 
-    Private Function CalculPsiY(q As Decimal, dbt As Decimal, t As Decimal, fy As Decimal, gammaM0 As Decimal) As Decimal
-        '------------------------------------------------------------------------------------------------------------------
-        '   xx/xx/24 : Création - GuD
-        '------------------------------------------------------------------------------------------------------------------
-        '   Calcul du coefficient de réduction de la limite d'élasticité du plat support de slim floor
-        '   d'après annexe I de l'EN 1994-1-1:2025
-        '------------------------------------------------------------------------------------------------------------------
-        '   q       [E] :   Charge sur le plat
-        '   dbt     [E] :   Bras de levier de la charge
-        '   t       [E] :   Epaisseur du plat
-        '   GammaM0 [E] :   GammaM0
-        '------------------------------------------------------------------------------------------------------------------
+    '=== FONCTION TRANSFEREE DANS cls_Eurocodes
+    'Private Function CalculPsiY(q As Decimal, dbt As Decimal, t As Decimal, fy As Decimal, gammaM0 As Decimal) As Decimal
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   xx/xx/24 : Création - GuD
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   Calcul du coefficient de réduction de la limite d'élasticité du plat support de slim floor
+    '    '   d'après annexe I de l'EN 1994-1-1:2025
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   q       [E] :   Charge sur le plat
+    '    '   dbt     [E] :   Bras de levier de la charge
+    '    '   t       [E] :   Epaisseur du plat
+    '    '   GammaM0 [E] :   GammaM0
+    '    '------------------------------------------------------------------------------------------------------------------
 
-        '--( Déclaration
+    '    '--( Déclaration
 
-        Dim mybt_Ed, mybt_Rd, eta_m, psiY As Decimal
+    '    Dim mybt_Ed, mybt_Rd, eta_m, psiY As Decimal
 
-        '--( Initialisation
+    '    '--( Initialisation
 
-        mybt_Ed = q * dbt
-        mybt_Rd = 1.2 * t ^ 2 * fy / (6 * gammaM0) * kConvMPaPa
+    '    mybt_Ed = q * dbt
+    '    mybt_Rd = 1.2 * t ^ 2 * fy / (6 * gammaM0) * kConvMPaPa
 
-        '--( Calcul
+    '    '--( Calcul
 
-        eta_m = Math.Min(Math.Abs(mybt_Ed / mybt_Rd), 1)
+    '    eta_m = Math.Min(Math.Abs(mybt_Ed / mybt_Rd), 1)
 
-        psiY = (eta_m - Math.Sqrt(eta_m ^ 2 - 16 * eta_m + 16)) / (2 * (eta_m - 2))
+    '    psiY = (eta_m - Math.Sqrt(eta_m ^ 2 - 16 * eta_m + 16)) / (2 * (eta_m - 2))
 
-        'psiY = Math.Max(psiY, 0) 'minoration par 0 au cas où
-        'psiY = Math.Min(psiY, 1) 'majoration par 1 au cas où
+    '    'psiY = Math.Max(psiY, 0) 'minoration par 0 au cas où
+    '    'psiY = Math.Min(psiY, 1) 'majoration par 1 au cas où
 
-        Return psiY
+    '    Return psiY
 
-    End Function
+    'End Function
 
 #End Region
 
@@ -1110,15 +1123,15 @@
         Dim dApp, dbtFi, dbtPlat As Decimal
         Const kPlast As Decimal = 1.2
         Dim tPl, tFi As Decimal
-        Dim dGauche, dDroite As Decimal
+        '  Dim dGauche, dDroite As Decimal
         Dim kCote As Decimal
 
         '--( Initialisation
 
         GammaM0 = myBeam.Param.Gamma.GammaM0
 
-        dApp = Me.LargeurAppui(myBeam)
-        Me.BrasLevier(myBeam, dApp, dbtFi, dbtPlat)
+        dApp = myBeam.SlimLargeurAppui
+        myBeam.Section.SlimBrasLevier(dApp, dbtFi, dbtPlat)
 
         FyPlat = myBeam.Section.FySpd
         FyInf = myBeam.Section.FyInf
@@ -1187,7 +1200,6 @@
 
     End Sub
 
-
     Private Sub RunCritereResistancePlastiquePlatY(myBeam As cls_Poutre, iCombi As Integer, QEd() As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   01/08/25 :  Création - POM
@@ -1218,8 +1230,8 @@
 
         GammaM0 = myBeam.Param.Gamma.GammaM0
 
-        dApp = Me.LargeurAppui(myBeam)
-        Me.BrasLevier(myBeam, dApp, dbtFi, dbtPlat)
+        dApp = myBeam.SlimLargeurAppui
+        myBeam.Section.SlimBrasLevier(dApp, dbtFi, dbtPlat)
 
         FyPlat = myBeam.Section.FySpd
         FyInf = myBeam.Section.FyInf

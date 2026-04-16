@@ -100,6 +100,14 @@
 
     End Structure
 
+#Region " Structure pour MAJ Progression du calcul (SlimFloor) "
+    Public Structure Struc_MAJEtape
+        Dim ValeurEtape As Integer          'Valeur de l'étape temps que l'on est en train de calculer, en minute
+        Dim ValeurProgression As Integer    'Valeur en % de la progression du calcul par rapport aux étapes
+    End Structure
+
+#End Region
+
 #End Region
 
 #End Region

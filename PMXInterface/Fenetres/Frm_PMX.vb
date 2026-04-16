@@ -79,6 +79,9 @@ Public Class Frm_PMX
 
 #End Region
 
+
+
+
 #Region "===OUVERTURE==="
 
     Private Sub Frm_PMX_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -641,8 +644,9 @@ Public Class Frm_PMX
             lOK = MaPoutreOKpourleCalcul(MyProjet.Poutres(iPoutre))
 
             If lOK Then
-                MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA,
-                                                                        strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
+
+                MyProjet.Poutres(iPoutre).AAA_Verifications(iPoutre, MyProjet.FileName, NomChargesA,
+                                                            strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
             End If
 
         Next
@@ -653,7 +657,7 @@ Public Class Frm_PMX
 
     End Sub
 
-    Private Sub CalculsEtNdC()
+    Private Async Sub CalculsEtNdC()
         '--------------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '--------------------------------------------------------------------------------------------------
@@ -665,15 +669,57 @@ Public Class Frm_PMX
         '--[ Déclarations
 
         Dim lOK As Boolean
+        Dim iBeam As Integer = MyProjet.IndEnCours
 
         '--[ Test de la poutre
 
-        lOK = MaPoutreOKpourleCalcul(MyProjet.Poutres(MyProjet.IndEnCours))
+        lOK = MaPoutreOKpourleCalcul(MyProjet.Poutres(iBeam))
 
         '--[ Analyse calcul RDM 
 
         If lOK Then
-            MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA, strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
+
+
+            'Ancien appel sans la MAJ de progression du calcul
+            'MyProjet.Poutres(iBeam).AAA_Verifications(iBeam, MyProjet.FileName, NomChargesA,
+            '                                          strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
+
+
+            'si le calcul à l'échauffement est à faire et que notre poutre est un slim floor alors on lance la fenêtre de progression du calcul
+            Dim ListeSF() As cls_Section.Enum_TypeSection = {cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SFB}
+            If Not MyProjet.Poutres(iBeam).lCalculOK And MyProjet.Poutres(iBeam).lSlimFloor Then
+                Frm_CalculEnCours.Show()
+                Me.Enabled = False
+
+                Dim progressEtape = New Progress(Of Struc_MAJEtape)(
+                Sub(Struct_MAJEtape)
+                    Frm_CalculEnCours.UpdateGlobal(Struct_MAJEtape)
+                End Sub)
+
+                Dim progressDansEtape = New Progress(Of Integer)(
+                Sub(v)
+                    Frm_CalculEnCours.UpdateStep(v)
+                End Sub)
+
+                Await Task.Run(Sub()
+                                   MyProjet.Poutres(iBeam).AAA_Verifications(iBeam, MyProjet.FileName, NomChargesA,
+                                                      strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC,
+                                                      progressEtape,
+                                                      progressDansEtape)
+                               End Sub)
+
+                'légère attente pour que l'utilisateur ait le temps de voir que les barres de progressions sont remplies
+                Threading.Thread.Sleep(300)
+                Frm_CalculEnCours.Close()
+                Enabled = True
+            Else
+                'sinon on appelle la fonction de verification normalement
+                MyProjet.Poutres(iBeam).AAA_Verifications(iBeam, MyProjet.FileName, NomChargesA,
+                                                      strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
+            End If
+
+
+
             'MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()         ' ???
             'MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
         End If
@@ -1165,7 +1211,7 @@ Public Class Frm_PMX
 
         If MyProjet.Poutres.Count = 0 Then Exit Sub
 
-        If MyProjet.lSaved Then
+        If MyProjet.lSaved And MyProjet.lCalculSaved Then
             Me.TSbtn_SaveN.Image = ImgList_Menu.Images("Enregistrer_OK")
         Else
             If MyProjet.lNouvellePoutre Then
@@ -1175,7 +1221,6 @@ Public Class Frm_PMX
                 Me.TSbtn_SaveN.Image = ImgList_Menu.Images("Enregistrer_NotOK")
             End If
         End If
-
 
     End Sub
 
@@ -1564,6 +1609,7 @@ Public Class Frm_PMX
             'MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
             MyProjet.lSaved = True
             MyProjet.lNouvellePoutre = False
+            MyProjet.lCalculSaved = True
             MAJMainToolBar()
 
             'MemoriserNouveauFichier(MyProjet.FileName)
@@ -1624,6 +1670,7 @@ Public Class Frm_PMX
 
             'MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
             MyProjet.lSaved = True
+            MyProjet.lCalculSaved = True
             MyProjet.lNouvellePoutre = False
             MAJMainToolBar()
 

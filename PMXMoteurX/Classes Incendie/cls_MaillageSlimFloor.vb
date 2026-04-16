@@ -6,8 +6,8 @@
 
     Public Const BMAXDAL As Double = 0.4              ' Largeur limite de dalle pour prise en compte d'un effet 2D dans le calcul thermique (m)
 
-    Public Const MATVIDEFERME As Integer = -2          ' vide d'une cavite fermee (espace entre le mur et le profile metallique d'une poutre de rive)
-    Public Const MATVIDEOUVERT As Integer = -1         ' vide d'une cavite ouverte
+	Public Const MATVIDEFERME As Integer = -2          ' vide d'une cavite fermee (espace entre le mur et le profile metallique d'une poutre de rive)
+	Public Const MATVIDEOUVERT As Integer = -1         ' vide d'une cavite ouverte
     Public Const MATACIERPLAT As Integer = 0           ' acier de construction du plat soudé
     Public Const MATACIERSEMI As Integer = 1           ' acier de construction de la semelle inférieure
     Public Const MATACIERAME As Integer = 2            ' acier de construction de l'ame
@@ -32,12 +32,13 @@
     Public ind_1 As Integer                     ' indice de la maille suivant l'axe fort jusqu'à laquelle effectuer le calcul de transfert thermique
     Public ind_2 As Integer                     ' indice de la maille suivant l'axe fort à droite de l'axe de symétrie de l'âme
 
-    Public y_min, y_max As Double
+	Public y_min, y_max As Double
+
 #End Region
 
 #Region " Constructeur "
 
-    Public Sub New()
+	Public Sub New()
 
     End Sub
 
@@ -1048,5 +1049,15 @@
 
 #End Region
 
+#Region " Outils "
+
+	'Public ReadOnly Property indMATVIDEOUVERT As Integer
+	'       Get
+	'           Return MATVIDEOUVERT
+	'       End Get
+	'   End Property
+
+
+#End Region
 
 End Class

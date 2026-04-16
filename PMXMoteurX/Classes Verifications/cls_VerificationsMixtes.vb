@@ -217,6 +217,7 @@
         Dim iNodeZero(,) As Integer = Nothing
         'Dim lMulti As Boolean
         Dim lCalculClass3HSS As Boolean                 ' Calcul élastique imposé en présence d'acier HSS
+        Dim lChInCombi() As Boolean = Nothing
 
         '--> Initialisations
 
@@ -225,6 +226,8 @@
         lEnrob = myBeam.lEnrobage
         nbCombi = myBeam.CombiA_ELU.nbCombi
         lCalculClass3HSS = myBeam.lCalculClass3HSS
+
+        myBeam.CombiA_ELU.GetTablesChargesDansCombi(myBeam.ChargesA.Count, lchincombi)
 
         '# Degré de connexion
 
@@ -281,7 +284,7 @@
             myBeam.Section.ProfilA.InitialiseSoudureMini(Me.GorgesSouduresMini)
         End If
 
-        '   On calcule le flux de cisaillement tout le temps, car on ne sait pas si on va en avoir besoin, si section de classe 4
+        '   On calcule le flux de cisaillement tout le temps, car on ne sait pas si on va en avoir besoin, si section de classe 3
         Me.FluxF = New cls_Flux
         Me.FluxF.InitialiseCalculMixte(myBeam)
         Me.FluxF.CalculFluxChargesMIXTE(myBeam, Beff, FluxCas)

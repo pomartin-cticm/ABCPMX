@@ -1313,6 +1313,16 @@ Public Class Cls_Rapport
 
                     DessineCourbeEchauffement(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), xLeftImg, YPen)
 
+                Case "CHAMPSTH"
+
+                    Dim iStep As Integer = CInt(Mots(nMots))
+
+                    DessineChampThSlim(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), iStep, xLeftImg, YPen)
+
+                Case "CHAMPSTH_LEGEND"
+                    DessinLegende(MyGr, sWiImg, sHiImg, xLeftImg, YPen)
+
+
             End Select
 
             If nMots > 4 Then

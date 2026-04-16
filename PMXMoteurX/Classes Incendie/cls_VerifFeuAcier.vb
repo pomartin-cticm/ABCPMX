@@ -81,7 +81,7 @@ Public Class cls_VerifFeuAcier
         '--------------------------------------------------------------------------------------------------------------------------
         '   Gestion des calculs au feu pour les poutres acier non enrobées
         '--------------------------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
+        '   myBeam             [E] :   Poutre traitée
         '--------------------------------------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -181,14 +181,16 @@ Public Class cls_VerifFeuAcier
         '    La classe des sections ne dépend pas du chargement (il n'y a pas d'effort axial) ni des contraintes.
         '    On classe donc les sections une fois pour toute, en dehors de la boucle sur les combinaisons de calcul
 
-        ClasseP = myBeam.Section.ClasseSection(zANP0, zANE0, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, True, False, lWEB, lrec, 0)
-        ClasseM = myBeam.Section.ClasseSection(zANP0, zANE0, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, True, False, lWEB, lrec, 0)
+        ClasseP = myBeam.Section.ClasseSection(zANP0, zANE0, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, True, False, lWEB, lRec, 0)
+        ClasseM = myBeam.Section.ClasseSection(zANP0, zANE0, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, True, False, lWEB, lRec, 0)
 
         Me.TimeInter = CInt((Me.TimeInter / DeltaT)) * DeltaT
 
         '--( Boucle sur TimeSteps
 
         For iSTep = 0 To Me.NbStep - 1
+
+
 
             TimeTarget = cls_VerifFeuAcier.TimeSteps(iSTep) * kConvMinSec
             lCont = IsSmaller(TimeT, TimeTarget)
@@ -223,6 +225,8 @@ Public Class cls_VerifFeuAcier
                     Me.TempAInter.Add(TempA)
                     'pTimeR = TimeT
                 End If
+
+
             Loop
 
             TempAStep(iSTep) = TempA
