@@ -9,7 +9,7 @@ Public Class cls_VerifFeuSlimAcier
 
     Public Shared TimeSteps() As Decimal = {30, 60, 90, 120, 180}
     'Public Shared TimeSteps() As Decimal = {10, 15, 20}
-    'Public Shared TimeSteps() As Decimal = {1, 2}
+    'Public Shared TimeSteps() As Decimal = {2, 5}
 
 #End Region
 
@@ -197,14 +197,17 @@ Public Class cls_VerifFeuSlimAcier
         If myBeam.lCalculOK Then
             If myBeam.lCalculCharge Then
                 '# Cas où les résultats de calcul sont directement disponibles en mémoire
-                ' On n'a rien à faire
+                ' On n'a juste à recréer le maillage
+
+                RecupereTemperatureFile(myBeam, iBeam, FileNameP, False)
+
             Else
                 '# Cas où les résultats de calcul sont disponibles dans le fichier de sauvegarde
 
                 ' Il faut regénérer le maillage et 
                 ' récupérer les températures du maillage dans le fichier
 
-                RecupereTemperatureFile(myBeam, iBeam, FileNameP)
+                RecupereTemperatureFile(myBeam, iBeam, FileNameP, True)
 
             End If
         Else
@@ -726,7 +729,7 @@ Public Class cls_VerifFeuSlimAcier
 
 #Region " Lecture Récupération des champs thermiques dans le fichier de données "
 
-    Private Sub RecupereTemperatureFile(myBeam As cls_Poutre, iBeam As Integer, FileNameP As String)
+    Private Sub RecupereTemperatureFile(myBeam As cls_Poutre, iBeam As Integer, FileNameP As String, lTemp As Boolean)
         '---------------------------------------------------------------------------------------------------------
         '   10/04/26 :  Création
         '---------------------------------------------------------------------------------------------------------
@@ -735,6 +738,7 @@ Public Class cls_VerifFeuSlimAcier
         '   myBeam      [E] :   Poutre traitée
         '   iBeam       [E] :   Indice de la poutre traitée dans la liste des poutres du projet
         '   FileNameP   [E] :   Nom du fichier de sauvegarde du projet
+        '   lTemp       [E] :   Indique si les températures doivent être récupérées ou non (utile pour la méthode d'échauffement qui n'a pas besoin de récupérer les températures)
         '---------------------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -751,11 +755,12 @@ Public Class cls_VerifFeuSlimAcier
 
         Maillage.Creation_maillage_2D_poutre_plancher_mince(myBeam.Section.ProfilA, myBeam.Dalle, myBeam.ParamFeu, bEffG, bEffD, myBeam.lIntermediaire, bApp)
 
-        Me.InitialiseVariables(Maillage.nb_cells_y, Maillage.nb_cells_z)
-
         '--( Récupération des températures du maillage dans le fichier de sauvegarde
 
-        ChargerTemperatures(myBeam, iBeam, FileNameP)
+        If lTemp Then
+            Me.InitialiseVariables(Maillage.nb_cells_y, Maillage.nb_cells_z)
+            ChargerTemperatures(myBeam, iBeam, FileNameP)
+        End If
 
     End Sub
 

@@ -5839,6 +5839,7 @@ Public Class cls_Poutre
             Case cls_Section.Enum_TypeSection.Mixte
                 Me.VerifFeuMixte = New cls_VerifFeuMixte(Me.ParamFeu.MethodTempArma)
             Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB
+                If Not (Me.lCalculOK AndAlso Me.lCalculCharge) Then _
                 Me.VerifFeuSlimAcier = New cls_VerifFeuSlimAcier
             Case cls_Section.Enum_TypeSection.SFBmixte, cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SABmixte
                 Me.VerifFeuSlimMixte = New cls_VerifFeuSlimMixte

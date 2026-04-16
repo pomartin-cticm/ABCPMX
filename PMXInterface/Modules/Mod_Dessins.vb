@@ -15660,7 +15660,6 @@ Public Module Mod_Dessins
 
 #End Region
 
-
 #Region " Dessins des calculs au feu (courbes echauffement) "
 
     Public Sub DessineCourbeEchauffement(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
