@@ -64,6 +64,9 @@ Public Class cls_OptionsCalcul
     Public lFlechesETA As Boolean                   ' Indique pour les poutres mixtes si on calcule la flèche en prenant en compte la raideur des connecteurs
     Public DeltaD As Decimal                        ' Valeur du glissement du connecteur pour une charge de PRd
 
+    Public lContreFlecheFab As Boolean              ' Indique la présence d'une contre-flèche de fabrication
+    Public ContreFlecheFabDim As Decimal            ' Indique la valeur de la contre-flèche de fabrication, stockée en m
+
     Public lMaitriseFissuration As Boolean          ' Indique si on effectue le calcul de maitrise de la fissuration
     Public FissureWk As Decimal                     ' Valeur maxi d'ouverture des fissures, en cas de maitrise de la fissuration
 

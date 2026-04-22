@@ -1341,13 +1341,18 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & BlocG("CONTROLCRACKW") & TABAFF & BlocG("NO"))
         End If
         AddLigneNDC(TABW2 & BlocG("CRACKWIDTH") & TABAFF & "w\-max\= = " & GetStringInUnit(MyBeam.Param.FissureWk, Enu_TypeVariable.SansType, 4, 2, True) & " mm")
+        If MyBeam.Param.lContreFlecheFab Then
+            AddLigneNDC(TABW2 & BlocG("PRECAMBER") & TABAFF & "w\-c\= = " & GetStringInUnitN(MyBeam.Param.ContreFlecheFabDim, Enu_TypeVariable.Millimetre, 4, 2, True, True))
+        Else
+            AddLigneNDC(TABW2 & BlocG("PRECAMBER") & TABAFF & BlocG("NO"))
+        End If
 
         '--> Options Feu
         EditionParametresCalculFeu(MyBeam)
 
         '--> Propriétés du béton
         AddTitreNdC(3, BlocG("TCONCRETE"))
-        AddLigneNDC(TABW2 & BlocG("RELATIVEHUMIDITY") & TABAFF & "RH = " & GetStringInUnit(MyBeam.Param.RH, Enu_TypeVariable.SansType, 4, 2, True) & " %")
+        AddLigneNDC(TABW2 & BlocG("RELATIVEHUMIDITY") & TABAFF & "RH = " & GetStringInUnitN(MyBeam.Param.RH, Enu_TypeVariable.SansType, 4, 2, True, True) & " %")
         AddLigneNDC(TABW2 & BlocG("SHRINKAGEDEFORMATION") & TABAFF & "\Se\s\-sh\= = " & GetStringInUnit(MyBeam.Param.EpsilonSH * 10 ^ 6, Enu_TypeVariable.SansType, 4, 2, True) & " x 10\+-6\=")
         AddLigneNDC(TABW2 & BlocG("YOUNGSMODULUSREBAR") & TABAFF & "E\-s\= = " & GetStringInUnit(MyBeam.Param.ArmaYoung, Enu_TypeVariable.ContrainteMPa, 4, 2, True))
 
@@ -12144,7 +12149,10 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & RemplaceDollar(BlocFEU("HEATINGTEMP"), cls_VerifFeuSlimAcier.TimeSteps(iStep)))
 
             AddLigneNDC("\IMG CHAMPSTH 10 90 30 NoCadre " & iStep.ToString)
-            AddLigneNDC("\IMG CHAMPSTH_LEGEND 10 90 3 NoCadre")
+            AddLigneNDC("\IMG CHAMPSTH_LEGEND -20 150 3 NoCadre")
+
+            SauteLigne()
+            AddLigneNDC(TABAFF & BlocFEU("HEATINGLEGEND"))
             SauteLigne()
 
             AfficheTableauTempSlim(myBeam, iStep)

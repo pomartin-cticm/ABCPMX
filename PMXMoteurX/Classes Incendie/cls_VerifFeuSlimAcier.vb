@@ -8,8 +8,8 @@ Public Class cls_VerifFeuSlimAcier
 #Region " Declaration "
 
     Public Shared TimeSteps() As Decimal = {30, 60, 90, 120, 180}
-    'Public Shared TimeSteps() As Decimal = {10, 15, 20}
-    'Public Shared TimeSteps() As Decimal = {2, 5}
+    'Public Shared TimeSteps() As Decimal = {10, 15, 17, 20}
+    'Public Shared TimeSteps() As Decimal = {1, 2}
 
 #End Region
 
@@ -62,9 +62,15 @@ Public Class cls_VerifFeuSlimAcier
         Next
     End Sub
 
+
+
 #End Region
 
-#Region " Gestion du maillage en accès "
+#Region " Gestion du maillage en accès - GETTERS "
+
+    Public Function GetMaillage() As cls_MaillageSlimFloor
+        Return Maillage
+    End Function
 
     Public ReadOnly Property Maillage_zPos(iY As Integer, iZ As Integer) As Decimal
         Get
@@ -129,11 +135,11 @@ Public Class cls_VerifFeuSlimAcier
         '--------------------------------------------------------------------------------------------------------------------------
         '   Gestion des calculs au feu pour les poutres slim acier
         '--------------------------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '   iBeam       [E] :   Indice de la poutre traitée dans la liste des poutres du projet
-        '   FileNameP   [E] :   Nom du fichier de sauvegarde du projet
-        '   progressEtape      [E] :   Permet de d'envoyer l'information de progression sur les étapes de temps à la Frm_CalculEnCours
-        '   progressDansEtape  [E] :   Permet de d'envoyer l'information de progression entre les étapes de temps à la Frm_CalculEnCours
+        '   myBeam              [E] :   Poutre traitée
+        '   iBeam               [E] :   Indice de la poutre traitée dans la liste des poutres du projet
+        '   FileNameP           [E] :   Nom du fichier de sauvegarde du projet
+        '   progressEtape       [E] :   Permet de d'envoyer l'information de progression sur les étapes de temps à la Frm_CalculEnCours
+        '   progressDansEtape   [E] :   Permet de d'envoyer l'information de progression entre les étapes de temps à la Frm_CalculEnCours
         '--------------------------------------------------------------------------------------------------------------------------
 
         '--( Déclarations

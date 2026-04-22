@@ -683,23 +683,25 @@ Public Class Frm_PMX
             'Ancien appel sans la MAJ de progression du calcul
             'MyProjet.Poutres(iBeam).AAA_Verifications(iBeam, MyProjet.FileName, NomChargesA,
             '                                          strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
+            'MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()         ' ???
+            'MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
 
 
+            '==) Nouvel appel avec vérif de calcul pour les slim floors
             'si le calcul à l'échauffement est à faire et que notre poutre est un slim floor alors on lance la fenêtre de progression du calcul
-            Dim ListeSF() As cls_Section.Enum_TypeSection = {cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SFB}
             If Not MyProjet.Poutres(iBeam).lCalculOK And MyProjet.Poutres(iBeam).lSlimFloor Then
                 Frm_CalculEnCours.Show()
                 Me.Enabled = False
 
                 Dim progressEtape = New Progress(Of Struc_MAJEtape)(
-                Sub(Struct_MAJEtape)
-                    Frm_CalculEnCours.UpdateGlobal(Struct_MAJEtape)
-                End Sub)
+    Sub(Struct_MAJEtape)
+        Frm_CalculEnCours.UpdateGlobal(Struct_MAJEtape)
+    End Sub)
 
                 Dim progressDansEtape = New Progress(Of Integer)(
-                Sub(v)
-                    Frm_CalculEnCours.UpdateStep(v)
-                End Sub)
+    Sub(v)
+        Frm_CalculEnCours.UpdateStep(v)
+    End Sub)
 
                 Await Task.Run(Sub()
                                    MyProjet.Poutres(iBeam).AAA_Verifications(iBeam, MyProjet.FileName, NomChargesA,
@@ -720,8 +722,6 @@ Public Class Frm_PMX
 
 
 
-            'MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()         ' ???
-            'MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
         End If
 
         '--[ Edition de la note de calcul

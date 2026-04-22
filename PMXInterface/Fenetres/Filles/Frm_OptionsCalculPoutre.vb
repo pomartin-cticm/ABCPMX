@@ -74,6 +74,7 @@ Public Class Frm_OptionsCalculPoutre
                 Me.lbl_StudDeflection.Text = Bloc("STUDSE")
                 Me.chk_MaitriseFissuration.Text = Bloc("CONTROLCRACKW")
                 Me.lbl_LargeurFissure.Text = Bloc("CRACKWIDTH")
+                Me.chk_CtrFlecheFab.Text = Bloc("PRECAMBER")
 
                 Me.lbl_CadreBeton.Text = Bloc("TCONCRETE")
                 Me.lbl_BetonMessage.Text = Bloc("CONCRETEMSG")
@@ -171,6 +172,7 @@ Public Class Frm_OptionsCalculPoutre
         Me.etq_UnitG.Text = "m/s2"
 
         Me.etq_UnitDimension1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDimension2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
         Me.etq_UnitLargeurF.Text = "mm"
     End Sub
@@ -242,6 +244,8 @@ Public Class Frm_OptionsCalculPoutre
         Me.chk_MaitriseFissuration.Checked = MyParam.lMaitriseFissuration
         Me.cmb_Wk.SelectedIndex = Array.IndexOf(cls_OptionsCalcul.tabWk, MyParam.FissureWk)
 
+        Me.chk_CtrFlecheFab.Checked = MyParam.lContreFlecheFab
+
         '==> Béton
 
         Me.cmb_RH.SelectedIndex = Array.IndexOf(cls_OptionsCalcul.tabRH, MyParam.RH)
@@ -256,6 +260,8 @@ Public Class Frm_OptionsCalculPoutre
         Me.txt_t0G1Enrob.Text = GetStringInUnit(MyParam.AgeT0G1(1), Enu_TypeVariable.SansType, 4, 0, False)
         Me.txt_t0G2Enrob.Text = GetStringInUnit(MyParam.AgeT0G2(1), Enu_TypeVariable.SansType, 4, 0, False)
         Me.txt_t0SHEnrob.Text = GetStringInUnit(MyParam.AgeT0SH(1), Enu_TypeVariable.SansType, 4, 0, False)
+
+        Me.txt_CtrFlecheFab.Text = GetStringInUnit(MyParam.ContreFlecheFabDim, Enu_TypeVariable.Dimension, 4, 0, False)
 
         '==> Propriétés sections
 
@@ -345,6 +351,9 @@ Public Class Frm_OptionsCalculPoutre
         GereTransfertValeur(Me.chk_FlechesETA.Checked, MyProjet.Poutres(MyProjet.IndEnCours).Param.lFlechesETA, lModif)
         GereTransfertValeur(MyParam.DeltaD, MyProjet.Poutres(MyProjet.IndEnCours).Param.DeltaD, lModif)
 
+        GereTransfertValeur(MyParam.lContreFlecheFab, MyProjet.Poutres(MyProjet.IndEnCours).Param.lContreFlecheFab, lModif)
+        GereTransfertValeur(MyParam.ContreFlecheFabDim, MyProjet.Poutres(MyProjet.IndEnCours).Param.ContreFlecheFabDim, lModif)
+
         GereTransfertValeur(Me.chk_MaitriseFissuration.Checked, MyProjet.Poutres(MyProjet.IndEnCours).Param.lMaitriseFissuration, lModif)
         GereTransfertValeur(cls_OptionsCalcul.tabWk(Me.cmb_Wk.SelectedIndex), MyProjet.Poutres(MyProjet.IndEnCours).Param.FissureWk, lModif)
 
@@ -389,7 +398,11 @@ Public Class Frm_OptionsCalculPoutre
         MyParam.lEnrobProp = Me.chk_EnrobagePropSection.Checked
     End Sub
 
-    Private Sub txt_EpsilonSh_TextChanged(sender As Object, e As EventArgs) Handles txt_EpsilonSh.TextChanged, txt_Es.TextChanged, txt_eta.TextChanged
+    Private Sub chk_CtrFlecheFab_CheckedChanged(sender As Object, e As EventArgs) Handles chk_CtrFlecheFab.CheckedChanged
+        MyParam.lContreFlecheFab = Me.chk_CtrFlecheFab.Checked
+    End Sub
+
+    Private Sub GestionSaisieTexte(sender As Object, e As EventArgs) Handles txt_EpsilonSh.TextChanged, txt_Es.TextChanged, txt_eta.TextChanged, txt_CtrFlecheFab.TextChanged
         If lBuild Then Exit Sub
 
         Dim Valeur As Decimal
@@ -403,7 +416,10 @@ Public Class Frm_OptionsCalculPoutre
                     MyParam.ArmaYoung = Valeur
                 Case Me.txt_eta.Name
                     MyParam.EtaW = Valeur
+                Case Me.txt_CtrFlecheFab.Name
+                    MyParam.ContreFlecheFabDim = Valeur
             End Select
+
         End If
     End Sub
 
@@ -484,6 +500,12 @@ Public Class Frm_OptionsCalculPoutre
                 ValMax = 1.2
                 lValMax = True
                 kUnit = 1
+
+            Case Me.txt_CtrFlecheFab.Name
+                kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+                ValMin = 0
+                ValMax = MyProjet.Poutres(MyProjet.IndEnCours).LongueurTotale / 100 'maximum autorisé en mm
+                ValMax = ValMax / kUnit 'maximum dans l'unité de dimension utilisée
         End Select
 
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
@@ -504,7 +526,7 @@ Public Class Frm_OptionsCalculPoutre
 
 #Region " Dessin des symboles "
 
-    Private Sub DrawSymbols(sender As Object, e As PaintEventArgs) Handles img_RH.Paint, img_EpsilonSh.Paint, img_Es.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint, img_AgeT.Paint, img_G.Paint, img_se.Paint, img_eta.Paint, img_Wk.Paint
+    Private Sub DrawSymbols(sender As Object, e As PaintEventArgs) Handles img_RH.Paint, img_EpsilonSh.Paint, img_Es.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint, img_AgeT.Paint, img_G.Paint, img_se.Paint, img_eta.Paint, img_Wk.Paint, img_CtrFlecheFab.Paint
         '--> Déclarations
 
         Dim sWI As Single = sender.Width
@@ -565,6 +587,10 @@ Public Class Frm_OptionsCalculPoutre
                 strIndice = ""
                 lGrec = True
 
+            Case Me.img_CtrFlecheFab.Name
+                strSymbol = "w"
+                strIndice = "c"
+
         End Select
 
         '--> Dessin
@@ -573,6 +599,8 @@ Public Class Frm_OptionsCalculPoutre
                     FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
+
+
 
 #End Region
 

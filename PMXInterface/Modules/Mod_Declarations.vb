@@ -660,8 +660,13 @@ Public Module Mod_Declarations
 
     Public Const lblHISTAR As String = "HISTAR"
 
-    Public Const TEMPMINPERSO As Double = 20           ' température minimale de l'échelle pour le champ thermique
-    Public Const TEMPMAXPERSO As Double = 1200         ' température maximale de l'échelle pour le champ thermique
+    Public Const TEMPERATURE_MIN As Double = 20           ' température minimale de l'échelle pour le champ thermique
+    Public Const TEMPERATURE_MAX As Double = 1200         ' température maximale de l'échelle pour le champ thermique
+
+    Public Const SEUIL_VISUEL As Decimal = 862            ' Pour la Frm_MaillageSlim
+    '                                                       Taille minimale de la diagonale de la zone de dessin de l'élément
+    '                                                       Sous ce seuil, glitch visuel avec le lissage (probablement dû aux tailles trop petite des mailles pour le gradient)
+    '                                                       Lorsque sous ce seuil > zone trop petite donc dessin sans lissage, sinon dessin avec lissage
 
 
 #End Region
@@ -749,7 +754,7 @@ Public Module Mod_Declarations
     Public CouleurErreur As Color = Color.DarkRed
 
     'Couleurs utilisées pour l'affichage du champ thermique de l'échauffement des SlimFloor - utilisée dans Frm_MaillageSlim et dans la NDC en cas de calcul de SlimFloor
-    Public Tab_Couleurs() As Color = {Color.DarkBlue, Color.Blue, Color.MediumTurquoise, Color.LightGreen, Color.Yellow, Color.Orange, Color.Red, Color.DarkRed}
+    Public Tab_Couleurs_ChTh() As Color = {Color.DarkBlue, Color.Blue, Color.MediumTurquoise, Color.LightGreen, Color.Yellow, Color.Orange, Color.Red, Color.DarkRed}
 
 
 #End Region

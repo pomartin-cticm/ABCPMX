@@ -820,6 +820,9 @@ Public Class cls_Projet
             AjouteLigneFrmt(Lines, "Psi2LongTerm", .lPsi2LongTerm)
             AjouteLigneFrmt(Lines, "lControlCrack", .lMaitriseFissuration)
 
+            AjouteLigneFrmt(Lines, "lCtrFlecheFab", .lContreFlecheFab)
+            AjouteLigneFrmt(Lines, "DimCtrFlechFab", .ContreFlecheFabDim)
+
         End With
 
         Lines.Add("")
@@ -2829,6 +2832,8 @@ Public Class cls_Projet
                         Case "LELAST" : .lElasticDesignVM = Mots(nbMots)
                         Case "LCONTR" : .lMaitriseFissuration = Mots(nbMots)
                         Case "PSI2LO" : .lPsi2LongTerm = Mots(nbMots)
+                        Case "LCTRFL" : .lContreFlecheFab = Mots(nbMots)
+                        Case "DIMCTR" : .ContreFlecheFabDim = CDec(TraiteReal(Mots(nbMots)))
                         Case Else : MsgBox("BLOC " & BkOPTIONS & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
 
                     End Select

@@ -87,9 +87,8 @@ Partial Class Frm_CalculEnCours
         Me.LBL_ProgressionDansEtape.AutoSize = True
         Me.LBL_ProgressionDansEtape.Location = New System.Drawing.Point(-3, 80)
         Me.LBL_ProgressionDansEtape.Name = "LBL_ProgressionDansEtape"
-        Me.LBL_ProgressionDansEtape.Size = New System.Drawing.Size(140, 13)
+        Me.LBL_ProgressionDansEtape.Size = New System.Drawing.Size(0, 13)
         Me.LBL_ProgressionDansEtape.TabIndex = 5
-        Me.LBL_ProgressionDansEtape.Text = "LBL_ProgressionDansEtape"
         Me.LBL_ProgressionDansEtape.UseWaitCursor = True
         '
         'LBL_ProgressionEtape
@@ -97,9 +96,8 @@ Partial Class Frm_CalculEnCours
         Me.LBL_ProgressionEtape.AutoSize = True
         Me.LBL_ProgressionEtape.Location = New System.Drawing.Point(-3, 25)
         Me.LBL_ProgressionEtape.Name = "LBL_ProgressionEtape"
-        Me.LBL_ProgressionEtape.Size = New System.Drawing.Size(115, 13)
+        Me.LBL_ProgressionEtape.Size = New System.Drawing.Size(0, 13)
         Me.LBL_ProgressionEtape.TabIndex = 4
-        Me.LBL_ProgressionEtape.Text = "LBL_ProgressionEtape"
         Me.LBL_ProgressionEtape.UseWaitCursor = True
         '
         'PGB_Etape

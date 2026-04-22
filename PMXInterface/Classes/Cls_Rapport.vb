@@ -1317,10 +1317,16 @@ Public Class Cls_Rapport
 
                     Dim iStep As Integer = CInt(Mots(nMots))
 
-                    DessineChampThSlim(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), iStep, xLeftImg, YPen)
+                    DessineChampThSlim(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), iStep,
+                                       True,    ' afficher le centre
+                                       True,    ' afficher le champs thermique
+                                       False,   ' pas besoin de place pour du texte sous l'image
+                                       -1, -1,  'i & j pour la maille selectionnée (NDC donc aucune)
+                                       TEMPERATURE_MIN, TEMPERATURE_MAX, ' on utilise l'échelle constante pour la NDC
+                                       xLeftImg, YPen)
 
                 Case "CHAMPSTH_LEGEND"
-                    DessinLegende(MyGr, sWiImg, sHiImg, xLeftImg, YPen)
+                    DessinLegende(MyGr, sWiImg, sHiImg, TEMPERATURE_MIN, TEMPERATURE_MAX, -1, xLeftImg, YPen) '-1 indique qu'aucune maille n'est selectionnée
 
 
             End Select

@@ -30,6 +30,9 @@ Public Class Frm_OptionsFeuN_CalculSlim
         Me.lbl_CalculOptions.BackColor = CouleurBackBandeaux
         Me.lbl_CalculOptions.ForeColor = CouleurForeBandeaux
 
+        btn_PostTraitementEchauff.Enabled = MyProjet.Poutres(MyProjet.IndEnCours).lCalculOK And MyProjet.Poutres(MyProjet.IndEnCours).lSlimFloor
+        'btn_PostTraitementEchauff.Enabled = MyProjet.Poutres(MyProjet.IndEnCours).lCalculCharge And MyProjet.Poutres(MyProjet.IndEnCours).lSlimFloor
+
     End Sub
 
     Private Sub GestionUnites()
@@ -53,7 +56,7 @@ Public Class Frm_OptionsFeuN_CalculSlim
 
             Me.lbl_Beff2D.Text = "Largeur de dalle effet 2D"
 
-            Me.btn_Maillage.Text = "Maillage"
+            Me.btn_PostTraitementEchauff.Text = Bloc("POSTPROCESSHEATING")
 
 
             'Me.lbl_Beff2D.Text = Bloc("SIZEELT")
@@ -78,7 +81,7 @@ Public Class Frm_OptionsFeuN_CalculSlim
 
 #Region " Evènements "
 
-    Private Sub btn_Maillage_Click(sender As Object, e As EventArgs) Handles btn_Maillage.Click
+    Private Sub btn_Maillage_Click(sender As Object, e As EventArgs) Handles btn_PostTraitementEchauff.Click
 
         Frm_MaillageSlim.ShowDialog()
 
