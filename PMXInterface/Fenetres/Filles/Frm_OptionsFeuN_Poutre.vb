@@ -12,7 +12,8 @@ Public Class Frm_OptionsFeuN_Poutre
 
 #Region "===OUVERTURE==="
     Private Sub Frm_OptionsFeuN_Poutre_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        '=== NON CONCERNEE POUR UNE FENETRE FILLE,
+        '=== CAR C'EST LA FENETRE PARENTE QUI APPELLE LA METHODE D'INITIALISATION DE LA FENETRE FILLE
     End Sub
 
     Public Sub InitialiseFenetre(BlocL As Dictionary(Of String, String), myBeam As cls_poutre)
@@ -22,6 +23,7 @@ Public Class Frm_OptionsFeuN_Poutre
         GestionLangue(BlocL)
         GestionStyle()
         GestionUnites()
+        PrepareFrm(myBeam)
 
         MAJI_CreuxOndes()
 
@@ -33,9 +35,18 @@ Public Class Frm_OptionsFeuN_Poutre
 
     End Sub
 
+    Private Sub PrepareFrm(myBeam As cls_Poutre)
+
+        Dim lMixte As Boolean = myBeam.lMixte
+
+        Me.chk_ArmaFroid.Visible = lMixte
+
+    End Sub
+
     Private Sub MAJI_CreuxOndes()
 
         Dim lDalMixtePerp As Boolean = False
+        Dim lEnrob As Boolean = False
 
         With MyProjet.Poutres(MyProjet.IndEnCours)
             If .Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
@@ -51,13 +62,14 @@ Public Class Frm_OptionsFeuN_Poutre
                 End If
 
             End If
+            lEnrob = .lEnrobage
         End With
 
         Me.chk_ProtectionCreuxOndes.Visible = lDalMixtePerp
 
         If lDalMixtePerp Then
 
-            Me.chk_ProtectionCreuxOndes.Enabled = LogicielOptions.lExpert And LogicielReglages.lCreuxO
+            Me.chk_ProtectionCreuxOndes.Enabled = LogicielOptions.lExpert And LogicielReglages.lCreuxO And (Not lEnrob)
 
         End If
 
@@ -549,7 +561,6 @@ Public Class Frm_OptionsFeuN_Poutre
 
 #End Region
 
-
 #Region " Dessins des symboles "
 
     Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) _
@@ -611,7 +622,6 @@ Public Class Frm_OptionsFeuN_Poutre
     End Sub
 
 #End Region
-
 
 #Region " Evenements de saisie "
 
@@ -682,6 +692,5 @@ Public Class Frm_OptionsFeuN_Poutre
     End Function
 
 #End Region
-
 
 End Class

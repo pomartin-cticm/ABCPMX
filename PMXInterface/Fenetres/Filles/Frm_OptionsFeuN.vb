@@ -100,7 +100,7 @@ Public Class Frm_OptionsFeuN
                     Frm_OptionsFeuN_CalculSlim.InitialiseFenetre(Bloc)
                 Else
                     Me.pan_Contenu.Controls.Add(Frm_OptionsFeuN_Calcul.pan_General)
-                    Frm_OptionsFeuN_Calcul.InitialiseFenetre(Bloc)
+                    Frm_OptionsFeuN_Calcul.InitialiseFenetre(Bloc, BeamLoc)
                 End If
 
             Case Enu_AffichageOptions.Parametres

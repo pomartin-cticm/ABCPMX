@@ -670,6 +670,7 @@ SIGMAMAX				= Maximum tension stress in rebars
 DELTASIGMA				= Including effect of concrete tension stiffening
 COMBIREBAR				= For combination 
 FREQG					= Eigen frequency for the combination 
+WITHPRECAMBER			= Values including the precamber
 
 #NDC_VERIFICATIONSFIRE
 FIRE_CHECKS				= Ultimate limit states in fire situation
@@ -724,7 +725,7 @@ TABCONCRETESLAB			= Upper and lower fibres of the concrete slab
 TABCONNECTOR			= Welded stud
 PRD_STUDS				= Shear resistance of the welded studs
 EMPTYVOIDS				= The voids between the steel deck and the upper flange are empty
-COMETHOD				= The specific CTICM method for the heating of the profile is applied
+COMETHOD				= Annex J of EN 1994-1-2:2026 is applied for the heating of the profile 
 FILLEDVOIDS				= The voids between the steel deck and the upper flange are assumed to be filled (protection of the upper flange)
 PHIVOID					= Void factor
 CREDFACTORS				= Factors

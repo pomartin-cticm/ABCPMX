@@ -193,6 +193,13 @@ Public Class Cls_Rapport
             Return Me.MyPages.Count
         End Get
     End Property
+
+    Public ReadOnly Property SizeFont As Single
+        Get
+            Return PoliceEnCours.Size
+        End Get
+    End Property
+
 #End Region
 
 #Region "   Construction de la Note"
@@ -1326,7 +1333,8 @@ Public Class Cls_Rapport
                                        xLeftImg, YPen)
 
                 Case "CHAMPSTH_LEGEND"
-                    DessinLegende(MyGr, sWiImg, sHiImg, TEMPERATURE_MIN, TEMPERATURE_MAX, -1, xLeftImg, YPen) '-1 indique qu'aucune maille n'est selectionnée
+
+                    DessinLegende(MyGr, sWiImg, sHiImg, TEMPERATURE_MIN, TEMPERATURE_MAX, -1, True, xLeftImg, YPen) '-1 indique qu'aucune maille n'est selectionnée
 
 
             End Select

@@ -631,6 +631,7 @@ WSLENDERNESSLIMIT		= Limite d'élancement
 WTOFWEBS				= Soudures âme-semelles
 WPLATE					= Soudures du plat
 
+
 #NDC_DETAILSULS
 TITLE					= Calculs détaillés aux ELU
 BENDINGR				= Résistance à la flexion
@@ -670,9 +671,10 @@ SIGMAMAX				= Contrainte de traxion max des armatures
 DELTASIGMA				= y compris l'effet de rigidité du béton
 COMBIREBAR				= Pour la combinaison
 FREQG					= Fréquence propre pour la combinaison 
+WITHPRECAMBER			= Valeurs incluant la contreflèche de fabrication
 
 #NDC_VERIFICATIONSFIRE
-FIRE_CHECKS				= États limites ultime en situation d'incendie
+FIRE_CHECKS				= États limites ultimes en situation d'incendie
 FIRE_CHECKS_SYMMARY		= Synthèse des résultats
 FIRE_CHECKS_DETAIL		= Résultats détaillés
 FIRE_CHECKS_PARAM		= Paramètres du calcul
@@ -715,7 +717,7 @@ UPPERFNOTEXPOSED		= La semelle supérieure n'est pas exposée au feu
 UPPERFEXPOSED			= La semelle supérieure est exposée au feu
 SECTIONFACTOR			= Massiveté du profilé métallique
 SECTIONFACTORBOX		= Facteur de massiveté enveloppe
-SHADOWFACTOR			= Facteur d'ombre
+SHADOWFACTOR			= Coef. de correction pour l'effet d'ombre
 TABSTEELPRO				= Profilé en acier
 TABSTEELUPFLANGE		= Semelle supérieure
 TABSTEELLOFLANGE		= Semelle inférieure
@@ -724,7 +726,7 @@ TABCONCRETESLAB			= Fibres inférieure et supérieure de la dalle
 TABCONNECTOR			= Goujons soudés
 PRD_STUDS				= Résistance des goujons soudés
 EMPTYVOIDS				= Les creux d'ondes entre la dalle et la semelle ne sont pas remplis
-COMETHOD				= La méthode spécifique du CTICM est appliquée pour le calcul de l'échauffement
+COMETHOD				= L'annexe J de l'EN 1994-1-2:2026 est appliquée pour le calcul de l'échauffement
 FILLEDVOIDS				= Les creux d'ondes entre la dalle et la semelle sont remplis (protection de la semelle supérieure)
 PHIVOID					= Facteur d'effet de cavité
 CREDFACTORS				= Coefficients

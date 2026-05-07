@@ -300,7 +300,8 @@ Public Class Frm_MaillageSlim
             TempeMaille = TempMailStepLoc(iStep, iSelect, jSelect)
         End If
 
-        DessinLegende(e.Graphics, img_Legende.Width, img_Legende.Height, tempMin, tempMax, TempeMaille)
+        DessinLegende(e.Graphics, img_Legende.Width, img_Legende.Height, tempMin, tempMax, TempeMaille, False)
+
     End Sub
 
     Private Sub img_Maillage_Paint(sender As Object, e As PaintEventArgs) Handles img_Maillage.Paint

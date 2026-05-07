@@ -125,6 +125,14 @@ CRACKWIDTH				= Limite d'ouverture des fissures
 WARNINGCOMPREINF1		= Les armatures en compression ne peuvent pas être prises en compte pour une dalle avec un seul lit d'armatures
 WARNINGCOMPREINF2		= Quand les armatures en compression sont prises en compte dans les calculs de la poutre, les exigences de l'EN 1992-1-1:2005, clause 9.2.1.2 (3) doivent être satisfaites, pour éviter un flambement prématuré des barres.
 PSI2LONGTERM			= La fraction quasi permanente des charges d'exploitation est considéré comme effet de long terme
+PRECAMBER				= Contre-flèche de fabrication
+PRECAMBERINFO			= La contreflèche n'est prise en compte aux ELS que pour les poutres simples sans consoles
+
+#FRM_CALCULENCOURS
+TITLE 					= Calcul d'échauffement
+TITLELABL				= Progression du calcul d'échauffement
+PROGRESTEP				= Calcul à l'incendie pour une durée de
+PROGREINSTEP			= Progression
 
 #FRM_CALCULATIONSHEET
 TITLE					= Note de calculs
@@ -524,6 +532,23 @@ MOISTURECONTENT			= Teneur en eau
 ENCASEDROOTFILLET		= Les congés de raccordement sont pris en compte dans le calcul des sections enrobées selon l'Annexe F de l'EN 1994-1-2
 SIZEELT					= Épaisseur des éléments
 PROTECTEDTROUGH			= Les creux d'ondes au dessus de la semelle supérieure sont remplis
+POSTPROCESSHEATING		= Post-traitement du calcul à l'incendie
+
+#FRM_POSTPROCESSING
+TITLE					= Post-traitement de l'échauffement de l'élément
+CLOSE 					= Fermer
+PARAMETERS 			    = Paramètres
+NOMAILLES				= Nombres de mailles
+HEATFIELD				= Afficher le champs thermique
+2DELEMT					= Afficher uniquement les éléments 2D
+STEP					= Étape du calcul
+SCALE					= Échelle de température 
+LOCSCALE				= Échelle locale
+GLOBSCALE				= Échelle globale
+CONSTSCALE				= Échelle constante
+LOCSCALEINFO			= Échelle locale : L'échelle de température est uniquement basée sur l'étape de calcul en cours.
+GLOBSCALEINFO			= Échelle globale : L'échelle de température est calculé sur l'ensemble des étapes de calcul.
+CONSTSCALEINFO			= Échelle constante : L'échelle de température est définie entre 20 et 1200°C.
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Coefficients d'accompagnement

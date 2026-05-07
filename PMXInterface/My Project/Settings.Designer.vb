@@ -283,7 +283,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("1.5")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
         Public Property GammaV_fi() As Decimal
             Get
                 Return CType(Me("GammaV_fi"),Decimal)

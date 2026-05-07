@@ -43,6 +43,7 @@
     Public lCreuxProteges As Boolean                        ' Indique pour les dalles mixtes perpendiculaires, si les creux d'ondes sont protégés
 
     Public Const BOLTZMANN As Decimal = 5.67 * 10 ^ (-8)    ' Constante de Boltzmann
+    Public Const DELTAKELVIN As Decimal = 273.15            ' Conversion °C - K
 
     Public lReductionConcreteStrength As Boolean            ' Indique si on réduit la résistance du béton armé pour T<250° (True) ou non (False)
 
@@ -180,7 +181,7 @@
               Or (Me.Protection = enu_TypeProtection.BoardsVermiculite) _
               Or (Me.Protection = enu_TypeProtection.BoardsSilicate)
 
-        Return lBoard
+        Return lBoard AndAlso Me.lProtection
 
     End Function
 
@@ -192,7 +193,7 @@
         '-------------------------------------------------------------------------------------------------------
         '-------------------------------------------------------------------------------------------------------
 
-        Return Me.Protection = enu_TypeProtection.IntumescentPaint
+        Return (Me.Protection = enu_TypeProtection.IntumescentPaint AndAlso Me.lProtection)
 
     End Function
 
@@ -211,8 +212,20 @@
               Or (Me.Protection = enu_TypeProtection.HighDensitySpray_PerliteCement) _
               Or (Me.Protection = enu_TypeProtection.HighDensitySpray_PerlitePlaster)
 
-        Return lSpray
+        Return lSpray AndAlso Me.lProtection
 
+    End Function
+
+    Public Function lProtection() As Boolean
+        '-------------------------------------------------------------------------------------------------------
+        '   07/05/26 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------
+        '   Indique si il y a une protection thermique ou non
+        '-------------------------------------------------------------------------------------------------------
+
+        Dim lPro As Boolean = (Me.TypeSurface = enu_TypeSurface.Protege)
+
+        Return lPro
     End Function
 
 #End Region

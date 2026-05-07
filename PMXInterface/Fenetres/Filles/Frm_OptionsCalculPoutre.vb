@@ -16,6 +16,7 @@ Public Class Frm_OptionsCalculPoutre
 
     Dim strNoArmaCompAvecUnLit As String
     Dim strWarningArmaComp As String
+    Dim strInfoW_ConfreF As String
 
 #End Region
 
@@ -101,6 +102,7 @@ Public Class Frm_OptionsCalculPoutre
                 Me.lbl_GraviteG.Text = Bloc("GFORCE")
 
                 CLE = "PSI2LONGTERM" : Me.chk_Psi2LongTerme.Text = Bloc(CLE)
+                CLE = "PRECAMBERINFO" : strInfoW_ConfreF = Bloc(CLE)
 
                 '--( Messages
 
@@ -261,7 +263,7 @@ Public Class Frm_OptionsCalculPoutre
         Me.txt_t0G2Enrob.Text = GetStringInUnit(MyParam.AgeT0G2(1), Enu_TypeVariable.SansType, 4, 0, False)
         Me.txt_t0SHEnrob.Text = GetStringInUnit(MyParam.AgeT0SH(1), Enu_TypeVariable.SansType, 4, 0, False)
 
-        Me.txt_CtrFlecheFab.Text = GetStringInUnit(MyParam.ContreFlecheFabDim, Enu_TypeVariable.Dimension, 4, 0, False)
+        Me.txt_CtrFlecheFab.Text = GetStringInUnitN(MyParam.ContreFleche, Enu_TypeVariable.Dimension, 4, 0, Enu_AfficheUnite.Non, True)
 
         '==> Propriétés sections
 
@@ -352,7 +354,7 @@ Public Class Frm_OptionsCalculPoutre
         GereTransfertValeur(MyParam.DeltaD, MyProjet.Poutres(MyProjet.IndEnCours).Param.DeltaD, lModif)
 
         GereTransfertValeur(MyParam.lContreFlecheFab, MyProjet.Poutres(MyProjet.IndEnCours).Param.lContreFlecheFab, lModif)
-        GereTransfertValeur(MyParam.ContreFlecheFabDim, MyProjet.Poutres(MyProjet.IndEnCours).Param.ContreFlecheFabDim, lModif)
+        GereTransfertValeur(MyParam.ContreFleche, MyProjet.Poutres(MyProjet.IndEnCours).Param.ContreFleche, lModif)
 
         GereTransfertValeur(Me.chk_MaitriseFissuration.Checked, MyProjet.Poutres(MyProjet.IndEnCours).Param.lMaitriseFissuration, lModif)
         GereTransfertValeur(cls_OptionsCalcul.tabWk(Me.cmb_Wk.SelectedIndex), MyProjet.Poutres(MyProjet.IndEnCours).Param.FissureWk, lModif)
@@ -417,7 +419,7 @@ Public Class Frm_OptionsCalculPoutre
                 Case Me.txt_eta.Name
                     MyParam.EtaW = Valeur
                 Case Me.txt_CtrFlecheFab.Name
-                    MyParam.ContreFlecheFabDim = Valeur
+                    MyParam.ContreFleche = Valeur
             End Select
 
         End If
@@ -604,4 +606,26 @@ Public Class Frm_OptionsCalculPoutre
 
 #End Region
 
+
+#Region " Infos W "
+
+    Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
+        'If InfoW_lVisible Then
+        '    InfoW_Fermer()
+        'Else
+        PublieInfoDegreConnex()
+        'End If
+    End Sub
+
+    Private Sub PublieInfoDegreConnex()
+
+        InfoW.InitialiseInfo()
+        InfoW.AddInfo(strInfoW_ConfreF)
+        'InfoW_Add("Le degré de connexion est calculé à mi-travée de la poutre, en supposant que la poutre en entièrement sous moment positif")
+
+        InfoW.Publie()
+
+    End Sub
+
+#End Region
 End Class

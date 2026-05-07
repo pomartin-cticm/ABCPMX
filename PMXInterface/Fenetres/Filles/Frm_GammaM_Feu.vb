@@ -1,9 +1,12 @@
-﻿Public Class Frm_GammaM_Feu
+﻿Imports PMXMoteur2
+
+Public Class Frm_GammaM_Feu
 
 
 #Region " Variables "
 
     Dim lBuild As Boolean
+    Dim myNorme As Enu_Normes
 
 #End Region
 
@@ -24,6 +27,8 @@
 
         Me.pan_GammaM.Dock = DockStyle.Fill
 
+        myNorme = MyProjet.Poutres(MyProjet.IndEnCours).Param.Norme
+
     End Sub
 
     Private Sub AfficherGammaM()
@@ -42,7 +47,6 @@
     End Sub
 
 #End Region
-
 
 #Region " Evènement saisie "
 
@@ -123,6 +127,8 @@
         Dim hIndice As Single = hCar / 2
         Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
 
+        Dim ENFeu As New cls_EurocodesFeu
+
         '--> Initialisation
 
         lIndice = True
@@ -134,22 +140,26 @@
             Case Me.img_GammaM_fi.Name
 
                 strSymbol = "g"
-                strIndice = "M,fi"
+                ' strIndice = "M,fi"
+                strIndice = ENFeu.IndiceGammaFeu(myNorme, "a")
 
             Case Me.img_GammaC_fi.Name
 
                 strSymbol = "g"
-                strIndice = "C,fi"
+                'strIndice = "C,fi"
+                strIndice = ENFeu.IndiceGammaFeu(myNorme, "c")
 
             Case Me.img_GammaS_fi.Name
 
                 strSymbol = "g"
-                strIndice = "s,fi"
+                'strIndice = "s,fi"
+                strIndice = ENFeu.IndiceGammaFeu(myNorme, "s")
 
             Case Me.img_GammaV_fi.Name
 
                 strSymbol = "g"
-                strIndice = "V,fi"
+                'strIndice = "V,fi"
+                strIndice = ENFeu.IndiceGammaFeu(myNorme, "v")
 
         End Select
 

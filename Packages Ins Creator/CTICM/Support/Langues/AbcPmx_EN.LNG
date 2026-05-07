@@ -125,6 +125,14 @@ CRACKWIDTH				= Limit of crack width
 WARNINGCOMPREINF1		= Rebars in compression can not be considered with only one layer of reinforcement in the slab
 WARNINGCOMPREINF2		= When rebars in compression are considered in the design of the beam, requirements of EN 1992-1-1:2005, 9.2.1.2 (3) should be fulfiled to avoid premature buckling
 PSI2LONGTERM			= The quasi-permanent ratio of liva loads is assumed to be a long term effect
+PRECAMBER				= Pre-camber
+PRECAMBERINFO			= Precambering is taken into account at Serviceability limit states only for single span beams
+
+#FRM_CALCULENCOURS
+TITLE 					= Progress of the heating calculation
+TITLELABL				= Progression du calcul d'échauffement
+PROGRESTEP				= Fire calculation for a duration of
+PROGREINSTEP			= Progress
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
@@ -522,6 +530,23 @@ MOISTURECONTENT			= Moisture content
 ENCASEDROOTFILLET		= Root fillets are taken into account in the fire design of encased section according to Annex F of EN 1994-1-2
 SIZEELT					= Size of the elements
 PROTECTEDTROUGH			= The voids between the deck and the flange are filled
+POSTPROCESSHEATING		= Post-processing of fire calculations
+
+#FRM_POSTPROCESSING
+TITLE                   = Post-processing of element heating
+CLOSE                   = Close
+PARAMETERS              = Parameters
+NOMAILLES				= Number of mesh
+HEATFIELD               = Display the heat field
+2DELEMT                 = Display only 2D elements
+STEP					= Step of the calculation
+SCALE					= Scale of the temperature
+LOCSCALE				= Local scale
+GLOBSCALE				= Global scale
+CONSTSCALE				= Constant scale
+LOCSCALEINFO			= Local scale : The temperature scale is only based of the current step of calculation.
+GLOBSCALEINFO			= Global scale : The temperature scale is based of the whole calculation.
+CONSTSCALEINFO			= Constant scale : The temperature scale is set between 20 and 1200°C.
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Combination factors

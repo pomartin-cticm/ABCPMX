@@ -23,6 +23,7 @@ Partial Class Frm_OptionsCalculPoutre
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_OptionsCalculPoutre))
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
@@ -115,6 +116,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_RH = New System.Windows.Forms.Label()
         Me.lbl_BetonMessage = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.img_info = New System.Windows.Forms.PictureBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -141,6 +143,7 @@ Partial Class Frm_OptionsCalculPoutre
         CType(Me.img_EpsilonSh, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -425,6 +428,7 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.pan_OptionsELS.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_OptionsELS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_OptionsELS.Controls.Add(Me.img_info)
         Me.pan_OptionsELS.Controls.Add(Me.txt_CtrFlecheFab)
         Me.pan_OptionsELS.Controls.Add(Me.etq_UnitDimension2)
         Me.pan_OptionsELS.Controls.Add(Me.img_CtrFlecheFab)
@@ -451,7 +455,7 @@ Partial Class Frm_OptionsCalculPoutre
         'txt_CtrFlecheFab
         '
         Me.txt_CtrFlecheFab.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_CtrFlecheFab.Location = New System.Drawing.Point(241, 177)
+        Me.txt_CtrFlecheFab.Location = New System.Drawing.Point(241, 39)
         Me.txt_CtrFlecheFab.Name = "txt_CtrFlecheFab"
         Me.txt_CtrFlecheFab.Size = New System.Drawing.Size(58, 20)
         Me.txt_CtrFlecheFab.TabIndex = 133
@@ -460,7 +464,7 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.etq_UnitDimension2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitDimension2.AutoSize = True
-        Me.etq_UnitDimension2.Location = New System.Drawing.Point(303, 181)
+        Me.etq_UnitDimension2.Location = New System.Drawing.Point(303, 43)
         Me.etq_UnitDimension2.Name = "etq_UnitDimension2"
         Me.etq_UnitDimension2.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDimension2.TabIndex = 132
@@ -469,7 +473,7 @@ Partial Class Frm_OptionsCalculPoutre
         'img_CtrFlecheFab
         '
         Me.img_CtrFlecheFab.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_CtrFlecheFab.Location = New System.Drawing.Point(192, 177)
+        Me.img_CtrFlecheFab.Location = New System.Drawing.Point(192, 39)
         Me.img_CtrFlecheFab.Name = "img_CtrFlecheFab"
         Me.img_CtrFlecheFab.Size = New System.Drawing.Size(46, 20)
         Me.img_CtrFlecheFab.TabIndex = 130
@@ -478,7 +482,7 @@ Partial Class Frm_OptionsCalculPoutre
         'chk_CtrFlecheFab
         '
         Me.chk_CtrFlecheFab.AutoSize = True
-        Me.chk_CtrFlecheFab.Location = New System.Drawing.Point(11, 180)
+        Me.chk_CtrFlecheFab.Location = New System.Drawing.Point(11, 42)
         Me.chk_CtrFlecheFab.Name = "chk_CtrFlecheFab"
         Me.chk_CtrFlecheFab.Size = New System.Drawing.Size(113, 17)
         Me.chk_CtrFlecheFab.TabIndex = 129
@@ -490,7 +494,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.chk_Psi2LongTerme.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chk_Psi2LongTerme.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.chk_Psi2LongTerme.Location = New System.Drawing.Point(12, 9)
+        Me.chk_Psi2LongTerme.Location = New System.Drawing.Point(11, 9)
         Me.chk_Psi2LongTerme.Name = "chk_Psi2LongTerme"
         Me.chk_Psi2LongTerme.Size = New System.Drawing.Size(413, 38)
         Me.chk_Psi2LongTerme.TabIndex = 128
@@ -502,7 +506,7 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.etq_UnitLargeurF.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitLargeurF.AutoSize = True
-        Me.etq_UnitLargeurF.Location = New System.Drawing.Point(303, 143)
+        Me.etq_UnitLargeurF.Location = New System.Drawing.Point(303, 180)
         Me.etq_UnitLargeurF.Name = "etq_UnitLargeurF"
         Me.etq_UnitLargeurF.Size = New System.Drawing.Size(28, 13)
         Me.etq_UnitLargeurF.TabIndex = 127
@@ -512,7 +516,7 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.cmb_Wk.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_Wk.FormattingEnabled = True
-        Me.cmb_Wk.Location = New System.Drawing.Point(240, 139)
+        Me.cmb_Wk.Location = New System.Drawing.Point(240, 176)
         Me.cmb_Wk.Name = "cmb_Wk"
         Me.cmb_Wk.Size = New System.Drawing.Size(59, 21)
         Me.cmb_Wk.TabIndex = 126
@@ -520,7 +524,7 @@ Partial Class Frm_OptionsCalculPoutre
         'img_Wk
         '
         Me.img_Wk.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Wk.Location = New System.Drawing.Point(192, 140)
+        Me.img_Wk.Location = New System.Drawing.Point(192, 177)
         Me.img_Wk.Name = "img_Wk"
         Me.img_Wk.Size = New System.Drawing.Size(46, 20)
         Me.img_Wk.TabIndex = 125
@@ -529,7 +533,7 @@ Partial Class Frm_OptionsCalculPoutre
         'lbl_LargeurFissure
         '
         Me.lbl_LargeurFissure.AutoSize = True
-        Me.lbl_LargeurFissure.Location = New System.Drawing.Point(12, 143)
+        Me.lbl_LargeurFissure.Location = New System.Drawing.Point(12, 180)
         Me.lbl_LargeurFissure.Name = "lbl_LargeurFissure"
         Me.lbl_LargeurFissure.Size = New System.Drawing.Size(92, 13)
         Me.lbl_LargeurFissure.TabIndex = 124
@@ -538,7 +542,7 @@ Partial Class Frm_OptionsCalculPoutre
         'chk_MaitriseFissuration
         '
         Me.chk_MaitriseFissuration.AutoSize = True
-        Me.chk_MaitriseFissuration.Location = New System.Drawing.Point(12, 123)
+        Me.chk_MaitriseFissuration.Location = New System.Drawing.Point(11, 160)
         Me.chk_MaitriseFissuration.Name = "chk_MaitriseFissuration"
         Me.chk_MaitriseFissuration.Size = New System.Drawing.Size(136, 17)
         Me.chk_MaitriseFissuration.TabIndex = 123
@@ -548,7 +552,7 @@ Partial Class Frm_OptionsCalculPoutre
         'lbl_StudDeflection
         '
         Me.lbl_StudDeflection.AutoSize = True
-        Me.lbl_StudDeflection.Location = New System.Drawing.Point(12, 77)
+        Me.lbl_StudDeflection.Location = New System.Drawing.Point(13, 117)
         Me.lbl_StudDeflection.Name = "lbl_StudDeflection"
         Me.lbl_StudDeflection.Size = New System.Drawing.Size(93, 13)
         Me.lbl_StudDeflection.TabIndex = 122
@@ -558,7 +562,7 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.etq_UnitDimension1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitDimension1.AutoSize = True
-        Me.etq_UnitDimension1.Location = New System.Drawing.Point(305, 99)
+        Me.etq_UnitDimension1.Location = New System.Drawing.Point(306, 139)
         Me.etq_UnitDimension1.Name = "etq_UnitDimension1"
         Me.etq_UnitDimension1.Size = New System.Drawing.Size(28, 13)
         Me.etq_UnitDimension1.TabIndex = 121
@@ -567,7 +571,7 @@ Partial Class Frm_OptionsCalculPoutre
         'txt_Se
         '
         Me.txt_Se.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Se.Location = New System.Drawing.Point(240, 95)
+        Me.txt_Se.Location = New System.Drawing.Point(241, 135)
         Me.txt_Se.Name = "txt_Se"
         Me.txt_Se.Size = New System.Drawing.Size(58, 20)
         Me.txt_Se.TabIndex = 120
@@ -575,7 +579,7 @@ Partial Class Frm_OptionsCalculPoutre
         'img_se
         '
         Me.img_se.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_se.Location = New System.Drawing.Point(192, 95)
+        Me.img_se.Location = New System.Drawing.Point(193, 135)
         Me.img_se.Name = "img_se"
         Me.img_se.Size = New System.Drawing.Size(46, 20)
         Me.img_se.TabIndex = 119
@@ -584,7 +588,7 @@ Partial Class Frm_OptionsCalculPoutre
         'chk_FlechesETA
         '
         Me.chk_FlechesETA.AutoSize = True
-        Me.chk_FlechesETA.Location = New System.Drawing.Point(12, 53)
+        Me.chk_FlechesETA.Location = New System.Drawing.Point(11, 78)
         Me.chk_FlechesETA.Name = "chk_FlechesETA"
         Me.chk_FlechesETA.Size = New System.Drawing.Size(108, 17)
         Me.chk_FlechesETA.TabIndex = 116
@@ -1172,6 +1176,16 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.ErrorProvider.ContainerControl = Me
         '
+        'img_info
+        '
+        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
+        Me.img_info.Location = New System.Drawing.Point(327, 39)
+        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_info.Name = "img_info"
+        Me.img_info.Size = New System.Drawing.Size(20, 20)
+        Me.img_info.TabIndex = 134
+        Me.img_info.TabStop = False
+        '
         'Frm_OptionsCalculPoutre
         '
         Me.AcceptButton = Me.btn_OK
@@ -1220,6 +1234,7 @@ Partial Class Frm_OptionsCalculPoutre
         CType(Me.img_EpsilonSh, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1316,4 +1331,5 @@ Partial Class Frm_OptionsCalculPoutre
     Friend WithEvents img_CtrFlecheFab As PictureBox
     Friend WithEvents chk_CtrFlecheFab As CheckBox
     Friend WithEvents txt_CtrFlecheFab As TextBox
+    Friend WithEvents img_info As PictureBox
 End Class

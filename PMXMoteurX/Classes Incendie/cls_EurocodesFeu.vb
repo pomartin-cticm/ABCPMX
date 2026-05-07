@@ -1,4 +1,6 @@
-﻿Public Class cls_EurocodesFeu
+﻿Imports PMXMoteur2.cls_OptionsCalcul
+
+Public Class cls_EurocodesFeu
 
 #Region " Déclarations "
 
@@ -249,7 +251,7 @@
             myTemp = 20 + 345 * CRed1 * Math.Log10(8 * TimeT / kConvMinSec + 1)
         Else
 
-            myTemp = temp40 + (temp120 - temp40) / 80 * (TimeT / kConvMinSec - 40)
+            myTemp = Temp40 + (Temp120 - Temp40) / 80 * (TimeT / kConvMinSec - 40)
         End If
 
 
@@ -1501,11 +1503,20 @@
         '--( Déclaration
 
         Dim NbStepsCalcul As Integer
+        Dim lMixte As Boolean = myBeam.lMixte
 
         If Me.MethodeCreuxOnde(myBeam) Then
-            NbStepsCalcul = Array.IndexOf(cls_VerifFeuMixte.TimeSteps, CDec(120), 0) + 1
+            If lMixte Then
+                NbStepsCalcul = Array.IndexOf(cls_VerifFeuMixte.TimeSteps, CDec(120), 0) + 1
+            Else
+                NbStepsCalcul = Array.IndexOf(cls_VerifFeuAcier.TimeSteps, CDec(120), 0) + 1
+            End If
         Else
-            NbStepsCalcul = cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1
+            If lMixte Then
+                NbStepsCalcul = cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1
+            Else
+                NbStepsCalcul = cls_VerifFeuAcier.TimeSteps.GetUpperBound(0) + 1
+            End If
         End If
 
         Return NbStepsCalcul
@@ -1521,9 +1532,15 @@
         '   myBeam  [E] :   Poutre traitée
         '------------------------------------------------------------------------------------------------------------------------------
 
-        Return myBeam.Dalle.lMixte And myBeam.Dalle.Bac.lPerpendiculaire _
-                                   And (myBeam.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu) And (Not myBeam.ParamFeu.lCreuxProteges) _
-                                   And (myBeam.ParamFeu.lProtectionPaint Or myBeam.ParamFeu.lProtectionSpray)
+        Dim lConditionCO As Boolean = Not (myBeam.lEnrobage Or myBeam.lSlimFloor)
+
+        lConditionCO = lConditionCO And myBeam.Dalle.lMixte And myBeam.Dalle.Bac.lPerpendiculaire _
+                                    And (myBeam.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu) _
+                                    And (Not myBeam.ParamFeu.lCreuxProteges) _
+                                    And (myBeam.ParamFeu.lProtectionPaint Or myBeam.ParamFeu.lProtectionSpray)
+
+        Return lConditionCO
+
     End Function
 
     Public Function SemelleSupExposee(myBeam As cls_Poutre) As Boolean
@@ -1796,12 +1813,12 @@
         Dim lambda_A As Single
 
         If IsGreaterOrEqual(ThetaA, 20.0) AndAlso IsSmaller(ThetaA, 800.0) Then
-            lambda_a = 54.0 - 0.0333 * ThetaA
+            lambda_A = 54.0 - 0.0333 * ThetaA
         ElseIf IsGreaterOrEqual(ThetaA, 800.0) AndAlso IsSmallerOrEqual(ThetaA, 1200.0) Then
-            lambda_a = 27.3
+            lambda_A = 27.3
         End If
 
-        Return lambda_a
+        Return lambda_A
 
     End Function
 
@@ -2036,6 +2053,32 @@
 
 
         Return KhiLT
+    End Function
+
+
+#End Region
+
+#Region " Autres fonctions "
+
+    Public Function IndiceGammaFeu(Norme As Enu_Normes, Mat As String) As String
+        '---------------------------------------------------------------------------------
+        '   06/05/26 : Création - POM
+        '---------------------------------------------------------------------------------
+        '   Renvoie l'indice du coefficient GammamM au feu
+        '---------------------------------------------------------------------------------
+        '   Mat     [E] :   Matériau
+        '---------------------------------------------------------------------------------
+
+        Dim Indice As String = String.Empty
+
+        Select Case Norme
+            Case Enu_Normes.EurocodesG1
+                Indice = "M,fi," & Mat
+            Case Enu_Normes.EurocodesG2
+                Indice = "M," & Mat & ",fi"
+        End Select
+
+        Return Indice
     End Function
 
 

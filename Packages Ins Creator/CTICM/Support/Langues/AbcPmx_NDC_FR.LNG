@@ -112,6 +112,8 @@ CONTINUOUS_RIB			= Dalle continue
 CONTINU_PSS				= Dalle et bac continus
 CONTROLCRACKW			= Maîtrise de la fissuration
 CRACKWIDTH				= Limite d'ouverture des fissures
+PRECAMBER				= Contre-flèche de fabrication
+PRECAMBERDIM			= Dimension de la contre-flèche
 CSTYPE					= Type de section
 CUT_DECK				= Bac découpé
 DATABASE				= issu de la base de données
@@ -629,6 +631,7 @@ WSLENDERNESSLIMIT		= Limite d'élancement
 WTOFWEBS				= Soudures âme-semelles
 WPLATE					= Soudures du plat
 
+
 #NDC_DETAILSULS
 TITLE					= Calculs détaillés aux ELU
 BENDINGR				= Résistance à la flexion
@@ -668,13 +671,15 @@ SIGMAMAX				= Contrainte de traxion max des armatures
 DELTASIGMA				= y compris l'effet de rigidité du béton
 COMBIREBAR				= Pour la combinaison
 FREQG					= Fréquence propre pour la combinaison 
+WITHPRECAMBER			= Valeurs incluant la contreflèche de fabrication
 
 #NDC_VERIFICATIONSFIRE
 FIRE_CHECKS				= États limites ultime en situation d'incendie
 FIRE_CHECKS_SYMMARY		= Synthèse des résultats
 FIRE_CHECKS_DETAIL		= Résultats détaillés
 FIRE_CHECKS_PARAM		= Paramètres du calcul
-FIRE_CHECKS_CURVES		= Courbes de résultats
+FIRE_CHECKS_CURVES		= Courbes d'échauffement
+FIRE_CHARTSHEATING		= Échauffement des sections
 TIMERESISTANCE			= Résistance au feu
 TIMESTEP				= Durée
 TEMPSTEEL				= Températures dans le profilé métallique
@@ -685,7 +690,7 @@ TFIREOPTIONS			= Options pour le calcul à l'incendie
 CONVECTIONALPHAC		= Coefficient de convection (parties exposées au feu)
 CONVECTIONALPHACC		= Coefficient de convection (partie supérieure de la dalle)
 BOLTZMANNC				= Constante de Boltzmann
-FIREEMISSIVITY			= Emissivité du feu
+FIREEMISSIVITY			= Émissivité du feu
 FORMFACTOR				= Facteur de forme
 REFTEMP					= Température de référence
 SLABTEMPBYFEM			= La température dans la dalle est obtenue par un calcul aux différences finies
@@ -703,7 +708,7 @@ PRO_BOARDSPLASTER		= Caissons en platre
 PRO_BOARDSFCEMENT		= Caissons en fibro-ciment
 PRO_BOARDSSILICATE		= Caissons en fibres de silicate
 PRO_BOARDSVERMICULITE	= Caissons en vermiculite ou en perlite avec du ciment
-PRO_THICK				= Epaisseur de la protection
+PRO_THICK				= Épaisseur de la protection
 PRO_PROP				= Propriétés de la protection
 PRO_DENS				= Masse volumique
 PRO_THCOND				= Conductivité thermique
@@ -737,6 +742,15 @@ TEMPSTEELLOWSLAB		= Fibre inférieure de la dalle
 TEMPSTEELUPPSLAB		= Fibre supérieure de la dalle 
 RESTRICTEDSTEPS			= Calcul au feu limité à $ 
 CONDITIONNOTMET			= Pour $, la condition suivante du Tableau F.3 de l'EN 1994-1-2 n'est pas satisfaite
+HEATINGTEMP				= Échauffement à $ minutes
+HEATINGLEGEND			= Température en °C
+CONCRETE				= Béton
+UPPERFLANGE				= Semelle supérieure
+WEB						= Âme
+LOWERFLANGE				= Semelle inférieure
+STEELPLATE				= Plat
+WELDS					= Soudures
+HOTGAZES				= Gaz chauds
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Évaluation des vibrations du plancher

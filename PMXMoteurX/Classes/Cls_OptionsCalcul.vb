@@ -65,7 +65,7 @@ Public Class cls_OptionsCalcul
     Public DeltaD As Decimal                        ' Valeur du glissement du connecteur pour une charge de PRd
 
     Public lContreFlecheFab As Boolean              ' Indique la présence d'une contre-flèche de fabrication
-    Public ContreFlecheFabDim As Decimal            ' Indique la valeur de la contre-flèche de fabrication, stockée en m
+    Public ContreFleche As Decimal                  ' Valeur de la contre-flèche de fabrication
 
     Public lMaitriseFissuration As Boolean          ' Indique si on effectue le calcul de maitrise de la fissuration
     Public FissureWk As Decimal                     ' Valeur maxi d'ouverture des fissures, en cas de maitrise de la fissuration
@@ -85,6 +85,7 @@ Public Class cls_OptionsCalcul
     Sub New()
 
         '--> Coefficients partiels par défaut
+
         Gamma = New cls_Gamma
 
         ''--> Coefficients pour le calcul en dynamique
@@ -136,6 +137,7 @@ Public Class cls_OptionsCalcul
 
         '-- Réduction des slim floor : par défaut, méthode de l'Annexe I des EN G2
         Me.MethodReducPlatSlim = Enu_MReducPlatSlim.M3_ReducLimiteElasticite
+
     End Sub
 
 #End Region

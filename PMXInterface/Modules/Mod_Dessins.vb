@@ -14977,7 +14977,7 @@ Public Module Mod_Dessins
     End Sub
 
     Public Sub DessinLegende(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
-                             ByVal tempMin As Double, ByVal tempMax As Double, ByVal tempMaille As Double,
+                             ByVal tempMin As Double, ByVal tempMax As Double, ByVal tempMaille As Double, lNdC As Boolean,
                              Optional ByVal xLeft As Decimal = 0, Optional ByVal yTop As Decimal = 0)
         '------------------------------------------------------------------------------------------------------------------------------------------------
         '   22/04/26 :  Création - BeB
@@ -14988,6 +14988,7 @@ Public Module Mod_Dessins
         '   pWi, pHi             [E] :   Largeur et hauteur de la zone de dessin
         '   tempMin, tempMax     [E] :   Température min et max de l'échelle
         '   tempMaille           [E] :   Température de la maille selectionnée par la souris, vaut -1 si aucune maille n'est selectionnée
+        '   lNdC                 [E] :   Indique si on dessine dans la Note de Calcul (true) ou dans la fenêtre de post-traitement (false), afin d'adapter la taille de la police
         '   xLeft, yTop          [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
         '------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -14996,7 +14997,11 @@ Public Module Mod_Dessins
         Const kADJUST As Decimal = 0.95
         Const LL As Double = 100
 
-        Dim FontFrm As Font = New Font(FontBase.Name, SizeFontFrm)
+        Dim mySize As Single
+        If lNdC Then mySize = MyNote.SizeFont Else mySize = SizeFontFrm
+
+        Dim FontFrm As Font = New Font(FontBase.Name, mySize)
+        'Dim FontFrm As Font = New Font(FontBase.Name, SizeFontFrm)
         Dim H As Double = LL * pHi / pWi
         Dim dCar As Double = Math.Sqrt(LL ^ 2 + H ^ 2) / 50
         Dim nbColors As Integer = Tab_Couleurs_ChTh.Length
@@ -15023,7 +15028,7 @@ Public Module Mod_Dessins
     End Sub
 
     Private Sub DessinGradientsLegende(ByRef myGr As Graphics, ByRef LegParaff As Struc_Affichage,
-                            ByVal H As Double, ByVal LL As Double)
+                                       ByVal H As Double, ByVal LL As Double)
 
         Dim nbColors As Integer = Tab_Couleurs_ChTh.Length
 
@@ -15041,8 +15046,8 @@ Public Module Mod_Dessins
     End Sub
 
     Private Sub DessinGraduationLegende(ByRef myGr As Graphics, ByRef LegParaff As Struc_Affichage,
-                      ByVal H As Double, ByVal LL As Double, ByVal dCar As Double,
-                      ByVal tab_TempCouleurs() As Decimal, ByVal FontFrm As Font)
+                                        ByVal H As Double, ByVal LL As Double, ByVal dCar As Double,
+                                        ByVal tab_TempCouleurs() As Decimal, ByVal FontFrm As Font)
 
         Dim nbColors As Integer = tab_TempCouleurs.Length
 
@@ -15926,9 +15931,24 @@ Public Module Mod_Dessins
         '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
         '-----------------------------------------------------------------------------------------------
 
+        '--( Déclarations
+
+        Dim EN_Feu As New cls_EurocodesFeu
+        Dim lMethCreuxOndes As Boolean
+
+        '--( Initialisation
+
+        lMethCreuxOndes = EN_Feu.MethodeCreuxOnde(myBeam)
+
+        '--( Traitement différencié en fonction du type de section
+
         Select Case myBeam.Section.TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul
-                DessineCourbeEchauffementAcier(myGr, pWi, pHi, myBeam, xLeft, yTop)
+                If lMethCreuxOndes Then
+                    DessineCourbeEchauffementAcierCO(myGr, pWi, pHi, myBeam, xLeft, yTop)
+                Else
+                    DessineCourbeEchauffementAcier(myGr, pWi, pHi, myBeam, xLeft, yTop)
+                End If
             Case cls_Section.Enum_TypeSection.Mixte
                 DessineCourbeEchauffementMixte(myGr, pWi, pHi, myBeam, xLeft, yTop)
         End Select
@@ -16505,7 +16525,103 @@ Public Module Mod_Dessins
 
     End Sub
 
-    Public Sub DessineCourbeEchauffementAcier(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
+    Private Sub DessineCourbeEchauffementAcierCO(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
+                                                 myBeam As cls_Poutre,
+                                                 ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   07/05/26 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation des courbes de températures gaz et acier
+        '   Pour le cas d'une section acier calculée avec la méthode des creux d'ondes
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   myBeam      [E] :   Poutre à dessiner
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+
+        '--( Declarations
+
+        Dim MyParAff As Struc_Affichage
+        Dim HautD, LargD As Decimal
+        Dim dCar As Decimal
+
+        Dim tabTemp() As Decimal = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200}
+        Dim tabTempLabel() As Decimal = {100, 300, 500, 700, 900, 1100, 1200}
+
+        Dim TimeMax As Decimal
+        Dim TempMax As Decimal
+        Dim FontAxe As New Font(FontBase.Name, 7)
+
+        Dim kConvX, kConvY As Decimal
+
+        Dim ColorQ As Color = Color.LightGray
+        Dim ColorG As Color = Color.DarkRed
+        Dim ColorA As Color = Color.DarkBlue
+
+        Dim tR30 As Decimal = cls_VerifFeuAcier.TimeSteps(0)
+
+        Dim PhiVoid As Decimal
+        Dim CRed(1) As Decimal
+
+        Dim EN_Feu As New cls_EurocodesFeu
+        Dim indB As Integer
+        Const kUnitS As Decimal = 60
+        Dim NbSteps As Integer
+
+        '--( Initialisations
+
+        InitialiseCourbesEchauffement(pWi, pHi, MyParAff, LargD, HautD, dCar, xLeft, yTop)
+
+        NbSteps = EN_Feu.NombreTimeStepsIncendie(myBeam)
+
+        TempMax = tabTemp.Max
+        'TimeMax = Math.Max((myBeam.VerifFeuAcier.TempAInter.Count * myBeam.VerifFeuAcier.TimeInter), cls_VerifFeuAcier.TimeSteps.Last * kUnitS)
+        TimeMax = Math.Max((myBeam.VerifFeuAcier.TempWInter.Count * myBeam.VerifFeuAcier.TimeInter), cls_VerifFeuAcier.TimeSteps(NbSteps - 1) * kUnitS)
+
+        kConvX = LargD / TimeMax
+        kConvY = HautD / TempMax
+
+        '--( Axes et quadrillage
+
+        DessineAxesQCourbesTemperatures(myGr, MyParAff, LargD, HautD, dCar, FontAxe,
+                                        cls_VerifFeuAcier.TimeSteps, ColorQ, kConvX, tabTemp, tabTempLabel, kConvY)
+
+        '--( Tracé de la courbe de température des gaz
+
+        DessineCourbeTempGaz(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorG, 1, TimeMax, tR30)
+
+        PhiVoid = EN_Feu.PhiVoid(myBeam.Dalle.Bac, myBeam.Section.ProfilA.Bfs, myBeam.ParamFeu.EpProtection)
+        CRed(0) = EN_Feu.CoefRed1(PhiVoid)
+        CRed(1) = EN_Feu.CoefRed2(PhiVoid)
+
+        DessineCourbeTempGazVoid(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorG, 2, TimeMax, tR30, CRed(0), CRed(1))
+        indB = 2
+
+        '--( Tracé des courbes de températures de l'acier
+
+        '## Température de la semelle sup
+        indB += 1
+        DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, indB,
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuAcier.TempFSInter, myBeam.VerifFeuAcier.TimeInter, cls_VerifFeuAcier.TimeSteps(0) * kUnitS, False)
+        '## Température de la semelle inf
+        indB += 1
+        DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, indB,
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuAcier.TempFIInter, myBeam.VerifFeuAcier.TimeInter, cls_VerifFeuAcier.TimeSteps(0) / 2 * kUnitS, True)
+        '## Température de l'âme
+        indB += 1
+        DessineCourbeTempElt(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorA, indB,
+                                 myBeam.ParamFeu.TempRef, myBeam.VerifFeuAcier.TempWInter, myBeam.VerifFeuAcier.TimeInter, cls_VerifFeuAcier.TimeSteps(0) / 2 * kUnitS, True)
+
+        '--( Fin
+
+        'myPenG.Dispose()
+        'myPenQ.Dispose()
+        'myPenA.Dispose()
+        FontAxe.Dispose()
+    End Sub
+
+    Private Sub DessineCourbeEchauffementAcier(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
                                               myBeam As cls_Poutre,
                                               ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
@@ -16560,7 +16676,7 @@ Public Module Mod_Dessins
 
         '--( Tracé de la courbe de température des gaz
 
-        DessineCourbeTempGaz(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorG, 1, TimeMax, tr30)
+        DessineCourbeTempGaz(myGr, MyParAff, FontAxe, kConvX, kConvY, ColorG, 1, TimeMax, tR30)
 
         '--( Tracé de la courbe de température de l'acier
 

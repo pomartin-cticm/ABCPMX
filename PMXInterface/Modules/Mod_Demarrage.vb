@@ -339,10 +339,10 @@ Public Module Mod_Demarrage
         '   Initialisation des paramètres de version
         '---------------------------------------------------------------------------------------------------------------
 
-        LogicielInfo.Version.Annee = 2025
+        LogicielInfo.Version.Annee = 2026
         LogicielInfo.Version.Principal = 1
         LogicielInfo.Version.Indice = 20
-        LogicielInfo.Version.Beta = 3
+        LogicielInfo.Version.Beta = 4
 
         Dim Chaine As String = ""
 

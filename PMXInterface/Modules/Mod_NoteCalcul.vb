@@ -1342,7 +1342,7 @@ Module Mod_NoteCalcul
         End If
         AddLigneNDC(TABW2 & BlocG("CRACKWIDTH") & TABAFF & "w\-max\= = " & GetStringInUnit(MyBeam.Param.FissureWk, Enu_TypeVariable.SansType, 4, 2, True) & " mm")
         If MyBeam.Param.lContreFlecheFab Then
-            AddLigneNDC(TABW2 & BlocG("PRECAMBER") & TABAFF & "w\-c\= = " & GetStringInUnitN(MyBeam.Param.ContreFlecheFabDim, Enu_TypeVariable.Millimetre, 4, 2, True, True))
+            AddLigneNDC(TABW2 & BlocG("PRECAMBER") & TABAFF & "w\-c\= = " & GetStringInUnitN(MyBeam.Param.ContreFleche, Enu_TypeVariable.Millimetre, 4, 2, OUI, True))
         Else
             AddLigneNDC(TABW2 & BlocG("PRECAMBER") & TABAFF & BlocG("NO"))
         End If
@@ -1352,7 +1352,7 @@ Module Mod_NoteCalcul
 
         '--> Propriétés du béton
         AddTitreNdC(3, BlocG("TCONCRETE"))
-        AddLigneNDC(TABW2 & BlocG("RELATIVEHUMIDITY") & TABAFF & "RH = " & GetStringInUnitN(MyBeam.Param.RH, Enu_TypeVariable.SansType, 4, 2, True, True) & " %")
+        AddLigneNDC(TABW2 & BlocG("RELATIVEHUMIDITY") & TABAFF & "RH = " & GetStringInUnitN(MyBeam.Param.RH, Enu_TypeVariable.SansType, 4, 2, NON_U, True) & " %")
         AddLigneNDC(TABW2 & BlocG("SHRINKAGEDEFORMATION") & TABAFF & "\Se\s\-sh\= = " & GetStringInUnit(MyBeam.Param.EpsilonSH * 10 ^ 6, Enu_TypeVariable.SansType, 4, 2, True) & " x 10\+-6\=")
         AddLigneNDC(TABW2 & BlocG("YOUNGSMODULUSREBAR") & TABAFF & "E\-s\= = " & GetStringInUnit(MyBeam.Param.ArmaYoung, Enu_TypeVariable.ContrainteMPa, 4, 2, True))
 
@@ -3235,7 +3235,7 @@ Module Mod_NoteCalcul
 
         '--> Déclaration 
 
-        Dim MyGamma As cls_Gamma
+        Dim myGamma As cls_Gamma
         Const TABEGAL1 As String = "\T27= "
         Const TABVARL3 As String = "\T45"
         Const TABVARL4 As String = "\T70"
@@ -3247,9 +3247,13 @@ Module Mod_NoteCalcul
         Dim ChaineFire As String = ""
         Dim ChaineSlab As String = ""
 
+        Dim ENFeu As New cls_EurocodesFeu
+        Dim myNorm As Enu_Normes
+
         '--> Initilisation 
 
         MyGamma = MyBeam.Param.Gamma.Clone
+        myNorm = MyBeam.Param.Norme
 
         '--> Traitement
 
@@ -3287,21 +3291,24 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABVAR2 & BlocG("STEEL_RES_FACTORS") & TABVARL3 & BlocG("SLAB_RES_FACTORS") & ChaineFire)
 
         If lFire Then
-            ChaineFire = TABVARL4 & "\Sg\s\-M,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaM_fi, Enu_TypeVariable.SansType, 3, 2, False)
+            'ChaineFire = TABVARL4 & "\Sg\s\-M,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaM_fi, Enu_TypeVariable.SansType, 3, 2, False)
+            ChaineFire = TABVARL4 & "\Sg\s\-" & ENFeu.IndiceGammaFeu(myNorm, "a") & "\=" & TABEGAL3 & GetStringInUnit(myGamma.GammaM_fi, Enu_TypeVariable.SansType, 3, 2, False)
         End If
         AddLigneNDC(TABVAR2 & "\Sg\s\-M0\=" & TABEGAL1 & GetStringInUnit(MyGamma.GammaM0, Enu_TypeVariable.SansType, 3, 2, False) _
                   & TABVARL3 & "\Sg\s\-C\= " & TABEGAL2 & GetStringInUnit(MyGamma.GammaC, Enu_TypeVariable.SansType, 3, 2, False) _
                   & ChaineFire)
 
         If lFire Then
-            ChaineFire = TABVARL4 & "\Sg\s\-C,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaC_fi, Enu_TypeVariable.SansType, 3, 2, False)
+            'ChaineFire = TABVARL4 & "\Sg\s\-C,fi\=" & TABEGAL3 & GetStringInUnit(myGamma.GammaC_fi, Enu_TypeVariable.SansType, 3, 2, False)
+            ChaineFire = TABVARL4 & "\Sg\s\-" & ENFeu.IndiceGammaFeu(myNorm, "c") & "\=" & TABEGAL3 & GetStringInUnit(myGamma.GammaC_fi, Enu_TypeVariable.SansType, 3, 2, False)
         End If
         AddLigneNDC(TABVAR2 & "\Sg\s\-M1\=" & TABEGAL1 & GetStringInUnit(MyGamma.GammaM1, Enu_TypeVariable.SansType, 3, 2, False) _
                   & TABVARL3 & "\Sg\s\-s\= " & TABEGAL2 & GetStringInUnit(MyGamma.GammaS, Enu_TypeVariable.SansType, 3, 2, False) _
                   & ChaineFire)
 
         If lFire Then
-            ChaineFire = TABVARL4 & "\Sg\s\-s,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaS_fi, Enu_TypeVariable.SansType, 3, 2, False)
+            'ChaineFire = TABVARL4 & "\Sg\s\-s,fi\=" & TABEGAL3 & GetStringInUnit(myGamma.GammaS_fi, Enu_TypeVariable.SansType, 3, 2, False)
+            ChaineFire = TABVARL4 & "\Sg\s\-" & ENFeu.IndiceGammaFeu(myNorm, "s") & "\=" & TABEGAL3 & GetStringInUnit(myGamma.GammaS_fi, Enu_TypeVariable.SansType, 3, 2, False)
         End If
         If MyGamma.lGammaV_unique Then
             ChaineSlab = "\Sg\s\-V\="
@@ -3313,7 +3320,8 @@ Module Mod_NoteCalcul
                   & ChaineFire)
 
         If lFire Then
-            ChaineFire = TABVARL4 & "\Sg\s\-V,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaV_fi, Enu_TypeVariable.SansType, 3, 2, False)
+            'ChaineFire = TABVARL4 & "\Sg\s\-V,fi\=" & TABEGAL3 & GetStringInUnit(myGamma.GammaV_fi, Enu_TypeVariable.SansType, 3, 2, False)
+            ChaineFire = TABVARL4 & "\Sg\s\-" & ENFeu.IndiceGammaFeu(myNorm, "v") & "\=" & TABEGAL3 & GetStringInUnit(myGamma.GammaV_fi, Enu_TypeVariable.SansType, 3, 2, False)
         End If
 
         If Not MyGamma.lGammaV_unique Then
@@ -3325,12 +3333,7 @@ Module Mod_NoteCalcul
                    & ChaineFire)
         End If
 
-
-
-
-
     End Sub
-
 
     Private Sub EditionParametresChargement(ByVal MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
@@ -10226,6 +10229,13 @@ Module Mod_NoteCalcul
 
         FinTableau()
 
+        Dim lContreF As Boolean = MyBeam.Param.lContreFlecheFab And (Not lMultispan)
+
+        If lContreF Then
+            AddLigneNDC("\T10" & BlocELS("WITHPRECAMBER"))
+        End If
+
+
     End Sub
 
     'Private Sub LigneTableauFlecheCombi(MyBeam As cls_Poutre, iCombi As Integer, lMultiSpan As Boolean, NCOL As Integer, LargCol() As Single, lETA As Boolean)
@@ -10292,14 +10302,14 @@ Module Mod_NoteCalcul
     '    Next
     'End Sub
 
-    Private Sub LigneTableauFlecheCombiNov(MyBeam As cls_Poutre, iCombi As Integer, lMultiSpan As Boolean, NCOL As Integer, LargCol() As Single, lETA As Boolean)
+    Private Sub LigneTableauFlecheCombiNov(myBeam As cls_Poutre, iCombi As Integer, lMultiSpan As Boolean, NCOL As Integer, LargCol() As Single, lETA As Boolean)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Ligne pour le tableau des flèches par cdc
         '-------------------------------------------------------------------------------------------
-        '   MyBeam      [E] :
-        '   iCase       [E] :   Indique du cas de charge
+        '   MyBeam      [E] :   poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison de charges
         '   lMultiSpan  [E] :   Indique si poutre à plusieurs travées
         '   NCOL        [E] :   Nombre colonnes dans le tableau
         '   LargCol     [E] :   Largeur des colonnes du tableau
@@ -10308,9 +10318,9 @@ Module Mod_NoteCalcul
 
         '--> Déclarations
 
-        Dim MyBordures(MyBeam.IndiceDerniereTravee) As Integer
-        Dim iTraveeDeb As Integer = MyBeam.IndicePremiereTravee
-        Dim iTraveeFin As Integer = MyBeam.IndiceDerniereTravee
+        Dim myBordures(myBeam.IndiceDerniereTravee) As Integer
+        Dim iTraveeDeb As Integer = myBeam.IndicePremiereTravee
+        Dim iTraveeFin As Integer = myBeam.IndiceDerniereTravee
         'Dim FlechesMax() As Decimal = Nothing
         Dim iCell As Integer
         Dim RatioX As Decimal
@@ -10318,6 +10328,8 @@ Module Mod_NoteCalcul
         Dim UZCombi() As Decimal = Nothing
         'Const lCombiRetrait As Boolean = True
         Dim myFleche As Decimal
+        Dim lContreF As Boolean = myBeam.Param.lContreFlecheFab And (Not lMultiSpan)
+        Dim FlecheWf As Decimal = myBeam.Param.ContreFleche
 
         '--> Initialisations
 
@@ -10333,7 +10345,7 @@ Module Mod_NoteCalcul
             iCell = 0
             InitialiseLigne(NCOL, HLIGNE)
             If i = iTraveeDeb Then
-                AddCellule(LargCol(0), MyBordures(i), PositionTexteInCell.Gauche, MyBeam.CombiA_ELS.Symbole(iCombi))
+                AddCellule(LargCol(0), MyBordures(i), PositionTexteInCell.Gauche, myBeam.CombiA_ELS.Symbole(iCombi))
             Else
                 AddCellule(LargCol(0), MyBordures(i), PositionTexteInCell.Centre, "")
             End If
@@ -10342,11 +10354,13 @@ Module Mod_NoteCalcul
                 iCell = 1
             End If
 
-            If lETA Then myFleche = MyBeam.VerifELS.FlechesMaxCombiETA(iCombi, i) Else myFleche = MyBeam.VerifELS.FlechesMaxCombi(iCombi, i)
+            If lETA Then myFleche = myBeam.VerifELS.FlechesMaxCombiETA(iCombi, i) Else myFleche = myBeam.VerifELS.FlechesMaxCombi(iCombi, i)
+
+            If lContreF Then myFleche += FlecheWf
 
             AddCellule(LargCol(iCell + 1), MyBordures(i) - Bordures.Droite, PositionTexteInCell.Gauche, GetStringInUnit(-myFleche, Enu_TypeVariable.Dimension, 3, 3, True))
             If Math.Abs(myFleche) > 0 Then
-                RatioX = Math.Abs(MyBeam.LongueurTravee(i) / myFleche)
+                RatioX = Math.Abs(myBeam.LongueurTravee(i) / myFleche)
                 ChaineRatioX = "(L/" & GetStringInUnit(RatioX, Enu_TypeVariable.SansType, 3, 0, False) & ")"
             Else
                 ChaineRatioX = ""
@@ -12269,7 +12283,7 @@ Module Mod_NoteCalcul
 
         '### SOUDURE
 
-        If Not lSAB Then
+        If Not (lSAB Or lIFB_B) Then
             LigneTableauTempSlim(POS, BlocFEU("WELDS"), TempSoud)
         End If
 
@@ -12329,8 +12343,8 @@ Module Mod_NoteCalcul
 
         AddCelluleFond(LC1, Bordures.Tous, PositionTexteInCell.Centre, "R" & RStep)
 
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "T\-" & strMin & "\= (" & UnitTemp & ")")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "T\-" & strMax & "\= (" & UnitTemp & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-" & strMin & "\= (" & UnitTemp & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-" & strMax & "\= (" & UnitTemp & ")")
 
     End Sub
 
@@ -12505,7 +12519,6 @@ Module Mod_NoteCalcul
                 If lMethCO Then
                     indB += 1
                     AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("VOIDCURVE"))
-
                 End If
 
                 If lMixte Then
@@ -12533,6 +12546,19 @@ Module Mod_NoteCalcul
                         indB += 1
                         AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELUPPSLAB"))
 
+                    End If
+                Else
+
+                    If lMethCO Then
+                        indB += 1
+                        AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELUPPFLANGE"))
+                        indB += 1
+                        AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELLOWFLANGE"))
+                        indB += 1
+                        AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELWEB"))
+                    Else
+                        indB += 1
+                        AddLigneNDC(TABVARL1 & CStr(indB) & TABVARL2 & BlocFEU("TEMPSTEELPROFILE"))
                     End If
 
                 End If
@@ -12713,10 +12739,327 @@ Module Mod_NoteCalcul
 
     Private Sub EditionVerificationsFEUDetailAcier(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
+        '   07/05/26 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres acier avec ou sans méthode du creux d'ondes
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim EN_Feu As New cls_EurocodesFeu
+        Dim lMethCreuxOndes As Boolean
+
+        '--( Initialisation
+
+        lMethCreuxOndes = EN_Feu.MethodeCreuxOnde(myBeam)
+
+        '--( Traitement spécifique en fonction de la méthode de calcul
+
+        If lMethCreuxOndes Then
+            EditionVerificationsFEUDetailCreuxOndes(myBeam)
+        Else
+            EditionVerificationsFEUDetailAcierNormal(myBeam)
+        End If
+    End Sub
+
+    Private Sub EditionVerificationsFEUDetailCreuxOndes(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   07/05/26 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres acier avec méthode du creux d'ondes
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim NbSteps As Integer
+        'Dim EN_Feu As New cls_EurocodesFeu
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_DETAIL"))
+
+        '--( Edition des températures
+
+        NbSteps = NombreTimeStepsIncendie(False, True)
+
+        EditionTemperatureFeuAcierCO(myBeam, NbSteps)
+
+        '--( Edition des critères pour chaque step
+
+        EditionCritereFeuAcierCO(myBeam, NbSteps)
+
+    End Sub
+
+    Private Sub EditionCritereFeuAcierCO(myBeam As cls_Poutre, NbSteps As Integer)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   18/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition du tableau des critères en fonction de la température
+        '   Pour les poutres acier calculés avec la méthode du creux d'ondes
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   NbSteps     [E] :   Nombre de durées d'exposition dans le tableau des températures
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+        Dim iStep As Integer
+        Dim lBuckling As Boolean = IsGreater(myBeam.VerifFeuAcier.ElancementW, myBeam.VerifFeuAcier.ElancementWMax)
+        Dim NbReq As Integer = NbSteps * 1 + 2
+
+        '--( Entete du tableau
+
+        If NbReq + nbLignes > MAXLIGNEPPAG Then SautePage()
+
+        AddLigneNDC("\T10\U" & BlocFEU("CRITERIA") & "\u")
+        SauteLigne()
+        EnteteTableauVerifFeuAcierCO(NCOL, LargCol, lBuckling)
+
+        '--( Remplissage tableau
+
+        For iStep = 0 To NbSteps - 1
+            LigneTableauVerifFeuAcierCO(iStep, myBeam.VerifFeuAcier, NCOL, LargCol, lBuckling)
+        Next
+
+        '--( Fin
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub EnteteTableauVerifFeuAcierCO(ByRef NCOL As Integer, ByRef LargCol() As Single, lBuckling As Boolean)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres acier avec méthode CO
+        '   Entête du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   NCOL        [S] :   Nombre de colonnes dans le tableau
+        '   LargCol     [S] :   Largeur des colonnes du tab
+        '   lbuckling   [E] :   Indique si voilement par cisaillement
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Initialisation
+
+        NCOL = 4
+        If lBuckling Then NCOL += 1
+
+        ReDim LargCol(2)
+
+        LargCol(0) = 15
+        LargCol(1) = 8
+
+        Const POS As Integer = 10
+
+        '--( AffichageOptFeu de l'entête
+
+        AddLigneNDC("\TABLEAU " & CStr(POS), False)
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
+
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        If lBuckling Then
+            AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-Vb\=")
+        End If
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LT\=")
+
+    End Sub
+
+    Private Sub LigneTableauVerifFeuAcierCO(iStep As Integer, myVerifFeu As cls_VerifFeuAcier, NCOL As Integer, LargCol() As Single, lBuckling As Boolean)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres acier, calculées en méthode du creux d'ondes
+        '   Ligne du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   iStep       [E] :   Indice du pas de temps
+        '   myVerifFeu  [E] :   Critères
+        '   NCOL        [E] :   Nombre de colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tab
+        '   lbuckling   [E] :   Indique si voilement par cisaillement
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+
+        '--( AffichageOptFeu
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
+
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre,
+                   GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre,
+                   GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
+        If lBuckling Then
+            AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre,
+                       GetStringInUnitN(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
+        End If
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre,
+                   GetStringInUnitN(myVerifFeu.CritereLTB(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
+
+    End Sub
+
+    Private Sub EditionTemperatureFeuAcierCO(myBeam As cls_Poutre, NbSteps As Integer)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   18/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres acier avec méthode CO
+        '   Tableau des températures dans les différentes parties
+        '   1 seul tableau avec toutes les températures
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   lBoard      [E] :   Indique si protection par panneaux
+        '   NbSteps     [E] :   Nombre de durées d'exposition dans le tableau des températures
+        '   lAcierSeul  [E] :   Indique si le tableau ne concerne que les parties en acier
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+        Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
+        Dim NbReq As Integer = (cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1) * 2
+
+        '--( Gestion titre et saut de page
+
+        AddLigneNDC("\T10\U" & BlocFEU("TEMPSTEEL") & "\u")
+
+        SauteLigne()
+        NbReq += 3
+
+        If NbReq + nbLignes > MAXLIGNEPPAG Then SautePage()
+
+        '--( AffichageOptFeu tableau
+
+        EnteteTableauTempVerifFeuAcierCO(NCOL, LargCol)
+        For iStep = 0 To NbSteps - 1
+            LigneTableauTempVerifFeuAcierCO(iStep, myBeam.VerifFeuAcier, NCOL, LargCol)
+        Next
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub LigneTableauTempVerifFeuAcierCO(iStep As Integer, myVerifFeu As cls_VerifFeuAcier,
+                                                NCOL As Integer, LargCol() As Single)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   07/05/26 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Ligne du tableau des températures dans l'acier, calcul CO
+        '-----------------------------------------------------------------------------------------------------------------
+        '   iStep       [E] :   Indice du pas de temps
+        '   myVerifFeu  [E] :   Critères
+        '   NCOL        [E] :   Nombre de colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tab
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim BordT As Integer = Bordures.Tous
+        Dim BordG As Integer = Bordures.Tous - Bordures.Droite
+        Dim BordD As Integer = Bordures.Tous - Bordures.Gauche
+        Dim BordC As Integer = Bordures.Tous - Bordures.Gauche - Bordures.Droite
+
+        Dim EN_Feu As New cls_EurocodesFeu
+
+        Const nbSignK As Integer = 4
+        Const nbDigitK As Integer = 3
+
+        '--( Ligne
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        AddCellule(LargCol(0), BordT, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
+
+        AddCellule(LargCol(1), BordG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+        AddCellule(LargCol(1), BordD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
+
+        AddCellule(LargCol(1), BordG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFiStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+        AddCellule(LargCol(1), BordD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFiStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
+        AddCellule(LargCol(1), BordG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempWStep(iStep), Enu_TypeVariable.Temperature, 3, 2, OUI, False))
+        AddCellule(LargCol(1), BordC, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
+        AddCellule(LargCol(1), BordD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, nbSignK, nbDigitK, NON, False))
+
+    End Sub
+
+
+    Private Sub EnteteTableauTempVerifFeuAcierCO(ByRef NCOL As Integer, ByRef LargCol() As Single)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Entête du tableau des températures dans dans un profilé acier calculé au feu selon la méthode du creux d'ondes
+        '-----------------------------------------------------------------------------------------------------------------
+        '   NCOL        [S] :   Nombre de colonnes dans le tableau
+        '   LargCol     [S] :   Largeur des colonnes du tab
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim BordSup As Integer = Bordures.Tous - Bordures.Bas
+        Dim BordSupG As Integer = Bordures.Tous - Bordures.Bas - Bordures.Droite
+        Dim BordSupD As Integer = Bordures.Tous - Bordures.Bas - Bordures.Gauche
+
+        Dim Bordinf As Integer = Bordures.Tous - Bordures.Haut
+        Dim BordinfG As Integer = Bordures.Tous - Bordures.Haut - Bordures.Droite
+        Dim BordinfD As Integer = Bordures.Tous - Bordures.Haut - Bordures.Gauche
+
+        Dim BBGauche As Integer = Bordures.Tous - Bordures.Droite
+        Dim BBDroite As Integer = Bordures.Tous - Bordures.Gauche
+
+        '--( Initialisation
+
+        NCOL = 8
+
+        ReDim LargCol(1)
+
+        LargCol(0) = 10
+        LargCol(1) = 7
+
+        Const POS As Integer = 10
+
+        '--( AffichageOptFeu de l'entête
+
+        AddLigneNDC("\TABLEAU " & CStr(POS), False)
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), BordSup, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-fs\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-fi\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-w\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-E,\Sq\s\=")
+
+    End Sub
+
+
+    Private Sub EditionVerificationsFEUDetailAcierNormal(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
         '   19/04/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
         '   Edition de la vérification détaillée des calculs au feu
-        '   Pour les poutres acier
+        '   Pour les poutres acier sans méthode du creux d'ondes
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
         '-----------------------------------------------------------------------------------------------------------------
@@ -13177,7 +13520,7 @@ Module Mod_NoteCalcul
 
         '--( Initialisation
 
-        NbSteps = NombreTimeStepsIncendie(EN_Feu.MethodeCreuxOnde(myBeam))
+        NbSteps = NombreTimeStepsIncendie(True, EN_Feu.MethodeCreuxOnde(myBeam))
 
         '--( Titre
 
@@ -13882,7 +14225,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Function NombreTimeStepsIncendie(lMethCreuxOndes As Boolean) As Integer
+    Private Function NombreTimeStepsIncendie(lMixte As Boolean, lMethCreuxOndes As Boolean) As Integer
         '-----------------------------------------------------------------------------------------------------------------
         '   16/03/25 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------       
@@ -13893,10 +14236,18 @@ Module Mod_NoteCalcul
 
         Dim NbStepsCalcul As Integer
 
-        If lMethCreuxOndes Then
-            NbStepsCalcul = Array.IndexOf(cls_VerifFeuMixte.TimeSteps, CDec(120), 0) + 1
+        If lMixte Then
+            If lMethCreuxOndes Then
+                NbStepsCalcul = Array.IndexOf(cls_VerifFeuMixte.TimeSteps, CDec(120), 0) + 1
+            Else
+                NbStepsCalcul = cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1
+            End If
         Else
-            NbStepsCalcul = cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1
+            If lMethCreuxOndes Then
+                NbStepsCalcul = Array.IndexOf(cls_VerifFeuAcier.TimeSteps, CDec(120), 0) + 1
+            Else
+                NbStepsCalcul = cls_VerifFeuAcier.TimeSteps.GetUpperBound(0) + 1
+            End If
         End If
 
         Return NbStepsCalcul

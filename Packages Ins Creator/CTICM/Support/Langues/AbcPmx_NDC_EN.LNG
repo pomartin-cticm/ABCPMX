@@ -112,6 +112,8 @@ CONTINUOUS_RIB			= Continuous concrete rib
 CONTINU_PSS				= Concrete rib and steel sheeting continuous
 CONTROLCRACKW			= Control of concrete cracking
 CRACKWIDTH				= Limit of crack width.
+PRECAMBER				= Pre-camber
+PRECAMBERDIM			= Value of the pre-camber
 CSTYPE					= Type of beam
 CUT_DECK				= Cut deck
 DATABASE				= Database
@@ -668,13 +670,15 @@ SIGMAMAX				= Maximum tension stress in rebars
 DELTASIGMA				= Including effect of concrete tension stiffening
 COMBIREBAR				= For combination 
 FREQG					= Eigen frequency for the combination 
+WITHPRECAMBER			= Values including the precamber
 
 #NDC_VERIFICATIONSFIRE
 FIRE_CHECKS				= Ultimate limit states in fire situation
 FIRE_CHECKS_SYMMARY		= Summary of results
 FIRE_CHECKS_DETAIL		= Detailed results
 FIRE_CHECKS_PARAM		= Design parameters
-FIRE_CHECKS_CURVES		= Fire design curves
+FIRE_CHECKS_CURVES		= Heating curves
+FIRE_CHARTSHEATING		= Heating of sections
 TIMERESISTANCE			= Fire Resistance
 TIMESTEP				= Fire duration
 TEMPSTEEL				= Temperatures in the steel profile
@@ -737,6 +741,15 @@ TEMPSTEELLOWSLAB		= Lower fibre of the slab
 TEMPSTEELUPPSLAB		= Upper fibre of the slab
 RESTRICTEDSTEPS			= Fire design restricted to $
 CONDITIONNOTMET			= At $, following condition of EN 1994-1-2, Table F.3 is not met
+HEATINGTEMP				= Heating at $ minutes
+HEATINGLEGEND			= Temperature in °C
+CONCRETE				= Concrete
+UPPERFLANGE				= Upper flange
+WEB						= Web
+LOWERFLANGE				= Lower flange
+STEELPLATE				= Steel plate
+WELDS					= Welds
+HOTGAZES				= Hot gazes
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations

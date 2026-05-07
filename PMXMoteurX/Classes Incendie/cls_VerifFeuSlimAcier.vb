@@ -164,12 +164,6 @@ Public Class cls_VerifFeuSlimAcier
         Dim TempAme(NbStep)() As Decimal '= Nothing
         Dim TempPlat(NbStep)() As Decimal '= Nothing
         Dim TempSoud(NbStep)() As Decimal '= Nothing
-        'Dim TempArma()() As Decimal = Nothing
-        'Dim TempSemSup()() As Decimal = Nothing
-        'Dim TempSemInf()() As Decimal = Nothing
-        'Dim TempAme()() As Decimal = Nothing
-        'Dim TempPlat()() As Decimal = Nothing
-        'Dim TempSoud()() As Decimal = Nothing
 
         Dim MplRd(,) As Decimal = Nothing
         Dim zANP(,) As Decimal = Nothing
@@ -189,15 +183,8 @@ Public Class cls_VerifFeuSlimAcier
             TempPlat(iStep) = New Decimal(1) {}
             TempSoud(iStep) = New Decimal(1) {}
         Next
-        'ReDim TempBeton(NbStep)(1)
-        'ReDim TempArma(NbStep)(1)
-        'ReDim TempSemSup(NbStep)(1)
-        'ReDim TempSemInf(NbStep)(1)
-        'ReDim TempAme(NbStep)(1)
-        'ReDim TempPlat(NbStep)(1)
-        'ReDim TempSoud(NbStep)(1)
 
-        '# Calcul échauffement de la section (numérique)
+        '# Calcul échauffement de la section (numérique) #########################################################################
         '--( Calcul de l'échauffement de la section
 
         If myBeam.lCalculOK Then
@@ -223,7 +210,7 @@ Public Class cls_VerifFeuSlimAcier
 
         End If
 
-        '# Valeurs enveloppes des températures
+        '# Valeurs enveloppes des températures ####################################################################################
 
         For iStep As Integer = 0 To NbStep - 1
             myBeam.VerifFeuSlimAcier.TemperatureStepMinMax(iStep, TempBeton(iStep), TempAme(iStep),
@@ -231,11 +218,11 @@ Public Class cls_VerifFeuSlimAcier
                                                                   TempPlat(iStep), TempSoud(iStep), TempArma(iStep))
         Next
 
-        '# Résistance à l'effort tranchant
+        '# Résistance à l'effort tranchant ########################################################################################
 
         CalculVbRdFeuSlimAcier(myBeam, VbRdFi)
 
-        '# Boucle sur les combinaisons de calcul pour vérifications
+        '# Boucle sur les combinaisons de calcul pour vérifications ###############################################################
 
         For iCombi = 0 To nbCombiELF - 1
 
@@ -247,17 +234,19 @@ Public Class cls_VerifFeuSlimAcier
 
             myBeam.CombiA_ELF.CombineEffortsT(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, VEd, False)
 
-            '# Recupération des efforts nodaux à partir des tranchants combinés
+            '## Recupération des efforts nodaux à partir des tranchants combinés
 
             myBeam.CombiA_ELF.RecupererEffortsNodauxPonderees(myBeam.Nodes, VEd, QEd, QSupEd)
 
-            '# Calcul des coefficients de réduction 
+            '## Calcul des coefficients de réduction pour l'influence de la flexion transversale
 
             CalculCoefficientsReduction(iCombi, myBeam, QEd, TempPlat, TempSemInf, PsiY_spd, PsiY_fi)
 
-            '# Moments resistants
+            '## Moments resistants, prenant en compte l'influence de la flexion transversale
 
             ProprietesFeuSlimAcier(iCombi, myBeam, True, MplRd, zANP, PsiY_fi, PsiY_spd)
+
+            '## Critères de résistance pour chaque Step
 
             For iSTep = 0 To Me.NbStep - 1
                 '# Vérification de la flexion transversale
@@ -275,7 +264,7 @@ Public Class cls_VerifFeuSlimAcier
 
         Next
 
-        '--( Recherche de la durée de résistance au feu
+        '# Recherche de la durée de résistance au feu ###########################################################################
 
         DureeResistanceAuFeu()
 
@@ -1049,12 +1038,12 @@ Public Class cls_VerifFeuSlimAcier
 
         Dim SolveurTh As New cls_EchauffementSlimFEM
 
-        Dim val_U As Double = myBeam.ParamFeu.TeneurU
+        Dim val_U As Double = Convert.ToDouble(myBeam.ParamFeu.TeneurU)
         Dim lNormal As Boolean = Not myBeam.Dalle.beton.lLeger
         Dim lANF As Boolean = myBeam.ParamFeu.lANFrance
         Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
         Dim lRhoCVar As Boolean = myBeam.ParamFeu.lRhoCvar
-        Dim RhoC As Double = myBeam.Dalle.beton.RhoC
+        Dim RhoC As Double = Convert.ToDouble(myBeam.Dalle.beton.RhoC)
 
         '--( Initialisation des variables
 
@@ -1077,6 +1066,14 @@ Public Class cls_VerifFeuSlimAcier
         '--( Initialisation des températures 
 
         Maillage.InitialiseTemp(myBeam.ParamFeu.TempRef)
+
+        '# GiB 02/12/2025 : définition de la matrice des températures à l'instant t en dehors de la procédure de calcul à chaque instant 
+        Dim local_Temp_0(0 To Maillage.ind_1 - Maillage.ind_2, 0 To Maillage.nb_cells_z - 1) As Double
+        Dim local_Expo(0 To Maillage.ind_1 - Maillage.ind_2, 0 To Maillage.nb_cells_z - 1) As Boolean
+        Dim local_NoExpo(0 To Maillage.ind_1 - Maillage.ind_2, 0 To Maillage.nb_cells_z - 1) As Boolean
+
+        '# GiB 20/04/2026 : remplissage des matrices des faces extérieures au feu
+        Maillage.Faces_exterieures(local_Expo, local_NoExpo, local_Temp_0)
 
         '--( Boucle sur TimeSteps
 
@@ -1106,9 +1103,13 @@ Public Class cls_VerifFeuSlimAcier
 
             Do While lCont
 
+                '# GiB 20/04/2026 : actualisation de la matrice local_Temp_0 à chaque pas de temps
+                SolveurTh.MAJ_Matrice_calcul(Maillage, local_Temp_0)
+
                 '# Boucle sur le temps jusqu'à obtenir la durée cible
 
-                DeltaT = IncrementTemps(TimeT, myBeam.lIntermediaire)
+                'DeltaT = IncrementTemps(TimeT, myBeam.lIntermediaire)
+                DeltaT = SolveurTh.Increment_Temps(TimeT)
                 TimeT += DeltaT
 
                 '# Température des gaz chauds
@@ -1119,7 +1120,8 @@ Public Class cls_VerifFeuSlimAcier
 
                 lTargetT = IsSmaller(TimeT, TimeTarget, 10 ^ (-4))
                 SolveurTh.Calcul_thermique_Poutre_plancher_mince(Maillage, myBeam.ParamFeu, TimeT, DeltaT, lTargetT, TempG,
-                                                                 val_U, lNormal, lANF, lGeneration1, RhoC, lRhoCVar)
+                                                                 val_U, lNormal, lANF, lGeneration1, RhoC, lRhoCVar,
+                                                                 local_Temp_0, local_Expo, local_NoExpo)
 
                 'On met à jour la progression dans l'étape en cours
                 If progressDansEtape IsNot Nothing Then
@@ -1127,6 +1129,7 @@ Public Class cls_VerifFeuSlimAcier
                     Dim progression As Integer = CInt(((TimeT - decalage) / (TimeTarget - decalage)) * 100)
                     progression = Math.Min(progression, 100)
                     progressDansEtape.Report(progression)
+
                 End If
 
                 lCont = lTargetT

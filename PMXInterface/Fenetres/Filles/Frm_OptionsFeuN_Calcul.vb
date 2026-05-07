@@ -11,7 +11,7 @@ Public Class Frm_OptionsFeuN_Calcul
 
 #Region "===OUVERTURE==="
 
-    Public Sub InitialiseFenetre(BlocL As Dictionary(Of String, String))
+    Public Sub InitialiseFenetre(BlocL As Dictionary(Of String, String), myBeam As cls_Poutre)
         lBuild = True
 
         GestionStyle()
@@ -19,12 +19,24 @@ Public Class Frm_OptionsFeuN_Calcul
         GestionUnites()
         PrepareFenetre()
         RemplirComboTempRebar()
+        PrepareFrm(myBeam)
 
         Me.pan_General.Dock = DockStyle.Fill
 
         AffichePoutreEnCours(Frm_OptionsFeuN.BeamLoc)
 
         lBuild = False
+    End Sub
+
+    Private Sub PrepareFrm(myBeam As cls_Poutre)
+
+        Dim lEnrob As Boolean = myBeam.lEnrobage
+        Dim lMixte As Boolean = myBeam.lMixte
+
+        Me.chk_CongeEnrobe.Visible = lEnrob
+
+        Me.pan_TempArma.Visible = lMixte
+
     End Sub
 
     Private Sub GestionStyle()

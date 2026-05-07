@@ -2,25 +2,25 @@
 
 #Region " Déclarations "
 
-    Const DIMDEF As Integer = 10000             ' Dimension initiale des tableaux de maillage
+	Const DIMDEF As Integer = 10000                     ' Dimension initiale des tableaux de maillage
 
-    Public Const BMAXDAL As Double = 0.4              ' Largeur limite de dalle pour prise en compte d'un effet 2D dans le calcul thermique (m)
+	Public Const BMAXDAL As Double = 0.4                ' Largeur limite de dalle pour prise en compte d'un effet 2D dans le calcul thermique (m)
 
-	Public Const MATVIDEFERME As Integer = -2          ' vide d'une cavite fermee (espace entre le mur et le profile metallique d'une poutre de rive)
-	Public Const MATVIDEOUVERT As Integer = -1         ' vide d'une cavite ouverte
-    Public Const MATACIERPLAT As Integer = 0           ' acier de construction du plat soudé
-    Public Const MATACIERSEMI As Integer = 1           ' acier de construction de la semelle inférieure
-    Public Const MATACIERAME As Integer = 2            ' acier de construction de l'ame
-    Public Const MATACIERSEMS As Integer = 3           ' acier de construction de la semelle supérieure
-    Public Const MATACIERSOUD As Integer = 4           ' acier de soudure du plat
-    Public Const MATARMA As Integer = 5                ' acier d'armature
-    Public Const MATBETON As Integer = 6               ' béton de la dalle
+	Public Const MATVIDEFERME As Integer = -2           ' vide d'une cavite fermee (espace entre le mur et le profile metallique d'une poutre de rive)
+	Public Const MATVIDEOUVERT As Integer = -1          ' vide d'une cavite ouverte
+	Public Const MATACIERPLAT As Integer = 0            ' acier de construction du plat soudé
+	Public Const MATACIERSEMI As Integer = 1            ' acier de construction de la semelle inférieure
+	Public Const MATACIERAME As Integer = 2             ' acier de construction de l'ame
+	Public Const MATACIERSEMS As Integer = 3            ' acier de construction de la semelle supérieure
+	Public Const MATACIERSOUD As Integer = 4            ' acier de soudure du plat
+	Public Const MATARMA As Integer = 5                 ' acier d'armature
+	Public Const MATBETON As Integer = 6                ' béton de la dalle
 
 #End Region
 
 #Region " Attributs "
 
-    Public nb_cells_y As Integer                ' nombre de mailles suivant l'axe fort
+	Public nb_cells_y As Integer                ' nombre de mailles suivant l'axe fort
     Public nb_cells_z As Integer                ' nombre de mailles suivant l'axe faible
     Public Tab_mesh_y() As Double               ' densité du maillage (taille de la maille (i,j)) suivant l'axe y       (m)
     Public Tab_mesh_z() As Double               ' densité du maillage (taille de la maille (i,j)) suivant l'axe z       (m)
@@ -68,7 +68,6 @@
 
 		'--( Déclaration des variables
 
-		Dim i_ As Integer, j_ As Integer, k_ As Integer, l_ As Integer
 		Dim i_mat As Integer
 		Dim n_dec As Integer, n_dec_y As Integer, n_dec_z As Integer            ' nombre de plans de coupe du maillage
 		Dim val_bs_eq As Double                                                 ' côté des barres d'armature conduisant à une aire équivalente
@@ -163,7 +162,6 @@
 		k_dens_y = 1.1                                        ' coefficient d'amplification de la densité d'un mailalge progressif
 
 		'====== TRAITEMENT PROFILE METALLIQUE ======
-		'==== with myProfil
 
 		'**( Traitement du Plat soudé eventuel
 		If Not lSAB Then   'SFB ou IFB
@@ -242,8 +240,6 @@
 		'**( Soudures du plat inférieur : SFB ou IFB-A
 
 		val_bw = 0.0
-		'GiB 18/11/2025 : correction
-		'If (Not lIFB_A) Then
 		If lSFB OrElse lIFB_A Then
 
 			If lSFB Then
@@ -294,6 +290,7 @@
 
 		End If
 
+
 		y_min = Math.Max(y_min, y_0)
 		y_max = Math.Min(y_max, y_0 + bEffG + bEffD)
 
@@ -309,13 +306,10 @@
 		'====== FIN TRAITEMENT PROFILE METALLIQUE ======
 		'====== TRAITEMENT DALLE =======================
 
-		''With My_slab
-
 		'**( Barres d'armature
 
 		val_bs_eq = 0.0
 
-		'If .ns > val_ZERO Then
 		If (myDalle.ArmaSlimFeu.lBarre And (myDalle.ArmaSlimFeu.NbBarres > 0)) Then
 
 			Dim PhiS As Decimal = myDalle.ArmaSlimFeu.Diametre
@@ -338,8 +332,6 @@
 
 			If (myDalle.ArmaSlimFeu.NbBarres = 2) Then
 
-				'GiB 18/11/2025 : correction
-				'If Not ((Not lInter) AndAlso myDalle.lRiveRemplie) Then   ' hors poutre de rive avec espace non rempli entre le mur et le profile metallique
 				If Not ((Not lInter) AndAlso (Not myDalle.lRiveRemplie)) Then
 
 					ys_1 = yw_1 - UwY - UcY - 0.5 * val_bs_eq
@@ -363,8 +355,6 @@
 
 			Else
 
-				'GiB 18/11/2025 : correction
-				'If Not ((Not lInter) AndAlso myDalle.lRiveRemplie) Then   ' hors poutre de rive avec espace non rempli entre le mur et le profile metallique
 				If Not ((Not lInter) AndAlso (Not myDalle.lRiveRemplie)) Then
 					ys_1 = yw_1 - UwY - 0.5 * val_bs_eq
 					ys_2 = ys_1 + val_bs_eq
@@ -385,7 +375,6 @@
 		yv_4 = y_0 + bEffG + bEffD
 		zv_3 = z_0
 
-		'If My_steel_beam.shape <= 1 Then        ' SFB, IFB-A ou SAB
 		If (lSFB Or lIFB_A) Then        ' SFB, IFB-A ou SAB
 			yv_2 = yp_1
 			yv_3 = yp_2
@@ -396,11 +385,8 @@
 			zv_2 = zfi_2
 		End If
 
-		'If My_slab.shape = 1 Then   'prédalle
 		If lPredalle Then               ' prédalle
-			'zv_2 += +My_slab.hpc
 			zv_2 += +myDalle.preDalle_ep
-			'ElseIf My_slab.shape = 2 Then   'dalle mixte
 		ElseIf lDalMixte Then   'dalle mixte
 			zv_2 += +myDalle.Bac.Hp
 		ElseIf lPlancherPrefa Then   'GiB 18/11/2025 : dalle prefabriquee
@@ -441,123 +427,15 @@
 		Tab_dec(17) = ys_1 : Tab_dec(18) = ys_2 : Tab_dec(19) = ys_3 : Tab_dec(20) = ys_4
 		Tab_dec(21) = ys_5 : Tab_dec(22) = ys_6 : Tab_dec(23) = ys_7 : Tab_dec(24) = ys_8
 		n_dec = 24
-
-		'GiB 19/11/2025 : ajout de decoupes aux bornes de l'intervalle de calcul thermique
-		If IsGreater(bEffG, delta_y) Then
-			n_dec += 1
-			Tab_dec(n_dec) = 0.5 * (yw_1 + yw_2) - delta_y
-		End If
-		If IsGreater(bEffD, delta_y) Then
-			n_dec += 1
-			Tab_dec(n_dec) = 0.5 * (yw_1 + yw_2) + delta_y
-		End If
-
-		n_dec_y = 0
-		For i_ = 0 To n_dec
-			If i_ = 0 Then
-				Tab_y(i_) = Tab_dec(i_)
-				n_dec_y += 1
-			Else
-				k_ = 0
-				For j_ = 0 To n_dec_y - 1
-					If Tab_y(j_) = Tab_dec(i_) Then
-						k_ += 1
-						Exit For
-					End If
-				Next
-				If k_ = 0 Then
-					Tab_y(n_dec_y) = Tab_dec(i_)
-					n_dec_y += 1
-				End If
-			End If
-		Next
+		Decoupes_bornes_y(bEffG, bEffD, delta_y, yw_1, yw_2, n_dec, Tab_dec)
+		Finalisation_Decoupes(n_dec, n_dec_y, Tab_dec, Tab_y)
 
 		'Tri par ordre croissant
 		ReDim Preserve Tab_y(0 To n_dec_y - 1)
 		Array.Sort(Tab_y)
 
 		'--(DENSITE DU MAILLAGE SUIVANT L'AXE FORT
-		'With My_mesh
-
-		Me.nb_cells_y = 0
-		j_ = 0
-		l_ = -1
-
-		For i_ = 1 To n_dec_y - 1
-
-			'GiB 19/11/2025 : ajout d'une zone à maillage progressif
-			If IsSmallerOrEqual(Tab_y(i_), 0.5 * (yw_1 + yw_2) - delta_y) Then  'une seule maille à gauche de la borne inférieure de l'intervalle de calcul thermique
-
-				l_ += 1
-				j_ = 1
-				Me.Tab_mesh_y(l_) = Tab_y(i_) - Tab_y(i_ - 1)
-
-			ElseIf IsSmallerOrEqual(Tab_y(i_), y_a_min) Then    'maillage progressif dans l'intervalle de calcul thermique, à gauche de la zone englobant la partie en acier
-
-				j_ = Math.Max(1, Nombre_mailles_maillage_progressif(Tab_y(i_) - Tab_y(i_ - 1), val_size, k_dens_y))
-				val_dens_y = Densite_maillage_progressif(Tab_y(i_) - Tab_y(i_ - 1), val_size, k_dens_y, j_)
-				If j_ = 1 Then
-					l_ += 1
-					Me.Tab_mesh_y(l_) = Tab_y(i_) - Tab_y(i_ - 1)
-				Else
-					For k_ = 1 To j_ - 1
-						l_ += 1
-						Me.Tab_mesh_y(l_ + j_ - 2 * k_ + 1) = val_dens_y * (k_dens_y ^ (k_ - 1))
-					Next
-
-					l_ += 1
-					Me.Tab_mesh_y(l_ - j_ + 1) = Tab_y(i_) - Tab_y(i_ - 1)
-					For k_ = 1 To j_ - 1
-						Me.Tab_mesh_y(l_ - j_ + 1) -= Me.Tab_mesh_y(l_ - j_ + 1 + k_)
-					Next
-
-				End If
-
-			ElseIf IsSmallerOrEqual(Tab_y(i_), y_a_max) Then    'maillage constant dans la zone englobant la partie en acier
-
-				j_ = Math.Max(1, CInt((Tab_y(i_) - Tab_y(i_ - 1)) / val_size))
-
-				'If Math.Abs(Tab_y(i_ - 1) - yw_1) <= val_ZERO AndAlso Math.Abs(Tab_y(i_) - yw_2) <= val_ZERO AndAlso j_ = 1 Then
-				If IsSmallerOrEqual(Math.Abs(Tab_y(i_ - 1) - yw_1), 0) AndAlso IsSmallerOrEqual(Math.Abs(Tab_y(i_) - yw_2), 0) AndAlso (j_ = 1) Then    '2 mailles sur l'épaisseur de l'âme
-					j_ = 2
-				End If
-
-				For k_ = 1 To j_
-					l_ += 1
-					Me.Tab_mesh_y(l_) = (Tab_y(i_) - Tab_y(i_ - 1)) / j_
-				Next
-
-			ElseIf IsSmallerOrEqual(Tab_y(i_), 0.5 * (yw_1 + yw_2) + delta_y) Then         'maillage progressif dans l'intervalle de calcul thermique, à droite de la zone englobant la partie en acier
-
-				j_ = Math.Max(1, Nombre_mailles_maillage_progressif(Tab_y(i_) - Tab_y(i_ - 1), val_size, k_dens_y))
-				val_dens_y = Densite_maillage_progressif(Tab_y(i_) - Tab_y(i_ - 1), val_size, k_dens_y, j_)
-				If j_ = 1 Then
-					l_ += 1
-					Me.Tab_mesh_y(l_) = Tab_y(i_) - Tab_y(i_ - 1)
-				Else
-					For k_ = 1 To j_ - 1
-						l_ += 1
-						Me.Tab_mesh_y(l_) = val_dens_y * (k_dens_y ^ (k_ - 1))
-					Next
-					l_ += 1
-					Me.Tab_mesh_y(l_) = Tab_y(i_) - Tab_y(i_ - 1)
-					For k_ = 1 To j_ - 1
-						Me.Tab_mesh_y(l_) -= Me.Tab_mesh_y(l_ - k_)
-					Next
-
-				End If
-
-			Else  'une seule maille à gauche de la borne supérieure de l'intervalle de calcul thermique
-
-				l_ += 1
-				j_ = 1
-				Me.Tab_mesh_y(l_) = Tab_y(i_) - Tab_y(i_ - 1)
-
-			End If
-
-			Me.nb_cells_y += j_
-
-		Next
+		Maillage_progressif_y(n_dec_y, yw_1, yw_2, y_a_min, y_a_max, delta_y, k_dens_y, val_dens_y, val_size, Tab_y)
 
 		'-- Ajustement de la taille des tableaux
 
@@ -569,61 +447,9 @@
 		' En dehors de cet intervalle, le gradient de température sur l'épaisseur de la dalle peut être considéré comme identique 
 		'-------------------------------------------------------------------------------------------------------------------------------
 
-		Me.ind_0 = Me.Tab_mesh_y.GetLowerBound(0)
-		Me.ind_1 = Me.Tab_mesh_y.GetUpperBound(0)
-
-		'Borne inférieure
-		y_min = Math.Min(y_min, 0.5 * (yw_1 + yw_2) - delta_y)
-		If y_min > y_0 Then
-
-			Dim y_ As Single : y_ = y_0
-
-			For i_ = 0 To Me.nb_cells_y - 1
-				y_ += Me.Tab_mesh_y(i_)
-				'If y_ >= y_min AndAlso i_ > 0 Then
-				If IsGreaterOrEqual(y_, y_min) AndAlso IsGreater(i_, 0) Then
-					'GiB 20/11/2025 : modification
-					'Me.ind_0 = i_ - 1
-					Me.ind_0 = i_
-					Exit For
-				End If
-			Next
-
-		End If
-
-		'Borne inférieure à modifier pour une poutre intérieure dont la largeur de la dalle est supérieure à delta_y de chaque côté de l'âme
-		Me.ind_2 = Me.ind_0
-		If lInter AndAlso IsGreater(bEffG, delta_y) AndAlso IsGreater(bEffD, delta_y) Then
-			Dim y_ As Single : y_ = y_0
-
-			For i_ = 0 To Me.nb_cells_y - 1
-				y_ += Me.Tab_mesh_y(i_)
-				If IsGreaterOrEqual(y_, 0.5 * (yw_1 + yw_2)) AndAlso IsGreater(i_, 0) Then
-					Me.ind_2 = i_ + 1
-					Exit For
-				End If
-			Next
-		End If
-
-		'Borne supérieure
-		y_max = Math.Max(y_max, 0.5 * (yw_1 + yw_2) + delta_y)
-
-		If y_max < y_0 + bEffG + bEffD Then
-
-			Dim y_ As Single = y_0
-
-			For i_ = 0 To Me.nb_cells_y - 1
-				y_ += Me.Tab_mesh_y(i_)
-				'If y_ >= y_max + val_ZERO Then
-				If IsGreaterOrEqual(y_, y_max) Then
-					'GiB 20/11/2025 : modification
-					'Me.ind_1 = i_ - 1
-					Me.ind_1 = i_
-					Exit For
-				End If
-			Next
-
-		End If
+		Borne_inferieure_calcul(y_min, yw_1, yw_2, delta_y, y_0)
+		Borne_inferieure_modifiee_calcul(yw_1, yw_2, delta_y, y_0, lInter, bEffG, bEffD)
+		Borne_superieure_calcul(y_max, yw_1, yw_2, delta_y, y_0, bEffG, bEffD)
 
 		'--( CALCUL DES ORDONNEES DES PLANS DE COUPE PARALLELES A L'AXE FORT
 
@@ -639,7 +465,6 @@
 		Tab_dec(21) = zs_6 : Tab_dec(22) = zs_6 : Tab_dec(23) = zs_7 : Tab_dec(24) = zs_8
 		Tab_dec(25) = Tab_dec(0) + myDalle.Ep_td
 
-		'If My_steel_beam.shape <= 1 Then
 		If lSFB Or lIFB_A Then
 			Tab_dec(25) += myProfil.Plat_t
 		Else
@@ -647,25 +472,7 @@
 		End If
 
 		n_dec = 25
-		n_dec_z = 0
-		For i_ = 0 To n_dec
-			If i_ = 0 Then
-				Tab_z(i_) = Tab_dec(i_)
-				n_dec_z += 1
-			Else
-				k_ = 0
-				For j_ = 0 To n_dec_z - 1
-					If Tab_z(j_) = Tab_dec(i_) Then
-						k_ += 1
-						Exit For
-					End If
-				Next
-				If k_ = 0 Then
-					Tab_z(n_dec_z) = Tab_dec(i_)
-					n_dec_z += 1
-				End If
-			End If
-		Next
+		Finalisation_Decoupes(n_dec, n_dec_z, Tab_dec, Tab_z)
 
 		'--( Tri par ordre croissant
 		ReDim Preserve Tab_z(0 To n_dec_z - 1)
@@ -674,70 +481,12 @@
 		'--( DENSITE DU MAILLAGE SUIVANT L'AXE FAIBLE
 
 		k_dens_z = 1.1
-		Me.nb_cells_z = 0
-		l_ = -1
-		For i_ = 1 To n_dec_z - 1
-
-			'GiB 19/11/2025 : ajout d'une partie à densité progressive au-dessus du plat ou de la semelle supérieur(s)
-
-			If IsSmaller(i_, n_dec_z - 1) Then
-				'If prop_ep_acier Then
-				j_ = Math.Max(1, CInt((Tab_z(i_) - Tab_z(i_ - 1)) / val_size))
-				For k_ = 1 To j_
-					l_ += 1
-					Me.Tab_mesh_z(l_) = (Tab_z(i_) - Tab_z(i_ - 1)) / j_
-				Next
-			Else
-
-				j_ = Math.Max(1, Nombre_mailles_maillage_progressif(Tab_z(i_) - Tab_z(i_ - 1), val_size, k_dens_z))
-				val_dens_z = Densite_maillage_progressif(Tab_z(i_) - Tab_z(i_ - 1), val_size, k_dens_z, j_)
-
-				If j_ = 1 Then
-					l_ += 1
-					Me.Tab_mesh_z(l_) = Tab_z(i_) - Tab_z(i_ - 1)
-				Else
-					For k_ = 1 To j_ - 1
-						l_ += 1
-						Me.Tab_mesh_z(l_) = val_dens_z * (k_dens_z ^ (k_ - 1))
-					Next
-					l_ += 1
-					Me.Tab_mesh_z(l_) = Tab_z(i_) - Tab_z(i_ - 1)
-					For k_ = 1 To j_ - 1
-						Me.Tab_mesh_z(l_) -= Me.Tab_mesh_z(l_ - k_)
-					Next
-
-				End If
-
-			End If
-			Me.nb_cells_z += j_
-
-		Next
+		Maillage_progressif_z(n_dec_z, val_size, k_dens_z, val_dens_z, Tab_z)
 		ReDim Preserve Me.Tab_mesh_z(0 To Me.nb_cells_z - 1)
 
 		'--( CALCUL DES COORDONNEES DU CENTRE DE CHAQUE MAILLE
 
-		ReDim Me.Tab_mesh_cent_y(0 To Me.nb_cells_y - 1, 0 To Me.nb_cells_z - 1)
-		ReDim Me.Tab_mesh_cent_z(0 To Me.nb_cells_y - 1, 0 To Me.nb_cells_z - 1)
-
-		For i_ = 0 To Me.nb_cells_y - 1
-
-			For j_ = 0 To Me.nb_cells_z - 1
-
-				If i_ = 0 Then
-					Me.Tab_mesh_cent_y(i_, j_) = Tab_y(0) + 0.5 * Me.Tab_mesh_y(i_)
-				Else
-					Me.Tab_mesh_cent_y(i_, j_) = Me.Tab_mesh_cent_y(i_ - 1, j_) + 0.5 * (Me.Tab_mesh_y(i_ - 1) + Me.Tab_mesh_y(i_))
-				End If
-
-				If j_ = 0 Then
-					Me.Tab_mesh_cent_z(i_, j_) = Tab_z(0) + 0.5 * Me.Tab_mesh_z(j_)
-				Else
-					Me.Tab_mesh_cent_z(i_, j_) = Me.Tab_mesh_cent_z(i_, j_ - 1) + 0.5 * (Me.Tab_mesh_z(j_ - 1) + Me.Tab_mesh_z(j_))
-				End If
-
-			Next
-
-		Next
+		Coordonnees_centre_maille(Tab_y, Tab_z)
 
 		'--( ATTRIBUTION DES MATERIAUX
 
@@ -751,13 +500,7 @@
 		'Const MATARMA As Integer = 5                ' acier d'armature
 		'Const MATBETON As Integer = 6               ' béton de la dalle
 
-		ReDim Me.Tab_mesh_mat(0 To Me.nb_cells_y - 1, 0 To Me.nb_cells_z - 1)
-		'Par défaut : béton
-		For i_ = 0 To Me.nb_cells_y - 1
-			For j_ = 0 To Me.nb_cells_z - 1
-				Me.Tab_mesh_mat(i_, j_) = MATBETON
-			Next
-		Next
+		Initialisation_materiaux(MATBETON)
 
 		'Vides de part et d'autre du plat inférieur d'une SFB ou d'une IFB-A ou de la semelle inférieure d'une IFB-B ou d'une SAB
 		i_mat = MATVIDEOUVERT
@@ -780,8 +523,6 @@
 
 		'--( Vide d'une poutre de rive entre le mur et le profile metallique
 
-		'If (Not lInter) AndAlso myDalle.lRiveRemplie Then
-		'GiB 18/11/2025 : correction
 		If (Not lInter) AndAlso (Not myDalle.lRiveRemplie) Then
 
 			prop_encl_open = (lSFB AndAlso IsSmaller(y_0, yp_1 - val_bw)) _
@@ -876,10 +617,7 @@
 		If (myDalle.ArmaSlimFeu.lBarre And (myDalle.ArmaSlimFeu.NbBarres > 0)) Then
 
 			'GiB 19/11/2025 
-			'i_mat = 5
 			i_mat = MATARMA
-			'GiB 18/11/2025 : cohérence avec le reste du code
-			'If Math.Abs(ys_1 - ys_2) > 0.0001 Then
 			If IsGreater(Math.Abs(ys_1 - ys_2), 0) Then
 				Call Affectation_materiau_maillage(i_mat, y_0, ys_1, ys_2, z_0, zs_1, zs_2, Me.Tab_mesh_y, Me.Tab_mesh_z, Me.Tab_mesh_mat)
 			End If
@@ -894,141 +632,643 @@
 
 	End Sub
 
-	Private Sub Affectation_materiau_maillage(val_mat As Integer, val_y0 As Double, val_y1 As Double, val_y2 As Double,
-                                              val_z0 As Double, val_z1 As Double, val_z2 As Double,
-                                              Tab_1() As Double, Tab_2() As Double, ByRef Tab_3(,) As Integer)
-        '---------------------------------------------------------------------------------------------------------------------------------------
-        '   13/11/25 :  Création - GiB
-        '---------------------------------------------------------------------------------------------------------------------------------------
-        '   Affectation d'un numéro de matériau à une maille (i,j) en fonction des coordonnées de cette maille
-        '---------------------------------------------------------------------------------------------------------------------------------------
-        '   val_mat         [E] :   numéro de matériau à affecter (-2 à 6)
-        '   val_y0          [E] :   abscisse de l'origine du répère (i,j)
-        '   val_y1, val_y2  [E] :   abscisses minimale et maximale de la maille (i,j)
-        '   val_z0          [E] :   ordonnée de l'origine du répère (i,j)
-        '   val_z1, val_z2  [E] :   ordonnées minimale et maximale de la maille (i,j)
-        '   Tab_1, Tab_2    [E] :   tableaux de densité du maillage suivant les abscisses et les ordonnées
-        '   Tab_3           [E/S] : tableau de matériau du maillage suivant les abscisses et les ordonnées
-        '---------------------------------------------------------------------------------------------------------------------------------------
+	Public Sub Affectation_materiau_maillage(val_mat As Integer, val_y0 As Double, val_y1 As Double, val_y2 As Double,
+											  val_z0 As Double, val_z1 As Double, val_z2 As Double,
+											  Tab_1() As Double, Tab_2() As Double, ByRef Tab_3(,) As Integer)
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   13/11/25 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Affectation d'un numéro de matériau à une maille (i,j) en fonction des coordonnées de cette maille
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   val_mat         [E] :   numéro de matériau à affecter (-2 à 6)
+		'   val_y0          [E] :   abscisse de l'origine du répère (i,j)
+		'   val_y1, val_y2  [E] :   abscisses minimale et maximale de la maille (i,j)
+		'   val_z0          [E] :   ordonnée de l'origine du répère (i,j)
+		'   val_z1, val_z2  [E] :   ordonnées minimale et maximale de la maille (i,j)
+		'   Tab_1, Tab_2    [E] :   tableaux de densité du maillage suivant les abscisses et les ordonnées
+		'   Tab_3           [E/S] : tableau de matériau du maillage suivant les abscisses et les ordonnées
+		'---------------------------------------------------------------------------------------------------------------------------------------
 
-        '--( Déclaration
+		'--( Déclaration
+		Dim i_ As Integer, j_ As Integer
+		Dim val_y As Double, val_z As Double
 
-        Dim ii_ As Integer, jj_ As Integer
-        Dim val_y As Double, val_z As Double
+		'--( Initialisation
+		val_y = val_y0
 
-        '--( Traitement
+		'--( Traitement
+		For i_ = Tab_1.GetLowerBound(0) To Tab_1.GetUpperBound(0)
 
-        val_y = val_y0
+			val_y += Tab_1(i_)
 
-        For ii_ = Tab_1.GetLowerBound(0) To Tab_1.GetUpperBound(0)
+			If IsGreater(val_y, val_y1) AndAlso IsSmallerOrEqual(val_y, val_y2) Then
+				val_z = val_z0
 
-            val_y += Tab_1(ii_)
+				For j_ = Tab_2.GetLowerBound(0) To Tab_2.GetUpperBound(0)
+					val_z += Tab_2(j_)
+					If IsGreater(val_z, val_z1, 0.0001) AndAlso IsSmallerOrEqual(val_z, val_z2, 0.0001) Then
+						Tab_3(i_, j_) = val_mat
+					ElseIf IsGreaterOrEqual(val_z, val_z2) Then
+						Exit For
+					End If
+				Next
 
-            'If val_y >= val_y1 + 0.0001 AndAlso val_y <= val_y2 + 0.0001 Then
-            'If IsGreaterOrEqual(val_y, val_y1) AndAlso IsSmallerOrEqual(val_y, val_y2) Then
-            'GiB 17/11/2025 : correction
-            If IsGreater(val_y, val_y1) AndAlso IsSmallerOrEqual(val_y, val_y2) Then
-                val_z = val_z0
+			ElseIf IsGreaterOrEqual(val_y, val_y2) Then
 
-                For jj_ = Tab_2.GetLowerBound(0) To Tab_2.GetUpperBound(0)
-                    val_z += Tab_2(jj_)
-                    'If val_z >= val_z1 + 0.0001 AndAlso val_z <= val_z2 + 0.0001 Then
-                    'If IsGreaterOrEqual(val_z, val_z1) AndAlso IsSmallerOrEqual(val_z, val_z2) Then
-                    'GiB 17/11/2025 : correction
-                    If IsGreater(val_z, val_z1) AndAlso IsSmallerOrEqual(val_z, val_z2) Then
-                        Tab_3(ii_, jj_) = val_mat
-                        'ElseIf val_z >= val_z2 - val_ZERO Then
-                    ElseIf IsGreaterOrEqual(val_z, val_z2) Then
-                        Exit For
-                    End If
-                Next
+				Exit For
 
-            ElseIf IsGreaterOrEqual(val_y, val_y2) Then
+			End If
 
-                Exit For
+		Next
 
-            End If
+	End Sub
 
-        Next
+	Public Function Nombre_mailles_maillage_progressif(val_dist As Double, val_size_0 As Double, val_fact As Double) As Integer
 
-    End Sub
+		'--------------------------------------------------------------------------------------------------------------------------------
+		'   19/11/2025 :  Création - GiB
+		'--------------------------------------------------------------------------------------------------------------------------------
+		'   Calcul du nombre de mailles sur une distance en considérant un maillage 1D progressif
+		'--------------------------------------------------------------------------------------------------------------------------------
+		'   val_dist       [E] :   distance à mailler
+		'   val_size       [E] :   densité constante par défaut
+		'   val_fact       [E] :   coefficient d'amplification de la densité du maillage
+		'   val_nb         [S] :   nombre de mailles à taille progressive
+		'--------------------------------------------------------------------------------------------------------------------------------
 
-    Public Function Nombre_mailles_maillage_progressif(val_dist As Double, val_size_0 As Double, val_fact As Double) As Integer
+		'--( Déclarations
+		Dim val_t As Double
+		Dim val_nb As Integer
 
-        '--------------------------------------------------------------------------------------------------------------------------------
-        '   19/11/2025 :  Création - GiB
-        '--------------------------------------------------------------------------------------------------------------------------------
-        '   Calcul du nombre de mailles sur une distance en considérant un maillage 1D progressif
-        '--------------------------------------------------------------------------------------------------------------------------------
-        '   val_dist       [E] :   distance à mailler
-        '   val_size       [E] :   densité constante par défaut
-        '   val_fact       [E] :   coefficient d'amplification de la densité du maillage
-        '   val_nb         [S] :   nombre de mailles à taille progressive
-        '--------------------------------------------------------------------------------------------------------------------------------
+		'--( Initialisation
+		val_t = 0.0
+		val_nb = 0
 
-        '--( Déclarations
-        Dim val_t As Double
-        Dim val_nb As Integer
+		'--( Boucle
+		Do While val_t < val_dist
+			val_t += val_size_0 * (val_fact ^ val_nb)
+			val_nb += 1
+		Loop
 
-        '--( Initialisation
-        val_t = 0.0
-        val_nb = 0
+		Return val_nb
 
-        '--( Boucle
-        Do While val_t < val_dist
-            val_t += val_size_0 * (val_fact ^ val_nb)
-            val_nb += 1
-        Loop
+	End Function
 
-        Return val_nb
+	Public Function Densite_maillage_progressif(val_dist As Double, val_size_0 As Double, val_fact As Double, val_nb As Integer) As Double
 
-    End Function
+		'--------------------------------------------------------------------------------------------------------------------------------
+		'   19/11/2025 :  Création - GiB
+		'--------------------------------------------------------------------------------------------------------------------------------
+		'   Calcul de la taille initiale des mailles sur une distance en considérant un maillage 1D progressif
+		'--------------------------------------------------------------------------------------------------------------------------------
+		'   val_dist		[E] :   distance à mailler
+		'   val_size_0		[E] :   densité constante par défaut
+		'   val_fact		[E] :   coefficient d'amplification de la densité du maillage
+		'   val_nb			[E] :   nombre de mailles à taille progressive
+		'   val_dens		[S] :   densité initiale
+		'--------------------------------------------------------------------------------------------------------------------------------
 
-    Public Function Densite_maillage_progressif(val_dist As Double, val_size_0 As Double, val_fact As Double, val_nb As Integer) As Double
+		'--( Déclarations
+		Dim i_ As Integer
+		Dim val_t As Double
+		Dim val_dens As Double
 
-        '--------------------------------------------------------------------------------------------------------------------------------
-        '   19/11/2025 :  Création - GiB
-        '--------------------------------------------------------------------------------------------------------------------------------
-        '   Calcul de la taille initiale des mailles sur une distance en considérant un maillage 1D progressif
-        '--------------------------------------------------------------------------------------------------------------------------------
-        '   val_dist       [E] :   distance à mailler
-        '   val_size       [E] :   densité constante par défaut
-        '   val_fact       [E] :   coefficient d'amplification de la densité du maillage
-        '   val_nb         [E] :   nombre de mailles à taille progressive
-        '   val_dens       [S] :   densité initiale
-        '--------------------------------------------------------------------------------------------------------------------------------
+		'--( Initialisation
+		val_dens = val_size_0
 
-        '--( Déclarations
-        Dim val_t As Double
-        Dim val_dens As Double
+		'--( Boucle
+		Do
+			val_t = 0.0
+			For i_ = 1 To val_nb
+				val_t += val_dens * (val_fact ^ (i_ - 1))
+			Next
 
-        '--( Initialisation
-        val_dens = val_size_0
+			If IsGreater(val_t, val_dist) Then
+				val_dens -= 0.0001
+			Else
+				Exit Do
+			End If
+		Loop
 
-        '--( Boucle
-        Do
-            val_t = 0.0
-            For i_ As Integer = 1 To val_nb
-                val_t += val_dens * (val_fact ^ (i_ - 1))
-            Next
+		Return val_dens
 
-            If IsGreater(val_t, val_dist) Then
-                val_dens -= 0.0001
-            Else
-                Exit Do
-            End If
-        Loop
+	End Function
 
-        Return val_dens
+	Public Function Face_exposee(val_i As Integer, val_j As Integer, val_ind As Integer, mat_0 As Integer, My_temp(,) As Double, My_mat(,) As Integer) As Boolean
 
-    End Function
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   20/04/2026 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Vérification du caractère exposé d'au moins une face d'une maille
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   val_i       [E] :   1er indice de la maille 
+		'   val_j       [E] :   2e indice de la maille
+		'   val_ind     [E] :   indice de la maille finale de la matrice du maillge complet
+		'   mat_0       [E] :   numéro du matériau représentant les gaz chauds
+		'   My_temp     [E] :   matrice de température des mailles
+		'   My_mat      [E] :   marice des numéros de matériau des mailles
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Paramètre en sortie:
+		'   l_Expo       face exposée (True) ou à l'intérieur du maillage (False)
+		'---------------------------------------------------------------------------------------------------------------------------------------
 
+		Dim l_Expo As Boolean = False
+		If IsSmaller(val_j, My_temp.GetUpperBound(1)) AndAlso IsEqual(My_mat(val_i, val_j + 1), mat_0) Then
+			l_Expo = True
+		End If
+
+		If (Not l_Expo) AndAlso (IsEqual(val_j, My_temp.GetLowerBound(1)) OrElse IsEqual(My_mat(val_i, val_j - 1), mat_0)) Then
+			l_Expo = True
+		End If
+
+		If (Not l_Expo) AndAlso (IsGreater(val_i, My_temp.GetLowerBound(0) + val_ind) AndAlso IsEqual(My_mat(val_i - 1, val_j), mat_0)) Then
+			l_Expo = True
+		End If
+
+		If (Not l_Expo) AndAlso (IsSmaller(val_i, My_temp.GetUpperBound(0) + val_ind) AndAlso IsEqual(My_mat(val_i + 1, val_j), mat_0)) Then
+			l_Expo = True
+		End If
+
+		Return l_Expo
+
+	End Function
+
+	Public Function Face_non_exposee(val_j As Integer, My_temp(,) As Double) As Boolean
+
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   20/04/2026 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Vérification du caractère non exposé d'une face d'une maille
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   val_j       [E] :   2e indice de la maille
+		'   My_temp     [E] :   matrice de température des mailles
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Paramètre en sortie:
+		'   l_NoEx       face non exposée (True) ou à l'intérieur du maillage (False)
+		'---------------------------------------------------------------------------------------------------------------------------------------
+
+		Dim l_NoEx As Boolean = False
+		If IsEqual(val_j, My_temp.GetUpperBound(1)) Then
+			l_NoEx = True
+		End If
+
+		Return l_NoEx
+
+	End Function
+
+	Public Sub Faces_exterieures(ByRef My_expo(,) As Boolean, ByRef My_noexpo(,) As Boolean, ByVal My_temp(,) As Double)
+
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   20/04/2026 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Remplissage de la matrice de face extérieure de maille
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   My_expo		[E] :   matrice de faces exposées
+		'   My_noexpo	[E] :   matrice de faces non exposées
+		'   My_temp		[E] :   matrice de température des mailles
+		'------------------------------------------------------------------------------------------
+
+		Dim i_ As Integer, i_y As Integer, j_ As Integer, j_ind As Integer
+
+		For i_ = Me.ind_2 To Me.ind_1
+			i_y = i_ - Me.ind_2
+			For j_ind = 0 To Me.nb_cells_z - 1
+				My_expo(i_y, j_ind) = Me.Face_exposee(i_, j_, Me.ind_2, Me.MATVIDEOUVERT, My_temp, Me.Tab_mesh_mat)
+				My_noexpo(i_y, j_ind) = Me.Face_non_exposee(j_, My_temp)
+			Next
+		Next
+	End Sub
+
+	Public Sub Decoupes_bornes_y(bEffG As Double, bEffD As Double, delta_y As Double, yw_1 As Double, yw_2 As Double, ByRef n_dec As Integer, ByRef Tab_dec() As Double)
+
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   21/04/2026 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Découpes aux bornes de l'intervalle de calcul thermique
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   beffG		[E] :   largeur de la dalle à gauche de l'axe faible (m)
+		'   My_noexpo	[E] :   largeur de la dalle à droite de l'axe faible (m)
+		'   delta_y		[E] :   largeur de la zone calculée dans l'analyse de transfert thermique à droite de l'axe faible (m)
+		'   yw_1		[E] :   abscisse initiale de la première soudure (m)
+		'   yw_2		[E] :   abscisse finale de la première soudure (m)
+		'   n_dec		[S] :   nombre de découpes
+		'   Tab_dec		[S] :   abscisse des découpes (m)
+		'   
+		'------------------------------------------------------------------------------------------
+
+		If IsGreater(bEffG, delta_y) Then
+			n_dec += 1
+			Tab_dec(n_dec) = 0.5 * (yw_1 + yw_2) - delta_y
+		End If
+		If IsGreater(bEffD, delta_y) Then
+			n_dec += 1
+			Tab_dec(n_dec) = 0.5 * (yw_1 + yw_2) + delta_y
+		End If
+
+	End Sub
+
+	Public Sub Finalisation_Decoupes(ByVal n_dec As Integer, ByRef n_dec_yz As Integer, ByVal Tab_dec() As Double, ByRef Tab_yz() As Double)
+
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   21/04/2026 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Finalisation des découpes de la section transversale suivant l'un ou l'autre des axes
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   n_dec		[E] :   nombre de découpes initiales
+		'   n_dec_yz	[E] :   nombre de découpes finales
+		'   Tab_dec		[E] :   abscisse ou ordonnée des découpes initiales (m)
+		'   Tab_yz		[E] :   abscisse ou ordonnée  des découpes finales (m)
+		'------------------------------------------------------------------------------------------
+
+		'--( Declaration
+		Dim i_ As Integer, j_ As Integer, k_ As Integer
+
+		'--( Initialisation
+		n_dec_yz = 0
+
+		'--( Traitement
+		For i_ = 0 To n_dec
+
+			If i_ = 0 Then
+				Tab_yz(i_) = Tab_dec(i_)
+				n_dec_yz += 1
+			Else
+				k_ = 0
+				For j_ = 0 To n_dec_yz - 1
+					'GiB 21/04/2025 : correction pour éviter des doublons de coordonnées
+					'If Tab_z(j_) = Tab_dec(i_) Then
+					If IsEqual(Tab_yz(j_), Tab_dec(i_), 0.0001) Then
+						k_ += 1
+						Exit For
+					End If
+				Next
+				If k_ = 0 Then
+					Tab_yz(n_dec_yz) = Tab_dec(i_)
+					n_dec_yz += 1
+				End If
+			End If
+
+		Next
+
+	End Sub
+
+	Public Sub Maillage_progressif_y(n_dec_y As Integer, yw_1 As Double, yw_2 As Double, y_a_min As Double, y_a_max As Double,
+									delta_y As Double, k_dens_y As Double, val_dens_y As Double, val_size As Double, Tab_y() As Double)
+
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   21/04/2026 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Maillage progressif de la section transversale suivant l'axe fort
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   n_dec_y			[E] :   nombre de découpes
+		'   yw_1			[E] :   abscisse initiale de la première soudure (m)
+		'   yw_2			[E] :   abscisse finale de la première soudure (m)
+		'   y_a_min			[E] :   abscisse minimale des parois en acier (m)
+		'   y_a_max			[E] :   abscisse maximale des parois en acier (m)
+		'   delta_y			[E] :   largeur de la zone calculée dans l'analyse de transfert thermique à droite de l'axe faible (m)
+		'   k_dens_y		[E] :   coefficient d'amplification de la densité du maillage
+		'   val_dens_y		[E] :   densité initiale (m)
+		'   val_size		[E] :   densité du maillage (m)
+		'   Tab_y			[E] :   abscisses des découpes (m)
+		'   Tab_mesh_y		[S] :   matrice des abscisses des bords de maille (m)
+		'   nb_cells_y		[S] :   nombre de mailles
+		'------------------------------------------------------------------------------------------
+
+		'--( Declaration
+		Dim i_ As Integer, j_ As Integer, k_ As Integer, l_ As Integer
+
+		'--( Initialisation
+		l_ = -1
+		Me.nb_cells_y = 0
+
+		'--( Traitement
+		For i_ = 1 To n_dec_y - 1
+
+			If IsSmallerOrEqual(Tab_y(i_), 0.5 * (yw_1 + yw_2) - delta_y) Then  'une seule maille à gauche de la borne inférieure de l'intervalle de calcul thermique
+
+				l_ += 1
+				j_ = 1
+				Me.Tab_mesh_y(l_) = Tab_y(i_) - Tab_y(i_ - 1)
+
+			ElseIf IsSmallerOrEqual(Tab_y(i_), y_a_min) Then    'maillage progressif dans l'intervalle de calcul thermique, à gauche de la zone englobant la partie en acier
+
+				j_ = Math.Max(1, Nombre_mailles_maillage_progressif(Tab_y(i_) - Tab_y(i_ - 1), val_size, k_dens_y))
+				val_dens_y = Densite_maillage_progressif(Tab_y(i_) - Tab_y(i_ - 1), val_size, k_dens_y, j_)
+				If j_ = 1 Then
+					l_ += 1
+					Me.Tab_mesh_y(l_) = Tab_y(i_) - Tab_y(i_ - 1)
+				Else
+					For k_ = 1 To j_ - 1
+						l_ += 1
+						Me.Tab_mesh_y(l_ + j_ - 2 * k_ + 1) = val_dens_y * (k_dens_y ^ (k_ - 1))
+					Next
+
+					l_ += 1
+					Me.Tab_mesh_y(l_ - j_ + 1) = Tab_y(i_) - Tab_y(i_ - 1)
+					For k_ = 1 To j_ - 1
+						Me.Tab_mesh_y(l_ - j_ + 1) -= Me.Tab_mesh_y(l_ - j_ + 1 + k_)
+					Next
+
+				End If
+
+			ElseIf IsSmallerOrEqual(Tab_y(i_), y_a_max) Then    'maillage constant dans la zone englobant la partie en acier
+
+				j_ = Math.Max(1, CInt((Tab_y(i_) - Tab_y(i_ - 1)) / val_size))
+
+				If IsSmallerOrEqual(Math.Abs(Tab_y(i_ - 1) - yw_1), 0) AndAlso IsSmallerOrEqual(Math.Abs(Tab_y(i_) - yw_2), 0) AndAlso (j_ = 1) Then    '2 mailles sur l'épaisseur de l'âme
+					j_ = 2
+				End If
+
+				For k_ = 1 To j_
+					l_ += 1
+					Me.Tab_mesh_y(l_) = (Tab_y(i_) - Tab_y(i_ - 1)) / j_
+				Next
+
+			ElseIf IsSmallerOrEqual(Tab_y(i_), 0.5 * (yw_1 + yw_2) + delta_y) Then         'maillage progressif dans l'intervalle de calcul thermique, à droite de la zone englobant la partie en acier
+
+				j_ = Math.Max(1, Nombre_mailles_maillage_progressif(Tab_y(i_) - Tab_y(i_ - 1), val_size, k_dens_y))
+				val_dens_y = Densite_maillage_progressif(Tab_y(i_) - Tab_y(i_ - 1), val_size, k_dens_y, j_)
+				If j_ = 1 Then
+					l_ += 1
+					Me.Tab_mesh_y(l_) = Tab_y(i_) - Tab_y(i_ - 1)
+				Else
+					For k_ = 1 To j_ - 1
+						l_ += 1
+						Me.Tab_mesh_y(l_) = val_dens_y * (k_dens_y ^ (k_ - 1))
+					Next
+					l_ += 1
+					Me.Tab_mesh_y(l_) = Tab_y(i_) - Tab_y(i_ - 1)
+					For k_ = 1 To j_ - 1
+						Me.Tab_mesh_y(l_) -= Me.Tab_mesh_y(l_ - k_)
+					Next
+
+				End If
+
+			Else  'une seule maille à gauche de la borne supérieure de l'intervalle de calcul thermique
+
+				l_ += 1
+				j_ = 1
+				Me.Tab_mesh_y(l_) = Tab_y(i_) - Tab_y(i_ - 1)
+
+			End If
+
+			Me.nb_cells_y += j_
+
+		Next
+
+	End Sub
+
+	Public Sub Maillage_progressif_z(n_dec_z As Integer, val_size As Double, k_dens_z As Double, val_dens_z As Double, Tab_z() As Double)
+
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   21/04/2026 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Maillage progressif de la section transversale suivant l'axe faible
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   n_dec_z			[E] :   nombre de découpes
+		'   val_size		[E] :   densité du maillage (m)
+		'   k_dens_z		[E] :   coefficient d'amplification de la densité du maillage
+		'   val_dens_z		[E]	:	 densité initiale
+		'   Tab_z			[E] :   ordonnées des découpes (m)
+		'   Tab_mesh_z		[S] :   matrice des ordonnées des bords de maille (m)
+		'   nb_cells_z		[S] :   nombre de mailles
+		'------------------------------------------------------------------------------------------
+
+		'--( Declaration
+		Dim i_ As Integer, j_ As Integer, k_ As Integer, l_ As Integer
+
+		'--( Initialisation
+		l_ = -1
+		Me.nb_cells_z = 0
+
+		'--( Traitement
+		For i_ = 1 To n_dec_z - 1
+
+			If IsSmaller(i_, n_dec_z - 1) Then
+				j_ = Math.Max(1, CInt((Tab_z(i_) - Tab_z(i_ - 1)) / val_size))
+				For k_ = 1 To j_
+					l_ += 1
+					Me.Tab_mesh_z(l_) = (Tab_z(i_) - Tab_z(i_ - 1)) / j_
+				Next
+			Else
+
+				j_ = Math.Max(1, Nombre_mailles_maillage_progressif(Tab_z(i_) - Tab_z(i_ - 1), val_size, k_dens_z))
+				val_dens_z = Densite_maillage_progressif(Tab_z(i_) - Tab_z(i_ - 1), val_size, k_dens_z, j_)
+
+				If j_ = 1 Then
+					l_ += 1
+					Me.Tab_mesh_z(l_) = Tab_z(i_) - Tab_z(i_ - 1)
+				Else
+					For k_ = 1 To j_ - 1
+						l_ += 1
+						Me.Tab_mesh_z(l_) = val_dens_z * (k_dens_z ^ (k_ - 1))
+					Next
+					l_ += 1
+					Me.Tab_mesh_z(l_) = Tab_z(i_) - Tab_z(i_ - 1)
+					For k_ = 1 To j_ - 1
+						Me.Tab_mesh_z(l_) -= Me.Tab_mesh_z(l_ - k_)
+					Next
+
+				End If
+
+			End If
+			Me.nb_cells_z += j_
+
+		Next
+
+	End Sub
+
+	Public Sub Coordonnees_centre_maille(Tab_y() As Double, Tab_z() As Double)
+
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   21/04/2026 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Calcul des coordonnées du centre de chaque maille
+		'---------------------------------------------------------------------------------------------------------------------------------------
+
+		'   Tab_y			[E] :   ordonnées des découpes (m)
+		'   Tab_z			[E] :   ordonnées des découpes (m)
+		'------------------------------------------------------------------------------------------
+
+		'--( Declaration
+		Dim i_ As Integer, j_ As Integer
+
+		'--( Initialisation
+		ReDim Me.Tab_mesh_cent_y(0 To Me.nb_cells_y - 1, 0 To Me.nb_cells_z - 1)
+		ReDim Me.Tab_mesh_cent_z(0 To Me.nb_cells_y - 1, 0 To Me.nb_cells_z - 1)
+
+		'--( Traitement
+		For i_ = 0 To Me.nb_cells_y - 1
+
+			For j_ = 0 To Me.nb_cells_z - 1
+
+				If i_ = 0 Then
+					Me.Tab_mesh_cent_y(i_, j_) = Tab_y(0) + 0.5 * Me.Tab_mesh_y(i_)
+				Else
+					Me.Tab_mesh_cent_y(i_, j_) = Me.Tab_mesh_cent_y(i_ - 1, j_) + 0.5 * (Me.Tab_mesh_y(i_ - 1) + Me.Tab_mesh_y(i_))
+				End If
+
+				If j_ = 0 Then
+					Me.Tab_mesh_cent_z(i_, j_) = Tab_z(0) + 0.5 * Me.Tab_mesh_z(j_)
+				Else
+					Me.Tab_mesh_cent_z(i_, j_) = Me.Tab_mesh_cent_z(i_, j_ - 1) + 0.5 * (Me.Tab_mesh_z(j_ - 1) + Me.Tab_mesh_z(j_))
+				End If
+
+			Next
+
+		Next
+
+	End Sub
+
+	Public Sub Borne_inferieure_calcul(ByRef y_min As Double, yw_1 As Double, yw_2 As Double, delta_y As Double, y_0 As Double)
+
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   21/04/2026 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Indice de la maille de la borne inférieure de l'intervalle de calcul
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   y_min		[E] :   abscisse minimale du maillage (m)
+		'   yw_1		[E] :   abscisse initiale de la première soudure (m)
+		'   yw_2		[E] :   abscisse finale de la première soudure (m)
+		'   delta_y		[E] :   largeur de la zone calculée dans l'analyse de transfert thermique à droite de l'axe faible (m)
+		'   y_0			[S] :   abscisse minimale du maillage (m)
+		'   ind_0		[S] :   indice de la borne inférieure
+		'   
+		'------------------------------------------------------------------------------------------
+
+		'--( Declaration
+		Dim i_ As Integer
+
+		'--( Initialisation
+		Me.ind_0 = Me.Tab_mesh_y.GetLowerBound(0)
+
+		'--( Traitement
+		y_min = Math.Min(y_min, 0.5 * (yw_1 + yw_2) - delta_y)
+		If y_min > y_0 Then
+
+			Dim y_ As Single : y_ = y_0
+
+			For i_ = 0 To Me.nb_cells_y - 1
+				y_ += Me.Tab_mesh_y(i_)
+				If IsGreaterOrEqual(y_, y_min) AndAlso IsGreater(i_, 0) Then
+					Me.ind_0 = i_
+					Exit For
+				End If
+			Next
+
+		End If
+
+	End Sub
+
+	Public Sub Borne_inferieure_modifiee_calcul(yw_1 As Double, yw_2 As Double, delta_y As Double, y_0 As Double,
+											  lInter As Boolean, beffG As Double, beffD As Double)
+
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   21/04/2026 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Indice de la maille de la borne inférieure à modifier pour une poutre intérieure dont la largeur de la dalle est supérieure à delta_y de chaque côté de l'âme
+		'---------------------------------------------------------------------------------------------------------------------------------------
+
+		'   yw_1		[E] :   abscisse initiale de la première soudure (m)
+		'   yw_2		[E] :   abscisse finale de la première soudure (m)
+		'   delta_y		[E] :   largeur de la zone calculée dans l'analyse de transfert thermique à droite de l'axe faible (m)
+		'   y_0			[S] :   abscisse minimale du maillage (m)
+		'   lInter		[E] :   poutre intérieure si True
+		'   beffG		[E] :   largeur de dalle à gauche de l'axe faible (m)
+		'   beffD		[E] :   largeur de dalle à droite de l'axe faible (m)
+		'   ind_2		[S] :   indice de la borne inférieure
+		'   
+		'------------------------------------------------------------------------------------------
+
+		'--( Initialisation
+		Me.ind_2 = Me.ind_0
+
+		'--( Traitement
+		If lInter AndAlso IsGreater(beffG, delta_y) AndAlso IsGreater(beffD, delta_y) Then
+			Dim y_ As Single : y_ = y_0
+
+			For i_ As Integer = 0 To Me.nb_cells_y - 1
+				y_ += Me.Tab_mesh_y(i_)
+				If IsGreaterOrEqual(y_, 0.5 * (yw_1 + yw_2)) AndAlso IsGreater(i_, 0) Then
+					Me.ind_2 = i_ + 1
+					Exit For
+				End If
+			Next
+		End If
+
+	End Sub
+
+	Public Sub Borne_superieure_calcul(ByRef y_max As Double, yw_1 As Double, yw_2 As Double, delta_y As Double, y_0 As Double, beffG As Double, beffD As Double)
+
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   21/04/2026 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Indice de la maille de la borne inférieure de l'intervalle de calcul
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   y_max		[E] :   abscisse maximale du maillage (m)
+		'   yw_1		[E] :   abscisse initiale de la première soudure (m)
+		'   yw_2		[E] :   abscisse finale de la première soudure (m)
+		'   delta_y		[E] :   largeur de la zone calculée dans l'analyse de transfert thermique à droite de l'axe faible (m)
+		'   y_0			[S] :   abscisse minimale du maillage (m)
+		'   beffG		[E] :   largeur de dalle à gauche de l'axe faible (m)
+		'   beffD		[E] :   largeur de dalle à droite de l'axe faible (m)
+		'   ind_1		[S] :   indice de la borne inférieure
+		'   
+		'------------------------------------------------------------------------------------------
+
+		'--( Initialisation
+		Me.ind_1 = Me.Tab_mesh_y.GetUpperBound(0)
+
+		'--( Traitement
+		y_max = Math.Max(y_max, 0.5 * (yw_1 + yw_2) + delta_y)
+
+		If y_max < y_0 + beffG + beffD Then
+
+			Dim y_ As Single = y_0
+
+			For i_ As Integer = 0 To Me.nb_cells_y - 1
+				y_ += Me.Tab_mesh_y(i_)
+				If IsGreaterOrEqual(y_, y_max) Then
+					Me.ind_1 = i_
+					If IsGreater(y_, y_max, 0.0001) AndAlso IsSmaller(y_ - Me.Tab_mesh_y(i_), y_max, 0.0001) Then
+						Me.ind_1 -= 1
+					End If
+					Exit For
+				End If
+			Next
+
+		End If
+
+	End Sub
+
+	Public Sub Initialisation_materiaux(MATBETON As Integer)
+
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   21/04/2026 :  Création - GiB
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   Initialisation de la matrice matériaux
+		'---------------------------------------------------------------------------------------------------------------------------------------
+		'   MATBETON	[E] :   numéro du matériau "béton"
+		'   
+		'------------------------------------------------------------------------------------------
+
+		'--( Initialisation
+		ReDim Me.Tab_mesh_mat(0 To Me.nb_cells_y - 1, 0 To Me.nb_cells_z - 1)
+
+		'--( Traitement
+		For i_ As Integer = 0 To Me.nb_cells_y - 1
+			For j_ As Integer = 0 To Me.nb_cells_z - 1
+				Me.Tab_mesh_mat(i_, j_) = MATBETON
+			Next
+		Next
+
+	End Sub
 
 #End Region
 
 #Region " Initialisation du calcul Feu "
 
-    Public Sub InitialiseTemp(Temp0 As Double)
+	Public Sub InitialiseTemp(Temp0 As Double)
         '---------------------------------------------------------------------------------------------------------------------------------------
         '   14/11/25 :  Création - POM
         '---------------------------------------------------------------------------------------------------------------------------------------
@@ -1049,6 +1289,56 @@
 
 #End Region
 
+#Region "Incrément de temps de calcul"
+
+	Public Function IncrementTemps(TimeT As Decimal, lInter As Boolean) As Decimal
+		'---------------------------------------------------------------------------------------------------------
+		'   10/04/26 :  Création
+		'---------------------------------------------------------------------------------------------------------
+		'   Incrément de temps variable
+		'---------------------------------------------------------------------------------------------------------
+		'   TimeT       [E] :   Temps actuel
+		'   lInter      [E] :   Poutre intérmédiaire ou pas
+		'---------------------------------------------------------------------------------------------------------
+
+		'--( Declaration et initialisation
+		Dim DeltaT As Decimal = 0.2
+
+		If IsGreaterOrEqual(TimeT, 600.0) AndAlso IsSmaller(TimeT, 900.0) Then
+			DeltaT = 0.25
+		ElseIf IsGreaterOrEqual(TimeT, 900.0) Then
+			If lInter Then   'poutre intérieure
+				If IsSmaller(TimeT, 1200.0) Then
+					DeltaT = 0.3
+				ElseIf IsSmaller(TimeT, 1800.0) Then
+					DeltaT = 0.4
+				ElseIf IsSmaller(TimeT, 3600.0) Then
+					DeltaT = 0.5
+				ElseIf IsSmaller(TimeT, 5400.0) Then
+					DeltaT = 0.6
+				ElseIf IsSmaller(TimeT, 7200.0) Then
+					DeltaT = 0.75
+				Else
+					DeltaT = 1.0
+				End If
+			ElseIf IsSmaller(TimeT, 2700.0) Then
+				DeltaT = 0.3
+			ElseIf IsSmaller(TimeT, 3600.0) Then
+				DeltaT = 0.4
+			ElseIf IsSmaller(TimeT, 7200.0) Then
+				DeltaT = 0.5
+			Else
+				DeltaT = 0.6
+			End If
+
+		End If
+
+		Return DeltaT
+
+	End Function
+
+#End Region
+
 #Region " Outils "
 
 	'Public ReadOnly Property indMATVIDEOUVERT As Integer
@@ -1059,5 +1349,6 @@
 
 
 #End Region
+
 
 End Class
