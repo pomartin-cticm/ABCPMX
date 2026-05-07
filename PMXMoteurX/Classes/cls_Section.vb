@@ -1463,7 +1463,7 @@ Public Class cls_Section
         '---------------------------------------------------------------------------------------------------------
         '   GammaM1         [E] :   GammaM1
         '   EtaW            [E] :   Eta
-        '   lMontantRigid   [E] :   Indique si on peut utiliser la colonne montant rigide dans le Tablea 5.3 de l'EN 1993-1-5
+        '   lMontantRigid   [E] :   Indique si on peut utiliser la colonne montant rigide dans le Tableau 5.3 de l'EN 1993-1-5
         '   kReducY, kReducE[E] :   Coefficients de réduction de fy et de E respectivement en fct de la température
         '---------------------------------------------------------------------------------------------------------
 

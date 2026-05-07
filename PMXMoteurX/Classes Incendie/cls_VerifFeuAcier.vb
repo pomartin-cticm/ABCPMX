@@ -188,7 +188,7 @@ Public Class cls_VerifFeuAcier
         '--( Calcul de l'échauffement - Boucle sur TimeSteps
 
         If lMethCreuxOndes Then
-            Me.CalculEchauffementMethodCO(myBeam, VRd0, MplRdFeu, MelRdFeu, VplRdFeu)
+            Me.CalculEchauffementMethodCO(myBeam, VRd0, MplRdFeu, MelRdFeu, VplRdFeu, VbRdFeu)
         Else
             Me.CalculEchauffement(myBeam, MplRd0, MelRd0, VRd0, MplRdFeu, MelRdFeu, VplRdFeu, VbRdFeu)
         End If
@@ -253,12 +253,14 @@ Public Class cls_VerifFeuAcier
         '--------------------------------------------------------------------------------------------------------------------------
 
         Dim Temp As Decimal
+
         If lMethCo Then
             ' valeur de la membrure comprimiée, cad la semelle supérieure pour une poutre en I
             Temp = TempFsStep(iStep)
         Else
             Temp = TempAStep(iStep)
         End If
+
         Return Temp
 
     End Function
@@ -654,7 +656,7 @@ Public Class cls_VerifFeuAcier
 
     Private Sub CalculEchauffementMethodCO(myBeam As cls_Poutre, VRd0 As Decimal,
                                            ByRef MplRdFeu() As Decimal, ByRef MelRdFeu() As Decimal,
-                                           ByRef VplRdFeu() As Decimal)
+                                           ByRef VplRdFeu() As Decimal, ByRef VbRdFeu() As Decimal)
         '--------------------------------------------------------------------------------------------------------------------------
         '   04/05/26 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------
@@ -666,6 +668,7 @@ Public Class cls_VerifFeuAcier
         '   MplRdFeu()      [E] :   Moments plastiques de la section aux Time Steps
         '   MelRdFeu()      [E] :   Moments élastiques de la section aux Time Steps
         '   VplRdFeu()      [E] :   Efforts tranchants plastiques de la section aux Time Steps
+        '   VbRdFeu()       [E] :   Efforts tranchants / voilement par cisaillement de la section aux Time Steps
         '--------------------------------------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -700,6 +703,8 @@ Public Class cls_VerifFeuAcier
         Const Temp300C As Decimal = 300
 
         Dim kReducFs, kReducW, kReducFi As Decimal
+        Dim kReducEW As Decimal
+        Dim lMontantR As Boolean = myBeam.lTraveeConsoleGauche And myBeam.lTraveeConsoleDroite
 
         '--( Initialisation
 
@@ -797,12 +802,14 @@ Public Class cls_VerifFeuAcier
             kReducFi = EN_Feu.ReducFyAcier(TempFi)
             kReducFs = EN_Feu.ReducFyAcier(TempFs)
             kReducW = EN_Feu.ReducFyAcier(TempW)
+            kReducEW = EN_Feu.ReducEyAcier(TempW)
 
             'MplRdFeu(iSTep) = 1
             'MelRdFeu(iSTep) = 1
             Me.MomentElPl(myBeam.Section, myBeam.ParamFeu, myBeam.Param.Gamma, kReducFs, kReducW, kReducFi, MplRdFeu(iSTep), MelRdFeu(iSTep))
 
             VplRdFeu(iSTep) = kReducW * VRd0
+            VbRdFeu(iSTep) = myBeam.Section.VbRdFeu(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW, lMontantR, kReducW, kReducEW)
 
         Next
 
