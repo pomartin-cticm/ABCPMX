@@ -57,24 +57,24 @@ Partial Class Frm_Juridique
         Me.TableLayoutPanel_Contenu.Controls.Add(Me.img_LOGO, 0, 0)
         Me.TableLayoutPanel_Contenu.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel_Contenu.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel_Contenu.Margin = New System.Windows.Forms.Padding(4, 0, 4, 4)
+        Me.TableLayoutPanel_Contenu.Margin = New System.Windows.Forms.Padding(3, 0, 3, 3)
         Me.TableLayoutPanel_Contenu.Name = "TableLayoutPanel_Contenu"
         Me.TableLayoutPanel_Contenu.RowCount = 4
         Me.TableLayoutPanel_Contenu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
-        Me.TableLayoutPanel_Contenu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.TableLayoutPanel_Contenu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
         Me.TableLayoutPanel_Contenu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
-        Me.TableLayoutPanel_Contenu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48.0!))
-        Me.TableLayoutPanel_Contenu.Size = New System.Drawing.Size(645, 580)
+        Me.TableLayoutPanel_Contenu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39.0!))
+        Me.TableLayoutPanel_Contenu.Size = New System.Drawing.Size(484, 471)
         Me.TableLayoutPanel_Contenu.TabIndex = 2
         '
         'Btn_Accepter
         '
         Me.Btn_Accepter.DialogResult = System.Windows.Forms.DialogResult.Yes
         Me.Btn_Accepter.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Btn_Accepter.Location = New System.Drawing.Point(517, 535)
-        Me.Btn_Accepter.Margin = New System.Windows.Forms.Padding(4, 4, 8, 7)
+        Me.Btn_Accepter.Location = New System.Drawing.Point(388, 434)
+        Me.Btn_Accepter.Margin = New System.Windows.Forms.Padding(3, 3, 6, 6)
         Me.Btn_Accepter.Name = "Btn_Accepter"
-        Me.Btn_Accepter.Size = New System.Drawing.Size(120, 38)
+        Me.Btn_Accepter.Size = New System.Drawing.Size(90, 31)
         Me.Btn_Accepter.TabIndex = 1
         Me.Btn_Accepter.Text = "btn_Accepter"
         Me.Btn_Accepter.UseVisualStyleBackColor = True
@@ -87,10 +87,10 @@ Partial Class Frm_Juridique
         Me.TableLayoutPanel_Contenu.SetColumnSpan(Me.lbl_Juridique, 2)
         Me.lbl_Juridique.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_Juridique.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lbl_Juridique.Location = New System.Drawing.Point(8, 203)
-        Me.lbl_Juridique.Margin = New System.Windows.Forms.Padding(8, 4, 8, 0)
+        Me.lbl_Juridique.Location = New System.Drawing.Point(6, 164)
+        Me.lbl_Juridique.Margin = New System.Windows.Forms.Padding(6, 3, 6, 0)
         Me.lbl_Juridique.Name = "lbl_Juridique"
-        Me.lbl_Juridique.Size = New System.Drawing.Size(629, 30)
+        Me.lbl_Juridique.Size = New System.Drawing.Size(472, 25)
         Me.lbl_Juridique.TabIndex = 1
         Me.lbl_Juridique.Text = "lbl_Juridique"
         Me.lbl_Juridique.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -102,10 +102,10 @@ Partial Class Frm_Juridique
         Me.Panel_Langue.Controls.Add(Me.TableLayoutPanel_Langue)
         Me.Panel_Langue.Controls.Add(Me.lbl_Langue)
         Me.Panel_Langue.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel_Langue.Location = New System.Drawing.Point(423, 7)
-        Me.Panel_Langue.Margin = New System.Windows.Forms.Padding(4, 7, 8, 4)
+        Me.Panel_Langue.Location = New System.Drawing.Point(317, 6)
+        Me.Panel_Langue.Margin = New System.Windows.Forms.Padding(3, 6, 6, 3)
         Me.Panel_Langue.Name = "Panel_Langue"
-        Me.Panel_Langue.Size = New System.Drawing.Size(214, 188)
+        Me.Panel_Langue.Size = New System.Drawing.Size(161, 152)
         Me.Panel_Langue.TabIndex = 1
         '
         'TableLayoutPanel_Langue
@@ -115,14 +115,13 @@ Partial Class Frm_Juridique
         Me.TableLayoutPanel_Langue.Controls.Add(Me.RadioButton_Fr, 0, 0)
         Me.TableLayoutPanel_Langue.Controls.Add(Me.RadioButton_En, 0, 1)
         Me.TableLayoutPanel_Langue.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel_Langue.Location = New System.Drawing.Point(0, 30)
-        Me.TableLayoutPanel_Langue.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TableLayoutPanel_Langue.Location = New System.Drawing.Point(0, 25)
         Me.TableLayoutPanel_Langue.Name = "TableLayoutPanel_Langue"
         Me.TableLayoutPanel_Langue.RowCount = 3
         Me.TableLayoutPanel_Langue.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel_Langue.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel_Langue.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel_Langue.Size = New System.Drawing.Size(212, 156)
+        Me.TableLayoutPanel_Langue.Size = New System.Drawing.Size(159, 125)
         Me.TableLayoutPanel_Langue.TabIndex = 4
         '
         'RadioButton_Fr
@@ -130,11 +129,10 @@ Partial Class Frm_Juridique
         Me.RadioButton_Fr.AutoEllipsis = True
         Me.RadioButton_Fr.Dock = System.Windows.Forms.DockStyle.Fill
         Me.RadioButton_Fr.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.RadioButton_Fr.Location = New System.Drawing.Point(4, 4)
-        Me.RadioButton_Fr.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RadioButton_Fr.Location = New System.Drawing.Point(3, 3)
         Me.RadioButton_Fr.Name = "RadioButton_Fr"
-        Me.RadioButton_Fr.Padding = New System.Windows.Forms.Padding(13, 0, 13, 0)
-        Me.RadioButton_Fr.Size = New System.Drawing.Size(204, 44)
+        Me.RadioButton_Fr.Padding = New System.Windows.Forms.Padding(10, 0, 10, 0)
+        Me.RadioButton_Fr.Size = New System.Drawing.Size(153, 35)
         Me.RadioButton_Fr.TabIndex = 2
         Me.RadioButton_Fr.Text = "RadioButton_Fr"
         Me.RadioButton_Fr.UseVisualStyleBackColor = True
@@ -145,11 +143,10 @@ Partial Class Frm_Juridique
         Me.RadioButton_En.BackColor = System.Drawing.Color.Transparent
         Me.RadioButton_En.Dock = System.Windows.Forms.DockStyle.Fill
         Me.RadioButton_En.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.RadioButton_En.Location = New System.Drawing.Point(4, 56)
-        Me.RadioButton_En.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RadioButton_En.Location = New System.Drawing.Point(3, 44)
         Me.RadioButton_En.Name = "RadioButton_En"
-        Me.RadioButton_En.Padding = New System.Windows.Forms.Padding(13, 0, 13, 0)
-        Me.RadioButton_En.Size = New System.Drawing.Size(204, 44)
+        Me.RadioButton_En.Padding = New System.Windows.Forms.Padding(10, 0, 10, 0)
+        Me.RadioButton_En.Size = New System.Drawing.Size(153, 35)
         Me.RadioButton_En.TabIndex = 3
         Me.RadioButton_En.Text = "RadioButton_En"
         Me.RadioButton_En.UseVisualStyleBackColor = False
@@ -162,9 +159,8 @@ Partial Class Frm_Juridique
         Me.lbl_Langue.Dock = System.Windows.Forms.DockStyle.Top
         Me.lbl_Langue.ForeColor = System.Drawing.SystemColors.ControlText
         Me.lbl_Langue.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Langue.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_Langue.Name = "lbl_Langue"
-        Me.lbl_Langue.Size = New System.Drawing.Size(212, 30)
+        Me.lbl_Langue.Size = New System.Drawing.Size(159, 25)
         Me.lbl_Langue.TabIndex = 1
         Me.lbl_Langue.Text = "lbl_Langue"
         Me.lbl_Langue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -177,10 +173,10 @@ Partial Class Frm_Juridique
         Me.TableLayoutPanel_Contenu.SetColumnSpan(Me.Panel_Juridique, 2)
         Me.Panel_Juridique.Controls.Add(Me.Label_InfoJuridique)
         Me.Panel_Juridique.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel_Juridique.Location = New System.Drawing.Point(8, 233)
-        Me.Panel_Juridique.Margin = New System.Windows.Forms.Padding(8, 0, 8, 4)
+        Me.Panel_Juridique.Location = New System.Drawing.Point(6, 189)
+        Me.Panel_Juridique.Margin = New System.Windows.Forms.Padding(6, 0, 6, 3)
         Me.Panel_Juridique.Name = "Panel_Juridique"
-        Me.Panel_Juridique.Size = New System.Drawing.Size(629, 294)
+        Me.Panel_Juridique.Size = New System.Drawing.Size(472, 239)
         Me.Panel_Juridique.TabIndex = 2
         '
         'Label_InfoJuridique
@@ -188,10 +184,10 @@ Partial Class Frm_Juridique
         Me.Label_InfoJuridique.AutoSize = True
         Me.Label_InfoJuridique.Location = New System.Drawing.Point(0, 0)
         Me.Label_InfoJuridique.Margin = New System.Windows.Forms.Padding(0)
-        Me.Label_InfoJuridique.MaximumSize = New System.Drawing.Size(600, 985)
+        Me.Label_InfoJuridique.MaximumSize = New System.Drawing.Size(450, 800)
         Me.Label_InfoJuridique.Name = "Label_InfoJuridique"
-        Me.Label_InfoJuridique.Padding = New System.Windows.Forms.Padding(13, 0, 0, 12)
-        Me.Label_InfoJuridique.Size = New System.Drawing.Size(137, 28)
+        Me.Label_InfoJuridique.Padding = New System.Windows.Forms.Padding(10, 0, 0, 10)
+        Me.Label_InfoJuridique.Size = New System.Drawing.Size(109, 23)
         Me.Label_InfoJuridique.TabIndex = 3
         Me.Label_InfoJuridique.Text = "Label_InfoJuridique"
         '
@@ -199,10 +195,10 @@ Partial Class Frm_Juridique
         '
         Me.Btn_Quitter.DialogResult = System.Windows.Forms.DialogResult.No
         Me.Btn_Quitter.Dock = System.Windows.Forms.DockStyle.Left
-        Me.Btn_Quitter.Location = New System.Drawing.Point(8, 535)
-        Me.Btn_Quitter.Margin = New System.Windows.Forms.Padding(8, 4, 4, 7)
+        Me.Btn_Quitter.Location = New System.Drawing.Point(6, 434)
+        Me.Btn_Quitter.Margin = New System.Windows.Forms.Padding(6, 3, 3, 6)
         Me.Btn_Quitter.Name = "Btn_Quitter"
-        Me.Btn_Quitter.Size = New System.Drawing.Size(120, 38)
+        Me.Btn_Quitter.Size = New System.Drawing.Size(90, 31)
         Me.Btn_Quitter.TabIndex = 2
         Me.Btn_Quitter.Text = "btn_Quitter"
         Me.Btn_Quitter.UseVisualStyleBackColor = True
@@ -213,10 +209,10 @@ Partial Class Frm_Juridique
         Me.img_LOGO.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.img_LOGO.Dock = System.Windows.Forms.DockStyle.Top
         Me.img_LOGO.Image = CType(resources.GetObject("img_LOGO.Image"), System.Drawing.Image)
-        Me.img_LOGO.Location = New System.Drawing.Point(8, 7)
-        Me.img_LOGO.Margin = New System.Windows.Forms.Padding(8, 7, 4, 4)
+        Me.img_LOGO.Location = New System.Drawing.Point(6, 6)
+        Me.img_LOGO.Margin = New System.Windows.Forms.Padding(6, 6, 3, 3)
         Me.img_LOGO.Name = "img_LOGO"
-        Me.img_LOGO.Size = New System.Drawing.Size(407, 187)
+        Me.img_LOGO.Size = New System.Drawing.Size(305, 152)
         Me.img_LOGO.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.img_LOGO.TabIndex = 3
         Me.img_LOGO.TabStop = False
@@ -230,18 +226,17 @@ Partial Class Frm_Juridique
         'Frm_Juridique
         '
         Me.AcceptButton = Me.Btn_Accepter
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Btn_Quitter
-        Me.ClientSize = New System.Drawing.Size(645, 580)
+        Me.ClientSize = New System.Drawing.Size(484, 471)
         Me.Controls.Add(Me.TableLayoutPanel_Contenu)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_Juridique"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Juridique"
         Me.TableLayoutPanel_Contenu.ResumeLayout(False)
         Me.Panel_Langue.ResumeLayout(False)

@@ -199,7 +199,7 @@ Partial Class Frm_PMX
         Me.TLPan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12.0!))
         Me.TLPan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLPan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Main.Size = New System.Drawing.Size(1123, 546)
+        Me.TLPan_Main.Size = New System.Drawing.Size(1117, 546)
         Me.TLPan_Main.TabIndex = 0
         '
         'Split_Main
@@ -218,7 +218,7 @@ Partial Class Frm_PMX
         'Split_Main.Panel2
         '
         Me.Split_Main.Panel2.Controls.Add(Me.TLPan_ZoneDeSaisie)
-        Me.Split_Main.Size = New System.Drawing.Size(1123, 472)
+        Me.Split_Main.Size = New System.Drawing.Size(1117, 472)
         Me.Split_Main.SplitterDistance = 145
         Me.Split_Main.SplitterIncrement = 5
         Me.Split_Main.SplitterWidth = 3
@@ -345,7 +345,7 @@ Partial Class Frm_PMX
         Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
         Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
-        Me.TLPan_ZoneDeSaisie.Size = New System.Drawing.Size(975, 472)
+        Me.TLPan_ZoneDeSaisie.Size = New System.Drawing.Size(969, 472)
         Me.TLPan_ZoneDeSaisie.TabIndex = 0
         '
         'ToolStrip_Poutre
@@ -359,7 +359,7 @@ Partial Class Frm_PMX
         Me.ToolStrip_Poutre.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip_Poutre.Name = "ToolStrip_Poutre"
         Me.ToolStrip_Poutre.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
-        Me.ToolStrip_Poutre.Size = New System.Drawing.Size(975, 31)
+        Me.ToolStrip_Poutre.Size = New System.Drawing.Size(969, 31)
         Me.ToolStrip_Poutre.TabIndex = 5
         Me.ToolStrip_Poutre.Text = "ToolStrip1"
         '
@@ -688,7 +688,7 @@ Partial Class Frm_PMX
         Me.TSGestionImagePoutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sep_bas_0, Me.TSbtn_ZoomPlus, Me.TSbtn_ZoomMoins, Me.sep_bas_1, Me.TSbtn_Cotations, Me.TSbtn_MontreIdent, Me.TSbtn_CopieImage, Me.sep_bas_2, Me.TSbtn_Maitre, Me.sep_bas_3, Me.TSbtn_ExpertMode})
         Me.TSGestionImagePoutre.Location = New System.Drawing.Point(0, 441)
         Me.TSGestionImagePoutre.Name = "TSGestionImagePoutre"
-        Me.TSGestionImagePoutre.Size = New System.Drawing.Size(975, 31)
+        Me.TSGestionImagePoutre.Size = New System.Drawing.Size(969, 31)
         Me.TSGestionImagePoutre.TabIndex = 7
         Me.TSGestionImagePoutre.Text = "TSGestionImagePoutre"
         '
@@ -783,7 +783,7 @@ Partial Class Frm_PMX
         Me.pan_Image.Location = New System.Drawing.Point(0, 31)
         Me.pan_Image.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Image.Name = "pan_Image"
-        Me.pan_Image.Size = New System.Drawing.Size(975, 410)
+        Me.pan_Image.Size = New System.Drawing.Size(969, 410)
         Me.pan_Image.TabIndex = 8
         '
         'chk_NewF
@@ -806,7 +806,7 @@ Partial Class Frm_PMX
         Me.img_Main.Location = New System.Drawing.Point(0, 0)
         Me.img_Main.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.img_Main.Name = "img_Main"
-        Me.img_Main.Size = New System.Drawing.Size(975, 410)
+        Me.img_Main.Size = New System.Drawing.Size(969, 410)
         Me.img_Main.TabIndex = 6
         Me.img_Main.TabStop = False
         '
@@ -823,13 +823,13 @@ Partial Class Frm_PMX
         Me.TLpan_OrganisationMenuBO.Name = "TLpan_OrganisationMenuBO"
         Me.TLpan_OrganisationMenuBO.RowCount = 1
         Me.TLpan_OrganisationMenuBO.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_OrganisationMenuBO.Size = New System.Drawing.Size(1123, 60)
+        Me.TLpan_OrganisationMenuBO.Size = New System.Drawing.Size(1117, 60)
         Me.TLpan_OrganisationMenuBO.TabIndex = 5
         '
         'img_Logo
         '
         Me.img_Logo.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.img_Logo.Location = New System.Drawing.Point(1026, 3)
+        Me.img_Logo.Location = New System.Drawing.Point(1020, 3)
         Me.img_Logo.Name = "img_Logo"
         Me.img_Logo.Size = New System.Drawing.Size(94, 54)
         Me.img_Logo.TabIndex = 0
@@ -848,7 +848,7 @@ Partial Class Frm_PMX
         Me.TLPan_Menus.RowCount = 2
         Me.TLPan_Menus.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TLPan_Menus.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
-        Me.TLPan_Menus.Size = New System.Drawing.Size(1023, 60)
+        Me.TLPan_Menus.Size = New System.Drawing.Size(1017, 60)
         Me.TLPan_Menus.TabIndex = 1
         '
         'ToolStrip_Main
@@ -862,7 +862,7 @@ Partial Class Frm_PMX
         Me.ToolStrip_Main.Location = New System.Drawing.Point(0, 25)
         Me.ToolStrip_Main.Name = "ToolStrip_Main"
         Me.ToolStrip_Main.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
-        Me.ToolStrip_Main.Size = New System.Drawing.Size(1023, 35)
+        Me.ToolStrip_Main.Size = New System.Drawing.Size(1017, 35)
         Me.ToolStrip_Main.TabIndex = 4
         Me.ToolStrip_Main.Text = "ToolStrip1"
         '
@@ -1018,7 +1018,7 @@ Partial Class Frm_PMX
         Me.TSMenuPrincipal.Location = New System.Drawing.Point(0, 0)
         Me.TSMenuPrincipal.Name = "TSMenuPrincipal"
         Me.TSMenuPrincipal.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
-        Me.TSMenuPrincipal.Size = New System.Drawing.Size(1023, 25)
+        Me.TSMenuPrincipal.Size = New System.Drawing.Size(1017, 25)
         Me.TSMenuPrincipal.TabIndex = 2
         Me.TSMenuPrincipal.Text = "ToolStrip_Menu"
         '
@@ -1038,33 +1038,33 @@ Partial Class Frm_PMX
         Me.NewToolStripMenuItemN.Image = CType(resources.GetObject("NewToolStripMenuItemN.Image"), System.Drawing.Image)
         Me.NewToolStripMenuItemN.Name = "NewToolStripMenuItemN"
         Me.NewToolStripMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.N), System.Windows.Forms.Keys)
-        Me.NewToolStripMenuItemN.Size = New System.Drawing.Size(294, 26)
+        Me.NewToolStripMenuItemN.Size = New System.Drawing.Size(290, 22)
         Me.NewToolStripMenuItemN.Text = "NewToolStripMenuItemN"
         '
         'ToolStripSeparator12
         '
         Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
-        Me.ToolStripSeparator12.Size = New System.Drawing.Size(291, 6)
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(287, 6)
         '
         'OpenToolStripMenuItemN
         '
         Me.OpenToolStripMenuItemN.Image = CType(resources.GetObject("OpenToolStripMenuItemN.Image"), System.Drawing.Image)
         Me.OpenToolStripMenuItemN.Name = "OpenToolStripMenuItemN"
         Me.OpenToolStripMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.O), System.Windows.Forms.Keys)
-        Me.OpenToolStripMenuItemN.Size = New System.Drawing.Size(294, 26)
+        Me.OpenToolStripMenuItemN.Size = New System.Drawing.Size(290, 22)
         Me.OpenToolStripMenuItemN.Text = "OpenToolStripMenuItemN"
         '
         'ToolStripSeparator13
         '
         Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
-        Me.ToolStripSeparator13.Size = New System.Drawing.Size(291, 6)
+        Me.ToolStripSeparator13.Size = New System.Drawing.Size(287, 6)
         '
         'SaveToolStripMenuItemN
         '
         Me.SaveToolStripMenuItemN.Image = CType(resources.GetObject("SaveToolStripMenuItemN.Image"), System.Drawing.Image)
         Me.SaveToolStripMenuItemN.Name = "SaveToolStripMenuItemN"
         Me.SaveToolStripMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
-        Me.SaveToolStripMenuItemN.Size = New System.Drawing.Size(294, 26)
+        Me.SaveToolStripMenuItemN.Size = New System.Drawing.Size(290, 22)
         Me.SaveToolStripMenuItemN.Text = "SaveToolStripMenuItemN"
         '
         'SaveAsToolStripMenuItemN
@@ -1073,32 +1073,32 @@ Partial Class Frm_PMX
         Me.SaveAsToolStripMenuItemN.Name = "SaveAsToolStripMenuItemN"
         Me.SaveAsToolStripMenuItemN.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Shift) _
             Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
-        Me.SaveAsToolStripMenuItemN.Size = New System.Drawing.Size(294, 26)
+        Me.SaveAsToolStripMenuItemN.Size = New System.Drawing.Size(290, 22)
         Me.SaveAsToolStripMenuItemN.Text = "SaveAsToolStripMenuItemN"
         '
         'ToolStripSeparator14
         '
         Me.ToolStripSeparator14.Name = "ToolStripSeparator14"
-        Me.ToolStripSeparator14.Size = New System.Drawing.Size(291, 6)
+        Me.ToolStripSeparator14.Size = New System.Drawing.Size(287, 6)
         '
         'RecentFileToolStripMenuItemN
         '
         Me.RecentFileToolStripMenuItemN.Image = CType(resources.GetObject("RecentFileToolStripMenuItemN.Image"), System.Drawing.Image)
         Me.RecentFileToolStripMenuItemN.Name = "RecentFileToolStripMenuItemN"
-        Me.RecentFileToolStripMenuItemN.Size = New System.Drawing.Size(294, 26)
+        Me.RecentFileToolStripMenuItemN.Size = New System.Drawing.Size(290, 22)
         Me.RecentFileToolStripMenuItemN.Text = "RecentFileToolStripMenuItemN"
         '
         'ToolStripSeparator17
         '
         Me.ToolStripSeparator17.Name = "ToolStripSeparator17"
-        Me.ToolStripSeparator17.Size = New System.Drawing.Size(291, 6)
+        Me.ToolStripSeparator17.Size = New System.Drawing.Size(287, 6)
         '
         'QuitToolStripMenuItemN
         '
         Me.QuitToolStripMenuItemN.Image = CType(resources.GetObject("QuitToolStripMenuItemN.Image"), System.Drawing.Image)
         Me.QuitToolStripMenuItemN.Name = "QuitToolStripMenuItemN"
         Me.QuitToolStripMenuItemN.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
-        Me.QuitToolStripMenuItemN.Size = New System.Drawing.Size(294, 26)
+        Me.QuitToolStripMenuItemN.Size = New System.Drawing.Size(290, 22)
         Me.QuitToolStripMenuItemN.Text = "QuitToolStripMenuItemN"
         '
         'TSbtn_Edit
@@ -1297,7 +1297,7 @@ Partial Class Frm_PMX
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(3, 63)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(1117, 1)
+        Me.Panel2.Size = New System.Drawing.Size(1111, 1)
         Me.Panel2.TabIndex = 7
         '
         'ContainerLogo
@@ -1318,13 +1318,13 @@ Partial Class Frm_PMX
         '
         'ToolStripContainer1.ContentPanel
         '
-        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1123, 515)
+        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1117, 515)
         Me.ToolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ToolStripContainer1.LeftToolStripPanelVisible = False
         Me.ToolStripContainer1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripContainer1.Name = "ToolStripContainer1"
         Me.ToolStripContainer1.RightToolStripPanelVisible = False
-        Me.ToolStripContainer1.Size = New System.Drawing.Size(1123, 546)
+        Me.ToolStripContainer1.Size = New System.Drawing.Size(1117, 546)
         Me.ToolStripContainer1.TabIndex = 1
         Me.ToolStripContainer1.Text = "ToolStripContainer1"
         Me.ToolStripContainer1.TopToolStripPanelVisible = False
@@ -1381,12 +1381,11 @@ Partial Class Frm_PMX
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(1123, 546)
+        Me.ClientSize = New System.Drawing.Size(1117, 546)
         Me.Controls.Add(Me.TLPan_Main)
         Me.Controls.Add(Me.ToolStripContainer1)
-        Me.DataBindings.Add(New System.Windows.Forms.Binding("Location", Global.PMXInterface.My.MySettings.Default, "FrmMainLocation", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Location = Global.PMXInterface.My.MySettings.Default.FrmMainLocation
+        Me.MinimumSize = New System.Drawing.Size(800, 450)
         Me.Name = "Frm_PMX"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Form1"

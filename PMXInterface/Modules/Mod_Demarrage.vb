@@ -54,7 +54,7 @@ Public Module Mod_Demarrage
         LogicielReglages.lFIRESLIMAcier = True
         LogicielReglages.lFIRESLIMMixte = False
 
-        LogicielReglages.lCreuxO = (LogicielInfo.Maitre = EnuMaitre.CTICM)
+        LogicielReglages.lCreuxO = True '(LogicielInfo.Maitre = EnuMaitre.CTICM)
 
     End Sub
 
@@ -68,8 +68,8 @@ Public Module Mod_Demarrage
 
         '--> Réglages CTICM/AM
 
-        LogicielInfo.Maitre = EnuMaitre.CTICM
-        'LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
+        'LogicielInfo.Maitre = EnuMaitre.CTICM
+        LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
 
         InitialiseReglagesLogiciel()
         InitialiseVersion()
@@ -288,8 +288,8 @@ Public Module Mod_Demarrage
 
             '--> Taille Initiale de la fenêtre principale
 
-            Frm_PMX.InitSize = My.Settings.FrmMainSize
-            Frm_PMX.InitLoc = My.Settings.FrmMainLocation
+            'Frm_PMX.InitSize = My.Settings.FrmMainSize
+            'Frm_PMX.InitLoc = My.Settings.FrmMainLocation
 
         Catch ex As Exception
             MsgBox("Erreur intialisation parameters | Error when initialising parameters", MsgBoxStyle.Critical, "Mod_Demarrage/InitialiseLogiciel")

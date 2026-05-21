@@ -45,8 +45,8 @@ Public Class Frm_PMX
 
     Dim FontFrm As Font
 
-    Public InitSize As System.Drawing.Size = Nothing
-    Public InitLoc As System.Drawing.Point = Nothing
+    'Public InitSize As System.Drawing.Size = Nothing
+    'Public InitLoc As System.Drawing.Point = Nothing
 #End Region
 
 #Region " Variables locales pour btnPoutres "
@@ -78,9 +78,6 @@ Public Class Frm_PMX
     Const RACnomBTN As String = "MyX"
 
 #End Region
-
-
-
 
 #Region "===OUVERTURE==="
 
@@ -148,11 +145,11 @@ Public Class Frm_PMX
 
     Private Sub PrepareFenetre()
 
-        If Not Me.InitSize.IsEmpty Then
+        'If Not Me.InitSize.IsEmpty Then
 
-            Me.Size = Me.InitSize
+        'Me.Size = Me.InitSize
 
-        End If
+        'End If
 
         'If Not Me.InitLoc.IsEmpty Then
 
@@ -1454,8 +1451,8 @@ Public Class Frm_PMX
         '----------------------------------------------------------------
         '----------------------------------------------------------------
 
-        My.Settings.FrmMainSize = Me.Size
-        My.Settings.FrmMainLocation = Me.Location
+        'My.Settings.FrmMainSize = Me.Size
+        'My.Settings.FrmMainLocation = Me.Location
 
     End Sub
 

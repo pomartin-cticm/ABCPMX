@@ -125,6 +125,14 @@ CRACKWIDTH				= Limite d'ouverture des fissures
 WARNINGCOMPREINF1		= Les armatures en compression ne peuvent pas être prises en compte pour une dalle avec un seul lit d'armatures
 WARNINGCOMPREINF2		= Quand les armatures en compression sont prises en compte dans les calculs de la poutre, les exigences de l'EN 1992-1-1:2005, clause 9.2.1.2 (3) doivent être satisfaites, pour éviter un flambement prématuré des barres.
 PSI2LONGTERM			= La fraction quasi permanente des charges d'exploitation est considéré comme effet de long terme
+PRECAMBER				= Contre-flèche de fabrication
+PRECAMBERINFO			= La contreflèche n'est prise en compte aux ELS que pour les poutres simples sans consoles
+
+#FRM_CALCULENCOURS
+TITLE 					= Calcul d'échauffement
+TITLELABL				= Progression du calcul d'échauffement
+PROGRESTEP				= Calcul à l'incendie pour une durée de
+PROGREINSTEP			= Progression
 
 #FRM_CALCULATIONSHEET
 TITLE					= Note de calculs
@@ -226,7 +234,7 @@ OK						= Ok
 CANCEL					= Annuler
 ULSTATES		 		= Etats limites ultimes
 SLSTATES				= Etats limites de service
-FLSTATES				= Etats limites incendie
+FLSTATES				= Etats limites ultimes au feu
 CONSTRUCTIONSTAGE		= Phase de construction
 
 #FRM_COMBINATIONS1
@@ -312,15 +320,16 @@ DIAMETER				= Diamètre
 TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)
 OK						= Ok
 CANCEL					= Annuler
-RESTRAINTBYTHEDECK		= Poutre est maintenue latéralement par le bac 
+IDECK					= Tôles
+RESTRAINTBYTHEDECK		= Poutre maintenue latéralement par le bac 
 INDIVIDUALSHEET			= Tôle individuelle
 NUMBERSPANS				= Nombre de travées traversées par les tôles
 SHEETLENGTH				= Longueur
 SHEETWIDTH				= Largeur
 DIMENSIONS				= Dimensions
-FLOORDEF				= Paramètres du sol
+FLOORDEF				= Paramètres du plancher
 NBSHEETSTRANSVERSE		= Nombre de tôles dans la direction transversale
-FLOORDIMENSIONS			= Dimensions du sol (travée principale)
+FLOORDIMENSIONS			= Dimensions du plancher (travée principale)
 FLOORLENGTH				= Longueur de travée
 FLOORWIDTH				= Largeur
 TRANSITION				= Type de transition entre deux tôles adjacentes
@@ -357,6 +366,10 @@ OPTIONS					= Options
 BEAMSPACING				= Entraxe des solives
 THCOATING				= Épaisseur du revêtement
 FUP						= Résistance ultime
+REINTRANTRIBSW1			= Le coefficient K nécessaire au calcul de la flexibilité en distorsion n'est fourni par le rapport CECM no 88 que pour les nervures ouvertes.
+REINTRANTRIBSW2			= Pour le nervures rentrantes, le coefficient K doit être défini par l'utilisateur.
+DISTORSIONFLEX			= Flexibilité en distorsion
+INFOW_TOLEK				= Des valeurs de K peuvent être trouvées dans l'article "Résistance au déversement d’une solive de plancher en phase de construction – maintien par le bac métallique" paru dans le no 3/2022 de la revue Construction Métallique
 
 #FRMEDITSTUDS	
 TITLE					= Base de données des goujons
@@ -472,7 +485,7 @@ FIRECALCULATION			= Calcul au feu
 SURFACETYPE				= Type de surface
 PROTECTED				= Protégé
 UNPROTECTED				= Non protégé
-GALVANISED				= Poutre acier galvanisée
+GALVANISED				= Poutre acier galvanisée à chaud
 PROTECTIONTYPE			= Type de protection
 SPRAY					= Flocage
 INTUMESCENTPAINT		= Peinture intumescente
@@ -489,7 +502,7 @@ PLASTER					= Plâtre
 DENSITY					= Densité
 THERMALCONDUC			= Conductivité thermique
 SPECIFICHEAT			= Chaleur spécifique 
-CONCRETEREDUC250		= Résistance du béton réduire pour une température inférieure à 250°
+CONCRETEREDUC250		= Résistance du béton réduite pour une température inférieure à 250°C
 ARMAFROID				= Armatures formées à froid
 ARMACOMP				= Armatures comprimées prises en compte
 DALLEFEM				= Échauffement de la dalle calculé par différences finies
@@ -502,13 +515,13 @@ FORMFACTOR				= Facteur de forme
 EMISSIVITYSTEELSURF		= Émissivité de l'acier
 EMISSIVITYFIRE			= Émissivité du feu
 EMISSIVITYCONCRETE		= Émissivité du béton
-CONVECTIONFACTOR		= Facteur de transfert thermique par convection
+CONVECTIONFACTOR		= Coefficients de transfert thermique par convection
 BELOWSLAB				= Sous la dalle
 ABOVESLAB				= Au-dessus de la dalle
 SHADOWEFFECT			= Effet d'ombre
 CONCRETEFACTOR			= Résistance plastique de la dalle	
 PROTECTIONTH			= Épaisseur			
-PROTECTEDSTEEL			= Profilé métallique avec protection thermique
+PROTECTEDSTEEL			= Profilé métallique avec protection contre le feu
 TEMPREBARS				= Température des armatures égale à la
 AVERAGETEMP				= température moyenne
 MAXTEMP2				= température maximale
@@ -519,6 +532,23 @@ MOISTURECONTENT			= Teneur en eau
 ENCASEDROOTFILLET		= Les congés de raccordement sont pris en compte dans le calcul des sections enrobées selon l'Annexe F de l'EN 1994-1-2
 SIZEELT					= Épaisseur des éléments
 PROTECTEDTROUGH			= Les creux d'ondes au dessus de la semelle supérieure sont remplis
+POSTPROCESSHEATING		= Post-traitement du calcul à l'incendie
+
+#FRM_POSTPROCESSING
+TITLE					= Post-traitement de l'échauffement de l'élément
+CLOSE 					= Fermer
+PARAMETERS 			    = Paramètres
+NOMAILLES				= Nombres de mailles
+HEATFIELD				= Afficher le champs thermique
+2DELEMT					= Afficher uniquement les éléments 2D
+STEP					= Étape du calcul
+SCALE					= Échelle de température 
+LOCSCALE				= Échelle locale
+GLOBSCALE				= Échelle globale
+CONSTSCALE				= Échelle constante
+LOCSCALEINFO			= Échelle locale : L'échelle de température est uniquement basée sur l'étape de calcul en cours.
+GLOBSCALEINFO			= Échelle globale : L'échelle de température est calculé sur l'ensemble des étapes de calcul.
+CONSTSCALEINFO			= Échelle constante : L'échelle de température est définie entre 20 et 1200°C.
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Coefficients d'accompagnement
@@ -686,6 +716,7 @@ PPOSTT					= Résultats
 ZOOMIN					= Zoom avant
 ZOOMOUT					= Zoom arrière
 COTATIONS				= Afficher les dimensions
+SHOWID					= Afficher les informations d'identification
 EXPERT					= Mode expert
 COPYIMAGE				= Copier l'image
 EDIT					= Editer
