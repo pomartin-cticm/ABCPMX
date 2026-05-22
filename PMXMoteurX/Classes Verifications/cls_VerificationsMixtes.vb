@@ -556,6 +556,10 @@
 
                 If Signe > 0 Then
                     Beta = myEN1994.ReductionFactorBeta(zTop - pzANP(iNode, kDeb), myBeam.HauteurTotaleSectionMixte, Nuance, lGene1, lOKPl)
+
+                    'suivant EN 1994-1-1:2025, 8.2.1.3(7)
+                    Beta = 1 - (1 - Beta) * DegConnex(iCombi, iTravee, 0)
+
                 Else
                     Beta = 1
                 End If

@@ -686,7 +686,11 @@ Public Class Frm_PMX
 
             '==) Nouvel appel avec vérif de calcul pour les slim floors
             'si le calcul à l'échauffement est à faire et que notre poutre est un slim floor alors on lance la fenêtre de progression du calcul
-            If Not MyProjet.Poutres(iBeam).lCalculOK And MyProjet.Poutres(iBeam).lSlimFloor Then
+
+            Dim lAffProgress As Boolean = Not MyProjet.Poutres(iBeam).lCalculOK AndAlso MyProjet.Poutres(iBeam).lSlimFloor _
+                                  AndAlso MyProjet.Poutres(iBeam).ParamFeu.lCalculFeu
+
+            If lAffProgress Then
                 Frm_CalculEnCours.Show()
                 Me.Enabled = False
 
@@ -711,13 +715,12 @@ Public Class Frm_PMX
                 Threading.Thread.Sleep(300)
                 Frm_CalculEnCours.Close()
                 Enabled = True
+
             Else
                 'sinon on appelle la fonction de verification normalement
                 MyProjet.Poutres(iBeam).AAA_Verifications(iBeam, MyProjet.FileName, NomChargesA,
                                                       strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
             End If
-
-
 
         End If
 

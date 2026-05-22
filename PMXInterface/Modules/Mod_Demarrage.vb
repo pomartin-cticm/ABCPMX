@@ -68,8 +68,8 @@ Public Module Mod_Demarrage
 
         '--> Réglages CTICM/AM
 
-        'LogicielInfo.Maitre = EnuMaitre.CTICM
-        LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
+        LogicielInfo.Maitre = EnuMaitre.CTICM
+        'LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
 
         InitialiseReglagesLogiciel()
         InitialiseVersion()
@@ -342,7 +342,7 @@ Public Module Mod_Demarrage
         LogicielInfo.Version.Annee = 2026
         LogicielInfo.Version.Principal = 1
         LogicielInfo.Version.Indice = 20
-        LogicielInfo.Version.Beta = 4
+        LogicielInfo.Version.Beta = 5
 
         Dim Chaine As String = ""
 

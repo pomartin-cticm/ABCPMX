@@ -495,6 +495,8 @@ REFEN1994G2				= prEN 1994-1-1:2024, Figure 8.3
 FORZSURH				= For
 RATIOZHABOVELIMIT		= The ratio z / H (= $) is above the limit for plastic calculation
 RATIOZHLIM				= Limit value
+PLASTICFULLCX			= For full connection
+PLASTICPARTIALCX		= For partial connection
 
 #NDC_ANALYSE
 ANALYSIS				= Analysis - Internal forces and moments

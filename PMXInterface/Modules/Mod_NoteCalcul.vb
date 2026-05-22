@@ -4031,6 +4031,9 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocSP("PPROPERTIES"))
 
+        '== En connexion complète
+        AddLigneNDC(TABW2 & "\U" & BlocSP("PLASTICFULLCX") & "\u")
+
         myBeam.Section.ProprietesPlastiquesMixteMyy(1, True, myBeam.Param.Gamma, 0, bEff, myBeam.Dalle, zANP, MplRd)
         myBeam.Section.ProprietesPlastiquesMixteMyy(1, False, myBeam.Param.Gamma, 0, bEff, myBeam.Dalle, zANPk, MplRk)
 
@@ -4053,6 +4056,7 @@ Module Mod_NoteCalcul
                 '--| Cas du ratio z/h en dehors des limites du calcul plastique
                 AddLigneNDC(TABW2 & RemplaceDollar(BlocSP("RATIOZHABOVELIMIT"), GetStringInUnitN(zSurH, Enu_TypeVariable.SansType, 4, 3, NON, True)))
                 AddLigneNDC(TABW2 & BlocSP("RATIOZHLIM") & TABAFF & "z/H <" & TABEGAL & GetStringInUnitN(zSurHLim, Enu_TypeVariable.SansType, 4, 3, NON, True))
+
             End If
             '--| Références
             If myBeam.Param.lGeneration1 Then
@@ -4062,12 +4066,84 @@ Module Mod_NoteCalcul
             End If
             AddLigneNDC(TABW2 & BlocSP("ACCORDINGTO") & TABAFF & Reference)
         End If
+
         AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnitN(zANP, Enu_TypeVariable.Dimension, 4, 1, OUI, False))
         AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnitN(BetaMk * MplRk, Enu_TypeVariable.Moment, 4, 0, OUI, False))
 
-        '--> Propriétés console gauche
+        '== En conexion partielle
+        Dim EtaMin As Decimal = 1
+        Dim iTraveeMin As Integer
+        For iTravee As Integer = 1 To myBeam.NombreTraveesDeuxAppuis
 
-        If myBeam.lTraveeConsoleGauche Then
+            Dim Eta As Decimal
+            Dim nbCombi As Integer = myBeam.CombiA_ELU.nbCombi
+
+            Eta = myBeam.VerifMixte(0).EtaEnveloppe(nbCombi, iTravee)
+
+            If iTravee = 1 Then
+                EtaMin = Eta
+                iTraveeMin = 1
+            Else
+                If Eta Then
+                    EtaMin = Eta
+                    iTraveeMin = iTravee
+                End If
+            End If
+        Next
+
+        If IsSmaller(EtaMin, 1) Then
+
+            SauteLigne()
+            AddLigneNDC(TABW2 & "\U" & BlocSP("PLASTICPARTIALCX") & "\u")
+
+            Dim gammaS As Decimal = myBeam.Param.Gamma.GammaS
+            Dim gammaM0 As Decimal = myBeam.Param.Gamma.GammaM0
+            Dim gammaC As Decimal = myBeam.Param.Gamma.GammaC
+            Dim NProfile As Decimal
+            Dim NEnrobage, NArmaEnrobage As Decimal
+            Dim NDalle As Decimal
+            Dim NConnex As Decimal
+            Dim lSimple As Decimal = myBeam.Param.lLargeurEfficaceSimplifiee
+            Dim DeltaPrd As Decimal
+            Dim BetaM_eta, BetaMk_eta As Decimal
+
+            NProfile = myBeam.Section.ResistanceTractionProfile(gammaM0)
+                If myBeam.Section.lEnrobage Then
+                    NEnrobage = myBeam.Section.NResistanceCompressionEnrobage(gammaC)
+                    NArmaEnrobage = myBeam.Section.NResistanceArmaturesEnrobage(gammaS)
+                End If
+
+
+            '--( Traitement des travées sur 2 appuis
+
+            '# En travée ######################################################################################
+
+            '==== Ajouter traitement du cas ou pas de moment >0
+
+            '---| Degré de connexion en zone de moment positif
+            bEff = myBeam.BeffDalle(myBeam.LongueurTravee(iTraveeMin), iTraveeMin, lSimple, False)
+            NDalle = myBeam.Dalle.NResistanceCompressionDalle(bEff, gammaC)
+            NConnex = Math.Min(NDalle, NProfile + NArmaEnrobage)
+
+            DeltaPrd = EtaMin * NConnex
+
+            myBeam.Section.ProprietesPlastiquesMixteMyyEta(1, True, myBeam.Param.Gamma, 0, bEff, DeltaPrd, myBeam.Dalle, True, zANP, MplRd)
+            myBeam.Section.ProprietesPlastiquesMixteMyyEta(1, False, myBeam.Param.Gamma, 0, bEff, DeltaPrd, myBeam.Dalle, True, zANPk, MplRk)
+
+            BetaM_eta = 1 - (1 - BetaM) * EtaMin
+            BetaMk_eta = 1 - (1 - BetaMk) * EtaMin
+
+            AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnitN(BetaM_eta * MplRd, Enu_TypeVariable.Moment, 4, 0, OUI, False))
+            AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnitN(zANP, Enu_TypeVariable.Dimension, 4, 1, OUI, False))
+            AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnitN(BetaMk_eta * MplRk, Enu_TypeVariable.Moment, 4, 0, OUI, False))
+
+        End If
+
+
+
+            '--> Propriétés console gauche
+
+            If myBeam.lTraveeConsoleGauche Then
 
             AddTitreNdC(2, BlocSP("PROPERTIESLCANTILEVER"))
 
