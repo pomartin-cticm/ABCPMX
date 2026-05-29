@@ -497,6 +497,7 @@ RATIOZHABOVELIMIT		= The ratio z / H (= $) is above the limit for plastic calcul
 RATIOZHLIM				= Limit value
 PLASTICFULLCX			= For full connection
 PLASTICPARTIALCX		= For partial connection
+FORETA					= With $
 
 #NDC_ANALYSE
 ANALYSIS				= Analysis - Internal forces and moments

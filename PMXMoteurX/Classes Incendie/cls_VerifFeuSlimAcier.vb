@@ -1206,7 +1206,6 @@ Public Class cls_VerifFeuSlimAcier
 
     End Function
 
-
 #End Region
 
 #Region " Outils "

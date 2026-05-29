@@ -690,6 +690,8 @@ Public Class Frm_PMX
             Dim lAffProgress As Boolean = Not MyProjet.Poutres(iBeam).lCalculOK AndAlso MyProjet.Poutres(iBeam).lSlimFloor _
                                   AndAlso MyProjet.Poutres(iBeam).ParamFeu.lCalculFeu
 
+            ' If MyProjet.Poutres(iBeam).lMixte Then lAffProgress = False
+
             If lAffProgress Then
                 Frm_CalculEnCours.Show()
                 Me.Enabled = False

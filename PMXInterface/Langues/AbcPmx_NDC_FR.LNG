@@ -497,6 +497,7 @@ RATIOZHABOVELIMIT		= Le ratio z / H (= $) est au-dessus de la limite pour le cal
 RATIOZHLIM				= Valeur limite
 PLASTICFULLCX			= En connexion complète
 PLASTICPARTIALCX		= En connexion partielle
+FORETA					= Pour $
 
 #NDC_ANALYSE
 ANALYSIS				= Analyse - Efforts internes

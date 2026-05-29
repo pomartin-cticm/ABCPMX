@@ -5821,7 +5821,11 @@ Public Class cls_Poutre
             Case cls_Section.Enum_TypeSection.SFBmixte, cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SABmixte
                 ReDim Me.VerifSlimMixte(0)
                 Me.VerifSlimMixte(0) = New cls_VerificationsSlimMixtes
-
+                If Not lEtaiTotal Then
+                    ' Quand on est pas totalement étayé, on ajoute la vérification en phase de construction
+                    ReDim Me.VerifSlimAcier(0)
+                    Me.VerifSlimAcier(0) = New cls_VerificationSlimAcier
+                End If
         End Select
 
         '# ELS
@@ -5897,7 +5901,7 @@ Public Class cls_Poutre
                 Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SFB
                     Me.VerifFeuSlimAcier.Z_VerifFeu(Me, iBeam, FileName, progressGlobal, progressStep)
                 Case cls_Section.Enum_TypeSection.SABmixte, cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SFBmixte
-                    Me.VerifFeuSlimMixte.Z_VerifFeu(Me)
+                    Me.VerifFeuSlimMixte.Z_VerifFeu(Me, iBeam, FileName, progressGlobal, progressStep)
             End Select
         End If
 

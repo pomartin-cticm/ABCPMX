@@ -406,7 +406,7 @@
 
         '# Calcul armatures transversales
 
-        Me.CalculArmaturesTransversales(myBeam, 0)
+        ' Me.CalculArmaturesTransversales(myBeam, 0)
 
 
     End Sub
@@ -1075,7 +1075,6 @@
                                 lSupportB = False
                             End If
                         End If
-
 
                         If lSupportA Then
                             myBeam.VerifMixte(iVerif).TauEd(i_travee, j_zone, 0) = k_sf_aa_sA * v_x_Ed / hf_aa
@@ -2013,6 +2012,31 @@
 
         Eta = EtaEqualF + (EtaInEqualF - EtaEqualF) / 2 * (RatioAire - 1)
         Return Eta
+    End Function
+
+    Public Function EtaEnveloppe(nbCombi As Integer, Optional iTravee As Integer = 1) As Decimal
+        '----------------------------------------------------------------------------------------------------------------
+        '   22/08/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------
+        '   Extrait le degré de connexion de la poutre le plus défavorable
+        '   Uniquement en moment > 0
+        '----------------------------------------------------------------------------------------------------------------
+        '   nbCombi     [E] :   Nombre de combinaisons ELU traitée
+        '   iTravee     [E] :   Indice de la travée
+        '----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim Eta As Decimal = Me.DegConnex(0, iTravee)
+
+        '--( Boucle sur les combinaisons
+
+        For iCombi As Integer = 1 To nbCombi - 1
+            Eta = Math.Min(Eta, Me.DegConnex(iCombi, iTravee))
+        Next
+
+        Return Eta
+
     End Function
 
 #End Region

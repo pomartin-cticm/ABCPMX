@@ -62,6 +62,9 @@ Module Mod_NoteCalcul
     Const NBSIGN_ANALYSE As Integer = 4
     Const NBDIGI_ANALYSE As Integer = 3
 
+    Const strFormatNoteFin As String = "\i"
+    Const strFormatNote As String = "\I"
+
     '--------------------------------------------------------------------------
     '   Paramètres de la fenêtre NDC - Ajout BD - 05/02/20
     '--------------------------------------------------------------------------
@@ -3789,7 +3792,11 @@ Module Mod_NoteCalcul
         '--> Traitement
 
         If lMixte Then
-            EditionProprietesSectionPoutreMixteN(MyBeam)
+            If MyBeam.lSlimFloor Then
+                EditionProprietesSectionPoutreSlimMixteN(MyBeam)
+            Else
+                EditionProprietesSectionPoutreMixteN(MyBeam)
+            End If
         ElseIf lEnrob Then
             EditionProprietesSectionAcierEnrobee(MyBeam)
         End If
@@ -3972,6 +3979,160 @@ Module Mod_NoteCalcul
 
     End Sub
 
+    Private Sub EditionProprietesSectionPoutreSlimMixteN(myBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   15/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des propriétés de sections pour une poutre mixte slim floor
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lDalle() As Boolean = Nothing
+        Dim NeqDalle() As Decimal = Nothing
+        Dim NeqEnrob() As Decimal = Nothing
+
+        Dim bEff As Decimal
+        Dim zANP, MplRd As Decimal
+        Dim zANPk, MplRk As Decimal
+
+        Dim EN1994 As New cls_Eurocodes
+        Dim BetaM, BetaMk As Decimal
+        Dim lOK, lAppBeta As Boolean
+
+        Dim Reference As String
+        Dim zSurH As Decimal
+        Dim zSurHLim As Decimal
+
+        '--> Récupération des coeff d'équivalence et état de la dalle
+
+        myBeam.ExtraireListeNeqDalleEnrobage(lDalle, NeqDalle, NeqEnrob)
+
+        '--> Propriétés élastiques
+
+        AddLigneNDC(TABW1 & strFormatNote & BlocSP("NOTES") & ":" & strFormatNoteFin)
+        AddLigneNDC(TABW1 & strFormatNote & BlocSP("NOTE_LOCATIONZSLAB") & strFormatNoteFin)
+
+        '--> Propriétés à mi travée principale
+
+        AddTitreNdC(2, BlocSP("PROPERTIESMIDSPAN"))
+
+        '# Largeur efficace
+
+        bEff = myBeam.BeffDalle(myBeam.LongueurTravee(1) / 2, 1, OptionsCalcul.lLargeurEfficaceSimplifiee, False)
+        AddLigneNDC(TABW2 & BlocSP("EFFECTIVEW") & TABAFF & "b\-eff\=" & TABEGAL & GetStringInUnit(bEff, Enu_TypeVariable.Longueur, 3, 2, True))
+
+        '# Propriétés élastiques
+
+        AddTitreNdC(3, BlocSP("EPROPERTIES"))
+
+        EditionProprietesElastiquesSectionMixtePositiveB(myBeam, bEff, lDalle.GetUpperBound(0) + 1, lDalle, NeqDalle, NeqEnrob)
+
+        '# Propriétés plastiques
+
+        AddTitreNdC(3, BlocSP("PPROPERTIES"))
+
+        '===================================================================================================================
+        '== En connexion complète
+        '===================================================================================================================
+        AddLigneNDC(TABW2 & "\U" & BlocSP("PLASTICFULLCX") & "\u")
+        myBeam.Section.ProprietesPlastiquesMixteMyy(1, True, myBeam.Param.Gamma, 0, bEff, myBeam.Dalle, zANP, MplRd)
+        myBeam.Section.ProprietesPlastiquesMixteMyy(1, False, myBeam.Param.Gamma, 0, bEff, myBeam.Dalle, zANPk, MplRk)
+
+        BetaM = EN1994.ReductionFactorBeta(myBeam.Dalle.zTop - zANP, myBeam.HauteurTotaleSectionMixte, myBeam.Section.Acier.Nuance, myBeam.Param.lGeneration1, lOK)
+        BetaMk = EN1994.ReductionFactorBeta(myBeam.Dalle.zTop - zANPk, myBeam.HauteurTotaleSectionMixte, myBeam.Section.Acier.Nuance, myBeam.Param.lGeneration1, lOK)
+        lAppBeta = EN1994.IsBetaApplicable(myBeam.Section.Acier.Nuance, myBeam.Param.lGeneration1)
+
+        AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(BetaM * MplRd, Enu_TypeVariable.Moment, 4, 0, True))
+        If lAppBeta Then
+            '--| AffichageOptFeu de la valeur de beta, le cas échéant
+            zSurH = (myBeam.Dalle.zTop - zANP) / myBeam.HauteurTotaleSectionMixte
+            If lOK Then
+                '--| Cas du ratio z/h dans les limites du calcul plastique
+                AddLigneNDC(TABW2 & BlocSP("BETAMPLASTIC") & TABAFF & "\Sb\s" & TABEGAL & GetStringInUnitN(BetaM, Enu_TypeVariable.SansType, 4, 3, NON, True))
+                AddLigneNDC(TABW2 & BlocSP("FORZSURH") & TABAFF & "z/H" & TABEGAL & GetStringInUnitN(zSurH, Enu_TypeVariable.SansType, 4, 3, NON, True))
+
+            Else
+
+                zSurHLim = EN1994.LimiteZsurHplastic(myBeam.Section.Acier.Nuance, myBeam.Param.lGeneration1)
+                '--| Cas du ratio z/h en dehors des limites du calcul plastique
+                AddLigneNDC(TABW2 & RemplaceDollar(BlocSP("RATIOZHABOVELIMIT"), GetStringInUnitN(zSurH, Enu_TypeVariable.SansType, 4, 3, NON, True)))
+                AddLigneNDC(TABW2 & BlocSP("RATIOZHLIM") & TABAFF & "z/H <" & TABEGAL & GetStringInUnitN(zSurHLim, Enu_TypeVariable.SansType, 4, 3, NON, True))
+
+            End If
+            '--| Références
+            If myBeam.Param.lGeneration1 Then
+                Reference = BlocSP("REFEN1994G1")
+            Else
+                Reference = BlocSP("REFEN1994G2")
+            End If
+            AddLigneNDC(TABW2 & BlocSP("ACCORDINGTO") & TABAFF & Reference)
+        End If
+
+        AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnitN(zANP, Enu_TypeVariable.Dimension, 4, 1, OUI, False))
+        AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnitN(BetaMk * MplRk, Enu_TypeVariable.Moment, 4, 0, OUI, False))
+
+        '===================================================================================================================
+        '== En connexion partielle
+        '===================================================================================================================
+
+        Dim EtaMin As Decimal = 1
+        Dim nbCombi As Integer = myBeam.CombiA_ELU.nbCombi
+
+        EtaMin = myBeam.VerifSlimMixte(0).EtaEnveloppe(nbCombi)
+
+        If IsSmaller(EtaMin, 1) Then
+
+            Dim gammaS As Decimal = myBeam.Param.Gamma.GammaS
+            Dim gammaM0 As Decimal = myBeam.Param.Gamma.GammaM0
+            Dim gammaC As Decimal = myBeam.Param.Gamma.GammaC
+            Dim NProfile As Decimal
+            Dim NEnrobage, NArmaEnrobage As Decimal
+            'Dim NDalle As Decimal
+            'Dim NConnex As Decimal
+            'Dim lSimple As Decimal = myBeam.Param.lLargeurEfficaceSimplifiee
+            'Dim DeltaPrd As Decimal
+            'Dim BetaM_eta, BetaMk_eta As Decimal
+
+            NProfile = myBeam.Section.ResistanceTractionProfile(gammaM0)
+            If myBeam.Section.lEnrobage Then
+                NEnrobage = myBeam.Section.NResistanceCompressionEnrobage(gammaC)
+                NArmaEnrobage = myBeam.Section.NResistanceArmaturesEnrobage(gammaS)
+            End If
+
+
+            '--( Traitement des travées sur 2 appuis
+
+            '# En travée ######################################################################################
+
+            '==== Ajouter traitement du cas ou pas de moment >0
+
+            '---| Degré de connexion en zone de moment positif
+            'bEff = myBeam.BeffDalle(myBeam.LongueurTravee(iTraveeMin), iTraveeMin, lSimple, False)
+            'NDalle = myBeam.Dalle.NResistanceCompressionDalle(bEff, gammaC)
+            'NConnex = Math.Min(NDalle, NProfile + NArmaEnrobage)
+
+            'DeltaPrd = EtaMin * NConnex
+
+            'myBeam.Section.ProprietesPlastiquesMixteMyyEta(1, True, myBeam.Param.Gamma, 0, bEff, DeltaPrd, myBeam.Dalle, True, zANP, MplRd)
+            'myBeam.Section.ProprietesPlastiquesMixteMyyEta(1, False, myBeam.Param.Gamma, 0, bEff, DeltaPrd, myBeam.Dalle, True, zANPk, MplRk)
+
+            'BetaM_eta = 1 - (1 - BetaM) * EtaMin
+            'BetaMk_eta = 1 - (1 - BetaMk) * EtaMin
+
+            Dim strEta As String = GetStringInUnitN(EtaMin, Enu_TypeVariable.SansType, 4, 3, NON, True)
+
+            SauteLigne()
+            AddLigneNDC(TABW2 & "\U" & BlocSP("PLASTICPARTIALCX") & "\u" & TABAFF & " \Sh\s" & TABEGAL & strEta)
+
+
+            'AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnitN(BetaM_eta * MplRd, Enu_TypeVariable.Moment, 4, 0, OUI, False))
+            'AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnitN(zANP, Enu_TypeVariable.Dimension, 4, 1, OUI, False))
+            'AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnitN(BetaMk_eta * MplRk, Enu_TypeVariable.Moment, 4, 0, OUI, False))
+
+        End If
+    End Sub
+
     Private Sub EditionProprietesSectionPoutreMixteN(myBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
         '   15/12/23 :  Création - POM
@@ -3984,8 +4145,6 @@ Module Mod_NoteCalcul
         Dim lDalle() As Boolean = Nothing
         Dim NeqDalle() As Decimal = Nothing
         Dim NeqEnrob() As Decimal = Nothing
-        Dim strFormatNoteFin As String = "\i"
-        Dim strFormatNote As String = "\I"
         Dim lMultiSpan As Boolean = myBeam.lMultiSpan
         Dim lEnrob As Boolean = myBeam.lEnrobage
         Dim bEff As Decimal
@@ -4093,8 +4252,6 @@ Module Mod_NoteCalcul
 
         If IsSmaller(EtaMin, 1) Then
 
-            SauteLigne()
-            AddLigneNDC(TABW2 & "\U" & BlocSP("PLASTICPARTIALCX") & "\u")
 
             Dim gammaS As Decimal = myBeam.Param.Gamma.GammaS
             Dim gammaM0 As Decimal = myBeam.Param.Gamma.GammaM0
@@ -4108,11 +4265,10 @@ Module Mod_NoteCalcul
             Dim BetaM_eta, BetaMk_eta As Decimal
 
             NProfile = myBeam.Section.ResistanceTractionProfile(gammaM0)
-                If myBeam.Section.lEnrobage Then
-                    NEnrobage = myBeam.Section.NResistanceCompressionEnrobage(gammaC)
-                    NArmaEnrobage = myBeam.Section.NResistanceArmaturesEnrobage(gammaS)
-                End If
-
+            If myBeam.Section.lEnrobage Then
+                NEnrobage = myBeam.Section.NResistanceCompressionEnrobage(gammaC)
+                NArmaEnrobage = myBeam.Section.NResistanceArmaturesEnrobage(gammaS)
+            End If
 
             '--( Traitement des travées sur 2 appuis
 
@@ -4133,17 +4289,21 @@ Module Mod_NoteCalcul
             BetaM_eta = 1 - (1 - BetaM) * EtaMin
             BetaMk_eta = 1 - (1 - BetaMk) * EtaMin
 
+            Dim strEta As String = GetStringInUnitN(EtaMin, Enu_TypeVariable.SansType, 4, 3, NON, True)
+
+            SauteLigne()
+            AddLigneNDC(TABW2 & "\U" & BlocSP("PLASTICPARTIALCX") & "\u" & TABAFF & " \Sh\s" & TABEGAL & strEta)
+
+            'AddLigneNDC(TABW2 & RemplaceDollar(BlocSP("FORETA"), " \Sh\s = " & strEta))
             AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnitN(BetaM_eta * MplRd, Enu_TypeVariable.Moment, 4, 0, OUI, False))
             AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnitN(zANP, Enu_TypeVariable.Dimension, 4, 1, OUI, False))
             AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnitN(BetaMk_eta * MplRk, Enu_TypeVariable.Moment, 4, 0, OUI, False))
 
         End If
 
+        '--> Propriétés console gauche
 
-
-            '--> Propriétés console gauche
-
-            If myBeam.lTraveeConsoleGauche Then
+        If myBeam.lTraveeConsoleGauche Then
 
             AddTitreNdC(2, BlocSP("PROPERTIESLCANTILEVER"))
 
