@@ -644,7 +644,8 @@
 
 #Region " Outils pour la méthode Hivoss "
 
-    Public Function FrequenceDalle(LPoutre As Decimal, PorteeDalle As Decimal, LargInfluence As Decimal, MasseProfile As Decimal, G As Decimal, lGeneration1 As Boolean) As Decimal
+    Public Function FrequenceDalle(LPoutre As Decimal, PorteeDalle As Decimal, LargInfluence As Decimal,
+                                   MasseSurfDalle As Decimal, G As Decimal, lGeneration1 As Boolean) As Decimal
         '---------------------------------------------------------------------------------------------------
         '   01/12/23 :  Création - POM
         '---------------------------------------------------------------------------------------------------
@@ -653,7 +654,7 @@
         '   LPoutre         [E] :   Longueur de la poutre
         '   PorteeDalle     [E] :   Portée de la dalle
         '   LargInfleunce   [E] :   Largeur d'influence des charges sur la dalle
-        '   MasseProfile    [E] :   Masse du profilé acier
+        '   MasseSurfDalle  [E] :   Masse surfacique de la dalle
         '   G               [E] :   Valeur de G (gravité)
         '   lGeneration1    [E] :   Indique si calculs selon génération 1 des Eurocodes
         '---------------------------------------------------------------------------------------------------
@@ -666,17 +667,14 @@
         Dim Delta As Decimal
         Dim MyFreq As Decimal
         Dim pQ As Decimal
-        Dim Surface As Decimal
+        ' Dim Surface As Decimal
 
         '--> Initialisation
 
         RatioTsL = PorteeDalle / LPoutre
-        Surface = LPoutre * LargInfluence
+        'Surface = LPoutre * LargInfluence
 
-        ' MassesToCharges(MyBeam, Masses)
-        '==== A COMPLETER
-
-        Mu = 1 '(Masses(0) - MasseProfile + MyBeam.HivossParam.IndCombiQ / 10 * Masses(MyBeam.HivossParam.IndChargeQ + 1)) / Surface
+        Mu = MasseSurfDalle
 
         '--> Calcul inertie dalle / unite de longueur
 
@@ -694,7 +692,6 @@
 
         Return MyFreq
     End Function
-
 
     Public Function InertieTransversaleH(nEq As Decimal) As Decimal
         '---------------------------------------------------------------------------------------------------

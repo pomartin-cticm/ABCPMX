@@ -84,8 +84,6 @@ Public Class cls_VerificationsELS
             Next
         End If
 
-        '--> Calcul des fréquences propres
-
         '--> Maitrise de la fissuration sous contraintes directes
 
         If myBeam.Param.lMaitriseFissuration And lContinue And lMixte Then

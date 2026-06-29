@@ -1,4 +1,5 @@
 ﻿Imports System.Xml
+Imports PMXMoteur2.cls_Poutre
 
 Public Class cls_MethodHivoss
 
@@ -826,6 +827,7 @@ Public Class cls_MethodHivoss
         Dim PorteeDalle As Decimal
 
         Const kPC As Decimal = 100
+        Dim MsurfDalle As Decimal
 
         '--( Initialisations
 
@@ -851,8 +853,9 @@ Public Class cls_MethodHivoss
         If lFreqDalle Then
             MasseProfil = myBeam.Section.ProfilA.Aire * cls_Acier.RHOACIER
             PorteeDalle = myBeam.PorteeDalle
+            MsurfDalle = Me.MasseSurfPlancher(myBeam, 1)
 
-            Me.FreqDalle = myBeam.Dalle.FrequenceDalle(myBeam.LongueurTravee(1), PorteeDalle, myBeam.LargeurInfluence, MasseProfil,
+            Me.FreqDalle = myBeam.Dalle.FrequenceDalle(myBeam.LongueurTravee(1), PorteeDalle, myBeam.LargeurInfluence, MsurfDalle,
                                                        myBeam.Param.GraviteG, myBeam.Param.lGeneration1)
             Me.FreqPoutre = Me.Frequence
             Me.Frequence = CDec(1 / Math.Sqrt(1 / Me.FreqPoutre ^ 2 + 1 / Me.FreqDalle ^ 2))
@@ -864,6 +867,65 @@ Public Class cls_MethodHivoss
         Me.indConfort = myBeam.Hivoss.ConfortAssessment(Me.HCategorie)
 
     End Sub
+
+    Private Function MasseSurfPlancher(myBeam As cls_Poutre, iTravee As Integer) As Decimal
+        '------------------------------------------------------------------------------------------------------------------------
+        '   05/06/26 :  Création - V1.20 - POM
+        '------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la masse surfacique associée au plancher pour un calcul Hivoss
+        '------------------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   iTravee     [E] :   Indice de la travée considérée (1 à NbTravees)
+        '------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim MassePlancher As Decimal                                ' Masse surfacique du plancher (kg/m²)
+        Dim G_PP As StructPoidsPropres = myBeam.ChargeRepartiePP()
+        Dim PorteeDalle As Decimal = myBeam.PorteeDalle
+        Dim G As Decimal = myBeam.Param.GraviteG
+        Dim lMixte As Boolean = myBeam.lMixte
+        Dim i As Integer
+
+        '--( Calculs )=====================================================================================
+
+        '--( Masse de poids propre de la dalle et du bac acier répartie sur la portée de la dalle
+
+        MassePlancher = (G_PP.qPP_BacAcier + G_PP.qPP_DalleBeton) / PorteeDalle / G
+
+        '--( Masse associée aux autres charges permanentes
+
+        MassePlancher += myBeam.ChargesU(cls_Poutre.symbG1).QSurf(iTravee) / G
+        For i = 1 To myBeam.ChargesU(cls_Poutre.symbG1).FReparties(iTravee).Count - 1
+            MassePlancher += myBeam.ChargesU(cls_Poutre.symbG1).FReparties(iTravee)(i).ForceRepMoyenne / G / PorteeDalle
+        Next
+
+        If lMixte Then
+            MassePlancher += myBeam.ChargesU(cls_Poutre.symbG2).QSurf(iTravee) / G
+            For i = 0 To myBeam.ChargesU(cls_Poutre.symbG2).FReparties(iTravee).Count - 1
+                MassePlancher += myBeam.ChargesU(cls_Poutre.symbG2).FReparties(iTravee)(i).ForceRepMoyenne / G / PorteeDalle
+            Next
+        End If
+
+        '--( Masse associée aux charges d'exploitation
+
+        Dim symbQ As String = ""
+        Dim kHivoss As Decimal = myBeam.Hivoss.ratioQ
+        Select Case myBeam.Hivoss.choixQ
+            Case Enu_Q.Q1 : symbQ = cls_Poutre.symbQ1
+            Case Enu_Q.Q2 : symbQ = cls_Poutre.symbQ2
+        End Select
+
+        MassePlancher += kHivoss * myBeam.ChargesU(symbQ).QSurf(iTravee) / G
+        For i = 0 To myBeam.ChargesU(symbQ).FReparties(iTravee).Count - 1
+            MassePlancher += myBeam.ChargesU(symbQ).FReparties(iTravee)(i).ForceRepMoyenne / G / PorteeDalle
+        Next
+
+        Return MassePlancher
+
+    End Function
+
+
 
 #End Region
 

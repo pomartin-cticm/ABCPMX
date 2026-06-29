@@ -35,11 +35,14 @@ Public Class Frm_OptionsCalculPoutre
     End Sub
 
     Private Sub InitialisationsFenetre()
+
         cls_OptionsCalcul.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Param, MyParam)
         RemplirComboStandard()
         RemplirComboRH()
         RemplirComboG()
         RemplirComboWk()
+        GestionOptionsELU()
+
     End Sub
 
     Private Sub GestionLangues()
@@ -120,6 +123,15 @@ Public Class Frm_OptionsCalculPoutre
             GestionFichierLangueAbsent(Me.Name, "GestionLangues")
 
         End If
+
+    End Sub
+
+    Private Sub GestionOptionsELU()
+
+        Dim lSlim As Boolean = MyProjet.Poutres(MyProjet.IndEnCours).lSlimFloor
+
+        Me.rdb_ElasticDesignClasse3.Enabled = Not lSlim
+        Me.rdb_ElasticDesignVM.Enabled = Not lSlim
 
     End Sub
 

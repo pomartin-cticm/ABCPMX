@@ -918,17 +918,62 @@ Public Class cls_Projet
         '   Ecriture du bloc CALCUL THERMIQUE de la poutre (pour poutre slim floor)
         '-------------------------------------------------------------------------------------
 
-        If myBeam.lSlimFloorAcier And myBeam.lCalculOK Then
+        If myBeam.lSlimFloor And myBeam.lCalculOK Then
 
             Lines.Add("BLOCK " & BkCALCULTH)
 
-            SaveFileCalculThDet(myBeam.VerifFeuSlimAcier, Lines)
+            If myBeam.lMixte Then
+                SaveFileCalculThDetMixte(myBeam.VerifFeuSlimMixte, Lines)
+            Else
+                SaveFileCalculThDet(myBeam.VerifFeuSlimAcier, Lines)
+            End If
 
         End If
 
     End Sub
 
     Private Sub SaveFileCalculThDet(ResultsTh As cls_VerifFeuSlimAcier, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   10/04/26 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc CALCUL THERMIQUE de la poutre (pour poutre slim floor)
+        '-------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim iStep As Integer = 0
+        Dim NbStep As Integer
+        Dim iY As Integer
+        Dim Chaine As String = ""
+        Const SP As String = " "
+        Dim KeyMot As String
+
+        '--(
+
+        AjouteLigneFrmt(Lines, "NB_Y", ResultsTh.Maillage_NbY)
+        AjouteLigneFrmt(Lines, "NB_Z", ResultsTh.Maillage_NbZ)
+
+        NbStep = cls_VerifFeuSlimAcier.TimeSteps.GetUpperBound(0) + 1
+
+        For iStep = 0 To NbStep - 1
+
+            Lines.Add("BLOCK " & BkTHR & "R" & CInt(cls_VerifFeuSlimAcier.TimeSteps(iStep)).ToString)
+
+            For iY = 0 To ResultsTh.Maillage_NbY - 1
+
+                KeyMot = "Column " & CStr(iY) & SP
+                Chaine = ""
+                For iZ As Integer = 0 To ResultsTh.Maillage_NbZ - 1
+                    Chaine = Chaine & Format(ResultsTh.TemperatureMaille(iStep, iY, iZ), "0.00") & SP
+                Next
+
+                AjouteLigneFrmt(Lines, KeyMot, Chaine)
+
+            Next
+        Next
+    End Sub
+
+    Private Sub SaveFileCalculThDetMixte(ResultsTh As cls_VerifFeuSlimMixte, ByRef Lines As List(Of String))
         '-------------------------------------------------------------------------------------
         '   10/04/26 :  Création - POM
         '-------------------------------------------------------------------------------------

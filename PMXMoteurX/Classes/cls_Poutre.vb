@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Security.Policy
 Imports System.Windows
+Imports System.Windows.Forms.VisualStyles
 Imports CTICM_DATA_DLLS
 Imports CTICM_RDM
 Imports Microsoft.VisualBasic.Logging
@@ -498,10 +499,10 @@ Public Class cls_Poutre
 
     Public Const symbG1PP As String = "G1pp"
     Const symbG1C As String = "G1c"
-    Const symbG1 As String = "G1"
-    Const symbG2 As String = "G2"
-    Const symbQ1 As String = "Q1"
-    Const symbQ2 As String = "Q2"
+    Public Const symbG1 As String = "G1"
+    Public Const symbG2 As String = "G2"
+    Public Const symbQ1 As String = "Q1"
+    Public Const symbQ2 As String = "Q2"
     Const symbQC As String = "QC"
     'Const symbQ1D1 As String = "Q1#1"
 
@@ -1603,7 +1604,7 @@ Public Class cls_Poutre
         'Clone ChargeUtilisateur
         PoutreCible.ChargesU = New Dictionary(Of String, cls_ChargementUtilisateur)
         For Each element As KeyValuePair(Of String, cls_ChargementUtilisateur) In PoutreSource.ChargesU
-            Dim element_local As cls_ChargementUtilisateur
+            Dim element_local As cls_ChargementUtilisateur = Nothing
             element_local.DeepClone(element.Value, element_local)
             PoutreCible.ChargesU.Add(element.Key, element_local)
         Next
@@ -3604,10 +3605,83 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Sub ProprietesVerifSlimFloorAcier(iCombi As Integer, MyPoutre As cls_Poutre, lValRd As Boolean,
+    Public Sub ProprietesMplRdSlimFloorAcier(iCombi As Integer, lValRd As Boolean, RhoV(,) As Decimal,
+                                             ByRef MplRd(,) As Decimal, ByRef zANP(,) As Decimal,
+                                             PsiAfi(,) As Decimal, RhoTfi(,) As Decimal, PsiYfi(,) As Decimal,
+                                             PsiAspd(,) As Decimal, RhoTspd(,) As Decimal, PsiYspd(,) As Decimal)
+        '------------------------------------------------------------------------------
+        '   06/05/2024 :  Création - GUD
+        '------------------------------------------------------------------------------
+        '   Calcul des propriétés plastiques MplRd le long de la barre en fonction de 
+        '   du chargement et de l'interaction MV (RhoV)
+        '------------------------------------------------------------------------------
+        '   MyPoutre    [E] :   Poutre traitée
+        '   iCombi      [E] :   indice de la combi en cours 
+        '   lValRd      [E] :   indique si valeur de calcul (True) ou non (False)
+        '   RhoV        [E] :   Table des valeurs de RhoV le long de la barre
+        '   MplRd       [S] :   Moment plastique résistant
+        '   zANP        [S] :   Axe neutre plastique
+        '
+        '   PsiYfi      [E] :   Réduction de la limite d'élasticité pour la semelle inférieure, tenant compte de la flexion locale
+        '   PsiYspd     [E] :   Réduction de la limite d'élasticité pour le plat inférieur, tenant compte de la flexion locale
+        '
+        '   PsiAfi      [E] :   Réduction de l'aire de la semelle inférieure, tenant compte de la flexion locale
+        '   PsiAspd     [E] :   Réduction de l'aire du plat inférieur, tenant compte de la flexion locale
+        '
+        '   PhoTfi      [E] :   Réduction de l'épaisseur de la semelle inférieure, tenant compte de la flexion locale
+        '   PhoTspd     [E] :   Réduction de l'épaisseur du plat inférieur, tenant compte de la flexion locale
+        '   
+        '------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim rhoVLoc As Decimal
+        Dim NbNodes As Integer = Me.Nodes.nbNodes
+        Dim iTravee As Integer
+        Dim iTravDeb, iTravFin As Integer       ' Par principe, en fait toutes les poutres sont sans consoles
+        Dim iNode As Integer
+        Dim iNodeDeb, iNodeFin As Integer
+        Dim kDeb, kfin As Integer
+
+        Dim lEdge As Boolean = Not Me.lIntermediaire
+
+        '--> Initialisation
+
+        iTravDeb = Me.IndicePremiereTravee
+        iTravFin = Me.IndiceDerniereTravee
+        ReDim zANP(NbNodes - 1, 1)
+        ReDim MplRd(NbNodes - 1, 1)
+
+        '--> Traitement
+
+        For iTravee = iTravDeb To iTravFin
+
+            iNodeDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iNodeDeb To iNodeFin
+                If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
+                If iNode = iNodeFin Then kfin = 0 Else kfin = 1
+
+                rhoVLoc = RhoV(iCombi, iNode)
+
+                Me.Section.ProprietesPlastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, rhoVLoc, lEdge, zANP(iNode, kDeb), MplRd(iNode, kDeb),
+                                                        PsiAfi(iCombi, iNode), RhoTfi(iCombi, iNode), PsiYfi(iCombi, iNode),
+                                                        PsiAspd(iCombi, iNode), RhoTspd(iCombi, iNode), PsiYspd(iCombi, iNode))
+
+                If kfin > kDeb Then
+                    zANP(iNode, kfin) = zANP(iNode, kDeb)
+                    MplRd(iNode, kfin) = MplRd(iNode, kDeb)
+                End If
+            Next
+
+        Next
+    End Sub
+
+    Public Sub ProprietesVerifSlimFloorAcier(iCombi As Integer, lValRd As Boolean,
                                              ByRef MplRd(,) As Decimal, ByRef zANP(,) As Decimal, ByRef MelRd(,) As Decimal, ByRef zANE(,) As Decimal,
-                                             Psi_fi(,) As Decimal, rho_t_fi(,) As Decimal, Psi_y_fi(,) As Decimal,
-                                             Psi_spd(,) As Decimal, rho_t_spd(,) As Decimal, Psi_y_spd(,) As Decimal)
+                                             PsiAfi(,) As Decimal, RhoTfi(,) As Decimal, PsiYfi(,) As Decimal,
+                                             PsiAspd(,) As Decimal, RhoTspd(,) As Decimal, PsiYspd(,) As Decimal)
         '------------------------------------------------------------------------------
         '   06/05/2024 :  Création - GUD
         '------------------------------------------------------------------------------
@@ -3617,16 +3691,25 @@ Public Class cls_Poutre
         '   MyPoutre    [E] :   Poutre traitée
         '   iCombi      [E] :   indice de la combi en cours 
         '   lValRd      [E] :   indique si valeur de calcul (True) ou non (False)
-        '   MplRd       [E] :   Moment plastique résistant
-        '   zANP        [E] :   Axe neutre plastique
-        '   MelRd       [E] :   Moment élastique résistant
-        '   zANE        [E] :   Axe neutre élastique
-        '   Psi_fi      COMPLETER
+        '   MplRd       [S] :   Moment plastique résistant
+        '   zANP        [S] :   Axe neutre plastique
+        '   MelRd       [S] :   Moment élastique résistant
+        '   zANE        [S] :   Axe neutre élastique
+        '
+        '   PsiYfi      [E] :   Réduction de la limite d'élasticité pour la semelle inférieure, tenant compte de la flexion locale
+        '   PsiYspd     [E] :   Réduction de la limite d'élasticité pour le plat inférieur, tenant compte de la flexion locale
+        '
+        '   PsiAfi      [E] :   Réduction de l'aire de la semelle inférieure, tenant compte de la flexion locale
+        '   PsiAspd     [E] :   Réduction de l'aire du plat inférieur, tenant compte de la flexion locale
+        '
+        '   PhoTfi      [E] :   Réduction de l'épaisseur de la semelle inférieure, tenant compte de la flexion locale
+        '   PhoTspd     [E] :   Réduction de l'épaisseur du plat inférieur, tenant compte de la flexion locale
+        '   
         '------------------------------------------------------------------------------
 
         '--> Déclaration
 
-        Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim NbNodes As Integer = Me.Nodes.nbNodes
         Dim iTravee As Integer
         Dim iTravDeb, iTravFin As Integer       ' Par principe, en fait toutes les poutres sont sans consoles
         Dim iNode As Integer
@@ -3634,12 +3717,12 @@ Public Class cls_Poutre
         Dim kDeb, kfin As Integer
         Dim InertieY As Decimal
         Const rhoVLoc As Decimal = 0            ' Pas d'interaction MV
-        Dim lEdge As Boolean = Not MyPoutre.lIntermediaire
+        Dim lEdge As Boolean = Not Me.lIntermediaire
 
         '--> Initialisation
 
-        iTravDeb = MyPoutre.IndicePremiereTravee
-        iTravFin = MyPoutre.IndiceDerniereTravee
+        iTravDeb = Me.IndicePremiereTravee
+        iTravFin = Me.IndiceDerniereTravee
         ReDim zANE(NbNodes - 1, 1)
         ReDim zANP(NbNodes - 1, 1)
         ReDim MelRd(NbNodes - 1, 1)
@@ -3649,20 +3732,20 @@ Public Class cls_Poutre
 
         For iTravee = iTravDeb To iTravFin
 
-            iNodeDeb = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
-            iNodeFin = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+            iNodeDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
 
             For iNode = iNodeDeb To iNodeFin
                 If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
                 If iNode = iNodeFin Then kfin = 0 Else kfin = 1
 
                 Me.Section.ProprietesElastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, lEdge, zANE(iNode, kDeb), InertieY, MelRd(iNode, kDeb),
-                                                        Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
-                                                        Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
+                                                        PsiAfi(iCombi, iNode), RhoTfi(iCombi, iNode), PsiYfi(iCombi, iNode),
+                                                        PsiAspd(iCombi, iNode), RhoTspd(iCombi, iNode), PsiYspd(iCombi, iNode))
 
                 Me.Section.ProprietesPlastiquesMyy_Slim(1, lValRd, Me.Param.Gamma, rhoVLoc, lEdge, zANP(iNode, kDeb), MplRd(iNode, kDeb),
-                                                        Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
-                                                        Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
+                                                        PsiAfi(iCombi, iNode), RhoTfi(iCombi, iNode), PsiYfi(iCombi, iNode),
+                                                        PsiAspd(iCombi, iNode), RhoTspd(iCombi, iNode), PsiYspd(iCombi, iNode))
 
                 If kfin > kDeb Then
                     zANE(iNode, kfin) = zANE(iNode, kDeb)
@@ -4615,6 +4698,12 @@ Public Class cls_Poutre
         '   09/09/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Retourne la charge répartie de poids propre
+        '   Prenant en compte :
+        '   - Le profilé acier
+        '   - La dalle béton
+        '   - Le bac acier
+        '-------------------------------------------------------------------------------------------
+        '   lProfile     [E] :   Prendre en compte le profilé acier ou non
         '-------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -4652,7 +4741,6 @@ Public Class cls_Poutre
             Else
                 .qPP_BacAcier = 0
             End If
-
 
             '--> Bilan et fin
             .qPP_Total = .qPP_ProfilAcier + .qPP_DalleBeton + .qPP_BacAcier + .qPP_BetonEnrobage
@@ -5924,10 +6012,37 @@ Public Class cls_Poutre
             Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SAB
                 lVerifOK = VerificationELUDispoSlimACIER()
             Case cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SFBmixte, cls_Section.Enum_TypeSection.SABmixte
-
+                lVerifOK = VerificationELUDispoSlimMIXTE()
         End Select
 
         Return lVerifOK
+    End Function
+
+    Private Function VerificationELUDispoSlimMIXTE() As Boolean
+        '-------------------------------------------------------------------------------------
+        '   26/06/26 :  Création - Version 1.20 - POM
+        '-------------------------------------------------------------------------------------
+        '   Indique si les vérifications ont été effectuées et sont disponibles
+        '   Pour une section slim mixte
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lOK As Boolean = True
+
+        '--> Traitement
+
+        If Me.VerifSlimMixte Is Nothing Then
+            lOK = False
+        Else
+            If Me.VerifSlimMixte.GetUpperBound(0) < 0 Then
+                lOK = False
+            Else
+                If Me.VerifSlimMixte(0) Is Nothing Then lOK = False
+            End If
+        End If
+
+        Return lOK
     End Function
 
     Private Function VerificationELUDispoACIER() As Boolean

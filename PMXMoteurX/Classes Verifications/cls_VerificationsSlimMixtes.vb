@@ -9,8 +9,11 @@
     Private ConvSigneT As Decimal                   ' Convention de signe pour les contraintes de traction
 
     Public CritereM As cls_Critere                  ' Resistance à la flexion
+    Public CritereMY As cls_Critere                 ' Resistance à la flexion transversale 
+
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
     Public CritereMV As cls_Critere                 ' Résistance à l'interacion MV
+
     'Public CritereVb As cls_Critere                 ' Pas de voilement par cisaillement pour les slimfloors 
     'Public CritereMVb As cls_Critere                ' Pas d'interaction flexion + voilement par cisaillement
 
@@ -26,8 +29,13 @@
 
     Public RhoV As Decimal(,)                       ' Coefficient d'interaction : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
 
-    Public Psi_fi, rho_t_fi, Psi_y_fi As Decimal(,)   ' Coefficient de réduction de la semelle inférieure : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
-    Public Psi_spd, rho_t_spd, Psi_y_spd As Decimal(,) ' Coefficient de réduction du plat soudé inférieur : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
+    '== Pour tous les coefficents de réduction ci-dessous, : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
+    Public PsiAfi As Decimal(,)                     ' Coefficient de réduction de la semelle inférieure (aire, méthode 1)
+    Public RhoTfi As Decimal(,)                     ' Coefficient de réduction de la semelle inférieure (épaisseur, méthode 2)
+    Public PsiYfi As Decimal(,)                     ' Coefficient de réduction de la semelle inférieure (limite d'élasticité, méthode 3)
+    Public PsiAspd As Decimal(,)                    ' Coefficient de réduction du plat soudé inférieur (aire, méthode 1)
+    Public RhoTspd As Decimal(,)                    ' Coefficient de réduction du plat soudé inférieur (épaisseur, méthode 2)
+    Public PsiYspd As Decimal(,)                    ' Coefficient de réduction du plat soudé inférieur (limite d'élasticité, méthode 3)
 
     Public methodeReduction As MethodeReductionPlatSlimFloor
 
@@ -113,6 +121,7 @@
     Private Sub InitialiseCriteres(NbNodes As Integer, nbCombi As Integer, IndDerniereT As Integer)
 
         Me.CritereM = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        Me.CritereMY = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         Me.CritereV = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         'Me.CritereVb = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         Me.CritereMV = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
@@ -147,7 +156,6 @@
 
     End Sub
 
-
 #End Region
 
 #Region "===Gestion globale de la vérification==="
@@ -167,6 +175,7 @@
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
         Dim QEd() As Decimal = Nothing                  ' tableau des forces nodales
+        Dim QSupEd() As Decimal = Nothing               ' tableau des forces nodales / unité longueur
 
         Dim VplRd As Decimal                            ' Effort tranchant résistant (a priori constant le long de la poutre)
         'Dim VbRd As Decimal                             ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
@@ -215,6 +224,8 @@
         Dim FluxRd(,) As Decimal = Nothing              ' Résistance de la connexion / u longueur le long de la barre
         Dim lPlastOK() As Boolean = {True, True}
 
+        Dim CSlim As New cls_CalculSlim
+
         '--> Initialisations
 
         lCombiClass3 = False
@@ -235,6 +246,10 @@
 
         lSimple = myBeam.Param.lLargeurEfficaceSimplifiee
         myBeam.MaillageBeff(lSimple, False, Beff)
+
+        '# Tableaux
+
+        Me.InitialiseCoeffReduc(myBeam.CombiA_ELU.nbCombi, myBeam.Nodes.nbNodes)
 
         '# Tranchant résistant
 
@@ -286,6 +301,14 @@
                 '# Combinaison des efforts tranchants
 
                 myBeam.CombiA_ELU.CombineEffortsT(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, VEd, Not Me.lCalculPlastic)
+
+                '# Recupération des efforts nodaux à partir des tranchants combinés
+
+                myBeam.CombiA_ELU.RecupererEffortsNodauxPonderees(myBeam.Nodes, VEd, QEd, QSupEd)
+
+                '# Calcul des coefficients de réduction 
+
+                CSlim.CalculCoefficientsReduction(iCombi, myBeam, QEd, PsiAfi, RhoTfi, PsiYfi, PsiAspd, RhoTspd, PsiYspd)
 
                 '# Combinaison des contraintes normales élastiques
 
@@ -351,6 +374,10 @@
 
                 Me.RunCritereMoments(myBeam, lFirst, iCombi, Me.lCalculPlastic, lClasse3, MEd, SigmaELU, MplRd)
 
+                '# Vérification de la flexion locale
+
+                CSlim.RunCritereResistancePlastiquePlatY_N(myBeam, iCombi, QSupEd, Me.CritereMY)
+
                 '# Vérification sous effort tranchant
 
                 If myBeam.Param.lElasticDesignVM Then
@@ -360,7 +387,7 @@
                     Me.RunCritereInteractionMVElastiqueVonMises(myBeam, iCombi, SigmaELU, TauELU)
                 Else
                     '# Critère de résistance plastique
-                    Me.RunCritereTranchants(myBeam, iCombi, VEd, VplRd)
+                    CSlim.RunCritereTranchants(myBeam, iCombi, VEd, VplRd, Me.CritereV)
                 End If
 
                 '# Vérification du voilement par cisaillement
@@ -1617,47 +1644,47 @@
     End Sub
 
 
-    Private Sub RunCritereTranchants(myBeam As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   10/10/23 :  Création - GUD
-        '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance à l'effort tranchant 
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam  [E] :   Poutre traitée
-        '   iCombi  [E] :   Indice de la combinaison
-        '   VEd     [E] :   Table des efforts tranchants le long de la barre
-        '   VplRd   [E] :   Table des efforts tranchants résistant plastique le long de la barre
-        '----------------------------------------------------------------------------------------------------------
+    'Private Sub RunCritereTranchants(myBeam As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   10/10/23 :  Création - GUD
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Vérification aux ELU de la résistance à l'effort tranchant 
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   myBeam  [E] :   Poutre traitée
+    '    '   iCombi  [E] :   Indice de la combinaison
+    '    '   VEd     [E] :   Table des efforts tranchants le long de la barre
+    '    '   VplRd   [E] :   Table des efforts tranchants résistant plastique le long de la barre
+    '    '----------------------------------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        Dim iNode, k As Integer
-        Dim iTravee, iDebT, iFinT As Integer
-        Dim iDebN, iFinN As Integer
-        Dim iDebK, iFinK As Integer
+    '    Dim iNode, k As Integer
+    '    Dim iTravee, iDebT, iFinT As Integer
+    '    Dim iDebN, iFinN As Integer
+    '    Dim iDebK, iFinK As Integer
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        iDebT = myBeam.IndicePremiereTravee
-        iFinT = myBeam.IndiceDerniereTravee
+    '    iDebT = myBeam.IndicePremiereTravee
+    '    iFinT = myBeam.IndiceDerniereTravee
 
-        '--> Traitement
+    '    '--> Traitement
 
-        For iTravee = iDebT To iFinT
-            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+    '    For iTravee = iDebT To iFinT
+    '        iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+    '        iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
 
-            For iNode = iDebN To iFinN
-                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
-                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+    '        For iNode = iDebN To iFinN
+    '            If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+    '            If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
 
-                For k = iDebK To iFinK
-                    Me.CritereV.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VplRd)
-                Next
-            Next
-        Next
+    '            For k = iDebK To iFinK
+    '                Me.CritereV.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VplRd)
+    '            Next
+    '        Next
+    '    Next
 
-    End Sub
+    'End Sub
 
     Private Sub RunCriteresInteractionMV(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, MVRd(,) As Decimal)
         '----------------------------------------------------------------------------------------------------------
@@ -1788,7 +1815,7 @@
 
         '--> Déclaration
 
-        Dim NArmaDalle, NDalle, NProfile, NEnrobage, NArmaEnrobage As Decimal
+        Dim NArmaDalle, NDalle, NProfile As Decimal
         Dim NConnex As Decimal
         Dim iNode, iNode0 As Integer
         Dim Beff As Decimal
@@ -1807,12 +1834,7 @@
         iTravDeb = MyPoutre.IndicePremiereTravee
         iTravFin = MyPoutre.IndiceDerniereTravee
 
-        '##ZZZ A compléter dans le cas des profilés enrobés
         NProfile = MyPoutre.Section.ResistanceTractionProfile(gammaM0)
-        If MyPoutre.Section.lEnrobage Then
-            NEnrobage = MyPoutre.Section.NResistanceCompressionEnrobage(gammaC)
-            NArmaEnrobage = MyPoutre.Section.NResistanceArmaturesEnrobage(gammaS)
-        End If
 
         AfSup = MyPoutre.Section.ProfilA.AireFs
         AfInf = MyPoutre.Section.ProfilA.AireFi
@@ -1826,7 +1848,7 @@
             iNode = MyPoutre.Nodes.iNodeExtTrav(0, 1)
             Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(0), 0, lSimple, False)
             NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
-            NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
+            NConnex = Math.Min(NArmaDalle, NProfile)
             'DegConnex(0, 1) = DeltaRd(0)(iNode) / NConnex
             EnregistreDegreConnex(DegConnex(0, 1), DeltaRd(0)(iNode) / NConnex)
             DegConnex(0, 0) = -1
@@ -1839,7 +1861,7 @@
             iNode = MyPoutre.Nodes.iNodeExtTrav(iTravFin, 0)
             Beff = MyPoutre.BeffDalle(0, iTravFin, lSimple, False)
             NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
-            NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
+            NConnex = Math.Min(NArmaDalle, NProfile)
             'DegConnex(iTravFin, 1) = DeltaRd(iTravFin)(0) / NConnex
             EnregistreDegreConnex(DegConnex(iTravFin, 1), DeltaRd(iTravFin)(0) / NConnex)
             DegConnex(iTravFin, 0) = -1
@@ -1855,7 +1877,7 @@
                 '# Cas d'un appui gauche avec continuité => On suppose un moment négatif
                 Beff = MyPoutre.BeffDalle(0, iTravee, lSimple, False)
                 NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
-                NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
+                NConnex = Math.Min(NArmaDalle, NProfile)
                 'DegConnex(iTravee, 1) = DeltaRd(iTravee)(0) / NConnex
                 EnregistreDegreConnex(DegConnex(iTravee, 1), DeltaRd(iTravee)(0) / NConnex)
             End If
@@ -1865,7 +1887,7 @@
             '---| Degré de connexion en zone de moment positif
             Beff = MyPoutre.BeffDalle(MyPoutre.Nodes.xTravee(iNodeMmax(iTravee)), iTravee, lSimple, False)
             NDalle = MyPoutre.Dalle.NResistanceCompressionDalle(Beff, gammaC)
-            NConnex = Math.Min(NDalle, NProfile + NArmaEnrobage)
+            NConnex = Math.Min(NDalle, NProfile)
             'DegConnex(iTravee, 0) = DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex
             EnregistreDegreConnex(DegConnex(iTravee, 0), DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex)
 
@@ -1881,7 +1903,7 @@
                 iNode = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
                 Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(iTravee), iTravee, lSimple, False)
                 NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
-                NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
+                NConnex = Math.Min(NArmaDalle, NProfile)
                 'If (iTravee > iTravDeb) Then
                 '    DegConnex(iTravee, 1) = Math.Min(DegConnex(iTravee, 1), DeltaRd(iTravee)(iNode - iNode0) / NConnex)
                 'Else
@@ -2065,6 +2087,30 @@
         Return lOK
     End Function
 
+
+#End Region
+
+
+#Region " Calcul coefficient de réduction plat inférieur "
+
+    Private Sub InitialiseCoeffReduc(NbCombi As Integer, NbNodes As Integer)
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   31/07/25 :  Reprise
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Initialisation des tableaux pour le calcul des coefficients de réduction
+        '   liés à la flexion transversale des semelles inférieures de slim
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        ReDim Me.PsiAfi(NbCombi - 1, NbNodes - 1)
+        ReDim Me.RhoTfi(NbCombi - 1, NbNodes - 1)
+        ReDim Me.PsiYfi(NbCombi - 1, NbNodes - 1)
+
+        ReDim Me.PsiAspd(NbCombi - 1, NbNodes - 1)
+        ReDim Me.RhoTspd(NbCombi - 1, NbNodes - 1)
+        ReDim Me.PsiYspd(NbCombi - 1, NbNodes - 1)
+
+    End Sub
 
 #End Region
 

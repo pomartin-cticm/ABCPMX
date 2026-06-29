@@ -1,4 +1,6 @@
-﻿Public Class cls_VerificationSlimAcier
+﻿Imports System.Security.Claims
+
+Public Class cls_VerificationSlimAcier
     '=========================================================================================================
     '=  CLASSE POUR LA VERIFICATION DES POUTRES SLIMFLOOR ACIER
     '=========================================================================================================
@@ -16,12 +18,12 @@
     Public RhoV As Decimal(,)                       ' Coefficient d'interaction : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
 
     '== Pour tous les coefficents de réduction ci-dessous, : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
-    Public Psi_fi As Decimal(,)                     ' Coefficient de réduction de la semelle inférieure (aire, méthode 1)
-    Public rho_t_fi As Decimal(,)                   ' Coefficient de réduction de la semelle inférieure (épaisseur, méthode 2)
-    Public Psi_y_fi As Decimal(,)                   ' Coefficient de réduction de la semelle inférieure (limite d'élasticité, méthode 3)
-    Public Psi_spd As Decimal(,)                    ' Coefficient de réduction du plat soudé inférieur (aire, méthode 1)
-    Public rho_t_spd As Decimal(,)                  ' Coefficient de réduction du plat soudé inférieur (épaisseur, méthode 2)
-    Public Psi_y_spd As Decimal(,)                  ' Coefficient de réduction du plat soudé inférieur (limite d'élasticité, méthode 3)
+    Public PsiAfi As Decimal(,)                     ' Coefficient de réduction de la semelle inférieure (aire, méthode 1)
+    Public RhoTfi As Decimal(,)                     ' Coefficient de réduction de la semelle inférieure (épaisseur, méthode 2)
+    Public PsiYfi As Decimal(,)                     ' Coefficient de réduction de la semelle inférieure (limite d'élasticité, méthode 3)
+    Public PsiAspd As Decimal(,)                    ' Coefficient de réduction du plat soudé inférieur (aire, méthode 1)
+    Public RhoTspd As Decimal(,)                    ' Coefficient de réduction du plat soudé inférieur (épaisseur, méthode 2)
+    Public PsiYspd As Decimal(,)                    ' Coefficient de réduction du plat soudé inférieur (limite d'élasticité, méthode 3)
 
     Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
 
@@ -129,6 +131,7 @@
 
         Dim iTravee, iDebT, iFinT As Integer
         Dim iDebN, iFinN As Integer
+        Dim CSlim As New cls_CalculSlim
 
         '--( Initialisation
 
@@ -137,7 +140,7 @@
 
         'lRive = Not myBeam.lIntermediaire
         'If lRive Then kQloc = 1 Else kQloc = 1 / 2
-        kQloc = CoefficientCharge(myBeam)
+        kQloc = CSlim.CoefficientCharge(myBeam)
 
         'dApp = Me.LargeurAppui(myBeam)
         'Me.BrasLevier(myBeam, dApp, dbtFi, dbtPlat)
@@ -250,10 +253,12 @@
 
         Dim lRetraitElastique As Boolean = True
         Dim lVerifElastic As Boolean                    ' Indique si on doit effectuer une verification élastique des sections
-        Const lWEB As Boolean = True
-        Dim lRec As Boolean
+        'Const lWEB As Boolean = True
+        'Dim lRec As Boolean
 
         Dim lChInCombi() As Boolean = Nothing
+
+        Dim CSlim As New cls_CalculSlim
 
         '--> Initialisations
 
@@ -281,11 +286,11 @@
 
         VRd = VplRd
 
-        '# Propriétés élastiques section brutes
+        '# Propriétés élastiques section brutes (sans réduction due à la flexion locale des semelle/plat inférieur)
 
         myBeam.Section.ProprietesElastiquesMyy_Slim(1, True, myBeam.Param.Gamma, zANE_SectionBrute, InertieY_SectionBrute, MelRd_SectionBrute)
 
-        '# Propriétés plastiques section brutes
+        '# Propriétés plastiques section brutes (sans réduction due à la flexion locale des semelle/plat inférieur)
 
         myBeam.Section.ProprietesPlastiquesMyy_Slim(1, True, myBeam.Param.Gamma, 0, zANP_SectionBrute, MplRd_SectionBrute)
 
@@ -293,8 +298,10 @@
 
         Dim lBeton As Boolean = myBeam.Section.lSlimFloor And (Not lConstructionPhase)
 
-        ClasseP = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, True, lBeton, False, lGeneration1, False, False, lWEB, lRec)
+        'ClasseP = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, True, lBeton, False, lGeneration1, False, False, lWEB, lRec)
         ' ClasseM = myBeam.Section.ClasseSection(zANP_SectionBrute, zANE_SectionBrute, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, False, False, lWEB, lrec)
+
+        ClasseP = myBeam.Section.ClasseSectionSlim(zANP_SectionBrute, zANE_SectionBrute, True, lGeneration1, False, myBeam.Dalle.Ep_td)
 
         '# Type de vérification pour les sections
 
@@ -344,12 +351,13 @@
 
             '# Calcul des coefficients de réduction 
 
-            CalculCoefficientsReduction(iCombi, myBeam, QEd) 'GUD: penser à faire la différence en fonction des largeurs participantes 
+            CSlim.CalculCoefficientsReduction(iCombi, myBeam, QEd,
+                                              PsiAfi, RhoTfi, PsiYfi, PsiAspd, RhoTspd, PsiYspd)
 
             '# Propriétés réduites
 
-            myBeam.ProprietesVerifSlimFloorAcier(iCombi, myBeam, True, MplRd, zANP, MelRd, zANE,
-                                                 Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
+            myBeam.ProprietesVerifSlimFloorAcier(iCombi, True, MplRd, zANP, MelRd, zANE,
+                                                 PsiAfi, RhoTfi, PsiYfi, PsiAspd, RhoTspd, PsiYspd)
 
             '# Combinaisons des contraintes
 
@@ -377,7 +385,7 @@
                 RunCritereResistanceElastiquePlatY(myBeam, iCombi, SigmaELU, SigmaY, TauY)
             Else
                 Me.RunCritereFlexionAcier(myBeam, iCombi, MEd, MplRd, MelRd, ClasseP, ClasseM, lClasse4)
-                Me.RunCritereResistancePlastiquePlatY_N(myBeam, iCombi, QSupEd)
+                CSlim.RunCritereResistancePlastiquePlatY_N(myBeam, iCombi, QSupEd, Me.CritereMY)
                 'Me.RunCritereResistancePlastiquePlatY(myBeam, iCombi, QEd)
             End If
 
@@ -393,7 +401,7 @@
 
                 '# Vérification sous effort tranchant
 
-                Me.RunCritereTranchants(myBeam, iCombi, VEd, VplRd)
+                CSlim.RunCritereTranchants(myBeam, iCombi, VEd, VplRd, Me.CritereV)
 
                 '# Vérification au voilement par cisaillement
 
@@ -407,7 +415,8 @@
 
                 '# Propriétés avec prise en compte de l'interaction MV
 
-                myBeam.ProprietesVerifMVAcier(iCombi, True, MVRd, zANPMV, Me.RhoV)
+                'myBeam.ProprietesVerifMVAcier(iCombi, True, MVRd, zANPMV, Me.RhoV)
+                myBeam.ProprietesMplRdSlimFloorAcier(iCombi, True, Me.RhoV, MVRd, zANPMV, PsiAfi, RhoTfi, PsiYfi, PsiAspd, RhoTspd, PsiYspd)
 
                 '# Vérification sous interaction MV
 
@@ -509,275 +518,277 @@
         '   liés à la flexion transversale des semelles inférieures de slim
         '-----------------------------------------------------------------------------------------------------------------------------
         '-----------------------------------------------------------------------------------------------------------------------------
-        ReDim Me.Psi_fi(NbCombi - 1, NbNodes - 1)
-        ReDim Me.rho_t_fi(NbCombi - 1, NbNodes - 1)
-        ReDim Me.Psi_y_fi(NbCombi - 1, NbNodes - 1)
 
-        ReDim Me.Psi_spd(NbCombi - 1, NbNodes - 1)
-        ReDim Me.rho_t_spd(NbCombi - 1, NbNodes - 1)
-        ReDim Me.Psi_y_spd(NbCombi - 1, NbNodes - 1)
-    End Sub
+        ReDim Me.PsiAfi(NbCombi - 1, NbNodes - 1)
+        ReDim Me.RhoTfi(NbCombi - 1, NbNodes - 1)
+        ReDim Me.PsiYfi(NbCombi - 1, NbNodes - 1)
 
-    Public Sub CalculCoefficientsReduction(iCombi As Integer, myPoutre As cls_Poutre, QEd() As Decimal)
-        '-----------------------------------------------------------------------------------------------------------------------------
-        '   31/07/25 :  Reprise
-        '-----------------------------------------------------------------------------------------------------------------------------
-        '   Calcul des coefficients de réduction liés à la flexion transversale des semelles inférieures de slim
-        '-----------------------------------------------------------------------------------------------------------------------------
-        '   iCombi      [E] :   Indice de la combinaison
-        '   myPoutre    [E] :   Poutre étudiée
-        '   QEd         [E] :   Efforts nodaux de la poutre
-        '-----------------------------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim iNode As Integer
-        Dim iTravee, iDebT, iFinT As Integer
-        Dim iDebN, iFinN As Integer
-        Dim deltaX As Decimal = myPoutre.LongueurTotale / myPoutre.Nodes.nbNodes
-
-        Dim q, dApp, GammaM0 As Decimal
-        Dim dbtFi, dbtPlat As Decimal
-
-        Dim FyPlat, fyInf As Decimal
-
-        Dim kChargeQ As Decimal
-
-        Dim EN1994 As New cls_Eurocodes
-
-        '--> Initialisation
-
-        iDebT = myPoutre.IndicePremiereTravee
-        iFinT = myPoutre.IndiceDerniereTravee
-
-        gammaM0 = myPoutre.Param.Gamma.GammaM0
-
-        dApp = myPoutre.SlimLargeurAppui
-        'Me.BrasLevier(myPoutre, dApp, dbtFi, dbtPlat)
-        myPoutre.Section.SlimBrasLevier(dApp, dbtFi, dbtPlat)
-
-        FyPlat = myPoutre.Section.FySpd
-        fyInf = myPoutre.Section.FyInf
-
-        'If myPoutre.lIntermediaire Then
-        '    kCote2 = myPoutre.EntraxeD2 / (myPoutre.EntraxeD1 + myPoutre.EntraxeD2)
-        'Else
-        '    kCote2 = 1
-        'End If
-        'kChargeQ = Math.Max(kCote2, 1 - kCote2)
-        kChargeQ = CoefficientCharge(myPoutre)
-
-        '--> Traitement
-
-        For iTravee = iDebT To iFinT
-            iDebN = myPoutre.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = myPoutre.Nodes.iNodeExtTrav(iTravee, 1)
-
-            For iNode = iDebN To iFinN
-
-                With myPoutre.Section.ProfilA
-
-                    '== Suggestion pour DeltaX (POM)
-                    If iNode = 0 Then
-                        deltaX = (myPoutre.Nodes.xGlobal(iNode + 1) - myPoutre.Nodes.xGlobal(iNode)) / 2
-                    ElseIf iNode = myPoutre.Nodes.nbNodes - 1 Then
-                        deltaX = (myPoutre.Nodes.xGlobal(iNode) - myPoutre.Nodes.xGlobal(iNode - 1)) / 2
-                    Else
-                        deltaX = (myPoutre.Nodes.xGlobal(iNode + 1) - myPoutre.Nodes.xGlobal(iNode - 1)) / 2
-                    End If
-                    '====
-
-                    q = kChargeQ * QEd(iNode) / deltaX
-
-                    Select Case .typeProfileAcier
-                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-
-                            Select Case myPoutre.Param.MethodReducPlatSlim
-                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire
-                                    Psi_spd(iCombi, iNode) = CalculPsi(q, .Plat_b, .Plat_t, FyPlat, .Plat_b - 2 * dApp, .Bfi, gammaM0)
-                                    Psi_fi(iCombi, iNode) = CalculPsi(q, .Bfi, .Tfi, fyInf, .Bfi, .Tw, gammaM0)
-
-                                    rho_t_spd(iCombi, iNode) = 1
-                                    rho_t_fi(iCombi, iNode) = 1
-
-                                    Psi_y_spd(iCombi, iNode) = 1
-                                    Psi_y_fi(iCombi, iNode) = 1
-
-                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M2_ReducEpaisseur
-
-                                    Psi_spd(iCombi, iNode) = 1
-                                    Psi_fi(iCombi, iNode) = 1
-
-                                    rho_t_spd(iCombi, iNode) = CalculRhot(q, dbtPlat, .Plat_t, FyPlat, gammaM0)
-                                    rho_t_fi(iCombi, iNode) = CalculRhot(q, dbtFi, .Tfi, fyInf, gammaM0)
-
-                                    Psi_y_spd(iCombi, iNode) = 1
-                                    Psi_y_fi(iCombi, iNode) = 1
-
-                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M3_ReducLimiteElasticite
-
-                                    Psi_spd(iCombi, iNode) = 1
-                                    Psi_fi(iCombi, iNode) = 1
-
-                                    rho_t_spd(iCombi, iNode) = 1
-                                    rho_t_fi(iCombi, iNode) = 1
-
-                                    Psi_y_spd(iCombi, iNode) = EN1994.SlimCalculPsiY(q, dbtPlat, .Plat_t, FyPlat, GammaM0)
-                                    Psi_y_fi(iCombi, iNode) = EN1994.SlimCalculPsiY(q, dbtFi, .Tfi, fyInf, GammaM0)
-
-                            End Select
-
-                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-
-                            Select Case myPoutre.Param.MethodReducPlatSlim
-                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire
-                                    Psi_spd(iCombi, iNode) = CalculPsi(q, .Plat_b, .Plat_t, FyPlat, .Plat_b - 2 * dApp, .Tw, gammaM0)
-                                    Psi_fi(iCombi, iNode) = 1
-
-                                    rho_t_spd(iCombi, iNode) = 1
-                                    rho_t_fi(iCombi, iNode) = 1
-
-                                    Psi_y_spd(iCombi, iNode) = 1
-                                    Psi_y_fi(iCombi, iNode) = 1
-
-                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M2_ReducEpaisseur
-
-                                    Psi_spd(iCombi, iNode) = 1
-                                    Psi_fi(iCombi, iNode) = 1
-
-                                    rho_t_spd(iCombi, iNode) = CalculRhot(q, dbtPlat, .Plat_t, FyPlat, gammaM0)
-                                    rho_t_fi(iCombi, iNode) = 1
-
-                                    Psi_y_spd(iCombi, iNode) = 1
-                                    Psi_y_fi(iCombi, iNode) = 1
-
-                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M3_ReducLimiteElasticite
-                                    Psi_spd(iCombi, iNode) = 1
-                                    Psi_fi(iCombi, iNode) = 1
-
-                                    rho_t_spd(iCombi, iNode) = 1
-                                    rho_t_fi(iCombi, iNode) = 1
-
-                                    Psi_y_spd(iCombi, iNode) = EN1994.SlimCalculPsiY(q, dbtPlat, .Plat_t, FyPlat, GammaM0)
-                                    Psi_y_fi(iCombi, iNode) = 1
-
-                            End Select
-
-                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-
-                            Select Case myPoutre.Param.MethodReducPlatSlim
-                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire
-                                    Psi_spd(iCombi, iNode) = 1
-                                    Psi_fi(iCombi, iNode) = CalculPsi(q, .Bfi, .Tfi, fyInf, .Bfi - 2 * dApp, .Tw, gammaM0)
-
-                                    rho_t_spd(iCombi, iNode) = 1
-                                    rho_t_fi(iCombi, iNode) = 1
-
-                                    Psi_y_spd(iCombi, iNode) = 1
-                                    Psi_y_fi(iCombi, iNode) = 1
-
-                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M2_ReducEpaisseur
-
-                                    Psi_spd(iCombi, iNode) = 1
-                                    Psi_fi(iCombi, iNode) = 1
-
-                                    rho_t_spd(iCombi, iNode) = 1
-                                    rho_t_fi(iCombi, iNode) = CalculRhot(q, dbtFi, .Tfi, fyInf, gammaM0)
-
-                                    Psi_y_spd(iCombi, iNode) = 1
-                                    Psi_y_fi(iCombi, iNode) = 1
-
-                                Case cls_OptionsCalcul.Enu_MReducPlatSlim.M3_ReducLimiteElasticite
-                                    Psi_spd(iCombi, iNode) = 1
-                                    Psi_fi(iCombi, iNode) = 1
-
-                                    rho_t_spd(iCombi, iNode) = 1
-                                    rho_t_fi(iCombi, iNode) = 1
-
-                                    Psi_y_spd(iCombi, iNode) = 1
-                                    Psi_y_fi(iCombi, iNode) = EN1994.SlimCalculPsiY(q, dbtFi, .Tfi, fyInf, GammaM0)
-
-                            End Select
-
-                    End Select
-
-                End With
-
-            Next
-        Next
+        ReDim Me.PsiAspd(NbCombi - 1, NbNodes - 1)
+        ReDim Me.RhoTspd(NbCombi - 1, NbNodes - 1)
+        ReDim Me.PsiYspd(NbCombi - 1, NbNodes - 1)
 
     End Sub
 
-    ''' <summary>
-    ''' Fonction qui calcul le coefficient de réduction de l'aire du plat inférieur
-    ''' </summary>
-    ''' <param name="q">charge linéique</param>
-    ''' <param name="b">largeur du plat</param>
-    ''' <param name="t">épaisseur du plat</param>
-    ''' <param name="fy">nuance d'acier du plat</param>
-    ''' <param name="e1">distance entre les charges appliquées</param>
-    ''' <param name="e2">distance entre les appuis</param>
-    ''' <param name="gammaM0">coefficient partiel gammaM0</param>
-    ''' <returns></returns>
-    Private Function CalculPsi(q As Decimal, b As Decimal, t As Decimal, fy As Decimal,
-                               e1 As Decimal, e2 As Decimal, gammaM0 As Decimal) As Decimal
-        Dim psi, mu, lambda As Decimal
+    'Public Sub CalculCoefficientsReduction(iCombi As Integer, myPoutre As cls_Poutre, QEd() As Decimal)
+    '    '-----------------------------------------------------------------------------------------------------------------------------
+    '    '   31/07/25 :  Reprise
+    '    '-----------------------------------------------------------------------------------------------------------------------------
+    '    '   Calcul des coefficients de réduction liés à la flexion transversale des semelles inférieures de slim
+    '    '-----------------------------------------------------------------------------------------------------------------------------
+    '    '   iCombi      [E] :   Indice de la combinaison
+    '    '   myPoutre    [E] :   Poutre étudiée
+    '    '   QEd         [E] :   Efforts nodaux de la poutre
+    '    '-----------------------------------------------------------------------------------------------------------------------------
 
-        mu = (e1 - e2) * q * gammaM0 / (t ^ 2 * fy * kConvMPaPa)
+    '    '--> Déclaration
 
-        lambda = 1 - Math.Sqrt(1 - mu)
+    '    Dim iNode As Integer
+    '    Dim iTravee, iDebT, iFinT As Integer
+    '    Dim iDebN, iFinN As Integer
+    '    Dim deltaX As Decimal = myPoutre.LongueurTotale / myPoutre.Nodes.nbNodes
 
-        'psi = 1 - (mu ^ 2 * t * 3 * Math.Sqrt(3) + lambda * mu * (2 * e1 + e2) - lambda ^ 2 * (e1 - e2)) / (6 * mu * b)
-        psi = 1 - (mu * t * 3 * Math.Sqrt(3) + lambda * (2 * e1 + e2)) / (6 * b) - lambda ^ 2 * (e1 - e2) / (6 * mu * b)
+    '    Dim q, dApp, GammaM0 As Decimal
+    '    Dim dbtFi, dbtPlat As Decimal
 
-        psi = Math.Max(psi, 0) 'minoration par 0 au cas où
-        psi = Math.Min(psi, 1) 'majoration par 1 au cas où
+    '    Dim FyPlat, fyInf As Decimal
 
-        Return psi
-    End Function
+    '    Dim kChargeQ As Decimal
 
-    ''' <summary>
-    ''' Fonction qui calcul le coefficient de réduction de l'épaisseur du plat inférieur
-    ''' </summary>
-    ''' <param name="q">charge linéique</param>
-    ''' <param name="dbt">bras de levier de la charge</param>
-    ''' <param name="t">épaisseur du plat inférieur</param>
-    ''' <param name="fy">nuance d'acier du plat inférieur</param>
-    ''' <param name="gammaM0">coefficient partiel gammaM0</param>
-    ''' <returns></returns>
-    Private Function CalculRhot(q As Decimal, dbt As Decimal, t As Decimal, fy As Decimal, gammaM0 As Decimal) As Decimal
-        '------------------------------------------------------------------------------------------------------------------
-        '   xx/xx/24 : Création - GuD
-        '------------------------------------------------------------------------------------------------------------------
-        '   Calcul du coefficient de réduction de la limite d'élasticité du plat support de slim floor
-        '   d'après COSFB technical specifications
-        '------------------------------------------------------------------------------------------------------------------
-        '   q       [E] :   Charge sur le plat
-        '   dbt     [E] :   Bras de levier de la charge
-        '   t       [E] :   Epaisseur du plat
-        '   GammaM0 [E] :   GammaM0
-        '------------------------------------------------------------------------------------------------------------------
+    '    Dim EN1994 As New cls_Eurocodes
 
-        '--( Déclaration
+    '    '--> Initialisation
 
-        Dim mxbt_Ed, mxbt_Rd, eta_m, rho_t As Decimal
+    '    iDebT = myPoutre.IndicePremiereTravee
+    '    iFinT = myPoutre.IndiceDerniereTravee
 
-        '--( Initialisation
+    '    gammaM0 = myPoutre.Param.Gamma.GammaM0
 
-        mxbt_Ed = q * dbt
-        mxbt_Rd = 1.2 * t ^ 2 * fy / (6 * gammaM0) * kConvMPaPa
+    '    dApp = myPoutre.SlimLargeurAppui
+    '    'Me.BrasLevier(myPoutre, dApp, dbtFi, dbtPlat)
+    '    myPoutre.Section.SlimBrasLevier(dApp, dbtFi, dbtPlat)
 
-        '--( Calcul
+    '    FyPlat = myPoutre.Section.FySpd
+    '    fyInf = myPoutre.Section.FyInf
 
-        eta_m = Math.Min(Math.Abs(mxbt_Ed / mxbt_Rd), 1)
+    '    'If myPoutre.lIntermediaire Then
+    '    '    kCote2 = myPoutre.EntraxeD2 / (myPoutre.EntraxeD1 + myPoutre.EntraxeD2)
+    '    'Else
+    '    '    kCote2 = 1
+    '    'End If
+    '    'kChargeQ = Math.Max(kCote2, 1 - kCote2)
+    '    kChargeQ = CoefficientCharge(myPoutre)
 
-        rho_t = (1 / 2) * (1 + Math.Sqrt(1 - eta_m))
+    '    '--> Traitement
 
-        'rho_t = Math.Max(rho_t, 0) 'minoration par 0 au cas où
-        'rho_t = Math.Max(rho_t, 1) 'majoration par 1 au cas où
+    '    For iTravee = iDebT To iFinT
+    '        iDebN = myPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+    '        iFinN = myPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
-        Return rho_t
-    End Function
+    '        For iNode = iDebN To iFinN
+
+    '            With myPoutre.Section.ProfilA
+
+    '                '== Suggestion pour DeltaX (POM)
+    '                If iNode = 0 Then
+    '                    deltaX = (myPoutre.Nodes.xGlobal(iNode + 1) - myPoutre.Nodes.xGlobal(iNode)) / 2
+    '                ElseIf iNode = myPoutre.Nodes.nbNodes - 1 Then
+    '                    deltaX = (myPoutre.Nodes.xGlobal(iNode) - myPoutre.Nodes.xGlobal(iNode - 1)) / 2
+    '                Else
+    '                    deltaX = (myPoutre.Nodes.xGlobal(iNode + 1) - myPoutre.Nodes.xGlobal(iNode - 1)) / 2
+    '                End If
+    '                '====
+
+    '                q = kChargeQ * QEd(iNode) / deltaX
+
+    '                Select Case .typeProfileAcier
+    '                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+
+    '                        Select Case myPoutre.Param.MethodReducPlatSlim
+    '                            Case cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire
+    '                                PsiAspd(iCombi, iNode) = CalculPsi(q, .Plat_b, .Plat_t, FyPlat, .Plat_b - 2 * dApp, .Bfi, GammaM0)
+    '                                PsiAfi(iCombi, iNode) = CalculPsi(q, .Bfi, .Tfi, fyInf, .Bfi, .Tw, GammaM0)
+
+    '                                RhoTspd(iCombi, iNode) = 1
+    '                                RhoTfi(iCombi, iNode) = 1
+
+    '                                PsiYspd(iCombi, iNode) = 1
+    '                                PsiYfi(iCombi, iNode) = 1
+
+    '                            Case cls_OptionsCalcul.Enu_MReducPlatSlim.M2_ReducEpaisseur
+
+    '                                PsiAspd(iCombi, iNode) = 1
+    '                                PsiAfi(iCombi, iNode) = 1
+
+    '                                RhoTspd(iCombi, iNode) = CalculRhot(q, dbtPlat, .Plat_t, FyPlat, GammaM0)
+    '                                RhoTfi(iCombi, iNode) = CalculRhot(q, dbtFi, .Tfi, fyInf, GammaM0)
+
+    '                                PsiYspd(iCombi, iNode) = 1
+    '                                PsiYfi(iCombi, iNode) = 1
+
+    '                            Case cls_OptionsCalcul.Enu_MReducPlatSlim.M3_ReducLimiteElasticite      ' C'est l'option choisie par l'EN 1994-1-1 - G2
+
+    '                                PsiAspd(iCombi, iNode) = 1
+    '                                PsiAfi(iCombi, iNode) = 1
+
+    '                                RhoTspd(iCombi, iNode) = 1
+    '                                RhoTfi(iCombi, iNode) = 1
+
+    '                                PsiYspd(iCombi, iNode) = EN1994.SlimCalculPsiY(q, dbtPlat, .Plat_t, FyPlat, GammaM0)
+    '                                PsiYfi(iCombi, iNode) = EN1994.SlimCalculPsiY(q, dbtFi, .Tfi, fyInf, GammaM0)
+
+    '                        End Select
+
+    '                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+
+    '                        Select Case myPoutre.Param.MethodReducPlatSlim
+    '                            Case cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire
+    '                                PsiAspd(iCombi, iNode) = CalculPsi(q, .Plat_b, .Plat_t, FyPlat, .Plat_b - 2 * dApp, .Tw, GammaM0)
+    '                                PsiAfi(iCombi, iNode) = 1
+
+    '                                RhoTspd(iCombi, iNode) = 1
+    '                                RhoTfi(iCombi, iNode) = 1
+
+    '                                PsiYspd(iCombi, iNode) = 1
+    '                                PsiYfi(iCombi, iNode) = 1
+
+    '                            Case cls_OptionsCalcul.Enu_MReducPlatSlim.M2_ReducEpaisseur
+
+    '                                PsiAspd(iCombi, iNode) = 1
+    '                                PsiAfi(iCombi, iNode) = 1
+
+    '                                RhoTspd(iCombi, iNode) = CalculRhot(q, dbtPlat, .Plat_t, FyPlat, GammaM0)
+    '                                RhoTfi(iCombi, iNode) = 1
+
+    '                                PsiYspd(iCombi, iNode) = 1
+    '                                PsiYfi(iCombi, iNode) = 1
+
+    '                            Case cls_OptionsCalcul.Enu_MReducPlatSlim.M3_ReducLimiteElasticite
+    '                                PsiAspd(iCombi, iNode) = 1
+    '                                PsiAfi(iCombi, iNode) = 1
+
+    '                                RhoTspd(iCombi, iNode) = 1
+    '                                RhoTfi(iCombi, iNode) = 1
+
+    '                                PsiYspd(iCombi, iNode) = EN1994.SlimCalculPsiY(q, dbtPlat, .Plat_t, FyPlat, GammaM0)
+    '                                PsiYfi(iCombi, iNode) = 1
+
+    '                        End Select
+
+    '                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+
+    '                        Select Case myPoutre.Param.MethodReducPlatSlim
+    '                            Case cls_OptionsCalcul.Enu_MReducPlatSlim.M1_ReducAire
+    '                                PsiAspd(iCombi, iNode) = 1
+    '                                PsiAfi(iCombi, iNode) = CalculPsi(q, .Bfi, .Tfi, fyInf, .Bfi - 2 * dApp, .Tw, GammaM0)
+
+    '                                RhoTspd(iCombi, iNode) = 1
+    '                                RhoTfi(iCombi, iNode) = 1
+
+    '                                PsiYspd(iCombi, iNode) = 1
+    '                                PsiYfi(iCombi, iNode) = 1
+
+    '                            Case cls_OptionsCalcul.Enu_MReducPlatSlim.M2_ReducEpaisseur
+
+    '                                PsiAspd(iCombi, iNode) = 1
+    '                                PsiAfi(iCombi, iNode) = 1
+
+    '                                RhoTspd(iCombi, iNode) = 1
+    '                                RhoTfi(iCombi, iNode) = CalculRhot(q, dbtFi, .Tfi, fyInf, GammaM0)
+
+    '                                PsiYspd(iCombi, iNode) = 1
+    '                                PsiYfi(iCombi, iNode) = 1
+
+    '                            Case cls_OptionsCalcul.Enu_MReducPlatSlim.M3_ReducLimiteElasticite
+    '                                PsiAspd(iCombi, iNode) = 1
+    '                                PsiAfi(iCombi, iNode) = 1
+
+    '                                RhoTspd(iCombi, iNode) = 1
+    '                                RhoTfi(iCombi, iNode) = 1
+
+    '                                PsiYspd(iCombi, iNode) = 1
+    '                                PsiYfi(iCombi, iNode) = EN1994.SlimCalculPsiY(q, dbtFi, .Tfi, fyInf, GammaM0)
+
+    '                        End Select
+
+    '                End Select
+
+    '            End With
+
+    '        Next
+    '    Next
+
+    'End Sub
+
+    '''' <summary>
+    '''' Fonction qui calcul le coefficient de réduction de l'aire du plat inférieur
+    '''' </summary>
+    '''' <param name="q">charge linéique</param>
+    '''' <param name="b">largeur du plat</param>
+    '''' <param name="t">épaisseur du plat</param>
+    '''' <param name="fy">nuance d'acier du plat</param>
+    '''' <param name="e1">distance entre les charges appliquées</param>
+    '''' <param name="e2">distance entre les appuis</param>
+    '''' <param name="gammaM0">coefficient partiel gammaM0</param>
+    '''' <returns></returns>
+    'Private Function CalculPsi(q As Decimal, b As Decimal, t As Decimal, fy As Decimal,
+    '                           e1 As Decimal, e2 As Decimal, gammaM0 As Decimal) As Decimal
+    '    Dim psi, mu, lambda As Decimal
+
+    '    mu = (e1 - e2) * q * gammaM0 / (t ^ 2 * fy * kConvMPaPa)
+
+    '    lambda = 1 - Math.Sqrt(1 - mu)
+
+    '    'psi = 1 - (mu ^ 2 * t * 3 * Math.Sqrt(3) + lambda * mu * (2 * e1 + e2) - lambda ^ 2 * (e1 - e2)) / (6 * mu * b)
+    '    psi = 1 - (mu * t * 3 * Math.Sqrt(3) + lambda * (2 * e1 + e2)) / (6 * b) - lambda ^ 2 * (e1 - e2) / (6 * mu * b)
+
+    '    psi = Math.Max(psi, 0) 'minoration par 0 au cas où
+    '    psi = Math.Min(psi, 1) 'majoration par 1 au cas où
+
+    '    Return psi
+    'End Function
+
+    '''' <summary>
+    '''' Fonction qui calcul le coefficient de réduction de l'épaisseur du plat inférieur
+    '''' </summary>
+    '''' <param name="q">charge linéique</param>
+    '''' <param name="dbt">bras de levier de la charge</param>
+    '''' <param name="t">épaisseur du plat inférieur</param>
+    '''' <param name="fy">nuance d'acier du plat inférieur</param>
+    '''' <param name="gammaM0">coefficient partiel gammaM0</param>
+    '''' <returns></returns>
+    'Private Function CalculRhot(q As Decimal, dbt As Decimal, t As Decimal, fy As Decimal, gammaM0 As Decimal) As Decimal
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   xx/xx/24 : Création - GuD
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   Calcul du coefficient de réduction de la limite d'élasticité du plat support de slim floor
+    '    '   d'après COSFB technical specifications
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   q       [E] :   Charge sur le plat
+    '    '   dbt     [E] :   Bras de levier de la charge
+    '    '   t       [E] :   Epaisseur du plat
+    '    '   GammaM0 [E] :   GammaM0
+    '    '------------------------------------------------------------------------------------------------------------------
+
+    '    '--( Déclaration
+
+    '    Dim mxbt_Ed, mxbt_Rd, eta_m, rho_t As Decimal
+
+    '    '--( Initialisation
+
+    '    mxbt_Ed = q * dbt
+    '    mxbt_Rd = 1.2 * t ^ 2 * fy / (6 * gammaM0) * kConvMPaPa
+
+    '    '--( Calcul
+
+    '    eta_m = Math.Min(Math.Abs(mxbt_Ed / mxbt_Rd), 1)
+
+    '    rho_t = (1 / 2) * (1 + Math.Sqrt(1 - eta_m))
+
+    '    'rho_t = Math.Max(rho_t, 0) 'minoration par 0 au cas où
+    '    'rho_t = Math.Max(rho_t, 1) 'majoration par 1 au cas où
+
+    '    Return rho_t
+    'End Function
 
     '=== FONCTION TRANSFEREE DANS cls_Eurocodes
     'Private Function CalculPsiY(q As Decimal, dbt As Decimal, t As Decimal, fy As Decimal, gammaM0 As Decimal) As Decimal
@@ -1074,131 +1085,108 @@
 
 #Region " Vérification de la poutre acier "
 
-    Private Function CoefficientCharge(myBeam As cls_Poutre) As Decimal
-        '----------------------------------------------------------------------------------------------------------
-        '   10/10/25 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Renvoie la proportion de charge reprise de part et d'autre
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '----------------------------------------------------------------------------------------------------------
+    'Private Sub RunCritereResistancePlastiquePlatY_N(myBeam As cls_Poutre, iCombi As Integer, qsupEd() As Decimal)
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   01/08/25 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Vérification aux ELU de la résistance élasto-plastique des plats supports
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   myBeam      [E] :   Poutre traitée
+    '    '   iCombi      [E] :   Indice de la combinaison
+    '    '   qsupEd      [E] :   Charge répartie linéique agissant DES 2 COTES
+    '    '----------------------------------------------------------------------------------------------------------
 
-        Dim dGauche, dDroite As Decimal
-        Dim kCote As Decimal
+    '    '--> Déclaration
 
-        dGauche = myBeam.EntraxeD1
-        dDroite = myBeam.EntraxeD2
-        If myBeam.lIntermediaire Then
-            kCote = Math.Max(dGauche, dDroite) / (dGauche + dDroite)
-        Else
-            kCote = Math.Max(2 * dGauche, dDroite) / (2 * dGauche + dDroite)
-        End If
+    '    Dim iTravee, iNode As Integer
+    '    Dim iDebT, iFinT As Integer
+    '    Dim iDebN, iFinN As Integer
+    '    'Dim DeltaX As Decimal
+    '    Dim qLin As Decimal
+    '    Dim myFiEd, myFiRd As Decimal
+    '    Dim myPlEd, myPlRd As Decimal
+    '    Dim GammaM0 As Decimal
+    '    Dim FyPlat, FyInf As Decimal
+    '    Dim dApp, dbtFi, dbtPlat As Decimal
+    '    Const kPlast As Decimal = 1.2
+    '    Dim tPl, tFi As Decimal
+    '    '  Dim dGauche, dDroite As Decimal
+    '    Dim kCote As Decimal
+    '    Dim CSlim As New cls_CalculSlim
 
-        Return kCote
+    '    '--( Initialisation
 
-    End Function
+    '    GammaM0 = myBeam.Param.Gamma.GammaM0
 
-    Private Sub RunCritereResistancePlastiquePlatY_N(myBeam As cls_Poutre, iCombi As Integer, qsupEd() As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   01/08/25 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance élasto-plastique des plats supports
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '   iCombi      [E] :   Indice de la combinaison
-        '   qsupEd      [E] :   Charge répartie linéique agissant DES 2 COTES
-        '----------------------------------------------------------------------------------------------------------
+    '    dApp = myBeam.SlimLargeurAppui
+    '    myBeam.Section.SlimBrasLevier(dApp, dbtFi, dbtPlat)
 
-        '--> Déclaration
+    '    FyPlat = myBeam.Section.FySpd
+    '    FyInf = myBeam.Section.FyInf
 
-        Dim iTravee, iNode As Integer
-        Dim iDebT, iFinT As Integer
-        Dim iDebN, iFinN As Integer
-        'Dim DeltaX As Decimal
-        Dim qLin As Decimal
-        Dim myFiEd, myFiRd As Decimal
-        Dim myPlEd, myPlRd As Decimal
-        Dim GammaM0 As Decimal
-        Dim FyPlat, FyInf As Decimal
-        Dim dApp, dbtFi, dbtPlat As Decimal
-        Const kPlast As Decimal = 1.2
-        Dim tPl, tFi As Decimal
-        '  Dim dGauche, dDroite As Decimal
-        Dim kCote As Decimal
+    '    tFi = myBeam.Section.ProfilA.Tfi
+    '    tPl = myBeam.Section.ProfilA.Plat_t
 
-        '--( Initialisation
+    '    iDebT = myBeam.IndicePremiereTravee
+    '    iFinT = myBeam.IndiceDerniereTravee
 
-        GammaM0 = myBeam.Param.Gamma.GammaM0
+    '    'dGauche = myBeam.EntraxeD1
+    '    'dDroite = myBeam.EntraxeD2
+    '    'If myBeam.lIntermediaire Then
+    '    '    kCote = Math.Max(dGauche, dDroite) / (dGauche + dDroite)
+    '    'Else
+    '    '    kCote = Math.Max(2 * dGauche, dDroite) / (2 * dGauche + dDroite)
+    '    'End If
 
-        dApp = myBeam.SlimLargeurAppui
-        myBeam.Section.SlimBrasLevier(dApp, dbtFi, dbtPlat)
+    '    kCote = CSlim.CoefficientCharge(myBeam)
 
-        FyPlat = myBeam.Section.FySpd
-        FyInf = myBeam.Section.FyInf
+    '    '--> Traitement
 
-        tFi = myBeam.Section.ProfilA.Tfi
-        tPl = myBeam.Section.ProfilA.Plat_t
+    '    For iTravee = iDebT To iFinT
+    '        iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+    '        iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
 
-        iDebT = myBeam.IndicePremiereTravee
-        iFinT = myBeam.IndiceDerniereTravee
+    '        For iNode = iDebN To iFinN
 
-        'dGauche = myBeam.EntraxeD1
-        'dDroite = myBeam.EntraxeD2
-        'If myBeam.lIntermediaire Then
-        '    kCote = Math.Max(dGauche, dDroite) / (dGauche + dDroite)
-        'Else
-        '    kCote = Math.Max(2 * dGauche, dDroite) / (2 * dGauche + dDroite)
-        'End If
+    '            With myBeam.Section.ProfilA
 
-        kCote = CoefficientCharge(myBeam)
+    '                qLin = qsupEd(iNode) * kCote
 
-        '--> Traitement
+    '                Select Case .typeProfileAcier
+    '                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
 
-        For iTravee = iDebT To iFinT
-            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+    '                        myFiEd = qLin * dbtFi
+    '                        myFiRd = kPlast * tFi ^ 2 * FyInf * kConvMPaPa / (6 * GammaM0)
 
-            For iNode = iDebN To iFinN
+    '                        Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myFiEd, myFiRd)
 
-                With myBeam.Section.ProfilA
+    '                        myPlEd = qLin * dbtPlat
+    '                        myPlRd = kPlast * tPl ^ 2 * FyPlat * kConvMPaPa / (6 * GammaM0)
 
-                    qLin = qsupEd(iNode) * kCote
+    '                        Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myPlEd, myPlRd)
 
-                    Select Case .typeProfileAcier
-                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+    '                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
 
-                            myFiEd = qLin * dbtFi
-                            myFiRd = kPlast * tFi ^ 2 * FyInf * kConvMPaPa / (6 * GammaM0)
+    '                        myPlEd = qLin * dbtPlat
+    '                        myPlRd = kPlast * tPl ^ 2 * FyPlat * kConvMPaPa / (6 * GammaM0)
 
-                            Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myFiEd, myFiRd)
+    '                        Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myPlEd, myPlRd)
 
-                            myPlEd = qLin * dbtPlat
-                            myPlRd = kPlast * tPl ^ 2 * FyPlat * kConvMPaPa / (6 * GammaM0)
+    '                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
 
-                            Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myPlEd, myPlRd)
+    '                        myFiEd = qLin * dbtFi
+    '                        myFiRd = kPlast * tFi ^ 2 * FyInf * kConvMPaPa / (6 * GammaM0)
 
-                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+    '                        Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myFiEd, myFiRd)
 
-                            myPlEd = qLin * dbtPlat
-                            myPlRd = kPlast * tPl ^ 2 * FyPlat * kConvMPaPa / (6 * GammaM0)
+    '                End Select
 
-                            Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myPlEd, myPlRd)
+    '            End With
 
-                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+    '        Next
+    '    Next
 
-                            myFiEd = qLin * dbtFi
-                            myFiRd = kPlast * tFi ^ 2 * FyInf * kConvMPaPa / (6 * GammaM0)
-
-                            Me.CritereMY.EnregistreCritere(iNode, iCombi, iTravee, myFiEd, myFiRd)
-
-                    End Select
-
-                End With
-
-            Next
-        Next
-
-    End Sub
+    'End Sub
 
     Private Sub RunCritereResistancePlastiquePlatY(myBeam As cls_Poutre, iCombi As Integer, QEd() As Decimal)
         '----------------------------------------------------------------------------------------------------------
@@ -1722,48 +1710,48 @@
 
     End Sub
 
-    Private Sub RunCritereTranchants(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VRd As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   10/10/23 :  Création - GUD
-        '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance à l'effort tranchant 
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam[E] :   Poutre traitée
-        '   iCombi  [E] :   Indice de la combinaison
-        '   VEd     [E] :   Table des efforts tranchants le long de la barre
-        '   VRd     [E] :   Effort tranchant résistant (plastique ou voilement) de la barre
-        '   lBukling[E] :   Indique si critere de résistance au voilement par cisaillement
-        '----------------------------------------------------------------------------------------------------------
+    'Private Sub RunCritereTranchants(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VRd As Decimal)
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   10/10/23 :  Création - GUD
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Vérification aux ELU de la résistance à l'effort tranchant 
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   myBeam[E] :   Poutre traitée
+    '    '   iCombi  [E] :   Indice de la combinaison
+    '    '   VEd     [E] :   Table des efforts tranchants le long de la barre
+    '    '   VRd     [E] :   Effort tranchant résistant (plastique ou voilement) de la barre
+    '    '   lBukling[E] :   Indique si critere de résistance au voilement par cisaillement
+    '    '----------------------------------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        Dim iNode, k As Integer
-        Dim iTravee, iDebT, iFinT As Integer
-        Dim iDebN, iFinN As Integer
-        Dim iDebK, iFinK As Integer
+    '    Dim iNode, k As Integer
+    '    Dim iTravee, iDebT, iFinT As Integer
+    '    Dim iDebN, iFinN As Integer
+    '    Dim iDebK, iFinK As Integer
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        iDebT = MyPoutre.IndicePremiereTravee
-        iFinT = MyPoutre.IndiceDerniereTravee
+    '    iDebT = MyPoutre.IndicePremiereTravee
+    '    iFinT = MyPoutre.IndiceDerniereTravee
 
-        '--> Traitement
+    '    '--> Traitement
 
-        For iTravee = iDebT To iFinT
-            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+    '    For iTravee = iDebT To iFinT
+    '        iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+    '        iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
-            For iNode = iDebN To iFinN
-                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
-                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+    '        For iNode = iDebN To iFinN
+    '            If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+    '            If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
 
-                For k = iDebK To iFinK
-                    Me.CritereV.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VRd)
-                Next
-            Next
-        Next
+    '            For k = iDebK To iFinK
+    '                Me.CritereV.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VRd)
+    '            Next
+    '        Next
+    '    Next
 
-    End Sub
+    'End Sub
 
     Private Sub RunCriteresInteractionMV(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, MVRd(,) As Decimal)
         '----------------------------------------------------------------------------------------------------------

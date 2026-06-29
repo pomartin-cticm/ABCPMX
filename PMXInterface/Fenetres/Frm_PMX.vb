@@ -602,7 +602,7 @@ Public Class Frm_PMX
     End Sub
 
     Private Sub TSbtn_NoteCalcul_Click(sender As Object, e As EventArgs) Handles TSbtn_NdcPoutre.Click
-        CalculsEtNdC()
+        CalculsEtNdCAsync()
     End Sub
 
     Private Sub TSbtn_Calcul_Click(sender As Object, e As EventArgs) Handles TSbtn_Calcul.Click
@@ -654,7 +654,8 @@ Public Class Frm_PMX
 
     End Sub
 
-    Private Async Sub CalculsEtNdC()
+    'Private Async Sub CalculsEtNdC()
+    Private Async Function CalculsEtNdCAsync() As Task
         '--------------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '--------------------------------------------------------------------------------------------------
@@ -676,15 +677,14 @@ Public Class Frm_PMX
 
         If lOK Then
 
-
-            'Ancien appel sans la MAJ de progression du calcul
+            '==) Ancien appel sans la MAJ de progression du calcul (==
             'MyProjet.Poutres(iBeam).AAA_Verifications(iBeam, MyProjet.FileName, NomChargesA,
             '                                          strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
             'MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()         ' ???
             'MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
 
 
-            '==) Nouvel appel avec vérif de calcul pour les slim floors
+            '==) Nouvel appel avec vérif de calcul pour les slim floors (==
             'si le calcul à l'échauffement est à faire et que notre poutre est un slim floor alors on lance la fenêtre de progression du calcul
 
             Dim lAffProgress As Boolean = Not MyProjet.Poutres(iBeam).lCalculOK AndAlso MyProjet.Poutres(iBeam).lSlimFloor _
@@ -693,30 +693,7 @@ Public Class Frm_PMX
             ' If MyProjet.Poutres(iBeam).lMixte Then lAffProgress = False
 
             If lAffProgress Then
-                Frm_CalculEnCours.Show()
-                Me.Enabled = False
-
-                Dim progressEtape = New Progress(Of Struc_MAJEtape)(
-    Sub(Struct_MAJEtape)
-        Frm_CalculEnCours.UpdateGlobal(Struct_MAJEtape)
-    End Sub)
-
-                Dim progressDansEtape = New Progress(Of Integer)(
-    Sub(v)
-        Frm_CalculEnCours.UpdateStep(v)
-    End Sub)
-
-                Await Task.Run(Sub()
-                                   MyProjet.Poutres(iBeam).AAA_Verifications(iBeam, MyProjet.FileName, NomChargesA,
-                                                      strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC,
-                                                      progressEtape,
-                                                      progressDansEtape)
-                               End Sub)
-
-                'légère attente pour que l'utilisateur ait le temps de voir que les barres de progressions sont remplies
-                Threading.Thread.Sleep(300)
-                Frm_CalculEnCours.Close()
-                Enabled = True
+                Await GestionCalculFeu(iBeam)
 
             Else
                 'sinon on appelle la fonction de verification normalement
@@ -730,7 +707,124 @@ Public Class Frm_PMX
 
         AAA_EditionNOTEdeCALCUL(True, False)
 
-    End Sub
+    End Function
+
+    'Private Async Function CalculsEtNdCAsync() As Task
+    '    '--------------------------------------------------------------------------------------------------
+    '    '   18/11/23 :  Création - POM
+    '    '--------------------------------------------------------------------------------------------------
+    '    '   La poutre en cours est elle conforme pour le calcul
+    '    '   Si oui, execution du calcul et édition de la note de calcul
+    '    '--------------------------------------------------------------------------------------------------
+    '    '--------------------------------------------------------------------------------------------------
+
+    '    '--[ Déclarations
+
+    '    Dim lOK As Boolean
+    '    Dim iBeam As Integer = MyProjet.IndEnCours
+
+    '    '--[ Test de la poutre
+
+    '    lOK = MaPoutreOKpourleCalcul(MyProjet.Poutres(iBeam))
+
+    '    '--[ Analyse calcul RDM 
+
+    '    If lOK Then
+
+
+    '        'Ancien appel sans la MAJ de progression du calcul
+    '        'MyProjet.Poutres(iBeam).AAA_Verifications(iBeam, MyProjet.FileName, NomChargesA,
+    '        '                                          strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
+    '        'MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()         ' ???
+    '        'MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
+
+
+    '        '==) Nouvel appel avec vérif de calcul pour les slim floors
+    '        'si le calcul à l'échauffement est à faire et que notre poutre est un slim floor alors on lance la fenêtre de progression du calcul
+
+    '        Dim lAffProgress As Boolean = Not MyProjet.Poutres(iBeam).lCalculOK AndAlso MyProjet.Poutres(iBeam).lSlimFloor _
+    '                              AndAlso MyProjet.Poutres(iBeam).ParamFeu.lCalculFeu
+
+    '        ' If MyProjet.Poutres(iBeam).lMixte Then lAffProgress = False
+
+    '        If lAffProgress Then
+    '            Await GestionCalculFeu(iBeam)
+
+    '            '            Frm_CalculEnCours.Show()
+    '            '            Me.Enabled = False
+
+    '            '            Dim progressEtape = New Progress(Of Struc_MAJEtape)(
+    '            'Sub(Struct_MAJEtape)
+    '            '    Frm_CalculEnCours.UpdateGlobal(Struct_MAJEtape)
+    '            'End Sub)
+
+    '            '            Dim progressDansEtape = New Progress(Of Integer)(
+    '            'Sub(v)
+    '            '    Frm_CalculEnCours.UpdateStep(v)
+    '            'End Sub)
+
+    '            '            Await Task.Run(Sub()
+    '            '                               MyProjet.Poutres(iBeam).AAA_Verifications(iBeam, MyProjet.FileName, NomChargesA,
+    '            '                                                  strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC,
+    '            '                                                  progressEtape,
+    '            '                                                  progressDansEtape)
+    '            '                           End Sub)
+
+    '            '            'légère attente pour que l'utilisateur ait le temps de voir que les barres de progressions sont remplies
+    '            '            Threading.Thread.Sleep(300)
+    '            '            Frm_CalculEnCours.Close()
+    '            '            Enabled = True
+
+    '        Else
+    '            'sinon on appelle la fonction de verification normalement
+    '            MyProjet.Poutres(iBeam).AAA_Verifications(iBeam, MyProjet.FileName, NomChargesA,
+    '                                                  strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
+    '        End If
+
+    '    End If
+
+    '    '--[ Edition de la note de calcul
+
+    '    AAA_EditionNOTEdeCALCUL(True, False)
+
+    'End Function
+
+    Private Async Function GestionCalculFeu(iBeam As Integer) As Task
+        '-----------------------------------------------------------------------------------------------------------
+        '   xx/05/26 : Création - BEB
+        '-----------------------------------------------------------------------------------------------------------
+        '   Gestion de la progression du calcul incendie des slim floor
+        '-----------------------------------------------------------------------------------------------------------
+        '   iBeam   [E]
+        '-----------------------------------------------------------------------------------------------------------
+
+        Frm_CalculEnCours.Show()
+        Me.Enabled = False
+
+        Dim progressEtape = New Progress(Of Struc_MAJEtape)(
+Sub(Struct_MAJEtape)
+    Frm_CalculEnCours.UpdateGlobal(Struct_MAJEtape)
+End Sub)
+
+        Dim progressDansEtape = New Progress(Of Integer)(
+Sub(v)
+    Frm_CalculEnCours.UpdateStep(v)
+End Sub)
+
+        Await Task.Run(Sub()
+                           MyProjet.Poutres(iBeam).AAA_Verifications(iBeam, MyProjet.FileName, NomChargesA,
+                                              strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC,
+                                              progressEtape,
+                                              progressDansEtape)
+
+                       End Sub)
+
+        'légère attente pour que l'utilisateur ait le temps de voir que les barres de progressions sont remplies
+        Threading.Thread.Sleep(300)
+        Frm_CalculEnCours.Close()
+        Enabled = True
+    End Function
+
 
     Private Function MaPoutreOKpourleCalcul(myBeam As cls_Poutre) As Boolean
         '--------------------------------------------------------------------------------------------------

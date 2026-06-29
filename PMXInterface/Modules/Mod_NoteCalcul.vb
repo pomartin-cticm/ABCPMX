@@ -4003,6 +4003,7 @@ Module Mod_NoteCalcul
         Dim Reference As String
         Dim zSurH As Decimal
         Dim zSurHLim As Decimal
+        Dim lSimple As Decimal = myBeam.Param.lLargeurEfficaceSimplifiee
 
         '--> Récupération des coeff d'équivalence et état de la dalle
 
@@ -4087,19 +4088,13 @@ Module Mod_NoteCalcul
             Dim gammaM0 As Decimal = myBeam.Param.Gamma.GammaM0
             Dim gammaC As Decimal = myBeam.Param.Gamma.GammaC
             Dim NProfile As Decimal
-            Dim NEnrobage, NArmaEnrobage As Decimal
-            'Dim NDalle As Decimal
-            'Dim NConnex As Decimal
-            'Dim lSimple As Decimal = myBeam.Param.lLargeurEfficaceSimplifiee
-            'Dim DeltaPrd As Decimal
+            Dim NDalle As Decimal
+            Dim NConnex As Decimal
+            Dim DeltaPrd As Decimal
             'Dim BetaM_eta, BetaMk_eta As Decimal
+            Dim BetaM_eta As Decimal
 
             NProfile = myBeam.Section.ResistanceTractionProfile(gammaM0)
-            If myBeam.Section.lEnrobage Then
-                NEnrobage = myBeam.Section.NResistanceCompressionEnrobage(gammaC)
-                NArmaEnrobage = myBeam.Section.NResistanceArmaturesEnrobage(gammaS)
-            End If
-
 
             '--( Traitement des travées sur 2 appuis
 
@@ -4108,16 +4103,21 @@ Module Mod_NoteCalcul
             '==== Ajouter traitement du cas ou pas de moment >0
 
             '---| Degré de connexion en zone de moment positif
-            'bEff = myBeam.BeffDalle(myBeam.LongueurTravee(iTraveeMin), iTraveeMin, lSimple, False)
-            'NDalle = myBeam.Dalle.NResistanceCompressionDalle(bEff, gammaC)
-            'NConnex = Math.Min(NDalle, NProfile + NArmaEnrobage)
+            Const iTravee As Integer = 1
+            bEff = myBeam.BeffDalle(myBeam.LongueurTravee(iTravee), iTravee, lSimple, False)
+            NDalle = myBeam.Dalle.NResistanceCompressionDalle(bEff, gammaC)
+            NConnex = Math.Min(NDalle, NProfile)
 
-            'DeltaPrd = EtaMin * NConnex
+            DeltaPrd = EtaMin * NConnex
 
             'myBeam.Section.ProprietesPlastiquesMixteMyyEta(1, True, myBeam.Param.Gamma, 0, bEff, DeltaPrd, myBeam.Dalle, True, zANP, MplRd)
             'myBeam.Section.ProprietesPlastiquesMixteMyyEta(1, False, myBeam.Param.Gamma, 0, bEff, DeltaPrd, myBeam.Dalle, True, zANPk, MplRk)
 
-            'BetaM_eta = 1 - (1 - BetaM) * EtaMin
+
+            myBeam.Section.ProprietesPlastiquesMixteMyyEta(1, True, myBeam.Param.Gamma, 0,
+                                                           bEff, DeltaPrd, myBeam.Dalle, True, zANP, MplRd)
+
+            BetaM_eta = 1 - (1 - BetaM) * EtaMin
             'BetaMk_eta = 1 - (1 - BetaMk) * EtaMin
 
             Dim strEta As String = GetStringInUnitN(EtaMin, Enu_TypeVariable.SansType, 4, 3, NON, True)
@@ -4125,9 +4125,8 @@ Module Mod_NoteCalcul
             SauteLigne()
             AddLigneNDC(TABW2 & "\U" & BlocSP("PLASTICPARTIALCX") & "\u" & TABAFF & " \Sh\s" & TABEGAL & strEta)
 
-
-            'AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnitN(BetaM_eta * MplRd, Enu_TypeVariable.Moment, 4, 0, OUI, False))
-            'AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnitN(zANP, Enu_TypeVariable.Dimension, 4, 1, OUI, False))
+            AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnitN(BetaM_eta * MplRd, Enu_TypeVariable.Moment, 4, 0, OUI, False))
+            AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnitN(zANP, Enu_TypeVariable.Dimension, 4, 1, OUI, False))
             'AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnitN(BetaMk_eta * MplRk, Enu_TypeVariable.Moment, 4, 0, OUI, False))
 
         End If
@@ -4251,7 +4250,6 @@ Module Mod_NoteCalcul
         Next
 
         If IsSmaller(EtaMin, 1) Then
-
 
             Dim gammaS As Decimal = myBeam.Param.Gamma.GammaS
             Dim gammaM0 As Decimal = myBeam.Param.Gamma.GammaM0
@@ -7025,6 +7023,8 @@ Module Mod_NoteCalcul
         '   Détail du calcul des armatures transversales
         '-------------------------------------------------------------------------------------------
 
+        If MyBeam.lMixte And MyBeam.lSlimFloor Then Exit Sub
+
         If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
 
         AddTitreNdC(2, BlocELU("CRITERIA_TRANSREBAR"))
@@ -7624,7 +7624,11 @@ Module Mod_NoteCalcul
                 EditionVerificationsELUSummarySlimACIER(MyBeam, 0, False)
             Case cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SABmixte, cls_Section.Enum_TypeSection.SFBmixte
                 '*** Section Slim mixte
-
+                If lConstruction Then
+                    EditionVerificationsELUSummarySlimACIER(MyBeam, 0, False)
+                Else
+                    EditionVerificationsELUSummarySlimMIXTE(MyBeam, 0, False)
+                End If
         End Select
 
     End Sub
@@ -7898,6 +7902,7 @@ Module Mod_NoteCalcul
 
         If MyBeam.lSlimFloor Then
             If MyBeam.lMixte And Not lConstructionP Then
+                EditionVerificationsELUCombiSLIMMIXTE(MyBeam, iVerif, lConstructionP)
             Else
                 EditionVerificationsELUCombiSLIMACIER(MyBeam, iVerif, lConstructionP)
             End If
@@ -9039,6 +9044,266 @@ Module Mod_NoteCalcul
 
 #End Region
 
+#Region "***Edition vérifications ELU pour les poutres Slim floor MIXTES***"
+    Private Sub EditionVerificationsELUSummarySlimMIXTE(myBeam As cls_Poutre, iVerif As Integer, lConstructionP As Boolean)
+        '-------------------------------------------------------------------------------------------
+        '   25/06/26 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Synthèse des critères ELU pour une poutre slim floor mixtes
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        '--( Traitement
+
+        AddTitreNdC(3, BlocELU("SECTIONSR"))
+        If myBeam.VerifSlimMixte(iVerif).lCalculPlastic Then
+            '------------------------------------------------------------------------------------------------------------
+            '--> Calcul Plastique
+            '------------------------------------------------------------------------------------------------------------
+
+            AfficheSyntheseCritere(myBeam, myBeam.VerifSlimMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)", False)
+            AfficheSyntheseCritere(myBeam, myBeam.VerifSlimMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"), False)
+            AfficheSyntheseCritere(myBeam, myBeam.VerifSlimMixte(iVerif).CritereMV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA"), lConstructionP)
+            AfficheSyntheseCritere(myBeam, myBeam.VerifSlimMixte(iVerif).CritereMY, "\SG\s\-My\=", BlocELU("MY_CRITERIA"), lConstructionP)
+
+            ''# Interaction MV
+            'If IsEqual(myBeam.VerifSlimMixte(iVerif).CritereMV.CritereMax, 0) Then
+            '    AddLigneNDC(TABW3 & BlocELU("NO_MVINTERACTION"))
+            'Else
+            'End If
+
+            SauteLigne()
+            AddLigneNDC(TABW2 & "(1): " & BlocELU("PLASTICDESIGNCLASS12"))
+
+        Else
+        End If
+
+    End Sub
+
+
+    Private Sub EditionVerificationsELUCombiSLIMMIXTE(MyBeam As cls_Poutre, iVerif As Integer, lConstructionP As Boolean)
+        '-------------------------------------------------------------------------------------------
+        '   25/06/26 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage détaillé des critères ELU par combinaison pour une poutre slmi mixte
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam          [E] :   Poutre
+        '   iVerif          [E] :   
+        '   lConstructionP  [E] :   Indique si phase de construction, pour les poutres mixtes
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim nbMinCombi As Decimal = 5.1 + 1.3 * MyBeam.CombiA_ELU.nbCombi + 1
+        Dim nbCombi As Integer
+        Dim lElastic As Boolean = MyBeam.Param.lElasticDesignVM
+
+        '--> Initialisation
+
+        If lConstructionP Then
+            nbCombi = MyBeam.CombiA_ELCU.nbCombi
+        Else
+            nbCombi = MyBeam.CombiA_ELU.nbCombi
+        End If
+
+        If nbLignes + nbMinCombi > MAXLIGNEPPAG Then SautePage()
+
+        AddTitreNdC(2, BlocELU("ULS_COMBI_CHECK"))
+
+        '--> Tableau des critères de résistance / combinaison
+
+        If lElastic Then
+            'TableauCritereCombiELU_AcierElasticVM(MyBeam, iVerif, nbCombi, lConstructionP)
+        Else
+            TableauCritereCombiELU_SlimMIXTEPlastic(MyBeam, iVerif, nbCombi) ', lConstructionP)
+        End If
+
+    End Sub
+
+    Private Sub TableauCritereCombiELU_SlimMIXTEPlastic(MyBeam As cls_Poutre, iVerif As Integer, nbCombi As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   25/06/26 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage détaillé des critères ELU par combinaison et par travée (le cas échéant)
+        '   Cas d'une poutre slim mixte, en calcul plastique ou élastique classe 3
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam          [E] :   Poutre
+        '   iVerif          [E] :   
+        '   nbCombi         [E] :   Nombre de combinaisons traitée
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim NCOL As Integer
+        Dim iCombi As Integer
+        Dim NbTravees As Integer
+
+        '--( Initialisation
+
+        NbTravees = MyBeam.NbTravees
+
+        '--( Entete du tableau
+
+        EnteteTableauCriteresELU_SlimMIXTE_Plastic(MyBeam, iVerif, NCOL)
+
+        '--( Boucle sur les combinaisons
+
+        For iCombi = 0 To nbCombi - 1
+
+            If nbLignes + NbTravees > MAXLIGNEPPAG Then
+                FinTableau()
+                SautePage()
+                EnteteTableauCriteresELU_SlimMIXTE_Plastic(MyBeam, iVerif, NCOL)
+            End If
+
+            LigneTableauCriteresELU_SlimMIXTE_Plastic(MyBeam, NCOL, iCombi, iVerif)
+
+        Next
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub LigneTableauCriteresELU_SlimMIXTE_Plastic(MyBeam As cls_Poutre, ByRef NCOL As Integer, iCombi As Integer, iVerif As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   25/06/26 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
+        '   Cas d'une poutre slim mixte en calcul plastique ou élastique classe 3
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :   Poutre traitée
+        '   NCOL        [E] :   Nombre de colonnes du tableau
+        '   iCombi      [E] :   Indice de la combinaison
+        '   iVerif      [E] :   Indice du bloc de vérification
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iTraveeDeb As Integer = MyBeam.IndicePremiereTravee
+        Dim iTraveeFin As Integer = MyBeam.IndiceDerniereTravee
+        Dim MyBordures(iTraveeFin) As Integer
+        Dim i As Integer
+        Dim lElastic As Boolean = MyBeam.Param.lElasticDesignVM
+        Dim iNodeD, iNodeF As Integer
+        Dim lMixte As Boolean = MyBeam.lMixte
+        Dim lEnrob As Boolean = MyBeam.lEnrobage
+        '    Dim lInterMV, lShearB, lInterMVb As Boolean
+        Dim lCalculPlastic As Boolean
+
+        '--> Initialisation
+
+        lCalculPlastic = MyBeam.VerifSlimMixte(iVerif).lCalculPlastic
+
+        'lInterMV = IsGreater(MyBeam.VerifMixte(iVerif).CritereMV.CritereMax, 0)
+        'lShearB = MyBeam.VerifMixte(iVerif).ShearB.lCheckRequired
+        'lInterMVb = IsGreater(MyBeam.VerifMixte(iVerif).CritereMVb.CritereMax, 0)
+
+        For i = iTraveeDeb To iTraveeFin
+            MyBordures(i) = Bordures.Gauche + Bordures.Droite
+        Next
+        MyBordures(0) += Bordures.Haut
+        MyBordures(MyBordures.GetUpperBound(0)) += Bordures.Bas
+
+        '--> Traitement
+
+        For i = iTraveeDeb To iTraveeFin
+            iNodeD = MyBeam.Nodes.iNodeExtTrav(i, 0)
+            iNodeF = MyBeam.Nodes.iNodeExtTrav(i, 1)
+
+            InitialiseLigne(NCOL, HLIGNE, False)
+
+            If i = iTraveeDeb Then
+                AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, MyBeam.CombiA_ELU.Symbole(iCombi))
+            Else
+                AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, "")
+            End If
+
+            'If lMultiSpan Then
+            '    AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
+            'End If
+
+            '==( Affichage de GammaM
+            AffichageCritereELU_N(MyBeam.VerifSlimMixte(iVerif).CritereM, i, iCombi, MyBordures(i))
+
+            '==( Affichage de GammaV
+            AffichageCritereELU_N(MyBeam.VerifSlimMixte(iVerif).CritereV, i, iCombi, MyBordures(i))
+
+            '==( Affichage de GammaMV
+            AffichageCritereELU_N(MyBeam.VerifSlimMixte(iVerif).CritereMV, i, iCombi, MyBordures(i))
+
+            '==( Affichage de GammaMy
+            AffichageCritereELU_N(MyBeam.VerifSlimMixte(iVerif).CritereMY, i, iCombi, MyBordures(i))
+
+
+        Next
+
+    End Sub
+
+    Private Sub EnteteTableauCriteresELU_SlimMIXTE_Plastic(MyBeam As cls_Poutre, iVerif As Integer, ByRef NCOL As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Entête du tableau des critères ELU par combinaison pour une vérification acier
+        '   cela peut concerner une poutre mixte en phase de construction
+        '   Configuration d'un tableau pour un calcul EN 1993 CLasse 1, 2 ou 3, non élastique VM
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :   Poutre traitée
+        '   iVerif      [E] :   Indice du bloc de vérification
+        '   NCOL        [E] :   
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim PostTab As Integer = POSTABELU
+        Dim lMultiSpan As Boolean = (MyBeam.NbTravees > 1)
+        'Dim lShearB As Boolean
+        'Dim lInterMV, lInterMVb As Boolean
+        Dim lMixte As Boolean = MyBeam.lMixte
+        Dim lCalculPlastic As Boolean
+
+        '--> Initialisation
+
+        lCalculPlastic = MyBeam.VerifSlimMixte(iVerif).lCalculPlastic
+        'lInterMV = IsGreater(MyBeam.VerifMixte(iVerif).CritereMV.CritereMax, 0)
+        'lInterMVb = IsGreater(MyBeam.VerifMixte(iVerif).CritereMVb.CritereMax, 0)
+        'lShearB = MyBeam.VerifMixte(iVerif).ShearB.lCheckRequired
+
+        NCOL = 5                        ' Pour GammaM, GammaV , GammaMV et GammaMy
+
+        'If lInterMV Then NCOL += 1      ' Colonne GammaMV
+
+        'If lShearB Then
+        '    NCOL += 1                   ' Colonne GammaVb 
+
+        '    If lInterMVb Then NCOL += 1 ' Colonne GammaMVb
+        'End If
+
+        AddLigneNDC("\TABLEAU " & CStr(PostTab))
+
+        '--> Entête
+
+        InitialiseLigne(NCOL, HLIGNEENTETE, False)
+
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "Combi")
+
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-My\=")
+        'If lInterMV Then
+        '    AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
+        'End If
+        'If lShearB Then
+        '    AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-Vb\=")
+        '    If lInterMVb And lCalculPlastic Then _
+        '    AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MVb\=")
+        'End If
+
+    End Sub
+
+#End Region
+
 #Region "***Edition vérifications ELU pour les poutres Slim floor ACIER***"
 
     Private Sub EditionVerificationsELUSummarySlimACIER(myBeam As cls_Poutre, iVerif As Integer, lConstructionP As Boolean)
@@ -9061,6 +9326,13 @@ Module Mod_NoteCalcul
             AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(0).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)", lConstructionP)
             AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(0).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA") & " (2)", lConstructionP)
             AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(iVerif).CritereMY, "\SG\s\-My\=", BlocELU("MY_CRITERIA"), lConstructionP)
+
+            '# Interaction MV
+            If IsEqual(myBeam.VerifSlimAcier(iVerif).CritereMV.CritereMax, 0) Then
+                AddLigneNDC(TABW3 & BlocELU("NO_MVINTERACTION"))
+            Else
+                AfficheSyntheseCritere(myBeam, myBeam.VerifSlimAcier(iVerif).CritereMV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA"), lConstructionP)
+            End If
 
             SauteLigne()
             AddLigneNDC(TABW2 & "(1): " & BlocELU("PLASTICDESIGNCLASS12"))
@@ -9130,6 +9402,7 @@ Module Mod_NoteCalcul
         End If
 
     End Sub
+
     Private Sub TableauCritereCombiELU_SlimAcierPlasticOuClass3(MyBeam As cls_Poutre, iVerif As Integer, nbCombi As Integer, lConstructionP As Boolean)
         '-------------------------------------------------------------------------------------------
         '   14/03/24 :  Création - POM
@@ -9234,6 +9507,9 @@ Module Mod_NoteCalcul
             '==( Affichage de GammaV
             AffichageCritereELU_N(MyBeam.VerifSlimAcier(iVerif).CritereV, i, iCombi, MyBordures(i))
 
+            '==( Affichage de GammaMV
+            AffichageCritereELU_N(MyBeam.VerifSlimAcier(iVerif).CritereMV, i, iCombi, MyBordures(i))
+
             '==( Affichage de GammaMy
             AffichageCritereELU_N(MyBeam.VerifSlimAcier(iVerif).CritereMY, i, iCombi, MyBordures(i))
             'AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, "")
@@ -9262,7 +9538,7 @@ Module Mod_NoteCalcul
 
         '--> Initialisation
 
-        NCOL = 4                        ' Pour GammaM, GammaV et GammaMy)
+        NCOL = 5                        ' Pour GammaM, GammaV et GammaMy et GammaMV)
 
         AddLigneNDC("\TABLEAU " & CStr(PostTab))
 
@@ -9274,6 +9550,7 @@ Module Mod_NoteCalcul
 
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-My\=")
 
     End Sub
@@ -10770,7 +11047,7 @@ Module Mod_NoteCalcul
             FlechesMaxi(jTravee) = UZ(IndiceNoteT(jTravee, 0))
             For iNode = IndiceNoteT(jTravee, 0) + 1 To IndiceNoteT(jTravee, 1)
 
-                If IsGreater(Math.Abs(UZ(iNode)), Math.Abs(FlechesMaxi(jTravee))) Then
+                If IsGreater(Math.Abs(UZ(iNode)), Math.Abs(FlechesMaxi(jTravee)), 10 ^ -6) Then
 
                     FlechesMaxi(jTravee) = UZ(iNode)
 
@@ -12377,6 +12654,7 @@ Module Mod_NoteCalcul
 
         Dim iStep, NbStep As Integer
         Dim VbRdFi() As Decimal = Nothing
+        Dim lMixte As Boolean = myBeam.lMixte
 
         '--( Initialisation
 
@@ -12385,7 +12663,11 @@ Module Mod_NoteCalcul
         SautePage()
         AddTitreNdC(2, BlocFEU("FIRE_CHARTSHEATING"))
 
-        myBeam.VerifFeuSlimAcier.CalculVbRdFeuSlimAcier(myBeam, VbRdFi)
+        If lMixte Then
+            myBeam.VerifFeuSlimMixte.CalculVbRdFeuSlimAcier(myBeam, VbRdFi)
+        Else
+            myBeam.VerifFeuSlimAcier.CalculVbRdFeuSlimAcier(myBeam, VbRdFi)
+        End If
 
         '--( Affichage des cartes
 
@@ -12480,14 +12762,23 @@ Module Mod_NoteCalcul
 
         Dim TempG As Decimal
         Dim ENFeu As New cls_EurocodesFeu
+        Dim lMixte As Boolean = myBeam.lMixte
 
         '--( Entete du tableau
 
-        EnteteTableauTempSlim(POS, cls_VerifFeuSlimAcier.TimeSteps(iStep).ToString)
+        If lMixte Then
+            EnteteTableauTempSlim(POS, cls_VerifFeuSlimMixte.TimeSteps(iStep).ToString)
+        Else
+            EnteteTableauTempSlim(POS, cls_VerifFeuSlimAcier.TimeSteps(iStep).ToString)
+        End If
 
         '--( Récupération des températures min/max
 
-        myBeam.VerifFeuSlimAcier.TemperatureStepMinMax(iStep, TempBeton, TempAme, TempSemInf, TempSemSup, TempPlat, TempSoud, TempArma)
+        If lMixte Then
+            myBeam.VerifFeuSlimMixte.TemperatureStepMinMax(iStep, TempBeton, TempAme, TempSemInf, TempSemSup, TempPlat, TempSoud, TempArma)
+        Else
+            myBeam.VerifFeuSlimAcier.TemperatureStepMinMax(iStep, TempBeton, TempAme, TempSemInf, TempSemSup, TempPlat, TempSoud, TempArma)
+        End If
 
         '--( Affichage des températures
 
@@ -12604,7 +12895,7 @@ Module Mod_NoteCalcul
         Dim lMethCreuxOndes As Boolean
         Dim lBacPerpendiculaire As Boolean = myBeam.Dalle.lMixte And myBeam.Dalle.Bac.lPerpendiculaire And myBeam.Dalle.Bac.lNervuresContinues
 
-        If myBeam.lSlimFloorAcier Then Exit Sub
+        If myBeam.lSlimFloor Then Exit Sub
 
         '--( Titre
 
@@ -12821,6 +13112,8 @@ Module Mod_NoteCalcul
                 EditionVerificationsFEUSyntheseMixte(myBeam)
             Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SFB
                 EditionVerificationsFEUSyntheseSlimAcier(myBeam)
+            Case cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SABmixte, cls_Section.Enum_TypeSection.SFBmixte
+                EditionVerificationsFEUSyntheseSlimMixte(myBeam)
         End Select
 
     End Sub
@@ -12843,18 +13136,56 @@ Module Mod_NoteCalcul
                 EditionVerificationsFEUDetailMixte(myBeam)
             Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SFB
                 EditionVerificationsFEUDetailSlimAcier(myBeam)
+            Case cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SABmixte, cls_Section.Enum_TypeSection.SFBmixte
+                EditionVerificationsFEUDetailSlimMixte(myBeam)
         End Select
 
     End Sub
 
-    '######### ACIER SLIM ##################################################################################################
+    '######### MIXTE SLIM ##################################################################################################
 
-    Private Sub EditionVerificationsFEUDetailSlimAcier(myBeam As cls_Poutre)
+    Private Sub EditionVerificationsFEUSyntheseSlimMixte(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
         '   19/04/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la synthèse des calculs au feu pour une poutre à section acier slim floor
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Calcul au feu
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myStep As Integer
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_SYMMARY"))
+
+        '--( Durée de résistance au feu
+
+        If myBeam.VerifFeuSlimMixte.RStep = -1 Then
+            myStep = 0
+        Else
+            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuSlimMixte.TimeSteps(myBeam.VerifFeuSlimMixte.RStep)))
+            myStep = myBeam.VerifFeuSlimMixte.RStep
+        End If
+
+        '--( Synthèse des critères
+
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimMixte.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), False, True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimMixte.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), False, True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimMixte.CritereMV(myStep), "\SG\s\-MV\=", BlocELU("MV_CRITERIA"), False, True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimMixte.CritereMY(myStep), "\SG\s\-My\=", BlocELU("MY_CRITERIA"), False, True)
+
+    End Sub
+
+
+    Private Sub EditionVerificationsFEUDetailSlimMixte(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   29/06/26 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
         '   Edition de la vérification détaillée des calculs au feu
-        '   Pour les poutres acier
+        '   Pour les poutres slim mixtes
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
         '-----------------------------------------------------------------------------------------------------------------
@@ -12864,6 +13195,98 @@ Module Mod_NoteCalcul
         Dim NCOL As Integer
         Dim LargCol() As Single = Nothing
         Dim iStep As Integer
+        Dim RSTP As String
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_DETAIL"))
+
+        '--( Entete du tableau
+
+        EnteteTableauVerifFeuSlimAcier(NCOL, LargCol)
+
+        '--( Remplissage tableau
+
+        For iStep = 0 To cls_VerifFeuSlimMixte.TimeSteps.GetUpperBound(0)
+            RSTP = CStr(cls_VerifFeuSlimMixte.TimeSteps(iStep))
+            LigneTableauVerifFeuSlim(RSTP, myBeam.VerifFeuSlimMixte.CritereM(iStep), myBeam.VerifFeuSlimMixte.CritereV(iStep),
+                                           myBeam.VerifFeuSlimMixte.CritereMV(iStep), myBeam.VerifFeuSlimMixte.CritereMY(iStep),
+                                     NCOL, LargCol)
+        Next
+
+        '--( Fin
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub LigneTableauVerifFeuSlim(RSTEP As String, myCritM As cls_Critere, myCritV As cls_Critere, myCritMV As cls_Critere, myCritMy As cls_Critere,
+                                         NCOL As Integer, LargCol() As Single)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres slim floor
+        '   Ligne du tableau pour un Rstep donné
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myCritM     [E] :   Critère flexion globale
+        '   myCritV     [E] :   Critère effort tranchant
+        '   myCritMV    [E] :   Critère interaction MV
+        '   myCritMy    [E] :   Critère flexion locale
+        '   
+        '   NCOL        [E] :   Nombre de colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tab
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        ' Dim kY, kE As Decimal
+        Dim EN_Feu As New cls_EurocodesFeu
+        Dim ChaineMV As String = "--"
+        Dim iCol As Integer = 6
+
+        '--( Initialisation
+
+        'kY = EN_Feu.ReducFyAcier(myVerifFeu.TempAStep(iStep))
+        'kE = EN_Feu.ReducEyAcier(myVerifFeu.TempAStep(iStep))
+
+        '--( AffichageOptFeu
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & RSTEP)
+
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myCritM.CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myCritV.CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
+
+        'If IsGreater(myVerifFeu.CritereV(iStep).CritereMax, 0) Then
+        ChaineMV = GetStringInUnitN(myCritMV.CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False)
+        'End If
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, ChaineMV)
+
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myCritMy.CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
+
+    End Sub
+
+
+    '######### ACIER SLIM ##################################################################################################
+
+    Private Sub EditionVerificationsFEUDetailSlimAcier(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres slim acier
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+        Dim iStep As Integer
+        Dim RSTP As String
 
         '--( Titre
 
@@ -12876,7 +13299,11 @@ Module Mod_NoteCalcul
         '--( Remplissage tableau
 
         For iStep = 0 To cls_VerifFeuSlimAcier.TimeSteps.GetUpperBound(0)
-            LigneTableauVerifFeuSlimAcier(iStep, myBeam.VerifFeuSlimAcier, NCOL, LargCol)
+            'LigneTableauVerifFeuSlimAcier(iStep, myBeam.VerifFeuSlimAcier, NCOL, LargCol)
+            RSTP = CStr(cls_VerifFeuSlimAcier.TimeSteps(iStep))
+            LigneTableauVerifFeuSlim(rstp, myBeam.VerifFeuSlimAcier.CritereM(iStep), myBeam.VerifFeuSlimAcier.CritereV(iStep),
+                                           myBeam.VerifFeuSlimAcier.CritereMV(iStep), myBeam.VerifFeuSlimAcier.CritereMY(iStep),
+                                     NCOL, LargCol)
         Next
 
         '--( Fin
@@ -12919,10 +13346,10 @@ Module Mod_NoteCalcul
 
         AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
 
-        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-My\=")
         AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
         AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
         AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-My\=")
 
     End Sub
 
@@ -12960,14 +13387,15 @@ Module Mod_NoteCalcul
 
         AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuSlimAcier.TimeSteps(iStep)))
 
-        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereMY(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
         AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
         AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
 
-        If IsGreater(myVerifFeu.CritereV(iStep).CritereMax, 0) Then
-            ChaineMV = GetStringInUnitN(myVerifFeu.CritereMV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False)
-        End If
+        'If IsGreater(myVerifFeu.CritereV(iStep).CritereMax, 0) Then
+        ChaineMV = GetStringInUnitN(myVerifFeu.CritereMV(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False)
+        'End If
         AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, ChaineMV)
+
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereMY(iStep).CritereMax, Enu_TypeVariable.SansType, 4, 3, NON, False))
 
     End Sub
 
@@ -13654,13 +14082,13 @@ Module Mod_NoteCalcul
 
         '--( Synthèse des critères
 
-        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimAcier.CritereMY(myStep), "\SG\s\-My\=", BlocELU("MY_CRITERIA"), False, True)
         AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimAcier.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), False, True)
         AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimAcier.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), False, True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimAcier.CritereMV(myStep), "\SG\s\-MV\=", BlocELU("MV_CRITERIA"), False, True)
+        AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimAcier.CritereMY(myStep), "\SG\s\-My\=", BlocELU("MY_CRITERIA"), False, True)
 
-        If IsGreater(myBeam.VerifFeuSlimAcier.CritereV(myStep).CritereMax, 0) Then
-            AfficheSyntheseCritere(myBeam, myBeam.VerifFeuSlimAcier.CritereMV(myStep), "\SG\s\-MV\=", BlocELU("MV_CRITERIA"), False, True)
-        End If
+        'If IsGreater(myBeam.VerifFeuSlimAcier.CritereV(myStep).CritereMax, 0) Then
+        'End If
 
     End Sub
 

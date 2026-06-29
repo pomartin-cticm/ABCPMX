@@ -1,5 +1,6 @@
 ﻿Imports System.Net
 Imports System.Reflection
+Imports System.Security.Claims
 Imports System.Windows.Forms.LinkLabel
 Imports Microsoft.VisualBasic.Devices
 
@@ -18,7 +19,7 @@ Public Class cls_VerifFeuSlimAcier
     Private NbStep As Integer                           ' Nombre d'items dans le tableau TimeSteps
     Public RStep As Integer                             ' Indice du dernier pas de calcul de la table TimeStep pour laquelle tous les critères sont OK
 
-    Private Maillage As cls_MaillageSlimFloor           ' Modèle numérique pour le calcul de l'échauffement d'une slim floor
+    Private Maillage As cls_MaillageSlimFloor            ' Modèle numérique pour le calcul de l'échauffement d'une slim floor
 
     Public TempMailStep(,,) As Decimal                  ' Tableau des températures du maillage à chaque pas de temps
 
@@ -61,8 +62,6 @@ Public Class cls_VerifFeuSlimAcier
             Me.CritereMV(iStep) = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         Next
     End Sub
-
-
 
 #End Region
 
@@ -145,6 +144,7 @@ Public Class cls_VerifFeuSlimAcier
         '--( Déclarations
 
         Dim nbCombiELF As Integer
+        Dim iCombi As Integer
 
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
@@ -167,6 +167,8 @@ Public Class cls_VerifFeuSlimAcier
 
         Dim MplRd(,) As Decimal = Nothing
         Dim zANP(,) As Decimal = Nothing
+
+        Dim CSlim As New cls_CalculSlim
 
         '--( Initialisation
 
@@ -192,7 +194,9 @@ Public Class cls_VerifFeuSlimAcier
                 '# Cas où les résultats de calcul sont directement disponibles en mémoire
                 ' On n'a juste à recréer le maillage
 
-                RecupereTemperatureFile(myBeam, iBeam, FileNameP, False)
+                'RecupereTemperatureFile(myBeam, iBeam, FileNameP, False)
+
+                CSlim.RecupereMaillage(myBeam, Me.Maillage)
 
             Else
                 '# Cas où les résultats de calcul sont disponibles dans le fichier de sauvegarde
@@ -200,7 +204,11 @@ Public Class cls_VerifFeuSlimAcier
                 ' Il faut regénérer le maillage et 
                 ' récupérer les températures du maillage dans le fichier
 
-                RecupereTemperatureFile(myBeam, iBeam, FileNameP, True)
+                'RecupereTemperatureFile(myBeam, iBeam, FileNameP, True)
+
+                CSlim.RecupereMaillage(myBeam, Me.Maillage)
+                Me.InitialiseVariables(Maillage.nb_cells_y, Maillage.nb_cells_z)
+                CSlim.ChargerTemperatures(myBeam, iBeam, FileNameP, Me.Maillage_NbY, Me.Maillage_NbZ, Me.TempMailStep)
 
             End If
         Else
@@ -212,15 +220,18 @@ Public Class cls_VerifFeuSlimAcier
 
         '# Valeurs enveloppes des températures ####################################################################################
 
-        For iStep As Integer = 0 To NbStep - 1
-            myBeam.VerifFeuSlimAcier.TemperatureStepMinMax(iStep, TempBeton(iStep), TempAme(iStep),
-                                                                  TempSemInf(iStep), TempSemSup(iStep),
-                                                                  TempPlat(iStep), TempSoud(iStep), TempArma(iStep))
+        For iStep As Integer = 0 To Me.NbStep - 1
+            'myBeam.VerifFeuSlimAcier.TemperatureStepMinMax(iStep, TempBeton(iStep), TempAme(iStep),
+            '                                                      TempSemInf(iStep), TempSemSup(iStep),
+            '                                                      TempPlat(iStep), TempSoud(iStep), TempArma(iStep))
+            CSlim.TemperatureStepMinMax(Me.Maillage, Me.TempMailStep, iStep,
+                                        TempBeton(iStep), TempAme(iStep), TempSemInf(iStep), TempSemSup(iStep),
+                                        TempPlat(iStep), TempSoud(iStep), TempArma(iStep))
         Next
 
         '# Résistance à l'effort tranchant ########################################################################################
 
-        CalculVbRdFeuSlimAcier(myBeam, VbRdFi)
+        CSlim.CalculVbRdFeuSlimAcier(myBeam, Me.Maillage, Me.TempMailStep, Me.NbStep, VbRdFi)
 
         '# Boucle sur les combinaisons de calcul pour vérifications ###############################################################
 
@@ -240,26 +251,31 @@ Public Class cls_VerifFeuSlimAcier
 
             '## Calcul des coefficients de réduction pour l'influence de la flexion transversale
 
-            CalculCoefficientsReduction(iCombi, myBeam, QEd, TempPlat, TempSemInf, PsiY_spd, PsiY_fi)
+            CSlim.CalculCoefficientsReductionFeu(iCombi, myBeam, NbStep, QEd, TempPlat, TempSemInf, PsiY_spd, PsiY_fi)
 
-            '## Moments resistants, prenant en compte l'influence de la flexion transversale
+            '## Moments resistants, prenant en compte l'influence de la flexion transversale et la température
 
-            ProprietesFeuSlimAcier(iCombi, myBeam, True, MplRd, zANP, PsiY_fi, PsiY_spd)
+            CSlim.ProprietesFlexionFeuSlimAcier(iCombi, myBeam, NbStep, True, MplRd, zANP, PsiY_fi, PsiY_spd)
 
             '## Critères de résistance pour chaque Step
 
             For iSTep = 0 To Me.NbStep - 1
                 '# Vérification de la flexion transversale
 
-                Me.RunCritereResistancePlastiquePlatY_N(myBeam, iCombi, QSupEd, iSTep, TempPlat(iSTep)(1), TempSemInf(iSTep)(1))
+                CSlim.RunCritereResistancePlastiquePlatY_FEU(myBeam, iCombi, QSupEd, iSTep, TempPlat(iSTep)(1), TempSemInf(iSTep)(1), Me.CritereMY(iSTep))
 
-                Me.RunCritereResistanceFlexion(myBeam, iCombi, iSTep, MEd, MplRd)
+                '# Vérification de la flexion globale
 
-                Me.RunCritereResistanceTranchant(myBeam, iCombi, iSTep, VEd, VbRdFi, EtaMax)
+                CSlim.RunCritereResistanceFlexionFEU(myBeam, iCombi, iSTep, MEd, MplRd, Me.CritereM(iSTep))
 
-                If IsGreater(EtaMax, 0.5) Then
-                    Me.RunCritereInteractionMV(myBeam, iCombi, iSTep, MEd, VEd, VbRdFi, PsiY_fi, PsiY_spd)
-                End If
+                '# Vérification sous efforts tranchants
+
+                CSlim.RunCritereResistanceTranchantFEU(myBeam, iCombi, iSTep, VEd, VbRdFi, Me.CritereV(iSTep))
+
+                '# Vérification interaction MV
+
+                CSlim.RunCritereInteractionMV_FEU(myBeam, iCombi, iSTep, MEd, VEd, VbRdFi, PsiY_fi, PsiY_spd, Me.CritereMV(iSTep))
+
             Next
 
         Next
@@ -335,390 +351,225 @@ Public Class cls_VerifFeuSlimAcier
 
 #End Region
 
-#Region " Coefficients de réduction pour le plat inférieur "
+    '#Region " Coefficients de réduction pour le plat inférieur "
 
-    Public Sub CalculCoefficientsReduction(iCombi As Integer, myBeam As cls_Poutre, QEd() As Decimal,
-                                           TempPl()() As Decimal, TempFi()() As Decimal,
-                                           ByRef PsiY_spd(,) As Decimal, ByRef PsiY_fi(,) As Decimal)
-        '-----------------------------------------------------------------------------------------------------------------------------
-        '   31/07/25 :  Reprise
-        '-----------------------------------------------------------------------------------------------------------------------------
-        '   Calcul des coefficients de réduction liés à la flexion transversale des semelles inférieures de slim
-        '   UNIQUEMENT AVEC LA METHODE EN1994
-        '-----------------------------------------------------------------------------------------------------------------------------
-        '   iCombi      [E] :   Indice de la combinaison
-        '   myPoutre    [E] :   Poutre étudiée
-        '   QEd         [E] :   Efforts nodaux de la poutre
-        '-----------------------------------------------------------------------------------------------------------------------------
+    '    Public Sub CalculCoefficientsReduction(iCombi As Integer, myBeam As cls_Poutre, QEd() As Decimal,
+    '                                           TempPl()() As Decimal, TempFi()() As Decimal,
+    '                                           ByRef PsiY_spd(,) As Decimal, ByRef PsiY_fi(,) As Decimal)
+    '        '-----------------------------------------------------------------------------------------------------------------------------
+    '        '   31/07/25 :  Reprise
+    '        '-----------------------------------------------------------------------------------------------------------------------------
+    '        '   Calcul des coefficients de réduction liés à la flexion transversale des semelles inférieures de slim
+    '        '   UNIQUEMENT AVEC LA METHODE EN1994
+    '        '-----------------------------------------------------------------------------------------------------------------------------
+    '        '   iCombi      [E] :   Indice de la combinaison
+    '        '   myPoutre    [E] :   Poutre étudiée
+    '        '   QEd         [E] :   Efforts nodaux de la poutre
+    '        '-----------------------------------------------------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '        '--> Déclaration
 
-        Dim iStep As Integer
-        Dim iNode As Integer
-        Dim iTravee, iDebT, iFinT As Integer
-        Dim iDebN, iFinN As Integer
-        Dim deltaX As Decimal = myBeam.LongueurTotale / myBeam.Nodes.nbNodes
+    '        Dim iStep As Integer
+    '        Dim iNode As Integer
+    '        Dim iTravee, iDebT, iFinT As Integer
+    '        Dim iDebN, iFinN As Integer
+    '        Dim deltaX As Decimal = myBeam.LongueurTotale / myBeam.Nodes.nbNodes
 
-        Dim q, dApp, GammaM0 As Decimal
-        Dim dbtFi, dbtPlat As Decimal
+    '        Dim q, dApp, GammaM0 As Decimal
+    '        Dim dbtFi, dbtPlat As Decimal
 
-        Dim FyPlat, fyInf As Decimal
+    '        Dim FyPlat, fyInf As Decimal
 
-        Dim kChargeQ As Decimal
+    '        Dim kChargeQ As Decimal
 
-        Dim EN1994 As New cls_Eurocodes
-        Dim ENFeu As New cls_EurocodesFeu
+    '        Dim EN1994 As New cls_Eurocodes
+    '        Dim ENFeu As New cls_EurocodesFeu
 
-        Dim kReducPl(NbStep - 1) As Decimal
-        Dim kReducFi(NbStep - 1) As Decimal
+    '        Dim kReducPl(NbStep - 1) As Decimal
+    '        Dim kReducFi(NbStep - 1) As Decimal
 
-        '--> Initialisation
+    '        '--> Initialisation
 
-        iDebT = myBeam.IndicePremiereTravee
-        iFinT = myBeam.IndiceDerniereTravee
+    '        iDebT = myBeam.IndicePremiereTravee
+    '        iFinT = myBeam.IndiceDerniereTravee
 
-        GammaM0 = myBeam.Param.Gamma.GammaM0
+    '        GammaM0 = myBeam.Param.Gamma.GammaM0
 
-        dApp = myBeam.SlimLargeurAppui
-        myBeam.Section.SlimBrasLevier(dApp, dbtFi, dbtPlat)
+    '        dApp = myBeam.SlimLargeurAppui
+    '        myBeam.Section.SlimBrasLevier(dApp, dbtFi, dbtPlat)
 
-        FyPlat = myBeam.Section.FySpd
-        fyInf = myBeam.Section.FyInf
+    '        FyPlat = myBeam.Section.FySpd
+    '        fyInf = myBeam.Section.FyInf
 
-        kChargeQ = CoefficientCharge(myBeam)
+    '        kChargeQ = CoefficientCharge(myBeam)
 
-        ReDim PsiY_fi(NbStep - 1, myBeam.Nodes.nbNodes - 1)
-        ReDim PsiY_spd(NbStep - 1, myBeam.Nodes.nbNodes - 1)
+    '        ReDim PsiY_fi(NbStep - 1, myBeam.Nodes.nbNodes - 1)
+    '        ReDim PsiY_spd(NbStep - 1, myBeam.Nodes.nbNodes - 1)
 
-        For iStep = 0 To NbStep - 1
-            kReducPl(iStep) = ENFeu.ReducFyAcier(TempPl(iStep)(1))
-            kReducFi(iStep) = ENFeu.ReducFyAcier(TempFi(iStep)(1))
-        Next
+    '        For iStep = 0 To NbStep - 1
+    '            kReducPl(iStep) = ENFeu.ReducFyAcier(TempPl(iStep)(1))
+    '            kReducFi(iStep) = ENFeu.ReducFyAcier(TempFi(iStep)(1))
+    '        Next
 
-        '--> Traitement
+    '        '--> Traitement
 
-        For iTravee = iDebT To iFinT
+    '        For iTravee = iDebT To iFinT
 
-            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+    '            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+    '            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
 
-            For iNode = iDebN To iFinN
+    '            For iNode = iDebN To iFinN
 
-                With myBeam.Section.ProfilA
+    '                With myBeam.Section.ProfilA
 
-                    '== Suggestion pour DeltaX (POM)
-                    If iNode = 0 Then
-                        deltaX = (myBeam.Nodes.xGlobal(iNode + 1) - myBeam.Nodes.xGlobal(iNode)) / 2
-                    ElseIf iNode = myBeam.Nodes.nbNodes - 1 Then
-                        deltaX = (myBeam.Nodes.xGlobal(iNode) - myBeam.Nodes.xGlobal(iNode - 1)) / 2
-                    Else
-                        deltaX = (myBeam.Nodes.xGlobal(iNode + 1) - myBeam.Nodes.xGlobal(iNode - 1)) / 2
-                    End If
-                    '====
+    '                    '== Suggestion pour DeltaX (POM)
+    '                    If iNode = 0 Then
+    '                        deltaX = (myBeam.Nodes.xGlobal(iNode + 1) - myBeam.Nodes.xGlobal(iNode)) / 2
+    '                    ElseIf iNode = myBeam.Nodes.nbNodes - 1 Then
+    '                        deltaX = (myBeam.Nodes.xGlobal(iNode) - myBeam.Nodes.xGlobal(iNode - 1)) / 2
+    '                    Else
+    '                        deltaX = (myBeam.Nodes.xGlobal(iNode + 1) - myBeam.Nodes.xGlobal(iNode - 1)) / 2
+    '                    End If
+    '                    '====
 
-                    q = kChargeQ * QEd(iNode) / deltaX
+    '                    q = kChargeQ * QEd(iNode) / deltaX
 
-                    For iStep = 0 To NbStep - 1
-                        Select Case .typeProfileAcier
-                            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+    '                    For iStep = 0 To NbStep - 1
+    '                        Select Case .typeProfileAcier
+    '                            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
 
-                                PsiY_spd(iStep, iNode) = EN1994.SlimCalculPsiY(q, dbtPlat, .Plat_t, kReducPl(iStep) * FyPlat, GammaM0)
-                                PsiY_fi(iStep, iNode) = EN1994.SlimCalculPsiY(q, dbtFi, .Tfi, kReducFi(iStep) * fyInf, GammaM0)
+    '                                PsiY_spd(iStep, iNode) = EN1994.SlimCalculPsiY(q, dbtPlat, .Plat_t, kReducPl(iStep) * FyPlat, GammaM0)
+    '                                PsiY_fi(iStep, iNode) = EN1994.SlimCalculPsiY(q, dbtFi, .Tfi, kReducFi(iStep) * fyInf, GammaM0)
 
-                            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+    '                            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
 
-                                PsiY_spd(iStep, iNode) = EN1994.SlimCalculPsiY(q, dbtPlat, .Plat_t, kReducPl(iStep) * FyPlat, GammaM0)
-                                PsiY_fi(iStep, iNode) = 1
+    '                                PsiY_spd(iStep, iNode) = EN1994.SlimCalculPsiY(q, dbtPlat, .Plat_t, kReducPl(iStep) * FyPlat, GammaM0)
+    '                                PsiY_fi(iStep, iNode) = 1
 
-                            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+    '                            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
 
-                                PsiY_spd(iStep, iNode) = 1
-                                PsiY_fi(iStep, iNode) = EN1994.SlimCalculPsiY(q, dbtFi, .Tfi, kReducFi(iStep) * fyInf, GammaM0)
+    '                                PsiY_spd(iStep, iNode) = 1
+    '                                PsiY_fi(iStep, iNode) = EN1994.SlimCalculPsiY(q, dbtFi, .Tfi, kReducFi(iStep) * fyInf, GammaM0)
 
-                        End Select
-                    Next
+    '                        End Select
+    '                    Next
 
-                End With
+    '                End With
 
-            Next
-        Next
+    '            Next
+    '        Next
 
-    End Sub
+    '    End Sub
 
-    Private Function CoefficientCharge(myBeam As cls_Poutre) As Decimal
-        '----------------------------------------------------------------------------------------------------------
-        '   10/10/25 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Renvoie la proportion de charge reprise de part et d'autre
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '----------------------------------------------------------------------------------------------------------
+    '    Private Function CoefficientCharge(myBeam As cls_Poutre) As Decimal
+    '        '----------------------------------------------------------------------------------------------------------
+    '        '   10/10/25 :  Création - POM
+    '        '----------------------------------------------------------------------------------------------------------
+    '        '   Renvoie la proportion de charge reprise de part et d'autre
+    '        '----------------------------------------------------------------------------------------------------------
+    '        '   myBeam      [E] :   Poutre traitée
+    '        '----------------------------------------------------------------------------------------------------------
 
-        Dim dGauche, dDroite As Decimal
-        Dim kCote As Decimal
+    '        Dim dGauche, dDroite As Decimal
+    '        Dim kCote As Decimal
 
-        dGauche = myBeam.EntraxeD1
-        dDroite = myBeam.EntraxeD2
-        If myBeam.lIntermediaire Then
-            kCote = Math.Max(dGauche, dDroite) / (dGauche + dDroite)
-        Else
-            kCote = Math.Max(2 * dGauche, dDroite) / (2 * dGauche + dDroite)
-        End If
+    '        dGauche = myBeam.EntraxeD1
+    '        dDroite = myBeam.EntraxeD2
+    '        If myBeam.lIntermediaire Then
+    '            kCote = Math.Max(dGauche, dDroite) / (dGauche + dDroite)
+    '        Else
+    '            kCote = Math.Max(2 * dGauche, dDroite) / (2 * dGauche + dDroite)
+    '        End If
 
-        Return kCote
+    '        Return kCote
 
-    End Function
+    '    End Function
 
-#End Region
-
-#Region " Résistance à l'effort tranchant "
-
-    Public Sub CalculVbRdFeuSlimAcier(myBeam As cls_Poutre, ByRef VbRdFi() As Decimal)
-        '------------------------------------------------------------------------------
-        '   14/04/26 :  Création - POM
-        '------------------------------------------------------------------------------
-        '   Calcul de la résistance plastique VbRd en fct de l'échauffement
-        '------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '   VbRdFi      [S] :   Résistances plastiques VbRd en fct de la durée d'exposit
-        '------------------------------------------------------------------------------
-
-        '--( Déclarations
-
-        Dim iStep As Integer
-        Dim MailAme As New List(Of Integer())
-        Dim AireAme As Decimal() = Nothing
-        Dim NbW As Integer
-        Dim iW As Integer
-        Dim kReducY As Decimal
-        Dim myTempW As Decimal
-        Dim ENFeu As New cls_EurocodesFeu
-        Dim RAC3 As Decimal = Math.Sqrt(3)
-        Dim FyW As Decimal
-        Dim GammaMFi As Decimal
-
-        '--( Initialisations
-
-        ReDim VbRdFi(NbStep - 1)
-        ReperageMaillesAme(MailAme)
-        NbW = MailAme.Count
-        CalAireMaillesAme(MailAme, AireAme)
-
-        GammaMFi = myBeam.Param.Gamma.GammaM_fi
-        FyW = myBeam.Section.FyW
-
-        '-- Récupération des mailles de l'âme
-
-        '--( Calculs
-
-        For iStep = 0 To NbStep - 1
-
-            For iW = 0 To NbW - 1
-
-                myTempW = Me.TemperatureMaille(iStep, MailAme(iW)(0), MailAme(iW)(1))
-                kReducY = ENFeu.ReducFyAcier(myTempW)
-
-                VbRdFi(iStep) += kReducY * AireAme(iW) * FyW / RAC3 / GammaMFi * kConvMPaPa
-
-            Next
-
-        Next
-
-    End Sub
-
-    Private Sub CalAireMaillesAme(mailWeb As List(Of Integer()), ByRef AireWeb() As Decimal)
-        '------------------------------------------------------------------------------
-        '   14/04/26 :  Création - POM
-        '------------------------------------------------------------------------------
-        '   Calcul des aires des mailles de l'âme
-        '------------------------------------------------------------------------------
-        '   MailWeb     [E] :   Liste des indices Y,Z des mailles de l'âme
-        '   AireWeb     [S] :   Tables des aires de chacune des mailles de l'âme
-        '------------------------------------------------------------------------------
-
-        '--( Déclaration
-
-        Dim nbMailW As Integer = mailWeb.Count
-        Dim iW As Integer
-
-        '--( Initialisation
-
-        ReDim AireWeb(nbMailW - 1)
-
-        '--( Traitement
-
-        For iW = 0 To nbMailW - 1
-
-            AireWeb(iW) = Me.Maillage.Tab_mesh_y(mailWeb(iW)(0)) * Me.Maillage.Tab_mesh_y(mailWeb(iW)(1))
-
-        Next
-
-    End Sub
-
-    Private Sub ReperageMaillesAme(ByRef MailWeb As List(Of Integer()))
-        '------------------------------------------------------------------------------
-        '   14/04/26 :  Création - POM
-        '------------------------------------------------------------------------------
-        '   Récupération des mailles de l'âme
-        '------------------------------------------------------------------------------
-        '   MailWeb     [S] :   Liste des indices Y,Z des mailles de l'âme
-        '------------------------------------------------------------------------------
-
-        '--( Déclarations
-
-        Dim iY, iZ As Integer
-        'Dim myMail(1) As Decimal
-
-        '--( Boucles sur les mailles
-
-        For iY = 0 To Me.Maillage_NbY - 1
-            For iZ = 0 To Maillage_NbZ - 1
-
-                If Me.Maillage.Tab_mesh_mat(iY, iZ) = cls_MaillageSlimFloor.MATACIERAME Then
-                    'myMail = {iY, iZ}
-                    'MailWeb.Add(myMail)
-                    MailWeb.Add({iY, iZ})
-                End If
-
-            Next
-        Next
-
-    End Sub
-
-#End Region
+    '#End Region
 
 #Region " Propriétés en flexion "
 
-    Public Sub ProprietesFeuSlimAcier(iCombi As Integer, myBeam As cls_Poutre, lValRd As Boolean,
-                                      ByRef MplRd(,) As Decimal, ByRef zANP(,) As Decimal,
-                                      PsiY_fi(,) As Decimal, PsiY_spd(,) As Decimal)
-        '------------------------------------------------------------------------------
-        '   13/04/26 :  Création - POM
-        '------------------------------------------------------------------------------
-        '   Calcul des propriétés plastiques  le long de la barre en fonction de 
-        '   du chargement et de la température
-        '------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '   iCombi      [E] :   indice de la combi en cours 
-        '   lValRd      [E] :   indique si valeur de calcul (True) ou non (False)
-        '   MplRd       [E] :   Moment plastique résistant
-        '   zANP        [E] :   Axe neutre plastique
-        '   Psi_fi      [E] :   Tables de réduction de fy pour la semelle inf (tenant compte de la flexion transversale)
-        '   Psi_spd     [E] :   Tables de réduction de fy pour le plat (tenant compte de la flexion transversale)
-        '------------------------------------------------------------------------------
+    'Public Sub ProprietesFeuSlimAcier(iCombi As Integer, myBeam As cls_Poutre, lValRd As Boolean,
+    '                                  ByRef MplRd(,) As Decimal, ByRef zANP(,) As Decimal,
+    '                                  PsiY_fi(,) As Decimal, PsiY_spd(,) As Decimal)
+    '    '------------------------------------------------------------------------------
+    '    '   13/04/26 :  Création - POM
+    '    '------------------------------------------------------------------------------
+    '    '   Calcul des propriétés plastiques  le long de la barre en fonction de 
+    '    '   du chargement et de la température
+    '    '------------------------------------------------------------------------------
+    '    '   myBeam      [E] :   Poutre traitée
+    '    '   iCombi      [E] :   indice de la combi en cours 
+    '    '   lValRd      [E] :   indique si valeur de calcul (True) ou non (False)
+    '    '   MplRd       [E] :   Moment plastique résistant
+    '    '   zANP        [E] :   Axe neutre plastique
+    '    '   Psi_fi      [E] :   Tables de réduction de fy pour la semelle inf (tenant compte de la flexion transversale)
+    '    '   Psi_spd     [E] :   Tables de réduction de fy pour le plat (tenant compte de la flexion transversale)
+    '    '------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        'Dim myModele As cls_ModeleP
+    '    'Dim myModele As cls_ModeleP
 
-        Dim NbNodes As Integer = myBeam.Nodes.nbNodes
-        Dim iTravee As Integer
-        Dim iTravDeb, iTravFin As Integer       ' Par principe, en fait toutes les poutres sont sans consoles
-        Dim iNode As Integer
-        Dim iNodeDeb, iNodeFin As Integer
-        Dim kDeb, kfin As Integer
-        Dim lEdge As Boolean = Not myBeam.lIntermediaire
-        Dim lCalcul As Boolean
-        'Const SIGNE As Decimal = 1
+    '    Dim NbNodes As Integer = myBeam.Nodes.nbNodes
+    '    Dim iTravee As Integer
+    '    Dim iTravDeb, iTravFin As Integer       ' Par principe, en fait toutes les poutres sont sans consoles
+    '    Dim iNode As Integer
+    '    Dim iNodeDeb, iNodeFin As Integer
+    '    Dim kDeb, kfin As Integer
+    '    Dim lEdge As Boolean = Not myBeam.lIntermediaire
+    '    Dim lCalcul As Boolean
+    '    'Const SIGNE As Decimal = 1
+    '    Dim CSlim As New cls_CalculSlim
 
-        '--> Initialisation
+    '    '--> Initialisation
 
-        iTravDeb = myBeam.IndicePremiereTravee
-        iTravFin = myBeam.IndiceDerniereTravee
+    '    iTravDeb = myBeam.IndicePremiereTravee
+    '    iTravFin = myBeam.IndiceDerniereTravee
 
-        ReDim zANP(NbStep - 1, NbNodes - 1)
-        ReDim MplRd(NbStep - 1, NbNodes - 1)
+    '    ReDim zANP(NbStep - 1, NbNodes - 1)
+    '    ReDim MplRd(NbStep - 1, NbNodes - 1)
 
-        '--> Traitement
+    '    '--> Traitement
 
-        For iStep As Integer = 0 To NbStep - 1
+    '    For iStep As Integer = 0 To NbStep - 1
 
-            For iTravee = iTravDeb To iTravFin
+    '        For iTravee = iTravDeb To iTravFin
 
-                iNodeDeb = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
-                iNodeFin = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+    '            iNodeDeb = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+    '            iNodeFin = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
 
-                For iNode = iNodeDeb To iNodeFin
-                    If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
-                    If iNode = iNodeFin Then kfin = 0 Else kfin = 1
+    '            For iNode = iNodeDeb To iNodeFin
+    '                If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
+    '                If iNode = iNodeFin Then kfin = 0 Else kfin = 1
 
-                    If iNode = iNodeDeb Then
-                        lCalcul = True
-                    Else
+    '                If iNode = iNodeDeb Then
+    '                    lCalcul = True
+    '                Else
 
-                        lCalcul = (Not IsEqual(PsiY_fi(iStep, iNode), PsiY_fi(iStep, iNode - 1))) _
-                              Or ((Not IsEqual(PsiY_spd(iStep, iNode), PsiY_spd(iStep, iNode - 1))))
+    '                    lCalcul = (Not IsEqual(PsiY_fi(iStep, iNode), PsiY_fi(iStep, iNode - 1))) _
+    '                          Or ((Not IsEqual(PsiY_spd(iStep, iNode), PsiY_spd(iStep, iNode - 1))))
 
-                    End If
+    '                End If
 
-                    If lCalcul Then
+    '                If lCalcul Then
 
-                        '--> Construction du modèle de la section à partir des champs thermiques
+    '                    CSlim.ProprietePlastiqueMSlimFeu(myBeam, iStep, PsiY_fi(iStep, iNode), PsiY_spd(iStep, iNode),
+    '                                               zANP(iStep, iNode), MplRd(iStep, iNode))
 
-                        'myModele = New cls_ModeleP
-                        'myModele.MaillageSlimThermique(myBeam, iStep, PsiY_fi(iStep, iNode), PsiY_spd(iStep, iNode))
+    '                Else
 
-                        ''--> Recherche de l'axe neutre plastique
+    '                    zANP(iStep, iNode) = zANP(iStep, iNode - 1)
+    '                    MplRd(iStep, iNode) = MplRd(iStep, iNode - 1)
 
-                        'myModele.RechercheANP(SIGNE, zANP(iStep, iNode), lValRd)
+    '                End If
 
-                        ''--> Moment plastique
+    '            Next
 
-                        'MplRd(iStep, iNode) = myModele.CalculMomentPlastique(SIGNE, zANP(iStep, iNode), lValRd)
+    '        Next
 
-                        ProprietePlastiqueMSlimFeu(myBeam, iStep, PsiY_fi(iStep, iNode), PsiY_spd(iStep, iNode),
-                                                   zANP(iStep, iNode), MplRd(iStep, iNode))
-
-                    Else
-
-                        zANP(iStep, iNode) = zANP(iStep, iNode - 1)
-                        MplRd(iStep, iNode) = MplRd(iStep, iNode - 1)
-
-                    End If
-
-                Next
-
-            Next
-
-        Next
-    End Sub
-
-    Private Sub ProprietePlastiqueMSlimFeu(myBeam As cls_Poutre, iStep As Integer, myPsiY_fi As Decimal, myPsiY_spd As Decimal,
-                                           ByRef zANP As Decimal, ByRef MplRd As Decimal, Optional RhoV As Decimal = 0)
-        '------------------------------------------------------------------------------
-        '   13/04/26 :  Création - POM
-        '------------------------------------------------------------------------------
-        '   Calcul des propriétés plastiques  le long de la barre en fonction de 
-        '   du chargement et de la température
-        '------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '   iStep       [E] :   indice du champ de température à prendre en compte
-        '   MplRd       [S] :   Moment plastique résistant
-        '   zANP        [S] :   Axe neutre plastique
-        '   myPsi_fi    [E] :   Coef de réduction de fy pour la semelle inf (tenant compte de la flexion transversale)
-        '   myPsi_spd   [E] :   Coef de réduction de fy pour le plat (tenant compte de la flexion transversale)
-        '   RhoV        [E] :   Coefficient d'interaction V
-        '------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim myModele As New cls_ModeleP
-        Const SIGNE As Decimal = 1
-        Const lValRd As Boolean = True
-
-        '--( Initialisation
-
-        myModele.MaillageSlimThermique(myBeam, iStep, RhoV, myPsiY_fi, myPsiY_spd)
-
-        '--> Recherche de l'axe neutre plastique
-
-        myModele.RechercheANP(SIGNE, zANP, lValRd)
-
-        '--> Moment plastique
-
-        MplRd = myModele.CalculMomentPlastique(SIGNE, zANP, lValRd)
-
-    End Sub
+    '    Next
+    'End Sub
 
 #End Region
 
@@ -1208,369 +1059,51 @@ Public Class cls_VerifFeuSlimAcier
 
 #End Region
 
-#Region " Outils "
+#Region " Fonctions "
+
+    Public Sub CalculVbRdFeuSlimAcier(myBeam As cls_Poutre, ByRef VbRdFi() As Decimal)
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   29/06/26 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Retourne les résistance à l'effort tranchant du profilé, pour les différentes durées d'incendie
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   myBeam              [E] :   Poutre traitée
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        Dim CSlim As New cls_CalculSlim
+
+        CSlim.CalculVbRdFeuSlimAcier(myBeam, Me.Maillage, Me.TempMailStep, Me.NbStep, VbRdFi)
+
+    End Sub
 
     Public Sub TemperatureStepMinMax(iStep As Integer, ByRef TempBeton() As Decimal, ByRef TempAme() As Decimal,
                                      ByRef TempSemInf() As Decimal, ByRef TempSemSup() As Decimal,
                                      ByRef TempPlat() As Decimal, ByRef TempSoud() As Decimal, ByRef TempArma() As Decimal)
         '---------------------------------------------------------------------------------------------------------
-        '   13/04/26 :  Création - POM
+        '   29/06/26 :  Création - POM
         '---------------------------------------------------------------------------------------------------------
         '   Récupération des températures min et max du maillage au temps iStep
         '---------------------------------------------------------------------------------------------------------
         '   iStep       [E] :   Indice du pas de temps traité
         '   TempBeton   [S] :   Tableau des températures min et max des éléments béton
+        '   TempAme     [S] :   Tableau des températures min et max des éléments pour l'âme du profilé
+        '   TempSemInf  [S] :   Tableau des températures min et max des éléments pour la semelle inférieure
+        '   TempSemSup  [S] :   Tableau des températures min et max des éléments pour la semelle supérieure
+        '   TempPlat    [S] :   Tableau des températures min et max des éléments pour le plat
+        '   TempSoud    [S] :   Tableau des températures min et max des soudures
+        '   TempArma    [S] :   Tableau des températures min et max des éléments d'armature
         '---------------------------------------------------------------------------------------------------------
 
-        '--( Déclarations
+        Dim CSlim As New cls_CalculSlim
 
-        Dim iMailY As Integer
-        Dim iMailZ As Integer
-        Dim nbY As Integer = Maillage.nb_cells_y
-        Dim nbZ As Integer = Maillage.nb_cells_z
-
-        '--( Initialisation
-
-        ReDim TempBeton(1)
-        ReDim TempAme(1)
-        ReDim TempArma(1)
-        ReDim TempPlat(1)
-        ReDim TempSemInf(1)
-        ReDim TempSemSup(1)
-        ReDim TempSoud(1)
-
-        '--( Traitement
-
-        For iMailY = 0 To nbY - 1
-            For iMailZ = 0 To nbZ - 1
-
-                Select Case Maillage.Tab_mesh_mat(iMailY, iMailZ)
-                    Case cls_MaillageSlimFloor.MATBETON
-
-                        TraitementTempMaille(iStep, iMailY, iMailZ, TempBeton)
-
-                    Case cls_MaillageSlimFloor.MATACIERAME
-
-                        TraitementTempMaille(iStep, iMailY, iMailZ, TempAme)
-
-                    Case cls_MaillageSlimFloor.MATACIERSEMI
-
-                        TraitementTempMaille(iStep, iMailY, iMailZ, TempSemInf)
-
-                    Case cls_MaillageSlimFloor.MATACIERSEMS
-
-                        TraitementTempMaille(iStep, iMailY, iMailZ, TempSemSup)
-
-                    Case cls_MaillageSlimFloor.MATACIERPLAT
-
-                        TraitementTempMaille(iStep, iMailY, iMailZ, TempPlat)
-
-                    Case cls_MaillageSlimFloor.MATACIERSOUD
-
-                        TraitementTempMaille(iStep, iMailY, iMailZ, TempSoud)
-
-                    Case cls_MaillageSlimFloor.MATARMA
-
-                        TraitementTempMaille(iStep, iMailY, iMailZ, TempArma)
-
-                End Select
-
-            Next
-        Next
-
-    End Sub
-
-    Private Sub TraitementTempMaille(iStep As Integer, iMailY As Integer, iMailZ As Integer, ByRef TempPart() As Decimal)
-
-        If TempPart(0) = 0 And TempPart(1) = 0 Then
-            TempPart(0) = Me.TempMailStep(iStep, iMailY, iMailZ)
-            TempPart(1) = Me.TempMailStep(iStep, iMailY, iMailZ)
-        Else
-            If Me.TempMailStep(iStep, iMailY, iMailZ) < TempPart(0) Then
-                TempPart(0) = Me.TempMailStep(iStep, iMailY, iMailZ)
-            End If
-            If Me.TempMailStep(iStep, iMailY, iMailZ) > TempPart(1) Then
-                TempPart(1) = Me.TempMailStep(iStep, iMailY, iMailZ)
-            End If
-        End If
+        CSlim.TemperatureStepMinMax(Me.Maillage, Me.TempMailStep, iStep,
+                                    TempBeton, TempAme, TempSemInf, TempSemSup, TempPlat, TempSoud, TempArma)
 
     End Sub
 
 #End Region
 
 #Region " Vérifications "
-
-    Private Sub RunCritereInteractionMV(myBeam As cls_Poutre, iCombi As Integer, iStep As Integer,
-                                        MEd(,) As Decimal, VEd(,) As Decimal, VRdFi() As Decimal,
-                                        PsiY_fi(,) As Decimal, PsiY_spd(,) As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   14/04/26 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance en flexion des sections sous températures
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '   iCombi      [E] :   Indice de la combinaison
-        '   iStep       [E] :   Indice du pas de temps de calcul
-        '   MEd         [E] :   Moments aux noeuds
-        '   VEd         [E] :   Efforts tranchants aux noeuds
-        '   VRdFi       [E] :   Table des résistances à l'effort tranchant (0 à NbStep-1)
-        '   Psi_fi      [E] :   Tables de réduction de fy pour la semelle inf (tenant compte de la flexion transversale)
-        '   Psi_spd     [E] :   Tables de réduction de fy pour le plat (tenant compte de la flexion transversale)
-        '----------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim iDebT, iFinT As Integer
-        Dim iDebN, iFinN As Integer
-        Dim iDebK, iFinK As Integer
-        Dim iTravee, iNode As Integer
-        Dim Eta As Decimal
-        Dim zANP As Decimal
-        Dim MplVRd As Decimal
-        Dim RhoV As Decimal
-
-        '--( Initialisation
-
-        iDebT = myBeam.IndicePremiereTravee
-        iFinT = myBeam.IndiceDerniereTravee
-
-        '--> Traitement
-
-        For iTravee = iDebT To iFinT
-
-            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
-
-            For iNode = iDebN To iFinN
-
-                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
-                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
-
-                Eta = Math.Abs(VEd(iNode, iDebK) / VRdFi(iStep))
-                If iFinK > iDebK Then Eta = Math.Max(Eta, Math.Abs(VEd(iNode, iFinK) / VRdFi(iStep)))
-
-                If IsGreater(Eta, 0.5) Then
-
-                    RhoV = (2 * Eta - 1) ^ 2
-
-                    ProprietePlastiqueMSlimFeu(myBeam, iStep, PsiY_fi(iStep, iNode), PsiY_spd(iStep, iNode),
-                                               zANP, MplVRd, RhoV)
-
-                    Me.CritereMV(iStep).EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, iDebK), MplVRd)
-
-                End If
-            Next
-        Next
-
-    End Sub
-
-    Private Sub RunCritereResistanceTranchant(myBeam As cls_Poutre, iCombi As Integer, iStep As Integer,
-                                              VEd(,) As Decimal, VRdFi() As Decimal, ByRef EtaMax As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   13/04/26 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance en flexion des sections sous températures
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '   iCombi      [E] :   Indice de la combinaison
-        '   iStep       [E] :   Indice du pas de temps de calcul
-        '   VEd         [E] :   Efforts tranchants aux noeuds
-        '   VRdFi       [E] :   Table des résistances à l'effort tranchant (0 à NbStep-1)
-        '   EtaMax      [S] :   Ratio VEd/VRd max pour la combinaison
-        '----------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim iDebT, iFinT As Integer
-        Dim iDebN, iFinN As Integer
-        Dim iDebK, iFinK As Integer
-        Dim iTravee, iNode As Integer
-
-        '--( Initialisation
-
-        iDebT = myBeam.IndicePremiereTravee
-        iFinT = myBeam.IndiceDerniereTravee
-        EtaMax = 0
-
-        '--> Traitement
-
-        For iTravee = iDebT To iFinT
-
-            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
-
-            For iNode = iDebN To iFinN
-
-                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
-                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
-
-                For k = iDebK To iFinK
-
-                    Me.CritereV(iStep).EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VRdFi(iStep))
-
-                    EtaMax = Math.Max(EtaMax, Math.Abs(VEd(iNode, k) / VRdFi(iStep)))
-
-                Next
-            Next
-        Next
-
-    End Sub
-
-    Private Sub RunCritereResistanceFlexion(myBeam As cls_Poutre, iCombi As Integer, iStep As Integer,
-                                            MEd(,) As Decimal, MRd(,) As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   13/04/26 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance en flexion des sections sous températures
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '   iCombi      [E] :   Indice de la combinaison
-        '   iStep       [E] :   Indice du pas de temps de calcul
-        '   MEd         [E] :   Moments aux noeuds
-        '----------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim iDebT, iFinT As Integer
-        Dim iDebN, iFinN As Integer
-        Dim iDebK, iFinK As Integer
-        Dim iTravee, iNode As Integer
-
-        '--( Initialisation
-
-        iDebT = myBeam.IndicePremiereTravee
-        iFinT = myBeam.IndiceDerniereTravee
-
-        '--> Traitement
-
-        For iTravee = iDebT To iFinT
-
-            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
-
-            For iNode = iDebN To iFinN
-
-                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
-                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
-
-                For k = iDebK To iFinK
-
-                    Me.CritereM(iStep).EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MRd(iStep, iNode))
-
-                Next
-            Next
-        Next
-
-    End Sub
-
-    Private Sub RunCritereResistancePlastiquePlatY_N(myBeam As cls_Poutre, iCombi As Integer, qsupEd() As Decimal,
-                                                     iStep As Integer, TempPl As Decimal, TempFi As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   13/04/26 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance élasto-plastique des plats supports
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '   iCombi      [E] :   Indice de la combinaison
-        '   qsupEd      [E] :   Charge répartie linéique agissant DES 2 COTES
-        '   iStep       [E] :   Indice du pas de temps de calcul
-        '   TempPl      [E] :   Température maxi dans le plat
-        '   TempFi      [E] :   Température maxi dans la semelle inférieure
-        '----------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim iTravee, iNode As Integer
-        Dim iDebT, iFinT As Integer
-        Dim iDebN, iFinN As Integer
-        'Dim DeltaX As Decimal
-        Dim qLin As Decimal
-        Dim myFiEd, myFiRd As Decimal
-        Dim myPlEd, myPlRd As Decimal
-        Dim GammaM0 As Decimal
-        Dim FyPlat, FyInf As Decimal
-        Dim dApp, dbtFi, dbtPlat As Decimal
-        Const kPlast As Decimal = 1.2
-        Dim tPl, tFi As Decimal
-        '  Dim dGauche, dDroite As Decimal
-        Dim kCote As Decimal
-
-        Dim ENFeu As New cls_EurocodesFeu
-        Dim kReducFi As Decimal
-        Dim kReducPl As Decimal
-
-        '--( Initialisation
-
-        GammaM0 = myBeam.Param.Gamma.GammaM0
-
-        dApp = myBeam.SlimLargeurAppui
-        myBeam.Section.SlimBrasLevier(dApp, dbtFi, dbtPlat)
-
-        FyPlat = myBeam.Section.FySpd
-        FyInf = myBeam.Section.FyInf
-
-        tFi = myBeam.Section.ProfilA.Tfi
-        tPl = myBeam.Section.ProfilA.Plat_t
-
-        iDebT = myBeam.IndicePremiereTravee
-        iFinT = myBeam.IndiceDerniereTravee
-
-        kCote = CoefficientCharge(myBeam)
-
-        '--> Traitement
-
-        For iTravee = iDebT To iFinT
-            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
-
-            For iNode = iDebN To iFinN
-
-                With myBeam.Section.ProfilA
-
-                    qLin = qsupEd(iNode) * kCote
-
-                    Select Case .typeProfileAcier
-                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-
-                            kReducFi = ENFeu.ReducFyAcier(TempFi)
-                            myFiEd = qLin * dbtFi
-                            myFiRd = kReducFi * kPlast * tFi ^ 2 * FyInf * kConvMPaPa / (6 * GammaM0)
-
-                            Me.CritereMY(iStep).EnregistreCritere(iNode, iCombi, iTravee, myFiEd, myFiRd)
-
-                            kReducPl = ENFeu.ReducFyAcier(TempPl)
-
-                            myPlEd = qLin * dbtPlat
-                            myPlRd = kReducPl * kPlast * tPl ^ 2 * FyPlat * kConvMPaPa / (6 * GammaM0)
-
-                            Me.CritereMY(iStep).EnregistreCritere(iNode, iCombi, iTravee, myPlEd, myPlRd)
-
-                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-
-                            kReducPl = ENFeu.ReducFyAcier(TempPl)
-
-                            myPlEd = qLin * dbtPlat
-                            myPlRd = kReducPl * kPlast * tPl ^ 2 * FyPlat * kConvMPaPa / (6 * GammaM0)
-
-                            Me.CritereMY(iStep).EnregistreCritere(iNode, iCombi, iTravee, myPlEd, myPlRd)
-
-                        Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-
-                            kReducFi = ENFeu.ReducFyAcier(TempFi)
-
-                            myFiEd = qLin * dbtFi
-                            myFiRd = kReducFi * kPlast * tFi ^ 2 * FyInf * kConvMPaPa / (6 * GammaM0)
-
-                            Me.CritereMY(iStep).EnregistreCritere(iNode, iCombi, iTravee, myFiEd, myFiRd)
-
-                    End Select
-
-                End With
-
-            Next
-        Next
-
-    End Sub
 
 #End Region
 

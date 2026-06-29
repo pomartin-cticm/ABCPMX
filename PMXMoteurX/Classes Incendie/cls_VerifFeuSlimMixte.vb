@@ -1,9 +1,11 @@
-﻿Public Class cls_VerifFeuSlimMixte
+﻿Imports System.Security.Claims
+
+Public Class cls_VerifFeuSlimMixte
 
 #Region " Declaration "
 
-    'Public Shared TimeSteps() As Decimal = {30, 60, 90, 120, 180}
-    Public Shared TimeSteps() As Decimal = {1, 2, 3, 5, 10}
+    Public Shared TimeSteps() As Decimal = {30, 60, 90, 120, 180}
+    'Public Shared TimeSteps() As Decimal = {1, 2, 3, 5, 10}
     'Public Shared TimeSteps() As Decimal = {1, 2}
 
 #End Region
@@ -13,7 +15,7 @@
     Private NbStep As Integer                           ' Nombre d'items dans le tableau TimeSteps
     Public RStep As Integer                             ' Indice du dernier pas de calcul de la table TimeStep pour laquelle tous les critères sont OK
 
-    Private Maillage As cls_MaillageSlimFloor           ' Modèle numérique pour le calcul de l'échauffement d'une slim floor
+    Private Maillage As cls_MaillageSlimFloor            ' Modèle numérique pour le calcul de l'échauffement d'une slim floor
 
     Public TempMailStep(,,) As Decimal                  ' Tableau des températures du maillage à chaque pas de temps
 
@@ -79,6 +81,7 @@
         '--( Déclarations
 
         Dim nbCombiELF As Integer
+        Dim iCombi As Integer
 
         Dim TempBeton(NbStep)() As Decimal '= Nothing
         Dim TempArma(NbStep)() As Decimal '= Nothing
@@ -87,6 +90,20 @@
         Dim TempAme(NbStep)() As Decimal '= Nothing
         Dim TempPlat(NbStep)() As Decimal '= Nothing
         Dim TempSoud(NbStep)() As Decimal '= Nothing
+
+        Dim MEd(,) As Decimal = Nothing
+        Dim VEd(,) As Decimal = Nothing
+        Dim QEd() As Decimal = Nothing                  ' tableau des forces nodales
+        Dim QSupEd() As Decimal = Nothing               ' tableau des forces nodales / unité longueur
+
+        Dim PsiY_spd(,) As Decimal = Nothing
+        Dim PsiY_fi(,) As Decimal = Nothing
+
+        Dim VbRdFi() As Decimal = Nothing
+        Dim MplRd(,) As Decimal = Nothing
+        Dim zANP(,) As Decimal = Nothing
+
+        Dim CSlim As New cls_CalculSlim
 
         '--( Initialisation
 
@@ -112,7 +129,7 @@
                 '# Cas où les résultats de calcul sont directement disponibles en mémoire
                 ' On n'a juste à recréer le maillage
 
-                '  RecupereTemperatureFile(myBeam, iBeam, FileNameP, False)
+                CSlim.RecupereMaillage(myBeam, Me.Maillage)
 
             Else
                 '# Cas où les résultats de calcul sont disponibles dans le fichier de sauvegarde
@@ -120,7 +137,9 @@
                 ' Il faut regénérer le maillage et 
                 ' récupérer les températures du maillage dans le fichier
 
-                '  RecupereTemperatureFile(myBeam, iBeam, FileNameP, True)
+                CSlim.RecupereMaillage(myBeam, Me.Maillage)
+                Me.InitialiseVariables(Maillage.nb_cells_y, Maillage.nb_cells_z)
+                CSlim.ChargerTemperatures(myBeam, iBeam, FileNameP, Me.Maillage_NbY, Me.Maillage_NbZ, Me.TempMailStep)
 
             End If
         Else
@@ -133,11 +152,117 @@
         '# Valeurs enveloppes des températures ####################################################################################
 
         For iStep As Integer = 0 To NbStep - 1
-            'myBeam.VerifFeuSlimAcier.TemperatureStepMinMax(iStep, TempBeton(iStep), TempAme(iStep),
-            '                                                      TempSemInf(iStep), TempSemSup(iStep),
-            '                                                      TempPlat(iStep), TempSoud(iStep), TempArma(iStep))
+            CSlim.TemperatureStepMinMax(Me.Maillage, Me.TempMailStep, iStep,
+                                        TempBeton(iStep), TempAme(iStep), TempSemInf(iStep), TempSemSup(iStep),
+                                        TempPlat(iStep), TempSoud(iStep), TempArma(iStep))
+
         Next
+
+        '# Résistance à l'effort tranchant ########################################################################################
+
+        CSlim.CalculVbRdFeuSlimAcier(myBeam, Me.Maillage, Me.TempMailStep, Me.NbStep, VbRdFi)
+
+        '# Boucle sur les combinaisons de calcul pour vérifications ###############################################################
+
+        For iCombi = 0 To nbCombiELF - 1
+
+            '## Combinaisons des moments
+
+            myBeam.CombiA_ELF.CombineMoments(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, MEd, False)
+
+            '## Combinaison des efforts tranchants
+
+            myBeam.CombiA_ELF.CombineEffortsT(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, VEd, False)
+
+            '## Recupération des efforts nodaux à partir des tranchants combinés
+
+            myBeam.CombiA_ELF.RecupererEffortsNodauxPonderees(myBeam.Nodes, VEd, QEd, QSupEd)
+
+            '## Calcul des coefficients de réduction pour l'influence de la flexion transversale
+
+            CSlim.CalculCoefficientsReductionFeu(iCombi, myBeam, NbStep, QEd, TempPlat, TempSemInf, PsiY_spd, PsiY_fi)
+
+            '## Moments resistants, prenant en compte l'influence de la flexion transversale et la température
+
+            CSlim.ProprietesFlexionFeuSlimAcier(iCombi, myBeam, NbStep, True, MplRd, zANP, PsiY_fi, PsiY_spd)
+
+            '## Critères de résistance pour chaque Step
+
+            For iSTep = 0 To Me.NbStep - 1
+
+                '-- Flexion locale
+
+                CSlim.RunCritereResistancePlastiquePlatY_FEU(myBeam, iCombi, QSupEd, iSTep, TempPlat(iSTep)(1), TempSemInf(iSTep)(1), Me.CritereMY(iSTep))
+
+                '-- Flexion globale
+
+                CSlim.RunCritereResistanceFlexionFEU(myBeam, iCombi, iSTep, MEd, MplRd, Me.CritereM(iSTep))
+
+                '-- Efforts tranchants
+
+                CSlim.RunCritereResistanceTranchantFEU(myBeam, iCombi, iSTep, VEd, VbRdFi, Me.CritereV(iSTep))
+
+                '-- Interaction MV
+
+                CSlim.RunCritereInteractionMV_FEU(myBeam, iCombi, iSTep, MEd, VEd, VbRdFi, PsiY_fi, PsiY_spd, Me.CritereMV(iSTep))
+
+            Next
+        Next
+
+        '# Recherche de la durée de résistance au feu ###########################################################################
+
+        DureeResistanceAuFeu()
+
     End Sub
+
+    Private Sub DureeResistanceAuFeu()
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   18/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Recherche du pas de calcul pour lequel tous les critères sont OK
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lResist As Boolean
+
+        '--( Traitement
+
+        RStep = NbStep - 1
+        lResist = IsResistanceAuFeuOK(RStep)
+
+        Do While (Not lResist) And (Me.RStep >= 0)
+            Me.RStep -= 1
+            If Me.RStep >= 0 Then lResist = IsResistanceAuFeuOK(RStep)
+        Loop
+
+    End Sub
+
+    Private Function IsResistanceAuFeuOK(iStep As Integer) As Boolean
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   18/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Recherche du pas de calcul pour lequel tous les critères sont OK
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   iStep      [E] :   Indice du pas de temps de calcul
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lOK As Boolean = True
+
+        '--( Vérifications
+
+        If IsGreater(Me.CritereMY(iStep).CritereMax, 1) Then lOK = False
+        If IsGreater(Me.CritereM(iStep).CritereMax, 1) Then lOK = False
+        If IsGreater(Me.CritereV(iStep).CritereMax, 1) Then lOK = False
+        If IsGreater(Me.CritereMV(iStep).CritereMax, 1) Then lOK = False
+
+        Return lOK
+
+    End Function
 
     Private Sub InitialiseVariables(NbY As Integer, NbZ As Integer)
         '---------------------------------------------------------------------------------------------------------
@@ -188,13 +313,7 @@
         '--( Initialisation des variables
 
         Maillage = New cls_MaillageSlimFloor
-        'If myBeam.lIntermediaire Then
-        '    bEffG = myBeam.EntraxeD1 / 2
-        'Else
-        '    bEffG = myBeam.EntraxeD1
-        'End If
-        'bEffD = myBeam.EntraxeD2 / 2
-        'bApp = 0.05
+
         ParamBeffMaillage(myBeam, bEffG, bEffD, bApp)
 
         '--( Construction du modèle numérique
@@ -372,6 +491,83 @@
 
     End Sub
 
+    Public Property Maillage_NbY As Integer
+        Get
+            Return Me.Maillage.nb_cells_y
+        End Get
+        Set(value As Integer)
+            'Ne rien faire, le maillage est créé dans la méthode d'échauffement
+        End Set
+    End Property
+
+    Public Property Maillage_NbZ As Integer
+        Get
+            Return Me.Maillage.nb_cells_z
+        End Get
+        Set(value As Integer)
+            'Ne rien faire, le maillage est créé dans la méthode d'échauffement
+        End Set
+    End Property
+
+    Public Property TemperatureMaille(iStep As Integer, iY As Integer, iZ As Integer) As Decimal
+        Get
+            Return Me.TempMailStep(iStep, iY, iZ)
+        End Get
+        Set(value As Decimal)
+            Me.TempMailStep(iStep, iY, iZ) = value
+        End Set
+    End Property
+
+    Public Function GetMaillage() As cls_MaillageSlimFloor
+        Return Maillage
+    End Function
+
 #End Region
+
+
+#Region " Fonctions "
+
+    Public Sub CalculVbRdFeuSlimAcier(myBeam As cls_Poutre, ByRef VbRdFi() As Decimal)
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   29/06/26 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Retourne les résistance à l'effort tranchant du profilé, pour les différentes durées d'incendie
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   myBeam              [E] :   Poutre traitée
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        Dim CSlim As New cls_CalculSlim
+
+        CSlim.CalculVbRdFeuSlimAcier(myBeam, Me.Maillage, Me.TempMailStep, Me.NbStep, VbRdFi)
+
+    End Sub
+
+    Public Sub TemperatureStepMinMax(iStep As Integer, ByRef TempBeton() As Decimal, ByRef TempAme() As Decimal,
+                                     ByRef TempSemInf() As Decimal, ByRef TempSemSup() As Decimal,
+                                     ByRef TempPlat() As Decimal, ByRef TempSoud() As Decimal, ByRef TempArma() As Decimal)
+        '---------------------------------------------------------------------------------------------------------
+        '   29/06/26 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------
+        '   Récupération des températures min et max du maillage au temps iStep
+        '---------------------------------------------------------------------------------------------------------
+        '   iStep       [E] :   Indice du pas de temps traité
+        '   TempBeton   [S] :   Tableau des températures min et max des éléments béton
+        '   TempAme     [S] :   Tableau des températures min et max des éléments pour l'âme du profilé
+        '   TempSemInf  [S] :   Tableau des températures min et max des éléments pour la semelle inférieure
+        '   TempSemSup  [S] :   Tableau des températures min et max des éléments pour la semelle supérieure
+        '   TempPlat    [S] :   Tableau des températures min et max des éléments pour le plat
+        '   TempSoud    [S] :   Tableau des températures min et max des soudures
+        '   TempArma    [S] :   Tableau des températures min et max des éléments d'armature
+        '---------------------------------------------------------------------------------------------------------
+
+        Dim CSlim As New cls_CalculSlim
+
+        CSlim.TemperatureStepMinMax(Me.Maillage, Me.TempMailStep, iStep,
+                                    TempBeton, TempAme, TempSemInf, TempSemSup, TempPlat, TempSoud, TempArma)
+
+    End Sub
+
+#End Region
+
 
 End Class

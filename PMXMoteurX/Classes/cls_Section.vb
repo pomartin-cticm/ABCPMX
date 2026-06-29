@@ -308,17 +308,18 @@ Public Class cls_Section
 
         With Me
             Select Case .TypeSection
-                Case cls_Section.Enum_TypeSection.IFB_A
+                Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
                     With .ProfilA
                         dbtFi = 0
                         dbtPlat = (.Plat_b - .Tw) / 2 - dApp
                     End With
-                Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB
+                Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte,
+                     cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
                     With .ProfilA
                         dbtFi = (.Bfi - .Tw) / 2 - .Rci - dApp
                         dbtPlat = 0
                     End With
-                Case cls_Section.Enum_TypeSection.SFB
+                Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
                     With .ProfilA
                         dbtFi = (.Bfi - .Tw) / 2 - .Rci
                         dbtPlat = (.Plat_b - .Bfi) / 2 - dApp
@@ -1969,6 +1970,72 @@ Public Class cls_Section
 
 #Region " Classification section acier "
 
+    Public Function ClasseSectionSlim(zANP As Decimal, zANE As Decimal, lBetonSlimfloor As Boolean,
+                                      lG1_EN As Boolean, lCalculFeu As Boolean, td As Decimal) As Integer
+        '----------------------------------------------------------------------------------------------------------
+        '   26/06/26 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Classe d'une section slim floor 
+        '----------------------------------------------------------------------------------------------------------
+        '   zANP                [E] :   Position de l'ANP (compté algébriquement depuis la face inférieure de la dalle béton)
+        '   zANE                [E] :   Position de l'ANE (compté algébriquement depuis la face inférieure de la dalle béton)
+        '   lBetonSlimfloor     [E] :   Indique si section slim floor, avec prise en compte du béton pour la classification
+        '   lG1_EN              [E] :   Indique si le calcul de la classe se fait selon les Eurocodes actuels (True) ou selon la deuxieme génération d'Eurocodes (False)
+        '   lCalculFeu          [E] :   Indique si calcul au feu
+        '   td                  [E] :   Epaisseur totale de la dalle (hors renformis)
+        '----------------------------------------------------------------------------------------------------------
+
+        '=== Classification en flexion positive, dans tous les cas
+
+        '--( Déclarations
+
+        Dim epsilon_fsup As Decimal = Epsilon_Sup
+        Dim epsilon_finf As Decimal = Epsilon_Inf
+        Dim epsilon_platSFB As Decimal = Me.Epsilon_Spd
+
+        Dim classeSemSup, classeAme, classeSemInf, classePlatInfSFB, classeSectionTotale As Integer
+
+        Dim cfsup, tfsup, cfinf, tfinf, cplat, tplat As Decimal
+
+        Dim HauteurEc As Decimal = Me.hec
+        Dim BfSup As Decimal
+        Dim lIFBB As Boolean = Me.lSlimFloor_IFB_B
+        Const LIM50MM As Decimal = 0.05
+
+        '--> Initialisation des variables locales 
+
+        '*** calcul les différentes valeurs de c et t pour la semelle sup, inf et le plat soudé (le cas échéant)
+
+        Me.Calcul_cf_tf(cfsup, tfsup, cfinf, tfinf, cplat, tplat)
+
+        If lIFBB Then BfSup = Me.ProfilA.Plat_b Else BfSup = Me.ProfilA.Bfs
+
+        '--( Classification de la semelle inférieure
+
+        '-- La semelle inférieure est toujours en partie tendue
+        classeSemInf = 1
+
+        '--( Classification de l'âme
+        classeAme = 2
+
+        '--( Classification de la semelle supérieure
+        If IsGreaterOrEqual(td - hec, Math.Max(LIM50MM, BfSup / 6)) Then
+            classeSemSup = 2
+        Else
+            classeSemSup = ClasseSemelle(True, True, False, cfsup, tfsup, epsilon_fsup)
+        End If
+
+        '--( Classification du plat
+        classePlatInfSFB = 1
+
+        '--( Finale
+
+        classeSectionTotale = Math.Max(classeSemSup, Math.Max(classeSemInf, Math.Max(classePlatInfSFB, classeAme)))
+
+        Return classeSectionTotale
+
+    End Function
+
     ''' <summary>
     ''' Calcul de la classe d'une section acier (usuelle, enrobée ou slimfloor)
     ''' </summary>
@@ -1999,7 +2066,7 @@ Public Class cls_Section
         '   lCompressionPure    [E] :   Indique si on est en compression pure
         '   lWeb                [E] :   Indique s'il est possible de ne pas prendre en compte la classe de l'âme (POM) (On peut la négliger si paramètre à faux)
         '                               Quand lWeb est vrai, cela signifie qu'une partie du moment est reprise par l'âme, on doit donc nécessairement la prendre en compte dans la classification
-        '   lReclasse           [E] :   Indique si la section  été reclassée après avoir négligé l'âme (POM - R25-002)
+        '   lReclasse           [E] :   Indique si la section été reclassée après avoir négligé l'âme (POM - R25-002)
         '----------------------------------------------------------------------------------------------------------
 
         '--( Déclarations

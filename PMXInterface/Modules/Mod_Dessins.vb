@@ -15153,31 +15153,36 @@ Public Module Mod_Dessins
         Dim lSousSeuilAffichage As Boolean  ' Permet de savoir si la taille du canva est assez grande pour utiliser le dessin avec lissage ou non 
 
         Dim tab_TempCouleurs(Tab_Couleurs_ChTh.Length - 1) As Decimal
-
+        Dim lMixte As Boolean = MyProjet.Poutres(MyProjet.IndEnCours).lMixte
 
         '--( Sécurité
 
         If Not myBeam.lSlimFloor Then Exit Sub
 
-
         '--( Initialisation
 
         InitialiseTempCouleurs(tempMin, tempMax, tab_TempCouleurs)
-        myBeam.VerifFeuSlimAcier.ParamBeffMaillage(myBeam, bEffG, bEffD, bApp)
+        If lMixte Then
+            myBeam.VerifFeuSlimMixte.ParamBeffMaillage(myBeam, bEffG, bEffD, bApp)
+        Else
+            myBeam.VerifFeuSlimAcier.ParamBeffMaillage(myBeam, bEffG, bEffD, bApp)
+        End If
 
         diagonaleEcran = Math.Sqrt(pHi ^ 2 + pWi ^ 2)
         lSousSeuilAffichage = diagonaleEcran < SEUIL_VISUEL
 
         '--( On commence par extraire le maillage et les températures à représenter
 
-        Maillage = myBeam.VerifFeuSlimAcier.GetMaillage
-
+        If lMixte Then
+            Maillage = myBeam.VerifFeuSlimMixte.GetMaillage
+        Else
+            Maillage = myBeam.VerifFeuSlimAcier.GetMaillage
+        End If
 
         '--( Préparation du myParAff
 
         PrepareParAff(myParAff, Maillage, pWi, pHi, lZoneCentrale, lCote, zCarMail, iMin, iMax, xLeft, yTop)
         nbZ = Maillage.nb_cells_z
-
 
         '--( Représentation des mailles
 
@@ -15396,9 +15401,19 @@ Public Module Mod_Dessins
         Dim couleurs As Color()
         Dim coulCentre As Color
         Dim tempCoins As Double()
-        Dim myTemp As Decimal = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail, jMail)
+        Dim myTemp As Decimal '= myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail, jMail)
         Dim lSelect As Boolean = (iMail = iSelect) AndAlso (jMail = jSelect)
         Dim ChMat As String = ""
+
+        Dim lMixte As Boolean = MyProjet.Poutres(MyProjet.IndEnCours).lMixte
+
+        '--( Récupération de la température de la maille
+
+        If lMixte Then
+            myTemp = myBeam.VerifFeuSlimMixte.TempMailStep(iStep, iMail, jMail)
+        Else
+            myTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail, jMail)
+        End If
 
         '--( Informations de la maille
 
@@ -15611,14 +15626,18 @@ Public Module Mod_Dessins
         ' bas,
         ' la diagonale en bas à gauche
         ' Dans cette étape on va en même temps récupérer la température de la maille voisine, si donc elle existe et est bien du même type
-
+        Dim lMixte As Boolean = myBeam.lMixte
 
         '==Direction cardinales==
         If (iMail = 0) Then     'frontière à gauche
             vGauche = False
         ElseIf (myMail.Tab_mesh_mat(iMail - 1, jMail) = myMail.Tab_mesh_mat(iMail, jMail)) Then
             vGauche = True
-            vGaucheTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail - 1, jMail)
+            If lMixte Then
+                vGaucheTemp = myBeam.VerifFeuSlimMixte.TempMailStep(iStep, iMail - 1, jMail)
+            Else
+                vGaucheTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail - 1, jMail)
+            End If
         End If
 
         If (jMail = 0) Then     'frontière en bas
@@ -15626,7 +15645,11 @@ Public Module Mod_Dessins
 
         ElseIf (myMail.Tab_mesh_mat(iMail, jMail - 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
             vBas = True
-            vBasTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail, jMail - 1)
+            If lMixte Then
+                vBasTemp = myBeam.VerifFeuSlimMixte.TempMailStep(iStep, iMail, jMail - 1)
+            Else
+                vBasTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail, jMail - 1)
+            End If
         End If
 
         If (iMail = myMail.nb_cells_y - 1) Then     'frontière à droite
@@ -15634,7 +15657,11 @@ Public Module Mod_Dessins
 
         ElseIf (myMail.Tab_mesh_mat(iMail + 1, jMail) = myMail.Tab_mesh_mat(iMail, jMail)) Then
             vDroite = True
-            vDroiteTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail + 1, jMail)
+            If lMixte Then
+                vDroiteTemp = myBeam.VerifFeuSlimMixte.TempMailStep(iStep, iMail + 1, jMail)
+            Else
+                vDroiteTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail + 1, jMail)
+            End If
         End If
 
         If (jMail = myMail.nb_cells_z - 1) Then     'frontière en haut
@@ -15642,7 +15669,11 @@ Public Module Mod_Dessins
 
         ElseIf (myMail.Tab_mesh_mat(iMail, jMail + 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
             vHaut = True
-            vHautTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail, jMail + 1)
+            If lMixte Then
+                vHautTemp = myBeam.VerifFeuSlimMixte.TempMailStep(iStep, iMail, jMail + 1)
+            Else
+                vHautTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail, jMail + 1)
+            End If
         End If
 
         '==Direction diagonales==
@@ -15650,7 +15681,11 @@ Public Module Mod_Dessins
         If vHaut And vGauche Then
             If (myMail.Tab_mesh_mat(iMail - 1, jMail + 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
                 vDiagHautGauche = True
-                vDiagHautGaucheTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail - 1, jMail + 1)
+                If lMixte Then
+                    vDiagHautGaucheTemp = myBeam.VerifFeuSlimMixte.TempMailStep(iStep, iMail - 1, jMail + 1)
+                Else
+                    vDiagHautGaucheTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail - 1, jMail + 1)
+                End If
             End If
         End If
 
@@ -15658,7 +15693,11 @@ Public Module Mod_Dessins
         If vHaut And vDroite Then
             If (myMail.Tab_mesh_mat(iMail + 1, jMail + 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
                 vDiagHautDroite = True
-                vDiagHautDroiteTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail + 1, jMail + 1)
+                If lMixte Then
+                    vDiagHautDroiteTemp = myBeam.VerifFeuSlimMixte.TempMailStep(iStep, iMail + 1, jMail + 1)
+                Else
+                    vDiagHautDroiteTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail + 1, jMail + 1)
+                End If
             End If
         End If
 
@@ -15666,7 +15705,11 @@ Public Module Mod_Dessins
         If vBas And vDroite Then
             If (myMail.Tab_mesh_mat(iMail + 1, jMail - 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
                 vDiagBasDroite = True
-                vDiagBasDroiteTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail + 1, jMail - 1)
+                If lMixte Then
+                    vDiagBasDroiteTemp = myBeam.VerifFeuSlimMixte.TempMailStep(iStep, iMail + 1, jMail - 1)
+                Else
+                    vDiagBasDroiteTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail + 1, jMail - 1)
+                End If
             End If
         End If
 
@@ -15674,11 +15717,13 @@ Public Module Mod_Dessins
         If vBas And vGauche Then
             If (myMail.Tab_mesh_mat(iMail - 1, jMail - 1) = myMail.Tab_mesh_mat(iMail, jMail)) Then
                 vDiagBasGauche = True
-                vDiagBasGaucheTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail - 1, jMail - 1)
+                If lMixte Then
+                    vDiagBasGaucheTemp = myBeam.VerifFeuSlimMixte.TempMailStep(iStep, iMail - 1, jMail - 1)
+                Else
+                    vDiagBasGaucheTemp = myBeam.VerifFeuSlimAcier.TempMailStep(iStep, iMail - 1, jMail - 1)
+                End If
             End If
         End If
-
-
 
         '=== DEUXIEME ETAPE===
         ' Dans cette étape finale, nous allons utiliser les informations récupérées lors de la première étape et réaliser le calcul des températures moyennes aux coins de la maille actuelle

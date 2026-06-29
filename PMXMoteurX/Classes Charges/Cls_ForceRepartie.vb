@@ -74,5 +74,12 @@
         End Get
     End Property
 
+    Public ReadOnly Property ForceRepMoyenne As Decimal
+        Get
+            Return (Force(0) + Force(1)) / 2
+        End Get
+    End Property
+
 #End Region
+
 End Class

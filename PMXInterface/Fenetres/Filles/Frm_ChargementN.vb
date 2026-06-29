@@ -1081,10 +1081,21 @@ Public Class Frm_ChargementN
         'MAJ AffichageOptFeu des valeurs dans la section charge surfacique 
 
         'If lMAJLargeur Then txt_WidthApplication.Text = myBeamLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-        If lMAJLargeur Then txt_WidthApplication.Text = MyPoutreLoc.LargeurInfluence
-        If lMAJPression Then txt_UniformLoad.Text = MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2)
+        If lMAJLargeur Then
+            'txt_WidthApplication.Text = MyPoutreLoc.LargeurInfluence
+            txt_WidthApplication.Text = GetStringInUnitN(MyPoutreLoc.LargeurInfluence, Enu_TypeVariable.Longueur, 4, 3, NON_U, True)
+        End If
+        If lMAJPression Then
+            'txt_UniformLoad.Text = MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2)
+            Dim qSload = MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2)
+            txt_UniformLoad.Text = GetStringInUnitN(qSload, Enu_TypeVariable.SansType, 4, 3, NON_U, False)
+        End If
         'txt_ResultingForce.Text = myBeamLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) * myBeamLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
-        txt_ResultingForce.Text = MyPoutreLoc.LongueurTravee(traveeEnCours) * MyPoutreLoc.LargeurInfluence * MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+
+        'Dim qSResult As Decimal = MyPoutreLoc.LongueurTravee(traveeEnCours) * MyPoutreLoc.LargeurInfluence * MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+        Dim qSResult As Decimal = MyPoutreLoc.LongueurTravee(traveeEnCours) * MyPoutreLoc.LargeurInfluence * MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) ' / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+
+        txt_ResultingForce.Text = GetStringInUnitN(qSResult, Enu_TypeVariable.Effort, 4, 3, NON_U, True)
 
     End Sub
 

@@ -95,6 +95,7 @@
     <Compile Include="Classes Materiaux\cls_AcierArmature.vb" />
     <Compile Include="Classes Materiaux\cls_Beton.vb" />
     <Compile Include="Classes Verifications\cls_CalculCritique.vb" />
+    <Compile Include="Classes Verifications\cls_CalculSlim.vb" />
     <Compile Include="Classes Verifications\cls_Eurocodes.vb" />
     <Compile Include="Classes Verifications\cls_Critere.vb" />
     <Compile Include="Classes Verifications\cls_VerificationsAcier.vb" />
