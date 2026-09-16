@@ -42,6 +42,8 @@ Module Mod_Internet
                 Fichier = "Update_PMX.txt"
         End Select
 
+        'Fichier = "Update_Flumilog.txt"
+
         Return Fichier
     End Function
 
@@ -111,10 +113,13 @@ Module Mod_Internet
 
                     FichierSource = AdresseInternet & "/" & FichierUpDate()
 
+                    'MsgBox("Fichier source " & FichierSource)
+
                     Try
                         If My.Computer.FileSystem.FileExists(FichierCible) Then
                             My.Computer.FileSystem.DeleteFile(FichierCible)
                         End If
+                        'lDebug = False
                         If lDebug Then
                             '# en mode débug, lecture sur l'ordinateur
                             FichierSource = My.Application.Info.DirectoryPath & "\..\..\..\UPDATES\" & FichierUpDate()
@@ -141,6 +146,7 @@ Module Mod_Internet
 
                     Catch ex As Exception
                         lOK = False
+                        If lDebug Then Console.WriteLine("echec chargement update" & ex.Message)
                     End Try
                     If (Not My.Computer.FileSystem.FileExists(FichierCible)) And lFirstAttempt Then lOK = False
 
@@ -367,6 +373,8 @@ Module Mod_Internet
                     Select Case iMeth
                         Case 0
                             '--> Téléchargement en bloquant le cache
+                            ' System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12
+                            MyWbC.Headers.Add(System.Net.HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
                             MyWbC.CachePolicy = New System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore)
                             MyWbC.DownloadFile(FichierSource, FichierCible)
 
@@ -379,6 +387,9 @@ Module Mod_Internet
                 Catch ex As Exception
                     lOK = False
                     lAccesOK = False
+                    Dim Result As String = ex.Message
+                    'MsgBox(Result)
+                    Console.WriteLine(Result)
                 End Try
                 If (Not My.Computer.FileSystem.FileExists(FichierCible)) And lFirstAttempt Then lOK = False
 
@@ -443,6 +454,106 @@ Module Mod_Internet
         BlocLine.CreationBloc(BlocMAJ, strLoadedKey)
 
     End Sub
+
+#End Region
+
+#Region " Fonctions de test d'accès au fichier "
+
+    Public _
+        Sub TestAccesFichierInternet(ByRef lAccesOK As Boolean, ByRef myResult As String)
+        '---------------------------------------------------------------------------------------------
+        '
+        '   06/08/26 :  Création - Version 1.00
+        '
+        '---------------------------------------------------------------------------------------------
+        '
+        '   Si les acces internet de la machine sont disponibles
+        '   on teste le telechargement le fichier Update_ACBPlus ou Update_PMX
+        '
+        '---------------------------------------------------------------------------------------------
+        '
+        '   lAccesOK    [S] :   Indique si on a eu acces à internet ou pas
+        '
+        '---------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lFirstAttempt As Boolean = True
+        Dim lCont As Boolean = True
+        Const iMeth As Integer = 0
+        Dim MyWbC As WebClient = New WebClient
+
+        '--> Initialisation
+
+        AdresseInternet = AdresseInternetFirst
+        myResult = ""
+
+        '--> Récupération internet
+
+        If My.Computer.Network.IsAvailable Then
+
+            '--[ Si le réseau est disponible, on récupère le fichier
+
+            Dim FichierSource, FichierCible As String
+            Dim lOK As Boolean = True
+
+            FichierCible = LogicielRep.Config & "\" & FichierUpDate()
+
+            Do While lCont
+                FichierSource = AdresseInternet & "/" & FichierUpDate()
+
+                Try
+                    If My.Computer.FileSystem.FileExists(FichierCible) Then
+                        My.Computer.FileSystem.DeleteFile(FichierCible)
+                    End If
+                    Select Case iMeth
+                        Case 0
+                            '--> Téléchargement en bloquant le cache
+                            ' System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12
+                            MyWbC.Headers.Add(System.Net.HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+                            MyWbC.CachePolicy = New System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore)
+                            MyWbC.DownloadFile(FichierSource, FichierCible)
+
+                        Case 1
+                            '--> Téléchargement
+
+                            My.Computer.Network.DownloadFile(FichierSource, FichierCible)
+
+                    End Select
+                Catch ex As Exception
+                    lOK = False
+                    lAccesOK = False
+                    Dim Result As String = ex.Message
+                    'MsgBox(Result)
+                    'Console.WriteLine(Result)
+                    myResult = "Echec téléchargement du ficier Update " & FichierSource & Chr(13) & Result
+                End Try
+                If (Not My.Computer.FileSystem.FileExists(FichierCible)) And lFirstAttempt Then lOK = False
+
+                '--[ Si la récuperation a reussi
+
+                If lOK Then
+
+                    lAccesOK = True
+
+                End If
+
+                lCont = (Not lOK) And lFirstAttempt
+                If lCont Then
+                    AdresseInternet = AdresseInternetSecours
+                    lFirstAttempt = False
+                    lOK = True
+                End If
+            Loop
+        Else
+
+            lAccesOK = False
+            myResult = "Accès internet non disponible"
+
+        End If
+
+    End Sub
+
 
 #End Region
 

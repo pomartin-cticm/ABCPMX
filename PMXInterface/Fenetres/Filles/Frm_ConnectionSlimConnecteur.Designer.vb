@@ -31,6 +31,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.lbl_Connecteur = New System.Windows.Forms.Label()
         Me.lbl_Type = New System.Windows.Forms.Label()
         Me.pan_TypeConnecteur = New System.Windows.Forms.Panel()
+        Me.img_InfoArma = New System.Windows.Forms.PictureBox()
         Me.img_info = New System.Windows.Forms.PictureBox()
         Me.rdb_Armatures = New System.Windows.Forms.RadioButton()
         Me.rdb_GoujonAme = New System.Windows.Forms.RadioButton()
@@ -55,6 +56,9 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.img_hsc = New System.Windows.Forms.PictureBox()
         Me.cmb_goujons = New System.Windows.Forms.ComboBox()
         Me.pan_SaisieArmature = New System.Windows.Forms.Panel()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.txt_PRdArma = New System.Windows.Forms.TextBox()
+        Me.img_PRd2 = New System.Windows.Forms.PictureBox()
         Me.cmb_Diametre = New System.Windows.Forms.ComboBox()
         Me.lbl_ClasseA = New System.Windows.Forms.Label()
         Me.lbl_Diameter = New System.Windows.Forms.Label()
@@ -64,15 +68,13 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.txt_Fsk = New System.Windows.Forms.TextBox()
         Me.img_Fsk = New System.Windows.Forms.PictureBox()
         Me.img_PhiS = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.txt_PRdArma = New System.Windows.Forms.TextBox()
-        Me.img_PRd2 = New System.Windows.Forms.PictureBox()
         Me.pan_Main.SuspendLayout()
         Me.TLPan_Main.SuspendLayout()
         Me.pan_Image.SuspendLayout()
         CType(Me.img_Stud, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLPan_Saisies.SuspendLayout()
         Me.pan_TypeConnecteur.SuspendLayout()
+        CType(Me.img_InfoArma, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_SaisieGoujons.SuspendLayout()
         CType(Me.img_PRd, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -82,9 +84,9 @@ Partial Class Frm_ConnectionSlimConnecteur
         CType(Me.img_d, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_hsc, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_SaisieArmature.SuspendLayout()
+        CType(Me.img_PRd2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Fsk, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_PRd2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Main
@@ -182,7 +184,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         '
         Me.pan_TypeConnecteur.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_TypeConnecteur.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_TypeConnecteur.Controls.Add(Me.img_info)
+        Me.pan_TypeConnecteur.Controls.Add(Me.img_InfoArma)
         Me.pan_TypeConnecteur.Controls.Add(Me.rdb_Armatures)
         Me.pan_TypeConnecteur.Controls.Add(Me.rdb_GoujonAme)
         Me.pan_TypeConnecteur.Controls.Add(Me.rdb_GoujonSemSup)
@@ -193,10 +195,19 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.pan_TypeConnecteur.Size = New System.Drawing.Size(250, 89)
         Me.pan_TypeConnecteur.TabIndex = 2
         '
+        'img_InfoArma
+        '
+        Me.img_InfoArma.Location = New System.Drawing.Point(224, 59)
+        Me.img_InfoArma.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_InfoArma.Name = "img_InfoArma"
+        Me.img_InfoArma.Size = New System.Drawing.Size(22, 22)
+        Me.img_InfoArma.TabIndex = 87
+        Me.img_InfoArma.TabStop = False
+        '
         'img_info
         '
         Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
-        Me.img_info.Location = New System.Drawing.Point(226, 58)
+        Me.img_info.Location = New System.Drawing.Point(613, 334)
         Me.img_info.Margin = New System.Windows.Forms.Padding(0)
         Me.img_info.Name = "img_info"
         Me.img_info.Size = New System.Drawing.Size(20, 20)
@@ -452,6 +463,34 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.pan_SaisieArmature.Size = New System.Drawing.Size(270, 205)
         Me.pan_SaisieArmature.TabIndex = 3
         '
+        'Label1
+        '
+        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(202, 129)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(21, 13)
+        Me.Label1.TabIndex = 91
+        Me.Label1.Text = "kN"
+        '
+        'txt_PRdArma
+        '
+        Me.txt_PRdArma.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_PRdArma.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txt_PRdArma.Location = New System.Drawing.Point(138, 125)
+        Me.txt_PRdArma.Name = "txt_PRdArma"
+        Me.txt_PRdArma.Size = New System.Drawing.Size(58, 20)
+        Me.txt_PRdArma.TabIndex = 89
+        '
+        'img_PRd2
+        '
+        Me.img_PRd2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_PRd2.Location = New System.Drawing.Point(93, 125)
+        Me.img_PRd2.Name = "img_PRd2"
+        Me.img_PRd2.Size = New System.Drawing.Size(46, 20)
+        Me.img_PRd2.TabIndex = 90
+        Me.img_PRd2.TabStop = False
+        '
         'cmb_Diametre
         '
         Me.cmb_Diametre.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -544,40 +583,13 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.img_PhiS.TabIndex = 82
         Me.img_PhiS.TabStop = False
         '
-        'Label1
-        '
-        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(202, 129)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(21, 13)
-        Me.Label1.TabIndex = 91
-        Me.Label1.Text = "kN"
-        '
-        'txt_PRdArma
-        '
-        Me.txt_PRdArma.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_PRdArma.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_PRdArma.Location = New System.Drawing.Point(138, 125)
-        Me.txt_PRdArma.Name = "txt_PRdArma"
-        Me.txt_PRdArma.Size = New System.Drawing.Size(58, 20)
-        Me.txt_PRdArma.TabIndex = 89
-        '
-        'img_PRd2
-        '
-        Me.img_PRd2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_PRd2.Location = New System.Drawing.Point(93, 125)
-        Me.img_PRd2.Name = "img_PRd2"
-        Me.img_PRd2.Size = New System.Drawing.Size(46, 20)
-        Me.img_PRd2.TabIndex = 90
-        Me.img_PRd2.TabStop = False
-        '
         'Frm_ConnectionSlimConnecteur
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 571)
         Me.Controls.Add(Me.pan_SaisieArmature)
+        Me.Controls.Add(Me.img_info)
         Me.Controls.Add(Me.pan_SaisieGoujons)
         Me.Controls.Add(Me.pan_Main)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
@@ -591,6 +603,7 @@ Partial Class Frm_ConnectionSlimConnecteur
         Me.TLPan_Saisies.PerformLayout()
         Me.pan_TypeConnecteur.ResumeLayout(False)
         Me.pan_TypeConnecteur.PerformLayout()
+        CType(Me.img_InfoArma, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_SaisieGoujons.ResumeLayout(False)
         Me.pan_SaisieGoujons.PerformLayout()
@@ -602,9 +615,9 @@ Partial Class Frm_ConnectionSlimConnecteur
         CType(Me.img_hsc, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_SaisieArmature.ResumeLayout(False)
         Me.pan_SaisieArmature.PerformLayout()
+        CType(Me.img_PRd2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Fsk, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_PRd2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -653,4 +666,5 @@ Partial Class Frm_ConnectionSlimConnecteur
     Friend WithEvents Label1 As Label
     Friend WithEvents txt_PRdArma As TextBox
     Friend WithEvents img_PRd2 As PictureBox
+    Friend WithEvents img_InfoArma As PictureBox
 End Class

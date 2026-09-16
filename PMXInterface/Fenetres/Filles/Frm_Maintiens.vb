@@ -111,6 +111,8 @@ Public Class Frm_Maintiens
 
     Dim strInfoW_PoutreMixte As String
 
+    Dim lSelectInfoN As Boolean = False
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -276,6 +278,8 @@ Public Class Frm_Maintiens
 
         Me.Icon = Frm_PMX.Icon
 
+        Me.img_InfoN.BackColor = SystemColors.ControlLightLight
+
         'Me.lbl_.BackColor = CouleurBackBandeaux
         'Me.lbl_.ForeColor = CouleurForeBandeaux
 
@@ -295,7 +299,8 @@ Public Class Frm_Maintiens
 
     Private Sub AfficherPoutreEnCours()
 
-        Me.img_info.Visible = MyPoutreLoc.lMixte
+        'Me.img_info.Visible = MyPoutreLoc.lMixte
+        Me.img_InfoN.Visible = MyPoutreLoc.lMixte
 
         'Select Case myBeamLoc.TypeMaintien(traveeEnCours.Item2)
         Select Case MyPoutreLoc.TypeMaintien
@@ -803,13 +808,31 @@ Public Class Frm_Maintiens
 
 #Region " Infos W "
 
-    Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
-        'If InfoW_lVisible Then
-        '    InfoW_Fermer()
-        'Else
-        PublieInfoDegreConnex()
-        'End If
+    Private Sub img_InfoN_MouseEnter(sender As Object, e As EventArgs) Handles img_InfoN.MouseEnter
+        lSelectInfoN = True
+        Me.img_InfoN.Invalidate()
     End Sub
+
+    Private Sub img_InfoN_MouseLeave(sender As Object, e As EventArgs) Handles img_InfoN.MouseLeave
+        lSelectInfoN = False
+        Me.img_InfoN.Invalidate()
+    End Sub
+
+    Private Sub img_InfoN_Click(sender As Object, e As EventArgs) Handles img_InfoN.Click
+        PublieInfoDegreConnex()
+    End Sub
+
+    Private Sub img_InfoN_Paint(sender As Object, e As PaintEventArgs) Handles img_InfoN.Paint
+        DessineIconeInfo(e.Graphics, Me.img_InfoN, lSelectInfoN)
+    End Sub
+
+    'Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
+    '    'If InfoW_lVisible Then
+    '    '    InfoW_Fermer()
+    '    'Else
+    '    PublieInfoDegreConnex()
+    '    'End If
+    'End Sub
 
     Private Sub PublieInfoDegreConnex()
 

@@ -18,6 +18,8 @@ Public Class Frm_OptionsCalculPoutre
     Dim strWarningArmaComp As String
     Dim strInfoW_ConfreF As String
 
+    Dim lSelectInfoCF As Boolean = False
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -189,6 +191,7 @@ Public Class Frm_OptionsCalculPoutre
         Me.etq_UnitDimension2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
         Me.etq_UnitLargeurF.Text = "mm"
+
     End Sub
 
     Private Sub GestionStyle()
@@ -621,15 +624,36 @@ Public Class Frm_OptionsCalculPoutre
 
 #Region " Infos W "
 
+    Private Sub img_infoContreFleche_MouseEnter(sender As Object, e As EventArgs) Handles img_infoContreFleche.MouseEnter
+        lSelectInfocf = True
+        Me.img_infoContreFleche.Invalidate()
+    End Sub
+
+    Private Sub img_infoContreFleche_MouseLeave(sender As Object, e As EventArgs) Handles img_infoContreFleche.MouseLeave
+        lSelectInfocf = False
+        Me.img_infoContreFleche.Invalidate()
+    End Sub
+
+    Private Sub img_infoContreFleche_Click(sender As Object, e As EventArgs) Handles img_infoContreFleche.Click
+        PublieInfoContreFleche()
+    End Sub
+
+    Private Sub img_infoContreFleche_Paint(sender As Object, e As PaintEventArgs) Handles img_infoContreFleche.Paint
+
+        DessineIconeInfo(e.Graphics, Me.img_infoContreFleche, lSelectInfocf)
+
+    End Sub
+
+
     Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
         'If InfoW_lVisible Then
         '    InfoW_Fermer()
         'Else
-        PublieInfoDegreConnex()
+        PublieInfoContreFleche()
         'End If
     End Sub
 
-    Private Sub PublieInfoDegreConnex()
+    Private Sub PublieInfoContreFleche()
 
         InfoW.InitialiseInfo()
         InfoW.AddInfo(strInfoW_ConfreF)

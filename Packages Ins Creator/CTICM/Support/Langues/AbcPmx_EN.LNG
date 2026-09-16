@@ -227,6 +227,8 @@ POINTPROP				= Point propping
 SHORTTERM				= Short term effects
 LONGTERM				= Long term effects
 REFERENCELTPSI2			= According to $, the ratio psi2 of live loads is assumed to be a long term effect
+INFO_PP_AUTO			= Self weight of the beam, as calculated by the piece of software. See "Information" for the details.
+INFO_PP_CUSTOM			= Custom value for the self weight of the beam. See "Information" to modify the value.
 
 #FRM_COMBINATIONS
 TITLE					= Combinations
@@ -625,6 +627,7 @@ STEELPROFILE			= Steel profile
 PARTIALENCASEMENT		= Partial encasement
 CONCRETESLAB			= Concrete slab
 PSHEETING				= Steel sheeting
+CUSTOMSW				= Custom value
 
 #FRM_LATERALRESTRAINTS
 ADD						= Add
@@ -958,6 +961,8 @@ SPACINGS				= Spacings
 SPANS					= Span lengths
 LEFTSLABCONTINUITY		= The slab is continuous at the left support
 RIGHTSLABCONTINUITY		= The slab is continuous at the right support
+INFOCRACKING			= For beams designed as simply supported although the slab is continuous, longitudinal reinforcement are reaquired to limit the cracking at supports. See details in the calculation sheet.
+INFOCRACKINGREF			= See :
 
 #FRM_STEELSECTIONSUSUAL
 AUTOMATICHA				= Total height automatically assessed

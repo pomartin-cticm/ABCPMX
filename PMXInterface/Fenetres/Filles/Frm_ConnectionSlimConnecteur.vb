@@ -20,6 +20,7 @@ Public Class Frm_ConnectionSlimConnecteur
 
     Dim ClasseAcierArma() As String = cls_AcierArmature.tabClasseAcierArma
 
+    Dim lSelectInfoArma As Boolean = False
 
 #End Region
 
@@ -477,12 +478,38 @@ Public Class Frm_ConnectionSlimConnecteur
 
 #Region " Infos W "
 
+    Private Sub img_InfoArma_MouseEnter(sender As Object, e As EventArgs) Handles img_InfoArma.MouseEnter
+        lSelectInfoArma = True
+        Me.img_InfoArma.Invalidate()
+    End Sub
+
+    Private Sub img_InfoArma_MouseLeave(sender As Object, e As EventArgs) Handles img_InfoArma.MouseLeave
+        lSelectInfoArma = False
+        Me.img_InfoArma.Invalidate()
+    End Sub
+
+    Private Sub img_InfoArma_Click(sender As Object, e As EventArgs) Handles img_InfoArma.Click
+        PublieInfoArmaConnex()
+    End Sub
+
+    Private Sub img_InfoArma_Paint(sender As Object, e As PaintEventArgs) Handles img_InfoArma.Paint
+
+        DessineIconeInfo(e.Graphics, Me.img_InfoArma, lSelectInfoArma)
+
+    End Sub
+
+
+
+
+
+
+
+
     Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
 
         PublieInfoArmaConnex()
 
     End Sub
-
 
     Private Sub PublieInfoArmaConnex()
 

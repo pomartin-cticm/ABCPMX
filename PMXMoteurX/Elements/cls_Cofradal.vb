@@ -194,6 +194,13 @@
         Return Me.MemberwiseClone()
     End Function
 
+    Public Sub CopieFrom(ByRef CofradalSource As cls_Cofradal)
+        Me.p_nom = CofradalSource.Nom
+        Me.p_dp = CofradalSource.dp
+        Me.p_msurf = CofradalSource.mSurf
+        Me.p_lCustom = CofradalSource.lCustom
+    End Sub
+
 #End Region
 
 End Class

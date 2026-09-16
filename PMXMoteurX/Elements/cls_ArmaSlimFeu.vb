@@ -1,6 +1,5 @@
 ﻿Public Class cls_ArmaSlimFeu
 
-
 #Region " Attributs "
 
     ''' <summary>
@@ -39,5 +38,19 @@
     End Sub
 
 #End Region
+
+#Region " Fonction de copie "
+
+    Public Function CopieFrom(ByVal p_Arma As cls_ArmaSlimFeu) As cls_ArmaSlimFeu
+        Me.lBarre = p_Arma.lBarre
+        Me.NbBarres = p_Arma.NbBarres
+        Me.Diametre = p_Arma.Diametre
+        Me.xPos = p_Arma.xPos
+        Me.zPos = p_Arma.zPos
+        Return Me
+    End Function
+
+#End Region
+
 
 End Class

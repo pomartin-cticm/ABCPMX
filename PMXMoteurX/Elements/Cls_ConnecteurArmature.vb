@@ -47,6 +47,11 @@
         ArmaCible.Acier = ArmaSource.Acier.Clone()
     End Sub
 
+    Public Sub CopieFrom(ByRef ArmaSource As Cls_ConnecteurArmature)
+        Me.Diametre = ArmaSource.Diametre
+        Me.Acier.CopieFrom(ArmaSource.Acier)
+    End Sub
+
 #End Region
 
 #Region " Résistance au cisaillement de l'armature utilisée comme conneteur "

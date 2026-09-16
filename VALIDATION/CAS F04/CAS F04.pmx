@@ -1,5 +1,5 @@
 ﻿'-----------------------------------------------'
-'PropMix software - CTICM - Version 1.00 beta 2
+'PropMix software - CTICM - Version 1.11
 'PROJECT USER FILE
 '-----------------------------------------------'
 '       /!\   Don't modify this file   /!\
@@ -62,8 +62,12 @@ BLOCK DECKRESTRAINT
    Transition            = 1
    ModFixTrough          = 0
    TypFixTrough          = 2
+   DiaFix                = 0,004
    EC                    = 0,5
+   Tpr                   = 0
+   KUser                 = 0
    FixCoutureType        = 0
+   DiaSeam               = 0,0048
    lDeckRestraint        = False
    lTheta                = False
 BLOCK SECTION
@@ -113,9 +117,11 @@ BLOCK STEELDECK
    b_t                   = 0,101
    e_p                   = 0,207
    tp                    = 0,001
+   h_offset              = 0
    Orientation           = 1
    msurf                 = 11,37
-   fyp                   = 350
+   Fyp                   = 350
+   Fup                   = 420
    ModuleWidth           = 1,035
    Ieff                  = 0,0000006008
    lPunched              = True
@@ -130,6 +136,7 @@ BLOCK SLABCONCRETE
    wk_max                = 0,0004
 
 BLOCK SLAB_REINFORCEMENT
+   NoBar                 = False
    EspBar                = 0 0,2
    PhiS                  = 0 0,012
    z_s                   = 0 0,032
@@ -141,6 +148,7 @@ BLOCK SLAB_REINFORCEMENT
    RClasse               = B500
    RFsK                  = 500
    REs                   = 210000
+
 BLOCK STUD
    Label                 = 22-125
    Height                = 0,125
@@ -171,10 +179,16 @@ BLOCK OPTIONS
    T0SH_1                = 1
    AgeTCalc              = 18250
    lElasticDesign        = False
+   Psi2LongTerm          = True
    lControlCrack         = False
+   lCtrFlecheFab         = False
+   DimCtrFlechFab        = 0
+   lAutoPP               = True
+   qPPCustom             = 0
 
 BLOCK FIRE_OPTIONS
    FireDesign            = True
+   RootEncased           = True
    DeltaT                = 5
    Temp0                 = 20
    FEpsilon              = 1
@@ -187,6 +201,7 @@ BLOCK FIRE_OPTIONS
    FrenchAN              = False
    VariableCDens         = False
    CompressionReinf      = True
+   FilledVoids           = True
    ColdFormReinf         = True
    SlabFEM               = False
    SlabTmax              = 0,01
@@ -194,6 +209,7 @@ BLOCK FIRE_OPTIONS
    ReinfTemp             = 1
    Surface               = Protection 2 0,025
    LambdP                = 0
+
 BLOCK GAMMA
    GammaM0               = 1,00
    GammaM1               = 1,0
@@ -221,6 +237,7 @@ BLOCK GAMMA
 
 BLOCK HIVOSS
    lHivossMethod         = True
+   lMGeneNum             = True
    RatioQ                = 0,1
    VariableQ             = 0
    FloorUse              = 4
@@ -298,8 +315,12 @@ BLOCK DECKRESTRAINT
    Transition            = 1
    ModFixTrough          = 0
    TypFixTrough          = 2
+   DiaFix                = 0,004
    EC                    = 0,5
+   Tpr                   = 0
+   KUser                 = 0
    FixCoutureType        = 0
+   DiaSeam               = 0,0048
    lDeckRestraint        = False
    lTheta                = False
 BLOCK SECTION
@@ -349,9 +370,11 @@ BLOCK STEELDECK
    b_t                   = 0,101
    e_p                   = 0,207
    tp                    = 0,001
+   h_offset              = 0
    Orientation           = 1
    msurf                 = 11,37
-   fyp                   = 350
+   Fyp                   = 350
+   Fup                   = 420
    ModuleWidth           = 1,035
    Ieff                  = 0,0000006008
    lPunched              = True
@@ -366,6 +389,7 @@ BLOCK SLABCONCRETE
    wk_max                = 0,0004
 
 BLOCK SLAB_REINFORCEMENT
+   NoBar                 = False
    EspBar                = 0 0,2
    PhiS                  = 0 0,012
    z_s                   = 0 0,032
@@ -377,6 +401,7 @@ BLOCK SLAB_REINFORCEMENT
    RClasse               = B500
    RFsK                  = 500
    REs                   = 210000
+
 BLOCK STUD
    Label                 = 22-125
    Height                = 0,125
@@ -407,10 +432,16 @@ BLOCK OPTIONS
    T0SH_1                = 1
    AgeTCalc              = 18250
    lElasticDesign        = False
+   Psi2LongTerm          = True
    lControlCrack         = False
+   lCtrFlecheFab         = False
+   DimCtrFlechFab        = 0
+   lAutoPP               = True
+   qPPCustom             = 0
 
 BLOCK FIRE_OPTIONS
    FireDesign            = True
+   RootEncased           = True
    DeltaT                = 5
    Temp0                 = 20
    FEpsilon              = 1
@@ -423,13 +454,15 @@ BLOCK FIRE_OPTIONS
    FrenchAN              = True
    VariableCDens         = False
    CompressionReinf      = True
+   FilledVoids           = True
    ColdFormReinf         = True
    SlabFEM               = False
    SlabTmax              = 0,01
-   ConcreteRedux         = False
+   ConcreteRedux         = True
    ReinfTemp             = 1
    Surface               = Protection 6 0,03
    LambdP                = 0
+
 BLOCK GAMMA
    GammaM0               = 1,00
    GammaM1               = 1,0
@@ -457,6 +490,7 @@ BLOCK GAMMA
 
 BLOCK HIVOSS
    lHivossMethod         = True
+   lMGeneNum             = True
    RatioQ                = 0,1
    VariableQ             = 0
    FloorUse              = 4
@@ -467,7 +501,7 @@ BLOCK HIVOSS
 
 BLOCK LOADS_G1
    QSurf                 = 0
-   qDist                 = 1 0 6911,003 10 6911,003
+   qDist                 = 1 0 8060,469 14 8060,469
  
 BLOCK LOADS_G2
    QSurf                 = 0

@@ -144,8 +144,15 @@ Public Class cls_VerifFeuSlimMixte
             End If
         Else
             '# Cas où les résultats de calcul ne sont pas disponibles
+            Const lDebug As Boolean = False
 
-            Echauffement_SlimMixte(myBeam, progressEtape, progressDansEtape)
+            If lDebug Then
+                Echauffement_SlimMixte(myBeam)
+            Else
+                Echauffement_SlimMixte(myBeam, progressEtape, progressDansEtape)
+            End If
+
+            myBeam.EstModifiee(True)
 
         End If
 

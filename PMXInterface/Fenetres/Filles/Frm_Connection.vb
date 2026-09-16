@@ -1,5 +1,6 @@
-﻿Imports PMXMoteur2
+﻿Imports System.Drawing.Drawing2D
 Imports System.IO
+Imports PMXMoteur2
 
 Public Class Frm_Connection
 
@@ -138,6 +139,10 @@ Public Class Frm_Connection
     Dim ZoneEnCours As Integer = 0
     Dim strZoneEnCours(2) As String
 
+
+    Dim lSelectIcone1 As Boolean = False
+    Dim lSelectIconeW As Boolean = False
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -194,7 +199,8 @@ Public Class Frm_Connection
 
         Me.lbl_EtaSymbol.Visible = Not lMultiSpan
         Me.lbl_DegreConnex.Visible = Not lMultiSpan
-        Me.img_info.Visible = Not lMultiSpan
+        'Me.img_info.Visible = Not lMultiSpan
+        Me.img_Icone_1.Visible = Not lMultiSpan
 
         'Par défaut on affiche la première travée sur deux appuis
         traveeEnCours = 1
@@ -258,6 +264,7 @@ Public Class Frm_Connection
     End Sub
 
     Private Sub GestionLangues()
+
         If File.Exists(LogicielFichiers.Langue) Then
             Dim strLoadedKey As String = ""
             Dim CLE As String = ""
@@ -466,6 +473,7 @@ Public Class Frm_Connection
         Me.txt_fu.BackColor = CouleurReadOnly
 
         Me.img_TestError.Visible = LogicielOptions.lExpert
+        Me.img_WarningTest.Visible = LogicielOptions.lExpert
     End Sub
 
     ''' <summary>
@@ -1157,11 +1165,11 @@ Public Class Frm_Connection
         Dim lPerp As Boolean = myBeamLoc.Dalle.Bac.lPerpendiculaire
         Dim lPerpPRd As Boolean = myBeamLoc.Dalle.Bac.lPerpendiculairePRd
         Dim lCofra220 As Boolean = (Not lDalleP) And lPerp And myBeamLoc.Dalle.Bac.lCofraplus220
-        Dim FcK As Decimal = myBeamLoc.Dalle.beton.Fck
-        Dim Fctk_005 As Decimal = myBeamLoc.Dalle.beton.Fctk_005
+        Dim FcK As Decimal = myBeamLoc.Dalle.Beton.Fck
+        Dim Fctk_005 As Decimal = myBeamLoc.Dalle.Beton.Fctk_005
         Dim GammaVs As Decimal = myBeamLoc.Param.Gamma.GammaVs
         Dim GammaVc As Decimal = myBeamLoc.Param.Gamma.GammaVc
-        Dim Ecm As Decimal = myBeamLoc.Dalle.beton.Ecm
+        Dim Ecm As Decimal = myBeamLoc.Dalle.Beton.Ecm
         Dim Nr As Integer = myBeamLoc.NrTransZone(traveeEnCours, ZoneEnCours)
 
 
@@ -1794,6 +1802,31 @@ Public Class Frm_Connection
 
 #Region " Infos W "
 
+    Private Sub btn_Info_Click(sender As Object, e As EventArgs)
+        PublieInfoDegreConnex()
+    End Sub
+
+
+    Private Sub img_Icone_1_MouseEnter(sender As Object, e As EventArgs) Handles img_Icone_1.MouseEnter
+        lSelectIcone1 = True
+        Me.img_Icone_1.Invalidate()
+    End Sub
+
+    Private Sub img_Icone_1_MouseLeave(sender As Object, e As EventArgs) Handles img_Icone_1.MouseLeave
+        lSelectIcone1 = False
+        Me.img_Icone_1.Invalidate()
+    End Sub
+
+    Private Sub img_Icone_1_Click(sender As Object, e As EventArgs) Handles img_Icone_1.Click
+        PublieInfoDegreConnex()
+    End Sub
+
+    Private Sub img_Icone_1_Paint(sender As Object, e As PaintEventArgs) Handles img_Icone_1.Paint
+
+        DessineIconeInfo(e.Graphics, Me.img_Icone_1, lSelectIcone1)
+
+    End Sub
+
     Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
         'If InfoW_lVisible Then
         '    InfoW_Fermer()
@@ -1816,6 +1849,26 @@ Public Class Frm_Connection
 
         GestionErrorsPMX("Frm_Connection", "Click", "Test erreur", True)
 
+    End Sub
+
+    Private Sub img_WarningTest_Click(sender As Object, e As EventArgs) Handles img_WarningTest.Click
+
+        GestionErrorsPMX("Frm_Connection", "Click", "Test erreur", True)
+
+    End Sub
+
+    Private Sub img_WarningTest_Paint(sender As Object, e As PaintEventArgs) Handles img_WarningTest.Paint
+        DessineIconeWarning(e.Graphics, Me.img_WarningTest, lSelectIconeW)
+    End Sub
+
+    Private Sub img_WarningTest_MouseEnter(sender As Object, e As EventArgs) Handles img_WarningTest.MouseEnter
+        lSelectIconeW = True
+        Me.img_WarningTest.Invalidate()
+    End Sub
+
+    Private Sub img_WarningTest_MouseLeave(sender As Object, e As EventArgs) Handles img_WarningTest.MouseLeave
+        lSelectIconeW = False
+        Me.img_WarningTest.Invalidate()
     End Sub
 
 #End Region

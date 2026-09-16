@@ -35,6 +35,7 @@ Partial Class Frm_Maintiens
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Maintiens = New System.Windows.Forms.Label()
         Me.pan_Maintiens = New System.Windows.Forms.Panel()
+        Me.img_InfoN = New System.Windows.Forms.PictureBox()
         Me.img_info = New System.Windows.Forms.PictureBox()
         Me.btn_Delete = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
@@ -58,6 +59,7 @@ Partial Class Frm_Maintiens
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
         Me.pan_Maintiens.SuspendLayout()
+        CType(Me.img_InfoN, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.pan_Img_Maintiens.SuspendLayout()
@@ -104,9 +106,9 @@ Partial Class Frm_Maintiens
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.Size = New System.Drawing.Size(1437, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
@@ -203,6 +205,7 @@ Partial Class Frm_Maintiens
         '
         Me.pan_Maintiens.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Maintiens.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Maintiens.Controls.Add(Me.img_InfoN)
         Me.pan_Maintiens.Controls.Add(Me.img_info)
         Me.pan_Maintiens.Controls.Add(Me.btn_Delete)
         Me.pan_Maintiens.Controls.Add(Me.Panel1)
@@ -218,15 +221,26 @@ Partial Class Frm_Maintiens
         Me.pan_Maintiens.Size = New System.Drawing.Size(250, 272)
         Me.pan_Maintiens.TabIndex = 1
         '
+        'img_InfoN
+        '
+        Me.img_InfoN.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.img_InfoN.Location = New System.Drawing.Point(218, 3)
+        Me.img_InfoN.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_InfoN.Name = "img_InfoN"
+        Me.img_InfoN.Size = New System.Drawing.Size(22, 22)
+        Me.img_InfoN.TabIndex = 86
+        Me.img_InfoN.TabStop = False
+        '
         'img_info
         '
         Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
-        Me.img_info.Location = New System.Drawing.Point(222, 5)
+        Me.img_info.Location = New System.Drawing.Point(225, 246)
         Me.img_info.Margin = New System.Windows.Forms.Padding(0)
         Me.img_info.Name = "img_info"
         Me.img_info.Size = New System.Drawing.Size(20, 20)
         Me.img_info.TabIndex = 81
         Me.img_info.TabStop = False
+        Me.img_info.Visible = False
         '
         'btn_Delete
         '
@@ -398,6 +412,7 @@ Partial Class Frm_Maintiens
         Me.TLPan_Gauche.PerformLayout()
         Me.pan_Maintiens.ResumeLayout(False)
         Me.pan_Maintiens.PerformLayout()
+        CType(Me.img_InfoN, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.pan_Img_Maintiens.ResumeLayout(False)
@@ -433,4 +448,5 @@ Partial Class Frm_Maintiens
     Friend WithEvents imgList_Navigation As ImageList
     Friend WithEvents Panel1 As Panel
     Friend WithEvents img_info As PictureBox
+    Friend WithEvents img_InfoN As PictureBox
 End Class

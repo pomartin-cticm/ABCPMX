@@ -1,0 +1,45 @@
+COMPOSITE BEAMS SOFTWARE 
+ABC-PMX Software
+
+  ==============================================================
+   |   |   |   |   |   |  |   |   |   |   |   |   |   |   |   |
+  ==============================================================
+  |                                                            |
+  |                                                            |
+  ==============================================================
+  /\							      /\	
+
+Copyright CTICM-ArcelorMittal - 2026
+ABC-PMX has been developed by CTICM - PARIS - FRANCE
+29-07-2026
+================================================================
+
+Version 1.20 : 29/07/26 (beta 5)
+-------------
+Includes 
+- the module for the calculation of steel slim floor beams - beta 1
+- the module for the fire calculation of steel slim floor beams - beta 3
+- introduction of precamber for sls deflections - beta 3
+- the module for the calculation of composite slim floor beams - beta 5
+- the module for the fire calculation of composite slim floor beams - beta 5
+- correction and improvements R25-004 to R25-012, R26-001, R26-002, R26-004
+- updated module for Annex J in EN 1994-1-2 (unprotected voids) - beta 2
+
+Version 1.10 : 09/07/25
+-------------
+
+Includes :
+- the fire design of steel and composite beams, according to EN 1993-1-2 and EN 1994-1-2
+- corrections of bugs and improvements R25-001 to R25-003
+
+
+Version 1.00 : 03/03/25
+-------------
+
+First edition of the piece of software. Without slimfloors and without fire design
+
+Delivered with ArcelorMittal DataBase - 2022-1
+
+----------------------------------------------------------------------------------------------
+
+

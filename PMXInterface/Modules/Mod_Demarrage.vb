@@ -48,11 +48,12 @@ Public Module Mod_Demarrage
         LogicielReglages.lFrenchOnly = (LogicielInfo.Maitre = EnuMaitre.CTICM)
         'LogicielReglages.lFrenchOnly = False
 
-        LogicielReglages.lSLIMAcier = True
-        LogicielReglages.lSLIMMixte = False
         LogicielReglages.lFIRE = True
-        LogicielReglages.lFIRESLIMAcier = True
-        LogicielReglages.lFIRESLIMMixte = False
+        Const lSlim As Boolean = False
+        LogicielReglages.lSLIMAcier = lSlim
+        LogicielReglages.lSLIMMixte = lSlim
+        LogicielReglages.lFIRESLIMAcier = lSlim
+        LogicielReglages.lFIRESLIMMixte = lSlim
 
         LogicielReglages.lCreuxO = True '(LogicielInfo.Maitre = EnuMaitre.CTICM)
 
@@ -341,8 +342,10 @@ Public Module Mod_Demarrage
 
         LogicielInfo.Version.Annee = 2026
         LogicielInfo.Version.Principal = 1
-        LogicielInfo.Version.Indice = 20
-        LogicielInfo.Version.Beta = 5
+        'LogicielInfo.Version.Indice = 20
+        'LogicielInfo.Version.Beta = 5
+        LogicielInfo.Version.Indice = 11
+        LogicielInfo.Version.Beta = 0
 
         Dim Chaine As String = ""
 

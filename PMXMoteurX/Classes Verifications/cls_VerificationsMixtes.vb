@@ -218,6 +218,7 @@
         'Dim lMulti As Boolean
         Dim lCalculClass3HSS As Boolean                 ' Calcul élastique imposé en présence d'acier HSS
         Dim lChInCombi() As Boolean = Nothing
+        Dim lOKBeta(1) As Boolean
 
         '--> Initialisations
 
@@ -358,7 +359,7 @@
                 ' avec prise en compte de la connection,
                 ' sans prise en compte de la réduction induit par l'effort tranchant 
 
-                Me.MaillageProprietesPlastiquesN(iCombi, myBeam, MEd, DeltaRd, Beff, iNodeZero, True, zANP, MplRd)
+                Me.MaillageProprietesPlastiquesN(iCombi, myBeam, MEd, DeltaRd, Beff, iNodeZero, True, zANP, MplRd, lOKBeta(0))
 
                 '# Calcul des moments plastiques  MfRd
                 Me.MaillageProprietesMfRd(myBeam, MEd, DeltaRd, Beff, MfRd)
@@ -420,7 +421,7 @@
                     ' avec prise en compte de la connection,
                     ' sans prise en compte de la réduction induit par l'effort tranchant 
 
-                    Me.MaillageProprietesPlastiquesN(iCombi, myBeam, MEd, DeltaRd, Beff, iNodeZero, True, zANPMV, MVRd, Me.RhoV)
+                    Me.MaillageProprietesPlastiquesN(iCombi, myBeam, MEd, DeltaRd, Beff, iNodeZero, True, zANPMV, MVRd, lOKBeta(1), Me.RhoV)
 
                     '# Vérification sous interaction MV
 
@@ -441,6 +442,9 @@
                 If lCombiClass3 Then
                     lCont = True
                     Me.lCalculPlastic = False
+                ElseIf Not lOKBeta(0) Then
+                    lCont = True
+                    Me.lCalculPlastic = False
                 Else
                     lCont = False
                 End If
@@ -459,6 +463,7 @@
     Private Sub MaillageProprietesPlastiquesN(iCombi As Integer, myBeam As cls_Poutre, MEd(,) As Decimal, DeltaRd(,) As List(Of Decimal),
                                               bEff() As Decimal, iNodeZero(,) As Integer, lWeb As Boolean,
                                               ByRef pzANP(,) As Decimal, ByRef pMPlRd(,) As Decimal,
+                                              ByRef lOKBeta As Boolean,
                                               Optional rhoV As Decimal(,) = Nothing)
         '----------------------------------------------------------------------------------------------------------
         '   21/08/24 :  Création - POM
@@ -476,6 +481,7 @@
         '   lWeb            [E] :   Indique si on prend en compte l'âme du profilé (sinon, on calcule un MfplRd)
         '   pzANP           [S] :   position ANP
         '   pMplRd          [S] :   moment plastique (en fonction du signe de MEd)
+        '   lOKBeta         [S] :   Indique si le calcul du coefficient beta est dans le domaine d'application
         '----------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -489,13 +495,14 @@
         Dim Signe, rhoVLoc As Decimal
         Dim RdConnex As Decimal
         Dim RConnexG, RConnexD As Decimal
-        Dim lOK As Boolean = True
+        'Dim lOK As Boolean = True
         Dim Beta As Decimal
         Dim myEN1994 As New cls_Eurocodes
         Dim zTop As Decimal
         Dim lGene1 As Boolean
         Dim Nuance As String
         Dim lOKPl As Boolean
+        Dim lAllBetaMini As Boolean = True
 
         '--( Initialisation
 
@@ -506,6 +513,7 @@
         zTop = myBeam.Dalle.zTop
         lGene1 = myBeam.Param.lGeneration1
         Nuance = myBeam.Section.Acier.Nuance
+        lOKBeta = True
 
         '--> Traitement
 
@@ -557,26 +565,42 @@
                 If Signe > 0 Then
                     Beta = myEN1994.ReductionFactorBeta(zTop - pzANP(iNode, kDeb), myBeam.HauteurTotaleSectionMixte, Nuance, lGene1, lOKPl)
 
+                    If lOKPl Then
+                        lAllBetaMini = False
+                    Else
+                        Beta = myEN1994.ReductionFactorBetaMini(Nuance, lGene1)
+                        'Pour les sections intermédiaires hors du domaine d'application de la figure Beta,
+                        'on prend la valeur minimale de Beta
+                        'on admet que cette méthode est applicable tant que la partie la plus sollicitée de la poutre
+                        'est dans le domaine d'application de la figure Beta
+                        'cette hypothèse est controlée par le parametre lAllBetaMini
+                        ' Si ce paramètre est vrai, toutes les sections sont hors du domaine d'application de la figure Beta, et on prend la valeur minimale de Beta
+                        ' dans ce cas, on refuse le calcul plastique et on impose un calcul élastique
+                    End If
+
                     'suivant EN 1994-1-1:2025, 8.2.1.3(7)
-                    Beta = 1 - (1 - Beta) * DegConnex(iCombi, iTravee, 0)
+                    Beta = 1 - (1 - Beta) * Math.Min(1, DegConnex(iCombi, iTravee, 0))
 
                 Else
                     Beta = 1
                 End If
 
+                pMPlRd(iNode, kDeb) = Beta * pMPlRd(iNode, kDeb)
+
                 If kfin > kDeb Then
                     pzANP(iNode, kfin) = pzANP(iNode, kDeb)
-                    pMPlRd(iNode, kfin) = Beta * pMPlRd(iNode, kDeb)
+                    pMPlRd(iNode, kfin) = pMPlRd(iNode, kDeb)
                 End If
 
             Next
         Next
 
-        '--( Traitement des erreurs
+        ''--( Traitement des erreurs
 
-        If Not lOK Then
-            MsgBox("cls_VerificationsMixtes|MaillageProprietesPlastiquesN| the solveur met an issue, contact support")
-        End If
+        lOKBeta = Not lAllBetaMini
+        'If Not lOK Then
+        '    MsgBox("cls_VerificationsMixtes|MaillageProprietesPlastiquesN| the solveur met an issue, contact support")
+        'End If
 
     End Sub
 
@@ -1838,7 +1862,6 @@
 
     End Sub
 
-
     Private Sub RunCritereTranchants(myBeam As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
@@ -2086,6 +2109,7 @@
         '----------------------------------------------------------------------------------------------------------
         '   Initialisation des tableaux de degré de connexion
         '----------------------------------------------------------------------------------------------------------
+        '   nbCombi     [E] :   Nombre de combinaisons
         '   iTravFin    [E] :   Indice de la dernière travée
         '----------------------------------------------------------------------------------------------------------
 
@@ -2258,6 +2282,7 @@
         Dim iTravDeb, iTravFin As Integer
         Dim Fy As Decimal
         Dim AfSup, AfInf As Decimal
+        Dim myEN1994 As New cls_Eurocodes
 
         '--( Initialisation
 
@@ -2303,7 +2328,8 @@
             Le = myBeam.LongueurTravee(iTravee)
             If iTravee > iTravDeb Then Le -= 0.15 * Le
             If iTravee < iTravFin Then Le -= 0.15 * Le
-            DegConnexMin(iTravee) = Me.EtaMinFlanges(Fy, Le, AfSup, AfInf)
+            'DegConnexMin(iTravee) = Me.EtaMinFlanges(Fy, Le, AfSup, AfInf)
+            DegConnexMin(iTravee) = myen1994.EtaMinFlanges(Fy, Le, AfSup, AfInf)
 
         Next
 
@@ -2484,109 +2510,6 @@
 
     End Sub
 
-    Private Function EtaMin() As Decimal
-        '----------------------------------------------------------------------------------------------------------
-        '   14/12/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Valeur minimale du Degré minimal de connexion pour une poute mixte 
-        '   d'après formules (6.12) et (6.14) de la NF EN 1994-1-1
-        '----------------------------------------------------------------------------------------------------------
-        '----------------------------------------------------------------------------------------------------------
-
-        Const ETAMINREF As Decimal = 0.4
-
-        Return ETAMINREF
-
-    End Function
-
-    Public Function EtaMinEqualFlanges(Fy As Decimal, Le As Decimal) As Decimal
-        '----------------------------------------------------------------------------------------------------------
-        '   14/12/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Degré minimal de connexion pour une poute mixte à semelles égales
-        '   d'après formule (6.12) de la NF EN 1994-1-1
-        '----------------------------------------------------------------------------------------------------------
-        '   Fy      [E] :   Limite d'élasticité
-        '   Le      [E) :   Distance entre points de moments nuls
-        '----------------------------------------------------------------------------------------------------------
-
-        '--> Déclarations
-
-        Dim Eta0 As Decimal
-
-        '--> Traitement
-
-        If IsGreater(Le, 25) Then
-            Eta0 = 1
-        Else
-            Eta0 = Math.Max(EtaMin, (1 - 355 / Fy * (0.75 - 0.03 * Le)))
-        End If
-        Return Eta0
-
-    End Function
-
-    Public Function EtaMinInEqualFlanges3(Fy As Decimal, Le As Decimal) As Decimal
-        '----------------------------------------------------------------------------------------------------------
-        '   14/12/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Degré minimal de connexion pour une poute mixte à semelles inégales, la semelle inf ayant une aire = 3 x aire semelle sup
-        '   d'après formule (6.14) de la NF EN 1994-1-1
-        '----------------------------------------------------------------------------------------------------------
-        '   Fy      [E] :   Limite d'élasticité
-        '   Le      [E) :   Distance entre points de moments nuls
-        '----------------------------------------------------------------------------------------------------------
-
-        '--> Déclarations
-
-        Dim Eta0 As Decimal
-
-        '--> Traitement
-
-        If IsGreater(Le, 20) Then
-            Eta0 = 1
-        Else
-            Eta0 = Math.Max(EtaMin, (1 - 355 / Fy * (0.3 - 0.015 * Le)))
-        End If
-        Return Eta0
-
-    End Function
-
-    Public Function EtaMinFlanges(Fy As Decimal, Le As Decimal, AfSup As Decimal, AfInf As Decimal) As Decimal
-        '----------------------------------------------------------------------------------------------------------
-        '   14/12/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Degré minimal de connexion pour une poute mixte à semelles égales
-        '   d'après formule (6.14) de la NF EN 1994-1-1
-        '----------------------------------------------------------------------------------------------------------
-        '   Fy      [E] :   Limite d'élasticité
-        '   Le      [E] :   Distance entre points de moments nuls
-        '   AfSup   [E] :   Aire de la semelle supérieure
-        '   AfInf   [E] :   Aire de la semelle inférieure
-        '----------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim RatioAire As Decimal = AfInf / AfSup
-        Dim Eta As Decimal = -1
-        Dim EtaEqualF As Decimal
-        Dim EtaInEqualF As Decimal
-
-        '--> Traitement hors domaine application
-
-        If IsGreater(RatioAire, 3) Or IsSmaller(RatioAire, 1) Then
-            MsgBox("Wrong ratio of flanges areas", MsgBoxStyle.Critical, "cls_VerificationsMixtes/EtaMinFlanges")
-            Return Eta
-        End If
-
-        '--> Traitement normal
-
-        EtaInEqualF = EtaMinInEqualFlanges3(Fy, Le)
-        EtaEqualF = EtaMinEqualFlanges(Fy, Le)
-
-        Eta = EtaEqualF + (EtaInEqualF - EtaEqualF) / 2 * (RatioAire - 1)
-        Return Eta
-    End Function
-
     Public Function EtaEnveloppe(nbCombi As Integer, iTravee As Integer) As Decimal
         '----------------------------------------------------------------------------------------------------------------
         '   22/08/24 :  Création - POM
@@ -2611,7 +2534,6 @@
         Return Eta
 
     End Function
-
 
 #End Region
 
@@ -2642,5 +2564,111 @@
 
 #End Region
 
+#Region " OLDs "
+
+    'Private Function EtaMin() As Decimal
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   14/12/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Valeur minimale du Degré minimal de connexion pour une poute mixte 
+    '    '   d'après formules (6.12) et (6.14) de la NF EN 1994-1-1
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '----------------------------------------------------------------------------------------------------------
+
+    '    Const ETAMINREF As Decimal = 0.4
+
+    '    Return ETAMINREF
+
+    'End Function
+
+    'Public Function EtaMinEqualFlanges(Fy As Decimal, Le As Decimal) As Decimal
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   14/12/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Degré minimal de connexion pour une poute mixte à semelles égales
+    '    '   d'après formule (6.12) de la NF EN 1994-1-1
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Fy      [E] :   Limite d'élasticité
+    '    '   Le      [E) :   Distance entre points de moments nuls
+    '    '----------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclarations
+
+    '    Dim Eta0 As Decimal
+
+    '    '--> Traitement
+
+    '    If IsGreater(Le, 25) Then
+    '        Eta0 = 1
+    '    Else
+    '        Eta0 = Math.Max(EtaMin, (1 - 355 / Fy * (0.75 - 0.03 * Le)))
+    '    End If
+    '    Return Eta0
+
+    'End Function
+
+    'Public Function EtaMinInEqualFlanges3(Fy As Decimal, Le As Decimal) As Decimal
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   14/12/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Degré minimal de connexion pour une poute mixte à semelles inégales, la semelle inf ayant une aire = 3 x aire semelle sup
+    '    '   d'après formule (6.14) de la NF EN 1994-1-1
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Fy      [E] :   Limite d'élasticité
+    '    '   Le      [E) :   Distance entre points de moments nuls
+    '    '----------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclarations
+
+    '    Dim Eta0 As Decimal
+
+    '    '--> Traitement
+
+    '    If IsGreater(Le, 20) Then
+    '        Eta0 = 1
+    '    Else
+    '        Eta0 = Math.Max(EtaMin, (1 - 355 / Fy * (0.3 - 0.015 * Le)))
+    '    End If
+    '    Return Eta0
+
+    'End Function
+
+    'Public Function EtaMinFlanges(Fy As Decimal, Le As Decimal, AfSup As Decimal, AfInf As Decimal) As Decimal
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   14/12/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Degré minimal de connexion pour une poute mixte à semelles égales
+    '    '   d'après formule (6.14) de la NF EN 1994-1-1
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Fy      [E] :   Limite d'élasticité
+    '    '   Le      [E] :   Distance entre points de moments nuls
+    '    '   AfSup   [E] :   Aire de la semelle supérieure
+    '    '   AfInf   [E] :   Aire de la semelle inférieure
+    '    '----------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclaration
+
+    '    Dim RatioAire As Decimal = AfInf / AfSup
+    '    Dim Eta As Decimal = -1
+    '    Dim EtaEqualF As Decimal
+    '    Dim EtaInEqualF As Decimal
+
+    '    '--> Traitement hors domaine application
+
+    '    If IsGreater(RatioAire, 3) Or IsSmaller(RatioAire, 1) Then
+    '        MsgBox("Wrong ratio of flanges areas", MsgBoxStyle.Critical, "cls_VerificationsMixtes/EtaMinFlanges")
+    '        Return Eta
+    '    End If
+
+    '    '--> Traitement normal
+
+    '    EtaInEqualF = EtaMinInEqualFlanges3(Fy, Le)
+    '    EtaEqualF = EtaMinEqualFlanges(Fy, Le)
+
+    '    Eta = EtaEqualF + (EtaInEqualF - EtaEqualF) / 2 * (RatioAire - 1)
+    '    Return Eta
+    'End Function
+
+#End Region
 
 End Class

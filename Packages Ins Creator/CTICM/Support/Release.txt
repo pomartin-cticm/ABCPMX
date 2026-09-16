@@ -11,17 +11,15 @@ ABC-PMX Software
 
 Copyright CTICM-ArcelorMittal - 2026
 ABC-PMX has been developed by CTICM - PARIS - FRANCE
-23-04-2026
+05-08-2026
 ================================================================
 
-Version 1.20 : 23/04/26 (beta 3)
+Version 1.11 : 05/08/26 
 -------------
 Includes 
-- the module for the calculation of steel slim floor beams - beta 1
-- the module for the fire calculation of steel slim floor beams - beta 3
-- introduction of precamber for sls deflections - beta 3
-- correction and improvements R25-004 to R25-012
-- updated module for Annex J in EN 1994-1-2 (unprotected voids) - beta 2
+- introduction of precamber for sls deflections
+- correction and improvements R25-004 to R25-012, R26-001 to R26-004
+- updated module for Annex J in EN 1994-1-2 (unprotected voids) 2
 
 Version 1.10 : 09/07/25
 -------------

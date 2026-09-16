@@ -197,7 +197,7 @@
                         ByVal nbModes As Integer,
                         ByRef Output_MODAL As DATA_MODAL.Struc_Output,
                         ByRef ErrorCode As Integer,
-                        ByRef ErrorText As String)
+                        ByRef ErrorText As String, Optional lConsole As Boolean = False)
         '-----------------------------------------------------
         '
         ' 06/09/2023 : TMN, v 1.0.0
@@ -232,7 +232,8 @@
             .NBVALP = nbModes
 
             'tolérance de convergence dans la résolution VP
-            .TOLERANCE = 0.000000001
+            '.TOLERANCE = 0.000000001
+            .TOLERANCE = 10 ^ -24
             'si VRAI : pas de calcul du vecteur propre
             .NOVECTP = False
 
@@ -241,7 +242,7 @@
         End With
 
         'Lancer l'analyse
-        ANALYSE(MAT, NOEUDS, BARRES, MASSES, RESOLUTION, RESULTATS)
+        ANALYSE(MAT, NOEUDS, BARRES, MASSES, RESOLUTION, RESULTATS, lConsole)
         ErrorCode = CodeERR
         ErrorText = TextERR
 

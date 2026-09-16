@@ -2026,7 +2026,6 @@ Public Class cls_Bac
             Me.Orientation = myBacS.Orientation
         End If
 
-
     End Sub
 
 #End Region

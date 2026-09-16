@@ -92,6 +92,11 @@ Public Class Frm_ChargementN
     Dim strReference As String
 
     Dim lGeneration1 As Boolean = MyProjet.Poutres(MyProjet.IndEnCours).Param.lGeneration1
+
+    Dim lSelectInfoPP As Boolean = False
+    Dim lSelectInfoPsi2 As Boolean = False
+
+    Dim strAutoPP, strCustomPP As String
 #End Region
 
 #Region "===OUVERTURE==="
@@ -331,6 +336,9 @@ Public Class Frm_ChargementN
 
                 CLE = Bloc("SHORTTERM") : Me.ToolTip1.SetToolTip(Me.lbl_CT, CLE)
                 CLE = Bloc("LONGTERM") : Me.ToolTip1.SetToolTip(Me.lbl_LT, CLE)
+
+                CLE = Bloc("INFO_PP_AUTO") : strAutoPP = CLE
+                CLE = Bloc("INFO_PP_CUSTOM") : strCustomPP = CLE
 
             Catch ex As Exception
 
@@ -717,6 +725,8 @@ Public Class Frm_ChargementN
 
         RH = MyPoutreLoc.Param.RH
 
+        Me.img_InfoPP.Visible = (rad_G1.Checked)
+
         '=== MISE A JOUR DU NOM DU CHARGEMENT =============================================================================
 
         Select Case True
@@ -738,7 +748,6 @@ Public Class Frm_ChargementN
         End Select
 
         '=== MISE A JOUR DU TYPE DE CHARGE ==================================================================================
-
 
         Me.lbl_Etaiement.Text = ""
 
@@ -840,7 +849,8 @@ Public Class Frm_ChargementN
         Me.pan_DoubleN.Visible = lDoubleN
         Me.txt_NDalleLTPsi2.Visible = lDoubleN
         Me.txt_NenrobLTPsi2.Visible = lDoubleN
-        Me.img_info.Visible = lDoubleN
+        'Me.img_info.Visible = lDoubleN
+        'Me.img_InfoPsi2.Visible = lDoubleN
 
         '***( Coefficient de base
 
@@ -1409,7 +1419,34 @@ Public Class Frm_ChargementN
     End Sub
 
     Private Sub btn_InfoPP_Click(sender As Object, e As EventArgs) Handles btn_InfoPP.Click
+
         Frm_InformationPP.ShowDialog()
+        Dim lMAJ As Boolean = False
+
+        If MyPoutreLoc.Param.lAutoPP <> MyProjet.Poutres(MyProjet.IndEnCours).Param.lAutoPP Then
+            '== MISE A JOUR
+
+            lMAJ = True
+            MyPoutreLoc.Param.lAutoPP = MyProjet.Poutres(MyProjet.IndEnCours).Param.lAutoPP
+            MyPoutreLoc.Param.qPPCustom = MyProjet.Poutres(MyProjet.IndEnCours).Param.qPPCustom
+
+        ElseIf MyPoutreLoc.Param.qPPCustom <> MyProjet.Poutres(MyProjet.IndEnCours).Param.qPPCustom Then
+            '== MISE A JOUR
+            lMAJ = True
+            MyPoutreLoc.Param.qPPCustom = MyProjet.Poutres(MyProjet.IndEnCours).Param.qPPCustom
+
+        End If
+
+        If lMAJ Then
+
+            MyPoutreLoc.InitialisePoidsPropres()
+            MAJIAffichageTableauxLineique()
+
+            MAJIReactions()
+
+        End If
+
+
     End Sub
 
     Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
@@ -1627,8 +1664,68 @@ Public Class Frm_ChargementN
 
 #End Region
 
-
 #Region " Infos W "
+
+    '==== INFO PP ===================================================================================================
+
+    Private Sub img_InfoPP_MouseEnter(sender As Object, e As EventArgs) Handles img_InfoPP.MouseEnter
+        lSelectInfoPP = True
+        Me.img_InfoPP.Invalidate()
+    End Sub
+
+    Private Sub img_InfoPP_MouseLeave(sender As Object, e As EventArgs) Handles img_InfoPP.MouseLeave
+        lSelectInfoPP = False
+        Me.img_InfoPP.Invalidate()
+    End Sub
+
+    Private Sub img_InfoPP_Click(sender As Object, e As EventArgs) Handles img_InfoPP.Click
+        PublieInfoPP()
+    End Sub
+
+    Private Sub img_Icone_1_Paint(sender As Object, e As PaintEventArgs) Handles img_InfoPP.Paint
+
+        DessineIconeInfo(e.Graphics, Me.img_InfoPP, lSelectInfoPP)
+
+    End Sub
+
+    Private Sub PublieInfoPP()
+
+        Dim strMessage As String = ""
+
+        Dim lAutoPP As Boolean = MyPoutreLoc.Param.lAutoPP
+
+        If lAutoPP Then
+            strMessage = strAutoPP
+        Else
+            strMessage = strCustomPP
+        End If
+
+        InfoW.InitialiseInfo()
+        InfoW.AddInfo(strMessage)
+
+        InfoW.Publie()
+
+    End Sub
+
+    '==== INFO PSI2 ===================================================================================================
+    Private Sub img_InfoPsi2_MouseEnter(sender As Object, e As EventArgs) Handles img_InfoPsi2.MouseEnter
+        lSelectInfoPsi2 = True
+        Me.img_InfoPsi2.Invalidate()
+    End Sub
+
+    Private Sub img_InfoPsi2_MouseLeave(sender As Object, e As EventArgs) Handles img_InfoPsi2.MouseLeave
+        lSelectInfoPsi2 = False
+        Me.img_InfoPsi2.Invalidate()
+    End Sub
+
+    Private Sub img_InfoPsi2_Click(sender As Object, e As EventArgs) Handles img_InfoPsi2.Click
+        PublieInfoPsi2()
+    End Sub
+    Private Sub img_InfoPsi2_Paint(sender As Object, e As PaintEventArgs) Handles img_InfoPsi2.Paint
+
+        DessineIconeInfo(e.Graphics, Me.img_InfoPsi2, lSelectInfoPsi2)
+
+    End Sub
 
     Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
         'If InfoW_lVisible Then

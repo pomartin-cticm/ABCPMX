@@ -118,7 +118,7 @@ SELFWEIGHT				= Poids propre
 OTHERPERM				= Autre charges permanentes
 SHRINKAGE				= Retrait
 TPARAMETERS				= Paramètres
-GFORCE					= Accélération de pesanteurs
+GFORCE					= Accélération pesanteur
 ETAW					= Voilement par cisaillement
 CONTROLCRACKW			= Maîtrise de la fissuration
 CRACKWIDTH				= Limite d'ouverture des fissures
@@ -227,6 +227,8 @@ POINTPROP				= Étaiements ponctuels
 SHORTTERM				= Effets à court terme
 LONGTERM				= Effets à long terme
 REFERENCELTPSI2			= Conformément à $, la fraction psi2 des charges variables est considérée comme un effet de long terme
+INFO_PP_AUTO			= Poids propre de la poutre calculé automatiquement. Voir le bouton "Information" pour plus de détails.
+INFO_PP_CUSTOM			= Valeur personnalisée du poids propre de la poutre. Voir le bouton "Information" pour modifier la valeur.
 
 #FRM_COMBINATIONS
 TITLE					= Combinaisons
@@ -627,6 +629,7 @@ STEELPROFILE			= Profilé acier
 PARTIALENCASEMENT		= Enrobage partiel
 CONCRETESLAB			= Dalle béton
 PSHEETING				= Bac acier
+CUSTOMSW				= Valeur imposée
 
 #FRM_LATERALRESTRAINTS
 ADD						= Ajouter
@@ -960,6 +963,8 @@ SPACINGS				= Entraxes
 SPANS					= Portées
 LEFTSLABCONTINUITY		= La dalle est continue sur l'appui gauche
 RIGHTSLABCONTINUITY		= La dalle est continue sur l'appui droit
+INFOCRACKING			= Pour des poutres calculées comme isostatiques bien que la dalle soit continue, des armatures longitudinales doivent être disposées pour limiter la fissuration sur appui. Voir la note de calcul.
+INFOCRACKINGREF			= Référence :
 
 #FRM_STEELSECTIONSUSUAL
 AUTOMATICHA				= Hauteur totale automatiquement calculée

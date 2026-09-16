@@ -1560,4 +1560,173 @@ Module Mod_OutilsGraph
 
 #End Region
 
+#Region " Fonctions de conversion de coordonnées "
+
+    Public Sub DessineIconeInfo(myGr As Graphics, myImg As PictureBox, lSelect As Boolean)
+        '------------------------------------------------------------------------------------------
+        '   28/07/26 : Création - POM - Version 1.00
+        '------------------------------------------------------------------------------------------
+        '   Dessin d'une icone "i" pour les informations
+        '------------------------------------------------------------------------------------------
+        '   myGr    [E] :   Graphics dans lequel on dessine
+        '   myImg   [E] :   PictureBox dans lequel on dessine
+        '   lSelect [E] :   Indique si l'icone est sélectionnée ou non (souris dessus)
+        '------------------------------------------------------------------------------------------
+
+
+        '--( Déclarations
+
+        Dim Couleur1 As Color = MyOrange
+        Dim Couleur2 As Color = GrisFonceAM
+        Dim myCouleur As Color
+        'Dim PointsI(nbPts - 1) As PointF
+        Dim Diametre As Single
+
+        Dim xC, yC As Single
+        Dim xDecal, yDecal As Single
+        Const FLOU As Single = 1
+        Dim sWi As Single, sHi As Single
+
+        '--( Initialisation
+
+        sWi = myImg.Width
+        sHi = myImg.Height
+        Diametre = Math.Min(sWi - 1, sHi - 1) * 0.9
+
+        xC = sWi / 2 - FLOU
+        yC = sHi / 2 - FLOU
+
+        If lSelect Then
+            myCouleur = Couleur1
+
+            Dim colorTable As New ProfessionalColorTable()
+            Using brush As New Drawing2D.LinearGradientBrush(
+                    myImg.ClientRectangle,
+                    colorTable.ButtonSelectedGradientBegin,
+                    colorTable.ButtonSelectedGradientEnd,
+                    Drawing2D.LinearGradientMode.Vertical)
+                myGr.FillRectangle(brush, myImg.ClientRectangle)
+            End Using
+            Using pen As New Pen(colorTable.ButtonSelectedBorder, 2)
+                myGr.DrawRectangle(pen, 0, 0, myImg.Width - 1, myImg.Height - 1)
+            End Using
+        Else
+            myCouleur = Couleur1
+        End If
+
+        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(sWi, sHi), myCouleur, myCouleur)
+
+        ''--( Préparation de l'icone
+
+        ''For i As Integer = 0 To nbPts - 1
+
+        ''    PointsI(i) = New PointF(xC + Diametre * Math.Cos(i * DeltaA) / 2, yC + Diametre * Math.Sin(i * DeltaA) / 2)
+
+        ''Next
+
+        ''myGr.FillPolygon(myBrushP, Pointsi)
+
+        myGr.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+        myGr.FillEllipse(myBrushP, xC - Diametre / 2, yC - Diametre / 2, Diametre, Diametre)
+
+        Dim mySize As Single = CSng(0.65 * Diametre)
+
+        'Dim myFont As New Font("ArialBlack", mySize, FontStyle.Bold)
+        Dim myFont As New Font("Segoe UI Black", mySize, FontStyle.Bold)
+
+        Dim Chaine As String = "i"
+        Dim SizeChaine As SizeF = myGr.MeasureString(Chaine, myFont)
+        xDecal = SizeChaine.Width / 2
+        yDecal = SizeChaine.Height / 2
+
+        myGr.DrawString(Chaine, myFont, Brushes.White, xC - xDecal + FLOU, yC - yDecal)
+
+    End Sub
+
+    Public Sub DessineIconeWarning(myGr As Graphics, myImg As PictureBox, lSelect As Boolean)
+        '------------------------------------------------------------------------------------------
+        '   28/07/26 : Création - POM - Version 1.00
+        '------------------------------------------------------------------------------------------
+        '   Dessin d'une icone "i" pour les informations
+        '------------------------------------------------------------------------------------------
+        '   myGr    [E] :   Graphics dans lequel on dessine
+        '   myImg   [E] :   PictureBox dans lequel on dessine
+        '   lSelect [E] :   Indique si l'icone est sélectionnée ou non (souris dessus)
+        '------------------------------------------------------------------------------------------
+
+
+        '--( Déclarations
+
+        Const nbPts As Integer = 4
+        Dim Couleur1 As Color = MyOrange
+        Dim Couleur2 As Color = GrisFonceAM
+        Dim myCouleur As Color
+        Dim PointsI(nbPts - 1) As PointF
+        Dim Diametre As Single
+
+        Dim xC, yC As Single
+        Dim xDecal, yDecal As Single
+        Const FLOU As Single = 1
+        Dim sWi As Single, sHi As Single
+        Dim Largeur, Hauteur As Single
+
+        '--( Initialisation
+
+        sWi = myImg.Width
+        sHi = myImg.Height
+        Diametre = Math.Min(sWi - 1, sHi - 1) * 0.9
+        Largeur = sWi * 0.9 - 1
+        Hauteur = sHi * 0.9 - 1
+
+        xC = sWi / 2 - FLOU
+        yC = sHi / 2 - FLOU
+
+        If lSelect Then
+            myCouleur = Couleur1
+
+            Dim colorTable As New ProfessionalColorTable()
+            Using brush As New Drawing2D.LinearGradientBrush(
+                    myImg.ClientRectangle,
+                    colorTable.ButtonSelectedGradientBegin,
+                    colorTable.ButtonSelectedGradientEnd,
+                    Drawing2D.LinearGradientMode.Vertical)
+                myGr.FillRectangle(brush, myImg.ClientRectangle)
+            End Using
+            Using pen As New Pen(colorTable.ButtonSelectedBorder, 2)
+                myGr.DrawRectangle(pen, 0, 0, myImg.Width - 1, myImg.Height - 1)
+            End Using
+        Else
+            myCouleur = Couleur1
+        End If
+
+        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(sWi, sHi), myCouleur, myCouleur)
+
+        ''--( Préparation de l'icone
+
+        PointsI(0) = New PointF(Largeur / 2 - FLOU, FLOU)
+        PointsI(1) = New PointF(FLOU, Hauteur)
+        PointsI(2) = New PointF(Largeur, Hauteur)
+        PointsI(3) = New PointF(Largeur / 2 + 2 * FLOU, FLOU)
+
+        myGr.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+        'myGr.FillEllipse(myBrushP, xC - Diametre / 2, yC - Diametre / 2, Diametre, Diametre)
+        myGr.FillPolygon(myBrushP, PointsI)
+
+        Dim mySize As Single = CSng(0.65 * Diametre)
+
+        'Dim myFont As New Font("ArialBlack", mySize, FontStyle.Bold)
+        Dim myFont As New Font("Segoe UI Black", mySize, FontStyle.Bold)
+
+        Dim Chaine As String = "!"
+        Dim SizeChaine As SizeF = myGr.MeasureString(Chaine, myFont)
+        xDecal = SizeChaine.Width / 2
+        yDecal = SizeChaine.Height / 2
+
+        myGr.DrawString(Chaine, myFont, Brushes.White, xC - xDecal + FLOU, yC - yDecal + 2 * FLOU)
+
+    End Sub
+
+#End Region
+
+
 End Module

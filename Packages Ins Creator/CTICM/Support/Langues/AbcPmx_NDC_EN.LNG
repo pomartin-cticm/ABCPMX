@@ -420,6 +420,8 @@ ZS_REINF				= Location of the layer axis, measured from the upper face of the pr
 NOREINFORCEMENT			= Longitudinal reinforcements are not defined
 SYREQUIREMENTS			= Requirements on transverse spacing $
 FOR2					= For 2 studs
+INFOAUTOPP				= First line of the table: self weight of the beam as calculated 
+INFOCUSTOMPP 			= First line of the table: self weight of the beam, with a custom value 
 
 #NDC_DECKR
 ADJACENTSHEETGAP		= At beam crossing, adjacent sheets are placed with a gap (discontinuous ribs)
@@ -495,6 +497,9 @@ REFEN1994G2				= prEN 1994-1-1:2024, Figure 8.3
 FORZSURH				= For
 RATIOZHABOVELIMIT		= The ratio z / H (= $) is above the limit for plastic calculation
 RATIOZHLIM				= Limit value
+PLASTICFULLCX			= For full connection
+PLASTICPARTIALCX		= For partial connection
+FORETA					= With $
 
 #NDC_ANALYSE
 ANALYSIS				= Analysis - Internal forces and moments
@@ -595,6 +600,8 @@ NORMALS_INCONENCA		= Normal compression stresses in the concrete encasement
 NORMALS_INREINF			= Normal stresses in the slab reinforcements
 NORMALS_INREINFENCA		= Normal stresses in the encasement reinforcement
 NORMALS_INSTEEL			= Normal stresses in constructional steel
+NORMALS_INSTEELPRO		= Normal stresses in the steel profile
+NORMALS_INSTEELPL		= Normal stresses in the steel plate
 NO_MVBINTERACTION		= No interaction between bending moment and shear buckling
 NO_MVINTERACTION		= No MV interaction
 PLASTICDESIGNCLASS12	= Class 1 or 2 cross-sections: plastic design
@@ -630,6 +637,10 @@ WSLENDERNESS			= Web slenderness
 WSLENDERNESSLIMIT		= Limit of web slenderness
 WTOFWEBS				= Web to flanges welds 
 WPLATE					= Plate to section welds
+ELASTICDESIGNSECTION	= Elastic design of sections
+OUTSIDEBETA				= z/H outside scope of EN 1994-1-1:2025, Figure 8.3
+ELASTICCLASS3			= Class 3 cross-sections
+ELASTICIMPOSED			= Elastic design according to calculation options
 
 #NDC_DETAILSULS
 TITLE					= Detailed ULS checking
@@ -651,9 +662,9 @@ CONTROLCRACKINGSIMPLES	= Limitation of cracking at simple support
 LEFTSIMPLES				= The beam is designed as simply supported at the left end, although the slab is continuous.
 RIGHTSIMPLES			= The beam is designed as simply supported at the right end, although the slab is continuous.
 BOTHSIMPLES				= The beam is designed as simply supported at both ends, although the slab is continuous.
-REFSIMPLES				= According to EN 1994-1-1: 2005, 7.4.1 (4), longitudinal reinforcement should be provided to control the crack width
-REQUIREMENTUNPROPPED	= For unpropped beams, a minimal reinforcement ratio of 0.4 % is required
-REQUIREMENTPROPPED		= For propped beams, a minimal reinforcement ratio of 0.2 % is required
+REFSIMPLES				= Longitudinal reinforcement should be provided to control the cracking
+REQUIREMENTUNPROPPED	= For unpropped beams, a minimal reinforcement ratio of 0.2 % is required
+REQUIREMENTPROPPED		= For propped beams, a minimal reinforcement ratio of 0.4 % is required
 MINIREINFORCEMENT		= Minimum reinforcement area
 EFFECTREINFORCEMENT		= Actual reinforcement area
 CONTROLCRACKINGNODIRECT	= Control of cracking without direct loading
@@ -662,7 +673,7 @@ REF2CONTROLCRACKING		= According to 7.4.3 of EN 1994-1-1:2005
 REF1CONTROLCRACKINGG2	= According to 9.4.2 of prEN 1994-1-1:2024
 REF2CONTROLCRACKINGG2	= According to 9.4.3 of prEN 1994-1-1:2024
 ADDREINFSUPP			= Additional longitudinal reinforcement are required at support
-REINFSUPPDETAIL			= For detailing, see EN 1994-1-1: 2005, 7.4.1 (4) 
+REINFSUPPDETAIL			= For detailing, see $ 
 CONTROLCRACKDIRECTSIGMA	= Control of cracking due to direct loading	
 DIAMAXI					= Maximum diameter of rebars
 ESPMAXI					= Maximum spacing of rebars
@@ -671,6 +682,15 @@ DELTASIGMA				= Including effect of concrete tension stiffening
 COMBIREBAR				= For combination 
 FREQG					= Eigen frequency for the combination 
 WITHPRECAMBER			= Values including the precamber
+CRACKINGCONC			= Cracking of concrete at supports
+CONTINUOUSSLAB			= The beam is designed as simply supported although the slab is continuous at supports
+CRACKPROPPED			= The beam is propped during construction
+CRACKNOTPROPPED			= The beam is not propped during construction
+CRACKARMAREQUIRED		= Longitudinal reinforcement are required within the effective width of the slab at supports
+CRACKARMARATIO			= They should not be less than $ % of the concrete area
+CRACKINGREF				= See :
+CRACKINGBEFF			= Effective width of the slab at support
+CRACKINGAREA			= Area of longitudinal reinforcement
 
 #NDC_VERIFICATIONSFIRE
 FIRE_CHECKS				= Ultimate limit states in fire situation
@@ -750,6 +770,7 @@ LOWERFLANGE				= Lower flange
 STEELPLATE				= Steel plate
 WELDS					= Welds
 HOTGAZES				= Hot gazes
+REBARSTEEL				= Steel rebars
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations

@@ -12,6 +12,7 @@ Public Class cls_VerificationSlimAcier
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
     Public CritereMV As cls_Critere                 ' Résistance à l'interacion MV
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
+    Public CritereSigmaPl As cls_Critere            ' Critère de résistance en flexion  / Contrainte normale dans le plat soudé
     Public CritereTauA As cls_Critere               ' Critère de contrainte de cisaillement élastique
     Public CritereSigmaVM As cls_Critere            ' Critère de contrainte élastique équivalente de Von Mises
 
@@ -86,6 +87,7 @@ Public Class cls_VerificationSlimAcier
         '-------------------------------------------------------------------
 
         Me.CritereSigmaA = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        Me.CritereSigmaPl = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
 
     End Sub
 
@@ -1451,14 +1453,49 @@ Public Class cls_VerificationSlimAcier
                     RunCritereFlexionVM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
 
                     '( Point 4 - Contrainte face interne de la semelle inférieure (ici un plat)
-                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydPlat, FydW), Me.CritereSigmaA)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydW, Me.CritereSigmaA)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydPlat, Me.PsiYspd, Me.CritereSigmaPl)
 
                     '( Point 5 - Contrainte face externe de la semelle inférieure (ici un plat)
-                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydPlat, Me.CritereSigmaA)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydPlat, Me.PsiYspd, Me.CritereSigmaPl)
+
 
                 Case cls_Section.Enum_TypeSection.IFB_B '==================================================================
+
+                    '( Point 1 - Contrainte face externe du plat supérieur
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 0, SigmaELU, FydPlat, Me.CritereSigmaPl)
+
+                    '( Point 2 - Contrainte face interne de la semelle supérieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 1, SigmaELU, FydW, Me.CritereSigmaA)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 1, SigmaELU, FydPlat, Me.CritereSigmaPl)
+
+                    '( Point 3 - Contrainte CdG de la section
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
+
+                    '( Point 4 - Contrainte face interne de la semelle inférieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydW, Me.CritereSigmaA)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydInf, Me.PsiYfi, Me.CritereSigmaA)
+
+                    '( Point 5 - Contrainte face externe de la semelle inférieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.PsiYfi, Me.CritereSigmaA)
+
                 Case cls_Section.Enum_TypeSection.SAB   '==================================================================
 
+                    '( Point 1 - Contrainte face externe de la semelle supérieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
+
+                    '( Point 2 - Contrainte face interne de la semelle supérieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
+
+                    '( Point 3 - Contrainte CdG de la section
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
+
+                    '( Point 4 - Contrainte face interne de la semelle inférieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydW, Me.CritereSigmaA)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydInf, Me.PsiYfi, Me.CritereSigmaA)
+
+                    '( Point 5 - Contrainte face externe de la semelle inférieure
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.PsiYfi, Me.CritereSigmaA)
 
                 Case cls_Section.Enum_TypeSection.SFB   '==================================================================
 
@@ -1472,13 +1509,15 @@ Public Class cls_VerificationSlimAcier
                     RunCritereFlexionVM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
 
                     '( Point 4 - Contrainte face interne de la semelle inférieure
-                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydInf, FydW), Me.CritereSigmaA)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydW, Me.CritereSigmaA)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydInf, Me.PsiYfi, Me.CritereSigmaA)
 
                     '( Point 5 - Contrainte face externe de la semelle inférieure
-                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.CritereSigmaA)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.PsiYfi, Me.CritereSigmaA)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydPlat, Me.PsiYspd, Me.CritereSigmaA)
 
                     '( Point 6 - Contrainte face externe du plat inférieur 
-                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 5, SigmaELU, FydInf, Me.CritereSigmaA)
+                    RunCritereFlexionVM(myBeam, iCombi, iPro0 + 5, SigmaELU, FydPlat, Me.PsiYspd, Me.CritereSigmaA)
 
             End Select
 
@@ -1629,6 +1668,53 @@ Public Class cls_VerificationSlimAcier
         Next
 
     End Sub
+
+    Private Sub RunCritereFlexionVM(MyPoutre As cls_Poutre, iCombi As Integer, iPoint As Integer, SigmaELU(,,) As Decimal,
+                                    SigmaU As Decimal, PsiY(,) As Decimal, MyCritereM As cls_Critere)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance en flexion par les critères de VonMises en un point de calcul de section
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   iPoint      [E] :   Indice du point de calcul des contraintes
+        '   SigmaELU    [E] :   Contraintes normales aux ELU
+        '   SigmaU      [E] :   Valeur ultime de la contrainte normale au point iPoint
+        '   PsiY        [E] :   Coefficient de réduction de la limite SigmaU
+        '   CritereM    [E] :   Critere de la contrainte de flexion
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+                For k = iDebK To iFinK
+                    MyCritereM.EnregistreCritere(iNode, iCombi, iTravee, SigmaELU(iPoint, iNode, k), PsiY(iCombi, iNode) * SigmaU)
+                Next
+            Next
+        Next
+
+    End Sub
+
 
     Private Sub RunCritereFlexionAcier(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal,
                                        MplRd As Decimal(,), MelRd As Decimal(,), ClasseP As Integer, ClasseM As Integer, ByRef lClasse4 As Boolean)

@@ -495,6 +495,9 @@ REFEN1994G2				= prEN 1994-1-1:2024, Figure 8.3
 FORZSURH				= Pour
 RATIOZHABOVELIMIT		= Le ratio z / H (= $) est au-dessus de la limite pour le calcul plastique
 RATIOZHLIM				= Valeur limite
+PLASTICFULLCX			= En connexion complète
+PLASTICPARTIALCX		= En connexion partielle
+FORETA					= Pour $
 
 #NDC_ANALYSE
 ANALYSIS				= Analyse - Efforts internes
@@ -751,6 +754,7 @@ LOWERFLANGE				= Semelle inférieure
 STEELPLATE				= Plat
 WELDS					= Soudures
 HOTGAZES				= Gaz chauds
+REBARSTEEL				= Armatures
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Évaluation des vibrations du plancher

@@ -60,11 +60,15 @@ Public Class Frm_DalleSlimFloorN
 
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), localBeam)
 
-        localDalle = localBeam.Dalle
+        localDalle.CopieFrom(MyProjet.Poutres(MyProjet.IndEnCours).Dalle)
 
-        lCofraPlus220 = localDalle.Bac.lCofraplus220
+        'localDalle = localBeam.Dalle
+
+        'lCofraPlus220 = localDalle.Bac.lCofraplus220
 
         DefautWrdb = Me.TLpan_Choix.ColumnStyles(2).Width
+
+        Dim lTest As Boolean = localDalle.ArmaSlimFeu.lBarre
 
     End Sub
 
@@ -219,7 +223,7 @@ Public Class Frm_DalleSlimFloorN
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
 
         DessineDalleFrmDalleSlimFloor(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
-                                      localBeam, myFontFrm, localBeam.lIntermediaire, iSelect, msgDessin, lCote)
+                                      localBeam, localDalle, myFontFrm, localBeam.lIntermediaire, iSelect, msgDessin, lCote)
 
         'DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
         '             localBeam, myFontFrm, localBeam.lIntermediaire, iSelect, msgDessin, lCote)
@@ -239,7 +243,6 @@ Public Class Frm_DalleSlimFloorN
 
     End Sub
 
-
 #End Region
 
 #Region "===FERMETURE==="
@@ -257,7 +260,6 @@ Public Class Frm_DalleSlimFloorN
             Me.Close()
         End If
     End Sub
-
 
     Private Function ValideSaisieFenetre() As Boolean
 
@@ -338,10 +340,22 @@ Public Class Frm_DalleSlimFloorN
 
         GereTransfertValeur(localDalle.AcierArmatures.Classe, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.AcierArmatures.Classe, lModif)
 
+        '--( Acier des armatures incendie
+
+        GereTransfertValeur(localDalle.ArmaSlimFeu.lBarre, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.ArmaSlimFeu.lBarre, lModif)
+        GereTransfertValeur(localDalle.ArmaSlimFeu.xPos, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.ArmaSlimFeu.xPos, lModif)
+        GereTransfertValeur(localDalle.ArmaSlimFeu.zPos, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.ArmaSlimFeu.zPos, lModif)
+        GereTransfertValeur(localDalle.ArmaSlimFeu.Diametre, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.ArmaSlimFeu.Diametre, lModif)
+        GereTransfertValeur(localDalle.ArmaSlimFeu.NbBarres, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.ArmaSlimFeu.NbBarres, lModif)
+
         '--> Bac
 
         MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Copie(localDalle.Bac, lModif)
         MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.CopieAutresParam(localDalle.Bac, lModif)
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).lSlimFloor Then
+            MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu
+        End If
 
         '--> Cofradal
 

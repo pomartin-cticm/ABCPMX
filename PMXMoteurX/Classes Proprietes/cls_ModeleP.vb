@@ -1732,7 +1732,8 @@ Public Class cls_ModeleP
 #Region " Outils de modélisation - Maillage slim floor "
 
     Private Sub MaillageSlimThermiqueMbeton(myMaillage As cls_MaillageSlimFloor, iStep As Integer, TemperatureMailles(,,) As Decimal,
-                                            Fck As Decimal, GammaC_Fi As Decimal, FySarma As Decimal, GammaS_Fi As Decimal)
+                                            Fck As Decimal, GammaC_Fi As Decimal, FySarma As Decimal, GammaS_Fi As Decimal,
+                                            myParamFeu As cls_OptionsFeu, lBetonL As Boolean)
         '-------------------------------------------------------------------------------------------------------------------
         '   04/06/26 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -1745,6 +1746,8 @@ Public Class cls_ModeleP
         '   GammaC_Fi           [E] :   Coefficient partiel pour le béton à l'incendie
         '   FySarma             [E] :   Limite d'élasticité armature
         '   GammaS_Fi           [E] :   Coefficient partiel pour les armatures à l'incendie
+        '   myParaFeu           [E] :   Paramètres de calcul incendie
+        '   lBetonL             [E] :   Indique si le béton est léger
         '-------------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -1760,6 +1763,9 @@ Public Class cls_ModeleP
 
         Dim EnFeu As New cls_EurocodesFeu
 
+        Dim lArmaF As Boolean = myParamFeu.lArmaFormeeAFroid
+        Dim lSimple250 As Boolean = Not myParamFeu.lReductionConcreteStrength
+
         '--( Traitement de chacune des mailles
 
         For iY = 0 To nbY - 1
@@ -1771,12 +1777,13 @@ Public Class cls_ModeleP
                 zPos = myMaillage.Tab_mesh_cent_z(iY, iZ)
                 Epaisseur = myMaillage.Tab_mesh_z(iZ)
                 myTemp = TemperatureMailles(iStep, iY, iZ)
-                kReduc = EnFeu.ReducFyAcier(myTemp)
 
                 Select Case myMaillage.Tab_mesh_mat(iY, iZ)
                     Case cls_MaillageSlimFloor.MATARMA
+                        kReduc = EnFeu.ReducFskArmatures(myTemp, lArmaF)
                         Me.AddMaille(Largeur * Epaisseur, Epaisseur, zPos, 1, 0, 1, FySarma, kReduc, GammaS_Fi)
                     Case cls_MaillageSlimFloor.MATBETON
+                        kReduc = EnFeu.ReducFckBeton(myTemp, lBetonL, lSimple250)
                         Me.AddMaille(Largeur * Epaisseur, Epaisseur, zPos, 0, 1, 1, Fck, kReduc, GammaC_Fi)
                 End Select
 
@@ -1873,14 +1880,15 @@ Public Class cls_ModeleP
         Dim GammaM As Decimal = myBeam.Param.Gamma.GammaM_fi
         Dim GammaC As Decimal = myBeam.Param.Gamma.GammaC_fi
         Dim GammaS As Decimal = myBeam.Param.Gamma.GammaS_fi
+        Dim lBetonL As Boolean = myBeam.Dalle.Beton.lLeger
 
         '--( Traitement
 
         If lMixte Then
             MaillageSlimThermiqueMacier(myBeam.VerifFeuSlimMixte.GetMaillage, iStep, myBeam.VerifFeuSlimMixte.TempMailStep,
                                         RhoV, FyW, FyS, FyI, FySpd, GammaM, kReducFiY, kReducPlY)
-            MaillageSlimThermiqueMbeton(myBeam.VerifFeuSlimMixte.getMaillage, iStep, myBeam.VerifFeuSlimMixte.TempMailStep,
-                                        Fck, GammaC, FySarma, GammaS)
+            MaillageSlimThermiqueMbeton(myBeam.VerifFeuSlimMixte.GetMaillage, iStep, myBeam.VerifFeuSlimMixte.TempMailStep,
+                                        Fck, GammaC, FySarma, GammaS, myBeam.ParamFeu, lBetonL)
         Else
             MaillageSlimThermiqueMacier(myBeam.VerifFeuSlimAcier.GetMaillage, iStep, myBeam.VerifFeuSlimAcier.TempMailStep,
                                         RhoV, FyW, FyS, FyI, FySpd, GammaM, kReducFiY, kReducPlY)

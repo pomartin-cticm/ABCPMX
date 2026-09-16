@@ -26,6 +26,11 @@ Public Class Frm_Portees
 
     Dim lSlimMixte As Boolean
 
+    Dim lSelectInfo() As Boolean = {False, False}
+
+    Dim strInfoN(1) As String
+    Dim RefeEN As String
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -96,6 +101,9 @@ Public Class Frm_Portees
                 Me.chk_ContinuiteDalleAppGauche.Text = Bloc("LEFTSLABCONTINUITY")
                 Me.chk_ContinuiteDalleAppDroit.Text = Bloc("RIGHTSLABCONTINUITY")
 
+                strInfoN(0) = Bloc("INFOCRACKING")
+                strInfoN(1) = Bloc("INFOCRACKINGREF")
+
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
                 'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -113,6 +121,9 @@ Public Class Frm_Portees
     Private Sub GestionStyle()
 
         Me.Icon = Frm_PMX.Icon
+
+        Me.img_Info1.BackColor = SystemColors.ControlLightLight
+        Me.img_Info2.BackColor = SystemColors.ControlLightLight
 
         FontFrm = New Font(FontBase.Name, SizeFontFrm)
 
@@ -195,6 +206,14 @@ Public Class Frm_Portees
 
         MAJI_PorteesConsoles()
         MAJI_Tremies()
+        MAJI_InfoSystem()
+
+        Select Case MyPoutreLoc.Param.Norme
+            Case cls_OptionsCalcul.Enu_Normes.EurocodesG1
+                RefeEN = " EN 1994-1-1:2005, 7.4.1 (4)"
+            Case cls_OptionsCalcul.Enu_Normes.EurocodesG2
+                RefeEN = " EN 1994-1-1:2026, 9.4.1 (4)"
+        End Select
 
     End Sub
 
@@ -596,6 +615,15 @@ Public Class Frm_Portees
                 MyPoutreLoc.lDalleContinueDroite = Me.chk_ContinuiteDalleAppDroit.Checked
         End Select
         Me.img_Portees.Invalidate()
+        MAJI_InfoSystem()
+    End Sub
+
+    Private Sub MAJI_InfoSystem()
+
+        'Me.img_Info1.Visible = MyPoutreLoc.lDalleContinueGauche
+        ' Me.img_Info2.Visible = MyPoutreLoc.lDalleContinueDroite
+        Me.img_Info1.Visible = MyPoutreLoc.lDalleContinueGauche Or MyPoutreLoc.lDalleContinueDroite
+        Me.img_Info2.Visible = False
 
     End Sub
 
@@ -680,7 +708,54 @@ Public Class Frm_Portees
 
     End Sub
 
+#End Region
+
+#Region " Infos W "
+
+    Private Sub PublieInfoArmaL()
+
+        InfoW.InitialiseInfo()
+        InfoW.AddInfo(strInfoN(0) & Chr(13) & strInfoN(1) & RefeEN)
+        'InfoW_Add("Le degré de connexion est calculé à mi-travée de la poutre, en supposant que la poutre en entièrement sous moment positif")
+
+        InfoW.Publie()
+
+    End Sub
+
+    Private Sub img_Info_Click(sender As Object, e As EventArgs) Handles img_Info2.Click, img_Info1.Click
+        PublieInfoArmaL()
+    End Sub
+
+    Private Sub img_Info_Paint(sender As Object, e As PaintEventArgs) Handles img_Info1.Paint, img_Info2.Paint
+
+        Dim lSelect As Boolean
+        Select Case sender.name
+            Case Me.img_Info1.Name : lSelect = lSelectInfo(0)
+            Case Me.img_Info2.Name : lSelect = lSelectInfo(1)
+        End Select
+
+        DessineIconeInfo(e.Graphics, CType(sender, PictureBox), lSelect)
+
+    End Sub
+
+    Private Sub img_Info_MouseEnter(sender As Object, e As EventArgs) Handles img_Info1.MouseEnter, img_Info2.MouseEnter
+        Select Case sender.name
+            Case Me.img_Info1.Name : lSelectInfo(0) = True
+            Case Me.img_Info2.Name : lSelectInfo(1) = True
+        End Select
+        CType(sender, PictureBox).Invalidate()
+    End Sub
+
+    Private Sub img_Info_MouseLeave(sender As Object, e As EventArgs) Handles img_Info1.MouseLeave, img_Info2.MouseLeave
+        Select Case sender.name
+            Case Me.img_Info1.Name : lSelectInfo(0) = False
+            Case Me.img_Info2.Name : lSelectInfo(1) = False
+        End Select
+        CType(sender, PictureBox).Invalidate()
+    End Sub
+
 
 #End Region
+
 
 End Class

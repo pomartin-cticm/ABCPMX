@@ -37,6 +37,7 @@ Partial Class Frm_Update
         Me.lbl_Fichier = New System.Windows.Forms.Label()
         Me.lbl_Version = New System.Windows.Forms.Label()
         Me.pan_Version = New System.Windows.Forms.Panel()
+        Me.img_WarningTest = New System.Windows.Forms.PictureBox()
         Me.lkl_Update = New System.Windows.Forms.LinkLabel()
         Me.etq_Message02 = New System.Windows.Forms.Label()
         Me.etq_Message01 = New System.Windows.Forms.Label()
@@ -47,6 +48,7 @@ Partial Class Frm_Update
         Me.TLPan_Portees.SuspendLayout()
         Me.pan_Fichier.SuspendLayout()
         Me.pan_Version.SuspendLayout()
+        CType(Me.img_WarningTest, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -56,7 +58,7 @@ Partial Class Frm_Update
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(454, 365)
+        Me.pan_General.Size = New System.Drawing.Size(567, 456)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -71,7 +73,7 @@ Partial Class Frm_Update
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(454, 365)
+        Me.TLpan_Main.Size = New System.Drawing.Size(567, 456)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -84,17 +86,17 @@ Partial Class Frm_Update
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 328)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 419)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(448, 34)
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(561, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(167, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(223, 3)
         Me.btn_OK.Name = "btn_OK"
         Me.btn_OK.Size = New System.Drawing.Size(114, 28)
         Me.btn_OK.TabIndex = 1
@@ -108,7 +110,7 @@ Partial Class Frm_Update
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(448, 319)
+        Me.pan_Main.Size = New System.Drawing.Size(561, 410)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_Portees
@@ -128,7 +130,8 @@ Partial Class Frm_Update
         Me.TLPan_Portees.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLPan_Portees.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Portees.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_Portees.Size = New System.Drawing.Size(448, 319)
+        Me.TLPan_Portees.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLPan_Portees.Size = New System.Drawing.Size(561, 410)
         Me.TLPan_Portees.TabIndex = 0
         '
         'pan_Fichier
@@ -141,10 +144,10 @@ Partial Class Frm_Update
         Me.pan_Fichier.Controls.Add(Me.etq_MessageSections)
         Me.pan_Fichier.Controls.Add(Me.cmd_Telecharger)
         Me.pan_Fichier.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Fichier.Location = New System.Drawing.Point(0, 189)
+        Me.pan_Fichier.Location = New System.Drawing.Point(0, 235)
         Me.pan_Fichier.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Fichier.Name = "pan_Fichier"
-        Me.pan_Fichier.Size = New System.Drawing.Size(448, 130)
+        Me.pan_Fichier.Size = New System.Drawing.Size(561, 175)
         Me.pan_Fichier.TabIndex = 3
         '
         'MyProgressB
@@ -160,7 +163,7 @@ Partial Class Frm_Update
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_MessageSteels.Location = New System.Drawing.Point(9, 35)
         Me.etq_MessageSteels.Name = "etq_MessageSteels"
-        Me.etq_MessageSteels.Size = New System.Drawing.Size(429, 15)
+        Me.etq_MessageSteels.Size = New System.Drawing.Size(542, 15)
         Me.etq_MessageSteels.TabIndex = 14
         Me.etq_MessageSteels.Text = "etq_MessageSteels"
         '
@@ -170,7 +173,7 @@ Partial Class Frm_Update
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_Avertissement.Location = New System.Drawing.Point(9, 97)
         Me.etq_Avertissement.Name = "etq_Avertissement"
-        Me.etq_Avertissement.Size = New System.Drawing.Size(297, 15)
+        Me.etq_Avertissement.Size = New System.Drawing.Size(500, 15)
         Me.etq_Avertissement.TabIndex = 13
         Me.etq_Avertissement.Text = "etq_Avertissement"
         '
@@ -180,7 +183,7 @@ Partial Class Frm_Update
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_MessageSections.Location = New System.Drawing.Point(9, 12)
         Me.etq_MessageSections.Name = "etq_MessageSections"
-        Me.etq_MessageSections.Size = New System.Drawing.Size(429, 15)
+        Me.etq_MessageSections.Size = New System.Drawing.Size(545, 15)
         Me.etq_MessageSections.TabIndex = 12
         Me.etq_MessageSections.Text = "etq_MessageSections"
         '
@@ -190,7 +193,7 @@ Partial Class Frm_Update
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmd_Telecharger.Location = New System.Drawing.Point(6, 57)
         Me.cmd_Telecharger.Name = "cmd_Telecharger"
-        Me.cmd_Telecharger.Size = New System.Drawing.Size(432, 24)
+        Me.cmd_Telecharger.Size = New System.Drawing.Size(545, 24)
         Me.cmd_Telecharger.TabIndex = 11
         Me.cmd_Telecharger.Text = "cmd_Telecharger"
         Me.cmd_Telecharger.UseVisualStyleBackColor = True
@@ -201,10 +204,10 @@ Partial Class Frm_Update
         Me.lbl_Fichier.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_Fichier.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Fichier.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Fichier.Location = New System.Drawing.Point(0, 159)
+        Me.lbl_Fichier.Location = New System.Drawing.Point(0, 205)
         Me.lbl_Fichier.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Fichier.Name = "lbl_Fichier"
-        Me.lbl_Fichier.Size = New System.Drawing.Size(448, 30)
+        Me.lbl_Fichier.Size = New System.Drawing.Size(561, 30)
         Me.lbl_Fichier.TabIndex = 2
         Me.lbl_Fichier.Text = "lbl_Fichier"
         Me.lbl_Fichier.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -218,7 +221,7 @@ Partial Class Frm_Update
         Me.lbl_Version.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Version.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Version.Name = "lbl_Version"
-        Me.lbl_Version.Size = New System.Drawing.Size(448, 30)
+        Me.lbl_Version.Size = New System.Drawing.Size(561, 30)
         Me.lbl_Version.TabIndex = 1
         Me.lbl_Version.Text = "lbl_Version"
         Me.lbl_Version.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -227,6 +230,7 @@ Partial Class Frm_Update
         '
         Me.pan_Version.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Version.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Version.Controls.Add(Me.img_WarningTest)
         Me.pan_Version.Controls.Add(Me.lkl_Update)
         Me.pan_Version.Controls.Add(Me.etq_Message02)
         Me.pan_Version.Controls.Add(Me.etq_Message01)
@@ -234,15 +238,26 @@ Partial Class Frm_Update
         Me.pan_Version.Location = New System.Drawing.Point(0, 30)
         Me.pan_Version.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Version.Name = "pan_Version"
-        Me.pan_Version.Size = New System.Drawing.Size(448, 128)
+        Me.pan_Version.Size = New System.Drawing.Size(561, 174)
         Me.pan_Version.TabIndex = 0
+        '
+        'img_WarningTest
+        '
+        Me.img_WarningTest.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_WarningTest.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.img_WarningTest.Location = New System.Drawing.Point(532, 140)
+        Me.img_WarningTest.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_WarningTest.Name = "img_WarningTest"
+        Me.img_WarningTest.Size = New System.Drawing.Size(22, 22)
+        Me.img_WarningTest.TabIndex = 87
+        Me.img_WarningTest.TabStop = False
         '
         'lkl_Update
         '
         Me.lkl_Update.AutoSize = True
         Me.lkl_Update.Location = New System.Drawing.Point(35, 72)
         Me.lkl_Update.Name = "lkl_Update"
-        Me.lkl_Update.Size = New System.Drawing.Size(58, 13)
+        Me.lkl_Update.Size = New System.Drawing.Size(66, 15)
         Me.lkl_Update.TabIndex = 5
         Me.lkl_Update.TabStop = True
         Me.lkl_Update.Text = "lkl_Update"
@@ -253,7 +268,7 @@ Partial Class Frm_Update
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_Message02.Location = New System.Drawing.Point(9, 40)
         Me.etq_Message02.Name = "etq_Message02"
-        Me.etq_Message02.Size = New System.Drawing.Size(429, 15)
+        Me.etq_Message02.Size = New System.Drawing.Size(542, 15)
         Me.etq_Message02.TabIndex = 4
         Me.etq_Message02.Text = "etq_Message02"
         '
@@ -263,7 +278,7 @@ Partial Class Frm_Update
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_Message01.Location = New System.Drawing.Point(8, 13)
         Me.etq_Message01.Name = "etq_Message01"
-        Me.etq_Message01.Size = New System.Drawing.Size(430, 15)
+        Me.etq_Message01.Size = New System.Drawing.Size(543, 15)
         Me.etq_Message01.TabIndex = 3
         Me.etq_Message01.Text = "etq_Message01"
         '
@@ -271,7 +286,7 @@ Partial Class Frm_Update
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(454, 365)
+        Me.ClientSize = New System.Drawing.Size(567, 456)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
@@ -288,6 +303,7 @@ Partial Class Frm_Update
         Me.pan_Fichier.ResumeLayout(False)
         Me.pan_Version.ResumeLayout(False)
         Me.pan_Version.PerformLayout()
+        CType(Me.img_WarningTest, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -310,4 +326,5 @@ Partial Class Frm_Update
     Friend WithEvents lkl_Update As LinkLabel
     Friend WithEvents etq_Message02 As Label
     Friend WithEvents etq_Message01 As Label
+    Friend WithEvents img_WarningTest As PictureBox
 End Class

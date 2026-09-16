@@ -123,7 +123,7 @@ Public Class cls_Projet
 
             For i As Integer = 0 To Me.Poutres.Count - 1
                 If Me.Poutres(i).Section.lSlimFloor Then
-                    retour = retour And (Me.Poutres(i).lCalculOK And Me.Poutres(i).lCalculSauve)
+                    retour = retour And ((Me.Poutres(i).lCalculOK And Me.Poutres(i).lCalculSauve) Or Not Me.Poutres(i).lCalculOK)
                 End If
             Next
             Return retour
@@ -822,6 +822,9 @@ Public Class cls_Projet
 
             AjouteLigneFrmt(Lines, "lCtrFlecheFab", .lContreFlecheFab)
             AjouteLigneFrmt(Lines, "DimCtrFlechFab", .ContreFleche)
+
+            AjouteLigneFrmt(Lines, "lAutoPP", .lAutoPP)
+            AjouteLigneFrmt(Lines, "qPPCustom", .qPPCustom)
 
         End With
 
@@ -2879,6 +2882,9 @@ Public Class cls_Projet
                         Case "PSI2LO" : .lPsi2LongTerm = Mots(nbMots)
                         Case "LCTRFL" : .lContreFlecheFab = Mots(nbMots)
                         Case "DIMCTR" : .ContreFleche = CDec(TraiteReal(Mots(nbMots)))
+                        Case "LAUTOP" : .lAutoPP = Mots(nbMots)
+                        Case "QPPCUS" : .qPPCustom = CDec(TraiteReal(Mots(nbMots)))
+
                         Case Else : MsgBox("BLOC " & BkOPTIONS & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
 
                     End Select

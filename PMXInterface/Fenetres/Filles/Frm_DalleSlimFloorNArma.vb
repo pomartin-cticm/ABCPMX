@@ -187,10 +187,8 @@ Public Class Frm_DalleSlimFloorNArma
         YMAX = MyProjet.Poutres(MyProjet.IndEnCours).Section.zSemSup
         YMAX -= Frm_DalleSlimFloorN.localDalle.ArmaSlimFeu.Diametre * 1.5 + Tfs
 
-
-
-
     End Sub
+
 #End Region
 
 #Region " Evenements saisie "

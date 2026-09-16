@@ -51,13 +51,14 @@ Partial Class Frm_MaintienBacN_Tole
         Me.txt_SheetLength = New System.Windows.Forms.TextBox()
         Me.lbl_IndSheetDimensions = New System.Windows.Forms.Label()
         Me.pan_ToleK = New System.Windows.Forms.Panel()
-        Me.img_info = New System.Windows.Forms.PictureBox()
+        Me.img_InfoK = New System.Windows.Forms.PictureBox()
         Me.lbl_Explication_2 = New System.Windows.Forms.Label()
         Me.lbl_Explication_1 = New System.Windows.Forms.Label()
         Me.img_K = New System.Windows.Forms.PictureBox()
         Me.txt_ToleK = New System.Windows.Forms.TextBox()
-        Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.etq_UnitK2 = New System.Windows.Forms.Label()
+        Me.img_info = New System.Windows.Forms.PictureBox()
+        Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_Main.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
         Me.pan_Panneau.SuspendLayout()
@@ -68,8 +69,9 @@ Partial Class Frm_MaintienBacN_Tole
         CType(Me.img_bp, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_ap, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_ToleK.SuspendLayout()
-        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_InfoK, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_K, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -363,7 +365,7 @@ Partial Class Frm_MaintienBacN_Tole
         '
         Me.pan_ToleK.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_ToleK.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_ToleK.Controls.Add(Me.img_info)
+        Me.pan_ToleK.Controls.Add(Me.img_InfoK)
         Me.pan_ToleK.Controls.Add(Me.lbl_Explication_2)
         Me.pan_ToleK.Controls.Add(Me.lbl_Explication_1)
         Me.pan_ToleK.Controls.Add(Me.img_K)
@@ -376,15 +378,14 @@ Partial Class Frm_MaintienBacN_Tole
         Me.pan_ToleK.Size = New System.Drawing.Size(300, 159)
         Me.pan_ToleK.TabIndex = 5
         '
-        'img_info
+        'img_InfoK
         '
-        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
-        Me.img_info.Location = New System.Drawing.Point(273, 129)
-        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
-        Me.img_info.Name = "img_info"
-        Me.img_info.Size = New System.Drawing.Size(20, 20)
-        Me.img_info.TabIndex = 81
-        Me.img_info.TabStop = False
+        Me.img_InfoK.Location = New System.Drawing.Point(270, 127)
+        Me.img_InfoK.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_InfoK.Name = "img_InfoK"
+        Me.img_InfoK.Size = New System.Drawing.Size(22, 22)
+        Me.img_InfoK.TabIndex = 134
+        Me.img_InfoK.TabStop = False
         '
         'lbl_Explication_2
         '
@@ -424,10 +425,6 @@ Partial Class Frm_MaintienBacN_Tole
         Me.txt_ToleK.TabIndex = 104
         Me.txt_ToleK.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'ErrorProvider
-        '
-        Me.ErrorProvider.ContainerControl = Me
-        '
         'etq_UnitK2
         '
         Me.etq_UnitK2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -438,12 +435,28 @@ Partial Class Frm_MaintienBacN_Tole
         Me.etq_UnitK2.TabIndex = 133
         Me.etq_UnitK2.Text = "mm"
         '
+        'img_info
+        '
+        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
+        Me.img_info.Location = New System.Drawing.Point(571, 325)
+        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_info.Name = "img_info"
+        Me.img_info.Size = New System.Drawing.Size(20, 20)
+        Me.img_info.TabIndex = 81
+        Me.img_info.TabStop = False
+        Me.img_info.Visible = False
+        '
+        'ErrorProvider
+        '
+        Me.ErrorProvider.ContainerControl = Me
+        '
         'Frm_MaintienBacN_Tole
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 564)
         Me.Controls.Add(Me.pan_Main)
+        Me.Controls.Add(Me.img_info)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "Frm_MaintienBacN_Tole"
         Me.Text = "Frm_MaintienBacN_Tole"
@@ -461,8 +474,9 @@ Partial Class Frm_MaintienBacN_Tole
         CType(Me.img_ap, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_ToleK.ResumeLayout(False)
         Me.pan_ToleK.PerformLayout()
-        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_InfoK, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_K, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -502,4 +516,5 @@ Partial Class Frm_MaintienBacN_Tole
     Friend WithEvents lbl_Explication_1 As Label
     Friend WithEvents img_info As PictureBox
     Friend WithEvents etq_UnitK2 As Label
+    Friend WithEvents img_InfoK As PictureBox
 End Class

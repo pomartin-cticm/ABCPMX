@@ -20,6 +20,10 @@ Public Class Frm_Update
     Dim lNewPro, lNewSteel As Boolean
     Dim lTestDebug As Boolean = False
 
+    Dim lSelectWarning As Boolean = False
+
+    Dim ResultTest As String = ""
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -30,6 +34,8 @@ Public Class Frm_Update
         InitialiseDebug()
         GestionLangue()
         GestionStyle()
+
+        GestionTestTelechargement()
 
         InitialisationFenetre()
 
@@ -166,6 +172,7 @@ Public Class Frm_Update
 
         '--[ Récupération du Fichier UpDate
 
+        lDebug = False
         If lDebug Then
             RecupereDonneesMAJDebug(BlocMAJ, lAccesOK)
         Else
@@ -418,5 +425,57 @@ Public Class Frm_Update
     End Sub
 
 #End Region
+
+#Region " Gestion du test de téléchargement "
+
+    Private Sub GestionTestTelechargement()
+
+        If LogicielOptions.lExpert Then
+
+            Dim lOKTest As Boolean = False
+            Me.img_WarningTest.BackColor = SystemColors.ControlLightLight
+
+            TestAccesFichierInternet(lOKTest, resulttest)
+
+            Me.img_WarningTest.Visible = Not lOKTest
+
+        Else
+            Me.img_WarningTest.Visible = False
+        End If
+
+    End Sub
+    Private Sub img_WarningTest_MouseEnter(sender As Object, e As EventArgs) Handles img_WarningTest.MouseEnter
+        lSelectWarning = True
+        Me.img_WarningTest.Invalidate()
+    End Sub
+
+    Private Sub img_WarningTest_Click(sender As Object, e As EventArgs) Handles img_WarningTest.Click
+        PublieInfoTestInternet()
+    End Sub
+
+    Private Sub img_WarningTest_MouseLeave(sender As Object, e As EventArgs) Handles img_WarningTest.MouseLeave
+        lSelectWarning = False
+        Me.img_WarningTest.Invalidate()
+    End Sub
+
+    Private Sub img_WarningTest_Paint(sender As Object, e As PaintEventArgs) Handles img_WarningTest.Paint
+        DessineIconeWarning(e.Graphics, Me.img_WarningTest, lSelectWarning)
+    End Sub
+
+    Private Sub PublieInfoTestInternet()
+
+        InfoW.InitialiseInfo()
+        InfoW.AddInfo(ResultTest)
+
+        InfoW.Publie()
+
+    End Sub
+
+#End Region
+
+
+
+
+
 
 End Class

@@ -809,7 +809,7 @@ Public Class cls_MethodHivoss
 
 #Region "===Application générale de la méthode==="
 
-    Public Sub ApplicationMethode(myBeam As cls_Poutre, lFreqDalle As Boolean)
+    Public Sub ApplicationMethode(myBeam As cls_Poutre, lFreqDalle As Boolean, lDebug As Boolean)
         '------------------------------------------------------------------------------------------------------------------------
         '   13/08/24 :  Création - V1.00 - POM
         '------------------------------------------------------------------------------------------------------------------------
@@ -817,6 +817,7 @@ Public Class cls_MethodHivoss
         '------------------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre traitée
         '   lFreqDalle  [E] :   Indique si on prend en compte la fréquence propre de la dalle
+        '   lDebug      [E] :   Indique si mode debug
         '------------------------------------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -839,7 +840,7 @@ Public Class cls_MethodHivoss
 
         Me.ChargerValeursHivoss(AllFloorVibration)
 
-        myBeam.Modal.Analyse(myBeam, Me.ratioQ, Me.IndexQ)
+        myBeam.Modal.Analyse(myBeam, Me.ratioQ, Me.IndexQ, lDebug)
         Me.Frequence = myBeam.Modal.Frequence
 
         If (myBeam.NbTravees = 1) And Not Me.lMgenNumerique Then

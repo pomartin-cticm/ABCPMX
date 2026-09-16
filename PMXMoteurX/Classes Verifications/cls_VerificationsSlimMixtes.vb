@@ -20,6 +20,7 @@
     Public CritereConnex As cls_Critere             ' Resistance de la connexion en calcul élastique
 
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
+    Public CritereSigmaPl As cls_Critere            ' Critère de résistance en flexion  / Contrainte normale dans le plat
     Public CritereSigmaC As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le béton de la dalle
     'Public CritereSigmaArmaC As cls_Critere         ' Critère de résistance en flexion  / Contrainte normale dans les armatures de la dalle
     'Public CritereSigmaE As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le béton d'enrobage
@@ -46,8 +47,9 @@
     End Enum
 
     Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
+    Public lBetaPlasticOK As Boolean                ' Indique si le calcul plastique possible et compatible avec domaine d'application de la figure 8.3 EN 1994-1-1:2024
 
-    Public DegConnex(,) As Decimal = Nothing        ' Degré de connexion : 1er indice : travée, 2eme indice : 0 pour M>0 et 1 pour M<0
+    Public DegConnex(,,) As Decimal = Nothing       ' Degré de connexion : 1er indice : combinaison; 2eme indice : travée, 3eme indice : 0 pour M>0 et 1 pour M<0
     Public DegConnexMin() As Decimal = Nothing      ' Degré minimal de connexion en moment positif (indice de la travée)
 
     'Public ShearB As strucShearBuckling             ' Pas de voilement par cisaillement
@@ -115,7 +117,7 @@
 
         lCalculPlastic = False
         Me.ConvSigneT = cls_PointsSigma.CONVSIGNETRACTION
-
+        Me.lBetaPlasticOK = True
     End Sub
 
     Private Sub InitialiseCriteres(NbNodes As Integer, nbCombi As Integer, IndDerniereT As Integer)
@@ -143,14 +145,10 @@
         '-------------------------------------------------------------------
 
         Me.CritereSigmaA = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
-        Me.CritereTauA = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        Me.CritereSigmaPl = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        'Me.CritereTauA = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         Me.CritereSigmaVM = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         Me.CritereSigmaC = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
-        'Me.CritereSigmaArmaC = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
-        'If lEnrob Then
-        '    Me.CritereSigmaE = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
-        '    Me.CritereSigmaArmaE = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
-        'End If
 
         Me.CritereConnex = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
 
@@ -226,19 +224,21 @@
 
         Dim CSlim As New cls_CalculSlim
 
+        Dim lPlasticBeta As Boolean = True              ' Indique si le calcul plastique est possible d'après la définition du coefficient beta
+
         '--> Initialisations
 
         lCombiClass3 = False
         lCombiClass4 = False
         'lEnrob = myBeam.lEnrobage
+        nbCombi = myBeam.CombiA_ELU.nbCombi
 
         '# Degré de connexion
 
-        Me.InitialiseDegreConnexion(myBeam.IndiceDerniereTravee)
+        Me.InitialiseDegreConnexion(nbCombi, myBeam.IndiceDerniereTravee)
 
         '# Critères
 
-        nbCombi = myBeam.CombiA_ELU.nbCombi
         Me.InitialiseCriteres(myBeam.Nodes.nbNodes, nbCombi, myBeam.IndiceDerniereTravee)
         Me.InitialiseRhoV(nbCombi, myBeam.Nodes.nbNodes)
 
@@ -288,6 +288,7 @@
 
         lCont = True
         Me.lCalculPlastic = (Not myBeam.Param.lElasticDesignVM) And (Not myBeam.Param.lElasticDesignCl3)
+        Me.lBetaPlasticOK = True
 
         Do While lCont
 
@@ -345,7 +346,7 @@
 
                 myBeam.MaillageRConnexion(xMZero, DeltaRd)
 
-                Me.MaillageProprietesPlastiques(iCombi, myBeam, MEd, DeltaRd, Beff, zANP, MplRd)
+                Me.MaillageProprietesPlastiques(iCombi, myBeam, MEd, DeltaRd, Beff, zANP, MplRd, lPlasticBeta)
 
                 '# Classes des sections
 
@@ -361,7 +362,7 @@
                 '# Degré de connexion
 
                 If Me.lCalculPlastic And (Not (lClasse3 Or lClasse4)) Then
-                    Me.CheckDegreConnexion(myBeam, DeltaRd, iNodeMmax)
+                    Me.CheckDegreConnexion(myBeam, DeltaRd, iNodeMmax, iCombi)
                 End If
 
                 '# Vérification de la connexion en calcul élastique
@@ -404,7 +405,7 @@
                 ' avec prise en compte de la connection,
                 ' sans prise en compte de la réduction induit par l'effort tranchant 
 
-                Me.MaillageProprietesPlastiques(iCombi, myBeam, MEd, DeltaRd, Beff, zANPMV, MVRd, Me.RhoV)
+                Me.MaillageProprietesPlastiques(iCombi, myBeam, MEd, DeltaRd, Beff, zANPMV, MVRd, lPlasticBeta, Me.RhoV)
 
                 '# Vérification sous interaction MV
 
@@ -422,6 +423,10 @@
                 If lCombiClass3 Then
                     lCont = True
                     Me.lCalculPlastic = False
+                ElseIf (Not lPlasticBeta) Then
+                    lCont = True
+                    Me.lCalculPlastic = False
+                    Me.lBetaPlasticOK = False
                 Else
                     lCont = False
                 End If
@@ -438,8 +443,8 @@
 
     End Sub
 
-    Private Sub MaillageProprietesPlastiques(iCombi As Integer, MyPoutre As cls_Poutre, MEd(,) As Decimal, DeltaRd() As List(Of Decimal), bEff() As Decimal,
-                                             ByRef pzANP(,) As Decimal, ByRef pMPlRd(,) As Decimal, Optional rhoV As Decimal(,) = Nothing)
+    Private Sub MaillageProprietesPlastiques(iCombi As Integer, myBeam As cls_Poutre, MEd(,) As Decimal, DeltaRd() As List(Of Decimal), bEff() As Decimal,
+                                             ByRef pzANP(,) As Decimal, ByRef pMPlRd(,) As Decimal, ByRef lPlastic As Boolean, Optional rhoV As Decimal(,) = Nothing)
         '----------------------------------------------------------------------------------------------------------
         '   02/11/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -453,11 +458,14 @@
         '   RhoV            [E] :   Coefficient pour l'interaction MV
         '   pzANP           [S] :   position ANP
         '   pMplRd          [S] :   moment plastique (en fonction du signe de MEd)
+        '   lPlastic        [S] :   Indique si le calcul est possible en théorie plastique (True) ou élastique (False)
+        '                           Renvoie faux quand le coefficient z/Hht est en dehors du domaine d'application
+        '                           de la figure 8.3 dans EN 1994-1-1:2024
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
-        Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim NbNodes As Integer = myBeam.Nodes.nbNodes
         Dim iTravee As Integer
         Dim iTravDeb, iTravFin As Integer
         Dim iNode As Integer
@@ -465,20 +473,27 @@
         Dim kDeb, kfin As Integer
         Dim rhoVLoc As Decimal
         Dim Signe As Decimal
+        Dim Beta As Decimal
+        Dim myEN1994 As New cls_Eurocodes
+        Dim zTop As Decimal
+        Dim lGene1 As Boolean = False
+        Dim Nuance As String = myBeam.Section.Acier.Nuance
+        Dim lOKPl As Boolean   '== PARAMETRE A GERER
 
         '--> Initialisation
 
-        iTravDeb = MyPoutre.IndicePremiereTravee
-        iTravFin = MyPoutre.IndiceDerniereTravee
+        iTravDeb = myBeam.IndicePremiereTravee
+        iTravFin = myBeam.IndiceDerniereTravee
         ReDim pzANP(NbNodes - 1, 1)
         ReDim pMPlRd(NbNodes - 1, 1)
+        zTop = myBeam.Dalle.zTop
 
         '--> Traitement
 
         For iTravee = iTravDeb To iTravFin
 
-            iNodeDeb = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
-            iNodeFin = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+            iNodeDeb = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeFin = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
 
             For iNode = iNodeDeb To iNodeFin
                 If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
@@ -494,12 +509,17 @@
 
                 'myBeam.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, myBeam.Param.Gamma, RhoV,
                 '                                                 bEff(iNode), DeltaRd(iTravee)(iNodeDeb + iNode), myBeam.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
-                MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, rhoVLoc,
-                                                                 bEff(iNode), DeltaRd(iTravee)(iNode - iNodeDeb), MyPoutre.Dalle, True, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
+                myBeam.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, myBeam.Param.Gamma, rhoVLoc,
+                                                               bEff(iNode), DeltaRd(iTravee)(iNode - iNodeDeb),
+                                                               myBeam.Dalle, True, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
+
+                Beta = myEN1994.ReductionFactorBeta(zTop - pzANP(iNode, kDeb), myBeam.HauteurTotaleSectionMixte, Nuance, lGene1, lOKPl)
+
+                lPlastic = lPlastic And lOKPl
 
                 If kfin > kDeb Then
                     pzANP(iNode, kfin) = pzANP(iNode, kDeb)
-                    pMPlRd(iNode, kfin) = pMPlRd(iNode, kDeb)
+                    pMPlRd(iNode, kfin) = Beta * pMPlRd(iNode, kDeb)
                 End If
             Next
 
@@ -1225,11 +1245,15 @@
         '   SigmaELU    [E] :   Contraintes normales aux ELU
         '----------------------------------------------------------------------------------------------------------
 
+        '  Public PsiYspd As Decimal(,)                    ' Coefficient de réduction du plat soudé inférieur (limite d'élasticité, méthode 3)
+
         '--> Déclaration
 
         Dim FydSup, FySup As Decimal
         Dim FydW, FyW As Decimal
         Dim FydInf, FyInf As Decimal
+        Dim FyPl, FydPl As Decimal
+        Dim FydPsi, FydPlPsi As Decimal
 
         Dim Fcd, Fck As Decimal
         Dim Fsk, Fsd As Decimal
@@ -1253,7 +1277,10 @@
         FyInf = myBeam.Section.FyInf
         FydInf = FyInf / myBeam.Param.Gamma.GammaM0
 
-        Fck = myBeam.Dalle.beton.Fck
+        FyPl = myBeam.Section.FySpd
+        FydPl = FyPl / myBeam.Param.Gamma.GammaM0
+
+        Fck = myBeam.Dalle.Beton.Fck
         Fcd = Fck / myBeam.Param.Gamma.GammaC
 
         Feck = myBeam.Section.Enrobage.Beton.Fck
@@ -1267,42 +1294,75 @@
         '# Contraintes dans le profilé
 
         If (iPro0 > -1) Then
-            RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
-            RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
-            RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
-            RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydInf, FydW), Me.CritereSigmaA)
-            RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.CritereSigmaA)
+
+            Select Case myBeam.Section.TypeSection
+                Case cls_Section.Enum_TypeSection.SFBmixte
+                    '$$ Fibre supérieure
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
+                    '$$ Interface âme/semelle supérieure
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
+                    '$$ CdG
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
+                    '$$ Interface âme/semelle inférieure
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydW, Me.CritereSigmaA)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydInf, Me.PsiYfi, Me.CritereSigmaA)
+                    '$$ Interface semelle inférieure/Plat
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.PsiYfi, Me.CritereSigmaA)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydPl, Me.PsiYspd, Me.CritereSigmaPl)
+                    '$$ Fibre inférieure (plat)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 5, SigmaELU, FydPl, Me.PsiYspd, Me.CritereSigmaPl)
+
+                Case cls_Section.Enum_TypeSection.IFB_Amixte
+
+                    '$$ Fibre supérieure (semelle)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
+                    '$$ Interface âme/semelle supérieure
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
+                    '$$ CdG
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
+                    '$$ Interface âme/plat inférieur
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydW, Me.CritereSigmaA)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydPl, Me.PsiYspd, Me.CritereSigmaPl)
+                    '$$ Fibre inférieure (plat)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydPl, Me.PsiYspd, Me.CritereSigmaPl)
+
+                Case cls_Section.Enum_TypeSection.IFB_Bmixte
+
+                    '$$ Fibre supérieure (plat)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 0, SigmaELU, FydPl, Me.CritereSigmaPl)
+                    '$$ Interface âme/semelle supérieure
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 1, SigmaELU, FydW, Me.CritereSigmaA)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 1, SigmaELU, FydPl, Me.CritereSigmaPl)
+                    '$$ CdG
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
+                    '$$ Interface âme/semelle inférieur
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydW, Me.CritereSigmaA)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydInf, Me.PsiYfi, Me.CritereSigmaA)
+                    '$$ Fibre inférieure (semelle)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.PsiYfi, Me.CritereSigmaA)
+
+                Case cls_Section.Enum_TypeSection.SABmixte
+
+                    '$$ Fibre supérieure (semelle)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
+                    '$$ Interface âme/semelle supérieure
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
+                    '$$ CdG
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
+                    '$$ Interface âme/semelle inférieur
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydW, Me.CritereSigmaA)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 3, SigmaELU, FydInf, Me.PsiYfi, Me.CritereSigmaA)
+                    '$$ Fibre inférieure (semelle)
+                    RunCritereFlexionVonM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.PsiYfi, Me.CritereSigmaA)
+
+            End Select
+
         End If
-
-        '# Contraintes dans le béton d'enrobage
-
-        'If lEnrob And (iEnrob0 > -1) Then
-        '    RunCritereFlexionVonM(myBeam, iCombi, iDal0 + 0, SigmaELU, Fecd, Me.CritereSigmaE, -Me.ConvSigneT)
-        '    RunCritereFlexionVonM(myBeam, iCombi, iDal0 + 1, SigmaELU, Fecd, Me.CritereSigmaE, -Me.ConvSigneT)
-        'End If
-
-        '# Contraintes dans les armatures d'enrobage
-
-        'If lEnrob And (iArmaE0 > -1) Then
-        '    MsgBox("Ajouter contraintes enrobage / RunCritereFlexionResistanceElastiqueVM")
-        'End If
 
         '# Contraintes dans le béton de la dalle
 
         If lMixte And (iDal0 > -1) Then
             RunCritereFlexionVonM(myBeam, iCombi, iDal0 + 0, SigmaELU, Fcd, Me.CritereSigmaC, -Me.ConvSigneT)
-        End If
-
-        '# Contraintes dans les armatures de la dalle
-
-        If lMixte And (myBeam.NbTravees > 1) And (myBeam.PtsSigma.iArmaDalle(1) > -1) Then
-            Dim mySigneS As Decimal
-            If myBeam.Param.lCompressionArma Then mySigneS = 0 Else mySigneS = Me.ConvSigneT
-
-            'For iArma = myBeam.PtsSigma.iArmaDalle(0) To myBeam.PtsSigma.iArmaDalle(1)
-            '    RunCritereFlexionVonM(myBeam, iCombi, iArma, SigmaELU, Fsd, Me.CritereSigmaArmaC, mySigneS)
-            'Next
-
         End If
 
         '# Enveloppe de résistance en flexion
@@ -1343,22 +1403,6 @@
 
         Me.CritereM.EnveloppeCritereCombi(Me.CritereSigmaC, iCombi, iTravDeb, iTravFin)
 
-        '--< Contraintes dans les armatures de la dalle
-
-        'If myBeam.lMultiSpan And (myBeam.PtsSigma.iArmaDalle(1) > -1) Then
-        '    Me.CritereM.EnveloppeCritereCombi(Me.CritereSigmaArmaC, iCombi, iTravDeb, iTravFin)
-        'End If
-
-        '--< Contraintes béton et armatures d'enrobage
-
-        'If myBeam.lEnrobage Then
-        '    If (myBeam.PtsSigma.iBetonEnrob(0) > -1) Then
-        '        Me.CritereM.EnveloppeCritereCombi(Me.CritereSigmaE, iCombi, iTravDeb, iTravFin)
-        '    End If
-        '    If (myBeam.PtsSigma.iArmaEnrob(0) > -1) Then
-        '        Me.CritereM.EnveloppeCritereCombi(Me.CritereSigmaArmaE, iCombi, iTravDeb, iTravFin)
-        '    End If
-        'End If
     End Sub
 
     Private Sub RunCritereFlexionVonM(myBeam As cls_Poutre, iCombi As Integer, iPoint As Integer, SigmaELU(,,) As Decimal,
@@ -1407,6 +1451,60 @@
                     Or ((signeS = 1) And IsGreater(SigmaELU(iPoint, iNode, k), 0)) _
                     Or ((signeS = -1) And IsSmaller(SigmaELU(iPoint, iNode, k), 0)) Then
                         MyCritereM.EnregistreCritere(iNode, iCombi, iTravee, SigmaELU(iPoint, iNode, k), SigmaU)
+                    End If
+                Next
+            Next
+        Next
+
+    End Sub
+
+    Private Sub RunCritereFlexionVonM(myBeam As cls_Poutre, iCombi As Integer, iPoint As Integer, SigmaELU(,,) As Decimal,
+                                      SigmaU As Decimal, PsiY(,) As Decimal, MyCritereM As cls_Critere, Optional signeS As Decimal = 0)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance en flexion par les critères de VM en un point de calcul de section
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   iPoint      [E] :   Indice du point de calcul des contraintes
+        '   SigmaELU    [E] :   Contraintes normales aux ELU
+        '   SigmaU      [E] :   Valeur ultime de la contrainte normale au point iPoint
+        '   PsiY        [E] :   Coefficient de réduction de la limite SigmaU
+        '   CritereM    [E] :   Critere de la contrainte de flexion
+        '   SigneS      [E] :   Indique le signe de contraintes à prendre en compte
+        '                       0 = on applique le critère quel que soit le signe de la contrainte (traction et compression)
+        '                       1 = on applique le critère uniquement si contrainte positive
+        '                       -1 = on applique le critère uniquement si contrainte négative
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+
+        '--> Déclaration
+
+        iDebT = myBeam.IndicePremiereTravee
+        iFinT = myBeam.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+
+                For k = iDebK To iFinK
+                    If (signeS = 0) _
+                    Or ((signeS = 1) And IsGreater(SigmaELU(iPoint, iNode, k), 0)) _
+                    Or ((signeS = -1) And IsSmaller(SigmaELU(iPoint, iNode, k), 0)) Then
+                        MyCritereM.EnregistreCritere(iNode, iCombi, iTravee, SigmaELU(iPoint, iNode, k), PsiY(iCombi, iNode) * SigmaU)
                     End If
                 Next
             Next
@@ -1783,26 +1881,57 @@
 
 #Region " Degré de connexion "
 
-    Private Sub InitialiseDegreConnexion(iTravFin As Integer)
+    Private Sub InitialiseDegreConnexion(nbCombi As Integer, iTravFin As Integer)
         '----------------------------------------------------------------------------------------------------------
         '   14/12/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Initialisation des tableaux de degré de connexion
         '----------------------------------------------------------------------------------------------------------
+        '   nbCombi     [E] :   Nombre de combinaisons
         '   iTravFin    [E] :   Indice de la dernière travée
         '----------------------------------------------------------------------------------------------------------
 
-        ReDim DegConnex(iTravFin, 1)
+        ReDim DegConnex(nbCombi - 1, iTravFin, 1)
         ReDim DegConnexMin(iTravFin)
 
-        For i As Integer = 0 To iTravFin
-            DegConnex(i, 0) = -1
-            DegConnex(i, 1) = -1
+        'For i As Integer = 0 To iTravFin
+        '    DegConnex(i, 0) = -1
+        '    DegConnex(i, 1) = -1
+        'Next
+        For icombi As Integer = 0 To nbCombi - 1
+            For i As Integer = 0 To iTravFin
+                DegConnex(icombi, i, 0) = -1
+                DegConnex(icombi, i, 1) = -1
+            Next
         Next
+    End Sub
+
+    Private Sub InitialiseAireSemelles(myBeam As cls_Poutre, ByRef AfSup As Decimal, ByRef AfInf As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   10/07/26 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul des aires des semelles supérieures et inférieures du profilé slim floor
+        '----------------------------------------------------------------------------------------------------------
+
+        Select Case myBeam.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.IFB_Amixte
+                AfSup = myBeam.Section.ProfilA.AireFs
+                AfInf = myBeam.Section.ProfilA.AirePlat
+            Case cls_Section.Enum_TypeSection.IFB_Bmixte
+                AfSup = myBeam.Section.ProfilA.AirePlat
+                AfInf = myBeam.Section.ProfilA.AireFi
+            Case cls_Section.Enum_TypeSection.SABmixte
+                AfSup = myBeam.Section.ProfilA.AireFs
+                AfInf = myBeam.Section.ProfilA.AireFi
+            Case cls_Section.Enum_TypeSection.SFBmixte
+                AfSup = myBeam.Section.ProfilA.AireFs
+                AfInf = myBeam.Section.ProfilA.AireFi + myBeam.Section.ProfilA.AirePlat
+        End Select
 
     End Sub
 
-    Private Sub CheckDegreConnexion(MyPoutre As cls_Poutre, DeltaRd() As List(Of Decimal), iNodeMmax() As Integer)
+    Private Sub CheckDegreConnexion(MyPoutre As cls_Poutre, DeltaRd() As List(Of Decimal),
+                                    iNodeMmax() As Integer, iCombi As Integer)
         '----------------------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -1811,6 +1940,7 @@
         '   DeltaRd     [E] :   Somme des PRd entre les points du maillage et les points de moments nuls
         '   iNodeMMax   [E] :   Indice des neouds de moment >0 max
         '   DegConnex   [E] :   Degré de connexion, par travée, en moment >0 et moment <0
+        '   iCombi      [E] :   Indice de la combinaison    
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -1828,6 +1958,7 @@
         Dim Fy As Decimal ' = Math.Max(myBeam)
         Dim AfSup, AfInf As Decimal
         Dim Le As Decimal
+        Dim myEN1994 As New cls_Eurocodes
 
         '--> Initialisation
 
@@ -1836,8 +1967,9 @@
 
         NProfile = MyPoutre.Section.ResistanceTractionProfile(gammaM0)
 
-        AfSup = MyPoutre.Section.ProfilA.AireFs
-        AfInf = MyPoutre.Section.ProfilA.AireFi
+        'AfSup = MyPoutre.Section.ProfilA.AireFs
+        'AfInf = MyPoutre.Section.ProfilA.AireFi
+        Me.InitialiseAireSemelles(MyPoutre, AfSup, AfInf)
         Fy = Math.Max(MyPoutre.Section.FySup, MyPoutre.Section.FyInf)
 
         '--> Boucle sur les travées
@@ -1850,8 +1982,8 @@
             NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
             NConnex = Math.Min(NArmaDalle, NProfile)
             'DegConnex(0, 1) = DeltaRd(0)(iNode) / NConnex
-            EnregistreDegreConnex(DegConnex(0, 1), DeltaRd(0)(iNode) / NConnex)
-            DegConnex(0, 0) = -1
+            EnregistreDegreConnex(DegConnex(iCombi, 0, 1), DeltaRd(0)(iNode) / NConnex)
+            DegConnex(iCombi, 0, 0) = -1
         End If
 
         '# Travée console droite (moment négatif)
@@ -1863,8 +1995,8 @@
             NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
             NConnex = Math.Min(NArmaDalle, NProfile)
             'DegConnex(iTravFin, 1) = DeltaRd(iTravFin)(0) / NConnex
-            EnregistreDegreConnex(DegConnex(iTravFin, 1), DeltaRd(iTravFin)(0) / NConnex)
-            DegConnex(iTravFin, 0) = -1
+            EnregistreDegreConnex(DegConnex(iCombi, iTravFin, 1), DeltaRd(iTravFin)(0) / NConnex)
+            DegConnex(iCombi, iTravFin, 0) = -1
         End If
 
         '# Boucle sur les travées intermédiaires
@@ -1879,7 +2011,7 @@
                 NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
                 NConnex = Math.Min(NArmaDalle, NProfile)
                 'DegConnex(iTravee, 1) = DeltaRd(iTravee)(0) / NConnex
-                EnregistreDegreConnex(DegConnex(iTravee, 1), DeltaRd(iTravee)(0) / NConnex)
+                EnregistreDegreConnex(DegConnex(iCombi, iTravee, 1), DeltaRd(iTravee)(0) / NConnex)
             End If
 
             '# En travée
@@ -1889,13 +2021,14 @@
             NDalle = MyPoutre.Dalle.NResistanceCompressionDalle(Beff, gammaC)
             NConnex = Math.Min(NDalle, NProfile)
             'DegConnex(iTravee, 0) = DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex
-            EnregistreDegreConnex(DegConnex(iTravee, 0), DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex)
+            EnregistreDegreConnex(DegConnex(iCombi, iTravee, 0), DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex)
 
             '---| Degré de connexion mini en zone de moment positif
             Le = MyPoutre.LongueurTravee(iTravee)
             If iTravee > iTravDeb Then Le -= 0.15 * Le
             If iTravee < iTravFin Then Le -= 0.15 * Le
-            DegConnexMin(iTravee) = Me.EtaMinFlanges(Fy, Le, AfSup, AfInf)
+            'DegConnexMin(iTravee) = Me.EtaMinFlanges(Fy, Le, AfSup, AfInf)
+            DegConnexMin(iTravee) = myEN1994.EtaMinFlanges(Fy, Le, AfSup, AfInf, True)
 
             '# Appui droite
             If iTravee < iTravFin Then
@@ -1909,7 +2042,7 @@
                 'Else
                 '    DegConnex(iTravee, 1) = DeltaRd(iTravee)(iNode - iNode0) / NConnex
                 'End If
-                EnregistreDegreConnex(DegConnex(iTravee, 1), DeltaRd(iTravee)(iNode - iNode0) / NConnex)
+                EnregistreDegreConnex(DegConnex(iCombi, iTravee, 1), DeltaRd(iTravee)(iNode - iNode0) / NConnex)
             End If
 
         Next
@@ -1933,110 +2066,7 @@
 
     End Sub
 
-    Private Function EtaMin() As Decimal
-        '----------------------------------------------------------------------------------------------------------
-        '   14/12/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Valeur minimale du Degré minimal de connexion pour une poute mixte 
-        '   d'après formules (6.12) et (6.14) de la NF EN 1994-1-1
-        '----------------------------------------------------------------------------------------------------------
-        '----------------------------------------------------------------------------------------------------------
-
-        Const ETAMINREF As Decimal = 0.4
-
-        Return ETAMINREF
-
-    End Function
-
-    Public Function EtaMinEqualFlanges(Fy As Decimal, Le As Decimal) As Decimal
-        '----------------------------------------------------------------------------------------------------------
-        '   14/12/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Degré minimal de connexion pour une poute mixte à semelles égales
-        '   d'après formule (6.12) de la NF EN 1994-1-1
-        '----------------------------------------------------------------------------------------------------------
-        '   Fy      [E] :   Limite d'élasticité
-        '   Le      [E) :   Distance entre points de moments nuls
-        '----------------------------------------------------------------------------------------------------------
-
-        '--> Déclarations
-
-        Dim Eta0 As Decimal
-
-        '--> Traitement
-
-        If IsGreater(Le, 25) Then
-            Eta0 = 1
-        Else
-            Eta0 = Math.Max(EtaMin, (1 - 355 / Fy * (0.75 - 0.03 * Le)))
-        End If
-        Return Eta0
-
-    End Function
-
-    Public Function EtaMinInEqualFlanges3(Fy As Decimal, Le As Decimal) As Decimal
-        '----------------------------------------------------------------------------------------------------------
-        '   14/12/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Degré minimal de connexion pour une poute mixte à semelles inégales, la semelle inf ayant une aire = 3 x aire semelle sup
-        '   d'après formule (6.14) de la NF EN 1994-1-1
-        '----------------------------------------------------------------------------------------------------------
-        '   Fy      [E] :   Limite d'élasticité
-        '   Le      [E) :   Distance entre points de moments nuls
-        '----------------------------------------------------------------------------------------------------------
-
-        '--> Déclarations
-
-        Dim Eta0 As Decimal
-
-        '--> Traitement
-
-        If IsGreater(Le, 20) Then
-            Eta0 = 1
-        Else
-            Eta0 = Math.Max(EtaMin, (1 - 355 / Fy * (0.3 - 0.015 * Le)))
-        End If
-        Return Eta0
-
-    End Function
-
-    Public Function EtaMinFlanges(Fy As Decimal, Le As Decimal, AfSup As Decimal, AfInf As Decimal) As Decimal
-        '----------------------------------------------------------------------------------------------------------
-        '   14/12/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Degré minimal de connexion pour une poute mixte à semelles égales
-        '   d'après formule (6.14) de la NF EN 1994-1-1
-        '----------------------------------------------------------------------------------------------------------
-        '   Fy      [E] :   Limite d'élasticité
-        '   Le      [E] :   Distance entre points de moments nuls
-        '   AfSup   [E] :   Aire de la semelle supérieure
-        '   AfInf   [E] :   Aire de la semelle inférieure
-        '----------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim RatioAire As Decimal = AfInf / AfSup
-        Dim Eta As Decimal = -1
-        Dim EtaEqualF As Decimal
-        Dim EtaInEqualF As Decimal
-
-        '--> Traitement hors domaine application
-
-        If IsGreater(RatioAire, 3) Or IsSmaller(RatioAire, 1) Then
-            MsgBox("Wrong ratio of flanges areas", MsgBoxStyle.Critical, "cls_VerificationsMixtes/EtaMinFlanges")
-            Return Eta
-        End If
-
-        '--> Traitement normal
-
-        EtaInEqualF = EtaMinInEqualFlanges3(Fy, Le)
-        EtaEqualF = EtaMinEqualFlanges(Fy, Le)
-
-        Eta = EtaEqualF + (EtaInEqualF - EtaEqualF) / 2 * (RatioAire - 1)
-        Return Eta
-    End Function
-
-    Public Function EtaEnveloppe(nbCombi As Integer, Optional iTravee As Integer = 1) As Decimal
+    Public Function EtaEnveloppe(nbCombi As Integer, iTravee As Integer) As Decimal
         '----------------------------------------------------------------------------------------------------------------
         '   22/08/24 :  Création - POM
         '----------------------------------------------------------------------------------------------------------------
@@ -2049,17 +2079,136 @@
 
         '--( Déclaration
 
-        Dim Eta As Decimal = Me.DegConnex(0, iTravee)
+        Dim Eta As Decimal = Me.DegConnex(0, iTravee, 0)
 
         '--( Boucle sur les combinaisons
 
         For iCombi As Integer = 1 To nbCombi - 1
-            Eta = Math.Min(Eta, Me.DegConnex(iCombi, iTravee))
+            Eta = Math.Min(Eta, Me.DegConnex(iCombi, iTravee, 0))
         Next
 
         Return Eta
 
     End Function
+
+#End Region
+
+#Region " OLDs "
+
+    'Private Function EtaMin() As Decimal
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   14/12/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Valeur minimale du Degré minimal de connexion pour une poute mixte 
+    '    '   d'après formules (6.12) et (6.14) de la NF EN 1994-1-1
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '----------------------------------------------------------------------------------------------------------
+
+    '    Const ETAMINREF As Decimal = 0.4
+
+    '    Return ETAMINREF
+
+    'End Function
+
+    'Public Function EtaMinEqualFlanges(Fy As Decimal, Le As Decimal) As Decimal
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   14/12/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Degré minimal de connexion pour une poute mixte à semelles égales
+    '    '   d'après formule (6.12) de la NF EN 1994-1-1
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Fy      [E] :   Limite d'élasticité
+    '    '   Le      [E) :   Distance entre points de moments nuls
+    '    '----------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclarations
+
+    '    Dim Eta0 As Decimal
+
+    '    '--> Traitement
+
+    '    If IsGreater(Le, 25) Then
+    '        Eta0 = 1
+    '    Else
+    '        Eta0 = Math.Max(EtaMin, (1 - 355 / Fy * (0.75 - 0.03 * Le)))
+    '    End If
+    '    Return Eta0
+
+    'End Function
+
+    'Public Function EtaMinInEqualFlanges3(Fy As Decimal, Le As Decimal) As Decimal
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   14/12/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Degré minimal de connexion pour une poute mixte à semelles inégales, la semelle inf ayant une aire = 3 x aire semelle sup
+    '    '   d'après formule (6.14) de la NF EN 1994-1-1
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Fy      [E] :   Limite d'élasticité
+    '    '   Le      [E) :   Distance entre points de moments nuls
+    '    '----------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclarations
+
+    '    Dim Eta0 As Decimal
+
+    '    '--> Traitement
+
+    '    If IsGreater(Le, 20) Then
+    '        Eta0 = 1
+    '    Else
+    '        Eta0 = Math.Max(EtaMin, (1 - 355 / Fy * (0.3 - 0.015 * Le)))
+    '    End If
+    '    Return Eta0
+
+    'End Function
+
+    'Public Function EtaMinFlanges(Fy As Decimal, Le As Decimal, AfSup As Decimal, AfInf As Decimal) As Decimal
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   14/12/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Degré minimal de connexion pour une poute mixte à semelles égales
+    '    '   d'après formule (6.14) de la NF EN 1994-1-1
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Fy      [E] :   Limite d'élasticité
+    '    '   Le      [E] :   Distance entre points de moments nuls
+    '    '   AfSup   [E] :   Aire de la semelle supérieure
+    '    '   AfInf   [E] :   Aire de la semelle inférieure
+    '    '----------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclaration
+
+    '    Dim RatioAire As Decimal = AfInf / AfSup
+    '    Dim Eta As Decimal = -1
+    '    Dim EtaEqualF As Decimal
+    '    Dim EtaInEqualF As Decimal
+
+    '    '--> Traitement hors domaine application
+
+    '    If IsSmaller(RatioAire, 1) Then
+    '        '--< Traitement hors domaine application >
+    '        MsgBox("Wrong ratio of flanges areas", MsgBoxStyle.Critical, "cls_VerificationsMixtes/EtaMinFlanges")
+
+    '    ElseIf IsGreater(RatioAire, 3) Then
+    '        '--< Traitement ratio semelles > 3 >
+
+    '        ' Dans ce cas, on applique la formule (I.3) de l'annexe I de la NF EN 1994-1-1:2024
+
+
+
+    '    Else
+
+    '        '--> Traitement normal
+
+    '        EtaInEqualF = EtaMinInEqualFlanges3(Fy, Le)
+    '        EtaEqualF = EtaMinEqualFlanges(Fy, Le)
+
+    '        Eta = EtaEqualF + (EtaInEqualF - EtaEqualF) / 2 * (RatioAire - 1)
+
+    '    End If
+
+
+    '    Return Eta
+    'End Function
 
 #End Region
 
@@ -2089,7 +2238,6 @@
 
 
 #End Region
-
 
 #Region " Calcul coefficient de réduction plat inférieur "
 

@@ -46,6 +46,8 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_CadreSections = New System.Windows.Forms.Label()
         Me.lbl_CadreBeton = New System.Windows.Forms.Label()
         Me.pan_OptionsELS = New System.Windows.Forms.Panel()
+        Me.img_infoContreFleche = New System.Windows.Forms.PictureBox()
+        Me.img_info = New System.Windows.Forms.PictureBox()
         Me.txt_CtrFlecheFab = New System.Windows.Forms.TextBox()
         Me.etq_UnitDimension2 = New System.Windows.Forms.Label()
         Me.img_CtrFlecheFab = New System.Windows.Forms.PictureBox()
@@ -116,7 +118,6 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_RH = New System.Windows.Forms.Label()
         Me.lbl_BetonMessage = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.img_info = New System.Windows.Forms.PictureBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -128,6 +129,8 @@ Partial Class Frm_OptionsCalculPoutre
         CType(Me.img_G, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Sections.SuspendLayout()
         Me.pan_OptionsELS.SuspendLayout()
+        CType(Me.img_infoContreFleche, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_CtrFlecheFab, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Wk, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_se, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -143,7 +146,6 @@ Partial Class Frm_OptionsCalculPoutre
         CType(Me.img_EpsilonSh, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_info, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -428,6 +430,7 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.pan_OptionsELS.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_OptionsELS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_OptionsELS.Controls.Add(Me.img_infoContreFleche)
         Me.pan_OptionsELS.Controls.Add(Me.img_info)
         Me.pan_OptionsELS.Controls.Add(Me.txt_CtrFlecheFab)
         Me.pan_OptionsELS.Controls.Add(Me.etq_UnitDimension2)
@@ -451,6 +454,26 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_OptionsELS.Name = "pan_OptionsELS"
         Me.pan_OptionsELS.Size = New System.Drawing.Size(442, 219)
         Me.pan_OptionsELS.TabIndex = 5
+        '
+        'img_infoContreFleche
+        '
+        Me.img_infoContreFleche.Location = New System.Drawing.Point(323, 38)
+        Me.img_infoContreFleche.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_infoContreFleche.Name = "img_infoContreFleche"
+        Me.img_infoContreFleche.Size = New System.Drawing.Size(22, 22)
+        Me.img_infoContreFleche.TabIndex = 135
+        Me.img_infoContreFleche.TabStop = False
+        '
+        'img_info
+        '
+        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
+        Me.img_info.Location = New System.Drawing.Point(346, 39)
+        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_info.Name = "img_info"
+        Me.img_info.Size = New System.Drawing.Size(20, 20)
+        Me.img_info.TabIndex = 134
+        Me.img_info.TabStop = False
+        Me.img_info.Visible = False
         '
         'txt_CtrFlecheFab
         '
@@ -1176,16 +1199,6 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'img_info
-        '
-        Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
-        Me.img_info.Location = New System.Drawing.Point(327, 39)
-        Me.img_info.Margin = New System.Windows.Forms.Padding(0)
-        Me.img_info.Name = "img_info"
-        Me.img_info.Size = New System.Drawing.Size(20, 20)
-        Me.img_info.TabIndex = 134
-        Me.img_info.TabStop = False
-        '
         'Frm_OptionsCalculPoutre
         '
         Me.AcceptButton = Me.btn_OK
@@ -1216,6 +1229,8 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_Sections.PerformLayout()
         Me.pan_OptionsELS.ResumeLayout(False)
         Me.pan_OptionsELS.PerformLayout()
+        CType(Me.img_infoContreFleche, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_CtrFlecheFab, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Wk, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_se, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1234,7 +1249,6 @@ Partial Class Frm_OptionsCalculPoutre
         CType(Me.img_EpsilonSh, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_info, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1332,4 +1346,5 @@ Partial Class Frm_OptionsCalculPoutre
     Friend WithEvents chk_CtrFlecheFab As CheckBox
     Friend WithEvents txt_CtrFlecheFab As TextBox
     Friend WithEvents img_info As PictureBox
+    Friend WithEvents img_infoContreFleche As PictureBox
 End Class

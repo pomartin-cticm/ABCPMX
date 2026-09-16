@@ -1167,15 +1167,20 @@ Public Class cls_Poutre
     ''' <summary>
     ''' Mise à jour des paramètres après modifications
     ''' </summary>
-    Public Sub EstModifiee()
+    Public Sub EstModifiee(Optional lFire As Boolean = False)
         '--------------------------------------------------------------------------
 
         Me.lNouvellePoutre = False
         Me.lDonneesSauvees = False
-        Me.lCalculOK = False
-        Me.lCalculSauve = False
-        Me.lCalculCharge = False
-        'Me.lPoutreModifiee = True
+        If Not lFire Then
+            Me.lCalculOK = False
+            Me.lCalculSauve = False
+            Me.lCalculCharge = False
+        End If
+        'Me.lCalculOK = False
+        'Me.lCalculSauve = False
+        'Me.lCalculCharge = False
+        ''Me.lPoutreModifiee = True
 
         Me.InitialisePoidsPropres()
 
@@ -1391,12 +1396,16 @@ Public Class cls_Poutre
 
     Public ReadOnly Property HauteurTotaleSectionMixte As Decimal
         Get
-            Dim pHauteur As Decimal = 0.5
-
-            '# 01/05/24 : Correction POM
+            Dim pHauteur As Decimal
 
             If Me.lSlimFloor Then
-                '# A COMPLETER
+                pHauteur = Me.Dalle.zTop
+                Select Case Me.Section.ProfilA.typeProfileAcier
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                        pHauteur += Me.Section.ProfilA.Plat_t
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                        pHauteur += Me.Section.ProfilA.Tfi
+                End Select
             Else
                 pHauteur = Me.Section.ProfilA.ha + Me.Dalle.zTop
             End If
@@ -4720,32 +4729,41 @@ Public Class cls_Poutre
         dc = Me.LargeurInfluence
 
         '--> Calcul
-        With G_PP
 
-            '# Profilé acier
-            .qPP_ProfilAcier = Me.Section.ProfilA.Aire * Me.Section.Acier.Rho * G
+        If Me.Param.lAutoPP Then
 
-            '# Béton d'enrobage
-            If Me.Section.lEnrobage Then
-                .qPP_BetonEnrobage = Me.Section.AireEnrobagePartielAec * Me.Section.Enrobage.Beton.RhoC * G
-            Else
-                .qPP_BetonEnrobage = 0
-            End If
+            With G_PP
 
-            '# Dalle
-            .qPP_DalleBeton = Me.Dalle.AireEq(dc, Me.Section.ProfilA.Bfs, Me.lSlimFloor) * Me.Dalle.beton.RhoC * G
+                '# Profilé acier
+                .qPP_ProfilAcier = Me.Section.ProfilA.Aire * Me.Section.Acier.Rho * G
 
-            '# Bac acier
-            If Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
-                .qPP_BacAcier = Me.Dalle.Bac.msurf * dc * G
-            Else
-                .qPP_BacAcier = 0
-            End If
+                '# Béton d'enrobage
+                If Me.Section.lEnrobage Then
+                    .qPP_BetonEnrobage = Me.Section.AireEnrobagePartielAec * Me.Section.Enrobage.Beton.RhoC * G
+                Else
+                    .qPP_BetonEnrobage = 0
+                End If
 
-            '--> Bilan et fin
-            .qPP_Total = .qPP_ProfilAcier + .qPP_DalleBeton + .qPP_BacAcier + .qPP_BetonEnrobage
+                '# Dalle
+                .qPP_DalleBeton = Me.Dalle.AireEq(dc, Me.Section.ProfilA.Bfs, Me.lSlimFloor) * Me.Dalle.Beton.RhoC * G
 
-        End With
+                '# Bac acier
+                If Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
+                    .qPP_BacAcier = Me.Dalle.Bac.msurf * dc * G
+                Else
+                    .qPP_BacAcier = 0
+                End If
+
+                '--> Bilan et fin
+                .qPP_Total = .qPP_ProfilAcier + .qPP_DalleBeton + .qPP_BacAcier + .qPP_BetonEnrobage
+
+            End With
+
+        Else
+
+            G_PP.qPP_Total = Me.Param.qPPCustom
+
+        End If
 
         Return G_PP
 
@@ -5934,7 +5952,8 @@ Public Class cls_Poutre
                 If Not (Me.lCalculOK AndAlso Me.lCalculCharge) Then _
                 Me.VerifFeuSlimAcier = New cls_VerifFeuSlimAcier
             Case cls_Section.Enum_TypeSection.SFBmixte, cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SABmixte
-                Me.VerifFeuSlimMixte = New cls_VerifFeuSlimMixte
+                If Not (Me.lCalculOK AndAlso Me.lCalculCharge) Then _
+                    Me.VerifFeuSlimMixte = New cls_VerifFeuSlimMixte
         End Select
 
         '--> Initialisation des calculs

@@ -22,7 +22,9 @@ Public Class Frm_InformationPP
 #Region "===OUVERTURE==="
 
     Private Sub Frm_InformationPP_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        lBuild = True
         InitialiserFenetre()
+        lBuild = False
     End Sub
 
     Public Sub InitialiserFenetre()
@@ -70,6 +72,8 @@ Public Class Frm_InformationPP
                 Me.lbl_DalleBeton.Text = Bloc("CONCRETESLAB")
                 Me.lbl_BacAcier.Text = Bloc("PSHEETING")
 
+                Me.chk_CustomPP.Text = Bloc("CUSTOMSW")
+
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues", CLE, strLoadedKey)
             Finally
@@ -85,6 +89,7 @@ Public Class Frm_InformationPP
     End Sub
 
     Private Sub GestionUnites()
+
         Me.etq_UnitGravite.Text = "m/s2"
 
         Me.etq_UnitRhoa.Text = "kg/m3"
@@ -107,6 +112,7 @@ Public Class Frm_InformationPP
     End Sub
 
     Private Sub GestionStyle()
+
         Me.Icon = Frm_PMX.Icon
 
         Me.lbl_ParametresGeneraux.ForeColor = CouleurForeBandeaux
@@ -117,7 +123,6 @@ Public Class Frm_InformationPP
 
         Me.lbl_PP_Dalle.ForeColor = CouleurForeBandeaux
         Me.lbl_PP_Dalle.BackColor = CouleurBackBandeaux
-
 
     End Sub
 
@@ -133,7 +138,6 @@ Public Class Frm_InformationPP
         Me.txt_Projet.Text = MyProjet.Nom
         Me.txt_BeamID.Text = MyProjet.Poutres(MyProjet.IndEnCours).BeamID
         Me.txt_Gravite.Text = Format(MyPoutreLoc.Param.GraviteG, formatTxtBox)
-        Me.txt_PP_tot.Text = GetStringInUnit(PoidsPropreLoc.qPP_Total / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 3, False)
 
         Me.txt_rhoa.Text = Format(MyPoutreLoc.Section.Acier.Rho, formatTxtBox2)
         Me.txt_Aa.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.Aire / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2, Enu_TypeVariable.SansType, 3, 3, False)
@@ -165,6 +169,85 @@ Public Class Frm_InformationPP
             Me.txt_qp.Text = 0
         End If
 
+        Me.chk_CustomPP.Checked = Not MyPoutreLoc.Param.lAutoPP
+
+        MAJ_PPReadOnly()
+
+        If MyPoutreLoc.Param.lAutoPP Then
+            Me.txt_PP_tot.Text = GetStringInUnit(PoidsPropreLoc.qPP_Total / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 3, False)
+        Else
+            Me.txt_PP_tot.Text = GetStringInUnit(MyPoutreLoc.Param.qPPCustom / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 3, False)
+        End If
+
+    End Sub
+
+#End Region
+
+#Region " Evènements "
+
+    Private Sub chk_CustomPP_CheckedChanged(sender As Object, e As EventArgs) Handles chk_CustomPP.CheckedChanged
+
+        If lBuild Then Exit Sub
+
+        MyPoutreLoc.Param.lAutoPP = Not Me.chk_CustomPP.Checked
+
+        MAJ_PPReadOnly()
+
+        If Not Me.chk_CustomPP.Checked Then
+            lBuild = True
+            'MyPoutreLoc.InitialisePoidsPropres()
+            PoidsPropreLoc = MyPoutreLoc.ChargeRepartiePP()
+
+            Me.txt_PP_tot.Text = GetStringInUnit(PoidsPropreLoc.qPP_Total / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 3, False)
+            lBuild = False
+        End If
+    End Sub
+    Private Sub txt_PP_tot_TextChanged(sender As Object, e As EventArgs) Handles txt_PP_tot.TextChanged
+
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+            MyPoutreLoc.Param.qPPCustom = ValeurUI
+        End If
+
+    End Sub
+
+    Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+
+        Dim lOk As Boolean = True
+        ErrorProvider.SetError(MyTxt, String.Empty)
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMin As Boolean = True
+        Dim lValMax As Boolean = False
+        Dim kUnit As Decimal = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+
+        Select Case MyTxt.Name
+            Case Me.txt_PP_tot.Name
+                ValMin = 0
+                ValMax = 1000 / kUnit
+
+        End Select
+
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, lValMin, ValMax, lValMax)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            'ErrorProvider.Clear()
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+    End Function
+
+    Private Sub MAJ_PPReadOnly()
+
+        Me.txt_PP_tot.ReadOnly = Not Me.chk_CustomPP.Checked
 
     End Sub
 
@@ -259,7 +342,31 @@ Public Class Frm_InformationPP
 
     End Sub
 
-
 #End Region
+
+#Region "===FERMETURE==="
+    Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
+
+        Dim lModif As Boolean
+
+        TransfertSaisie(lModif)
+
+        If lModif Then
+            MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
+        End If
+
+        Me.Close()
+
+    End Sub
+
+    Private Sub TransfertSaisie(ByRef lModif As Boolean)
+        lModif = False
+
+        GereTransfertValeur(MyPoutreLoc.Param.lAutoPP, MyProjet.Poutres(MyProjet.IndEnCours).Param.lAutoPP, lModif)
+        GereTransfertValeur(MyPoutreLoc.Param.qPPCustom, MyProjet.Poutres(MyProjet.IndEnCours).Param.qPPCustom, lModif)
+
+    End Sub
+#End Region
+
 
 End Class

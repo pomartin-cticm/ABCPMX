@@ -66,7 +66,7 @@
     ''' <summary>
     ''' béton de la dalle
     ''' </summary>
-    Public beton As New cls_Beton
+    Public Beton As New cls_Beton
 
     ''' <summary>
     ''' Bac acier de la dalle
@@ -897,6 +897,47 @@
 
         Cls_ConnecteurArmature.DeepClone(DalleSource.ConnecteurArmature, DalleCible.ConnecteurArmature)
     End Sub
+
+    Public Sub CopieFrom(DalleSource As cls_Dalle)
+
+        Me.type = DalleSource.type
+        Me.typeConnecteur = DalleSource.typeConnecteur
+        Me.Ep_td = DalleSource.Ep_td
+        Me.Ep_th = DalleSource.Ep_th
+
+        Me.pTheta_h = DalleSource.pTheta_h
+        Me.preDalle_ep = DalleSource.preDalle_ep
+        Me.preDalle_tjoint = DalleSource.preDalle_tjoint
+
+        Me.lRiveRemplie = DalleSource.lRiveRemplie
+        Me.lSlimFloor = DalleSource.lSlimFloor
+
+        Me.Beton.CopieFrom(DalleSource.Beton)
+
+        Me.Bac.TransfertFrom(DalleSource.Bac, False)
+
+        Me.Cofradal.CopieFrom(DalleSource.Cofradal)
+
+        Me.LitArma.Clear()
+
+        For Each ArmaLongi As Cls_Armatures_Longi In DalleSource.LitArma
+            Dim Armalongi_loc As New Cls_Armatures_Longi()
+            Armalongi_loc.CopieFrom(ArmaLongi)
+            Me.LitArma.Add(Armalongi_loc)
+        Next
+
+        Me.lNoArma = DalleSource.lNoArma
+
+        Me.AcierArmatures.CopieFrom(DalleSource.AcierArmatures)
+
+        Me.ArmaSlimFeu.CopieFrom(DalleSource.ArmaSlimFeu)
+
+        Me.Goujons.CopieFrom(DalleSource.Goujons)
+
+        Me.ConnecteurArmature.CopieFrom(DalleSource.ConnecteurArmature)
+
+    End Sub
+
 
 #End Region
 

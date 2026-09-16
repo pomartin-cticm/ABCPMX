@@ -72,6 +72,9 @@ Public Class cls_OptionsCalcul
 
     Public MethodReducPlatSlim As Enu_MReducPlatSlim ' Méthode de reduction des propriétés du support de dalle dans une section slim floor, pour tenir compte de la flexion transversale
 
+    Public lAutoPP As Boolean                       ' Indique si on calcule automatiquement le poids propre de la poutre
+    Public qPPCustom As Decimal                     ' Valeur personnalisée du poids propre de la poutre, si l'option de calcul automatique est désactivée
+
 #End Region
 
 #Region " Attributs à trier "
@@ -100,6 +103,8 @@ Public Class cls_OptionsCalcul
         Me.dMaxNodes = 0.1
         Me.nbMinNodesTravee = 100
         Me.nbMinNodesConsole = 50
+
+        '--( Autres paramètres
 
         Me.lLargeurEfficaceSimplifiee = False
         Me.lCompressionArma = False
@@ -137,6 +142,11 @@ Public Class cls_OptionsCalcul
 
         '-- Réduction des slim floor : par défaut, méthode de l'Annexe I des EN G2
         Me.MethodReducPlatSlim = Enu_MReducPlatSlim.M3_ReducLimiteElasticite
+
+        '--( Poids propre
+
+        lAutoPP = True
+        qPPCustom = 0
 
     End Sub
 

@@ -43,6 +43,12 @@
         Return Me.MemberwiseClone()
     End Function
 
+    Public Sub CopieFrom(ByRef source As cls_AcierArmature)
+        Me.Classe = source.Classe
+        Me.FsK = source.FsK
+        Me.Es = source.Es
+    End Sub
+
 #End Region
 
 #Region " Outils "

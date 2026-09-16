@@ -587,6 +587,17 @@
         Return Me.MemberwiseClone()
     End Function
 
+    Public Sub CopieFrom(BetonSource As cls_Beton)
+        Me.Classe = BetonSource.Classe
+        Me.Fck = BetonSource.Fck
+        Me.lCrackingLimitation = BetonSource.lCrackingLimitation
+        Me.wk_max = BetonSource.wk_max
+        Me.RhoC = BetonSource.RhoC
+        Me.lLeger = BetonSource.lLeger
+        Me.kE = BetonSource.kE
+        Me.Ciment = BetonSource.Ciment
+    End Sub
+
 #End Region
 
 End Class

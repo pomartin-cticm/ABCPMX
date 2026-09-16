@@ -694,6 +694,7 @@ Public Class Frm_PMX
 
             If lAffProgress Then
                 Await GestionCalculFeu(iBeam)
+                MAJMainToolBar()
 
             Else
                 'sinon on appelle la fonction de verification normalement

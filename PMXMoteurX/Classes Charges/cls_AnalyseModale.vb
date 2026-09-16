@@ -84,7 +84,7 @@ Public Class cls_AnalyseModale
 
 #Region " Calculs "
 
-    Public Sub Analyse(MyPoutre As cls_Poutre, RatioQ As Decimal, IndiceQ As Integer)
+    Public Sub Analyse(MyPoutre As cls_Poutre, RatioQ As Decimal, IndiceQ As Integer, Optional lConsole As Boolean = False)
         '---------------------------------------------------------------------------------------------------
         '   03/11/23 :  Création - POM
         '---------------------------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ Public Class cls_AnalyseModale
 
         '--> Initialisations
 
-        nEqDalleCT = MyPoutre.Dalle.beton.CoefficientEquivalenceCT(lGene1)
+        nEqDalleCT = MyPoutre.Dalle.Beton.CoefficientEquivalenceCT(lGene1)
         nEqEnrobCT = MyPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT(lGene1)
 
         MyPoutre.PrepareNodesN()
@@ -143,7 +143,7 @@ Public Class cls_AnalyseModale
         'Dim CodeError_MOD As Integer
         Dim TextError_MOD As String = String.Empty
 
-        Call MyDLLMOD.CALCULER(DonneesEF, 1, MyOutput_MOD, Me.pErrorCode, TextError_MOD)
+        Call MyDLLMOD.CALCULER(DonneesEF, 1, MyOutput_MOD, Me.pErrorCode, TextError_MOD, lConsole)
 
         '--> Capture des résultats
 

@@ -12,7 +12,7 @@ Module ModNET_Analyse
     '================================================================================================
 
     Sub ANALYSE(ByRef MAT As MATERIAU, ByRef NOEUDS As STR_NOEUDS, ByRef BARRES As STR_BARRES,
-                 ByRef MASSES As MAS_BARRES, ByVal RESOLUTION As MOD_RESOLUTION, ByRef RESULTATS As MOD_RESULTATS)
+                ByRef MASSES As MAS_BARRES, ByVal RESOLUTION As MOD_RESOLUTION, ByRef RESULTATS As MOD_RESULTATS, lConsole As Boolean)
         '==============================================================================================================================================================
         '
         '   R O U T I N E    D ' A N A L Y S E      M O D A L E    D E    S T R U C T U R E S     2 D
@@ -78,6 +78,8 @@ Module ModNET_Analyse
         Dim MD(3) As Double
 
         On Error GoTo PbProtec
+
+        Dim I, J As Integer
 
         '=============================================================================================
         'PROTECTION
@@ -296,6 +298,12 @@ Module ModNET_Analyse
                 CodeERR = 11
             Next IB
 
+            'If lConsole Then
+            '    Console.WriteLine("Matrice SM avant ResolVP")
+            '    For I = 1 To SM.GetUpperBound(0)
+            '        Console.WriteLine("SM(" & I.ToString & ") = " & SM(I).ToString)
+            '    Next
+            'End If
 
             CodeERR = 12
 
@@ -309,6 +317,13 @@ Module ModNET_Analyse
 
             'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
             CodeERR = 13
+
+            'If lConsole Then
+            '    Console.WriteLine("Matrice SM après ResolVP")
+            '    For I = 1 To SM.GetUpperBound(0)
+            '        Console.WriteLine("SM(" & I.ToString & ") = " & SM(I).ToString)
+            '    Next
+            'End If
 
             'Récupérer la matrice de masse
             '-----------------------------
@@ -331,23 +346,102 @@ Module ModNET_Analyse
 
             Dim MAX_D As Double
 
+            If lConsole Then
+                Console.WriteLine("NBVP = " & NBVP.ToString)
+                Console.WriteLine("Nombre noeuds  NNT = " & NNT.ToString)
+                Console.WriteLine("Nombre DDLs   IDIM = " & IDIM.ToString)
+            End If
+
+            Dim MAX_DN(3) As Double
+            Const METHODNORM As Integer = 2
+            Dim IDEX As Integer
+
             For IV = 1 To NBVP
 
                 'Masse totale
                 RESULTATS.MAS_TOT(ICAS) = MASSE_TOTALE
 
+                If lConsole Then
+                    Console.WriteLine("Mode No = " & IV.ToString)
+                    For i = 1 To IDIM
+                        Console.WriteLine("Vecteur(" & IV.ToString & " , " & i.ToString & ") = " & VECTP(IV, i).ToString)
+                    Next
+                    For i = 1 To IDIM
+                        Console.WriteLine(VECTP(IV, i).ToString)
+                    Next
+                End If
+
                 'NORMALISATION DU VECTEUR PROPRE : DMAX=1
                 '--------------------------------------------
-                MAX_D = 0
-                For I = 1 To IDIM
-                    If Math.Abs(VECTP(IV, I)) > MAX_D Then
-                        MAX_D = Math.Abs(VECTP(IV, I))
-                    End If
-                Next
-                For I = 1 To IDIM
-                    VECTP(IV, I) = VECTP(IV, I) / MAX_D
-                Next
+                If METHODNORM = 0 Then
+                    MAX_D = 0
+                    For I = 1 To IDIM
+                        If Math.Abs(VECTP(IV, I)) > MAX_D Then
+                            MAX_D = Math.Abs(VECTP(IV, I))
+                        End If
+                    Next
+                    For I = 1 To IDIM
+                        VECTP(IV, I) = VECTP(IV, I) / MAX_D
+                    Next
+                ElseIf METHODNORM = 1 Then
+                    MAX_DN(1) = 0
+                    MAX_DN(2) = 0
+                    MAX_DN(3) = 0
 
+                    For I = 1 To NNT
+                        For J = 1 To 3
+                            IDEX = (I - 1) * 3 + J
+                            If Math.Abs(VECTP(IV, IDEX)) > MAX_DN(J) Then
+                                MAX_DN(J) = Math.Abs(VECTP(IV, IDEX))
+                            End If
+                        Next
+                    Next
+                    For I = 1 To NNT
+                        For J = 1 To 3
+                            If MAX_DN(J) > 0 Then
+                                IDEX = (I - 1) * 3 + J
+                                VECTP(IV, IDEX) = VECTP(IV, IDEX) / MAX_DN(J)
+                            End If
+                        Next
+                    Next
+                ElseIf METHODNORM = 2 Then
+                    MAX_D = 0
+                    J = 2
+                    For I = 1 To NNT
+
+                        IDEX = (I - 1) * 3 + J
+                        If Math.Abs(VECTP(IV, IDEX)) > MAX_D Then
+                            MAX_D = Math.Abs(VECTP(IV, IDEX))
+                        End If
+
+                    Next
+
+                    For I = 1 To IDIM
+                        VECTP(IV, I) = VECTP(IV, I) / MAX_D
+                    Next
+                End If
+                If lConsole Then
+                    If METHODNORM = 0 Or METHODNORM = 2 Then
+                        Console.WriteLine("Normalisation DMAX = " & MAX_D.ToString)
+                    ElseIf METHODNORM = 1 Then
+                        Console.WriteLine("Normalisation DMAX(1) = " & MAX_DN(1).ToString)
+                        Console.WriteLine("Normalisation DMAX(2) = " & MAX_DN(2).ToString)
+                        Console.WriteLine("Normalisation DMAX(3) = " & MAX_DN(3).ToString)
+                    End If
+
+                    For I = 1 To IDIM
+                        Console.WriteLine("Vecteur(" & IV.ToString & " , " & I.ToString & ") = " & VECTP(IV, I).ToString)
+                    Next
+
+                    For I = 1 To 3
+                        Console.WriteLine("DDL = " & I.ToString)
+                        For J = 1 To NNT
+                            IDEX = (J - 1) * 3 + I
+                            Console.WriteLine(VECTP(IV, IDEX).ToString)
+                        Next
+                    Next
+
+                End If
 
                 DMD = 0
                 DMDELTA = 0

@@ -503,6 +503,39 @@
         Return myBeta
     End Function
 
+    Public Function BetaFactor1Mini(Nuance As String) As Decimal
+        '----------------------------------------------------------------------------------------------------------------------
+        '   06/08/26 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient de réduction Beta pour le moment plastique d'une section mixte
+        '   selon EN 1994-1-1:2005, 6.2.1.2 (2) 
+        '   Renvoi de la valeur  mini de Beta pour pouvoir faire du calcul plastique
+        '   Correspondant à la valeur de z / H maxi pour pouvoir faire du calcul plastique
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Nuance  [E] :   Nuance de l'acier
+        '----------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myBeta As Decimal
+        Dim pNuanceFy As String
+        Dim RatioZsurH As Decimal = 0.4
+
+        '--( Calcul
+
+        pNuanceFy = Me.NuanceFY(Nuance)
+
+        Select Case pNuanceFy
+            Case "420", "460"
+                myBeta = 1 - (0.15 / 0.25) * (RatioZsurH - 0.15)
+            Case Else
+                myBeta = 1
+        End Select
+
+        Return myBeta
+
+    End Function
+
     Public Function BetaFactor2(zpl As Decimal, Ht As Decimal, Nuance As String, ByRef lOKPl As Boolean) As Decimal
         '----------------------------------------------------------------------------------------------------------------------
         '   01/05/24 :  Création - POM
@@ -530,13 +563,14 @@
         RatioZsurH = zpl / Ht
         pNuanceFy = Me.NuanceFY(Nuance)
 
+        '== Valeurs correspondantes à la version FprEN 1994-1-1:2024, Figure 8.3
         Select Case pNuanceFy
             Case "235"
                 Beta = {1, 0.95}
             Case "275"
-                Beta = {1, 0.95}
-            Case "355"
                 Beta = {1, 0.93}
+            Case "355"
+                Beta = {1, 0.9}
             Case "420", "460"
                 Beta = {1, 0.9}
         End Select
@@ -548,7 +582,7 @@
         If IsSmallerOrEqual(RatioZsurH, Alpha(0)) Then
             myBeta = 1
         ElseIf IsSmallerOrEqual(RatioZsurH, Alpha(1)) Then
-            myBeta = Beta(0) - (Beta(1) - Beta(0)) / (Alpha(1) - Alpha(0)) * (RatioZsurH - Alpha(0))
+            myBeta = Beta(0) + (Beta(1) - Beta(0)) / (Alpha(1) - Alpha(0)) * (RatioZsurH - Alpha(0))
         Else
             myBeta = -1
             lOKPl = False
@@ -556,6 +590,85 @@
 
         Return myBeta
     End Function
+
+    Public Function BetaFactor2Mini(Nuance As String) As Decimal
+        '----------------------------------------------------------------------------------------------------------------------
+        '   06/08/26 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient de réduction Beta pour le moment plastique d'une section mixte
+        '   selon EN 1994-1-1:2024, Figure 8.3 
+        '   Retourne la valeur mini de Beta pour pouvoir faire du calcul plastique
+        '   Correspondant à la valeur de z / H maxi pour pouvoir faire du calcul plastique
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Nuance  [E] :   Nuance de l'acier
+        '----------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myBeta As Decimal
+        Dim RatioZsurH As Decimal
+        Dim Beta() As Decimal = Nothing
+        Dim Alpha() As Decimal = Nothing
+        Dim pNuanceFy As String
+
+        '--( Initialisation
+
+        '        RatioZsurH = zpl / Ht
+        pNuanceFy = Me.NuanceFY(Nuance)
+
+        '== Valeurs correspondantes à la version FprEN 1994-1-1:2024, Figure 8.3
+        Select Case pNuanceFy
+            Case "235"
+                Beta = {1, 0.95}
+            Case "275"
+                Beta = {1, 0.93}
+            Case "355"
+                Beta = {1, 0.9}
+            Case "420", "460"
+                Beta = {1, 0.9}
+        End Select
+
+        Alpha = Me.InitialiseAlphaFactors(pNuanceFy)
+
+        '--( Calcul
+
+        RatioZsurH = Alpha(1)
+
+        myBeta = Beta(0) + (Beta(1) - Beta(0)) / (Alpha(1) - Alpha(0)) * (RatioZsurH - Alpha(0))
+
+        Return myBeta
+    End Function
+
+    Public Function ReductionFactorBetaMini(Nuance As String, lGen1 As Boolean) As Decimal
+        '----------------------------------------------------------------------------------------------------------------------
+        '   06/08/26 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient de réduction Beta pour le moment plastique d'une section mixte
+        '   selon EN 1994-1-1:2024 (génération 2) ou EN 1994-1-1:2005 (génération 1)
+        '   Retourne la valeur mini de Beta pour pouvoir faire du calcul plastique
+        '   correspondant à la valeur de z / H maxi pour pouvoir faire du calcul plastique
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Nuance  [E] :   Nuance de l'acier
+        '   lGen1   [E] :   Indique si génération 1 des EN
+        '   lOKPl   [S] :   Indique si on peut faire du calcul plastique
+        '----------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myBeta As Decimal
+
+        '--( Traitement
+
+        If lGen1 Then
+            myBeta = BetaFactor1Mini(Nuance)
+        Else
+            myBeta = BetaFactor2Mini(Nuance)
+        End If
+
+        Return myBeta
+
+    End Function
+
 
     Public Function ReductionFactorBeta(zpl As Decimal, Ht As Decimal, Nuance As String, lGen1 As Boolean, ByRef lOKPl As Boolean) As Decimal
         '----------------------------------------------------------------------------------------------------------------------
@@ -657,13 +770,15 @@
 
         Dim Alpha() As Decimal = Nothing
 
+        '== Valeurs correspondantes à la version FprEN 1994-1-1:2024, Figure 8.3
+
         Select Case NuanceLoc
             Case "235"
                 Alpha = {0.2, 0.6}
             Case "275"
-                Alpha = {0.2, 0.5}
+                Alpha = {0.2, 0.6}
             Case "355"
-                Alpha = {0.2, 0.45}
+                Alpha = {0.2, 0.5}
             Case "420", "460"
                 Alpha = {0.15, 0.4}
         End Select
@@ -748,4 +863,165 @@
     End Function
 
 #End Region
+
+#Region " Degré minimal de connexion "
+
+    Public Function EtaMinRatioAInf3(Le As Decimal, Fy As Decimal) As Decimal
+        '------------------------------------------------------------------------------------------------------------------
+        '   16/07/26 : Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Calcul du degré minimal de connexion
+        '   Dans le cas d'un ratio Ainf / Asup > 3, applicable aux slimFloors
+        '   On applique la formule (I.3) de l'EN 1994-1-1:2025
+        '------------------------------------------------------------------------------------------------------------------
+        '   Le      [E] :   Longueur de la poutre
+        '   Fy      [E] :   Limite d'élasticité de l'acier
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim EtaMin As Decimal = 1
+
+        '--( Traitement
+
+        If IsSmallerOrEqual(Le, 18) Then
+            EtaMin = Math.Max(0.5, 1 - (355 / Fy) * (0.3 - 0.015 * Le))
+        Else
+            EtaMin = 1
+        End If
+
+        Return EtaMin
+
+    End Function
+
+    Public Function Eta0EqualFlanges(Fy As Decimal, Le As Decimal) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Degré minimal de connexion pour une poute mixte à semelles égales
+        '   d'après formule (6.12) de la NF EN 1994-1-1:2005
+        '   ou Formules (8.13), (8.14) dans la NF FprEN 1994-1-1:2025
+        '----------------------------------------------------------------------------------------------------------
+        '   Fy      [E] :   Limite d'élasticité
+        '   Le      [E] :   Distance entre points de moments nuls
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim Eta0 As Decimal
+
+        '--> Traitement
+
+        If IsGreater(Le, 25) Then
+            Eta0 = 1
+        Else
+            Eta0 = (1 - 355 / Fy * (0.75 - 0.03 * Le))
+        End If
+        Return Eta0
+
+    End Function
+
+    Public Function Eta0RatioFlanges3(Fy As Decimal, Le As Decimal) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Degré minimal de connexion pour une poute mixte à semelles inégales, la semelle inf ayant une aire = 3 x aire semelle sup
+        '   d'après formule (6.14) de la NF EN 1994-1-1
+        '   ou Formules (8.15), (8.16) dans la NF FprEN 1994-1-1:2025
+        '----------------------------------------------------------------------------------------------------------
+        '   Fy      [E] :   Limite d'élasticité
+        '   Le      [E) :   Distance entre points de moments nuls
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim Eta0 As Decimal
+
+        '--> Traitement
+
+        If IsGreater(Le, 20) Then
+            Eta0 = 1
+        Else
+            Eta0 = (1 - 355 / Fy * (0.3 - 0.015 * Le))
+        End If
+        Return Eta0
+
+    End Function
+
+    Private Function EtaMin() As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Valeur minimale du Degré minimal de connexion pour une poute mixte 
+        '   d'après formules (6.12) et (6.14) de la NF EN 1994-1-1
+        '----------------------------------------------------------------------------------------------------------
+        '----------------------------------------------------------------------------------------------------------
+
+        Const ETAMINREF As Decimal = 0.4
+
+        Return ETAMINREF
+
+    End Function
+
+    Public Function EtaMinFlanges(Fy As Decimal, Le As Decimal, AfSup As Decimal, AfInf As Decimal, Optional lSlimF As Boolean = False) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Degré minimal de connexion pour une poute mixte à semelles égales
+        '   d'après formule (6.14) de la NF EN 1994-1-1
+        '   ou formule (8.12) de la NF FprEN 1994-1-1:2025
+        '----------------------------------------------------------------------------------------------------------
+        '   Fy      [E] :   Limite d'élasticité
+        '   Le      [E] :   Distance entre points de moments nuls
+        '   AfSup   [E] :   Aire de la semelle supérieure
+        '   AfInf   [E] :   Aire de la semelle inférieure
+        '   lSlimF  [E] :   Indique si on est dans le cas d'un slim floor
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim RatioAire As Decimal = AfInf / AfSup
+        Dim Eta As Decimal = -1
+        Dim EtaEqualF As Decimal
+        Dim EtaInEqualF As Decimal
+        Dim lOK As Boolean = True
+
+        '--> Traitement hors domaine application
+
+        If IsSmaller(RatioAire, 1) Then
+            '--< Traitement hors domaine application >
+
+            lOK = False
+        ElseIf IsGreater(RatioAire, 3) Then
+            '--< Traitement ratio semelles > 3 >
+
+            ' Dans ce cas, on applique la formule (I.3) de l'annexe I de la NF EN 1994-1-1:2024
+
+            If lSlimF Then
+                Eta = Me.EtaMinRatioAInf3(Le, Fy)
+            Else
+                lOK = False
+            End If
+
+        Else
+
+            '--> Traitement normal
+
+            EtaInEqualF = Me.Eta0RatioFlanges3(Fy, Le)
+            EtaEqualF = Me.Eta0EqualFlanges(Fy, Le)
+
+            Eta = EtaEqualF + (EtaInEqualF - EtaEqualF) / 2 * (RatioAire - 1)
+
+        End If
+
+        Eta = Math.Max(Eta, Me.EtaMin)
+
+        If Not lOK Then
+            MsgBox("Wrong ratio of flanges areas:" & CStr(RatioAire), MsgBoxStyle.Critical, "cls_Eurocodes/EtaMinFlanges")
+        End If
+        Return Eta
+    End Function
+
+#End Region
+
 End Class

@@ -43,6 +43,7 @@ Partial Class Frm_ChargementN
         Me.lbl_ReactionsAppuis = New System.Windows.Forms.Label()
         Me.pan_ChoixCharges = New System.Windows.Forms.Panel()
         Me.pan_Psi = New System.Windows.Forms.Panel()
+        Me.img_InfoPsi2 = New System.Windows.Forms.PictureBox()
         Me.img_Psi1 = New System.Windows.Forms.PictureBox()
         Me.txt_Psi1 = New System.Windows.Forms.TextBox()
         Me.img_Psi0 = New System.Windows.Forms.PictureBox()
@@ -115,6 +116,7 @@ Partial Class Frm_ChargementN
         Me.txt_x_Ponctuelle = New System.Windows.Forms.TextBox()
         Me.txt_Indice_Ponctuelle = New System.Windows.Forms.TextBox()
         Me.pan_ChargesLineiques = New System.Windows.Forms.Panel()
+        Me.img_InfoPP = New System.Windows.Forms.PictureBox()
         Me.btn_InfoPP = New System.Windows.Forms.Button()
         Me.btn_SupprimerLineique = New System.Windows.Forms.Button()
         Me.btn_AjouterLineique = New System.Windows.Forms.Button()
@@ -168,6 +170,7 @@ Partial Class Frm_ChargementN
         Me.pan_ReactionsAppuis.SuspendLayout()
         Me.pan_ChoixCharges.SuspendLayout()
         Me.pan_Psi.SuspendLayout()
+        CType(Me.img_InfoPsi2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Psi1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Psi0, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Psi2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -186,6 +189,7 @@ Partial Class Frm_ChargementN
         Me.TLpan_DefCharges.SuspendLayout()
         Me.pan_ChargesPonctuelles.SuspendLayout()
         Me.pan_ChargesLineiques.SuspendLayout()
+        CType(Me.img_InfoPP, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_ChargesSurfaciques.SuspendLayout()
         CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -230,9 +234,9 @@ Partial Class Frm_ChargementN
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
-        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.Size = New System.Drawing.Size(958, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
@@ -428,6 +432,7 @@ Partial Class Frm_ChargementN
         'pan_Psi
         '
         Me.pan_Psi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Psi.Controls.Add(Me.img_InfoPsi2)
         Me.pan_Psi.Controls.Add(Me.img_Psi1)
         Me.pan_Psi.Controls.Add(Me.txt_Psi1)
         Me.pan_Psi.Controls.Add(Me.img_Psi0)
@@ -439,58 +444,68 @@ Partial Class Frm_ChargementN
         Me.pan_Psi.Size = New System.Drawing.Size(242, 36)
         Me.pan_Psi.TabIndex = 81
         '
+        'img_InfoPsi2
+        '
+        Me.img_InfoPsi2.Location = New System.Drawing.Point(214, 4)
+        Me.img_InfoPsi2.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_InfoPsi2.Name = "img_InfoPsi2"
+        Me.img_InfoPsi2.Size = New System.Drawing.Size(22, 22)
+        Me.img_InfoPsi2.TabIndex = 87
+        Me.img_InfoPsi2.TabStop = False
+        '
         'img_Psi1
         '
         Me.img_Psi1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Psi1.Location = New System.Drawing.Point(83, 5)
+        Me.img_Psi1.Location = New System.Drawing.Point(78, 5)
         Me.img_Psi1.Name = "img_Psi1"
-        Me.img_Psi1.Size = New System.Drawing.Size(33, 20)
+        Me.img_Psi1.Size = New System.Drawing.Size(31, 20)
         Me.img_Psi1.TabIndex = 90
         Me.img_Psi1.TabStop = False
         '
         'txt_Psi1
         '
         Me.txt_Psi1.BackColor = System.Drawing.Color.LightGray
-        Me.txt_Psi1.Location = New System.Drawing.Point(116, 5)
+        Me.txt_Psi1.Location = New System.Drawing.Point(110, 5)
         Me.txt_Psi1.Name = "txt_Psi1"
         Me.txt_Psi1.ReadOnly = True
-        Me.txt_Psi1.Size = New System.Drawing.Size(36, 20)
+        Me.txt_Psi1.Size = New System.Drawing.Size(33, 20)
         Me.txt_Psi1.TabIndex = 89
         '
         'img_Psi0
         '
         Me.img_Psi0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.img_Psi0.Location = New System.Drawing.Point(6, 5)
+        Me.img_Psi0.Margin = New System.Windows.Forms.Padding(0, 3, 0, 3)
         Me.img_Psi0.Name = "img_Psi0"
-        Me.img_Psi0.Size = New System.Drawing.Size(33, 20)
+        Me.img_Psi0.Size = New System.Drawing.Size(31, 20)
         Me.img_Psi0.TabIndex = 88
         Me.img_Psi0.TabStop = False
         '
         'txt_Psi0
         '
         Me.txt_Psi0.BackColor = System.Drawing.Color.LightGray
-        Me.txt_Psi0.Location = New System.Drawing.Point(39, 5)
+        Me.txt_Psi0.Location = New System.Drawing.Point(38, 5)
         Me.txt_Psi0.Name = "txt_Psi0"
         Me.txt_Psi0.ReadOnly = True
-        Me.txt_Psi0.Size = New System.Drawing.Size(36, 20)
+        Me.txt_Psi0.Size = New System.Drawing.Size(33, 20)
         Me.txt_Psi0.TabIndex = 87
         '
         'img_Psi2
         '
         Me.img_Psi2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Psi2.Location = New System.Drawing.Point(159, 5)
+        Me.img_Psi2.Location = New System.Drawing.Point(147, 5)
         Me.img_Psi2.Name = "img_Psi2"
-        Me.img_Psi2.Size = New System.Drawing.Size(33, 20)
+        Me.img_Psi2.Size = New System.Drawing.Size(31, 20)
         Me.img_Psi2.TabIndex = 86
         Me.img_Psi2.TabStop = False
         '
         'txt_Psi2
         '
         Me.txt_Psi2.BackColor = System.Drawing.Color.LightGray
-        Me.txt_Psi2.Location = New System.Drawing.Point(192, 5)
+        Me.txt_Psi2.Location = New System.Drawing.Point(179, 5)
         Me.txt_Psi2.Name = "txt_Psi2"
         Me.txt_Psi2.ReadOnly = True
-        Me.txt_Psi2.Size = New System.Drawing.Size(36, 20)
+        Me.txt_Psi2.Size = New System.Drawing.Size(33, 20)
         Me.txt_Psi2.TabIndex = 85
         '
         'pan_CoefEquivalence
@@ -510,12 +525,13 @@ Partial Class Frm_ChargementN
         '
         Me.img_info.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.img_info.Image = CType(resources.GetObject("img_info.Image"), System.Drawing.Image)
-        Me.img_info.Location = New System.Drawing.Point(2, 34)
+        Me.img_info.Location = New System.Drawing.Point(2, 18)
         Me.img_info.Margin = New System.Windows.Forms.Padding(0)
         Me.img_info.Name = "img_info"
         Me.img_info.Size = New System.Drawing.Size(20, 20)
         Me.img_info.TabIndex = 81
         Me.img_info.TabStop = False
+        Me.img_info.Visible = False
         '
         'pan_DoubleN
         '
@@ -1232,6 +1248,7 @@ Partial Class Frm_ChargementN
         '
         Me.pan_ChargesLineiques.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_ChargesLineiques.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ChargesLineiques.Controls.Add(Me.img_InfoPP)
         Me.pan_ChargesLineiques.Controls.Add(Me.btn_InfoPP)
         Me.pan_ChargesLineiques.Controls.Add(Me.btn_SupprimerLineique)
         Me.pan_ChargesLineiques.Controls.Add(Me.btn_AjouterLineique)
@@ -1266,6 +1283,15 @@ Partial Class Frm_ChargementN
         Me.pan_ChargesLineiques.Name = "pan_ChargesLineiques"
         Me.pan_ChargesLineiques.Size = New System.Drawing.Size(453, 149)
         Me.pan_ChargesLineiques.TabIndex = 5
+        '
+        'img_InfoPP
+        '
+        Me.img_InfoPP.Location = New System.Drawing.Point(326, 34)
+        Me.img_InfoPP.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_InfoPP.Name = "img_InfoPP"
+        Me.img_InfoPP.Size = New System.Drawing.Size(22, 22)
+        Me.img_InfoPP.TabIndex = 86
+        Me.img_InfoPP.TabStop = False
         '
         'btn_InfoPP
         '
@@ -1744,6 +1770,7 @@ Partial Class Frm_ChargementN
         Me.pan_ChoixCharges.PerformLayout()
         Me.pan_Psi.ResumeLayout(False)
         Me.pan_Psi.PerformLayout()
+        CType(Me.img_InfoPsi2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Psi1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Psi0, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Psi2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1769,6 +1796,7 @@ Partial Class Frm_ChargementN
         Me.pan_ChargesPonctuelles.PerformLayout()
         Me.pan_ChargesLineiques.ResumeLayout(False)
         Me.pan_ChargesLineiques.PerformLayout()
+        CType(Me.img_InfoPP, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_ChargesSurfaciques.ResumeLayout(False)
         Me.pan_ChargesSurfaciques.PerformLayout()
         CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1911,4 +1939,6 @@ Partial Class Frm_ChargementN
     Friend WithEvents lbl_CT As Label
     Friend WithEvents img_info As PictureBox
     Friend WithEvents ToolTip1 As ToolTip
+    Friend WithEvents img_InfoPP As PictureBox
+    Friend WithEvents img_InfoPsi2 As PictureBox
 End Class

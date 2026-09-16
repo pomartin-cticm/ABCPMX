@@ -12,6 +12,8 @@ Public Class Frm_MaintienBacN_Tole
     Dim EntraxeD As Decimal
     Dim lOpenRib As Boolean
 
+    Dim lSelectInfoK As Boolean = False
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -264,6 +266,27 @@ Public Class Frm_MaintienBacN_Tole
 #End Region
 
 #Region " Infos W "
+
+    Private Sub img_InfoK_MouseEnter(sender As Object, e As EventArgs) Handles img_InfoK.MouseEnter
+        lSelectInfok = True
+        Me.img_InfoK.Invalidate()
+    End Sub
+
+    Private Sub img_InfoK_MouseLeave(sender As Object, e As EventArgs) Handles img_InfoK.MouseLeave
+        lSelectInfok = False
+        Me.img_InfoK.Invalidate()
+    End Sub
+
+    Private Sub img_InfoK_Click(sender As Object, e As EventArgs) Handles img_InfoK.Click
+        PublieInfoToleK()
+    End Sub
+
+    Private Sub img_Icone_1_Paint(sender As Object, e As PaintEventArgs) Handles img_InfoK.Paint
+
+        DessineIconeInfo(e.Graphics, Me.img_InfoK, lSelectInfok)
+
+    End Sub
+
 
     Private Sub img_info_Click(sender As Object, e As EventArgs) Handles img_info.Click
         'If InfoW_lVisible Then

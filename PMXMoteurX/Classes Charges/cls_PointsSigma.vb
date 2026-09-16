@@ -154,6 +154,13 @@
                 Me.zPos.Add(MyPoutre.Dalle.zTop)
                 Me.iBetonDalle(0) = Me.zPos.Count - 1
                 Me.iBetonDalle(1) = Me.iBetonDalle(0)
+            Case cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte,
+                 cls_Section.Enum_TypeSection.SABmixte, cls_Section.Enum_TypeSection.SFBmixte
+
+                Me.zPos.Add(MyPoutre.Dalle.zTop)
+                Me.iBetonDalle(0) = Me.zPos.Count - 1
+                Me.iBetonDalle(1) = Me.iBetonDalle(0)
+
         End Select
 
     End Sub

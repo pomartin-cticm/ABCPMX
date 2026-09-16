@@ -61,12 +61,16 @@ Imports PMXInterface
         ReDim myPoutre.VerifMixte(0)
         myPoutre.VerifMixte(0) = New cls_VerificationsMixtes()
 
-        EtaMin = myPoutre.VerifMixte(0).EtaMinEqualFlanges(235, 10)
+        Dim myEn1994 As New cls_Eurocodes
+
+        'EtaMin = myPoutre.VerifMixte(0).EtaMinEqualFlanges(235, 10)
+        EtaMin = myEn1994.Eta0EqualFlanges(235, 10)
         Valref = 0.4
 
         Assert.IsTrue(IsEqual(EtaMin, valref))
 
-        EtaMin = myPoutre.VerifMixte(0).EtaMinInEqualFlanges3(275, 10)
+        'EtaMin = myPoutre.VerifMixte(0).EtaMinInEqualFlanges3(275, 10)
+        EtaMin = myEn1994.Eta0RatioFlanges3(275, 10)
         Valref = 0.8064
 
         Assert.IsTrue(IsEqual(EtaMin, Valref))

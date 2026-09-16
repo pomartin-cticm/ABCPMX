@@ -99,6 +99,17 @@ Public Class cls_GoujonSoude
         Return Me.MemberwiseClone()
     End Function
 
+    Public Sub CopieFrom(ByRef GoujonSource As cls_GoujonSoude)
+        Me.nom = GoujonSource.nom
+        Me.hsc = GoujonSource.hsc
+        Me.h_tete = GoujonSource.h_tete
+        Me.d_tete = GoujonSource.d_tete
+        Me.d = GoujonSource.d
+        Me.Fu = GoujonSource.Fu
+        Me.Fy = GoujonSource.Fy
+        Me.kcc = GoujonSource.kcc
+    End Sub
+
 #End Region
 
 #Region " Outils DataBase "

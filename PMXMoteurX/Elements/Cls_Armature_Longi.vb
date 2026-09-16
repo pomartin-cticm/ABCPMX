@@ -81,6 +81,14 @@
         Return Me.MemberwiseClone()
     End Function
 
+    Public Sub CopieFrom(ByVal source As Cls_Armatures_Longi)
+        Me.EspBar = source.EspBar
+        Me.PhiS = source.PhiS
+        Me.z_s = source.z_s
+        Me.n_s = source.n_s
+        Me.lActive = source.lActive
+    End Sub
+
 #End Region
 
 End Class
